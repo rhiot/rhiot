@@ -5,3 +5,7 @@ The is umbrella project covering Camel-related subprojects for the Internet Of T
 ## Subprojects
 
 - IoT - covers modules providing the Internet Of Things functionalities
+
+## Build status
+
+[![Build Status](https://travis-ci.org/camel-labs/camel-labs.svg?branch=master)](https://travis-ci.org/camel-labs/camel-labs)
