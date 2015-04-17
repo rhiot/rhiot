@@ -50,8 +50,8 @@ public class RaspberryPiEndpoint extends DefaultEndpoint {
     @Metadata(required = "true")
     private String id;
 
-    @UriParam(defaultValue = "LOW", description = "Digital Only: if input mode then state trigger event, if output then start value")
-    private PinState state = PinState.LOW;
+    @UriParam(description = "Digital Only: if input mode then state trigger event, if output then started value")
+    private PinState state = null;
 
     @UriParam(defaultValue = "DIGITAL_OUTPUT", enums = "DIGITAL_OUTPUT:DIGITAL_INPUT:PWM_OUTPUT:DIGITAL_OUTPUT:ANALOG_OUTPUT")
     @Metadata(required = "true")
@@ -118,6 +118,7 @@ public class RaspberryPiEndpoint extends DefaultEndpoint {
             }
 
         } else {
+            // enhancement we could manage several pins with one consumer
             throw new IllegalArgumentException("Cannot create twice same input pin for Consumer");
         }
 
@@ -151,7 +152,7 @@ public class RaspberryPiEndpoint extends DefaultEndpoint {
                 break;
             }
             pin.setMode(this.mode); // Force Mode to avoid NPE
-        } else {
+        } else { // enhancement we could manage several pins with one producer
             throw new IllegalArgumentException("Cannot create twice same output pin for Producer");
         }
 

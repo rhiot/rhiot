@@ -43,8 +43,10 @@ public class DigitalInputTest extends CamelTestSupport {
         MockEndpoint mock = getMockEndpoint("mock:result");
 
         consumer.handleGpioPinDigitalStateChangeEvent(new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin)consumer.getPin(), PinState.LOW));
+        Thread.sleep(100);
+        consumer.handleGpioPinDigitalStateChangeEvent(new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin)consumer.getPin(), PinState.HIGH));
 
-        mock.expectedMessageCount(1);
+        mock.expectedMessageCount(2);
 
         assertMockEndpointsSatisfied();
     }
