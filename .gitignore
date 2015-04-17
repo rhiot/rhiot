@@ -1,3 +1,10 @@
 # IntelliJ
 .idea/
 *.iml
+
+# Eclipse stuff
+**/.project
+**/.settings/org.eclipse.core.resources.prefs
+**/.prefs
+**/.classpath
+**/target
