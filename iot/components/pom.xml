@@ -13,4 +13,7 @@
     <artifactId>camel-labs-iot-components</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+    	<module>camel-raspberrypi</module>
+    </modules>
 </project>
