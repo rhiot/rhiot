@@ -20,20 +20,18 @@ import com.pi4j.io.gpio.PinState;
 
 import org.apache.camel.Converter;
 
+import static com.pi4j.io.gpio.PinState.getState;
+
 @Converter
 public final class RaspberryPiConverter {
 
-    /**
-     * 
-     */
     private RaspberryPiConverter() {
-        // TODO Auto-generated constructor stub
     }
 
     @Converter
     public static PinState toPinState(String state) {
         for (PinState pin : PinState.allStates()) {
-            if (pin.getName().compareTo(state) == 0) {
+            if (pin.getName().equals(state)) {
                 return pin;
             }
         }
@@ -41,13 +39,13 @@ public final class RaspberryPiConverter {
     }
 
     @Converter
-    public static boolean toBoolean(PinState state) {
+    public static boolean pinStateToBoolean(PinState state) {
         return state.isHigh();
     }
 
     @Converter
-    public static PinState toPinState(boolean state) {
-        return PinState.getState(state);
+    public static PinState booleanToPinState(boolean state) {
+        return getState(state);
     }
 
 }
