@@ -21,7 +21,6 @@ import com.pi4j.io.gpio.GpioPinAnalogOutput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.GpioPinPwmOutput;
 import com.pi4j.io.gpio.PinMode;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 
@@ -36,8 +35,8 @@ public class RaspberryPiProducer extends DefaultProducer {
 
     /**
      * Create Producer to PIN with OUTPUT mode
-     * 
-     * @param pi4jEndpoint the endpoint
+     *
+     * @param endpoint the endpoint
      * @param pin the pin to manage
      * @param action the action to do
      */

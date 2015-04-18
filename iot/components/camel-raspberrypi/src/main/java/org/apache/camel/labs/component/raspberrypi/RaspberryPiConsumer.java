@@ -22,7 +22,6 @@ import com.pi4j.io.gpio.event.GpioPinAnalogValueChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerAnalog;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
@@ -41,8 +40,8 @@ public class RaspberryPiConsumer extends DefaultConsumer implements GpioPinListe
      * 
      * @param endpoint Camel Endpoint
      * @param processor Camel Processor
-     * @param pin
-     * @param state
+     * @param pin pin
+     * @param state state
      */
     public RaspberryPiConsumer(RaspberryPiEndpoint endpoint, Processor processor, GpioPin pin, PinState state) {
         super(endpoint, processor);
