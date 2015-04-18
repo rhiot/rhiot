@@ -2,6 +2,11 @@
 .idea/
 *.iml
 
+# IntelliJ SoapUI plugin
+global-groovy.log
+soapui.log
+soapui-errors.log
+
 # Eclipse stuff
 **/.project
 **/.settings/org.eclipse.core.resources.prefs
