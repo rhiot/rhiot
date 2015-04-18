@@ -30,10 +30,10 @@
 		<commons-cli-version>1.2</commons-cli-version>
 
 		<camel.osgi.export.pkg>
-			org.apache.camel.labs.component.raspberrypi.*,
-			org.apache.camel.labs.component.raspberrypi.converter.*
+			org.camellabs.component.raspberrypi.*,
+			org.camellabs.component.raspberrypi.converter.*
 		</camel.osgi.export.pkg>
-		<camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=raspberry</camel.osgi.export.service>
+		<camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=raspberrypi</camel.osgi.export.service>
 	</properties>
 
 	<dependencies>
@@ -117,7 +117,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>org.apache.camel.labs.component.raspberrypi.CamelMain</mainClass>
+							<mainClass>org.camellabs.component.raspberrypi.CamelMain</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
