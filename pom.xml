@@ -135,6 +135,7 @@
                             </licenseFamily>
                         </licenseFamilies>
                         <excludes>
+                            <exclude>build.out</exclude>
                             <exclude>README.md</exclude>
                             <exclude>global-groovy.log</exclude>
                             <exclude>soapui.log</exclude>

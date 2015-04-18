@@ -13,7 +13,7 @@ dump_output() {
    tail -500 $BUILD_OUTPUT
 }
 error_handler() {
-  [ -e /home/travis/build/camel-labs/camel-labs/target/rat.txt ] && cat /home/travis/build/camel-labs/camel-labs/target/rat.txt
+  [ -e target/rat.txt ] && cat target/rat.txt
   echo ERROR: An error was encountered with the build.
   dump_output
   exit 1
