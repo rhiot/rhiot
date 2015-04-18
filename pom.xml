@@ -113,6 +113,39 @@
                 <version>3.2</version>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.rat</groupId>
+                    <artifactId>apache-rat-plugin</artifactId>
+                    <version>0.11</version>
+                    <configuration>
+                        <licenses>
+                            <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                                <licenseFamilyCategory>AL</licenseFamilyCategory>
+                                <licenseFamilyName>camel-labs</licenseFamilyName>
+                                <patterns>
+                                    <pattern>http://www.apache.org/licenses/LICENSE-2.0</pattern>
+                                </patterns>
+                            </license>
+                        </licenses>
+                        <licenseFamilies>
+                            <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                                <familyName>camel-labs</familyName>
+                            </licenseFamily>
+                        </licenseFamilies>
+                        <excludes>
+                            <exclude>README.md</exclude>
+                            <exclude>global-groovy.log</exclude>
+                            <exclude>soapui.log</exclude>
+                            <exclude>soapui-errors.log</exclude>
+                            <exclude>.travis.yml</exclude>
+                            <exclude>travis.sh</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
@@ -130,6 +163,25 @@
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>withRatCheck</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.rat</groupId>
+                        <artifactId>apache-rat-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>check</goal>
                                 </goals>
                             </execution>
                         </executions>
