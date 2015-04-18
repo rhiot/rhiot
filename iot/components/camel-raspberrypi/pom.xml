@@ -19,8 +19,8 @@
 		<artifactId>components</artifactId>
 		<version>2.16-SNAPSHOT</version>
 	</parent>
-	
-  <groupId>org.apache.camel-labs</groupId>
+
+	<groupId>com.github.camel-labs</groupId>
 	<artifactId>camel-raspberrypi</artifactId>
 	<packaging>bundle</packaging>
 	<name>camel-labs-iot-components-raspberrypi</name>
@@ -98,9 +98,9 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-		
+
 				<configuration>
-					<reuseForks>false</reuseForks>		
+					<reuseForks>false</reuseForks>
 					<excludes>
 						<exclude>**/*IntTest*</exclude>
 					</excludes>
@@ -188,5 +188,5 @@
 		</repository>
 	</repositories>
 
-	
+
 </project>
