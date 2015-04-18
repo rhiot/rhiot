@@ -49,7 +49,7 @@ public class RaspberryPiComponent extends UriEndpointComponent {
     }
 
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        RaspberryPiEndpoint endpoint = null;
+        Endpoint endpoint = null;
         Pattern regexPattern = Pattern.compile(RaspberryPiConstants.CAMEL_RBPI_URL_PATTERN);
 
         Matcher match = regexPattern.matcher(remaining);
