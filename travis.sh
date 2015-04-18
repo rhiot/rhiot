@@ -29,7 +29,7 @@ PING_LOOP_PID=$!
 # your_build_command_1 >> $BUILD_OUTPUT 2>&1
 # your_build_command_2 >> $BUILD_OUTPUT 2>&1
 mvn install -PwithRatCheck >> $BUILD_OUTPUT 2>&1
-[ -e target/rat.txt ] && cat target/rat.txt
+[ -e /home/travis/build/camel-labs/camel-labs/target/rat.txt ] && cat /home/travis/build/camel-labs/camel-labs/target/rat.txt
 
 # The build finished without returning an error so dump a tail of the output
 dump_output
