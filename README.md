@@ -12,3 +12,7 @@ because of the wider scope of these or because of the licensing reasons.
 ## Build status
 
 [![Build Status](https://travis-ci.org/camel-labs/camel-labs.svg?branch=master)](https://travis-ci.org/camel-labs/camel-labs)
+
+## License
+
+The Camel Labs project is distributed under the [Apache 2.0 Software License](https://www.apache.org/licenses/LICENSE-2.0).
