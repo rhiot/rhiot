@@ -1,6 +1,6 @@
 # Camel Labs
 
-![](camel-labs.png) 
+[[camel-labs.png | height = 100px]] 
 The is umbrella project covering Camel-related subprojects for the Internet Of Things and the other bleeding edge use cases.
 
 ## Subprojects
