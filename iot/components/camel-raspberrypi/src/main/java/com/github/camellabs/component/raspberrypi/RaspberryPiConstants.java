@@ -20,7 +20,7 @@ package com.github.camellabs.component.raspberrypi;
  * Constants Class
  */
 public final class RaspberryPiConstants {
-    public static final String LOG_COMPONENT = "log:com.github.camellabs.labs.component.raspberrypi?showAll=true&multiline=true";
+    public static final String LOG_COMPONENT = "log:com.github.camellabs.component.raspberrypi?showAll=true&multiline=true";
     public static final String CAMEL_ID_ROUTE = "raspberry-pi";
     public static final String PROVIDER_NAME = "RaspberryPi GPIO Provider Mock";
     public static final String CAMEL_RBPI = "CamelPi4j";

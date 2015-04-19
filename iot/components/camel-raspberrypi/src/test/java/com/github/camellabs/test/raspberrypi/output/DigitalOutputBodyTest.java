@@ -16,6 +16,7 @@
  */
 package com.github.camellabs.test.raspberrypi.output;
 
+import com.github.camellabs.component.raspberrypi.mock.RaspberryPiRevision;
 import com.github.camellabs.component.raspberrypi.mock.RaspiGpioProviderMock;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.PinState;
@@ -29,7 +30,7 @@ import org.junit.Test;
 
 public class DigitalOutputBodyTest extends CamelTestSupport {
 
-    public static final RaspiGpioProviderMock MOCK_RASPI = new RaspiGpioProviderMock();
+    public static final RaspiGpioProviderMock MOCK_RASPI = new RaspiGpioProviderMock(RaspberryPiRevision.MODEL_2);
 
     static {
         // Mandatory we are not inside a Real Raspberry PI
@@ -37,7 +38,7 @@ public class DigitalOutputBodyTest extends CamelTestSupport {
     }
 
     @Test
-    public void providerGPIO() throws Exception {
+    public void providerDigitalOutputBodyTest() throws Exception {
 
         MockEndpoint mock = getMockEndpoint("mock:result");
 
@@ -54,7 +55,7 @@ public class DigitalOutputBodyTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("timer://foo?repeatCount=1").id("rbpi-route").to("log:com.github.camellabs.component.raspberrypi?showAll=true&multiline=true").transform().constant(true)
-                    .to("raspberrypi://pin:5?mode=DIGITAL_OUTPUT").transform().simple("${body} == false").to("raspberrypi://pin:6?mode=DIGITAL_OUTPUT&state=HIGH")
+                    .to("raspberrypi://pin/5?mode=DIGITAL_OUTPUT").transform().simple("${body} == false").to("raspberrypi://pin/6?mode=DIGITAL_OUTPUT&state=HIGH")
                     .to("mock:result");
             }
         };
