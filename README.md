@@ -1,6 +1,6 @@
 # Camel Labs
 
-<a href="url"><img src="camel-labs.png" align="left" height="80" hspace="30"></a>
+<a href="/"><img src="camel-labs.png" align="left" height="80" hspace="30"></a>
 This is an umbrella project covering Camel-related subprojects for the Internet Of Things and the other bleeding edge use cases.
 Camel Labs includes all the hot features and tools that can't be distributed with the [Apache Camel](http://apache.camel.org)
 because of the wider scope of these or because of the licensing reasons.
