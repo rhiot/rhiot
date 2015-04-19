@@ -1,6 +1,6 @@
 # Camel Labs
 
-<a href="url"><img src="camel-labs.png" align="left" height="100" ></a>
+<a href="url"><img src="camel-labs.png" align="left" height="80" hspace="30></a>
 The is umbrella project covering Camel-related subprojects for the Internet Of Things and the other bleeding edge use cases.
 
 ## Subprojects
