@@ -2,7 +2,7 @@
 
 <a href="url"><img src="camel-labs.png" align="left" height="80" hspace="30"></a>
 This is an umbrella project covering Camel-related subprojects for the Internet Of Things and the other bleeding edge use cases.
-<br>
+</br></br>
 
 ## Subprojects
 
