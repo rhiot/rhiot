@@ -1,8 +1,8 @@
 /**
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Camel Labs under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -18,8 +18,6 @@ package com.github.camellabs.component.raspberrypi;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.github.camellabs.component.raspberrypi.RaspberryPiConstants;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -50,7 +48,7 @@ public class URLRegex {
         Assert.assertEquals("1", m.group("id"));
         Assert.assertEquals("raspberrypi", m.group("scheme"));
     }
-    
+
     @Test
     public void schemeWOSlashTest() {
 
@@ -72,7 +70,7 @@ public class URLRegex {
         Assert.assertEquals("aze", m.group("id"));
 
     }
-    
+
     @Test
     public void simpleTestRestStyle() {
 
