@@ -14,10 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.raspberrypi;
+package com.github.camellabs.component.raspberrypi.gpio;
 
 import java.lang.reflect.Field;
 
+import com.github.camellabs.component.raspberrypi.PinAction;
+import com.github.camellabs.component.raspberrypi.RaspberryPiComponent;
+import com.github.camellabs.component.raspberrypi.RaspberryPiType;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.Pin;

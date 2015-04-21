@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.camellabs.component.raspberrypi.gpio.RaspberryPiEndpoint;
 import com.github.camellabs.component.raspberrypi.i2c.I2CEndpoint;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;

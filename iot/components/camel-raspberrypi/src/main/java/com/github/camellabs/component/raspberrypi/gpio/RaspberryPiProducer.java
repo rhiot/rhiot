@@ -14,13 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.raspberrypi;
+package com.github.camellabs.component.raspberrypi.gpio;
 
+import com.github.camellabs.component.raspberrypi.PinAction;
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.GpioPinAnalogOutput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.GpioPinPwmOutput;
 import com.pi4j.io.gpio.PinMode;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 
