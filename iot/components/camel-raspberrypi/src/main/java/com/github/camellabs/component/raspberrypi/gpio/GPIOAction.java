@@ -16,6 +16,6 @@
  */
 package com.github.camellabs.component.raspberrypi.gpio;
 
-public enum PinAction {
+public enum GPIOAction {
     TOGGLE, BUZZ, HIGH, LOW
 }

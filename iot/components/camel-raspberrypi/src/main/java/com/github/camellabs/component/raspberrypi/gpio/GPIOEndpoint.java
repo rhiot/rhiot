@@ -60,7 +60,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
     private PinMode mode = PinMode.DIGITAL_OUTPUT;
 
     @UriParam(description = "Default : use Body if Action for ouput Pin (TOGGLE, BUZZ, HIGH, LOW for digital only) (HEADER digital and analog) ", enums = "TOGGLE:BUZZ:HIGH:LOW:HEADER")
-    private PinAction action;
+    private GPIOAction action;
 
     @UriParam(defaultValue = "0", description = "Analog or PWN Only")
     private double value;
@@ -162,7 +162,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
         return new GPIOProducer(this, pin, action);
     }
 
-    public PinAction getAction() {
+    public GPIOAction getAction() {
         return action;
     }
 
@@ -260,7 +260,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
         return true;
     }
 
-    public void setAction(PinAction action) {
+    public void setAction(GPIOAction action) {
         this.action = action;
     }
 
