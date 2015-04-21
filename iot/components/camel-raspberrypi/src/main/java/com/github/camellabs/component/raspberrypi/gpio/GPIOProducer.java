@@ -55,7 +55,12 @@ public class GPIOProducer extends DefaultProducer {
 
     private void output(Exchange exchange, Object value) {
 
-        switch (pin.getMode()) {
+        //
+        PinMode mode = pin.getMode();
+        log.debug("Mode > " + mode + " for " + pin);
+
+        // Check mode
+        switch (mode) {
 
         case DIGITAL_OUTPUT:
             Boolean outputBoolean = exchange.getContext().getTypeConverter().convertTo(Boolean.class, value);

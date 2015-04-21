@@ -38,7 +38,7 @@ public class AnalogOutputBodyTest extends CamelTestSupport {
     }
 
     @Test
-    public void providerGPIO() throws Exception {
+    public void produceAnalogOutputBodyTest() throws Exception {
 
         MockEndpoint mock = getMockEndpoint("mock:result");
 
@@ -47,7 +47,7 @@ public class AnalogOutputBodyTest extends CamelTestSupport {
         assertMockEndpointsSatisfied();
 
         Assert.assertEquals(INT_RESULT, MOCK_RASPI.getPwm(RaspiPin.GPIO_01), 0);
-        Assert.assertEquals(DOUBLE_RESULT, MOCK_RASPI.getValue(RaspiPin.GPIO_06), 0);
+        Assert.assertEquals(DOUBLE_RESULT, MOCK_RASPI.getValue(RaspiPin.GPIO_07), 0);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class AnalogOutputBodyTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("timer://foo?repeatCount=1").id("rbpi-route").transform().simple("121").to("raspberrypi://gpio/1?mode=PWM_OUTPUT").transform().simple("64.3")
-                    .to("raspberrypi://gpio/6?mode=ANALOG_OUTPUT").to("mock:result");
+                    .to("raspberrypi://gpio/7?mode=ANALOG_OUTPUT").to("mock:result");
             }
         };
     }

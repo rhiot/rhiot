@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * To emulate Raspberry from RaspiGpioProvider.java (PI4J library)
  */
-public final class RaspiGpioProviderMock extends GpioProviderBase implements GpioProvider, GpioInterruptListener {
+public class RaspiGpioProviderMock extends GpioProviderBase implements GpioProvider, GpioInterruptListener {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(RaspiGpioProviderMock.class);
 

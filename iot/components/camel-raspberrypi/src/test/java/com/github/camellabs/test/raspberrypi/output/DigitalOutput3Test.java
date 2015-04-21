@@ -37,7 +37,7 @@ public class DigitalOutput3Test extends CamelTestSupport {
     }
 
     @Test
-    public void providerDigitalOutput3Test() throws Exception {
+    public void produceDigitalOutput3Test() throws Exception {
 
         MockEndpoint mock = getMockEndpoint("mock:result");
 

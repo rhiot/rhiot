@@ -16,50 +16,50 @@
  */
 package com.github.camellabs.test.raspberrypi.output;
 
-import com.github.camellabs.component.raspberrypi.mock.RaspberryPiRevision;
 import com.github.camellabs.component.raspberrypi.mock.RaspiGpioProviderMock;
 import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.PinMode;
 import com.pi4j.io.gpio.RaspiPin;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-public class DigitalOutput1Test extends CamelTestSupport {
+public class AnalogOutputBodyMockitoTest extends CamelTestSupport {
 
-    public static final RaspiGpioProviderMock MOCK_RASPI = new RaspiGpioProviderMock(RaspberryPiRevision.MODEL_2);
+    public static final RaspiGpioProviderMock MOCK_RASPI = Mockito.spy(new RaspiGpioProviderMock());
 
-    static {
-        // Mandatory we are not inside a Real Raspberry PI
-        GpioFactory.setDefaultProvider(MOCK_RASPI);
-    }
+    public static final int INT_RESULT = 121;
+    public static final double DOUBLE_RESULT = 64.3;
 
     @Test
-    public void produceDigitalOutput1Test() throws Exception {
+    public void produceAnalogOutputBodyTest() throws Exception {
 
         MockEndpoint mock = getMockEndpoint("mock:result");
 
         mock.expectedMessageCount(1);
+        mock.expectedBodiesReceived(64.3);
 
         assertMockEndpointsSatisfied();
 
-        Assert.assertEquals("", PinState.HIGH, MOCK_RASPI.getState(RaspiPin.GPIO_17));
-        Assert.assertEquals("", PinState.LOW, MOCK_RASPI.getState(RaspiPin.GPIO_18));
-        Assert.assertEquals("", PinState.HIGH, MOCK_RASPI.getState(RaspiPin.GPIO_19));
-
+        Mockito.verify(MOCK_RASPI).setPwm(RaspiPin.GPIO_23, 121);
+        Mockito.verify(MOCK_RASPI).setValue(RaspiPin.GPIO_24, 64.3);
+        Mockito.verify(MOCK_RASPI).setMode(RaspiPin.GPIO_23, PinMode.PWM_OUTPUT);
+        Mockito.verify(MOCK_RASPI).setMode(RaspiPin.GPIO_24, PinMode.ANALOG_OUTPUT);
     }
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("timer://foo?repeatCount=1").id("rbpi-route").to("log:com.github.camellabs.component.raspberrypi?showAll=true&multiline=true")
-                    .to("raspberrypi://gpio/17?mode=DIGITAL_OUTPUT&state=LOW&action=TOGGLE").to("raspberrypi://gpio/18?mode=DIGITAL_OUTPUT&state=HIGH&action=LOW")
-                    .to("raspberrypi://gpio/19?mode=DIGITAL_OUTPUT&state=LOW&action=HIGH").to("mock:result");
+                Mockito.when(MOCK_RASPI.getMode(RaspiPin.GPIO_23)).thenReturn(PinMode.PWM_OUTPUT);
+                Mockito.when(MOCK_RASPI.getMode(RaspiPin.GPIO_24)).thenReturn(PinMode.ANALOG_OUTPUT);
 
+                GpioFactory.setDefaultProvider(MOCK_RASPI);
+                from("timer://foo?repeatCount=1").id("rbpi-route").transform().simple("121").to("raspberrypi://gpio/23?mode=PWM_OUTPUT").transform().simple("64.3")
+                    .to("raspberrypi://gpio/24?mode=ANALOG_OUTPUT").to("mock:result");
             }
         };
     }
