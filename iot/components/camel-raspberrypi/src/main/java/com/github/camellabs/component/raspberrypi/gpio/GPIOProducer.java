@@ -16,7 +16,6 @@
  */
 package com.github.camellabs.component.raspberrypi.gpio;
 
-import com.github.camellabs.component.raspberrypi.PinAction;
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.GpioPinAnalogOutput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;

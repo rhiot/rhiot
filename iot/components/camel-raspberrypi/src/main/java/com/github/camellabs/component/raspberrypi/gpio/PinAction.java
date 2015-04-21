@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.raspberrypi;
+package com.github.camellabs.component.raspberrypi.gpio;
 
 public enum PinAction {
     TOGGLE, BUZZ, HIGH, LOW

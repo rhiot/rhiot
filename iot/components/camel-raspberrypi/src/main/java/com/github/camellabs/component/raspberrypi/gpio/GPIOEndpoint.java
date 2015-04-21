@@ -18,7 +18,6 @@ package com.github.camellabs.component.raspberrypi.gpio;
 
 import java.lang.reflect.Field;
 
-import com.github.camellabs.component.raspberrypi.PinAction;
 import com.github.camellabs.component.raspberrypi.RaspberryPiComponent;
 import com.github.camellabs.component.raspberrypi.RaspberryPiType;
 import com.pi4j.io.gpio.GpioController;
