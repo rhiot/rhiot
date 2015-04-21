@@ -28,9 +28,12 @@ public final class RaspberryPiConstants {
     public static final String CAMEL_RBPI_PIN_STATE = CAMEL_RBPI + ".pinState";
     public static final String CAMEL_RBPI_PIN_TYPE = CAMEL_RBPI + ".pinType";
     public static final String CAMEL_RBPI_PIN_VALUE = CAMEL_RBPI + ".pinValue";
-    public static final String CAMEL_RBPI_URL_PATTERN = "((?<scheme>raspberrypi):(//)?)?(?<type>pin|i2c|serial|spi)(:|/)(?<id>[a-zA-Z0-9_-]+)";
+    public static final String CAMEL_RBPI_URL_PATTERN = "((?<scheme>raspberrypi):(//)?)?(?<type>pin|i2c|serial|spi)(:|/)(?<id>[a-zA-Z0-9_-]+)(/(?<device>[a-zA-Z0-9_-]+))?";
     public static final String CAMEL_URL_ID = "id";
     public static final String CAMEL_URL_TYPE = "type";
+    public static final String CAMEL_URL_DEVICE = "device";
+    public static final String CAMEL_DEVICE_ID = "deviceId";
+    public static final String CAMEL_BUS_ID = "busId";
 
     private RaspberryPiConstants() {
         // Constants class

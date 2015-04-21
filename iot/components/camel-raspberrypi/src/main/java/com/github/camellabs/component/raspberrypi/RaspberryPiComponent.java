@@ -20,8 +20,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.camellabs.component.raspberrypi.i2c.I2CEndpoint;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.i2c.I2CFactory;
+import com.pi4j.io.i2c.I2CFactoryProvider;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
@@ -62,7 +65,13 @@ public class RaspberryPiComponent extends UriEndpointComponent {
                 endpoint = new RaspberryPiEndpoint(uri, remaining, this, controller);
                 parameters.put(RaspberryPiConstants.CAMEL_URL_ID, match.group(RaspberryPiConstants.CAMEL_URL_ID));
                 parameters.put(RaspberryPiConstants.CAMEL_URL_TYPE, type);
+                break;
 
+            case I2C:
+                endpoint = new I2CEndpoint(uri, remaining, I2CFactory.getInstance(Integer.parseInt(match.group(RaspberryPiConstants.CAMEL_URL_ID))));
+                parameters.put(RaspberryPiConstants.CAMEL_BUS_ID, match.group(RaspberryPiConstants.CAMEL_URL_ID));
+                parameters.put(RaspberryPiConstants.CAMEL_DEVICE_ID, match.group(RaspberryPiConstants.CAMEL_URL_DEVICE));
+                // parameters.put(RaspberryPiConstants.CAMEL_URL_TYPE, type);
                 break;
 
             default:
@@ -72,6 +81,10 @@ public class RaspberryPiComponent extends UriEndpointComponent {
         }
 
         return endpoint;
+    }
+
+    public void setProvider(I2CFactoryProvider provider) {
+        I2CFactory.setFactory(provider);
     }
 
     @Override
