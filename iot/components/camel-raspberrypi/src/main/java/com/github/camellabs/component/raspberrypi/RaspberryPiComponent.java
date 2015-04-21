@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.github.camellabs.component.raspberrypi.gpio.RaspberryPiEndpoint;
+import com.github.camellabs.component.raspberrypi.gpio.GPIOEndpoint;
 import com.github.camellabs.component.raspberrypi.i2c.I2CEndpoint;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Represents the component that manages {@link RaspberryPiEndpoint}.
+ * Represents the component that manages {@link GPIOEndpoint}.
  */
 public class RaspberryPiComponent extends UriEndpointComponent {
 
@@ -45,11 +45,11 @@ public class RaspberryPiComponent extends UriEndpointComponent {
     private GpioController controller;
 
     public RaspberryPiComponent() {
-        super(RaspberryPiEndpoint.class);
+        super(GPIOEndpoint.class);
     }
 
     public RaspberryPiComponent(CamelContext context) {
-        super(context, RaspberryPiEndpoint.class);
+        super(context, GPIOEndpoint.class);
     }
 
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
@@ -63,7 +63,7 @@ public class RaspberryPiComponent extends UriEndpointComponent {
 
             switch (type) {
             case PIN:
-                endpoint = new RaspberryPiEndpoint(uri, remaining, this, controller);
+                endpoint = new GPIOEndpoint(uri, remaining, this, controller);
                 parameters.put(RaspberryPiConstants.CAMEL_URL_ID, match.group(RaspberryPiConstants.CAMEL_URL_ID));
                 parameters.put(RaspberryPiConstants.CAMEL_URL_TYPE, type);
                 break;

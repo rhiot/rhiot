@@ -44,10 +44,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Represents a Pin endpoint.
  */
-@UriEndpoint(scheme = "raspberrypi", syntax = "raspberrypi:pin:id", consumerClass = RaspberryPiConsumer.class, label = "platform,iot", title = "RaspberryPi")
-public class RaspberryPiEndpoint extends DefaultEndpoint {
+@UriEndpoint(scheme = "raspberrypi", syntax = "raspberrypi:pin:id", consumerClass = GPIOConsumer.class, label = "platform,iot", title = "RaspberryPi")
+public class GPIOEndpoint extends DefaultEndpoint {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(RaspberryPiEndpoint.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(GPIOEndpoint.class);
 
     @UriPath(description = "pin id (pi4j and wiringpi index)")
     @Metadata(required = "true")
@@ -84,10 +84,10 @@ public class RaspberryPiEndpoint extends DefaultEndpoint {
 
     private GpioController controller;
 
-    public RaspberryPiEndpoint() {
+    public GPIOEndpoint() {
     }
 
-    public RaspberryPiEndpoint(String uri, String pin, RaspberryPiComponent component, GpioController crtl) {
+    public GPIOEndpoint(String uri, String pin, RaspberryPiComponent component, GpioController crtl) {
         super(uri, component);
         ObjectHelper.notNull(crtl, "controller");
         this.controller = crtl;
@@ -125,7 +125,7 @@ public class RaspberryPiEndpoint extends DefaultEndpoint {
             throw new IllegalArgumentException("Cannot create twice same input pin for Consumer");
         }
 
-        return new RaspberryPiConsumer(this, processor, pin, state);
+        return new GPIOConsumer(this, processor, pin, state);
     }
 
     /**
@@ -160,7 +160,7 @@ public class RaspberryPiEndpoint extends DefaultEndpoint {
         }
 
         // shutdownOption(pin);
-        return new RaspberryPiProducer(this, pin, action);
+        return new GPIOProducer(this, pin, action);
     }
 
     public PinAction getAction() {

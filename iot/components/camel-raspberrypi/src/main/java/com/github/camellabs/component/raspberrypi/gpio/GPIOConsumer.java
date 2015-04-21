@@ -31,9 +31,9 @@ import org.apache.camel.impl.DefaultConsumer;
 /**
  * The Pin consumer.
  */
-public class RaspberryPiConsumer extends DefaultConsumer implements GpioPinListenerDigital, GpioPinListenerAnalog {
+public class GPIOConsumer extends DefaultConsumer implements GpioPinListenerDigital, GpioPinListenerAnalog {
 
-    private final RaspberryPiEndpoint endpoint;
+    private final GPIOEndpoint endpoint;
     private final GpioPin pin;
     private final PinState state;
 
@@ -45,7 +45,7 @@ public class RaspberryPiConsumer extends DefaultConsumer implements GpioPinListe
      * @param pin pin
      * @param state state
      */
-    public RaspberryPiConsumer(RaspberryPiEndpoint endpoint, Processor processor, GpioPin pin, PinState state) {
+    public GPIOConsumer(GPIOEndpoint endpoint, Processor processor, GpioPin pin, PinState state) {
         super(endpoint, processor);
         this.endpoint = endpoint;
         this.pin = pin;

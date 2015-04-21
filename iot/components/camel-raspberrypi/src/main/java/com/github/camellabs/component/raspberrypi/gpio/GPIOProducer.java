@@ -29,9 +29,9 @@ import org.apache.camel.impl.DefaultProducer;
 /**
  * The Pin producer.
  */
-public class RaspberryPiProducer extends DefaultProducer {
+public class GPIOProducer extends DefaultProducer {
 
-    private RaspberryPiEndpoint endpoint;
+    private GPIOEndpoint endpoint;
     private GpioPin pin;
     private PinAction action;
 
@@ -42,7 +42,7 @@ public class RaspberryPiProducer extends DefaultProducer {
      * @param pin the pin to manage
      * @param action the action to do
      */
-    public RaspberryPiProducer(RaspberryPiEndpoint endpoint, GpioPin pin, PinAction action) {
+    public GPIOProducer(GPIOEndpoint endpoint, GpioPin pin, PinAction action) {
         super(endpoint);
 
         this.endpoint = endpoint;

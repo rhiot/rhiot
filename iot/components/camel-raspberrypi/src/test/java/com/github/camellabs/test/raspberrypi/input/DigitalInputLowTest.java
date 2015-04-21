@@ -16,7 +16,7 @@
  */
 package com.github.camellabs.test.raspberrypi.input;
 
-import com.github.camellabs.component.raspberrypi.gpio.RaspberryPiConsumer;
+import com.github.camellabs.component.raspberrypi.gpio.GPIOConsumer;
 import com.github.camellabs.component.raspberrypi.mock.RaspiGpioProviderMock;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPin;
@@ -38,7 +38,7 @@ public class DigitalInputLowTest extends CamelTestSupport {
     @Test
     public void consumeDigitalEventIncorrectState() throws Exception {
 
-        RaspberryPiConsumer pinConsumer = (RaspberryPiConsumer)this.context.getRoute("test-route").getConsumer();
+        GPIOConsumer pinConsumer = (GPIOConsumer)this.context.getRoute("test-route").getConsumer();
 
         MockEndpoint mock = getMockEndpoint("mock:result");
 
