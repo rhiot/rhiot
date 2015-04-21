@@ -18,8 +18,8 @@ package com.github.camellabs.test.raspberrypi.i2c;
 
 import java.io.IOException;
 
-import com.github.camellabs.component.raspberrypi.mock.RaspiGpioProviderMock;
 import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.RaspiGpioProvider;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
@@ -34,11 +34,6 @@ import org.mockito.Mockito;
 public class I2CReadTest extends CamelTestSupport {
 
     private static int I2CInt = 121;
-
-    static {
-        // Mandatory we are not inside a Real Raspberry PI
-        GpioFactory.setDefaultProvider(new RaspiGpioProviderMock());
-    }
 
     @Test
     public void consumeI2CDevice() throws Exception {
@@ -68,6 +63,8 @@ public class I2CReadTest extends CamelTestSupport {
                     e.printStackTrace();
                 }
                 I2CFactory.setFactory(factory);
+                GpioFactory.setDefaultProvider(Mockito.mock(RaspiGpioProvider.class));
+
                 from("raspberrypi://i2c/1/12?readAction=READ").to("mock:result");
             }
         };

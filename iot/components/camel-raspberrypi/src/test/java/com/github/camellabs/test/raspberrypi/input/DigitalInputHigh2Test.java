@@ -17,23 +17,20 @@
 package com.github.camellabs.test.raspberrypi.input;
 
 import com.github.camellabs.component.raspberrypi.gpio.GPIOConsumer;
-import com.github.camellabs.component.raspberrypi.mock.RaspiGpioProviderMock;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPin;
+import com.pi4j.io.gpio.GpioProvider;
 import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiGpioProvider;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class DigitalInputHigh2Test extends CamelTestSupport {
-
-    static {
-        // Mandatory we are not inside a Real Raspberry PI
-        GpioFactory.setDefaultProvider(new RaspiGpioProviderMock());
-    }
 
     @Test
     public void consumeDigitalEventWithIncorrectState() throws Exception {
@@ -53,6 +50,9 @@ public class DigitalInputHigh2Test extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
+                GpioProvider factory = Mockito.mock(RaspiGpioProvider.class);
+
+                GpioFactory.setDefaultProvider(factory);
                 from("raspberrypi://gpio/16?mode=DIGITAL_INPUT&state=HIGH").id("test-route").to("mock:result");
 
             }

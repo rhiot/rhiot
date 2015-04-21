@@ -17,22 +17,19 @@
 package com.github.camellabs.test.raspberrypi.input;
 
 import com.github.camellabs.component.raspberrypi.gpio.GPIOConsumer;
-import com.github.camellabs.component.raspberrypi.mock.RaspiGpioProviderMock;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPin;
+import com.pi4j.io.gpio.GpioProvider;
+import com.pi4j.io.gpio.RaspiGpioProvider;
 import com.pi4j.io.gpio.event.GpioPinAnalogValueChangeEvent;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class AnalogInputTest extends CamelTestSupport {
-
-    static {
-        // Mandatory we are not inside a Real Raspberry PI
-        GpioFactory.setDefaultProvider(new RaspiGpioProviderMock());
-    }
 
     @Test
     public void consumeAnalogEvent() throws Exception {
@@ -51,7 +48,13 @@ public class AnalogInputTest extends CamelTestSupport {
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
+
             public void configure() {
+
+                GpioProvider factory = Mockito.mock(RaspiGpioProvider.class);
+
+                GpioFactory.setDefaultProvider(factory);
+
                 from("raspberrypi://gpio/1?mode=ANALOG_INPUT").id("test-route").to("mock:result");
 
             }
