@@ -54,7 +54,7 @@ public class AnalogOutputBodyTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("timer://foo?repeatCount=1").id("rbpi-route").transform().simple("121").to("raspberrypi:pin:1?mode=PWM_OUTPUT").transform().simple("64.3")
+                from("timer://foo?repeatCount=1").id("rbpi-route").transform().simple("121").to("raspberrypi://gpio/1?mode=PWM_OUTPUT").transform().simple("64.3")
                     .to("raspberrypi://gpio/6?mode=ANALOG_OUTPUT").to("mock:result");
             }
         };
