@@ -79,7 +79,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
     @UriPath(defaultValue = "pin", description = "pin : GPIO Wiringpi, i2c:spi:serial not yet available")
     @Metadata(required = "true")
-    private RaspberryPiType type = RaspberryPiType.PIN;
+    private RaspberryPiType type = RaspberryPiType.GPIO;
 
     private GpioController controller;
 

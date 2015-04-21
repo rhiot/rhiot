@@ -62,7 +62,7 @@ public class RaspberryPiComponent extends UriEndpointComponent {
             RaspberryPiType type = getCamelContext().getTypeConverter().convertTo(RaspberryPiType.class, match.group(RaspberryPiConstants.CAMEL_URL_TYPE));
 
             switch (type) {
-            case PIN:
+            case GPIO:
                 endpoint = new GPIOEndpoint(uri, remaining, this, controller);
                 parameters.put(RaspberryPiConstants.CAMEL_URL_ID, match.group(RaspberryPiConstants.CAMEL_URL_ID));
                 parameters.put(RaspberryPiConstants.CAMEL_URL_TYPE, type);

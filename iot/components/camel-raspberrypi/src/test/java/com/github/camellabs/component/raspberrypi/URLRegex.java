@@ -41,7 +41,7 @@ public class URLRegex {
     @Test
     public void schemeTest() {
 
-        String url = "raspberrypi://pin:1";
+        String url = "raspberrypi://gpio/1";
         Matcher m = p.matcher(url);
         Assert.assertTrue(m.matches());
         Assert.assertEquals("pin", m.group("type"));

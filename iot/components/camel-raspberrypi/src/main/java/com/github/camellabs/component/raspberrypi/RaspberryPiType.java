@@ -18,10 +18,9 @@ package com.github.camellabs.component.raspberrypi;
 
 /**
  * RaspberryPiType Enum
- * 
  */
 public enum RaspberryPiType {
-    I2C("i2c"), SPI("spi"), PIN("pin"), SERIAL("serial");
+    I2C("i2c"), SPI("spi"), GPIO("gpio"), SERIAL("serial");
 
     private String name = "";
 

@@ -52,7 +52,7 @@ public class AnalogInputTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("raspberrypi://pin/1?mode=ANALOG_INPUT").id("test-route").to("mock:result");
+                from("raspberrypi://gpio/1?mode=ANALOG_INPUT").id("test-route").to("mock:result");
 
             }
         };

@@ -53,7 +53,7 @@ public class DigitalInputHighTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("raspberrypi://pin/12?mode=DIGITAL_INPUT&state=HIGH").id("test-route").to("mock:result");
+                from("raspberrypi://gpio/12?mode=DIGITAL_INPUT&state=HIGH").id("test-route").to("mock:result");
 
             }
         };

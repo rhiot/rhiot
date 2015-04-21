@@ -53,7 +53,7 @@ public class DigitalInputLowTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("raspberrypi://pin:14?mode=DIGITAL_INPUT&state=LOW").id("test-route").to("mock:result");
+                from("raspberrypi://gpio/14?mode=DIGITAL_INPUT&state=LOW").id("test-route").to("mock:result");
 
             }
         };
