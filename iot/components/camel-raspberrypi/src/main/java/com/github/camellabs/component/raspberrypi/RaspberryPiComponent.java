@@ -24,6 +24,7 @@ import com.github.camellabs.component.raspberrypi.gpio.GPIOEndpoint;
 import com.github.camellabs.component.raspberrypi.i2c.I2CEndpoint;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.io.i2c.I2CFactoryProvider;
 
@@ -72,7 +73,7 @@ public class RaspberryPiComponent extends UriEndpointComponent {
                 endpoint = new I2CEndpoint(uri, remaining, I2CFactory.getInstance(Integer.parseInt(match.group(RaspberryPiConstants.CAMEL_URL_ID))));
                 parameters.put(RaspberryPiConstants.CAMEL_BUS_ID, match.group(RaspberryPiConstants.CAMEL_URL_ID));
                 parameters.put(RaspberryPiConstants.CAMEL_DEVICE_ID, match.group(RaspberryPiConstants.CAMEL_URL_DEVICE));
-                // parameters.put(RaspberryPiConstants.CAMEL_URL_TYPE, type);
+
                 break;
 
             default:
@@ -94,6 +95,18 @@ public class RaspberryPiComponent extends UriEndpointComponent {
         synchronized (SYNC) {
             if (controller == null) {
                 controller = GpioFactory.getInstance();
+            }
+        }
+    }
+
+    @Override
+    protected void doShutdown() throws Exception {
+        super.doShutdown();
+        if (controller != null) {
+            GpioPin gpiopins[] = new GpioPin[controller.getProvisionedPins().size()];
+            controller.getProvisionedPins().toArray(gpiopins);
+            for (GpioPin pin : gpiopins) {
+                controller.unprovisionPin(pin);
             }
         }
     }

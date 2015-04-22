@@ -121,7 +121,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
         } else {
             // enhancement we could manage several pins with one consumer
-            throw new IllegalArgumentException("Cannot create twice same input pin for Consumer");
+            throw new IllegalArgumentException("Cannot create twice same input pin [" + this.id + "] for Consumer");
         }
 
         return new GPIOConsumer(this, processor, pin, state);
@@ -155,7 +155,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
             }
             pin.setMode(this.mode); // Force Mode to avoid NPE
         } else { // enhancement we could manage several pins with one producer
-            throw new IllegalArgumentException("Cannot create twice same output pin for Producer");
+            throw new IllegalArgumentException("Cannot create twice same output gpio [" + this.id + "] for Producer");
         }
 
         // shutdownOption(pin);
