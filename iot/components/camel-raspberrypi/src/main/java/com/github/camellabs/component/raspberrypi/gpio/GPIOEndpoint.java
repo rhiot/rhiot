@@ -19,7 +19,6 @@ package com.github.camellabs.component.raspberrypi.gpio;
 import java.lang.reflect.Field;
 
 import com.github.camellabs.component.raspberrypi.RaspberryPiComponent;
-import com.github.camellabs.component.raspberrypi.RaspberryPiType;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.Pin;
@@ -76,10 +75,6 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
     @UriParam(defaultValue = "PULL_UP")
     private PinPullResistance pullResistance = PinPullResistance.PULL_UP;
-
-    @UriPath(defaultValue = "pin", description = "pin : GPIO Wiringpi, i2c:spi:serial not yet available")
-    @Metadata(required = "true")
-    private RaspberryPiType type = RaspberryPiType.GPIO;
 
     private GpioController controller;
 
@@ -236,10 +231,6 @@ public class GPIOEndpoint extends DefaultEndpoint {
         return state;
     }
 
-    public RaspberryPiType getType() {
-        return type;
-    }
-
     public double getValue() {
         return value;
     }
@@ -294,10 +285,6 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
     public void setState(PinState state) {
         this.state = state;
-    }
-
-    public void setType(RaspberryPiType type) {
-        this.type = type;
     }
 
     public void setValue(double value) {
