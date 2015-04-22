@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Represents a GPIO endpoint.
  */
-@UriEndpoint(scheme = "raspberrypi", syntax = "raspberrypi-gpio://gpioId", consumerClass = GPIOConsumer.class, label = "platform,iot", title = "RaspberryPi")
+@UriEndpoint(scheme = "raspberrypi-gpio", syntax = "raspberrypi-gpio://gpioId", consumerClass = GPIOConsumer.class, label = "platform,iot", title = "RaspberryPi")
 public class GPIOEndpoint extends DefaultEndpoint {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(GPIOEndpoint.class);

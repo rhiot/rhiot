@@ -30,7 +30,7 @@ import org.apache.camel.spi.UriPath;
 /**
  * Represents a I2C endpoint.
  */
-@UriEndpoint(scheme = "raspberrypi", syntax = "raspberrypi-i2c://busId/deviceId", consumerClass = I2CConsumer.class, label = "iot", title = "i2c")
+@UriEndpoint(scheme = "raspberrypi-i2c", syntax = "raspberrypi-i2c://busId/deviceId", consumerClass = I2CConsumer.class, label = "iot", title = "i2c")
 public class I2CEndpoint extends DefaultEndpoint {
     @UriPath
     @Metadata(required = "true")
