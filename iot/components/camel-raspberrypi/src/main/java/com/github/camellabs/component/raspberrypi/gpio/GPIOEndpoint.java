@@ -18,7 +18,6 @@ package com.github.camellabs.component.raspberrypi.gpio;
 
 import java.lang.reflect.Field;
 
-import com.github.camellabs.component.raspberrypi.RaspberryPiComponent;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.Pin;
@@ -40,9 +39,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Represents a Pin endpoint.
+ * Represents a GPIO endpoint.
  */
-@UriEndpoint(scheme = "raspberrypi", syntax = "raspberrypi:pin:id", consumerClass = GPIOConsumer.class, label = "platform,iot", title = "RaspberryPi")
+@UriEndpoint(scheme = "raspberrypi", syntax = "raspberrypi-pin://id", consumerClass = GPIOConsumer.class, label = "platform,iot", title = "RaspberryPi")
 public class GPIOEndpoint extends DefaultEndpoint {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(GPIOEndpoint.class);
@@ -81,7 +80,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
     public GPIOEndpoint() {
     }
 
-    public GPIOEndpoint(String uri, String pin, RaspberryPiComponent component, GpioController crtl) {
+    public GPIOEndpoint(String uri, String pin, GPIOComponent component, GpioController crtl) {
         super(uri, component);
         ObjectHelper.notNull(crtl, "controller");
         this.controller = crtl;

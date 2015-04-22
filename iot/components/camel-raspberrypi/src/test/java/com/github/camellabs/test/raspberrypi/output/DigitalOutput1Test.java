@@ -57,8 +57,8 @@ public class DigitalOutput1Test extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("timer://foo?repeatCount=1").id("rbpi-route").to("log:com.github.camellabs.component.raspberrypi?showAll=true&multiline=true")
-                    .to("raspberrypi://gpio/17?mode=DIGITAL_OUTPUT&state=LOW&action=TOGGLE").to("raspberrypi://gpio/18?mode=DIGITAL_OUTPUT&state=HIGH&action=LOW")
-                    .to("raspberrypi://gpio/19?mode=DIGITAL_OUTPUT&state=LOW&action=HIGH").to("mock:result");
+                    .to("raspberrypi-gpio://17?mode=DIGITAL_OUTPUT&state=LOW&action=TOGGLE").to("raspberrypi-gpio://18?mode=DIGITAL_OUTPUT&state=HIGH&action=LOW")
+                    .to("raspberrypi-gpio://19?mode=DIGITAL_OUTPUT&state=LOW&action=HIGH").to("mock:result");
 
             }
         };

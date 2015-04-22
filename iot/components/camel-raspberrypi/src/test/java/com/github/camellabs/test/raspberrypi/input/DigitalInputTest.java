@@ -55,7 +55,7 @@ public class DigitalInputTest extends CamelTestSupport {
                 GpioProvider factory = Mockito.mock(RaspiGpioProvider.class);
 
                 GpioFactory.setDefaultProvider(factory);
-                from("raspberrypi://gpio/15?mode=DIGITAL_INPUT").id("test-route").to("mock:result");
+                from("raspberrypi-gpio://15?mode=DIGITAL_INPUT").id("test-route").to("mock:result");
 
             }
         };

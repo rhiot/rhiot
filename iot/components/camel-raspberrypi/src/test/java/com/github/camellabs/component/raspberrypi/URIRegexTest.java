@@ -24,61 +24,25 @@ import org.junit.Test;
 
 public class URIRegexTest {
 
-    Pattern p = Pattern.compile(RaspberryPiConstants.CAMEL_RBPI_URL_PATTERN);
-
     @Test
-    public void simpleTest() {
-
-        String url = "gpio/1";
-
+    public void schemeGPIOTest() {
+        Pattern p = Pattern.compile(RaspberryPiConstants.CAMEL_GPIO_URL_PATTERN);
+        String url = "raspberrypi-gpio://1";
         Matcher m = p.matcher(url);
         Assert.assertTrue(m.matches());
-        Assert.assertEquals("gpio", m.group("type"));
-        Assert.assertEquals("1", m.group("id"));
-
+        Assert.assertEquals("1", m.group("gpioId"));
+        Assert.assertEquals("raspberrypi-gpio", m.group("scheme"));
     }
 
     @Test
-    public void schemeTest() {
-
-        String url = "raspberrypi://gpio/1";
+    public void schemeI2CTest() {
+        Pattern p = Pattern.compile(RaspberryPiConstants.CAMEL_I2C_URL_PATTERN);
+        String url = "raspberrypi-i2c://121/12";
         Matcher m = p.matcher(url);
         Assert.assertTrue(m.matches());
-        Assert.assertEquals("gpio", m.group("type"));
-        Assert.assertEquals("1", m.group("id"));
-        Assert.assertEquals("raspberrypi", m.group("scheme"));
-    }
-
-    @Test
-    public void schemeWOSlashTest() {
-
-        String url = "gpio/1";
-        Matcher m = p.matcher(url);
-        Assert.assertTrue(m.matches());
-        Assert.assertEquals("gpio", m.group("type"));
-        Assert.assertEquals("1", m.group("id"));
-    }
-
-    @Test
-    public void simpleTestI2C() {
-
-        String url = "i2c/aze";
-        Matcher m = p.matcher(url);
-        Assert.assertTrue(m.matches());
-        Assert.assertEquals("i2c", m.group("type"));
-        Assert.assertEquals("aze", m.group("id"));
-
-    }
-
-    @Test
-    public void simpleTestRestStyle() {
-
-        String url = "i2c/aze";
-        Matcher m = p.matcher(url);
-        Assert.assertTrue(m.matches());
-        Assert.assertEquals("i2c", m.group("type"));
-        Assert.assertEquals("aze", m.group("id"));
-
+        Assert.assertEquals("121", m.group("busId"));
+        Assert.assertEquals("12", m.group("deviceId"));
+        Assert.assertEquals("raspberrypi-i2c", m.group("scheme"));
     }
 
 }

@@ -14,14 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.raspberrypi;
+package com.github.camellabs.component.raspberrypi.gpio;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.github.camellabs.component.raspberrypi.gpio.GPIOEndpoint;
-import com.github.camellabs.component.raspberrypi.i2c.I2CEndpoint;
+import com.github.camellabs.component.raspberrypi.RaspberryPiConstants;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPin;
@@ -37,47 +36,32 @@ import org.slf4j.LoggerFactory;
 /**
  * Represents the component that manages {@link GPIOEndpoint}.
  */
-public class RaspberryPiComponent extends UriEndpointComponent {
+public class GPIOComponent extends UriEndpointComponent {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(RaspberryPiComponent.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(GPIOComponent.class);
 
-    private static final Object SYNC = RaspberryPiComponent.class;
+    private static final Object SYNC = GPIOComponent.class;
 
     private GpioController controller;
 
-    public RaspberryPiComponent() {
+    public GPIOComponent() {
         super(GPIOEndpoint.class);
     }
 
-    public RaspberryPiComponent(CamelContext context) {
+    public GPIOComponent(CamelContext context) {
         super(context, GPIOEndpoint.class);
     }
 
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         Endpoint endpoint = null;
-        Pattern regexPattern = Pattern.compile(RaspberryPiConstants.CAMEL_RBPI_URL_PATTERN);
+        Pattern regexPattern = Pattern.compile(RaspberryPiConstants.CAMEL_GPIO_URL_PATTERN);
 
         Matcher match = regexPattern.matcher(remaining);
         if (match.matches()) {
 
-            RaspberryPiType type = getCamelContext().getTypeConverter().convertTo(RaspberryPiType.class, match.group(RaspberryPiConstants.CAMEL_URL_TYPE));
+            endpoint = new GPIOEndpoint(uri, remaining, this, controller);
+            parameters.put(RaspberryPiConstants.CAMEL_URL_ID, match.group(RaspberryPiConstants.CAMEL_GPIO_ID));
 
-            switch (type) {
-            case GPIO:
-                endpoint = new GPIOEndpoint(uri, remaining, this, controller);
-                parameters.put(RaspberryPiConstants.CAMEL_URL_ID, match.group(RaspberryPiConstants.CAMEL_URL_ID));
-                break;
-
-            case I2C:
-                endpoint = new I2CEndpoint(uri, remaining, I2CFactory.getInstance(Integer.parseInt(match.group(RaspberryPiConstants.CAMEL_URL_ID))));
-                parameters.put(RaspberryPiConstants.CAMEL_BUS_ID, match.group(RaspberryPiConstants.CAMEL_URL_ID));
-                parameters.put(RaspberryPiConstants.CAMEL_DEVICE_ID, match.group(RaspberryPiConstants.CAMEL_URL_DEVICE));
-
-                break;
-
-            default:
-                break;
-            }
             setProperties(endpoint, parameters);
         }
 

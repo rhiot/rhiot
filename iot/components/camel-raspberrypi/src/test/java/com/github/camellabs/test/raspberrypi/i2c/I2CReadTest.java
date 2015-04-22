@@ -65,7 +65,7 @@ public class I2CReadTest extends CamelTestSupport {
                 I2CFactory.setFactory(factory);
                 GpioFactory.setDefaultProvider(Mockito.mock(RaspiGpioProvider.class));
 
-                from("raspberrypi://i2c/1/12?readAction=READ").to("mock:result");
+                from("raspberrypi-i2c://1/12?readAction=READ").to("mock:result");
             }
         };
     }
