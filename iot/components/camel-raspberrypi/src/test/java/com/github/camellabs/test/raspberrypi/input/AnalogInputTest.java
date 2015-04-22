@@ -55,7 +55,7 @@ public class AnalogInputTest extends CamelTestSupport {
 
                 GpioFactory.setDefaultProvider(factory);
 
-                from("raspberrypi-gpio://1?mode=ANALOG_INPUT").id("test-route").to("mock:result");
+                from("raspberrypi-gpio://0?mode=ANALOG_INPUT").id("test-route").to("mock:result");
 
             }
         };
