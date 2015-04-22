@@ -41,14 +41,14 @@ import org.slf4j.LoggerFactory;
 /**
  * Represents a GPIO endpoint.
  */
-@UriEndpoint(scheme = "raspberrypi", syntax = "raspberrypi-pin://id", consumerClass = GPIOConsumer.class, label = "platform,iot", title = "RaspberryPi")
+@UriEndpoint(scheme = "raspberrypi", syntax = "raspberrypi-gpio://gpioId", consumerClass = GPIOConsumer.class, label = "platform,iot", title = "RaspberryPi")
 public class GPIOEndpoint extends DefaultEndpoint {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(GPIOEndpoint.class);
 
-    @UriPath(description = "pin id (pi4j and wiringpi index)")
+    @UriPath(description = "pin gpioId (pi4j and wiringpi index)")
     @Metadata(required = "true")
-    private String id;
+    private String gpioId;
 
     @UriParam(description = "Digital Only: if input mode then state trigger event, if output then started value")
     private PinState state = null;
@@ -115,7 +115,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
         } else {
             // enhancement we could manage several pins with one consumer
-            throw new IllegalArgumentException("Cannot create twice same input pin [" + this.id + "] for Consumer");
+            throw new IllegalArgumentException("Cannot create twice same input pin [" + this.gpioId + "] for Consumer");
         }
 
         return new GPIOConsumer(this, processor, pin, state);
@@ -149,7 +149,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
             }
             pin.setMode(this.mode); // Force Mode to avoid NPE
         } else { // enhancement we could manage several pins with one producer
-            throw new IllegalArgumentException("Cannot create twice same output gpio [" + this.id + "] for Producer");
+            throw new IllegalArgumentException("Cannot create twice same output gpio [" + this.gpioId + "] for Producer");
         }
 
         // shutdownOption(pin);
@@ -162,10 +162,6 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
     public GpioController getController() {
         return controller;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public PinMode getMode() {
@@ -184,11 +180,11 @@ public class GPIOEndpoint extends DefaultEndpoint {
     private Pin getPin() {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug(" Pin Id > " + id);
+            LOG.debug(" Pin Id > " + gpioId);
         }
 
         Pin ret = null;
-        String pinAddress = (Integer.parseInt(id) < 10) ? "0" + id : id;
+        String pinAddress = (Integer.parseInt(gpioId) < 10) ? "0" + gpioId : gpioId;
 
         Class<RaspiPin> clazz = RaspiPin.class;
 
@@ -238,7 +234,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
         GpioPin ret = null;
 
         for (GpioPin pin : getOrCreateController().getProvisionedPins()) {
-            if (pin.getPin().getAddress() == Integer.parseInt(id)) {
+            if (pin.getPin().getAddress() == Integer.parseInt(gpioId)) {
                 ret = pin;
                 break;
             }
@@ -258,8 +254,12 @@ public class GPIOEndpoint extends DefaultEndpoint {
         this.controller = controller;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getGpioId() {
+        return gpioId;
+    }
+
+    public void setGpioId(String gpioId) {
+        this.gpioId = gpioId;
     }
 
     public void setMode(PinMode mode) {

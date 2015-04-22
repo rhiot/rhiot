@@ -60,7 +60,7 @@ public class GPIOComponent extends UriEndpointComponent {
         if (match.matches()) {
 
             endpoint = new GPIOEndpoint(uri, remaining, this, controller);
-            parameters.put(RaspberryPiConstants.CAMEL_URL_ID, match.group(RaspberryPiConstants.CAMEL_GPIO_ID));
+            parameters.put(RaspberryPiConstants.CAMEL_GPIO_ID, match.group(RaspberryPiConstants.CAMEL_GPIO_ID));
 
             setProperties(endpoint, parameters);
         }
