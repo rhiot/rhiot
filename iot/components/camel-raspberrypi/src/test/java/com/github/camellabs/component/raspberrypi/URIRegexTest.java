@@ -22,18 +22,18 @@ import java.util.regex.Pattern;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class URLRegex {
+public class URIRegexTest {
 
     Pattern p = Pattern.compile(RaspberryPiConstants.CAMEL_RBPI_URL_PATTERN);
 
     @Test
     public void simpleTest() {
 
-        String url = "pin:1";
+        String url = "gpio/1";
 
         Matcher m = p.matcher(url);
         Assert.assertTrue(m.matches());
-        Assert.assertEquals("pin", m.group("type"));
+        Assert.assertEquals("gpio", m.group("type"));
         Assert.assertEquals("1", m.group("id"));
 
     }
@@ -44,7 +44,7 @@ public class URLRegex {
         String url = "raspberrypi://gpio/1";
         Matcher m = p.matcher(url);
         Assert.assertTrue(m.matches());
-        Assert.assertEquals("pin", m.group("type"));
+        Assert.assertEquals("gpio", m.group("type"));
         Assert.assertEquals("1", m.group("id"));
         Assert.assertEquals("raspberrypi", m.group("scheme"));
     }
@@ -52,18 +52,17 @@ public class URLRegex {
     @Test
     public void schemeWOSlashTest() {
 
-        String url = "raspberrypi:pin:1";
+        String url = "gpio/1";
         Matcher m = p.matcher(url);
         Assert.assertTrue(m.matches());
-        Assert.assertEquals("pin", m.group("type"));
+        Assert.assertEquals("gpio", m.group("type"));
         Assert.assertEquals("1", m.group("id"));
-        Assert.assertEquals("raspberrypi", m.group("scheme"));
     }
 
     @Test
     public void simpleTestI2C() {
 
-        String url = "i2c:aze";
+        String url = "i2c/aze";
         Matcher m = p.matcher(url);
         Assert.assertTrue(m.matches());
         Assert.assertEquals("i2c", m.group("type"));
