@@ -24,13 +24,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A simple application to run RaspberryPi Camel
- * 
  */
 public final class CamelMain {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(CamelMain.class);
-    
-    private CamelMain() { }
+
+    private CamelMain() {
+    }
 
     public static class CommandLineRouteBuilder extends RouteBuilder {
 
@@ -46,10 +46,9 @@ public final class CamelMain {
         }
     }
 
-   
     public static void main(String[] args) throws Exception {
         LOG.info("main");
-        
+
         for (int i = 0; i < args.length; i++) {
             LOG.info("args[" + i + "] =" + args[i]);
         }
