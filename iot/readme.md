@@ -15,16 +15,25 @@ development easier.
 #### Library Depedency
 This module uses [pi4j](http://pi4j.com/) library - version 1.0
 
-#### Maven Depedency
+#### Maven Dependency
 
 #### GPIO Endpoint
-##### URI
+##### URI Format
+```
+raspberrypi-gpio://gpioId[?options]
+```
+
 ##### URI Options
 ##### Headers
 ##### Body
 
 #### I2C Endpoint
-##### URI
+##### URI Format
+```
+raspberrypi-i2c://busId/deviceId[?options]
+```
+
+##### URI Options
 ##### URI Options
 ##### Headers
 ##### Body
@@ -36,16 +45,25 @@ This module uses [pi4j](http://pi4j.com/) library - version 1.0
 #### Library Depedency
 This module uses [Device I/O API/Impl](https://wiki.openjdk.java.net/display/dio/Main) library - version 1.0.1
 
-#### Maven Depedency
+#### Maven Dependency
 
 #### GPIO Endpoint
-##### URI
+##### URI Format
+```
+deviceio-gpio://gpioId[?options]
+```
+
 ##### URI Options
 ##### Headers
 ##### Body
 
 #### I2C Endpoint
-##### URI
+##### URI Format
+```
+deviceio-i2c://busId/deviceId[?options]
+```
+
+##### URI Options
 ##### URI Options
 ##### Headers
 ##### Body
