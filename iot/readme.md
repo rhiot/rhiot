@@ -17,3 +17,7 @@ development easier.
 ### Camel Device IO component
 
 ::: the component documentation here :::
+
+### Camel Tinkerforgecomponent
+
+::: the component documentation here :::
