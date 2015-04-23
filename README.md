@@ -7,7 +7,8 @@ because of the wider scope of these or because of the licensing reasons.
 
 ## Subprojects
 
-- IoT - covers modules providing the Internet Of Things functionalities
+- [Camel IoT Labs](https://github.com/camel-labs/camel-labs/tree/master/iot) - covers modules providing the Internet Of 
+Things functionalities
 
 ## Build status
 
