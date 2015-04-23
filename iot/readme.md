@@ -16,6 +16,14 @@ development easier.
 This module uses [pi4j](http://pi4j.com/) library - version 1.0
 
 #### Maven Dependency
+```
+<dependency>
+    <groupId>com.github.camel-labs</groupId>
+    <artifactId>camel-raspberry</artifactId>
+    <version>x.x.x</version>
+    <!-- use the same version as your Camel core version -->
+</dependency>
+```
 
 #### GPIO Endpoint
 ##### URI Format
@@ -46,6 +54,14 @@ raspberrypi-i2c://busId/deviceId[?options]
 This module uses [Device I/O API/Impl](https://wiki.openjdk.java.net/display/dio/Main) library - version 1.0.1
 
 #### Maven Dependency
+```
+<dependency>
+    <groupId>com.github.camel-labs</groupId>
+    <artifactId>camel-device-io</artifactId>
+    <version>x.x.x</version>
+    <!-- use the same version as your Camel core version -->
+</dependency>
+```
 
 #### GPIO Endpoint
 ##### URI Format
