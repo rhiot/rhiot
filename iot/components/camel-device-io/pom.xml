@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Camel Labs under one or more contributor license agreements. 
+	See the NOTICE file distributed with this work for additional information 
+	regarding copyright ownership. The licenses this file to You under the Apache 
+	License, Version 2.0 (the "License"); you may not use this file except in 
+	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>  <!-- should be removed -->
+		<groupId>com.github.camel-labs</groupId>
+		<artifactId>camel-labs-iot-components</artifactId>
+		<version>0.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>camel-device-io</artifactId>
+	<packaging>bundle</packaging>
+	<name>camel-labs-iot-components-device-io</name>
+	<description>Camel Device IO Component</description>
+
+	<properties>
+		<jdk-dio-version>1.0.1</jdk-dio-version>
+		<commons-cli-version>1.2</commons-cli-version>
+
+		<camel.osgi.export.pkg>
+			com.github.camellabs.component.deviceio.*,
+			com.github.camellabs.component.deviceio.converter.*
+		</camel.osgi.export.pkg>
+		<camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=deviceio</camel.osgi.export.service>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>jdk</groupId>
+			<artifactId>jdk.dio</artifactId>
+			<version>${jdk-dio-version}</version>
+		</dependency>
+
+		<!-- logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- testing -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<reuseForks>false</reuseForks>
+					<excludes>
+						<exclude>**/*IntTest*</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>com.github.camellabs.component.raspberrypi.CamelMain</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>itest</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>**/*.xml</exclude>
+							</excludes>
+							<includes>
+								<include>**/*IntTest*</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>raspberry</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-dependencies</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}</outputDirectory>
+									<!-- configure the plugin here -->
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<repositories>
+		<repository>
+			<id>kura_addons</id>
+			<name>Kura Addons Maven Repository</name>
+			<url>https://raw.github.com/eurotech/kura_addons/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+</project>
+
