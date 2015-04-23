@@ -45,8 +45,6 @@ public class I2CProducer extends DefaultProducer implements I2CDevice {
     public void process(Exchange exchange) throws Exception {
         Object o = exchange.getIn().getBody();
 
-        exchange.isTransacted();
-
         if (o instanceof Byte) {
             if (endpoint.getAddress() >= 0) {
                 write(endpoint.getAddress(), (Byte)o);
@@ -97,5 +95,13 @@ public class I2CProducer extends DefaultProducer implements I2CDevice {
 
     public void write(int address, byte[] buffer, int offset, int size) throws IOException {
         this.device.read(address, buffer, offset, size);
+    }
+
+    public I2CDevice getDevice() {
+        return device;
+    }
+
+    public void setDevice(I2CDevice device) {
+        this.device = device;
     }
 }
