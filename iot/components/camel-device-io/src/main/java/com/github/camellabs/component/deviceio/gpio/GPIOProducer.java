@@ -20,7 +20,6 @@ package com.github.camellabs.component.deviceio.gpio;
 import java.io.IOException;
 
 import jdk.dio.ClosedDeviceException;
-import jdk.dio.Device;
 import jdk.dio.UnavailableDeviceException;
 import jdk.dio.gpio.GPIOPin;
 
@@ -33,7 +32,7 @@ import org.apache.camel.impl.DefaultProducer;
 public class GPIOProducer extends DefaultProducer {
 
     private GPIOEndpoint endpoint;
-    private Device pin = null;
+    private GPIOPin pin = null;
 
     /**
      * Create Producer to PIN with OUTPUT mode
@@ -82,7 +81,7 @@ public class GPIOProducer extends DefaultProducer {
         this.pin = pin;
     }
 
-    public Device getPin() {
+    public GPIOPin getPin() {
         return pin;
     }
 }

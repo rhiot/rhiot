@@ -69,9 +69,7 @@ public class GPIOConsumer extends DefaultConsumer implements PinListener, PortLi
 
     private void sendEvent(Exchange exchange) {
         try {
-
             getProcessor().process(exchange);
-
         } catch (Exception e) {
             exchange.setException(e);
         } finally {
