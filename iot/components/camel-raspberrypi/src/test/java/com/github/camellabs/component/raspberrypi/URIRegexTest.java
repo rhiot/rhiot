@@ -35,6 +35,15 @@ public class URIRegexTest {
     }
 
     @Test
+    public void schemeShortGPIOTest() {
+        Pattern p = Pattern.compile(RaspberryPiConstants.CAMEL_GPIO_URL_PATTERN);
+        String url = "1";
+        Matcher m = p.matcher(url);
+        Assert.assertTrue(m.matches());
+        Assert.assertEquals("1", m.group("gpioId"));
+    }
+
+    @Test
     public void schemeI2CTest() {
         Pattern p = Pattern.compile(RaspberryPiConstants.CAMEL_I2C_URL_PATTERN);
         String url = "raspberrypi-i2c://121/12";
@@ -43,6 +52,16 @@ public class URIRegexTest {
         Assert.assertEquals("121", m.group("busId"));
         Assert.assertEquals("12", m.group("deviceId"));
         Assert.assertEquals("raspberrypi-i2c", m.group("scheme"));
+    }
+
+    @Test
+    public void schemeShortI2CTest() {
+        Pattern p = Pattern.compile(RaspberryPiConstants.CAMEL_I2C_URL_PATTERN);
+        String url = "121/12";
+        Matcher m = p.matcher(url);
+        Assert.assertTrue(m.matches());
+        Assert.assertEquals("121", m.group("busId"));
+        Assert.assertEquals("12", m.group("deviceId"));
     }
 
 }
