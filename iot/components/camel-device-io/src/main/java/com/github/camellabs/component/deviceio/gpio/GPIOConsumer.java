@@ -37,14 +37,6 @@ public class GPIOConsumer extends DefaultConsumer implements PinListener, PortLi
     private final GPIOEndpoint endpoint;
     private final GPIOPin pin;
 
-    /**
-     * Create Consumer mapped to INPUT pin
-     * 
-     * @param endpoint Camel Endpoint
-     * @param processor Camel Processor
-     * @param pin
-     * @param state
-     */
     public GPIOConsumer(GPIOEndpoint endpoint, Processor processor, GPIOPin pin) {
         super(endpoint, processor);
         this.endpoint = endpoint;
