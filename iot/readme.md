@@ -18,6 +18,6 @@ development easier.
 
 ::: the component documentation here :::
 
-### Camel Tinkerforgecomponent
+### Camel Tinkerforge component
 
 ::: the component documentation here :::
