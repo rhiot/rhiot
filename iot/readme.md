@@ -13,7 +13,7 @@ development easier.
 ### Camel Raspberry Pi component
 
 #### Library Depedency
-This module uses [pi4j](http://pi4j.com/) library
+This module uses [pi4j](http://pi4j.com/) library - version 1.0
 
 #### Maven Depedency
 
@@ -34,7 +34,7 @@ This module uses [pi4j](http://pi4j.com/) library
 ### Camel Device IO component
 
 #### Library Depedency
-This module uses [Device I/O API/Imp](https://wiki.openjdk.java.net/display/dio/Main) library
+This module uses [Device I/O API/Impl](https://wiki.openjdk.java.net/display/dio/Main) library - version 1.0.1
 
 #### Maven Depedency
 
