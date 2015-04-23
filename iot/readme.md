@@ -14,7 +14,7 @@ development easier.
 
 #### Library Depedency
 <img src="http://pi4j.com/images/logos/pi4j-header-small3.png" align="left">
-
+<br>
 This module uses [pi4j](http://pi4j.com/) library
 
 #### Maven Depedency
