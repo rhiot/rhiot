@@ -13,8 +13,6 @@ development easier.
 ### Camel Raspberry Pi component
 
 #### Library Depedency
-<img src="http://pi4j.com/images/logos/pi4j-header-small3.png" align="left">
-<br>
 This module uses [pi4j](http://pi4j.com/) library
 
 #### Maven Depedency
@@ -35,6 +33,22 @@ This module uses [pi4j](http://pi4j.com/) library
 
 ### Camel Device IO component
 
+#### Library Depedency
+This module uses [Device I/O API/Imp](https://wiki.openjdk.java.net/display/dio/Main) library
+
+#### Maven Depedency
+
+#### GPIO Endpoint
+##### URI
+##### URI Options
+##### Headers
+##### Body
+
+#### I2C Endpoint
+##### URI
+##### URI Options
+##### Headers
+##### Body
 
 ### Camel Tinkerforge component
 
