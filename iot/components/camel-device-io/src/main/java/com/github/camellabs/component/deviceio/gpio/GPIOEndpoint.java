@@ -51,7 +51,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
     @Metadata(required = "true")
     private String gpioId;
 
-    @UriParam(description = "Default : use Body if Action for ouput Pin (TOGGLE, BUZZ, HIGH, LOW for digital only) (HEADER digital and analog) ", enums = "TOGGLE:BUZZ:HIGH:LOW:HEADER")
+    @UriParam(description = "Default : use Body if Action for ouput Pin (TOGGLE, HIGH, LOW for digital only) ", enums = "TOGGLE:HIGH:LOW:HEADER")
     private GPIOAction action;
 
     @UriParam(defaultValue = "false", description = "")
