@@ -38,7 +38,7 @@ raspberrypi-gpio://gpioId[?options]
 #### I2C Endpoint
 ##### URI Format
 ```
-raspberrypi-i2c://busId/deviceId[?options]
+raspberrypi-i2c://(0x)busId/(0x)deviceId[?options]
 ```
 
 ##### URI Options
@@ -76,7 +76,7 @@ deviceio-gpio://gpioId[?options]
 #### I2C Endpoint
 ##### URI Format
 ```
-deviceio-i2c://busId/deviceId[?options]
+deviceio-i2c://(0x)busId/(0x)deviceId[?options]
 ```
 
 ##### URI Options
