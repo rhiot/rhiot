@@ -154,6 +154,7 @@
                             </licenseFamily>
                         </licenseFamilies>
                         <excludes>
+                            <exclude>**/readme.md</exclude>
                             <exclude>**/README.md</exclude>
                         </excludes>
                     </configuration>
