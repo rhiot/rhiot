@@ -23,6 +23,7 @@
   <modules>
     <module>camel-raspberrypi</module>
     <module>camel-device-io</module>
+    <module>camel-tinkerforge</module>
   </modules>
 
   <build>
