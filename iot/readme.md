@@ -12,4 +12,8 @@ development easier.
 
 ### Camel Raspberry Pi component
 
-::: Greg should put the component documentation here :::
+::: the component documentation here :::
+
+### Camel Device IO component
+
+::: the component documentation here :::
