@@ -13,6 +13,8 @@ development easier.
 ### Camel Raspberry Pi component
 
 #### Library Depedency
+<img src="http://pi4j.com/images/logos/pi4j-header-small3.png" align="left">
+
 This module uses [pi4j](http://pi4j.com/) library
 
 #### Maven Depedency
