@@ -34,13 +34,6 @@ public class GPIOProducer extends DefaultProducer {
     private GPIOEndpoint endpoint;
     private GPIOPin pin = null;
 
-    /**
-     * Create Producer to PIN with OUTPUT mode
-     * 
-     * @param endpoint the endpoint
-     * @param pin the pin to manage
-     * @param action the action to do
-     */
     public GPIOProducer(GPIOEndpoint endpoint, GPIOPin pin) {
         super(endpoint);
         this.endpoint = endpoint;
