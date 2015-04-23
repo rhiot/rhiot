@@ -22,6 +22,7 @@
 
   <modules>
     <module>camel-raspberrypi</module>
+    <module>camel-device-io</module>
   </modules>
 
   <build>
