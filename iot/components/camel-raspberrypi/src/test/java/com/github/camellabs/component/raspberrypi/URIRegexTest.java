@@ -55,6 +55,17 @@ public class URIRegexTest {
     }
 
     @Test
+    public void schemeI2CHexTest() {
+        Pattern p = Pattern.compile(RaspberryPiConstants.CAMEL_I2C_URL_PATTERN);
+        String url = "raspberrypi-i2c://121/0x12";
+        Matcher m = p.matcher(url);
+        Assert.assertTrue(m.matches());
+        Assert.assertEquals("121", m.group("busId"));
+        Assert.assertEquals(18, Integer.decode(m.group("deviceId")).intValue());
+        Assert.assertEquals("raspberrypi-i2c", m.group("scheme"));
+    }
+
+    @Test
     public void schemeShortI2CTest() {
         Pattern p = Pattern.compile(RaspberryPiConstants.CAMEL_I2C_URL_PATTERN);
         String url = "121/12";
@@ -62,6 +73,26 @@ public class URIRegexTest {
         Assert.assertTrue(m.matches());
         Assert.assertEquals("121", m.group("busId"));
         Assert.assertEquals("12", m.group("deviceId"));
+    }
+
+    @Test
+    public void schemeShortI2CHexTest() {
+        Pattern p = Pattern.compile(RaspberryPiConstants.CAMEL_I2C_URL_PATTERN);
+        String url = "0x10/0x100";
+        Matcher m = p.matcher(url);
+        Assert.assertTrue(m.matches());
+        Assert.assertEquals(16, Integer.decode(m.group("busId")).intValue());
+        Assert.assertEquals(256, Integer.decode(m.group("deviceId")).intValue());
+    }
+
+    @Test
+    public void parseInt() {
+
+        Assert.assertEquals(255, Integer.decode("0x000000ff").intValue());
+        Assert.assertEquals(255, Integer.decode("0X000000ff").intValue());
+        Assert.assertEquals(111, Integer.decode("111").intValue());
+        Integer.decode("111");
+
     }
 
 }

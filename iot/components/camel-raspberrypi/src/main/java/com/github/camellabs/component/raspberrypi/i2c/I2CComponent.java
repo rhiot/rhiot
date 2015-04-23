@@ -53,9 +53,12 @@ public class I2CComponent extends UriEndpointComponent {
         Matcher match = regexPattern.matcher(remaining);
         if (match.matches()) {
 
-            endpoint = new I2CEndpoint(uri, remaining, I2CFactory.getInstance(Integer.parseInt(match.group(RaspberryPiConstants.CAMEL_BUS_ID))));
-            parameters.put(RaspberryPiConstants.CAMEL_BUS_ID, match.group(RaspberryPiConstants.CAMEL_BUS_ID));
-            parameters.put(RaspberryPiConstants.CAMEL_DEVICE_ID, match.group(RaspberryPiConstants.CAMEL_DEVICE_ID));
+            int busId = Integer.decode(match.group(RaspberryPiConstants.CAMEL_BUS_ID));
+            int deviceId = Integer.decode(match.group(RaspberryPiConstants.CAMEL_DEVICE_ID));
+
+            endpoint = new I2CEndpoint(uri, remaining, I2CFactory.getInstance(busId));
+            parameters.put(RaspberryPiConstants.CAMEL_BUS_ID, busId);
+            parameters.put(RaspberryPiConstants.CAMEL_DEVICE_ID, deviceId);
 
             setProperties(endpoint, parameters);
         }
