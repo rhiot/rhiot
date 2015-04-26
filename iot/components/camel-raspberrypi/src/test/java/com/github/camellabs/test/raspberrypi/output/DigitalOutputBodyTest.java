@@ -22,6 +22,9 @@ import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
+import org.apache.camel.EndpointInject;
+import org.apache.camel.Produce;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -37,12 +40,18 @@ public class DigitalOutputBodyTest extends CamelTestSupport {
         GpioFactory.setDefaultProvider(MOCK_RASPI);
     }
 
+    @EndpointInject(uri = "mock:result")
+    protected MockEndpoint resultEndpoint;
+
+    @Produce(uri = "direct:start")
+    protected ProducerTemplate template;
+
     @Test
     public void produceDigitalOutputBodyTest() throws Exception {
 
-        MockEndpoint mock = getMockEndpoint("mock:result");
+        resultEndpoint.expectedMessageCount(1);
 
-        mock.expectedMessageCount(1);
+        template.sendBody(true);
 
         assertMockEndpointsSatisfied();
 
@@ -54,7 +63,7 @@ public class DigitalOutputBodyTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("timer://foo?repeatCount=1").id("rbpi-route").to("log:com.github.camellabs.component.raspberrypi?showAll=true&multiline=true").transform().constant(true)
+                from("direct:start").id("rbpi-route").to("log:com.github.camellabs.component.raspberrypi?showAll=true&multiline=true")
                     .to("raspberrypi-gpio://5?mode=DIGITAL_OUTPUT").transform().simple("${body} == false").to("raspberrypi-gpio://6?mode=DIGITAL_OUTPUT&state=HIGH")
                     .to("mock:result");
             }

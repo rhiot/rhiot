@@ -20,6 +20,9 @@ import com.github.camellabs.component.raspberrypi.mock.RaspiGpioProviderMock;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.RaspiPin;
 
+import org.apache.camel.EndpointInject;
+import org.apache.camel.Produce;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -32,6 +35,12 @@ public class AnalogOutputBodyTest extends CamelTestSupport {
     public static final int INT_RESULT = 121;
     public static final double DOUBLE_RESULT = 64.3;
 
+    @EndpointInject(uri = "mock:result")
+    protected MockEndpoint resultEndpoint;
+
+    @Produce(uri = "direct:start")
+    protected ProducerTemplate template;
+
     static {
         // Mandatory we are not inside a Real Raspberry PI
         GpioFactory.setDefaultProvider(MOCK_RASPI);
@@ -40,9 +49,9 @@ public class AnalogOutputBodyTest extends CamelTestSupport {
     @Test
     public void produceAnalogOutputBodyTest() throws Exception {
 
-        MockEndpoint mock = getMockEndpoint("mock:result");
+        resultEndpoint.expectedMessageCount(1);
 
-        mock.expectedMessageCount(1);
+        template.sendBody(INT_RESULT);
 
         assertMockEndpointsSatisfied();
 
@@ -54,8 +63,8 @@ public class AnalogOutputBodyTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("timer://foo?repeatCount=1").id("rbpi-route").transform().simple("121").to("raspberrypi-gpio://1?mode=PWM_OUTPUT").transform().simple("64.3")
-                    .to("raspberrypi-gpio://7?mode=ANALOG_OUTPUT").to("mock:result");
+                from("direct:start").id("rbpi-route").to("raspberrypi-gpio://1?mode=PWM_OUTPUT").transform().simple("64.3").to("raspberrypi-gpio://7?mode=ANALOG_OUTPUT")
+                    .to("mock:result");
             }
         };
     }
