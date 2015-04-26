@@ -94,8 +94,9 @@ public class GPIOProducer extends DefaultProducer {
      * Process the message
      */
     public void process(Exchange exchange) throws Exception {
-        log.debug(exchange.toString());
-
+        if (log.isTraceEnabled()) {
+            log.trace(exchange.toString());
+        }
         if (action == null) {
             log.trace("No action pick up body");
             this.output(exchange, exchange.getIn().getBody());

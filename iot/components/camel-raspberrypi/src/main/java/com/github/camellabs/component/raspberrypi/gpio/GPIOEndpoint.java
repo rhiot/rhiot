@@ -18,6 +18,7 @@ package com.github.camellabs.component.raspberrypi.gpio;
 
 import java.lang.reflect.Field;
 
+import com.github.camellabs.component.raspberrypi.RaspberryPiConstants;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.Pin;
@@ -74,6 +75,9 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
     @UriParam(defaultValue = "PULL_UP")
     private PinPullResistance pullResistance = PinPullResistance.PULL_UP;
+
+    @UriParam(defaultValue = RaspberryPiConstants.CAMEL_GPIO_CLAZZ)
+    private Class gpioClass = RaspiPin.class;
 
     private GpioController controller;
 
@@ -172,6 +176,68 @@ public class GPIOEndpoint extends DefaultEndpoint {
         return controller;
     }
 
+    private Pin getPinPerFieldName() {
+        Pin ret = null;
+
+        try {
+            Field field = gpioClass.getDeclaredField(this.gpioId);
+            ret = (Pin)field.get(null);
+        } catch (NoSuchFieldException e) {
+            LOG.trace(" Field " + gpioId + " not found in class " + gpioClass);
+        } catch (SecurityException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+        }
+
+        return ret;
+    }
+
+    private Pin getPinPerPinName() {
+        Pin ret = null;
+
+        for (Field field : gpioClass.getFields()) {
+            if (field.getType().equals(Pin.class)) {
+                try {
+                    ret = (Pin)field.get(null);
+                    if (ret.getName().compareTo(gpioId) == 0) {
+                        return ret;
+                    }
+                } catch (IllegalArgumentException e) {
+                } catch (IllegalAccessException e) {
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    private Pin getPinPerPinAddress() {
+        Pin ret = null;
+
+        int address = -1;
+
+        try {
+            address = Integer.parseInt(this.gpioId);
+        } catch (Exception e) {
+            LOG.trace(" gpioId " + gpioId + " not an address");
+        }
+
+        for (Field field : gpioClass.getFields()) {
+            if (field.getType().equals(Pin.class)) {
+                try {
+                    ret = (Pin)field.get(null);
+                    if (ret.getAddress() == address) {
+                        return ret;
+                    }
+                } catch (IllegalArgumentException e) {
+                } catch (IllegalAccessException e) {
+                }
+            }
+        }
+        LOG.trace(" Address " + gpioId + " not found in class " + gpioClass);
+        return ret;
+    }
+
     /**
      * Hack to retrieve the correct Pin from RaspiPin.class lib
      * 
@@ -183,24 +249,17 @@ public class GPIOEndpoint extends DefaultEndpoint {
             LOG.debug(" Pin Id > " + gpioId);
         }
 
-        Pin ret = null;
-        String pinAddress = (Integer.parseInt(gpioId) < 10) ? "0" + gpioId : gpioId;
+        Pin ret = getPinPerFieldName();
 
-        Class<RaspiPin> clazz = RaspiPin.class;
+        if (ret == null) {
+            ret = getPinPerPinAddress();
+            if (ret == null) {
+                ret = getPinPerPinName();
+            }
+        }
 
-        try {
-
-            Field clazzField = clazz.getField("GPIO_" + pinAddress);
-            ret = (Pin)clazzField.get(null);
-
-        } catch (NoSuchFieldException e) {
-            LOG.debug("", e);
-        } catch (SecurityException e) {
-            LOG.debug("", e);
-        } catch (IllegalArgumentException e) {
-            LOG.debug("", e);
-        } catch (IllegalAccessException e) {
-            LOG.debug("", e);
+        if (ret == null) {
+            throw new IllegalArgumentException("Cannot find gpio [" + this.gpioId + "] ");
         }
 
         return ret;
@@ -292,6 +351,14 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
     private void shutdownOption(GpioPin pin) {
         pin.setShutdownOptions(shutdownExport, shutdownState, shutdownResistance);
+    }
+
+    public Class getGpioClass() {
+        return gpioClass;
+    }
+
+    public void setGpioClass(Class gpioClass) {
+        this.gpioClass = gpioClass;
     }
 
 }
