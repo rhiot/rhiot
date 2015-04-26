@@ -220,6 +220,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
             address = Integer.parseInt(this.gpioId);
         } catch (Exception e) {
             LOG.trace(" gpioId " + gpioId + " not an address");
+            return ret;
         }
 
         for (Field field : gpioClass.getFields()) {
