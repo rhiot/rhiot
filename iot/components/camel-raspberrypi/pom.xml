@@ -24,7 +24,6 @@
 	<description>Camel Raspberry Pi Component</description>
 
 	<properties>
-		<pi4j-version>1.0</pi4j-version>
 		<commons-cli-version>1.2</commons-cli-version>
 
 		<camel.osgi.export.pkg>
@@ -43,22 +42,18 @@
 		<dependency>
 			<groupId>com.pi4j</groupId>
 			<artifactId>pi4j-core</artifactId>
-			<version>${pi4j-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.pi4j</groupId>
 			<artifactId>pi4j-device</artifactId>
-			<version>${pi4j-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.pi4j</groupId>
 			<artifactId>pi4j-gpio-extension</artifactId>
-			<version>${pi4j-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.pi4j</groupId>
 			<artifactId>pi4j-service</artifactId>
-			<version>${pi4j-version}</version>
 		</dependency>
 
 		<dependency>

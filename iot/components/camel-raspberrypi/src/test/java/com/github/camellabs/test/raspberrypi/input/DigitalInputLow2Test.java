@@ -24,6 +24,7 @@ import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiGpioProvider;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 
+import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -32,12 +33,13 @@ import org.mockito.Mockito;
 
 public class DigitalInputLow2Test extends CamelTestSupport {
 
+    @EndpointInject(uri = "mock:result")
+    protected MockEndpoint mock;
+
     @Test
     public void consumeDigitalEvent() throws Exception {
 
         GPIOConsumer pinConsumer = (GPIOConsumer)this.context.getRoute("test-route").getConsumer();
-
-        MockEndpoint mock = getMockEndpoint("mock:result");
 
         pinConsumer.handleGpioPinDigitalStateChangeEvent(new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin)pinConsumer.getPin(), PinState.LOW));
 

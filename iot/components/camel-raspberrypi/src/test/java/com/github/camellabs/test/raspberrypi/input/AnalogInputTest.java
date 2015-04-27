@@ -23,6 +23,7 @@ import com.pi4j.io.gpio.GpioProvider;
 import com.pi4j.io.gpio.RaspiGpioProvider;
 import com.pi4j.io.gpio.event.GpioPinAnalogValueChangeEvent;
 
+import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -31,12 +32,13 @@ import org.mockito.Mockito;
 
 public class AnalogInputTest extends CamelTestSupport {
 
+    @EndpointInject(uri = "mock:result")
+    protected MockEndpoint mock;
+
     @Test
     public void consumeAnalogEvent() throws Exception {
 
         GPIOConsumer pinConsumer = (GPIOConsumer)this.context.getRoute("test-route").getConsumer();
-
-        MockEndpoint mock = getMockEndpoint("mock:result");
 
         pinConsumer.handleGpioPinAnalogValueChangeEvent(new GpioPinAnalogValueChangeEvent("CAMEL-EVENT", (GpioPin)pinConsumer.getPin(), 11));
 
