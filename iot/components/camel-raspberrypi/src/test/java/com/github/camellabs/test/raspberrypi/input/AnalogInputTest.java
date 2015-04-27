@@ -32,6 +32,8 @@ import org.mockito.Mockito;
 
 public class AnalogInputTest extends CamelTestSupport {
 
+    GpioProvider factory = Mockito.mock(RaspiGpioProvider.class);
+
     @EndpointInject(uri = "mock:result")
     protected MockEndpoint mock;
 
@@ -45,6 +47,7 @@ public class AnalogInputTest extends CamelTestSupport {
         mock.expectedMessageCount(1);
 
         assertMockEndpointsSatisfied();
+
     }
 
     @Override
@@ -52,8 +55,6 @@ public class AnalogInputTest extends CamelTestSupport {
         return new RouteBuilder() {
 
             public void configure() {
-
-                GpioProvider factory = Mockito.mock(RaspiGpioProvider.class);
 
                 GpioFactory.setDefaultProvider(factory);
 

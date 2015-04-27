@@ -33,6 +33,8 @@ import org.mockito.Mockito;
 
 public class DigitalInputLowTest extends CamelTestSupport {
 
+    GpioProvider factory = Mockito.mock(RaspiGpioProvider.class);
+
     @EndpointInject(uri = "mock:result")
     protected MockEndpoint mock;
 
@@ -52,7 +54,6 @@ public class DigitalInputLowTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                GpioProvider factory = Mockito.mock(RaspiGpioProvider.class);
 
                 GpioFactory.setDefaultProvider(factory);
                 from("raspberrypi-gpio://0?mode=DIGITAL_INPUT&state=LOW").id("test-route").to("mock:result");
