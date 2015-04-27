@@ -21,8 +21,9 @@
   </licenses>
 
   <modules>
-    <module>camel-raspberrypi</module>
     <module>camel-device-io</module>
+    <module>camel-kura</module>
+    <module>camel-raspberrypi</module>
     <module>camel-tinkerforge</module>
   </modules>
 
