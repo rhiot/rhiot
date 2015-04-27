@@ -22,6 +22,7 @@
         <apache-rat-plugin.version>0.11</apache-rat-plugin.version>
         <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+        <tinkerforge.version>2.1.4</tinkerforge.version>
     </properties>
 
     <name>${project.artifactId}</name>
@@ -71,7 +72,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
             <dependency>
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-core</artifactId>
@@ -116,6 +116,11 @@
                 <groupId>org.eclipse.kura</groupId>
                 <artifactId>org.eclipse.kura.core</artifactId>
                 <version>${kura.version}</version>
+            </dependency>    
+            <dependency>
+                <groupId>com.tinkerforge</groupId>
+                <artifactId>tinkerforge</artifactId>
+                <version>${tinkerforge.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
