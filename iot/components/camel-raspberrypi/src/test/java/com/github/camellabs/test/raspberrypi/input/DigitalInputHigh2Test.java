@@ -41,9 +41,9 @@ public class DigitalInputHigh2Test extends CamelTestSupport {
 
         GPIOConsumer pin = (GPIOConsumer)context.getRoute("test-route").getConsumer();
 
-        pin.handleGpioPinDigitalStateChangeEvent(new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin)pin.getPin(), PinState.LOW));
-
         mock.expectedMessageCount(0);
+
+        pin.handleGpioPinDigitalStateChangeEvent(new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin)pin.getPin(), PinState.LOW));
 
         assertMockEndpointsSatisfied();
     }
@@ -55,7 +55,8 @@ public class DigitalInputHigh2Test extends CamelTestSupport {
                 GpioProvider factory = Mockito.mock(RaspiGpioProvider.class);
 
                 GpioFactory.setDefaultProvider(factory);
-                from("raspberrypi-gpio://16?mode=DIGITAL_INPUT&state=HIGH").id("test-route").to("mock:result");
+                from("raspberrypi-gpio://16?mode=DIGITAL_INPUT&state=HIGH").id("test-route").to("log:com.github.camellabs.component.raspberrypi?showAll=true&multiline=true")
+                    .to("mock:result");
 
             }
         };

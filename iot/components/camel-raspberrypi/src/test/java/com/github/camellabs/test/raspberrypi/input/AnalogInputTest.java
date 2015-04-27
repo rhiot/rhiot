@@ -16,6 +16,7 @@
  */
 package com.github.camellabs.test.raspberrypi.input;
 
+import com.github.camellabs.component.raspberrypi.RaspberryPiConstants;
 import com.github.camellabs.component.raspberrypi.gpio.GPIOConsumer;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPin;
@@ -39,12 +40,14 @@ public class AnalogInputTest extends CamelTestSupport {
 
     @Test
     public void consumeAnalogEvent() throws Exception {
-
         GPIOConsumer pinConsumer = (GPIOConsumer)this.context.getRoute("test-route").getConsumer();
+        Object body = new GpioPinAnalogValueChangeEvent("CAMEL-EVENT", (GpioPin)pinConsumer.getPin(), 11);
+
+        mock.expectedBodyReceived().body(GpioPinAnalogValueChangeEvent.class);
+        mock.expectedMessageCount(1);
+        mock.expectedHeaderReceived(RaspberryPiConstants.CAMEL_RBPI_PIN_VALUE, 11);
 
         pinConsumer.handleGpioPinAnalogValueChangeEvent(new GpioPinAnalogValueChangeEvent("CAMEL-EVENT", (GpioPin)pinConsumer.getPin(), 11));
-
-        mock.expectedMessageCount(1);
 
         assertMockEndpointsSatisfied();
 
@@ -58,7 +61,7 @@ public class AnalogInputTest extends CamelTestSupport {
 
                 GpioFactory.setDefaultProvider(factory);
 
-                from("raspberrypi-gpio://0?mode=ANALOG_INPUT").id("test-route").to("mock:result");
+                from("raspberrypi-gpio://0?mode=ANALOG_INPUT").id("test-route").to("log:com.github.camellabs.component.raspberrypi?showAll=true&multiline=true").to("mock:result");
 
             }
         };
