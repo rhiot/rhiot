@@ -24,8 +24,6 @@ import com.github.camellabs.component.raspberrypi.RaspberryPiConstants;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPin;
-import com.pi4j.io.i2c.I2CFactory;
-import com.pi4j.io.i2c.I2CFactoryProvider;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
@@ -66,10 +64,6 @@ public class GPIOComponent extends UriEndpointComponent {
         }
 
         return endpoint;
-    }
-
-    public void setProvider(I2CFactoryProvider provider) {
-        I2CFactory.setFactory(provider);
     }
 
     @Override
