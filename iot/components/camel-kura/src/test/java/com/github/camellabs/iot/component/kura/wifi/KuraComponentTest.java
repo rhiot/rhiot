@@ -26,16 +26,10 @@ import org.junit.Test;
 
 public class KuraComponentTest extends CamelTestSupport {
 
+    // Routes fixtures
+
     @EndpointInject(uri = "mock:shouldFilterSsid")
     MockEndpoint mockEndpoint;
-
-    @Test
-    public void shouldFilterSsid() throws InterruptedException {
-        mockEndpoint.setExpectedMessageCount(1);
-        mockEndpoint.assertIsSatisfied();
-        WifiAccessPoint[] accessPoint = mockEndpoint.getExchanges().get(0).getIn().getBody(WifiAccessPoint[].class);
-        assertEquals("ssid1", accessPoint[0].getSSID());
-    }
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
@@ -47,13 +41,21 @@ public class KuraComponentTest extends CamelTestSupport {
         };
     }
 
-
-
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = super.createRegistry();
         registry.bind("accessPointsProvider", new MockAccessPointProvider());
         return registry;
+    }
+
+    // Tests
+
+    @Test
+    public void shouldFilterSsid() throws InterruptedException {
+        mockEndpoint.setExpectedMessageCount(1);
+        mockEndpoint.assertIsSatisfied();
+        WifiAccessPoint[] accessPoint = mockEndpoint.getExchanges().get(0).getIn().getBody(WifiAccessPoint[].class);
+        assertEquals("ssid1", accessPoint[0].getSSID());
     }
 
 }
