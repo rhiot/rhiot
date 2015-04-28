@@ -10,6 +10,8 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
 Camel IoT Labs brings some extra components for the Apache Camel intended to make both device- and server-side IoT
 development easier.
 
+---
+
 ### Camel Kura Wifi component
 
 Camel Kura WiFi component can be used to retrieve the information about the WiFi access spots available within the device
@@ -47,6 +49,8 @@ of the WiFi scan:
 | Option                 | Default value                                                           | Description   |
 |:---------------------- |:----------------------------------------------------------------------- |:------------- |
 | `accessPointsProvider` | `com.github.camellabs.iot.component.kura.wifi.KuraAccessPointsProvider` | `com.github.camellabs.iot.component.kura.wifi.AccessPointsProvider` strategy instance registry reference used to resolve the list of the access points available to consume. |
+
+---
 
 ### Camel Raspberry Pi component
 
@@ -86,6 +90,8 @@ raspberrypi-i2c://(0x)busId/(0x)deviceId[?options]
 
 ::: the component documentation here :::
 
+---
+
 ### Camel Device IO component
 
 #### Library Depedency
@@ -121,6 +127,8 @@ deviceio-i2c://(0x)busId/(0x)deviceId[?options]
 ##### URI Options
 ##### Headers
 ##### Body
+
+---
 
 ### Camel Tinkerforge component
 
