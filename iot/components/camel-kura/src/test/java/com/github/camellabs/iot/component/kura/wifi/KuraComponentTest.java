@@ -29,7 +29,10 @@ public class KuraComponentTest extends CamelTestSupport {
     // Routes fixtures
 
     @EndpointInject(uri = "mock:shouldFilterSsid")
-    MockEndpoint mockEndpoint;
+    MockEndpoint filteredAccessPointMockEndpoint;
+
+    @EndpointInject(uri = "mock:shouldFindAllAccessPoints")
+    MockEndpoint allAccessPointsMockEndpoint;
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
@@ -37,6 +40,8 @@ public class KuraComponentTest extends CamelTestSupport {
             @Override
             public void configure() throws Exception {
                 from("kura-wifi:*/ssid1?accessPointsProvider=#accessPointsProvider").to("mock:shouldFilterSsid");
+
+                from("kura-wifi:*/*?accessPointsProvider=#accessPointsProvider").to("mock:shouldFindAllAccessPoints");
             }
         };
     }
@@ -52,10 +57,18 @@ public class KuraComponentTest extends CamelTestSupport {
 
     @Test
     public void shouldFilterSsid() throws InterruptedException {
-        mockEndpoint.setExpectedMessageCount(1);
-        mockEndpoint.assertIsSatisfied();
-        WifiAccessPoint[] accessPoint = mockEndpoint.getExchanges().get(0).getIn().getBody(WifiAccessPoint[].class);
+        filteredAccessPointMockEndpoint.setExpectedMessageCount(1);
+        filteredAccessPointMockEndpoint.assertIsSatisfied();
+        WifiAccessPoint[] accessPoint = filteredAccessPointMockEndpoint.getExchanges().get(0).getIn().getBody(WifiAccessPoint[].class);
         assertEquals("ssid1", accessPoint[0].getSSID());
+    }
+
+    @Test
+    public void shouldFindAllAccessPoints() throws InterruptedException {
+        allAccessPointsMockEndpoint.setExpectedMessageCount(1);
+        allAccessPointsMockEndpoint.assertIsSatisfied();
+        WifiAccessPoint[] accessPoint = allAccessPointsMockEndpoint.getExchanges().get(0).getIn().getBody(WifiAccessPoint[].class);
+        assertEquals(2, accessPoint.length);
     }
 
 }

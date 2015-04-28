@@ -24,7 +24,6 @@ import org.apache.camel.impl.DefaultScheduledPollConsumer;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -44,8 +43,10 @@ public class KuraWifiConsumer extends DefaultScheduledPollConsumer {
 
         Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(wifiAccessPoints).build();
         getProcessor().process(exchange);
-        return super.poll();
+        return wifiAccessPoints.isEmpty() ? 0 : 1;
     }
+
+
 
     @Override
     public KuraWifiEndpoint getEndpoint() {
