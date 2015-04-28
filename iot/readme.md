@@ -48,7 +48,7 @@ of the WiFi scan:
 
 | Option                 | Default value                                                           | Description   |
 |:---------------------- |:----------------------------------------------------------------------- |:------------- |
-| `accessPointsProvider` | `com.github.camellabs.iot.component.kura.wifi.KuraAccessPointsProvider` | `com.github.camellabs.iot.component.kura.wifi.AccessPointsProvider` strategy instance registry reference used to resolve the list of the access points available to consume. |
+| `accessPointsProvider` | `com.github.camellabs.iot.component.` `kura.wifi.KuraAccessPointsProvider` | `com.github.camellabs.iot.component.kura.` `wifi.AccessPointsProvider` strategy instance registry reference used to resolve the list of the access points available to consume. |
 
 ---
 
