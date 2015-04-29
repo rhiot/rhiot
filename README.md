@@ -10,6 +10,13 @@ because of the wider scope of these or because of the licensing reasons.
 - [Camel IoT Labs](https://github.com/camel-labs/camel-labs/tree/master/iot) - covers modules providing the Internet Of 
 Things functionalities
 
+## Building the project
+
+All you need to build the project is Maven 3 and Java 8 JDK:
+
+    https://github.com/camel-labs/camel-labs.git
+    mvn install
+
 ## Build status
 
 [![Build Status](https://travis-ci.org/camel-labs/camel-labs.svg?branch=master)](https://travis-ci.org/camel-labs/camel-labs)
