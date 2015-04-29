@@ -50,7 +50,7 @@ of the WiFi scan:
 |:------------------------- |:-----------------------------------------------------------------------       |:------------- |
 | `accessPointsProvider`    | `com.github.camellabs.iot.component.` `kura.wifi.KuraAccessPointsProvider`    | `com.github.camellabs.iot.component.kura.` `wifi.AccessPointsProvider` strategy instance registry reference used to resolve the list of the access points available to consume. |
 | `consumer.initialDelay`   | 1000                                                                          | Milliseconds before the polling starts. |
-| `consumer.delay`          | 1000 | Delay between each access points scan. |
+| `consumer.delay`          | 500 | Delay between each access points scan. |
 | `consumer.useFixedDelay`  | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
 
 ---
