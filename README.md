@@ -14,7 +14,7 @@ Things functionalities
 
 All you need to build the project is Maven 3 and Java 8 JDK:
 
-    https://github.com/camel-labs/camel-labs.git
+    git clone https://github.com/camel-labs/camel-labs.git
     cd camel-labs
     mvn install
 
