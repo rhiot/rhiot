@@ -28,6 +28,7 @@ public final class DeviceIOConstants {
     public static final String CAMEL_DEVICE_IO_TYPE = CAMEL_DEVICE_IO + ".pinType";
     public static final String CAMEL_DEVICE_IO_VALUE = CAMEL_DEVICE_IO + ".pinValue";
     public static final String CAMEL_GPIO_URL_PATTERN = "((?<scheme>deviceio-gpio)://?)?(?<gpioId>[a-zA-Z0-9_-]+)";
+    public static final String CAMEL_I2C_URL_PATTERN = "((?<scheme>deviceio-i2c)://)?(?<busId>(0x)?[0-9a-f]+)/(?<deviceId>(0x)?[0-9a-f]+)";
     public static final String CAMEL_GPIO_ID = "gpioId";
     public static final String CAMEL_URL_TYPE = "type";
     public static final String CAMEL_DEVICE_IO_TIMESTAMP = CAMEL_DEVICE_IO + ".timeStamp";
