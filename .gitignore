@@ -15,3 +15,6 @@ soapui-errors.log
 **/.prefs
 **/.classpath
 **/target
+
+# MacOS
+**/.DS_Store
