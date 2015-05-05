@@ -41,7 +41,7 @@ public class KuraWifiEndpoint extends DefaultEndpoint {
 
     @Override
     public Producer createProducer() throws Exception {
-        throw new UnsupportedOperationException("Kura Wifi component supports only consumer-side endpoints.");
+        return new KuraWifiProducer(this);
     }
 
     @Override
@@ -53,6 +53,8 @@ public class KuraWifiEndpoint extends DefaultEndpoint {
     public boolean isSingleton() {
         return true;
     }
+
+    // Configuration getters and setters
 
     public String getNetworkInterface() {
         return networkInterface;
@@ -69,6 +71,8 @@ public class KuraWifiEndpoint extends DefaultEndpoint {
     public void setSsid(String ssid) {
         this.ssid = ssid;
     }
+
+    // Collaborators getters and setters
 
     public AccessPointsProvider getAccessPointsProvider() {
         return accessPointsProvider;

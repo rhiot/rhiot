@@ -15,8 +15,8 @@ development easier.
 ### Camel Kura Wifi component
 
 Camel Kura WiFi component can be used to retrieve the information about the WiFi access spots available within the device
-range. Under the hood Kura Wifi component uses Kura `org.eclipse.kura.net.NetworkService`. Currently Kura WiFi component
-supports only the consumer endpoints.
+range. Under the hood Kura Wifi component uses Kura `org.eclipse.kura.net.NetworkService`. Kura WiFi component
+supports both the consumer and producer endpoints.
 
 #### Maven dependency
 
@@ -43,6 +43,15 @@ The Kura WiFi consumer returns the list of the `org.eclipse.kura.net.wifi.WifiAc
 of the WiFi scan:
 
     WifiAccessPoint[] accessPoints = consumerTemplate.receiveBody("kura:wlan0/*", WifiAccessPoint[].class);
+    
+You can also request the WiFi scanning using the producer endpoint:
+
+    from("kura-wifi:*/*").to("mock:accessPoints");
+    
+Or using the producer template directly:
+ 
+    WifiAccessPoint[] accessPoints = template.requestBody("kura-wifi:*/*", null, WifiAccessPoint[].class);
+
 
 #### Options
 

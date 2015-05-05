@@ -71,4 +71,10 @@ public class KuraComponentTest extends CamelTestSupport {
         assertEquals(2, accessPoint.length);
     }
 
+    @Test
+    public void shouldFindAllAccessPointsUsingProducer() {
+        WifiAccessPoint[] accessPoints = template.requestBody("kura-wifi:*/*?accessPointsProvider=#accessPointsProvider", null, WifiAccessPoint[].class);
+        assertEquals(2, accessPoints.length);
+    }
+
 }
