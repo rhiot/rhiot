@@ -21,11 +21,21 @@ import org.eclipse.kura.linux.net.NetworkServiceImpl;
 import org.eclipse.kura.net.NetworkService;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.lang3.reflect.FieldUtils.writeField;
+
+/**
+ * Access point provider using the Kura NetworkService to scan the WiFi networks.
+ */
 public class KuraAccessPointsProvider implements AccessPointsProvider {
 
     private final NetworkService networkService = new NetworkServiceImpl();
+
+    public KuraAccessPointsProvider() {
+        initializeNetworkService();
+    }
 
     @Override
     public List<WifiAccessPoint> accessPoints(String forInterface) {
@@ -36,6 +46,14 @@ public class KuraAccessPointsProvider implements AccessPointsProvider {
                 return networkService.getWifiAccessPoints(forInterface);
             }
         } catch (KuraException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void initializeNetworkService() {
+        try {
+            writeField(networkService, "m_addedModems", new ArrayList(), true);
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
