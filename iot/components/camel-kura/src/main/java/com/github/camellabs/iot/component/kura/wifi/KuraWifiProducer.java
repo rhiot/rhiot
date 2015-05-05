@@ -22,8 +22,6 @@ import org.eclipse.kura.net.wifi.WifiAccessPoint;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 public class KuraWifiProducer extends DefaultProducer {
 
     public KuraWifiProducer(KuraWifiEndpoint endpoint) {
@@ -32,11 +30,7 @@ public class KuraWifiProducer extends DefaultProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        List<WifiAccessPoint> wifiAccessPoints = getEndpoint().getAccessPointsProvider().accessPoints(getEndpoint().getNetworkInterface());
-        String ssidFilter = getEndpoint().getSsid();
-        if(!ssidFilter.equals("*")) {
-            wifiAccessPoints = wifiAccessPoints.parallelStream().filter(point -> point.getSSID().equals(ssidFilter)).collect(toList());
-        }
+        List<WifiAccessPoint> wifiAccessPoints = getEndpoint().wifiAccessPoints();
         exchange.getIn().setBody(wifiAccessPoints);
     }
 

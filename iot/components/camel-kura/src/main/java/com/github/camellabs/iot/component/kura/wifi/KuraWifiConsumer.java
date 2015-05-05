@@ -25,8 +25,9 @@ import org.eclipse.kura.net.wifi.WifiAccessPoint;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
+/**
+ * Kura WiFi Consumer periodically scans the access points available for the device.
+ */
 public class KuraWifiConsumer extends DefaultScheduledPollConsumer {
 
     public KuraWifiConsumer(DefaultEndpoint defaultEndpoint, Processor processor) {
@@ -35,18 +36,11 @@ public class KuraWifiConsumer extends DefaultScheduledPollConsumer {
 
     @Override
     protected int poll() throws Exception {
-        List<WifiAccessPoint> wifiAccessPoints = getEndpoint().getAccessPointsProvider().accessPoints(getEndpoint().getNetworkInterface());
-        String ssidFilter = getEndpoint().getSsid();
-        if(!ssidFilter.equals("*")) {
-            wifiAccessPoints = wifiAccessPoints.parallelStream().filter(point -> point.getSSID().equals(ssidFilter)).collect(toList());
-        }
-
+        List<WifiAccessPoint> wifiAccessPoints = getEndpoint().wifiAccessPoints();
         Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(wifiAccessPoints).build();
         getProcessor().process(exchange);
         return wifiAccessPoints.isEmpty() ? 0 : 1;
     }
-
-
 
     @Override
     public KuraWifiEndpoint getEndpoint() {

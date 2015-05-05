@@ -22,6 +22,11 @@ import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
+import org.eclipse.kura.net.wifi.WifiAccessPoint;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @UriEndpoint(scheme = "kura-wifi", title = "Kura WiFi", consumerClass = KuraWifiConsumer.class, label = "iot,raspberrypi,kura", syntax = "kura-wifi:interface/ssid")
 public class KuraWifiEndpoint extends DefaultEndpoint {
@@ -37,6 +42,14 @@ public class KuraWifiEndpoint extends DefaultEndpoint {
 
     public KuraWifiEndpoint(String endpointUri, KuraWifiComponent component) {
         super(endpointUri, component);
+    }
+
+    public List<WifiAccessPoint> wifiAccessPoints() {
+        List<WifiAccessPoint> wifiAccessPoints = getAccessPointsProvider().accessPoints(getNetworkInterface());
+        if(!getSsid().equals("*")) {
+            return wifiAccessPoints.parallelStream().filter(point -> point.getSSID().equals(getSsid())).collect(toList());
+        }
+        return wifiAccessPoints;
     }
 
     @Override
