@@ -7,10 +7,10 @@
     <parent>
         <groupId>com.github.camel-labs</groupId>
         <version>0.0.0-SNAPSHOT</version>
-        <artifactId>camel-labs-bom</artifactId>
-        <relativePath>../bom</relativePath>
+        <artifactId>camel-labs-iot</artifactId>
+        <relativePath>..</relativePath>
     </parent>
-    <artifactId>camel-labs-iot</artifactId>
+    <artifactId>camel-labs-iot-cloudlet</artifactId>
     <packaging>pom</packaging>
 
     <licenses>
@@ -21,9 +21,7 @@
     </licenses>
 
     <modules>
-        <module>utils</module>
-        <module>components</module>
-        <module>cloudlet</module>
+        <module>sdk</module>
     </modules>
 
 </project>
