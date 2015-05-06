@@ -20,6 +20,11 @@ import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+/**
+ * Utility class providing common tools for the discovery of the cloudlets for the Java clients. Cloudlet Java client
+ * is usually deployed on the field device (like Gateway) or into the cloudlet willing to connect to the another
+ * cloudlet. Discovery is a process of finding the right connection URL to the target cloudlet.
+ */
 public final class Discoveries {
 
     private static final Logger LOG = getLogger(Discoveries.class);
