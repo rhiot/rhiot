@@ -19,6 +19,7 @@
         <kura.version>1.0.3</kura.version>
         <logback.version>1.1.2</logback.version>
         <pi4j-version>1.0</pi4j-version>
+        <spring-boot.version>1.2.3.RELEASE</spring-boot.version>
         <tinkerforge.version>2.1.4</tinkerforge.version>
 
         <apache-rat-plugin.version>0.11</apache-rat-plugin.version>
@@ -69,6 +70,14 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- BOMs -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-parent</artifactId>
@@ -76,6 +85,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <dependency>
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-core</artifactId>
