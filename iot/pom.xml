@@ -21,6 +21,7 @@
     </licenses>
 
     <modules>
+        <module>utils</module>
         <module>components</module>
     </modules>
 
