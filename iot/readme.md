@@ -20,9 +20,9 @@ access point is available near the gateway. Such trusted WiFi network could be l
 Using this approach, less urgent data (like GPS coordinates stored for the further offline analysis) can be delivered to 
 the data center without the additional cost related to the GPS transmission fees.
 
-<a href="https://github.com/camel-labs/camel-labs"><img src="images/wifi_truck_1.png" align="center" height="200" hspace="30"></a>
-
-<a href="https://github.com/camel-labs/camel-labs"><img src="images/wifi_truck_2.png" align="center" height="200" hspace="30"></a>
+<a href="https://github.com/camel-labs/camel-labs"><img src="images/wifi_truck_1.png" align="center" height="300" hspace="30"></a>
+<br>
+<a href="https://github.com/camel-labs/camel-labs"><img src="images/wifi_truck_2.png" align="center" height="300" hspace="30"></a>
 
 Camel Kura WiFi component can be used to retrieve the information about the WiFi access spots available within the device
 range. Under the hood Kura Wifi component uses Kura `org.eclipse.kura.net.NetworkService`. Kura WiFi component
