@@ -21,10 +21,28 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.eclipse.kura.core.net.WifiAccessPointImpl;
+import org.eclipse.kura.net.NetworkService;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
 import org.junit.Test;
+import org.mockito.BDDMockito;
+import org.mockito.Mockito;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 public class KuraComponentTest extends CamelTestSupport {
+
+    // Collaborators fixtures
+
+    NetworkService networkService = mock(NetworkService.class);
+
+    WifiAccessPoint accessPoint = new WifiAccessPointImpl("mockSsid");
 
     // Routes fixtures
 
@@ -34,6 +52,9 @@ public class KuraComponentTest extends CamelTestSupport {
     @EndpointInject(uri = "mock:shouldFindAllAccessPoints")
     MockEndpoint allAccessPointsMockEndpoint;
 
+    @EndpointInject(uri = "mock:shouldUseNetworkServiceFromRegistry")
+    MockEndpoint networkServiceFromRegistryMockEndpoint;
+
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
@@ -42,6 +63,9 @@ public class KuraComponentTest extends CamelTestSupport {
                 from("kura-wifi:*/ssid1?accessPointsProvider=#accessPointsProvider").to("mock:shouldFilterSsid");
 
                 from("kura-wifi:*/*?accessPointsProvider=#accessPointsProvider").to("mock:shouldFindAllAccessPoints");
+
+                from("kura-wifi:*/*").to("mock:shouldUseNetworkServiceFromRegistry");
+
             }
         };
     }
@@ -50,6 +74,10 @@ public class KuraComponentTest extends CamelTestSupport {
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = super.createRegistry();
         registry.bind("accessPointsProvider", new MockAccessPointProvider());
+
+        registry.bind("networkService", networkService);
+        given(networkService.getAllWifiAccessPoints()).willReturn(singletonList(accessPoint));
+
         return registry;
     }
 
@@ -75,6 +103,20 @@ public class KuraComponentTest extends CamelTestSupport {
     public void shouldFindAllAccessPointsUsingProducer() {
         WifiAccessPoint[] accessPoints = template.requestBody("kura-wifi:*/*?accessPointsProvider=#accessPointsProvider", null, WifiAccessPoint[].class);
         assertEquals(2, accessPoints.length);
+    }
+
+    @Test
+    public void shouldUseNetworkServiceFromRegistry() throws InterruptedException {
+        // Given
+        networkServiceFromRegistryMockEndpoint.setExpectedMessageCount(1);
+        networkServiceFromRegistryMockEndpoint.assertIsSatisfied();
+
+        // When
+        WifiAccessPoint[] accessPoints = networkServiceFromRegistryMockEndpoint.getExchanges().get(0).getIn().getBody(WifiAccessPoint[].class);
+
+        // Then
+        assertEquals(1, accessPoints.length);
+        assertEquals(accessPoint.getSSID(), accessPoints[0].getSSID());
     }
 
 }
