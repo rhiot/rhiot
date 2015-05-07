@@ -62,6 +62,13 @@ Or using the producer template directly:
 | `consumer.delay`          | 500 | Delay between each access points scan. |
 | `consumer.useFixedDelay`  | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
 
+#### Detecting Kura NetworkService
+
+In the first place `com.github.camellabs.iot.component.kura.wifi.KuraAccessPointsProvider` tries to locate `org.eclipse.kura.net.NetworkService`
+in the Camel registry. If exactly one instance of the `NetworkService`  is found (this is usually the case when
+if you deploy the route into the Kura container), that instance will be used by the Kura component. Otherwise new instance of the
+`org.eclipse.kura.linux.net.NetworkServiceImpl` will be created and cached by the `KuraAccessPointsProvider`.
+
 ---
 
 ### Camel TinkerForge component

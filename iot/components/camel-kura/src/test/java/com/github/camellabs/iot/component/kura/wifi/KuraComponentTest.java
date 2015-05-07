@@ -25,13 +25,7 @@ import org.eclipse.kura.core.net.WifiAccessPointImpl;
 import org.eclipse.kura.net.NetworkService;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
 import org.junit.Test;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
 
-import java.util.Arrays;
-import java.util.Collections;
-
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
