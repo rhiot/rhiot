@@ -30,33 +30,33 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
+        <dependency>
+            <groupId>com.github.camel-labs</groupId>
+            <artifactId>camel-labs-iot-utils</artifactId>
+        </dependency>
+        <dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
 		</dependency>
-		<dependency>
+        <dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.api</artifactId>
 		</dependency>
-		<dependency>
+        <dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.core</artifactId>
 		</dependency>
-		<dependency>
+        <dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.core.net</artifactId>
 		</dependency>
-		<dependency>
+        <dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.linux.net</artifactId>
 		</dependency>
-		<dependency>
+        <dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
 		</dependency>
 
 		<!-- Testing -->

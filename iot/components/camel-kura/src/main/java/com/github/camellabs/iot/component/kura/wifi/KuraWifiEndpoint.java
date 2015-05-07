@@ -38,10 +38,11 @@ public class KuraWifiEndpoint extends DefaultEndpoint {
     private String ssid = "*";
 
     @UriParam
-    AccessPointsProvider accessPointsProvider = new KuraAccessPointsProvider();
+    AccessPointsProvider accessPointsProvider;
 
     public KuraWifiEndpoint(String endpointUri, KuraWifiComponent component) {
         super(endpointUri, component);
+        accessPointsProvider = new KuraAccessPointsProvider(component.getCamelContext().getRegistry());
     }
 
     public List<WifiAccessPoint> wifiAccessPoints() {

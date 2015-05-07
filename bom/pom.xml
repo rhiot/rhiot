@@ -15,6 +15,7 @@
     <properties>
         <apache-commons-lang3.version>3.3.2</apache-commons-lang3.version>
         <camel.version>2.15.2</camel.version>
+        <camel-labs.version>${project.version}</camel-labs.version>
         <kura.version>1.0.3</kura.version>
         <logback.version>1.1.2</logback.version>
         <pi4j-version>1.0</pi4j-version>
@@ -47,6 +48,11 @@
                 <scope>import</scope>
             </dependency>
 
+            <dependency>
+                <groupId>com.github.camel-labs</groupId>
+                <artifactId>camel-labs-iot-utils</artifactId>
+                <version>${camel-labs.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-core</artifactId>

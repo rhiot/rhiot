@@ -16,25 +16,31 @@
  */
 package com.github.camellabs.iot.component.kura.wifi;
 
+import org.apache.camel.spi.Registry;
 import org.eclipse.kura.KuraException;
 import org.eclipse.kura.linux.net.NetworkServiceImpl;
 import org.eclipse.kura.net.NetworkService;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import static org.apache.commons.lang3.reflect.FieldUtils.writeField;
+import static com.github.camellabs.iot.utils.Reflections.writeField;
 
 /**
  * Access point provider using the Kura NetworkService to scan the WiFi networks.
  */
 public class KuraAccessPointsProvider implements AccessPointsProvider {
 
-    private final NetworkService networkService = new NetworkServiceImpl();
+    private static final Logger LOG = LoggerFactory.getLogger(KuraAccessPointsProvider.class);
 
-    public KuraAccessPointsProvider() {
-        initializeNetworkService();
+    private final NetworkService networkService;
+
+    public KuraAccessPointsProvider(Registry registry) {
+        networkService = resolveNetworkService(registry);
     }
 
     @Override
@@ -50,12 +56,19 @@ public class KuraAccessPointsProvider implements AccessPointsProvider {
         }
     }
 
-    private void initializeNetworkService() {
-        try {
-            writeField(networkService, "m_addedModems", new ArrayList(), true);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+    private NetworkService resolveNetworkService(Registry registry) {
+        Set<NetworkService> servicesFromRegistry = registry.findByType(NetworkService.class);
+        if(servicesFromRegistry.size() != 1) {
+            LOG.info("Found Kura NetworkService in the registry. Kura component will use that instance.");
+            NetworkService networkService = new NetworkServiceImpl();
+            initializeNetworkService(networkService);
+            return networkService;
         }
+        return servicesFromRegistry.iterator().next();
+    }
+
+    protected void initializeNetworkService(NetworkService networkService) {
+        writeField(networkService, "m_addedModems", new ArrayList());
     }
 
 }
