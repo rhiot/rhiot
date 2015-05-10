@@ -168,12 +168,47 @@ public class GPIOEndpoint extends DefaultEndpoint {
         return controller;
     }
 
+    public Class getGpioClass() {
+        return gpioClass;
+    }
+
+    public String getGpioId() {
+        return gpioId;
+    }
+
     public PinMode getMode() {
         return mode;
     }
 
     public GpioController getOrCreateController() {
         return controller;
+    }
+
+    /**
+     * Hack to retrieve the correct Pin from RaspiPin.class lib
+     * 
+     * @return the correct Pin
+     */
+    private Pin getPin() {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(" Pin Id > " + gpioId);
+        }
+
+        Pin ret = getPinPerFieldName();
+
+        if (ret == null) {
+            ret = getPinPerPinAddress();
+            if (ret == null) {
+                ret = getPinPerPinName();
+            }
+        }
+
+        if (ret == null) {
+            throw new IllegalArgumentException("Cannot find gpio [" + this.gpioId + "] ");
+        }
+
+        return ret;
     }
 
     private Pin getPinPerFieldName() {
@@ -187,25 +222,6 @@ public class GPIOEndpoint extends DefaultEndpoint {
         } catch (SecurityException e) {
         } catch (IllegalArgumentException e) {
         } catch (IllegalAccessException e) {
-        }
-
-        return ret;
-    }
-
-    private Pin getPinPerPinName() {
-        Pin ret = null;
-
-        for (Field field : gpioClass.getFields()) {
-            if (field.getType().equals(Pin.class)) {
-                try {
-                    ret = (Pin)field.get(null);
-                    if (ret.getName().compareTo(gpioId) == 0) {
-                        return ret;
-                    }
-                } catch (IllegalArgumentException e) {
-                } catch (IllegalAccessException e) {
-                }
-            }
         }
 
         return ret;
@@ -239,28 +255,20 @@ public class GPIOEndpoint extends DefaultEndpoint {
         return ret;
     }
 
-    /**
-     * Hack to retrieve the correct Pin from RaspiPin.class lib
-     * 
-     * @return the correct Pin
-     */
-    private Pin getPin() {
+    private Pin getPinPerPinName() {
+        Pin ret = null;
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(" Pin Id > " + gpioId);
-        }
-
-        Pin ret = getPinPerFieldName();
-
-        if (ret == null) {
-            ret = getPinPerPinAddress();
-            if (ret == null) {
-                ret = getPinPerPinName();
+        for (Field field : gpioClass.getFields()) {
+            if (field.getType().equals(Pin.class)) {
+                try {
+                    ret = (Pin)field.get(null);
+                    if (ret.getName().compareTo(gpioId) == 0) {
+                        return ret;
+                    }
+                } catch (IllegalArgumentException e) {
+                } catch (IllegalAccessException e) {
+                }
             }
-        }
-
-        if (ret == null) {
-            throw new IllegalArgumentException("Cannot find gpio [" + this.gpioId + "] ");
         }
 
         return ret;
@@ -314,8 +322,8 @@ public class GPIOEndpoint extends DefaultEndpoint {
         this.controller = controller;
     }
 
-    public String getGpioId() {
-        return gpioId;
+    public void setGpioClass(Class gpioClass) {
+        this.gpioClass = gpioClass;
     }
 
     public void setGpioId(String gpioId) {
@@ -352,14 +360,6 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
     private void shutdownOption(GpioPin pin) {
         pin.setShutdownOptions(shutdownExport, shutdownState, shutdownResistance);
-    }
-
-    public Class getGpioClass() {
-        return gpioClass;
-    }
-
-    public void setGpioClass(Class gpioClass) {
-        this.gpioClass = gpioClass;
     }
 
 }
