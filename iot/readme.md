@@ -223,5 +223,13 @@ You can use static field name "*GPIO_XX*", pin name "*GPIO [0-9]*" or pin addres
 
     from("timer:default?period=2000")
     .to("pi4j-gpio://GPIO_04?mode=DIGITAL_OUTPUT&state=LOW&action=TOGGLE");
+    
+    
+##### Simple button w/ LED mode
+
+Plug an button on GPIO 1, and LED on GPIO 2 (with Resistor) and code a route like this
+
+    from("pi4j-gpio://1?mode=DIGITAL_INPUT&state=HIGH").id("switch-led")
+    .to("pi4j-gpio://2?&action=TOGGLE");
 
 ---
