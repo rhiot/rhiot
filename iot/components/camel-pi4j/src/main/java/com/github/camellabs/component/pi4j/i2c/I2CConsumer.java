@@ -37,10 +37,6 @@ public class I2CConsumer extends ScheduledPollConsumer implements I2CDevice {
         this.device = device;
     }
 
-    /**
-     * @param exchange
-     * @throws IOException
-     */
     protected void createBody(Exchange exchange) throws IOException {
         byte[] buffer = null;
         if (endpoint.getReadAction() != null) {
@@ -105,6 +101,18 @@ public class I2CConsumer extends ScheduledPollConsumer implements I2CDevice {
         return this.device.read(address);
     }
 
+    public int readU16BigEndian(int register) throws IOException {
+        int lo = read(register);
+        int hi = read(register + 1);
+        return (hi << 8) + lo;
+    }
+
+    public int readU16LittleEndian(int register) throws IOException {
+        int lo = read(register);
+        int hi = read(register + 1);
+        return (lo << 8) + hi;
+    }
+
     public int read(int address, byte[] buffer, int offset, int size) throws IOException {
         return this.device.read(address, buffer, offset, size);
     }
@@ -123,5 +131,13 @@ public class I2CConsumer extends ScheduledPollConsumer implements I2CDevice {
 
     public void write(int address, byte[] buffer, int offset, int size) throws IOException {
         this.device.read(address, buffer, offset, size);
+    }
+
+    public void sleep(long howMuch) {
+        try {
+            Thread.sleep(howMuch);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
     }
 }
