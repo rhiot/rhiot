@@ -16,6 +16,6 @@
 
  #!/usr/bin/env bash
 
-sudo wget https://github.com/camel-labs/camel-labs/blob/master/iot/initd/rasbian/camel-iot-gateway.sh -O /etc/init.d/camel-iot-gateway
+sudo wget https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/rasbian/camel-iot-gateway.sh -O /etc/init.d/camel-iot-gateway
 sudo chmod +x /etc/init.d/camel-iot-gateway
 sudo /etc/init.d/camel-iot-gateway start
