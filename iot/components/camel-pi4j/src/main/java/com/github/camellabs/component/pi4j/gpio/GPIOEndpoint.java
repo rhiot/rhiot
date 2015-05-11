@@ -58,13 +58,13 @@ public class GPIOEndpoint extends DefaultEndpoint {
     @Metadata(required = "true")
     private PinMode mode = PinMode.DIGITAL_OUTPUT;
 
-    @UriParam(description = "Default : use Body if Action for ouput Pin (TOGGLE, BUZZ, HIGH, LOW for digital only) (HEADER digital and analog) ", enums = "TOGGLE:BUZZ:HIGH:LOW:HEADER")
+    @UriParam(description = "Default : use Body if Action for ouput Pin (TOGGLE, BUZZ, HIGH, LOW for digital only) (HEADER digital and analog)", enums = "TOGGLE:BUZZ:HIGH:LOW:HEADER")
     private GPIOAction action;
 
     @UriParam(defaultValue = "0", description = "Analog or PWN Only")
     private double value;
 
-    @UriParam(defaultValue = "true", description = "pin shutdown behavior")
+    @UriParam(defaultValue = "true", description = "pin shutdown export")
     private boolean shutdownExport = true;
 
     @UriParam(defaultValue = "LOW", description = "pin state value before exit program")
