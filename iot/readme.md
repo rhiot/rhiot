@@ -5,6 +5,24 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
 [Apache Camel](http://camel.apache.org).
 <br><br>
 
+## Camel IoT gateway
+
+Camel IoT gateway is the small fat jar application that can be installed into the field device. Gateway acts as a bridge
+between the sensors and the data center.
+
+### Installing gateway on the Rasbian
+
+In order to install Camel IoT gateway on the Raspbian, execute the following command:
+
+    bash <(curl https://bit.ly/get-camel-iot-gateway-rasbian)
+    
+Or the same remotely using SSH:
+
+    ssh pi@$YOUR_RASPBERRY_PI_DEVICE 'bash <(curl https://bit.ly/get-camel-iot-gateway-rasbian)'
+    
+From this point forward Camel IoT gateway will be installed on your device as `camel-iot-gateway` service and started
+whenever the device boots up.
+
 ## Camel IoT components
 
 Camel IoT Labs brings some extra components for the Apache Camel intended to make both device- and server-side IoT
