@@ -191,7 +191,7 @@ Maven users should add the following dependency to their POM file:
 
 #### URI format for GPIO
 
-    pi4j-gpio://gpioId?[options]
+    pi4j-gpio://gpioId[?options]
 
 *gpioId* must match [A-Z_0-9]+ pattern.
 By default, pi4j-gpio uses *RaspiPin* Class, change it via *gpioClass* property
