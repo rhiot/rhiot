@@ -21,6 +21,7 @@ package com.github.camellabs.component.pi4j;
  */
 public final class Pi4jConstants {
     public static final String LOG_COMPONENT = "log:com.github.camellabs.component.pi4j?showAll=true&multiline=true";
+    public static final String CAMEL_I2C_DRIVER_LOCATION = "/META-INF/services/com/github/camellabs/component/pi4j/i2c/";
     public static final String CAMEL_ID_ROUTE = "raspberry-pi";
     public static final String PROVIDER_NAME = "RaspberryPi GPIO Provider Mock";
     public static final String CAMEL_RBPI = "CamelPi4j";
