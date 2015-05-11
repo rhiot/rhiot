@@ -18,6 +18,6 @@
 
 sudo wget https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/rasbian/camel-iot-gateway.sh -O /etc/init.d/camel-iot-gateway
 sudo chmod +x /etc/init.d/camel-iot-gateway
-sudo update-rc.d /etc/init.d/camel-iot-gateway defaults
+sudo update-rc.d camel-iot-gateway defaults
 
 sudo /etc/init.d/camel-iot-gateway start
