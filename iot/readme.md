@@ -172,3 +172,56 @@ be a header on the exchange.
     .setBody(constant("on"))
     .to("tinkerforge:io16?uid=io9&ioport=b");
 
+---
+
+### Camel Pi4j component
+
+Camel Pi4j component can be used to manage GPIO and I2C bus features from Raspberry Pi.
+This component uses [pi4j](http://pi4j.com) library
+
+#### Maven dependency
+
+Maven users should add the following dependency to their POM file:
+
+    <dependency>
+      <groupId>com.github.camel-labs</groupId>
+      <artifactId>camel-pi4j</artifactId>
+      <version>0.0.0</version>
+    </dependency>
+
+#### URI format for GPIO
+
+    pi4j-gpio://gpioId?[options]
+
+*gpioId* must match [A-Z_0-9]+ pattern.
+By default, pi4j-gpio uses *RaspiPin* Class, change it via *gpioClass* property
+You can use static field name "*GPIO_XX*", pin name "*GPIO [0-9]*" or pin address "*[0-9]*" 
+
+
+###### Optional URI Parameters
+
+| Parameter            | Default value             | Description                                               |
+|----------------------|---------------------------|-----------------------------------------------------------|
+| gpioId               |                           |                                                           |
+| state                |                           | Digital Only: if input mode then state trigger event, if output then started value                       |
+| mode                 | DIGITAL_OUTPUT            | Show message starting at position 0                       |
+| action               |                           | Default : use Body if Action for output Pin (TOGGLE, BUZZ, HIGH, LOW for digital only) (HEADER digital and analog) |
+| value                | 0                         | Analog or PWN Only                       |
+| shutdownExport       | true                      | To configure the pin shutdown export                      |
+| shutdownResistance   | OFF                       | To configure the pin resistance before exit program                      |
+| shutdownState        | LOW                       | To configure the pin state value before exit program                      |
+| pullResistance       | PULL_UP                   | To configure the input pull resistance, Avoid strange value for info http://en.wikipedia.org/wiki/Pull-up_resistor                     |
+| gpioClass            | *com.pi4j.io.gpio.RaspiPin* | *class<com.pi4j.io.gpio.Pin>* pin implementation                  |
+| controller           | *com.pi4j.io.gpio.impl.GpioControllerImpl*            | *instance of <com.pi4j.io.gpio.GpioController>* GPIO controller instance, check gpioClass pin implementation to use the same  |
+
+##### Consuming:
+
+    from("pi4j-gpio://13?mode=DIGITAL_INPUT&state=LOW")
+    .to("log:default?showHeaders=true");
+
+##### Producing
+
+    from("timer:default?period=2000")
+    .to("pi4j-gpio://GPIO_04?mode=DIGITAL_OUTPUT&state=LOW&action=TOGGLE");
+
+---
