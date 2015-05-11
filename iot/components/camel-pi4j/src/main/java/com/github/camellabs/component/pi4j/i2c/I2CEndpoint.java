@@ -16,6 +16,13 @@
  */
 package com.github.camellabs.component.pi4j.i2c;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
+
+import com.github.camellabs.component.pi4j.Pi4jConstants;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 
@@ -25,6 +32,7 @@ import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriEndpoint;
+import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriPath;
 
 /**
@@ -32,36 +40,91 @@ import org.apache.camel.spi.UriPath;
  */
 @UriEndpoint(scheme = "pi4j-i2c", syntax = "pi4j-i2c://busId/deviceId", consumerClass = I2CConsumer.class, label = "iot", title = "i2c")
 public class I2CEndpoint extends DefaultEndpoint {
+
     @UriPath
     @Metadata(required = "true")
     private String name;
 
+    @UriParam(defaultValue = "")
     private int busId;
 
+    @UriParam(defaultValue = "")
     private int deviceId;
 
     private I2CDevice device;
 
     private I2CBus bus;
 
+    @UriParam(defaultValue = "")
     private int address;
 
+    @UriParam(defaultValue = "")
     private I2CReadAction readAction;
 
+    @UriParam(defaultValue = "")
     private int size = -1;
 
+    @UriParam(defaultValue = "")
     private int offset = -1;
 
+    @UriParam(defaultValue = "")
     private int bufferSize = -1;
+
+    @UriParam(defaultValue = "")
+    private Class driverClass = I2CConsumer.class;
+
+    @UriParam(defaultValue = "")
+    private String driverName;
+
+    @UriParam(defaultValue = "")
+    private String[] i2cOptions;
 
     public I2CEndpoint(String uri, String remaining, I2CBus bus) {
         super(uri);
+
         this.bus = bus;
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
+        Consumer ret = null;
+
+        initDriver();
+
         device = bus.getDevice(deviceId);
-        return new I2CConsumer(this, processor, device);
+
+        Constructor constructor = driverClass.getConstructor(I2CEndpoint.class, Processor.class, I2CDevice.class);
+
+        ret = (Consumer)constructor.newInstance(this, processor, device);
+
+        return ret;
+    }
+
+    private void initDriver() throws ClassNotFoundException {
+        if (driverName != null && driverName.compareTo("") != 0) {
+            InputStream is = I2CEndpoint.class.getResourceAsStream(Pi4jConstants.CAMEL_I2C_DRIVER_LOCATION + driverName);
+            BufferedReader br = null;
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+            try {
+                br = new BufferedReader(new InputStreamReader(is));
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            driverClass = I2CEndpoint.class.forName(sb.toString());
+        }
     }
 
     public Producer createProducer() throws Exception {
@@ -91,6 +154,18 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     public int getDeviceId() {
         return deviceId;
+    }
+
+    public Class getDriverClass() {
+        return driverClass;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public String[] getI2cOptions() {
+        return i2cOptions;
     }
 
     public String getName() {
@@ -135,6 +210,18 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     public void setDeviceId(int deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public void setDriverClass(Class driverClass) {
+        this.driverClass = driverClass;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public void setI2cOptions(String[] i2cOptions) {
+        this.i2cOptions = i2cOptions;
     }
 
     public void setName(String name) {
