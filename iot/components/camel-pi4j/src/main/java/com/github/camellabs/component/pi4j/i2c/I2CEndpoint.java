@@ -71,7 +71,7 @@ public class I2CEndpoint extends DefaultEndpoint {
     private int bufferSize = -1;
 
     @UriParam(defaultValue = "")
-    private Class driverClass = I2CConsumer.class;
+    private Class driverClass;
 
     @UriParam(defaultValue = "")
     private String driverName;
@@ -88,7 +88,7 @@ public class I2CEndpoint extends DefaultEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         Consumer ret = null;
 
-        initDriver();
+        initDriver(I2CConsumer.class);
 
         device = bus.getDevice(deviceId);
 
@@ -99,7 +99,24 @@ public class I2CEndpoint extends DefaultEndpoint {
         return ret;
     }
 
-    private void initDriver() throws ClassNotFoundException {
+    public Producer createProducer() throws Exception {
+        Producer ret = null;
+
+        initDriver(I2CProducer.class);
+
+        device = bus.getDevice(deviceId);
+
+        Constructor constructor = driverClass.getConstructor(I2CEndpoint.class, I2CDevice.class);
+
+        ret = (Producer)constructor.newInstance(this, device);
+
+        return ret;
+    }
+
+    private void initDriver(Class defaultClass) throws ClassNotFoundException, IOException {
+        Class ret = null;
+
+        // Force via driverName
         if (driverName != null && driverName.compareTo("") != 0) {
             InputStream is = I2CEndpoint.class.getResourceAsStream(Pi4jConstants.CAMEL_I2C_DRIVER_LOCATION + driverName);
             BufferedReader br = null;
@@ -113,24 +130,18 @@ public class I2CEndpoint extends DefaultEndpoint {
                         sb.append(line);
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             } finally {
                 if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    br.close();
                 }
             }
             driverClass = I2CEndpoint.class.forName(sb.toString());
         }
-    }
+        // Force default
+        if (driverClass == null) {
+            driverClass = defaultClass;
+        }
 
-    public Producer createProducer() throws Exception {
-        device = bus.getDevice(deviceId);
-        return new I2CProducer(this, device);
     }
 
     public int getAddress() {
