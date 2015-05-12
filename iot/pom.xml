@@ -23,6 +23,7 @@
     <modules>
         <module>utils</module>
         <module>components</module>
+        <module>gateway</module>
         <module>cloudlet</module>
     </modules>
 

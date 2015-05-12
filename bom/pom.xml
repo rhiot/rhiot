@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <activemq.version>5.11.1</activemq.version>
         <apache-commons-lang3.version>3.3.2</apache-commons-lang3.version>
         <camel.version>2.15.2</camel.version>
         <camel-labs.version>${project.version}</camel-labs.version>
@@ -73,6 +74,31 @@
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-service</artifactId>
                 <version>${pi4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-broker</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-client</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-jms-pool</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-pool</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-mqtt</artifactId>
+                <version>${activemq.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
