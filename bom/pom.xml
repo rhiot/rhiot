@@ -19,6 +19,7 @@
         <kura.version>1.0.3</kura.version>
         <logback.version>1.1.2</logback.version>
         <pi4j-version>1.0</pi4j-version>
+        <pubnub.version>3.7.2</pubnub.version>
         <spring-boot.version>1.2.3.RELEASE</spring-boot.version>
         <tinkerforge.version>2.1.4</tinkerforge.version>
 
@@ -102,6 +103,11 @@
                 <groupId>com.tinkerforge</groupId>
                 <artifactId>tinkerforge</artifactId>
                 <version>${tinkerforge.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pubnub</groupId>
+                <artifactId>pubnub</artifactId>
+                <version>${pubnub.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
