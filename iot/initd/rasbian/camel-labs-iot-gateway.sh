@@ -15,10 +15,10 @@
  # limitations under the License.
 
 #!/bin/bash
-# /etc/init.d/camel-iot-gateway
+# /etc/init.d/camel-labs-iot-gateway
 
 ### BEGIN INIT INFO
-# Provides:          camel-iot-gateway
+# Provides:          camel-labs-iot-gateway
 # Required-Start:    $syslog
 # Required-Stop:     $syslog
 # Default-Start:     2 3 4 5
@@ -31,16 +31,17 @@
 case "$1" in
     start)
         echo "Starting Camel Labs IoT Gateway"
-        mkdir -p /var/camel-iot-gateway
-        java -jar /home/pi/camel-iot-gateway-*.jar >/var/camel-iot-gateway/camel-iot-gateway.log 2>&1 &
-        echo $! > /var/camel-iot-gateway/pid
+        mkdir -p /var/camel-labs-iot-gateway
+        java -jar /var/camel-labs-iot-gateway/camel-labs-iot-gateway-*.jar >/var/camel-labs-iot-gateway/camel-labs-iot-gateway.log 2>&1 &
+        echo $! > /var/camel-labs-iot-gateway/pid
+        echo "Camel Labs IoT Gateway started."
         ;;
     stop)
         echo "Stopping Camel Labs IoT Gateway"
-        kill `cat /var/camel-iot-gateway/pid`
+        kill `cat /var/camel-labs-iot-gateway/pid`
         ;;
     *)
-        echo "Usage: /etc/init.d/camel-iot-gateway start|stop"
+        echo "Usage: /etc/init.d/camel-labs-iot-gateway start|stop"
         exit 1
         ;;
 esac

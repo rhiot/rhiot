@@ -14,11 +14,11 @@ between the sensors and the data center.
 
 In order to install Camel IoT gateway on the Raspbian, execute the following command:
 
-    bash <(curl https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/rasbian/get-camel-iot-gateway-rasbian.sh)
+    bash <(curl https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/rasbian/get-camel-labs-iot-gateway-rasbian.sh)
     
 Or the same remotely using SSH:
 
-    ssh pi@$YOUR_RASPBERRY_PI_DEVICE 'bash <(curl https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/rasbian/get-camel-iot-gateway-rasbian.sh)'
+    ssh pi@$YOUR_RASPBERRY_PI_DEVICE 'bash <(curl https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/rasbian/get-camel-labs-iot-gateway-rasbian.sh)'
     
 From this point forward Camel IoT gateway will be installed on your device as `camel-iot-gateway` service and started
 whenever the device boots up.

@@ -14,10 +14,19 @@
  # See the License for the specific language governing permissions and
  # limitations under the License.
 
- #!/usr/bin/env bash
+#!/usr/bin/env bash
 
-sudo wget https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/rasbian/camel-iot-gateway.sh -O /etc/init.d/camel-iot-gateway
-sudo chmod +x /etc/init.d/camel-iot-gateway
-sudo update-rc.d camel-iot-gateway defaults
+# Prepare gateway home directory
+mkdir -p /var/camel-labs-iot-gateway
 
-sudo /etc/init.d/camel-iot-gateway start
+# Download and install the latest gateway
+wget http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.github.camellabs&a=camel-labs-iot-gateway&v=LATEST --directory-prefix=/tmp
+mv /tmp/camel-labs-iot-gateway-*.jar /var/camel-labs-iot-gateway/
+
+# Download and install the init.d script
+sudo wget https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/rasbian/camel-labs-iot-gateway.sh -O /etc/init.d/camel-labs-iot-gateway
+sudo chmod +x /etc/init.d/camel-labs-iot-gateway
+sudo update-rc.d camel-labs-iot-gateway defaults
+
+# Start the installed gateway service
+sudo /etc/init.d/camel-labs-iot-gateway start
