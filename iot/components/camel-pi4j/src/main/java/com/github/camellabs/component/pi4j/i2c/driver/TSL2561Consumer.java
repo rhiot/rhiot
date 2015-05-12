@@ -114,6 +114,7 @@ public class TSL2561Consumer extends I2CConsumer {
     public final static double TSL2561_LUX_M8C = 0.000; // (0x0000) // 0.000 *
                                                         // 2^LUX_SCALE
 
+    // Default value
     private int gain = TSL2561_GAIN_1X;
     private int integration = TSL2561_INTEGRATIONTIME_402MS;
     private long pause = 800L;
@@ -125,7 +126,8 @@ public class TSL2561Consumer extends I2CConsumer {
     protected void doStart() throws Exception {
         super.doStart();
         write(TSL2561_COMMAND_BIT, (byte)TSL2561_CONTROL_POWERON);
-        setGain();
+        write(TSL2561_COMMAND_BIT | TSL2561_REGISTER_TIMING, (byte)(gain | integration));
+        sleep(pause);
     }
 
     protected void doStop() throws Exception {
@@ -141,28 +143,6 @@ public class TSL2561Consumer extends I2CConsumer {
         LOG.debug("" + body);
 
         exchange.getIn().setBody(body);
-    }
-
-    public void setGain() throws IOException {
-        setGain(TSL2561_GAIN_1X);
-    }
-
-    public void setGain(int gain) throws IOException {
-        setGain(gain, TSL2561_INTEGRATIONTIME_402MS);
-    }
-
-    public void setGain(int gain, int integration) throws IOException {
-        if (gain != TSL2561_GAIN_1X && gain != TSL2561_GAIN_16X)
-            throw new IllegalArgumentException("Bad  gain value [" + gain + "]");
-
-        if (gain != this.gain || integration != this.integration) {
-            write(TSL2561_COMMAND_BIT | TSL2561_REGISTER_TIMING, (byte)(gain | integration));
-            LOG.debug("Setting low gain");
-            this.gain = gain;
-            this.integration = integration;
-            sleep(pause); // pause for integration (pause must be bigger than
-                          // integration time)
-        }
     }
 
     /*
