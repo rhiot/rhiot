@@ -109,9 +109,10 @@ public class I2CEndpoint extends DefaultEndpoint {
             try {
                 br = new BufferedReader(new InputStreamReader(is));
                 while ((line = br.readLine()) != null) {
-                    sb.append(line);
+                    if (!line.contains("#")) {
+                        sb.append(line);
+                    }
                 }
-
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
