@@ -116,4 +116,12 @@ public class I2CProducer extends DefaultProducer implements I2CDevice {
     public void setDevice(I2CDevice device) {
         this.device = device;
     }
+
+    public void sleep(long howMuch) {
+        try {
+            Thread.sleep(howMuch);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
+    }
 }
