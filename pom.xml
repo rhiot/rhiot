@@ -18,6 +18,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <spring-boot.version>1.2.3.RELEASE</spring-boot.version>
     </properties>
 
     <name>${project.artifactId}</name>
@@ -172,7 +174,7 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>1.2.3.RELEASE</version>
+                    <version>${spring-boot.version}</version>
                     <configuration>
                         <mainClass>org.apache.camel.spring.boot.FatJarRouter</mainClass>
                     </configuration>
