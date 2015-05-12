@@ -16,11 +16,11 @@
  */
 package com.github.camellabs.component.pi4j.converter;
 
+import static com.pi4j.io.gpio.PinState.getState;
+
 import com.pi4j.io.gpio.PinState;
 
 import org.apache.camel.Converter;
-
-import static com.pi4j.io.gpio.PinState.getState;
 
 @Converter
 public final class Pi4jConverter {
@@ -46,6 +46,11 @@ public final class Pi4jConverter {
     @Converter
     public static PinState booleanToPinState(boolean state) {
         return getState(state);
+    }
+
+    @Converter
+    public static String[] stringToStringArray(String string) {
+        return string.split(",");
     }
 
 }
