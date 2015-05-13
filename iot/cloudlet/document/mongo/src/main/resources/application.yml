@@ -1,0 +1,4 @@
+server.port: 15000
+spring:
+  data.mongodb.database: zed_service_document
+  groovy.template.check-template-location: false
