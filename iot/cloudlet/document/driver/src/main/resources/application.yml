@@ -1,4 +1,4 @@
 server.port: 15000
 spring:
-  data.mongodb.database: zed_service_document
+  data.mongodb.database: cloudlet_document
   groovy.template.check-template-location: false
