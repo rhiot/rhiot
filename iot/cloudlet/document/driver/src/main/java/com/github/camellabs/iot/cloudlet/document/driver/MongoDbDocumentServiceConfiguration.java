@@ -40,10 +40,10 @@ public class MongoDbDocumentServiceConfiguration {
 
     static final Logger LOG = LoggerFactory.getLogger(MongoDbDocumentServiceConfiguration.class);
 
-    @ConditionalOnProperty(value = "zed.service.document.mongodb.embedded", havingValue = "true")
+    @ConditionalOnProperty(value = "camel.labs.iot.cloudlet.document.driver.mongodb.embedded", havingValue = "true")
     @Bean(initMethod = "start", destroyMethod = "stop")
     public MongodExecutable embeddedMongoDB(
-            @Value("${zed.service.document.mongodb.embedded.port:27017}") int mongodbPort
+            @Value("${camel.labs.iot.cloudlet.document.driver.mongodb.embedded.port:27017}") int mongodbPort
     ) throws IOException {
         IMongodConfig mongodConfig = new MongodConfigBuilder()
                 .version(V2_6_1)
@@ -53,7 +53,7 @@ public class MongoDbDocumentServiceConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "zed.service.document.mongodb.springbootconfig", matchIfMissing = true, havingValue = "false")
+    @ConditionalOnProperty(value = "camel.labs.iot.cloudlet.document.driver.mongodb.springbootconfig", matchIfMissing = true, havingValue = "false")
     Mongo mongo() throws UnknownHostException {
         String mongodbKubernetesHost = System.getenv("MONGODB_SERVICE_HOST");
         String mongodbKubernetesPort = System.getenv("MONGODB_SERVICE_PORT");

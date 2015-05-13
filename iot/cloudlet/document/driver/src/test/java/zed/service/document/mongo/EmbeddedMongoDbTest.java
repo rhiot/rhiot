@@ -17,7 +17,7 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {MongoDbDocumentServiceConfiguration.class, EmbeddedMongoDbTest.class})
-@IntegrationTest("zed.service.document.mongodb.embedded=true")
+@IntegrationTest("camel.labs.iot.cloudlet.document.driver.mongodb.embedded=true")
 public class EmbeddedMongoDbTest extends Assert {
 
     // Collaborator fixtures
@@ -30,8 +30,8 @@ public class EmbeddedMongoDbTest extends Assert {
     @BeforeClass
     public static void beforeClass() {
         int mongodbPort = findAvailableTcpPort();
-        System.setProperty("zed.service.document.mongodb.embedded.port", mongodbPort + "");
-        System.setProperty("zed.service.document.mongodb.springbootconfig", TRUE.toString());
+        System.setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.embedded.port", mongodbPort + "");
+        System.setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.springbootconfig", TRUE.toString());
         System.setProperty("spring.data.mongodb.port", mongodbPort + "");
 
         System.setProperty("server.port", findAvailableTcpPort() + "");

@@ -55,7 +55,7 @@ public class MongoDbDocumentServiceTest extends Assert {
         System.setProperty("server.port", findAvailableTcpPort() + "");
         System.setProperty("zed.service.api.port", findAvailableTcpPort() + "");
 
-        System.setProperty("zed.service.document.mongodb.springbootconfig", TRUE.toString());
+        System.setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.springbootconfig", TRUE.toString());
         System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
     }
 
