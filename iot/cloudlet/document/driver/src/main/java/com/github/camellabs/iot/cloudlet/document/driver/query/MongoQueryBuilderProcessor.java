@@ -1,4 +1,4 @@
-package zed.service.document.mongo.query;
+package com.github.camellabs.iot.cloudlet.document.driver.query;
 
 import com.mongodb.DBObject;
 import org.apache.camel.Exchange;

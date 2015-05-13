@@ -1,12 +1,12 @@
-package zed.service.document.mongo.routing;
+package com.github.camellabs.iot.cloudlet.document.driver.routing;
 
-public class RemoveOperation {
+public class FindOneOperation {
 
     private final String collection;
 
     private final String id;
 
-    public RemoveOperation(String collection, String id) {
+    public FindOneOperation(String collection, String id) {
         this.collection = collection;
         this.id = id;
     }

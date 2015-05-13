@@ -1,7 +1,7 @@
 package zed.service.document.mongo;
 
+import com.github.camellabs.iot.cloudlet.document.driver.MongoDbDocumentServiceConfiguration;
 import com.github.camellabs.iot.cloudlet.document.sdk.DocumentService;
-import com.github.camellabs.iot.cloudlet.document.sdk.Pojos;
 import com.github.camellabs.iot.cloudlet.document.sdk.QueryBuilder;
 import com.github.camellabs.iot.cloudlet.document.sdk.RestDocumentService;
 import org.apache.camel.CamelContext;

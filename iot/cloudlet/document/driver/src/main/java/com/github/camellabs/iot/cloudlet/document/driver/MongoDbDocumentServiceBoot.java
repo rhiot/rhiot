@@ -1,4 +1,4 @@
-package zed.service.document.mongo;
+package com.github.camellabs.iot.cloudlet.document.driver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

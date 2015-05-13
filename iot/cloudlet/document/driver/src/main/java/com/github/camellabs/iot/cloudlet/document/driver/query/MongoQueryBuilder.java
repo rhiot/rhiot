@@ -1,4 +1,4 @@
-package zed.service.document.mongo.query;
+package com.github.camellabs.iot.cloudlet.document.driver.query;
 
 import com.google.common.base.Predicate;
 import com.mongodb.BasicDBObject;

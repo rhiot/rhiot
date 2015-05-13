@@ -1,4 +1,4 @@
-package zed.service.document.mongo.routing;
+package com.github.camellabs.iot.cloudlet.document.driver.routing;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -15,10 +15,10 @@ import static org.apache.camel.component.mongodb.MongoDbConstants.NUM_TO_SKIP;
 import static org.apache.camel.component.mongodb.MongoDbConstants.SORT_BY;
 import static org.apache.camel.model.rest.RestBindingMode.json;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static zed.service.document.mongo.bson.BsonMapperProcessor.mapBsonToJson;
-import static zed.service.document.mongo.bson.BsonMapperProcessor.mapJsonToBson;
-import static zed.service.document.mongo.query.MongoDbSortConditionExpression.sortCondition;
-import static zed.service.document.mongo.query.MongoQueryBuilderProcessor.queryBuilder;
+import static com.github.camellabs.iot.cloudlet.document.driver.bson.BsonMapperProcessor.mapBsonToJson;
+import static com.github.camellabs.iot.cloudlet.document.driver.bson.BsonMapperProcessor.mapJsonToBson;
+import static com.github.camellabs.iot.cloudlet.document.driver.query.MongoDbSortConditionExpression.sortCondition;
+import static com.github.camellabs.iot.cloudlet.document.driver.query.MongoQueryBuilderProcessor.queryBuilder;
 
 @Component
 public class DocumentServiceRestApiRoutes extends RouteBuilder {
@@ -70,27 +70,27 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
-                setBody().groovy("new zed.service.document.mongo.routing.SaveOperation(headers['collection'], body)").
+                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.SaveOperation(headers['collection'], body)").
                 to("direct:save");
 
         rest("/api/document").
                 get("/count/{collection}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.CountOperation(headers['collection'])").
+                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.CountOperation(headers['collection'])").
                 to("direct:count");
 
         rest("/api/document").
                 get("/findOne/{collection}/{id}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.FindOneOperation(headers['collection'], headers['id'])").
+                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.FindOneOperation(headers['collection'], headers['id'])").
                 to("direct:findOne");
 
         rest("/api/document").
                 post("/findMany/{collection}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.FindManyOperation(headers['collection'], body.ids)").
+                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.FindManyOperation(headers['collection'], body.ids)").
                 to("direct:findMany");
 
         rest("/api/document").
                 post("/findByQuery/{collection}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.FindByQueryOperation(headers['collection'], body)").
+                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.FindByQueryOperation(headers['collection'], body)").
                 to("direct:findByQuery");
 
         rest("/api/document")
@@ -102,12 +102,12 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/countByQuery/{collection}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.CountByQueryOperation(headers['collection'], body)").
+                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.CountByQueryOperation(headers['collection'], body)").
                 to("direct:countByQuery");
 
         rest("/api/document").
                 delete("/remove/{collection}/{id}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.RemoveOperation(headers['collection'], headers['id'])").
+                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.RemoveOperation(headers['collection'], headers['id'])").
                 to("direct:remove");
 
         // Operations handlers

@@ -1,5 +1,6 @@
 package zed.service.document.mongo;
 
+import com.github.camellabs.iot.cloudlet.document.driver.MongoDbDocumentServiceConfiguration;
 import com.mongodb.Mongo;
 import com.mongodb.MongoTimeoutException;
 import org.junit.Assert;

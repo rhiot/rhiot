@@ -1,4 +1,4 @@
-package zed.service.document.mongo.bson;
+package com.github.camellabs.iot.cloudlet.document.driver.bson;
 
 import com.google.common.collect.Lists;
 import com.mongodb.DBObject;

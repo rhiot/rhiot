@@ -1,8 +1,8 @@
-package zed.service.document.mongo.query;
+package com.github.camellabs.iot.cloudlet.document.driver.query;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.support.ExpressionAdapter;
-import zed.service.document.mongo.routing.FindByQueryOperation;
+import com.github.camellabs.iot.cloudlet.document.driver.routing.FindByQueryOperation;
 
 public class MongoDbSortConditionExpression extends ExpressionAdapter {
 
