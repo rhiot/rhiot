@@ -1,4 +1,4 @@
-package zed.service.document.mongo;
+package camel.labs.iot.cloudlet.document.driver.mongodb;
 
 import com.github.camellabs.iot.cloudlet.document.driver.MongoDbDocumentServiceConfiguration;
 import com.github.camellabs.iot.cloudlet.document.sdk.DocumentService;
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
-import zed.service.document.mongo.Invoice.Address;
+import camel.labs.iot.cloudlet.document.driver.mongodb.Invoice.Address;
 
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -36,7 +36,7 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {EmbedMongoConfiguration.class, MongoDbDocumentServiceConfiguration.class, MongoDocumentServiceTestConfiguration.class})
-@IntegrationTest("zed.service.api.endpoint.options=connectTimeout=20000:requestTimeout=1000")
+@IntegrationTest("camel.labs.iot.cloudlet.rest.endpoint.options=connectTimeout=20000:requestTimeout=1000")
 public class MongoDbDocumentServiceTest extends Assert {
 
     @Autowired
@@ -53,7 +53,7 @@ public class MongoDbDocumentServiceTest extends Assert {
     @BeforeClass
     public static void beforeClass() {
         System.setProperty("server.port", findAvailableTcpPort() + "");
-        System.setProperty("zed.service.api.port", findAvailableTcpPort() + "");
+        System.setProperty("camel.labs.iot.cloudlet.rest.port", findAvailableTcpPort() + "");
 
         System.setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.springbootconfig", TRUE.toString());
         System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
@@ -473,7 +473,7 @@ public class MongoDbDocumentServiceTest extends Assert {
 class MongoDocumentServiceTestConfiguration {
 
     @Bean
-    DocumentService documentService(@Value("${zed.service.api.port}") int restApiPort) {
+    DocumentService documentService(@Value("${camel.labs.iot.cloudlet.rest.port}") int restApiPort) {
         return new RestDocumentService(restApiPort);
     }
 

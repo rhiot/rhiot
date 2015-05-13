@@ -39,11 +39,11 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
     @Autowired
     public DocumentServiceRestApiRoutes(
-            @Value("${zed.service.document.mongo.db:zed_service_document}") String documentsDbName,
-            @Value("${zed.service.api.port:15001}") int restPort,
-            @Value("${zed.service.api.cors:true}") boolean enableCors,
-            @Value("${zed.service.api.attachment.size.max:26214400}") int maxAttachmentSize, // Default attachment size = 25 MB
-            @Value("${zed.service.api.endpoint.options:}") String apiEndpointOptions) {
+            @Value("${camel.labs.iot.cloudlet.document.driver.mongodb.db:zed_service_document}") String documentsDbName,
+            @Value("${camel.labs.iot.cloudlet.rest.port:15001}") int restPort,
+            @Value("${camel.labs.iot.cloudlet.rest.cors:true}") boolean enableCors,
+            @Value("${camel.labs.iot.cloudlet.rest.attachment.size.max:26214400}") int maxAttachmentSize, // Default attachment size = 25 MB
+            @Value("${camel.labs.iot.cloudlet.rest.endpoint.options:}") String apiEndpointOptions) {
         this.documentsDbName = documentsDbName;
         this.restPort = restPort;
         this.enableCors = enableCors;

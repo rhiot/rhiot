@@ -1,4 +1,4 @@
-package zed.service.document.mongo;
+package camel.labs.iot.cloudlet.document.driver.mongodb;
 
 import com.github.camellabs.iot.cloudlet.document.driver.MongoDbDocumentServiceConfiguration;
 import com.mongodb.Mongo;
@@ -35,7 +35,7 @@ public class EmbeddedMongoDbTest extends Assert {
         System.setProperty("spring.data.mongodb.port", mongodbPort + "");
 
         System.setProperty("server.port", findAvailableTcpPort() + "");
-        System.setProperty("zed.service.api.port", findAvailableTcpPort() + "");
+        System.setProperty("camel.labs.iot.cloudlet.rest.port", findAvailableTcpPort() + "");
     }
 
     // Tests

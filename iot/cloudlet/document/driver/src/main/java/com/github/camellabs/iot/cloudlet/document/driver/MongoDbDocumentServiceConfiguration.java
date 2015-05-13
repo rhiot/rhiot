@@ -87,7 +87,7 @@ public class MongoDbDocumentServiceConfiguration {
     }
 
     @Bean
-    ServletRegistrationBean swaggerServlet(@Value("${server.port:15000}") int serverPort, @Value("${zed.service.api.port:15001}") int restPort) {
+    ServletRegistrationBean swaggerServlet(@Value("${server.port:15000}") int serverPort, @Value("${camel.labs.iot.cloudlet.rest.port:15001}") int restPort) {
         ServletRegistrationBean swaggerServlet = new ServletRegistrationBean();
         swaggerServlet.setName("ApiDeclarationServlet");
         swaggerServlet.setServlet(new DefaultCamelSwaggerServlet());
