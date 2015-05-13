@@ -70,8 +70,8 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
-                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.SaveOperation(headers['collection'], body)").
-                to("direct:save");
+                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation(headers['collection'], body)").
+                to("bean:mongodbDocumentDriver?method=save");
 
         rest("/api/document").
                 get("/count/{collection}").route().
@@ -111,16 +111,6 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
                 to("direct:remove");
 
         // Operations handlers
-
-        from("direct:save").
-                setHeader(COLLECTION).groovy("body.collection").
-                setBody().groovy("body.pojo").
-                convertBodyTo(DBObject.class). // FIXED:CAMEL-7996
-                process(mapJsonToBson()).
-                setProperty("original", body()).
-                // TODO:CAMEL
-                        to(baseMongoDbEndpoint() + "save").
-                setBody().groovy("exchange.properties['original'].get('_id').toString()");
 
         from("direct:findOne").
                 setHeader(COLLECTION).groovy("body.collection").
