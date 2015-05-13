@@ -1,4 +1,4 @@
-package zed.service.document.sdk;
+package com.github.camellabs.iot.cloudlet.document.sdk;
 
 import com.github.camellabs.iot.cloudlet.sdk.HealthCheck;
 import com.github.camellabs.iot.cloudlet.sdk.ServiceDiscoveryException;
@@ -15,7 +15,7 @@ import static com.github.camellabs.iot.cloudlet.sdk.RestTemplates.defaultRestTem
 import static com.github.camellabs.iot.utils.Reflections.classOfArrayOfClass;
 import static com.github.camellabs.iot.utils.Reflections.writeField;
 import static java.lang.String.format;
-import static zed.service.document.sdk.Pojos.pojoClassToCollection;
+import static com.github.camellabs.iot.cloudlet.document.sdk.Pojos.pojoClassToCollection;
 
 public class RestDocumentService<T> implements DocumentService<T> {
 

@@ -1,4 +1,4 @@
-package zed.service.document.sdk;
+package com.github.camellabs.iot.cloudlet.document.sdk;
 
 import java.util.List;
 

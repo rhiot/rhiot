@@ -1,12 +1,12 @@
-package zed.service.document.sdk;
+package com.github.camellabs.iot.cloudlet.document.sdk;
 
 import com.github.camellabs.iot.cloudlet.sdk.ServiceDiscoveryException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static zed.service.document.sdk.RestDocumentService.DEFAULT_DOCUMENT_SERVICE_URL;
-import static zed.service.document.sdk.RestDocumentService.baseUrlWithContextPath;
-import static zed.service.document.sdk.RestDocumentService.discoverOrDefault;
+import static com.github.camellabs.iot.cloudlet.document.sdk.RestDocumentService.DEFAULT_DOCUMENT_SERVICE_URL;
+import static com.github.camellabs.iot.cloudlet.document.sdk.RestDocumentService.baseUrlWithContextPath;
+import static com.github.camellabs.iot.cloudlet.document.sdk.RestDocumentService.discoverOrDefault;
 
 public class RestDocumentServiceTest extends Assert {
 
