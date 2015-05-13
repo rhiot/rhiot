@@ -14,7 +14,7 @@
 
     <modules>
         <module>sdk</module>
-        <module>mongo</module>
+        <module>driver</module>
     </modules>
 
 </project>

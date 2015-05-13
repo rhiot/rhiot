@@ -9,7 +9,7 @@
         <version>0.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>zed-service-document-mongodb</artifactId>
+    <artifactId>camel-labs-iot-cloudlet-document-driver</artifactId>
     <packaging>war</packaging>
 
     <dependencies>

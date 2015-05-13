@@ -1,6 +1,7 @@
 package zed.service.document.mongo;
 
 import com.github.camellabs.iot.cloudlet.document.sdk.DocumentService;
+import com.github.camellabs.iot.cloudlet.document.sdk.Pojos;
 import com.github.camellabs.iot.cloudlet.document.sdk.QueryBuilder;
 import com.github.camellabs.iot.cloudlet.document.sdk.RestDocumentService;
 import org.apache.camel.CamelContext;
@@ -27,11 +28,11 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 
+import static com.github.camellabs.iot.cloudlet.document.sdk.Pojos.pojoClassToCollection;
 import static com.github.camellabs.iot.cloudlet.document.sdk.QueryBuilder.buildQuery;
 import static java.lang.Boolean.TRUE;
 import static org.joda.time.DateTime.now;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
-import static zed.service.document.mongo.crossstore.sql.Pojos.pojoClassToCollection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {EmbedMongoConfiguration.class, MongoDbDocumentServiceConfiguration.class, MongoDocumentServiceTestConfiguration.class})
