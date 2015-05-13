@@ -1,4 +1,4 @@
-package com.github.camellabs.iot.cloudlet.document.driver.bson;
+package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 
 import com.google.common.collect.Lists;
 import com.mongodb.DBObject;
@@ -7,19 +7,15 @@ import org.apache.camel.Processor;
 
 import java.util.List;
 
-public class BsonMapperProcessor implements Processor {
+import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapper.bsonToJson;
+import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapper.jsonToBson;
 
-    private final BsonMapper bsonMapper;
+public class BsonMapperProcessor implements Processor {
 
     private final boolean bsonToJson;
 
-    public BsonMapperProcessor(BsonMapper bsonMapper, boolean bsonToJson) {
-        this.bsonMapper = bsonMapper;
-        this.bsonToJson = bsonToJson;
-    }
-
     public BsonMapperProcessor(boolean bsonToJson) {
-        this(new BsonMapper(), bsonToJson);
+        this.bsonToJson = bsonToJson;
     }
 
     public static BsonMapperProcessor mapBsonToJson() {
@@ -52,7 +48,7 @@ public class BsonMapperProcessor implements Processor {
     }
 
     private DBObject map(DBObject dbObject) {
-        return bsonToJson ? bsonMapper.bsonToJson(dbObject) : bsonMapper.jsonToBson(dbObject);
+        return bsonToJson ? bsonToJson(dbObject) : jsonToBson(dbObject);
     }
 
 }

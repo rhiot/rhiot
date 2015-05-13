@@ -1,7 +1,6 @@
 package com.github.camellabs.iot.cloudlet.document.driver.routing;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,7 @@ import static org.apache.camel.component.mongodb.MongoDbConstants.NUM_TO_SKIP;
 import static org.apache.camel.component.mongodb.MongoDbConstants.SORT_BY;
 import static org.apache.camel.model.rest.RestBindingMode.json;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static com.github.camellabs.iot.cloudlet.document.driver.bson.BsonMapperProcessor.mapBsonToJson;
-import static com.github.camellabs.iot.cloudlet.document.driver.bson.BsonMapperProcessor.mapJsonToBson;
+import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapperProcessor.mapBsonToJson;
 import static com.github.camellabs.iot.cloudlet.document.driver.query.MongoDbSortConditionExpression.sortCondition;
 import static com.github.camellabs.iot.cloudlet.document.driver.query.MongoQueryBuilderProcessor.queryBuilder;
 
