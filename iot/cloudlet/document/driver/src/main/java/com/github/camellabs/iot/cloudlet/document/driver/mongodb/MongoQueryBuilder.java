@@ -1,4 +1,4 @@
-package com.github.camellabs.iot.cloudlet.document.driver.query;
+package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 
 import com.google.common.base.Predicate;
 import com.mongodb.BasicDBObject;

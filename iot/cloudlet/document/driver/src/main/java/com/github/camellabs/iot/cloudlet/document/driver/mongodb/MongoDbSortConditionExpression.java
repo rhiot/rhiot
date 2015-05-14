@@ -1,4 +1,4 @@
-package com.github.camellabs.iot.cloudlet.document.driver.query;
+package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.support.ExpressionAdapter;

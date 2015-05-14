@@ -1,4 +1,4 @@
-package com.github.camellabs.iot.cloudlet.document.driver.query;
+package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 
 import com.mongodb.DBObject;
 import org.apache.camel.Exchange;

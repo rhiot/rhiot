@@ -15,8 +15,8 @@ import static org.apache.camel.component.mongodb.MongoDbConstants.SORT_BY;
 import static org.apache.camel.model.rest.RestBindingMode.json;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapperProcessor.mapBsonToJson;
-import static com.github.camellabs.iot.cloudlet.document.driver.query.MongoDbSortConditionExpression.sortCondition;
-import static com.github.camellabs.iot.cloudlet.document.driver.query.MongoQueryBuilderProcessor.queryBuilder;
+import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoDbSortConditionExpression.sortCondition;
+import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoQueryBuilderProcessor.queryBuilder;
 
 @Component
 public class DocumentServiceRestApiRoutes extends RouteBuilder {
