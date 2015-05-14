@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapperProcessor.mapJsonToBson;
 import static java.lang.String.format;
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static org.apache.camel.component.mongodb.MongoDbConstants.OID;

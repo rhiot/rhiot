@@ -22,10 +22,6 @@ public class BsonMapperProcessor implements Processor {
         return new BsonMapperProcessor(true);
     }
 
-    public static BsonMapperProcessor mapJsonToBson() {
-        return new BsonMapperProcessor(false);
-    }
-
     @Override
     public void process(Exchange exchange) throws Exception {
         Object rawBody = exchange.getIn().getBody();
