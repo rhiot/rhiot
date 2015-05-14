@@ -107,7 +107,7 @@ public class I2CProducer extends DefaultProducer implements I2CDevice {
     }
 
     public void write(int address, byte[] buffer, int offset, int size) throws IOException {
-        this.device.read(address, buffer, offset, size);
+        this.device.write(address, buffer, offset, size);
     }
 
     public I2CDevice getDevice() {
