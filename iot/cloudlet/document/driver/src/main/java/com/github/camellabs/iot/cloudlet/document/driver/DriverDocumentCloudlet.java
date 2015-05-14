@@ -11,6 +11,7 @@ import de.flapdoodle.embed.mongo.config.IMongodConfig;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
 import org.apache.camel.component.swagger.DefaultCamelSwaggerServlet;
+import org.apache.camel.spring.boot.FatJarRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,9 +37,9 @@ import static java.lang.Integer.parseInt;
 import static java.lang.System.getenv;
 
 @SpringBootApplication
-public class MongoDbDocumentServiceConfiguration {
+public class DriverDocumentCloudlet extends FatJarRouter {
 
-    static final Logger LOG = LoggerFactory.getLogger(MongoDbDocumentServiceConfiguration.class);
+    static final Logger LOG = LoggerFactory.getLogger(DriverDocumentCloudlet.class);
 
     @ConditionalOnProperty(value = "camel.labs.iot.cloudlet.document.driver.mongodb.embedded", havingValue = "true")
     @Bean(initMethod = "start", destroyMethod = "stop")

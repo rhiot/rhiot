@@ -2,3 +2,4 @@ server.port: 15000
 spring:
   data.mongodb.database: cloudlet_document
   groovy.template.check-template-location: false
+  main.sources: com.github.camellabs.iot.cloudlet.document.driver.DriverDocumentCloudlet

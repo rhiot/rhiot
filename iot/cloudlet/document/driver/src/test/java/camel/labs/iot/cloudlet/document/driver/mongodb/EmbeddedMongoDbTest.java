@@ -1,6 +1,6 @@
 package camel.labs.iot.cloudlet.document.driver.mongodb;
 
-import com.github.camellabs.iot.cloudlet.document.driver.MongoDbDocumentServiceConfiguration;
+import com.github.camellabs.iot.cloudlet.document.driver.DriverDocumentCloudlet;
 import com.mongodb.Mongo;
 import com.mongodb.MongoTimeoutException;
 import org.junit.Assert;
@@ -16,7 +16,7 @@ import static java.lang.Boolean.TRUE;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {MongoDbDocumentServiceConfiguration.class, EmbeddedMongoDbTest.class})
+@SpringApplicationConfiguration(classes = {DriverDocumentCloudlet.class, EmbeddedMongoDbTest.class})
 @IntegrationTest("camel.labs.iot.cloudlet.document.driver.mongodb.embedded=true")
 public class EmbeddedMongoDbTest extends Assert {
 
