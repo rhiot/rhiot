@@ -30,8 +30,9 @@ import org.slf4j.LoggerFactory;
  */
 public class I2CProducer extends DefaultProducer implements I2CDevice {
     private static final Logger LOG = LoggerFactory.getLogger(I2CProducer.class);
-    private I2CEndpoint endpoint;
-    private I2CDevice device;
+
+    protected I2CEndpoint endpoint;
+    protected I2CDevice device;
 
     public I2CProducer(I2CEndpoint endpoint, I2CDevice device) {
         super(endpoint);
@@ -77,13 +78,13 @@ public class I2CProducer extends DefaultProducer implements I2CDevice {
         return this.device.read(address);
     }
 
-    private int readU16BigEndian(int register) throws IOException {
+    public int readU16BigEndian(int register) throws IOException {
         int lo = read(register);
         int hi = read(register + 1);
         return (hi << 8) + lo;
     }
 
-    private int readU16LittleEndian(int register) throws IOException {
+    public int readU16LittleEndian(int register) throws IOException {
         int lo = read(register);
         int hi = read(register + 1);
         return (lo << 8) + hi;
