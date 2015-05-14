@@ -18,3 +18,5 @@ soapui-errors.log
 
 # MacOS
 **/.DS_Store
+/.settings
+/.project
