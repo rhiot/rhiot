@@ -74,10 +74,7 @@ public class I2CEndpoint extends DefaultEndpoint {
     private Class driverClass;
 
     @UriParam(defaultValue = "")
-    private String driverName;
-
-    @UriParam(defaultValue = "")
-    private String[] i2cOptions;
+    private String driver;
 
     public I2CEndpoint(String uri, String remaining, I2CBus bus) {
         super(uri);
@@ -116,9 +113,9 @@ public class I2CEndpoint extends DefaultEndpoint {
     private void initDriver(Class defaultClass) throws ClassNotFoundException, IOException {
         Class ret = null;
 
-        // Force via driverName
-        if (driverName != null && driverName.compareTo("") != 0) {
-            InputStream is = I2CEndpoint.class.getResourceAsStream(Pi4jConstants.CAMEL_I2C_DRIVER_LOCATION + driverName);
+        // Force via driver
+        if (driver != null && driver.compareTo("") != 0) {
+            InputStream is = I2CEndpoint.class.getResourceAsStream(Pi4jConstants.CAMEL_I2C_DRIVER_LOCATION + driver);
             BufferedReader br = null;
             StringBuilder sb = new StringBuilder();
 
@@ -172,12 +169,8 @@ public class I2CEndpoint extends DefaultEndpoint {
         return driverClass;
     }
 
-    public String getDriverName() {
-        return driverName;
-    }
-
-    public String[] getI2cOptions() {
-        return i2cOptions;
+    public String getDriver() {
+        return driver;
     }
 
     public String getName() {
@@ -228,12 +221,8 @@ public class I2CEndpoint extends DefaultEndpoint {
         this.driverClass = driverClass;
     }
 
-    public void setDriverName(String driverName) {
-        this.driverName = driverName;
-    }
-
-    public void setI2cOptions(String[] i2cOptions) {
-        this.i2cOptions = i2cOptions;
+    public void setDriver(String driverName) {
+        this.driver = driverName;
     }
 
     public void setName(String name) {

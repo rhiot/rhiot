@@ -46,7 +46,7 @@ public class BMP180Consumer extends I2CConsumer {
     private final static byte BMP180_READTEMPCMD = 0x2E;
     private final static byte BMP180_READPRESSURECMD = 0x34;
 
-    private BMP180OperatingMode mode;
+    private BMP180OperatingMode mode = BMP180OperatingMode.STANDARD;
 
     // Calibration variables
     private short AC1;
@@ -62,16 +62,6 @@ public class BMP180Consumer extends I2CConsumer {
 
     public BMP180Consumer(I2CEndpoint endpoint, Processor processor, I2CDevice device) {
         super(endpoint, processor, device);
-
-        this.mode = initMode(endpoint, processor, device);
-    }
-
-    private BMP180OperatingMode initMode(I2CEndpoint endpoint, Processor processor, I2CDevice device) {
-        BMP180OperatingMode ret = BMP180OperatingMode.ULTRA_HIGH_RES;
-        if (endpoint.getI2cOptions() != null && endpoint.getI2cOptions().length > 0) {
-            ret = endpoint.getCamelContext().getTypeConverter().convertTo(BMP180OperatingMode.class, endpoint.getI2cOptions()[0]);
-        }
-        return ret;
     }
 
     /**
