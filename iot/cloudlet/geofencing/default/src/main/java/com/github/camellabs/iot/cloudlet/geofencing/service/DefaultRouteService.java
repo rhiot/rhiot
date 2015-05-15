@@ -75,7 +75,7 @@ public class DefaultRouteService implements RouteService {
           String routeId;
           if(lastCoordinates == null || (TimeUnit.MILLISECONDS.toMinutes(coordinates.getTimestamp().getTime() - lastCoordinates.getTimestamp().getTime()) > 5)) {
               Route newRoute = new Route(null, client, new Date());
-              routeId = documentDriver.save(new SaveOperation(newRoute.getClass().getSimpleName(), newRoute));
+              routeId = documentDriver.save(new SaveOperation(newRoute));
           } else {
               routeId = lastRouteCoordinates.getRouteId();
           }

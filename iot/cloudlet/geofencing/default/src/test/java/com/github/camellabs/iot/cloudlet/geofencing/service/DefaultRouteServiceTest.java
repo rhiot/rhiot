@@ -70,7 +70,7 @@ public class DefaultRouteServiceTest extends Assert {
 
     @Test
     public void shouldReturnClients() {
-        documentDriver.save(new SaveOperation(pojoClassToCollection(GpsCoordinates.class), point1));
+        documentDriver.save(new SaveOperation(point1));
         assertEquals(1, routeService.clients().size());
         assertEquals(Collections.singletonList(client), routeService.clients());
     }
@@ -83,7 +83,7 @@ public class DefaultRouteServiceTest extends Assert {
 
     @Test
     public void shouldIdempotentlyAssignSinglePointToRoute() {
-        documentDriver.save(new SaveOperation(pojoClassToCollection(GpsCoordinates.class), point1));
+        documentDriver.save(new SaveOperation(point1));
         assertEquals(1, routeService.analyzeRoutes(client));
         assertEquals(0, routeService.analyzeRoutes(client));
         assertEquals(1, routeService.routes(client).size());
@@ -91,12 +91,12 @@ public class DefaultRouteServiceTest extends Assert {
 
     @Test
     public void shouldIdempotentlyAssignTwoPointsToRoute() {
-        documentDriver.save(new SaveOperation(pojoClassToCollection(GpsCoordinates.class), point1));
+        documentDriver.save(new SaveOperation(point1));
         assertEquals(1, routeService.analyzeRoutes(client));
         assertEquals(0, routeService.analyzeRoutes(client));
         assertEquals(1, routeService.routes(client).size());
 
-        documentDriver.save(new SaveOperation(pojoClassToCollection(GpsCoordinates.class), point2));
+        documentDriver.save(new SaveOperation(point2));
         assertEquals(1, routeService.analyzeRoutes(client));
         assertEquals(0, routeService.analyzeRoutes(client));
         assertEquals(1, routeService.routes(client).size());
@@ -104,9 +104,9 @@ public class DefaultRouteServiceTest extends Assert {
 
     @Test
     public void shouldDetectNextRoute() {
-        documentDriver.save(new SaveOperation(pojoClassToCollection(GpsCoordinates.class), point1));
-        documentDriver.save(new SaveOperation(pojoClassToCollection(GpsCoordinates.class), point2));
-        documentDriver.save(new SaveOperation(pojoClassToCollection(GpsCoordinates.class), point3));
+        documentDriver.save(new SaveOperation(point1));
+        documentDriver.save(new SaveOperation(point2));
+        documentDriver.save(new SaveOperation(point3));
 
         assertEquals(3, routeService.analyzeRoutes(client));
 
