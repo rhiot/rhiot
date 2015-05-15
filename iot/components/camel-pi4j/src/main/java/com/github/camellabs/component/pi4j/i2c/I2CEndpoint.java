@@ -251,4 +251,9 @@ public class I2CEndpoint extends DefaultEndpoint {
     public void setSize(int size) {
         this.size = size;
     }
+
+    @Override
+    public boolean isLenientProperties() {
+        return Pi4jConstants.CAMEL_PI4j_LENIENT;
+    }
 }
