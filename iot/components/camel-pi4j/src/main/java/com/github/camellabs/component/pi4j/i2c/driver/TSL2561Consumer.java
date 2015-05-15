@@ -57,14 +57,6 @@ public class TSL2561Consumer extends I2CConsumer {
     public final static int TSL2561_REGISTER_CHAN1_HIGH = 0x0F;
     public final static int TSL2561_REGISTER_ID = 0x0A;
 
-    public final static int TSL2561_GAIN_1X = 0x00;
-    public final static int TSL2561_GAIN_16X = 0x10;
-
-    public final static int TSL2561_INTEGRATIONTIME_13MS = 0x00; // rather
-                                                                 // 13.7ms
-    public final static int TSL2561_INTEGRATIONTIME_101MS = 0x01;
-    public final static int TSL2561_INTEGRATIONTIME_402MS = 0x02;
-
     public final static double TSL2561_LUX_K1C = 0.130; // (0x0043) // 0.130 *
                                                         // 2^RATIO_SCALE
     public final static double TSL2561_LUX_B1C = 0.0315; // (0x0204) // 0.0315 *
