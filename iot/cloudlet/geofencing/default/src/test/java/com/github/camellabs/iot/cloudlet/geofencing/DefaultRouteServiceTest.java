@@ -2,7 +2,6 @@ package com.github.camellabs.iot.cloudlet.geofencing;
 
 import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
-import com.github.camellabs.iot.cloudlet.document.sdk.Pojos;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.service.RouteService;
 import org.joda.time.DateTime;
@@ -13,13 +12,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.core.convert.support.ConversionServiceFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.convert.CustomConversions;
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 
@@ -28,9 +23,9 @@ import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {GeofencingCloudlet.class, GeofencingCloudletTest.class})
+@SpringApplicationConfiguration(classes = {GeofencingCloudlet.class, DefaultRouteServiceTest.class})
 @IntegrationTest({"camel.labs.iot.cloudlet.document.driver.mongodb.embedded=true"})
-public class GeofencingCloudletTest extends Assert {
+public class DefaultRouteServiceTest extends Assert {
 
     @Autowired
     RouteService routeService;
