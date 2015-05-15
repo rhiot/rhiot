@@ -43,7 +43,7 @@ public class PubNubMock extends Pubnub {
         callback.successCallback(channel, "OK");
         Callback clientMockCallback = subscribers.get(channel);
         if (clientMockCallback != null) {
-            clientMockCallback.successCallback(channel, message, "111111111111");
+            clientMockCallback.successCallback(channel, message, "" + System.currentTimeMillis());
         }
     }
 }

@@ -17,8 +17,8 @@
 package com.github.camellabs.component.pubnub;
 
 public interface PubNubConstants {
-	String OPERATION = "CamelPubNubOperation";
-	String TIMETOKEN = "CamelPubNubTimeToken";
-	String CHANNEL = "CamelPubNubChannel";
-
+    String OPERATION = "CamelPubNubOperation";
+    String TIMETOKEN = "CamelPubNubTimeToken";
+    String CHANNEL = "CamelPubNubChannel";
+    String UUID = "CamelPubNubUUID";
 }

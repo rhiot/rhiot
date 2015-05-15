@@ -27,27 +27,26 @@ import org.apache.camel.impl.UriEndpointComponent;
  */
 public class PubNubComponent extends UriEndpointComponent {
 
-	public PubNubComponent() {
-		super(PubNubEndpoint.class);
-	}
+    public PubNubComponent() {
+        super(PubNubEndpoint.class);
+    }
 
-	public PubNubComponent(CamelContext context) {
-		super(context, PubNubEndpoint.class);
-	}
+    public PubNubComponent(CamelContext context) {
+        super(context, PubNubEndpoint.class);
+    }
 
-	protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-		String[] uriParts = remaining.split(":");
-		if (uriParts.length != 2) {
-			throw new IllegalArgumentException("Invalid Endpoint URI: " + uri
-					+ ". It should contains a valid endpointType and channel");
-		}
-		PubNubEndpointType endpointType = PubNubEndpointType.valueOf(uriParts[0]);
-		String channel = uriParts[1];
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+        String[] uriParts = remaining.split(":");
+        if (uriParts.length != 2) {
+            throw new IllegalArgumentException("Invalid Endpoint URI: " + uri + ". It should contains a valid endpointType and channel");
+        }
+        PubNubEndpointType endpointType = PubNubEndpointType.valueOf(uriParts[0]);
+        String channel = uriParts[1];
 
-		PubNubEndpoint endpoint = new PubNubEndpoint(uri, this, endpointType);
-		setProperties(endpoint, parameters);
-		endpoint.setChannel(channel);
-		return endpoint;
-	}
+        PubNubEndpoint endpoint = new PubNubEndpoint(uri, this, endpointType);
+        setProperties(endpoint, parameters);
+        endpoint.setChannel(channel);
+        return endpoint;
+    }
 
 }

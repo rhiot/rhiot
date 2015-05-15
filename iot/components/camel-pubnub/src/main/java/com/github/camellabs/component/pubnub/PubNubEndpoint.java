@@ -30,150 +30,150 @@ import org.apache.camel.util.ObjectHelper;
 
 @UriEndpoint(scheme = "pubnub", title = "PubNub", syntax = "pubnub:endpointType:channel", consumerClass = PubNubConsumer.class, label = "iot,messaging")
 public class PubNubEndpoint extends DefaultEndpoint {
-	private Pubnub pubnub;
+    private Pubnub pubnub;
 
-	@UriPath(enums = "pubsub,presens")
-	@Metadata(required = "true")
-	private PubNubEndpointType endpointType;
+    @UriPath(enums = "pubsub,presens")
+    @Metadata(required = "true")
+    private PubNubEndpointType endpointType;
 
-	@UriPath(description = "The channel used for subscribing/publishing events")
-	@Metadata(required = "true")
-	private String channel;
+    @UriPath(description = "The channel used for subscribing/publishing events")
+    @Metadata(required = "true")
+    private String channel;
 
-	@UriParam()
-	@Metadata(required = "true")
-	private String publisherKey;
+    @UriParam()
+    @Metadata(required = "true")
+    private String publisherKey;
 
-	@UriParam()
-	@Metadata(required = "true")
-	private String subscriberKey;
+    @UriParam()
+    @Metadata(required = "true")
+    private String subscriberKey;
 
-	@UriParam()
-	private String secretKey;
+    @UriParam()
+    private String secretKey;
 
-	@UriParam(defaultValue = "false")
-	private boolean ssl;
+    @UriParam(defaultValue = "false")
+    private boolean ssl;
 
-	@UriParam(description = "The uuid identifying the connection")
-	private String uuid;
+    @UriParam(description = "The uuid identifying the connection")
+    private String uuid;
 
-	@UriParam
-	private String operation;
+    @UriParam
+    private String operation;
 
-	public PubNubEndpoint(String uri, PubNubComponent component, PubNubEndpointType endpointType) {
-		super(uri, component);
-		this.endpointType = endpointType;
-	}
+    public PubNubEndpoint(String uri, PubNubComponent component, PubNubEndpointType endpointType) {
+        super(uri, component);
+        this.endpointType = endpointType;
+    }
 
-	public Producer createProducer() throws Exception {
-		return new PubNubProducer(this);
-	}
+    public Producer createProducer() throws Exception {
+        return new PubNubProducer(this);
+    }
 
-	public Consumer createConsumer(Processor processor) throws Exception {
-		return new PubNubConsumer(this, processor);
-	}
+    public Consumer createConsumer(Processor processor) throws Exception {
+        return new PubNubConsumer(this, processor);
+    }
 
-	public boolean isSingleton() {
-		return true;
-	}
+    public boolean isSingleton() {
+        return true;
+    }
 
-	public PubNubEndpointType getEndpointType() {
-		return endpointType;
-	}
+    public PubNubEndpointType getEndpointType() {
+        return endpointType;
+    }
 
-	public String getPublisherKey() {
-		return publisherKey;
-	}
+    public String getPublisherKey() {
+        return publisherKey;
+    }
 
-	public void setPublisherKey(String publisherKey) {
-		this.publisherKey = publisherKey;
-	}
+    public void setPublisherKey(String publisherKey) {
+        this.publisherKey = publisherKey;
+    }
 
-	public String getSubscriberKey() {
-		return subscriberKey;
-	}
+    public String getSubscriberKey() {
+        return subscriberKey;
+    }
 
-	public void setSubscriberKey(String subscriberKey) {
-		this.subscriberKey = subscriberKey;
-	}
+    public void setSubscriberKey(String subscriberKey) {
+        this.subscriberKey = subscriberKey;
+    }
 
-	public String getSecretKey() {
-		return secretKey;
-	}
+    public String getSecretKey() {
+        return secretKey;
+    }
 
-	public boolean isSsl() {
-		return ssl;
-	}
+    public boolean isSsl() {
+        return ssl;
+    }
 
-	public void setSsl(boolean ssl) {
-		this.ssl = ssl;
-	}
+    public void setSsl(boolean ssl) {
+        this.ssl = ssl;
+    }
 
-	public void setSecretKey(String secretKey) {
-		this.secretKey = secretKey;
-	}
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
 
-	public String getChannel() {
-		return channel;
-	}
+    public String getChannel() {
+        return channel;
+    }
 
-	public void setChannel(String channel) {
-		this.channel = channel;
-	}
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
-	public String getUuid() {
-		return uuid;
-	}
+    public String getUuid() {
+        return uuid;
+    }
 
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
 
-	public String getOperation() {
-		return operation;
-	}
+    public String getOperation() {
+        return operation;
+    }
 
-	public Pubnub getPubnub() {
-		return pubnub;
-	}
+    public Pubnub getPubnub() {
+        return pubnub;
+    }
 
-	void setPubnub(Pubnub pubnub) {
-		this.pubnub = pubnub;
-	}
+    void setPubnub(Pubnub pubnub) {
+        this.pubnub = pubnub;
+    }
 
-	@Override
-	protected void doStart() throws Exception {
-		this.pubnub = getPubnub() != null ? getPubnub() : getInstance();
-		super.doStart();
-	}
+    @Override
+    protected void doStart() throws Exception {
+        this.pubnub = getPubnub() != null ? getPubnub() : getInstance();
+        super.doStart();
+    }
 
-	private Pubnub getInstance() {
-		if (this.pubnub != null) {
-			return this.pubnub;
-		}
-		Pubnub answer = null;
-		if (ObjectHelper.isNotEmpty(getSecretKey())) {
-			if (isSsl()) {
-				answer = new Pubnub(getPublisherKey(), getSubscriberKey(), getSecretKey(), true);
-			} else {
-				answer = new Pubnub(getPublisherKey(), getSubscriberKey(), getSecretKey());
-			}
-		} else if (isSsl()) {
-			answer = new Pubnub(getPublisherKey(), getSubscriberKey(), true);
-		} else {
-			answer = new Pubnub(getPublisherKey(), getSubscriberKey());
-		}
-		if (ObjectHelper.isNotEmpty(getUuid())) {
-			answer.setUUID(getUuid());
-		} else {
-			String autoUUID = answer.uuid();
-			setUuid(autoUUID);
-			answer.setUUID(autoUUID);
-		}
-		return answer;
-	}
+    private Pubnub getInstance() {
+        if (this.pubnub != null) {
+            return this.pubnub;
+        }
+        Pubnub answer = null;
+        if (ObjectHelper.isNotEmpty(getSecretKey())) {
+            if (isSsl()) {
+                answer = new Pubnub(getPublisherKey(), getSubscriberKey(), getSecretKey(), true);
+            } else {
+                answer = new Pubnub(getPublisherKey(), getSubscriberKey(), getSecretKey());
+            }
+        } else if (isSsl()) {
+            answer = new Pubnub(getPublisherKey(), getSubscriberKey(), true);
+        } else {
+            answer = new Pubnub(getPublisherKey(), getSubscriberKey());
+        }
+        if (ObjectHelper.isNotEmpty(getUuid())) {
+            answer.setUUID(getUuid());
+        } else {
+            String autoUUID = answer.uuid();
+            setUuid(autoUUID);
+            answer.setUUID(autoUUID);
+        }
+        return answer;
+    }
 }
