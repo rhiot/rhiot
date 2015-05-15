@@ -16,15 +16,13 @@
  */
 package com.github.camellabs.component.tinkerforge.temperature;
 
-import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
-import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
+import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
 
 public class TemperatureEndpoint extends TinkerforgeEndpoint {
     @UriParam private String uid = "t1";

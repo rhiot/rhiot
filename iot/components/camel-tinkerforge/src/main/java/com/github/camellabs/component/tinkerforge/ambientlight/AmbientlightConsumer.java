@@ -16,14 +16,18 @@
  */
 package com.github.camellabs.component.tinkerforge.ambientlight;
 
-import com.tinkerforge.*;
-import com.github.camellabs.component.tinkerforge.TinkerforgeConsumer;
+import java.io.IOException;
+
 import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Message;
 import org.apache.camel.Processor;
 
-import java.io.IOException;
+import com.github.camellabs.component.tinkerforge.TinkerforgeConsumer;
+import com.tinkerforge.AlreadyConnectedException;
+import com.tinkerforge.BrickletAmbientLight;
+import com.tinkerforge.BrickletDistanceIR;
+import com.tinkerforge.IPConnection;
+import com.tinkerforge.NotConnectedException;
+import com.tinkerforge.TimeoutException;
 
 public class AmbientlightConsumer extends TinkerforgeConsumer<AmbientlightEndpoint, BrickletAmbientLight> implements BrickletAmbientLight.IlluminanceListener {
 	

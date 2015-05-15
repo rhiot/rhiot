@@ -16,16 +16,15 @@
  */
 package com.github.camellabs.component.tinkerforge.lcd20x4;
 
-import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
-import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
+import java.io.IOException;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.spi.UriParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
+import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
 
 public class Lcd20x4Endpoint extends TinkerforgeEndpoint {
     @UriParam private String uid = "Lcd1";

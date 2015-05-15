@@ -16,11 +16,19 @@
  */
 package com.github.camellabs.component.tinkerforge;
 
-import com.tinkerforge.*;
-import org.apache.camel.*;
+import java.io.IOException;
+
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.Message;
+import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 
-import java.io.IOException;
+import com.tinkerforge.AlreadyConnectedException;
+import com.tinkerforge.Device;
+import com.tinkerforge.IPConnection;
+import com.tinkerforge.NotConnectedException;
+import com.tinkerforge.TimeoutException;
 
 public abstract class TinkerforgeConsumer<EndpointType extends TinkerforgeEndpoint, BrickletType extends Device> extends DefaultConsumer {
     protected IPConnection connection = new IPConnection();

@@ -16,15 +16,17 @@
  */
 package com.github.camellabs.component.tinkerforge.distance;
 
-import com.tinkerforge.*;
-import com.github.camellabs.component.tinkerforge.TinkerforgeConsumer;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Message;
-import org.apache.camel.Processor;
-import org.apache.camel.impl.ScheduledPollConsumer;
-
 import java.io.IOException;
+
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+
+import com.github.camellabs.component.tinkerforge.TinkerforgeConsumer;
+import com.tinkerforge.AlreadyConnectedException;
+import com.tinkerforge.BrickletDistanceIR;
+import com.tinkerforge.IPConnection;
+import com.tinkerforge.NotConnectedException;
+import com.tinkerforge.TimeoutException;
 
 public class DistanceConsumer extends TinkerforgeConsumer<DistanceEndpoint, BrickletDistanceIR> implements BrickletDistanceIR.DistanceListener {
 	

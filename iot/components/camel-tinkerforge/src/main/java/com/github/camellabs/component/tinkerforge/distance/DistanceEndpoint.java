@@ -16,16 +16,14 @@
  */
 package com.github.camellabs.component.tinkerforge.distance;
 
-import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
-import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.RuntimeCamelException;
-import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
+import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
 
 public class DistanceEndpoint extends TinkerforgeEndpoint {
     @UriParam private String uid = "d1";

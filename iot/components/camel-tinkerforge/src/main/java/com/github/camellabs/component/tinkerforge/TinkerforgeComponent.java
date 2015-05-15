@@ -16,6 +16,17 @@
  */
 package com.github.camellabs.component.tinkerforge;
 
+import java.net.URI;
+import java.util.Map;
+
+import org.apache.camel.CamelContext;
+import org.apache.camel.Endpoint;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.impl.DefaultComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.camellabs.component.tinkerforge.ambientlight.AmbientlightEndpoint;
 import com.github.camellabs.component.tinkerforge.distance.DistanceEndpoint;
 import com.github.camellabs.component.tinkerforge.dualrelay.DualRelayEndpoint;
@@ -31,12 +42,6 @@ import com.github.camellabs.component.tinkerforge.rotarypoti.RotaryPotentiometer
 import com.github.camellabs.component.tinkerforge.solidstaterelay.SolidStateRelayEndpoint;
 import com.github.camellabs.component.tinkerforge.soundintensity.SoundIntensityEndpoint;
 import com.github.camellabs.component.tinkerforge.temperature.TemperatureEndpoint;
-import org.apache.camel.Endpoint;
-import org.apache.camel.impl.DefaultComponent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 public class TinkerforgeComponent extends DefaultComponent {
 	private static final transient Logger LOG = LoggerFactory.getLogger(TinkerforgeComponent.class);
