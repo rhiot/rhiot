@@ -55,34 +55,4 @@ public class GeofencingCloudlet extends FatJarRouter {
         return new CustomConversions(converterList);
     }
 
-
-//    @Bean
-//    AbstractMongoConfiguration xxx(Mongo mongo, @Value("${camel.labs.iot.cloudlet.document.driver.mongodb.db:cloudlet_document}") String documentsDbName) {
-//        return new AbstractMongoConfiguration(){
-//            @Override
-//            protected String getDatabaseName() {
-//                return documentsDbName;
-//            }
-//
-//            @Override
-//            public Mongo mongo() throws Exception {
-//                return mongo;
-//            }
-//        };
-//    }
-
-
-
-//    String xxx(MongoTemplate mongoTemplate) {
-//        Converter<Long,Date> x = new Converter<Long,Date>() {
-//            @Override
-//            public Date convert(Long source) {
-//                return new Date(source);
-//            }
-//        };
-//        ((MappingMongoConverter)mongoTemplate.getConverter()).setCustomConversions(new CustomConversions(Arrays.asList(x)));
-//        return "xxx";
-//    }
-
-
 }
