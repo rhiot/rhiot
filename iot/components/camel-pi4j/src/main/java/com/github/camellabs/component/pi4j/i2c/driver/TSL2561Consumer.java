@@ -115,8 +115,8 @@ public class TSL2561Consumer extends I2CConsumer {
                                                         // 2^LUX_SCALE
 
     // Default value
-    private int gain = TSL2561_GAIN_1X;
-    private int integration = TSL2561_INTEGRATIONTIME_402MS;
+    private TSL2561Gain gain = TSL2561Gain.GAIN_1X;
+    private TSL2561IntegrationTime integration = TSL2561IntegrationTime.INTEGRATIONTIME_402MS;
     private long pause = 800L;
 
     public TSL2561Consumer(I2CEndpoint endpoint, Processor processor, I2CDevice device) {
@@ -126,7 +126,7 @@ public class TSL2561Consumer extends I2CConsumer {
     protected void doStart() throws Exception {
         super.doStart();
         write(TSL2561_COMMAND_BIT, (byte)TSL2561_CONTROL_POWERON);
-        write(TSL2561_COMMAND_BIT | TSL2561_REGISTER_TIMING, (byte)(gain | integration));
+        write(TSL2561_COMMAND_BIT | TSL2561_REGISTER_TIMING, (byte)(gain.gain | integration.integrationTime));
         sleep(pause);
     }
 
@@ -156,7 +156,7 @@ public class TSL2561Consumer extends I2CConsumer {
         if (ambient >= 0xffff || ir >= 0xffff) // value(s) exeed(s) datarange
             throw new RuntimeException("Gain too high. Values exceed range.");
 
-        if (false && this.gain == TSL2561_GAIN_1X) {
+        if (false && this.gain == TSL2561Gain.GAIN_1X) {
             ambient *= 16; // scale 1x to 16x
             ir *= 16; // scale 1x to 16x
         }
@@ -184,4 +184,29 @@ public class TSL2561Consumer extends I2CConsumer {
 
         return lux;
     }
+
+    public TSL2561Gain getGain() {
+        return gain;
+    }
+
+    public void setGain(TSL2561Gain gain) {
+        this.gain = gain;
+    }
+
+    public TSL2561IntegrationTime getIntegration() {
+        return integration;
+    }
+
+    public void setIntegration(TSL2561IntegrationTime integration) {
+        this.integration = integration;
+    }
+
+    public long getPause() {
+        return pause;
+    }
+
+    public void setPause(long pause) {
+        this.pause = pause;
+    }
+
 }
