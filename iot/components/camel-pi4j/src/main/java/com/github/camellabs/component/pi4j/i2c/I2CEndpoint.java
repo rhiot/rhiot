@@ -36,12 +36,16 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriPath;
 import org.apache.camel.util.EndpointHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a I2C endpoint.
  */
 @UriEndpoint(scheme = "pi4j-i2c", syntax = "pi4j-i2c://busId/deviceId", consumerClass = I2CConsumer.class, label = "iot", title = "i2c")
 public class I2CEndpoint extends DefaultEndpoint {
+
+    private static final Logger LOG = LoggerFactory.getLogger(I2CEndpoint.class);
 
     @UriPath
     @Metadata(required = "true")
@@ -73,10 +77,10 @@ public class I2CEndpoint extends DefaultEndpoint {
     private int bufferSize = -1;
 
     @UriParam(defaultValue = "")
-    private Class driverClass;
-
-    @UriParam(defaultValue = "")
     private String driver;
+
+    // DO NOT EXPORT IT OUTSIDE, NO GETTER, NO SETTER
+    private Class driverClass;
 
     // DO NOT EXPORT IT OUTSIDE, NO GETTER, NO SETTER
     private Map<String, Object> parameters;
@@ -103,6 +107,13 @@ public class I2CEndpoint extends DefaultEndpoint {
         // Inject last parameter to i2c derived consumer
         EndpointHelper.setProperties(this.getCamelContext(), ret, parameters);
 
+        if (!parameters.isEmpty()) {
+            for (String param : parameters.keySet()) {
+                LOG.warn("There are parameters that couldn't be set on the endpoint Consumer. Check the uri if the parameters are spelt correctly and that they are properties of the endpoint."
+                         + " Unknown Consumer parameters=[" + param + "]");
+            }
+        }
+
         return ret;
     }
 
@@ -120,6 +131,12 @@ public class I2CEndpoint extends DefaultEndpoint {
         // Inject last parameter to i2c derived producer
         EndpointHelper.setProperties(this.getCamelContext(), ret, parameters);
 
+        if (!parameters.isEmpty()) {
+            for (String param : parameters.keySet()) {
+                LOG.warn("There are parameters that couldn't be set on the endpoint Producer. Check the uri if the parameters are spelt correctly and that they are properties of the endpoint."
+                         + " Unknown Producer parameters=[" + param + "]");
+            }
+        }
         return ret;
     }
 
@@ -178,10 +195,6 @@ public class I2CEndpoint extends DefaultEndpoint {
         return deviceId;
     }
 
-    public Class getDriverClass() {
-        return driverClass;
-    }
-
     public String getDriver() {
         return driver;
     }
@@ -228,10 +241,6 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     public void setDeviceId(int deviceId) {
         this.deviceId = deviceId;
-    }
-
-    public void setDriverClass(Class driverClass) {
-        this.driverClass = driverClass;
     }
 
     public void setDriver(String driverName) {
