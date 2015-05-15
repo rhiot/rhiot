@@ -24,7 +24,7 @@ public enum TSL2561IntegrationTime {
 
     INTEGRATIONTIME_13MS(0x00), INTEGRATIONTIME_101MS(0x01), INTEGRATIONTIME_402MS(0x02);
 
-    int integrationTime;
+    final int integrationTime;
 
     TSL2561IntegrationTime(int integrationTime) {
 

@@ -23,7 +23,7 @@ public enum TSL2561Gain {
 
     GAIN_1X(0x00), GAIN_16X(0x01);
 
-    int gain;
+    final int gain;
 
     TSL2561Gain(int gain) {
         this.gain = gain;

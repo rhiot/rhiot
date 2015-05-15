@@ -38,8 +38,8 @@ public enum BMP180OperatingMode {
      */
     ULTRA_HIGH_RES(255, 12);
 
-    int waitTime;
-    int currentDraw;
+    final int waitTime;
+    final int currentDraw;
 
     private BMP180OperatingMode(int maxConversionTime, int currentDraw) {
         this.waitTime = (maxConversionTime + 5) / 10;
