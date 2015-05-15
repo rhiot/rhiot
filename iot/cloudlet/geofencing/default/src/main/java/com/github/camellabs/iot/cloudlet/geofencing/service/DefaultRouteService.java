@@ -16,6 +16,8 @@
  */
 package com.github.camellabs.iot.cloudlet.geofencing.service;
 
+import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
+import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.Route;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteGpsCoordinates;
@@ -41,24 +43,24 @@ public class DefaultRouteService implements RouteService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRouteService.class);
 
+    private final DocumentDriver documentDriver;
+
     private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public DefaultRouteService(MongoTemplate mongoTemplate) {
+    public DefaultRouteService(DocumentDriver documentDriver, MongoTemplate mongoTemplate) {
+        this.documentDriver = documentDriver;
         this.mongoTemplate = mongoTemplate;
     }
 
     @Override
     public int analyzeRoutes(String client) {
         RouteGpsCoordinates lastRouteCoordinates = findLastRouteCoordinates(client);
-
         GpsCoordinates lastCoordinates = null;
-        Route lastRoute = null;
         if(lastRouteCoordinates == null) {
             LOG.info("No GPS coordinates assigned to routes for client {}", client);
         } else {
             lastCoordinates = mongoTemplate.findById(lastRouteCoordinates.getCoordinatesId(), GpsCoordinates.class, GpsCoordinates.class.getSimpleName());
-            lastRoute = mongoTemplate.findById(lastRouteCoordinates.getRouteId(), Route.class);
         }
 
         Query query = new Query();
@@ -70,12 +72,16 @@ public class DefaultRouteService implements RouteService {
         query.with(new Sort(ASC, "_id"));
         List<GpsCoordinates> coordinatesToAnalyze = mongoTemplate.find(query, GpsCoordinates.class, GpsCoordinates.class.getSimpleName());
         for(GpsCoordinates coordinates : coordinatesToAnalyze) {
+          String routeId;
           if(lastCoordinates == null || (TimeUnit.MILLISECONDS.toMinutes(coordinates.getTimestamp().getTime() - lastCoordinates.getTimestamp().getTime()) > 5)) {
-              lastRoute = new Route(null, client, new Date());
-              mongoTemplate.save(lastRoute);
+              Route newRoute = new Route(null, client, new Date());
+              routeId = documentDriver.save(new SaveOperation(newRoute.getClass().getSimpleName(), newRoute));
+          } else {
+              routeId = lastRouteCoordinates.getRouteId();
           }
-          RouteGpsCoordinates routeGpsCoordinates = new RouteGpsCoordinates(null, lastRoute.getId(), coordinates.getId(), client);
-          mongoTemplate.save(routeGpsCoordinates);
+
+          lastRouteCoordinates = new RouteGpsCoordinates(null, routeId, coordinates.getId(), client);
+          mongoTemplate.save(lastRouteCoordinates);
           lastCoordinates = coordinates;
         }
         return coordinatesToAnalyze.size();
@@ -88,7 +94,7 @@ public class DefaultRouteService implements RouteService {
 
     @Override
     public List<Route> routes(String client) {
-        return mongoTemplate.findAll(Route.class);
+        return mongoTemplate.findAll(Route.class, Route.class.getSimpleName());
     }
 
     // Callbacks
