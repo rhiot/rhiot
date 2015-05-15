@@ -19,15 +19,12 @@ package com.github.camellabs.iot.cloudlet.geofencing.service;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.Route;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteGpsCoordinates;
-import com.mongodb.Mongo;
 import org.bson.types.ObjectId;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Component
 public class DefaultRouteService implements RouteService {
@@ -51,17 +49,9 @@ public class DefaultRouteService implements RouteService {
     }
 
     @Override
-    public List<String> clients() {
-        return mongoTemplate.getDb().getCollection(GpsCoordinates.class.getSimpleName()).distinct("client");
-    }
-
-    @Override
     public int analyzeRoutes(String client) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("client").is(client));
-        query.limit(1);
-        query.with(new Sort(DESC, "_id"));
-        RouteGpsCoordinates lastRouteCoordinates = mongoTemplate.findOne(query, RouteGpsCoordinates.class);
+        RouteGpsCoordinates lastRouteCoordinates = findLastRouteCoordinates(client);
+
         GpsCoordinates lastCoordinates = null;
         Route lastRoute = null;
         if(lastRouteCoordinates == null) {
@@ -71,10 +61,10 @@ public class DefaultRouteService implements RouteService {
             lastRoute = mongoTemplate.findById(lastRouteCoordinates.getRouteId(), Route.class);
         }
 
-        query = new Query();
-        query.addCriteria(Criteria.where("client").is(client));
+        Query query = new Query();
+        query.addCriteria(where("client").is(client));
         if(lastRouteCoordinates != null) {
-            query.addCriteria(Criteria.where("_id").gt(new ObjectId(lastRouteCoordinates.getCoordinatesId())));
+            query.addCriteria(where("_id").gt(new ObjectId(lastRouteCoordinates.getCoordinatesId())));
         }
         query.limit(20);
         query.with(new Sort(ASC, "_id"));
@@ -92,8 +82,20 @@ public class DefaultRouteService implements RouteService {
     }
 
     @Override
+    public List<String> clients() {
+        return mongoTemplate.getDb().getCollection(GpsCoordinates.class.getSimpleName()).distinct("client");
+    }
+
+    @Override
     public List<Route> routes(String client) {
         return mongoTemplate.findAll(Route.class);
+    }
+
+    // Callbacks
+
+    protected RouteGpsCoordinates findLastRouteCoordinates(String client) {
+        Query lastRouteCoordinatesQuery = new Query().addCriteria(where("client").is(client)).with(new Sort(DESC, "_id")).limit(1);
+        return mongoTemplate.findOne(lastRouteCoordinatesQuery, RouteGpsCoordinates.class);
     }
 
 }
