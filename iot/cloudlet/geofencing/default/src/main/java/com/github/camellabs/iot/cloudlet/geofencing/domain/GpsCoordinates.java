@@ -1,23 +1,21 @@
 package com.github.camellabs.iot.cloudlet.geofencing.domain;
 
-import org.springframework.data.annotation.Id;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class GpsCoordinates {
 
-    String id;
+    private final String id;
 
-    String client;
+    private final String client;
 
-    String clientId;
+    private final String clientId;
 
-    Date timestamp;
+    private final Date timestamp;
 
-    BigDecimal latitude;
+    private final BigDecimal latitude;
 
-    BigDecimal longitude;
+    private final BigDecimal longitude;
 
     public GpsCoordinates(String id, String client, String clientId, Date timestamp, BigDecimal latitude, BigDecimal longitude) {
         this.id = id;
@@ -32,47 +30,26 @@ public class GpsCoordinates {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getClient() {
         return client;
-    }
-
-    public void setClient(String client) {
-        this.client = client;
     }
 
     public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
     public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
 
     public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(BigDecimal latitude) {
-        this.latitude = latitude;
-    }
 
     public BigDecimal getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(BigDecimal longitude) {
-        this.longitude = longitude;
-    }
 }
