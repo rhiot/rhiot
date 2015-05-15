@@ -56,7 +56,7 @@ public class I2CComponent extends UriEndpointComponent {
             int busId = Integer.decode(match.group(Pi4jConstants.CAMEL_BUS_ID));
             int deviceId = Integer.decode(match.group(Pi4jConstants.CAMEL_DEVICE_ID));
 
-            endpoint = new I2CEndpoint(uri, remaining, I2CFactory.getInstance(busId));
+            endpoint = new I2CEndpoint(uri, this, remaining, I2CFactory.getInstance(busId), parameters);
             parameters.put(Pi4jConstants.CAMEL_BUS_ID, busId);
             parameters.put(Pi4jConstants.CAMEL_DEVICE_ID, deviceId);
 

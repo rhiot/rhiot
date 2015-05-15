@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
+import java.util.Map;
 
 import com.github.camellabs.component.pi4j.Pi4jConstants;
 import com.pi4j.io.i2c.I2CBus;
@@ -34,6 +35,7 @@ import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriPath;
+import org.apache.camel.util.EndpointHelper;
 
 /**
  * Represents a I2C endpoint.
@@ -76,10 +78,15 @@ public class I2CEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "")
     private String driver;
 
-    public I2CEndpoint(String uri, String remaining, I2CBus bus) {
-        super(uri);
+    // DO NOT EXPORT IT OUTSIDE, NO GETTER, NO SETTER
+    private Map<String, Object> parameters;
+
+    public I2CEndpoint(String uri, I2CComponent i2cComponent, String remaining, I2CBus bus, Map<String, Object> parameters) {
+        super(uri, i2cComponent);
 
         this.bus = bus;
+        this.parameters = parameters;
+
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
@@ -92,6 +99,9 @@ public class I2CEndpoint extends DefaultEndpoint {
         Constructor constructor = driverClass.getConstructor(I2CEndpoint.class, Processor.class, I2CDevice.class);
 
         ret = (Consumer)constructor.newInstance(this, processor, device);
+
+        // Inject last parameter to i2c derived consumer
+        EndpointHelper.setProperties(this.getCamelContext(), ret, parameters);
 
         return ret;
     }
@@ -106,6 +116,9 @@ public class I2CEndpoint extends DefaultEndpoint {
         Constructor constructor = driverClass.getConstructor(I2CEndpoint.class, I2CDevice.class);
 
         ret = (Producer)constructor.newInstance(this, device);
+
+        // Inject last parameter to i2c derived producer
+        EndpointHelper.setProperties(this.getCamelContext(), ret, parameters);
 
         return ret;
     }
