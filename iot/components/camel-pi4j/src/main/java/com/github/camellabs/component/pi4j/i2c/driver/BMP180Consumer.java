@@ -46,7 +46,7 @@ public class BMP180Consumer extends I2CConsumer {
     private final static byte BMP180_READTEMPCMD = 0x2E;
     private final static byte BMP180_READPRESSURECMD = 0x34;
 
-    private BMP180OperatingMode mode = BMP180OperatingMode.STANDARD;
+    private BMP180OperatingMode operatingMode = BMP180OperatingMode.STANDARD;
 
     // Calibration variables
     private short AC1;
@@ -70,7 +70,7 @@ public class BMP180Consumer extends I2CConsumer {
      * @return the temperature in degrees Celcius.
      * @throws IOException if there was communication problem
      */
-    public float readTemperature() throws IOException {
+    private float readTemperature() throws IOException {
         int UT = readRawTemp();
         int X1 = ((UT - AC6) * AC5) >> 15;
         int X2 = (MC << 11) / (X1 + MD);
@@ -84,7 +84,7 @@ public class BMP180Consumer extends I2CConsumer {
      * @return the pressure in Pascal.
      * @throws IOException if there was communication problem
      */
-    public int readPressure() throws IOException {
+    private int readPressure() throws IOException {
         long p = 0;
         int UT = readRawTemp();
         int UP = readRawPressure();
@@ -97,13 +97,13 @@ public class BMP180Consumer extends I2CConsumer {
         X1 = (B2 * ((B6 * B6) >> 12)) >> 11;
         X2 = (AC2 * B6) >> 11;
         int X3 = X1 + X2;
-        int B3 = (((AC1 * 4 + X3) << mode.getOverSamplingSetting()) + 2) / 4;
+        int B3 = (((AC1 * 4 + X3) << operatingMode.getOverSamplingSetting()) + 2) / 4;
 
         X1 = (AC3 * B6) >> 13;
         X2 = (B1 * ((B6 * B6) >> 12)) >> 16;
         X3 = ((X1 + X2) + 2) >> 2;
         long B4 = (AC4 * ((long)(X3 + 32768))) >> 15;
-        long B7 = ((long)UP - B3) * (50000 >> mode.getOverSamplingSetting());
+        long B7 = ((long)UP - B3) * (50000 >> operatingMode.getOverSamplingSetting());
 
         if (B7 < 0x80000000) {
             p = (B7 * 2) / B4;
@@ -124,7 +124,7 @@ public class BMP180Consumer extends I2CConsumer {
      * @return the raw temperature sensor data.
      * @throws IOException if there was a communication problem
      */
-    public int readRawTemp() throws IOException {
+    private int readRawTemp() throws IOException {
         write(BMP180_CONTROL, BMP180_READTEMPCMD);
         sleep(50);
         return readU16BigEndian(BMP180_TEMPDATA);
@@ -136,10 +136,18 @@ public class BMP180Consumer extends I2CConsumer {
      * @return the raw pressure sensor data.
      * @throws IOException if there was a communication problem
      */
-    public int readRawPressure() throws IOException {
+    private int readRawPressure() throws IOException {
         write(BMP180_CONTROL, BMP180_READPRESSURECMD);
-        sleep(mode.getWaitTime());
-        return readU3(BMP180_PRESSUREDATA) >> (8 - mode.getOverSamplingSetting());
+        sleep(operatingMode.getWaitTime());
+        return readU3(BMP180_PRESSUREDATA) >> (8 - operatingMode.getOverSamplingSetting());
+    }
+
+    public BMP180OperatingMode getOperatingMode() {
+        return operatingMode;
+    }
+
+    public void setOperatingMode(BMP180OperatingMode operatingMode) {
+        this.operatingMode = operatingMode;
     }
 
     @Override
