@@ -251,3 +251,10 @@ Plug an button on GPIO 1, and LED on GPIO 2 (with Resistor) and code a route lik
     .to("pi4j-gpio://2?&action=TOGGLE");
 
 ---
+
+## Articles, presentations & videos
+
+Here is the bunch of useful resources regarding Camel IoT project:
+- [Make Your IoT Gateway WiFi-Aware Using Camel and Kura](http://java.dzone.com/articles/make-your-iot-gateway-wifi) - DZone article by Henryk Konsek (2015)
+- [IoT gateway dream team - Eclipse Kura and Apache Camel](http://www.slideshare.net/hekonsek/io-t-gateway-dream-team-eclipse-kura-and-apache-camel) - slides from the Henryk Konsek talk for Eclipse IoT Virtual Meetup (2015)
+- [IoT gateway dream team - Eclipse Kura and Apache Camel](https://www.youtube.com/watch?v=mli5c-oTN1U) - video from the Henryk Konsek talk for Eclipse IoT Virtual Meetup (2015)
