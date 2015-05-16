@@ -57,10 +57,6 @@ public class I2CEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "")
     private int deviceId;
 
-    private I2CDevice device;
-
-    private I2CBus bus;
-
     @UriParam(defaultValue = "")
     private int address;
 
@@ -84,6 +80,10 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     // DO NOT EXPORT IT OUTSIDE, NO GETTER, NO SETTER
     private Map<String, Object> parameters;
+
+    private I2CDevice device;
+
+    private I2CBus bus;
 
     public I2CEndpoint(String uri, I2CComponent i2cComponent, String remaining, I2CBus bus, Map<String, Object> parameters) {
         super(uri, i2cComponent);
@@ -140,37 +140,6 @@ public class I2CEndpoint extends DefaultEndpoint {
         return ret;
     }
 
-    private void initDriver(Class defaultClass) throws ClassNotFoundException, IOException {
-        Class ret = null;
-
-        // Force via driver
-        if (driver != null && driver.compareTo("") != 0) {
-            InputStream is = I2CEndpoint.class.getResourceAsStream(Pi4jConstants.CAMEL_I2C_DRIVER_LOCATION + driver);
-            BufferedReader br = null;
-            StringBuilder sb = new StringBuilder();
-
-            String line;
-            try {
-                br = new BufferedReader(new InputStreamReader(is));
-                while ((line = br.readLine()) != null) {
-                    if (!line.contains("#")) {
-                        sb.append(line);
-                    }
-                }
-            } finally {
-                if (br != null) {
-                    br.close();
-                }
-            }
-            driverClass = I2CEndpoint.class.forName(sb.toString());
-        }
-        // Force default
-        if (driverClass == null) {
-            driverClass = defaultClass;
-        }
-
-    }
-
     public int getAddress() {
         return address;
     }
@@ -213,6 +182,42 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     public int getSize() {
         return size;
+    }
+
+    private void initDriver(Class defaultClass) throws ClassNotFoundException, IOException {
+        Class ret = null;
+
+        // Force via driver
+        if (driver != null && driver.compareTo("") != 0) {
+            InputStream is = I2CEndpoint.class.getResourceAsStream(Pi4jConstants.CAMEL_I2C_DRIVER_LOCATION + driver);
+            BufferedReader br = null;
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+            try {
+                br = new BufferedReader(new InputStreamReader(is));
+                while ((line = br.readLine()) != null) {
+                    if (!line.contains("#")) {
+                        sb.append(line);
+                    }
+                }
+            } finally {
+                if (br != null) {
+                    br.close();
+                }
+            }
+            driverClass = I2CEndpoint.class.forName(sb.toString());
+        }
+        // Force default
+        if (driverClass == null) {
+            driverClass = defaultClass;
+        }
+
+    }
+
+    @Override
+    public boolean isLenientProperties() {
+        return Pi4jConstants.CAMEL_PI4j_LENIENT;
     }
 
     public boolean isSingleton() {
@@ -261,10 +266,5 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     public void setSize(int size) {
         this.size = size;
-    }
-
-    @Override
-    public boolean isLenientProperties() {
-        return Pi4jConstants.CAMEL_PI4j_LENIENT;
     }
 }
