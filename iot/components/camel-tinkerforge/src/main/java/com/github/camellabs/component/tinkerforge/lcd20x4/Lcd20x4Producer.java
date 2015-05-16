@@ -16,16 +16,17 @@
  */
 package com.github.camellabs.component.tinkerforge.lcd20x4;
 
-import com.tinkerforge.*;
-import com.github.camellabs.component.tinkerforge.TinkerforgeProducer;
+import java.io.IOException;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.InvalidPayloadException;
-import org.apache.camel.RuntimeCamelException;
-import org.apache.camel.impl.DefaultProducer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import com.github.camellabs.component.tinkerforge.TinkerforgeProducer;
+import com.tinkerforge.AlreadyConnectedException;
+import com.tinkerforge.BrickletLCD20x4;
+import com.tinkerforge.IPConnection;
+import com.tinkerforge.NotConnectedException;
+import com.tinkerforge.TimeoutException;
 
 public class Lcd20x4Producer extends TinkerforgeProducer<Lcd20x4Endpoint, BrickletLCD20x4> {
     private Lcd20x4Endpoint endpoint;

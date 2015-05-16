@@ -16,10 +16,15 @@
  */
 package com.github.camellabs.component.tinkerforge;
 
-import com.tinkerforge.*;
+import java.io.IOException;
+
 import org.apache.camel.impl.DefaultProducer;
 
-import java.io.IOException;
+import com.tinkerforge.AlreadyConnectedException;
+import com.tinkerforge.Device;
+import com.tinkerforge.IPConnection;
+import com.tinkerforge.NotConnectedException;
+import com.tinkerforge.TimeoutException;
 
 public abstract class TinkerforgeProducer<EndpointType extends TinkerforgeEndpoint, BrickletType extends Device> extends DefaultProducer {
     protected IPConnection connection = new IPConnection();

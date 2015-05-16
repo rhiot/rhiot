@@ -16,18 +16,17 @@
  */
 package com.github.camellabs.component.tinkerforge.humidity;
 
-import com.tinkerforge.*;
-import com.github.camellabs.component.tinkerforge.TinkerforgeConsumer;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Message;
-import org.apache.camel.Processor;
-import org.apache.camel.impl.DefaultConsumer;
-import org.apache.camel.impl.ScheduledPollConsumer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
+
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+
+import com.github.camellabs.component.tinkerforge.TinkerforgeConsumer;
+import com.tinkerforge.AlreadyConnectedException;
+import com.tinkerforge.BrickletHumidity;
+import com.tinkerforge.IPConnection;
+import com.tinkerforge.NotConnectedException;
+import com.tinkerforge.TimeoutException;
 
 public class HumidityConsumer extends TinkerforgeConsumer<HumidityEndpoint, BrickletHumidity> implements BrickletHumidity.HumidityListener {
     private final HumidityEndpoint endpoint;

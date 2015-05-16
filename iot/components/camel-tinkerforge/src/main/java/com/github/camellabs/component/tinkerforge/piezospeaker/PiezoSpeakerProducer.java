@@ -16,12 +16,16 @@
  */
 package com.github.camellabs.component.tinkerforge.piezospeaker;
 
-import com.tinkerforge.*;
-import com.github.camellabs.component.tinkerforge.TinkerforgeProducer;
-import org.apache.camel.Exchange;
-import org.apache.camel.RuntimeCamelException;
-
 import java.io.IOException;
+
+import org.apache.camel.Exchange;
+
+import com.github.camellabs.component.tinkerforge.TinkerforgeProducer;
+import com.tinkerforge.AlreadyConnectedException;
+import com.tinkerforge.BrickletPiezoSpeaker;
+import com.tinkerforge.IPConnection;
+import com.tinkerforge.NotConnectedException;
+import com.tinkerforge.TimeoutException;
 
 public class PiezoSpeakerProducer extends TinkerforgeProducer<PiezoSpeakerEndpoint, BrickletPiezoSpeaker> {
 

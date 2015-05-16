@@ -1,5 +1,3 @@
-target
-
 # IntelliJ
 .idea/
 *.iml
@@ -11,12 +9,16 @@ soapui-errors.log
 
 # Eclipse stuff
 **/.project
-**/.settings/org.eclipse.core.resources.prefs
+**/.settings/*
 **/.prefs
 **/.classpath
-**/target
+
+# Maven stuff
+**/target/*
 
 # MacOS
 **/.DS_Store
+
+# These are needed solely to make Eclipse stop whining.
 /.settings
 /.project

@@ -14,32 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.document.driver.spi;
+package com.github.camellabs.iot.cloudlet.geofencing;
 
-import static com.github.camellabs.iot.cloudlet.document.driver.spi.Pojos.collectionName;
+import org.apache.camel.spring.boot.FatJarRouter;
+import org.apache.camel.spring.boot.FatWarInitializer;
 
-public class SaveOperation {
+public class GeofencingCloudletWarInitializer extends FatWarInitializer {
 
-    private final String collection;
-
-    private final Object pojo;
-
-    public SaveOperation(String collection, Object pojo) {
-        this.collection = collection;
-        this.pojo = pojo;
-    }
-
-    public SaveOperation(Object pojo) {
-        this.collection = collectionName(pojo.getClass());
-        this.pojo = pojo;
-    }
-
-    public String collection() {
-        return collection;
-    }
-
-    public Object pojo() {
-        return pojo;
+    @Override
+    protected Class<? extends FatJarRouter> routerClass() {
+        return GeofencingCloudlet.class;
     }
 
 }

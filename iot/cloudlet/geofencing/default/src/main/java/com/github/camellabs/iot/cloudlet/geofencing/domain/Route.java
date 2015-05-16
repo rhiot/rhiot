@@ -14,32 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.document.driver.spi;
+package com.github.camellabs.iot.cloudlet.geofencing.domain;
 
-import static com.github.camellabs.iot.cloudlet.document.driver.spi.Pojos.collectionName;
+import java.util.Date;
 
-public class SaveOperation {
+public class Route {
 
-    private final String collection;
+    private final String id;
 
-    private final Object pojo;
+    private final String client;
 
-    public SaveOperation(String collection, Object pojo) {
-        this.collection = collection;
-        this.pojo = pojo;
+    private final Date created;
+
+    public Route(String id, String client, Date created) {
+        this.id = id;
+        this.client = client;
+        this.created = created;
     }
 
-    public SaveOperation(Object pojo) {
-        this.collection = collectionName(pojo.getClass());
-        this.pojo = pojo;
+    public String getId() {
+        return id;
     }
 
-    public String collection() {
-        return collection;
+    public String getClient() {
+        return client;
     }
 
-    public Object pojo() {
-        return pojo;
+    public Date getCreated() {
+        return created;
     }
 
 }

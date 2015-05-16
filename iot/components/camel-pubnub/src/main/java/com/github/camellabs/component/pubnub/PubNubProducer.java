@@ -86,7 +86,8 @@ public class PubNubProducer extends DefaultProducer {
             break;
         }
         case GET_STATE: {
-            endpoint.getPubnub().getState(endpoint.getChannel(), endpoint.getUuid(), callback);
+            String uuid = exchange.getIn().getHeader(PubNubConstants.UUID, String.class);
+            endpoint.getPubnub().getState(endpoint.getChannel(), uuid != null ? uuid : endpoint.getUuid(), callback);
             break;
         }
         case HERE_NOW: {
