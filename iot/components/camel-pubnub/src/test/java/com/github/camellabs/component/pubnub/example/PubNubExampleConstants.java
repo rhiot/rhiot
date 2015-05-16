@@ -19,6 +19,6 @@ package com.github.camellabs.component.pubnub.example;
 public interface PubNubExampleConstants {
     // replace subscriber+publisher key with one obtained from PubNub.
     // http://www.pubnub.com
-    String PUBNUB_SUBSCRIBER_KEY = "sub-c-506c4834-d0ee-11e2-9456-02ee2ddab7fe";
-    String PUBNUB_PUBLISHER_KEY = "pub-c-f414dd3b-48ee-4c9a-b898-1f4c5f7fd46e";
+    String PUBNUB_SUBSCRIBER_KEY = "replace";
+    String PUBNUB_PUBLISHER_KEY = "replace";
 }
