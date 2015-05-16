@@ -30,6 +30,8 @@ import org.apache.camel.util.ObjectHelper;
 
 @UriEndpoint(scheme = "pubnub", title = "PubNub", syntax = "pubnub:endpointType:channel", consumerClass = PubNubConsumer.class, label = "iot,messaging")
 public class PubNubEndpoint extends DefaultEndpoint {
+
+    @UriParam
     private Pubnub pubnub;
 
     @UriPath(enums = "pubsub,presens")
@@ -51,8 +53,8 @@ public class PubNubEndpoint extends DefaultEndpoint {
     @UriParam()
     private String secretKey;
 
-    @UriParam(defaultValue = "false")
-    private boolean ssl;
+    @UriParam(defaultValue = "true")
+    private boolean ssl = true;
 
     @UriParam(description = "The uuid identifying the connection")
     private String uuid;
@@ -141,7 +143,7 @@ public class PubNubEndpoint extends DefaultEndpoint {
         return pubnub;
     }
 
-    void setPubnub(Pubnub pubnub) {
+    public void setPubnub(Pubnub pubnub) {
         this.pubnub = pubnub;
     }
 
@@ -152,9 +154,6 @@ public class PubNubEndpoint extends DefaultEndpoint {
     }
 
     private Pubnub getInstance() {
-        if (this.pubnub != null) {
-            return this.pubnub;
-        }
         Pubnub answer = null;
         if (ObjectHelper.isNotEmpty(getSecretKey())) {
             if (isSsl()) {

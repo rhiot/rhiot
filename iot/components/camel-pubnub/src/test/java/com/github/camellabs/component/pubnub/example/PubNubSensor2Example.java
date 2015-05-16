@@ -42,15 +42,15 @@ public class PubNubSensor2Example {
     }
 
     static private class SimulatedDeviceEventGeneratorRoute extends RouteBuilder {
-        private String deviceEP = "pubnub:pubsub:iot?uuid=device2&publisherKey=" + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY + "&subscriberKey="
+        private String deviceEP = "pubnub://pubsub:iot?uuid=device2&publisherKey=" + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY + "&subscriberKey="
                                   + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY;
-        private String devicePrivateEP = "pubnub:pubsub:device2private?uuid=device2&publisherKey=" + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY + "&subscriberKey="
+        private String devicePrivateEP = "pubnub://pubsub:device2private?uuid=device2&publisherKey=" + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY + "&subscriberKey="
                                          + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY;
 
         @Override
         public void configure() throws Exception {
             //@formatter:off
-            from("timer:device2?delay=1000").routeId("device-event-route")
+            from("timer:device2").routeId("device-event-route")
             .bean(PubNubSensor2Example.EventGeneratorBean.class, "getRandomEvent('device2')")
             .convertBodyTo(JSONObject.class)
             .to(deviceEP);
@@ -63,7 +63,7 @@ public class PubNubSensor2Example {
     }
 
     static private class PubsubRoute extends RouteBuilder {
-        private static String masterEP = "pubnub:pubsub:iot?uuid=master&subscriberKey=" + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY + "&publisherKey="
+        private static String masterEP = "pubnub://pubsub:iot?uuid=master&subscriberKey=" + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY + "&publisherKey="
                                          + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY;
         private final static Map<String, String> devices = new ConcurrentHashMap<String, String>();
 
@@ -77,7 +77,7 @@ public class PubNubSensor2Example {
             .log("${body} headers : ${headers}").to("mock:result");
             
             //TODO Could remote control device to turn on/off sensor measurement 
-            from("timer:master?delay=2s&period=5s").routeId("unicast2device-route")
+            from("timer:master?delay=15s&period=5s").routeId("unicast2device-route")
             .setHeader(PubNubConstants.CHANNEL, method(PubNubSensor2Example.PubsubRoute.DataProcessorBean.class, "getUnicastChannelOfDevice()"))
             .setBody(constant("Hello device"))
             .to(masterEP);
@@ -85,7 +85,7 @@ public class PubNubSensor2Example {
         }
 
         public static class DataProcessorBean {
-            @EndpointInject(uri = "pubnub:pubsub:iot?uuid=master&subscriberKey=" + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY)
+            @EndpointInject(uri = "pubnub://pubsub:iot?uuid=master&subscriberKey=" + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY)
             private static ProducerTemplate template;
 
             @SuppressWarnings("unused")

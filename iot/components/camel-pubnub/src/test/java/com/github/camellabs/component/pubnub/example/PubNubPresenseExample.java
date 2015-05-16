@@ -32,7 +32,7 @@ public class PubNubPresenseExample {
         @Override
         public void configure() throws Exception {
             //@formatter:off
-            from("pubnub:presens:iot?subscriberKey="+PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY)
+            from("pubnub://presens:iot?subscriberKey="+PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY)
             .log("${body}")
             .to("mock:result");
             //@formatter:on

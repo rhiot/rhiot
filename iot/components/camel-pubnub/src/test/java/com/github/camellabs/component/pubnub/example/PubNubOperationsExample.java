@@ -42,7 +42,8 @@ public class PubNubOperationsExample {
     }
 
     static private class RestRoute extends RouteBuilder {
-        private String PUBNUB = "pubnub:pubsub:iot?publisherKey=" + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY + "&subscriberKey=" + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY;
+        private String PUBNUB = "pubnub://pubsub:iot?publisherKey=" + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY + "&subscriberKey="
+                                + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY;
 
         @Override
         public void configure() throws Exception {

@@ -16,17 +16,23 @@
  */
 package com.github.camellabs.component.pubnub;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.pubnub.api.Callback;
 import com.pubnub.api.Pubnub;
 import com.pubnub.api.PubnubException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PubNubMock extends Pubnub {
-    private Map<String, Callback> subscribers = new HashMap<String, Callback>();
+    private static final Map<String, Callback> subscribers = new ConcurrentHashMap<String, Callback>();
+    private static final Map<String, Callback> presensSubscribers = new ConcurrentHashMap<String, Callback>();
+    private static final Map<String, JSONObject> stateMap = new ConcurrentHashMap<String, JSONObject>();
+    private ExecutorService executorService = Executors.newFixedThreadPool(3);
 
     public PubNubMock(String publish_key, String subscribe_key) {
         super(publish_key, subscribe_key);
@@ -35,7 +41,30 @@ public class PubNubMock extends Pubnub {
     @Override
     public void subscribe(String channel, Callback callback) throws PubnubException {
         subscribers.put(channel, callback);
-        callback.connectCallback(channel, "OK");
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                    callback.connectCallback(channel, "OK");
+                } catch (InterruptedException e) {
+                }
+            }
+        });
+        Callback presensCallback = presensSubscribers.get(channel);
+        if (presensCallback != null) {
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(500);
+                        String presens = "{\"action\":\"join\",\"timestamp\":1431777382,\"uuid\":\"d08f121b-d146-45af-a814-058c1b7d283a\",\"occupancy\":1}";
+                        presensCallback.successCallback(channel, new JSONObject(presens), "" + System.currentTimeMillis());
+                    } catch (Exception e) {
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -43,7 +72,116 @@ public class PubNubMock extends Pubnub {
         callback.successCallback(channel, "OK");
         Callback clientMockCallback = subscribers.get(channel);
         if (clientMockCallback != null) {
-            clientMockCallback.successCallback(channel, message, "" + System.currentTimeMillis());
+            executorService.execute(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                        clientMockCallback.successCallback(channel, message, "" + System.currentTimeMillis());
+                    } catch (InterruptedException e) {
+                    }
+                }
+            });
         }
+    }
+
+    @Override
+    public void presence(String channel, Callback callback) throws PubnubException {
+        presensSubscribers.put(channel, callback);
+        executorService.execute(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    callback.connectCallback(channel, "OK");
+                } catch (InterruptedException e) {
+                }
+            }
+        });
+    }
+
+    @Override
+    public void history(String channel, boolean reverse, Callback callback) {
+        executorService.execute(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    callback.successCallback(channel, new JSONArray("[[\"message1\", \"message2\", \"message3\"],\"Start Time Token\",\"End Time Token\"]"));
+                } catch (Exception e) {
+                }
+            }
+        });
+    }
+
+    @Override
+    public void setState(String channel, String uuid, JSONObject state, Callback callback) {
+        stateMap.put(uuid, state);
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    callback.successCallback(channel, "OK");
+                } catch (Exception e) {
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getState(String channel, String uuid, Callback callback) {
+        JSONObject jsonObject = stateMap.get(uuid);
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    callback.successCallback(channel, jsonObject);
+                } catch (Exception e) {
+                }
+            }
+        });
+    }
+
+    @Override
+    public void hereNow(String channel, boolean state, boolean uuids, Callback callback) {
+
+        executorService.execute(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                    //@formatter:off
+                    JSONObject response = new JSONObject("{\"uuids\":[\"76c2c571-9a2b-d074-b4f8-e93e09f49bd\"," 
+                                                        + "\"175c2c67-b2a9-470d-8f4b-1db94f90e39e\", "
+                                                        + "\"2c67175c-2a9b-074d-4b8f-90e39e1db94f\"]," 
+                                                        + "\"occupancy\":3 }");
+                    //@formatter:on
+                    callback.successCallback(channel, response);
+                } catch (Exception e) {
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public void whereNow(String uuid, Callback callback) {
+        executorService.execute(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    callback.successCallback("channel", new JSONObject("{\"channels\":[\"hello_world\"]}"));
+                } catch (Exception e) {
+                }
+            }
+        });
     }
 }
