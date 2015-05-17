@@ -45,8 +45,8 @@ public class PubNubPresensTest extends CamelTestSupport {
         });
         assertMockEndpointsSatisfied();
         assertTrue(connected);
-        JSONObject presensResponse = mockResult.getReceivedExchanges().get(0).getIn().getBody(JSONObject.class);
-        assertEquals("join", presensResponse.getString("action"));
+        JSONObject presenceResponse = mockResult.getReceivedExchanges().get(0).getIn().getBody(JSONObject.class);
+        assertEquals("join", presenceResponse.getString("action"));
     }
 
     @Override
@@ -61,7 +61,7 @@ public class PubNubPresensTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 //@formatter:off
-                from("pubnub://presens:mychannel?pubnub=#pubnub")
+                from("pubnub://presence:mychannel?pubnub=#pubnub")
                 .to("log:com.github.camellabs.component.pubnub?showAll=true&multiline=true")
                 .to("mock:result");
                 //@formatter:on

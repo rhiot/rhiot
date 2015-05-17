@@ -34,7 +34,7 @@ public class PubNubEndpoint extends DefaultEndpoint {
     @UriParam
     private Pubnub pubnub;
 
-    @UriPath(enums = "pubsub,presens")
+    @UriPath(enums = "pubsub,presence")
     @Metadata(required = "true")
     private PubNubEndpointType endpointType;
 

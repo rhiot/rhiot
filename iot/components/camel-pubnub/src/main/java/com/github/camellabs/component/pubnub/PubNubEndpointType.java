@@ -17,7 +17,7 @@
 package com.github.camellabs.component.pubnub;
 
 public enum PubNubEndpointType {
-    pubsub("pubsub"), presens("presens");
+    pubsub("pubsub"), presence("presence");
 
     private final String text;
 

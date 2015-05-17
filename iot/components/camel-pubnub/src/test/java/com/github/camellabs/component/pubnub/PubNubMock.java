@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 public class PubNubMock extends Pubnub {
     private static final Map<String, Callback> subscribers = new ConcurrentHashMap<String, Callback>();
-    private static final Map<String, Callback> presensSubscribers = new ConcurrentHashMap<String, Callback>();
+    private static final Map<String, Callback> presenceSubscribers = new ConcurrentHashMap<String, Callback>();
     private static final Map<String, JSONObject> stateMap = new ConcurrentHashMap<String, JSONObject>();
     private ExecutorService executorService = Executors.newFixedThreadPool(3);
 
@@ -51,15 +51,15 @@ public class PubNubMock extends Pubnub {
                 }
             }
         });
-        Callback presensCallback = presensSubscribers.get(channel);
-        if (presensCallback != null) {
+        Callback presenceCallback = presenceSubscribers.get(channel);
+        if (presenceCallback != null) {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         Thread.sleep(500);
-                        String presens = "{\"action\":\"join\",\"timestamp\":1431777382,\"uuid\":\"d08f121b-d146-45af-a814-058c1b7d283a\",\"occupancy\":1}";
-                        presensCallback.successCallback(channel, new JSONObject(presens), "" + System.currentTimeMillis());
+                        String presence = "{\"action\":\"join\",\"timestamp\":1431777382,\"uuid\":\"d08f121b-d146-45af-a814-058c1b7d283a\",\"occupancy\":1}";
+                        presenceCallback.successCallback(channel, new JSONObject(presence), "" + System.currentTimeMillis());
                     } catch (Exception e) {
                     }
                 }
@@ -88,7 +88,7 @@ public class PubNubMock extends Pubnub {
 
     @Override
     public void presence(String channel, Callback callback) throws PubnubException {
-        presensSubscribers.put(channel, callback);
+        presenceSubscribers.put(channel, callback);
         executorService.execute(new Runnable() {
 
             @Override

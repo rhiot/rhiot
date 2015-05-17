@@ -269,12 +269,12 @@ Maven users should add the following dependency to their POM file:
 
 #### General URI format
 
-    pubnub:<pubnubEndpointType>:channel[?options]
+    pubnub://<pubnubEndpointType>:channel[?options]
 
 The following values are currently supported as pubnubEndpointType:
 
 * pubsub
-* presens
+* presence
 
 ###### URI Parameters
 
@@ -303,12 +303,12 @@ Operations can be used on the producer endpoint, or as a header:
 
 Route that consumes messages from mychannel:
 
-    from("pubnub:pubsub:mychannel?uuid=master&subscriberKey=mysubkey").routeId("my-route")
+    from("pubnub://pubsub:mychannel?uuid=master&subscriberKey=mysubkey").routeId("my-route")
     .to("log:default?showHeaders=true");
     
-Route that listens for presens (eg. join, leave, state change) events on a channel
+Route that listens for presence (eg. join, leave, state change) events on a channel
 
-    from("pubnub:presens:mychannel?subscriberKey=mysubkey").routeId("presens-route")
+    from("pubnub://presence:mychannel?subscriberKey=mysubkey").routeId("presence-route")
     .to("log:default?showHeaders=true");
 
 ##### Producing
@@ -318,7 +318,7 @@ Route the collect data and sendt it to pubnub channel mychannel:
     from("timer:default?period=2000").routeId("device-event-route")
     .bean(EventGeneratorBean.class, "getEvent()")
     .convertBodyTo(JSONObject.class)
-    .to("pubnub:pubsub:mychannel?uuid=deviceuuid&publisherKey=mypubkey");
+    .to("pubnub://pubsub:mychannel?uuid=deviceuuid&publisherKey=mypubkey");
 
 ---
 
