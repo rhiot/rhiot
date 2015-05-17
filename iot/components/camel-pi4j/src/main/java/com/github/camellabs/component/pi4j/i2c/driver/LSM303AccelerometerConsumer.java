@@ -29,8 +29,10 @@ import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * 
+/*
+ * Thx @OlivierLD
+ * More details about first implementation http://www.lediouris.net/RaspberryPI/readme.html
+ * Code from https://github.com/OlivierLD/raspberry-pi4j-samples/blob/master/AdafruitI2C/src/adafruiti2c/sensor/AdafruitLSM303.java
  */
 public class LSM303AccelerometerConsumer extends I2CConsumer {
     private static final transient Logger LOG = LoggerFactory.getLogger(LSM303AccelerometerConsumer.class);
