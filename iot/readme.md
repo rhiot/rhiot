@@ -23,6 +23,44 @@ Or the same remotely using SSH:
 From this point forward Camel IoT gateway will be installed on your device as `camel-iot-gateway` service and started
 whenever the device boots up.
 
+### Device heartbeats
+
+Camel gateway generates heartbeats indicating that the device is alive and optionally connected to the data
+center.
+
+The default heartbeat rate is 5 seconds, which means that heartbeat events will be generated every 5 second. You
+can change the heartbeat rate by setting the `camellabs.iot.gateway.heartbeat.rate` environment variable to the desired
+number of the rate miliseconds. The snippet below demonstrates how to change the heartbeat rate to 10 seconds:
+
+    export camellabs.iot.gateway.heartbeat.rate=10000
+
+#### Logging heartbeat
+
+By default Camel gateway sends the heartbeat event to the application log. The name of the logger is `Heartbeat` and the
+message is `Ping!`.
+
+#### MQTT heartbeat
+
+Camel IoT gateway can send the heartbeat events to the data center using the MQTT protocol. In order to enable the 
+MQTT-based heartbeats set the `camellabs.iot.gateway.heartbeat.mqtt` environment variable to `true`. Just as 
+demonstrated on the snippet below:
+
+    export camellabs.iot.gateway.heartbeat.mqtt=true
+
+The address of the target MQTT broker can be set using the `camellabs.iot.gateway.heartbeat.mqtt.broker.url` environment 
+variable, just as demonstrated on the example below:
+
+    export camellabs.iot.gateway.heartbeat.mqtt.broker.url=tcp://mydatacenter.com
+    
+By default MQTT heartbeat sends events to the `heartbeat` topic. You can change the name of the topic using the
+`camellabs.iot.gateway.heartbeat.mqtt.topic` environment variable. For example to send the heartbeats to the 
+`myheartbeats` queue set the `camellabs.iot.gateway.heartbeat.mqtt.topic` environment variable as follows:
+
+    export camellabs.iot.gateway.heartbeat.mqtt.topic=myheartbeats
+
+The heartbeat message format is `hostname:timestamp`, where `hostname` is the name of the device host and `timestamp` is
+the current time converted to the Java miliseconds.
+
 ## Camel IoT components
 
 Camel IoT Labs brings some extra components for the Apache Camel intended to make both device- and server-side IoT
