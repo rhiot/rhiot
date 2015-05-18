@@ -38,6 +38,8 @@ public class MqttHeartbeatRouteBuilderCallback implements RouteBuilderCallback {
                 to("paho:{{camellabs.iot.gateway.heartbeat.mqtt.topic:heartbeat}}?brokerUrl={{camellabs.iot.gateway.heartbeat.mqtt.broker.url}}");
     }
 
+    // Private helpers
+
     private String generateHeartBeatMessage() {
         try {
             return getLocalHost().getHostName() + ":" + currentTimeMillis();
