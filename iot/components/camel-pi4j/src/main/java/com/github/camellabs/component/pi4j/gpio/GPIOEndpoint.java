@@ -79,8 +79,8 @@ public class GPIOEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "0")
     private long delay = 0;
 
-    @UriParam(defaultValue = "100")
-    private long duration = 100;
+    @UriParam(defaultValue = "50")
+    private long duration = 50;
 
     @UriParam(defaultValue = Pi4jConstants.CAMEL_GPIO_CLAZZ)
     private Class gpioClass = RaspiPin.class;
@@ -88,6 +88,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
     private GpioController controller;
 
     public GPIOEndpoint() {
+        super();
     }
 
     public GPIOEndpoint(String uri, String pin, GPIOComponent component, GpioController crtl) {
