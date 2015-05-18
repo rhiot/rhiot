@@ -24,7 +24,7 @@ wget http://repository.sonatype.org/service/local/artifact/maven/redirect?r=cent
 mv /tmp/camel-labs-iot-gateway-*.jar /var/camel-labs-iot-gateway/
 
 # Download and install the init.d script
-sudo wget https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/rasbian/camel-labs-iot-gateway.sh -O /etc/init.d/camel-labs-iot-gateway
+sudo wget https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/raspbian/camel-labs-iot-gateway.sh -O /etc/init.d/camel-labs-iot-gateway
 sudo chmod +x /etc/init.d/camel-labs-iot-gateway
 sudo update-rc.d camel-labs-iot-gateway defaults
 
