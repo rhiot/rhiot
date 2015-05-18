@@ -33,6 +33,8 @@ import org.slf4j.LoggerFactory;
  * Thx @OlivierLD
  * More details about first implementation http://www.lediouris.net/RaspberryPI/readme.html
  * Code from https://github.com/OlivierLD/raspberry-pi4j-samples/blob/master/AdafruitI2C/src/adafruiti2c/sensor/AdafruitLSM303.java
+ * 
+ * device doc : http://cdn.sparkfun.com/datasheets/Sensors/Magneto/DM00026454.pdf
  */
 public class LSM303AccelerometerConsumer extends I2CConsumer {
     private static final transient Logger LOG = LoggerFactory.getLogger(LSM303AccelerometerConsumer.class);
