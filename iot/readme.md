@@ -36,12 +36,17 @@ number of the rate miliseconds. The snippet below demonstrates how to change the
 
 #### Logging heartbeat
 
-By default Camel gateway sends the heartbeat event to the application log. The name of the logger is `Heartbeat` and the
+By default Camel gateway sends the heartbeat event to the application log. Logging heartbeats are useful when verifying that
+gateway is still running by looking into the application log files. The name of the logger is `Heartbeat` and the
 message is `Ping!`.
 
 #### MQTT heartbeat
 
-Camel IoT gateway can send the heartbeat events to the data center using the MQTT protocol. In order to enable the 
+Camel IoT gateway can send the heartbeat events to the data center using the MQTT protocol. MQTT heartbeats are 
+useful when verifying that gateway is still running and connected to the backend services deployed into the data
+center.
+
+In order to enable the 
 MQTT-based heartbeats set the `camellabs.iot.gateway.heartbeat.mqtt` environment variable to `true`. Just as 
 demonstrated on the snippet below:
 
