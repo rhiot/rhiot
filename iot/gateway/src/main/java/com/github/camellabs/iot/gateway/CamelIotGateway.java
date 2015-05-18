@@ -37,7 +37,7 @@ public class CamelIotGateway extends FatJarRouter {
             }
         }
 
-        from("timer:heartbeat?delay=5000").to(HEARTBEAT_ENDPOINT);
+        from("timer:heartbeat?delay={{camellabs.iot.gateway.heartbeat.rate:5000}}").to(HEARTBEAT_ENDPOINT);
         from(HEARTBEAT_ENDPOINT).log(INFO, "Heartbeat", "Ping!");
     }
 
