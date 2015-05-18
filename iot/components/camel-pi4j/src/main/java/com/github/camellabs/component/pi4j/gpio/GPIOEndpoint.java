@@ -58,7 +58,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
     @Metadata(required = "true")
     private PinMode mode = PinMode.DIGITAL_OUTPUT;
 
-    @UriParam(description = "Default : use Body if Action for ouput Pin (TOGGLE, BUZZ, HIGH, LOW for digital only) (HEADER digital and analog)", enums = "TOGGLE:BUZZ:HIGH:LOW:HEADER")
+    @UriParam(description = "Default : use Body if Action for ouput Pin (TOGGLE, BLINK, HIGH, LOW for digital only) (HEADER digital and analog)", enums = "TOGGLE:BLINK:HIGH:LOW:HEADER")
     private GPIOAction action;
 
     @UriParam(defaultValue = "0", description = "Analog or PWN Only")
@@ -75,6 +75,12 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
     @UriParam(defaultValue = "PULL_UP")
     private PinPullResistance pullResistance = PinPullResistance.PULL_UP;
+
+    @UriParam(defaultValue = "0")
+    private long delay = 0;
+
+    @UriParam(defaultValue = "100")
+    private long duration = 100;
 
     @UriParam(defaultValue = Pi4jConstants.CAMEL_GPIO_CLAZZ)
     private Class gpioClass = RaspiPin.class;
@@ -166,6 +172,14 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
     public GpioController getController() {
         return controller;
+    }
+
+    public long getDelay() {
+        return delay;
+    }
+
+    public long getDuration() {
+        return duration;
     }
 
     public Class getGpioClass() {
@@ -320,6 +334,14 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
     public void setController(GpioController controller) {
         this.controller = controller;
+    }
+
+    public void setDelay(long delay) {
+        this.delay = delay;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
     public void setGpioClass(Class gpioClass) {

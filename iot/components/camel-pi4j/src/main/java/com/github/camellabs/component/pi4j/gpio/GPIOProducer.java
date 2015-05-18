@@ -16,6 +16,8 @@
  */
 package com.github.camellabs.component.pi4j.gpio;
 
+import java.util.concurrent.ExecutorService;
+
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.GpioPinAnalogOutput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
@@ -33,6 +35,7 @@ public class GPIOProducer extends DefaultProducer {
     private GPIOEndpoint endpoint;
     private GpioPin pin;
     private GPIOAction action;
+    private ExecutorService pool;
 
     /**
      * Create Producer to PIN with OUTPUT mode
@@ -120,6 +123,28 @@ public class GPIOProducer extends DefaultProducer {
                 if (pin.getMode() == PinMode.DIGITAL_OUTPUT) {
                     ((GpioPinDigitalOutput)pin).high();
                 }
+                break;
+
+            case BLINK:
+                if (pin.getMode() == PinMode.DIGITAL_OUTPUT) {
+                    pool = this.getEndpoint().getCamelContext().getExecutorServiceManager().newSingleThreadExecutor(this, "gpio");
+                    pool.submit(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(endpoint.getDelay());
+                                ((GpioPinDigitalOutput)pin).toggle();
+                                Thread.sleep(endpoint.getDuration());
+                                ((GpioPinDigitalOutput)pin).toggle();
+                            } catch (InterruptedException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+
                 break;
 
             default:

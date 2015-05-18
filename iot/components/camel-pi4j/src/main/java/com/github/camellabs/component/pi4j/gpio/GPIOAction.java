@@ -17,5 +17,5 @@
 package com.github.camellabs.component.pi4j.gpio;
 
 public enum GPIOAction {
-    TOGGLE, BUZZ, HIGH, LOW
+    TOGGLE, BUZZ, HIGH, LOW, BLINK
 }
