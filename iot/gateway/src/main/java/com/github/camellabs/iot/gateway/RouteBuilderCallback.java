@@ -18,6 +18,7 @@ package com.github.camellabs.iot.gateway;
 
 import org.apache.camel.builder.RouteBuilder;
 
+// TODO Move this callback to the camel-spring-boot
 public interface RouteBuilderCallback {
 
     void beforeRoutesDefinition(RouteBuilder routeBuilder);
