@@ -47,9 +47,9 @@ public class MCP23017LCD extends I2CProducer {
 
     private static final Logger LOG = LoggerFactory.getLogger(MCP23017LCD.class);
 
-    private static final String LCD_BLINK_CURSOR = "CamelLCDBlinkCursor";
-    private static final String LCD_CURSOR = "CamelLCDCursor";
-    private static final String LCD_COLOR = "CamelLCDColor";
+    public static final String LCD_BLINK_CURSOR = "CamelLCDBlinkCursor";
+    public static final String LCD_CURSOR = "CamelLCDCursor";
+    public static final String LCD_COLOR = "CamelLCDColor";
 
     // LCD Commands
     private static final int LCD_CLEARDISPLAY = 0x01;
