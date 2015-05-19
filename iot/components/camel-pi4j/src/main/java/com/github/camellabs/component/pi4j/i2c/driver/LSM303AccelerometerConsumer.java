@@ -18,7 +18,6 @@
 package com.github.camellabs.component.pi4j.i2c.driver;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import com.github.camellabs.component.pi4j.i2c.I2CConsumer;
 import com.github.camellabs.component.pi4j.i2c.I2CEndpoint;
@@ -64,11 +63,11 @@ public class LSM303AccelerometerConsumer extends I2CConsumer {
 
     @Override
     protected void createBody(Exchange exchange) throws IOException {
-        int[] body = readingSensors();
+        LSM303Value body = readingSensors();
 
         LOG.debug("" + body);
 
-        exchange.getIn().setBody(Arrays.toString(body));
+        exchange.getIn().setBody(body);
     }
 
     protected void doStart() throws Exception {
@@ -78,17 +77,17 @@ public class LSM303AccelerometerConsumer extends I2CConsumer {
 
     }
 
-    private int[] readingSensors() throws IOException {
-        int[] ret = {0, 0, 0};
+    private LSM303Value readingSensors() throws IOException {
+        LSM303Value ret = new LSM303Value();
         byte[] accelData = {0, 0, 0, 0, 0, 0};
 
         int r = getDevice().read(LSM303_REGISTER_ACCEL_OUT_X_L_A | 0x80, accelData, 0, 6);
         if (r != 6) {
             System.out.println("Error reading accel data, < 6 bytes");
         }
-        ret[0] = accel12(accelData, 0);
-        ret[1] = accel12(accelData, 2);
-        ret[2] = accel12(accelData, 4);
+        ret.setX(accel12(accelData, 0));
+        ret.setY(accel12(accelData, 2));
+        ret.setZ(accel12(accelData, 4));
 
         return ret;
     }

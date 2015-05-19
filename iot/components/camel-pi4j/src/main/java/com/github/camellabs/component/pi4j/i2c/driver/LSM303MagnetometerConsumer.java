@@ -18,7 +18,6 @@
 package com.github.camellabs.component.pi4j.i2c.driver;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import com.github.camellabs.component.pi4j.i2c.I2CConsumer;
 import com.github.camellabs.component.pi4j.i2c.I2CEndpoint;
@@ -63,11 +62,11 @@ public class LSM303MagnetometerConsumer extends I2CConsumer {
 
     @Override
     protected void createBody(Exchange exchange) throws IOException {
-        int[] body = readingSensors();
+        LSM303Value body = readingSensors();
 
         LOG.debug("" + body);
 
-        exchange.getIn().setBody(Arrays.toString(body));
+        exchange.getIn().setBody(body);
     }
 
     protected void doStart() throws Exception {
@@ -85,8 +84,8 @@ public class LSM303MagnetometerConsumer extends I2CConsumer {
         return (n < 32768 ? n : n - 65536); // 2's complement signed
     }
 
-    private int[] readingSensors() throws IOException {
-        int[] ret = {0, 0, 0};
+    private LSM303Value readingSensors() throws IOException {
+        LSM303Value ret = new LSM303Value();
         byte[] magData = new byte[6];
 
         // Reading magnetometer measurements.
@@ -95,9 +94,9 @@ public class LSM303MagnetometerConsumer extends I2CConsumer {
             System.out.println("Error reading mag data, < 6 bytes");
         }
 
-        ret[0] = mag16(magData, 0);
-        ret[1] = mag16(magData, 2);
-        ret[2] = mag16(magData, 4);
+        ret.setX(mag16(magData, 0));
+        ret.setY(mag16(magData, 2));
+        ret.setZ(mag16(magData, 4));
 
         return ret;
     }
