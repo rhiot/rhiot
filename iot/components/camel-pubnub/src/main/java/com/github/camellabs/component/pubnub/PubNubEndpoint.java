@@ -36,18 +36,16 @@ public class PubNubEndpoint extends DefaultEndpoint {
 
     @UriPath(enums = "pubsub,presence")
     @Metadata(required = "true")
-    private PubNubEndpointType endpointType;
+    private final PubNubEndpointType endpointType;
 
-    @UriPath(description = "The channel used for subscribing/publishing events")
+    @UriPath()
     @Metadata(required = "true")
     private String channel;
 
     @UriParam()
-    @Metadata(required = "true")
     private String publisherKey;
 
     @UriParam()
-    @Metadata(required = "true")
     private String subscriberKey;
 
     @UriParam()
@@ -56,10 +54,10 @@ public class PubNubEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "true")
     private boolean ssl = true;
 
-    @UriParam(description = "The uuid identifying the connection")
+    @UriParam()
     private String uuid;
 
-    @UriParam
+    @UriParam(label = "producer", enums = "HERE_NOW, WHERE_NOW, GET_STATE, SET_STATE, GET_HISTORY, PUBLISH")
     private String operation;
 
     public PubNubEndpoint(String uri, PubNubComponent component, PubNubEndpointType endpointType) {
@@ -67,14 +65,17 @@ public class PubNubEndpoint extends DefaultEndpoint {
         this.endpointType = endpointType;
     }
 
+    @Override
     public Producer createProducer() throws Exception {
         return new PubNubProducer(this);
     }
 
+    @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         return new PubNubConsumer(this, processor);
     }
 
+    @Override
     public boolean isSingleton() {
         return true;
     }
@@ -83,6 +84,10 @@ public class PubNubEndpoint extends DefaultEndpoint {
         return endpointType;
     }
 
+    /**
+     * The pubnub publish key obtained from your pubnub account. Required when
+     * publishing messages.
+     */
     public String getPublisherKey() {
         return publisherKey;
     }
@@ -91,6 +96,10 @@ public class PubNubEndpoint extends DefaultEndpoint {
         this.publisherKey = publisherKey;
     }
 
+    /**
+     * The pubnub subscribe key obtained from your pubnub account. Required when
+     * subscribing to channels or listening for presence events
+     */
     public String getSubscriberKey() {
         return subscriberKey;
     }
@@ -99,10 +108,20 @@ public class PubNubEndpoint extends DefaultEndpoint {
         this.subscriberKey = subscriberKey;
     }
 
+    /**
+     * The pubnub secret key used for message signing.
+     */
     public String getSecretKey() {
         return secretKey;
     }
 
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    /**
+     * Use ssl
+     */
     public boolean isSsl() {
         return ssl;
     }
@@ -111,10 +130,9 @@ public class PubNubEndpoint extends DefaultEndpoint {
         this.ssl = ssl;
     }
 
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
+    /**
+     * The channel used for subscribing/publishing events
+     */
     public String getChannel() {
         return channel;
     }
@@ -123,6 +141,9 @@ public class PubNubEndpoint extends DefaultEndpoint {
         this.channel = channel;
     }
 
+    /**
+     * The uuid identifying the connection. Will be auto assigned if not set.
+     */
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
@@ -131,6 +152,9 @@ public class PubNubEndpoint extends DefaultEndpoint {
         return uuid;
     }
 
+    /**
+     * The operation to perform.
+     */
     public void setOperation(String operation) {
         this.operation = operation;
     }
@@ -148,6 +172,15 @@ public class PubNubEndpoint extends DefaultEndpoint {
     }
 
     @Override
+    protected void doStop() throws Exception {
+        super.doStop();
+        if (pubnub != null) {
+            pubnub.shutdown();
+            pubnub = null;
+        }
+    }
+
+    @Override
     protected void doStart() throws Exception {
         this.pubnub = getPubnub() != null ? getPubnub() : getInstance();
         super.doStart();
@@ -156,15 +189,9 @@ public class PubNubEndpoint extends DefaultEndpoint {
     private Pubnub getInstance() {
         Pubnub answer = null;
         if (ObjectHelper.isNotEmpty(getSecretKey())) {
-            if (isSsl()) {
-                answer = new Pubnub(getPublisherKey(), getSubscriberKey(), getSecretKey(), true);
-            } else {
-                answer = new Pubnub(getPublisherKey(), getSubscriberKey(), getSecretKey());
-            }
-        } else if (isSsl()) {
-            answer = new Pubnub(getPublisherKey(), getSubscriberKey(), true);
+            answer = new Pubnub(getPublisherKey(), getSubscriberKey(), getSecretKey(), isSsl());
         } else {
-            answer = new Pubnub(getPublisherKey(), getSubscriberKey());
+            answer = new Pubnub(getPublisherKey(), getSubscriberKey(), isSsl());
         }
         if (ObjectHelper.isNotEmpty(getUuid())) {
             answer.setUUID(getUuid());

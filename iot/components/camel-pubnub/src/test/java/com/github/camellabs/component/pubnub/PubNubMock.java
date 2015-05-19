@@ -32,7 +32,7 @@ public class PubNubMock extends Pubnub {
     private static final Map<String, Callback> subscribers = new ConcurrentHashMap<String, Callback>();
     private static final Map<String, Callback> presenceSubscribers = new ConcurrentHashMap<String, Callback>();
     private static final Map<String, JSONObject> stateMap = new ConcurrentHashMap<String, JSONObject>();
-    private ExecutorService executorService = Executors.newFixedThreadPool(3);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(3);
 
     public PubNubMock(String publish_key, String subscribe_key) {
         super(publish_key, subscribe_key);
@@ -41,27 +41,21 @@ public class PubNubMock extends Pubnub {
     @Override
     public void subscribe(String channel, Callback callback) throws PubnubException {
         subscribers.put(channel, callback);
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500);
-                    callback.connectCallback(channel, "OK");
-                } catch (InterruptedException e) {
-                }
+        executorService.execute(() -> {
+            try {
+                Thread.sleep(500);
+                callback.connectCallback(channel, "OK");
+            } catch (InterruptedException e) {
             }
         });
         Callback presenceCallback = presenceSubscribers.get(channel);
         if (presenceCallback != null) {
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(500);
-                        String presence = "{\"action\":\"join\",\"timestamp\":1431777382,\"uuid\":\"d08f121b-d146-45af-a814-058c1b7d283a\",\"occupancy\":1}";
-                        presenceCallback.successCallback(channel, new JSONObject(presence), "" + System.currentTimeMillis());
-                    } catch (Exception e) {
-                    }
+            executorService.execute(() -> {
+                try {
+                    Thread.sleep(500);
+                    String presence = "{\"action\":\"join\",\"timestamp\":1431777382,\"uuid\":\"d08f121b-d146-45af-a814-058c1b7d283a\",\"occupancy\":1}";
+                    presenceCallback.successCallback(channel, new JSONObject(presence), "" + System.currentTimeMillis());
+                } catch (Exception e) {
                 }
             });
         }
@@ -72,15 +66,41 @@ public class PubNubMock extends Pubnub {
         callback.successCallback(channel, "OK");
         Callback clientMockCallback = subscribers.get(channel);
         if (clientMockCallback != null) {
-            executorService.execute(new Runnable() {
+            executorService.execute(() -> {
+                try {
+                    Thread.sleep(1000);
+                    clientMockCallback.successCallback(channel, message, "" + System.currentTimeMillis());
+                } catch (InterruptedException e) {
+                }
+            });
+        }
+    }
 
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(1000);
-                        clientMockCallback.successCallback(channel, message, "" + System.currentTimeMillis());
-                    } catch (InterruptedException e) {
-                    }
+    @Override
+    public void publish(String channel, JSONArray message, Callback callback) {
+        callback.successCallback(channel, "OK");
+        Callback clientMockCallback = subscribers.get(channel);
+        if (clientMockCallback != null) {
+            executorService.execute(() -> {
+                try {
+                    Thread.sleep(1000);
+                    clientMockCallback.successCallback(channel, message, "" + System.currentTimeMillis());
+                } catch (InterruptedException e) {
+                }
+            });
+        }
+    }
+
+    @Override
+    public void publish(String channel, String message, Callback callback) {
+        callback.successCallback(channel, "OK");
+        Callback clientMockCallback = subscribers.get(channel);
+        if (clientMockCallback != null) {
+            executorService.execute(() -> {
+                try {
+                    Thread.sleep(1000);
+                    clientMockCallback.successCallback(channel, message, "" + System.currentTimeMillis());
+                } catch (InterruptedException e) {
                 }
             });
         }
@@ -89,30 +109,22 @@ public class PubNubMock extends Pubnub {
     @Override
     public void presence(String channel, Callback callback) throws PubnubException {
         presenceSubscribers.put(channel, callback);
-        executorService.execute(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    callback.connectCallback(channel, "OK");
-                } catch (InterruptedException e) {
-                }
+        executorService.execute(() -> {
+            try {
+                Thread.sleep(1000);
+                callback.connectCallback(channel, "OK");
+            } catch (InterruptedException e) {
             }
         });
     }
 
     @Override
     public void history(String channel, boolean reverse, Callback callback) {
-        executorService.execute(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    callback.successCallback(channel, new JSONArray("[[\"message1\", \"message2\", \"message3\"],\"Start Time Token\",\"End Time Token\"]"));
-                } catch (Exception e) {
-                }
+        executorService.execute(() -> {
+            try {
+                Thread.sleep(1000);
+                callback.successCallback(channel, new JSONArray("[[\"message1\", \"message2\", \"message3\"],\"Start Time Token\",\"End Time Token\"]"));
+            } catch (Exception e) {
             }
         });
     }
@@ -120,14 +132,11 @@ public class PubNubMock extends Pubnub {
     @Override
     public void setState(String channel, String uuid, JSONObject state, Callback callback) {
         stateMap.put(uuid, state);
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    callback.successCallback(channel, "OK");
-                } catch (Exception e) {
-                }
+        executorService.execute(() -> {
+            try {
+                Thread.sleep(1000);
+                callback.successCallback(channel, "OK");
+            } catch (Exception e) {
             }
         });
     }
@@ -135,14 +144,11 @@ public class PubNubMock extends Pubnub {
     @Override
     public void getState(String channel, String uuid, Callback callback) {
         JSONObject jsonObject = stateMap.get(uuid);
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    callback.successCallback(channel, jsonObject);
-                } catch (Exception e) {
-                }
+        executorService.execute(() -> {
+            try {
+                Thread.sleep(1000);
+                callback.successCallback(channel, jsonObject);
+            } catch (Exception e) {
             }
         });
     }
@@ -150,37 +156,29 @@ public class PubNubMock extends Pubnub {
     @Override
     public void hereNow(String channel, boolean state, boolean uuids, Callback callback) {
 
-        executorService.execute(new Runnable() {
+        executorService.execute(() -> {
+            try {
+                Thread.sleep(500);
+                //@formatter:off
+                JSONObject response = new JSONObject("{\"uuids\":[\"76c2c571-9a2b-d074-b4f8-e93e09f49bd\"," 
+                                                    + "\"175c2c67-b2a9-470d-8f4b-1db94f90e39e\", "
+                                                    + "\"2c67175c-2a9b-074d-4b8f-90e39e1db94f\"]," 
+                                                    + "\"occupancy\":3 }");
+                //@formatter:on
+            callback.successCallback(channel, response);
+        } catch (Exception e) {
+        }
 
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500);
-                    //@formatter:off
-                    JSONObject response = new JSONObject("{\"uuids\":[\"76c2c571-9a2b-d074-b4f8-e93e09f49bd\"," 
-                                                        + "\"175c2c67-b2a9-470d-8f4b-1db94f90e39e\", "
-                                                        + "\"2c67175c-2a9b-074d-4b8f-90e39e1db94f\"]," 
-                                                        + "\"occupancy\":3 }");
-                    //@formatter:on
-                    callback.successCallback(channel, response);
-                } catch (Exception e) {
-                }
-
-            }
-        });
+    })  ;
     }
 
     @Override
     public void whereNow(String uuid, Callback callback) {
-        executorService.execute(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    callback.successCallback("channel", new JSONObject("{\"channels\":[\"hello_world\"]}"));
-                } catch (Exception e) {
-                }
+        executorService.execute(() -> {
+            try {
+                Thread.sleep(1000);
+                callback.successCallback("channel", new JSONObject("{\"channels\":[\"hello_world\"]}"));
+            } catch (Exception e) {
             }
         });
     }
