@@ -138,8 +138,7 @@ public class GPIOProducer extends DefaultProducer {
                                 Thread.sleep(endpoint.getDuration());
                                 ((GpioPinDigitalOutput)pin).toggle();
                             } catch (InterruptedException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
+                                log.error("Thread interruption into BLINK sequence", e);
                             }
                         }
                     });
