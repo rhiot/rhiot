@@ -53,7 +53,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
     @Autowired
     public DocumentServiceRestApiRoutes(
-            @Value("${camel.labs.iot.cloudlet.document.driver.mongodb.db:cloudlet_document}") String documentsDbName,
+            @Value("${camel.labs.iot.cloudlet.document.driver.mongodb.db}") String documentsDbName,
             @Value("${camel.labs.iot.cloudlet.rest.port:15001}") int restPort,
             @Value("${camel.labs.iot.cloudlet.rest.cors:true}") boolean enableCors,
             @Value("${camel.labs.iot.cloudlet.rest.attachment.size.max:26214400}") int maxAttachmentSize, // Default attachment size = 25 MB
