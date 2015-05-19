@@ -20,14 +20,14 @@
     </licenses>
 
     <dependencies>
-        <!-- Utils -->
-        <dependency>
-            <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-utils</artifactId>
-        </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Service -->
@@ -42,10 +42,6 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-groovy</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mongodb</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -69,6 +65,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
