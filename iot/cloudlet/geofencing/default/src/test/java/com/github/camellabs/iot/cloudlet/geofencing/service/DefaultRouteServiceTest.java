@@ -43,6 +43,7 @@ import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.awaitility.Duration.ONE_MINUTE;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
+import static java.util.Collections.singletonList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {GeofencingCloudlet.class, DefaultRouteServiceTest.class})
@@ -71,6 +72,8 @@ public class DefaultRouteServiceTest extends Assert {
         mongoTemplate.getDb().dropDatabase();
     }
 
+    // Tests
+
     @Test
     public void shouldReturnNoClientsForEmptyDatabase() {
         assertEquals(0, routeService.clients().size());
@@ -87,7 +90,22 @@ public class DefaultRouteServiceTest extends Assert {
         Map<String, List<String>> clients = restTemplate.getForObject(clientsRequestUri, Map.class);
 
         // Then
-        assertEquals(Collections.singletonList(client), clients.get("clients"));
+        assertEquals(singletonList(client), clients.get("clients"));
+    }
+
+    @Test
+    public void shouldReturnRoutes() throws URISyntaxException {
+        // Given
+        documentDriver.save(new SaveOperation(point1));
+        routeService.analyzeRoutes(client);
+        URI clientsRequestUri = new URI("http://localhost:15001/api/geofencing/routes/routes/" + client);
+
+        // When
+        @SuppressWarnings("unchecked")
+        Map<String, List<String>> routes = restTemplate.getForObject(clientsRequestUri, Map.class);
+
+        // Then
+        assertEquals(1, routes.get("routes").size());
     }
 
     @Test

@@ -37,6 +37,11 @@ public class GeofencingCloudlet extends FatJarRouter {
                 get("/clients").route().
                 beanRef("routeService", "clients").transform().groovy("[clients: request.body]");
 
+        rest("/api/geofencing/routes").
+                get("/routes/{client}").route().
+                transform().header("client").
+                beanRef("routeService", "routes").transform().groovy("[routes: request.body]");
+
         from("timer:analyzeRoutes?period=60000&delay={{camellabs.iot.cloudlet.geofencing.routes.analysis.delay:15000}}").
                 beanRef("routeService", "clients").split().body().parallelProcessing().
                 beanRef("routeService", "analyzeRoutes");
