@@ -17,6 +17,7 @@
         <apache-commons-lang3.version>3.3.2</apache-commons-lang3.version>
         <camel.version>2.15.2</camel.version>
         <camel-labs.version>${project.version}</camel-labs.version>
+        <embedmongo.version>1.46.4</embedmongo.version>
         <kura.version>1.0.3</kura.version>
         <logback.version>1.1.2</logback.version>
         <pi4j-version>1.0</pi4j-version>
@@ -77,6 +78,7 @@
             <dependency>
                 <groupId>de.flapdoodle.embed</groupId>
                 <artifactId>de.flapdoodle.embed.mongo</artifactId>
+                <version>${embedmongo.version}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
