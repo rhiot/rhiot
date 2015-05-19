@@ -23,6 +23,7 @@ import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +35,17 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.awaitility.Duration.ONE_MINUTE;
+import static java.lang.Boolean.TRUE;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
 import static java.util.Collections.singletonList;
+import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {GeofencingCloudlet.class, DefaultRouteServiceTest.class})
@@ -61,11 +63,27 @@ public class DefaultRouteServiceTest extends Assert {
     @Autowired
     DocumentDriver documentDriver;
 
+    static int restPort = findAvailableTcpPort();
+
+    String restApi = "http://localhost:" + restPort + "/api/geofencing/";
+
     String client = "client";
 
     GpsCoordinates point1 = new GpsCoordinates(null, client, "clientId", new Date(), TEN, TEN);
     GpsCoordinates point2 = new GpsCoordinates(null, client, "clientId", new Date(), TEN.add(ONE), TEN.add(ONE));
     GpsCoordinates point3 = new GpsCoordinates(null, client, "clientId", new DateTime(point2.getTimestamp()).plusMinutes(6).toDate(), TEN.add(ONE), TEN.add(ONE));
+
+    @BeforeClass
+    public static void beforeClass() {
+        System.setProperty("server.port", findAvailableTcpPort() + "");
+        System.setProperty("camel.labs.iot.cloudlet.rest.port", restPort + "");
+
+        int mongodbPort = findAvailableTcpPort();
+        System.setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.embedded.port", mongodbPort + "");
+        System.setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.springbootconfig", TRUE.toString());
+        System.setProperty("spring.data.mongodb.port", mongodbPort + "");
+    }
+
 
     @Before
     public void before() {
@@ -83,7 +101,7 @@ public class DefaultRouteServiceTest extends Assert {
     public void shouldReturnClients() throws URISyntaxException {
         // Given
         documentDriver.save(new SaveOperation(point1));
-        URI clientsRequestUri = new URI("http://localhost:15001/api/geofencing/routes/clients");
+        URI clientsRequestUri = new URI(restApi + "routes/clients");
 
         // When
         @SuppressWarnings("unchecked")
@@ -98,7 +116,7 @@ public class DefaultRouteServiceTest extends Assert {
         // Given
         documentDriver.save(new SaveOperation(point1));
         routeService.analyzeRoutes(client);
-        URI clientsRequestUri = new URI("http://localhost:15001/api/geofencing/routes/routes/" + client);
+        URI clientsRequestUri = new URI(restApi + "routes/routes/" + client);
 
         // When
         @SuppressWarnings("unchecked")
