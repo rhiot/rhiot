@@ -50,6 +50,6 @@ public class LSM303Value {
     }
 
     public String toString() {
-        return "[x= " + x + " , y= " + y + ", z= " + z + "]";
+        return "[" + x + "," + y + "," + z + "]";
     }
 }

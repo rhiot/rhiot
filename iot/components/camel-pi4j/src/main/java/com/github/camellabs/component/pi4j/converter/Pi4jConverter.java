@@ -18,6 +18,9 @@ package com.github.camellabs.component.pi4j.converter;
 
 import static com.pi4j.io.gpio.PinState.getState;
 
+import java.nio.ByteBuffer;
+
+import com.github.camellabs.component.pi4j.i2c.driver.LSM303Value;
 import com.pi4j.io.gpio.PinState;
 
 import org.apache.camel.Converter;
@@ -53,4 +56,28 @@ public final class Pi4jConverter {
         return string.split(",");
     }
 
+    @Converter
+    public static byte[] LSM303ValuetoArray(LSM303Value value) {
+
+        ByteBuffer ret = ByteBuffer.allocate(3 * 4);
+
+        ret.putInt(value.getX());
+        ret.putInt(value.getY());
+        ret.putInt(value.getZ());
+
+        return ret.array();
+    }
+
+    @Converter
+    public static LSM303Value intArraytoLSM303Value(byte[] value) {
+        LSM303Value ret = new LSM303Value();
+
+        ByteBuffer b = ByteBuffer.wrap(value);
+
+        ret.setX(b.getInt());
+        ret.setY(b.getInt());
+        ret.setZ(b.getInt());
+
+        return ret;
+    }
 }
