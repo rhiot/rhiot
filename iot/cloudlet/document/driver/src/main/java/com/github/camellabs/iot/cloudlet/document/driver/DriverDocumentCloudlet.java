@@ -26,14 +26,12 @@ import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.IMongodConfig;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
-import org.apache.camel.component.swagger.DefaultCamelSwaggerServlet;
 import org.apache.camel.spring.boot.FatJarRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -101,22 +99,6 @@ public class DriverDocumentCloudlet extends FatJarRouter {
     @Bean
     MongoDbMvcEndpoint mongoDbMvcEndpoint(MongoDbEndpoint mongoDbEndpoint) {
         return new MongoDbMvcEndpoint(mongoDbEndpoint);
-    }
-
-    @Bean
-    ServletRegistrationBean swaggerServlet(@Value("${server.port:15000}") int serverPort, @Value("${camel.labs.iot.cloudlet.rest.port:15001}") int restPort) {
-        ServletRegistrationBean swaggerServlet = new ServletRegistrationBean();
-        swaggerServlet.setName("ApiDeclarationServlet");
-        swaggerServlet.setServlet(new DefaultCamelSwaggerServlet());
-        swaggerServlet.addInitParameter("base.path", String.format("http://localhost:%d/api", restPort));
-        swaggerServlet.addInitParameter("api.path", String.format("http://localhost:%d/api/contract", serverPort));
-        swaggerServlet.addInitParameter("api.version", "1.2.3");
-        swaggerServlet.addInitParameter("api.title", "User Services");
-        swaggerServlet.addInitParameter("api.description", "Camel Rest Example with Swagger that provides an User REST service");
-        swaggerServlet.addInitParameter("cors", "true");
-        swaggerServlet.setLoadOnStartup(2);
-        swaggerServlet.addUrlMappings("/api/contract/*");
-        return swaggerServlet;
     }
 
     @Bean
