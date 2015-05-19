@@ -24,14 +24,9 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
-        <!-- Utils -->
         <dependency>
             <groupId>com.github.camel-labs</groupId>
             <artifactId>camel-labs-iot-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
         </dependency>
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
@@ -69,12 +64,6 @@
             <groupId>org.jolokia</groupId>
             <artifactId>jolokia-core</artifactId>
         </dependency>
-
-        <!-- SQL cross store -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
@@ -92,7 +81,6 @@
         <dependency>
             <groupId>com.github.camel-labs</groupId>
             <artifactId>camel-labs-iot-cloudlet-document-sdk</artifactId>
-            <version>0.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
