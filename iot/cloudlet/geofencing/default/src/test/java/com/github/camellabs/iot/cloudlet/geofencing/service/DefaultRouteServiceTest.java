@@ -30,9 +30,14 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.awaitility.Duration.ONE_MINUTE;
@@ -43,6 +48,8 @@ import static java.math.BigDecimal.TEN;
 @SpringApplicationConfiguration(classes = {GeofencingCloudlet.class, DefaultRouteServiceTest.class})
 @IntegrationTest({"camel.labs.iot.cloudlet.document.driver.mongodb.embedded=true"})
 public class DefaultRouteServiceTest extends Assert {
+
+    RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
     RouteService routeService;
@@ -70,10 +77,17 @@ public class DefaultRouteServiceTest extends Assert {
     }
 
     @Test
-    public void shouldReturnClients() {
+    public void shouldReturnClients() throws URISyntaxException {
+        // Given
         documentDriver.save(new SaveOperation(point1));
-        assertEquals(1, routeService.clients().size());
-        assertEquals(Collections.singletonList(client), routeService.clients());
+        URI clientsRequestUri = new URI("http://localhost:15001/api/geofencing/routes/clients");
+
+        // When
+        @SuppressWarnings("unchecked")
+        Map<String, List<String>> clients = restTemplate.getForObject(clientsRequestUri, Map.class);
+
+        // Then
+        assertEquals(Collections.singletonList(client), clients.get("clients"));
     }
 
     @Test
