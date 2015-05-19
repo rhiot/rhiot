@@ -31,6 +31,13 @@ import java.util.List;
 @ComponentScan("com.github.camellabs.iot.cloudlet")
 public class GeofencingCloudlet extends FatJarRouter {
 
+    @Override
+    public void configure() throws Exception {
+        from("timer:analyzeRoutes?period=60000&delay={{camellabs.iot.cloudlet.geofencing.routes.analysis.delay:15000}}").
+                beanRef("routeService", "clients").split().body().parallelProcessing().
+                beanRef("routeService", "analyzeRoutes");
+    }
+
     @Bean
     public CustomConversions customConversions() throws Exception {
         List<Converter<?, ?>> converterList = new ArrayList<Converter<?, ?>>();

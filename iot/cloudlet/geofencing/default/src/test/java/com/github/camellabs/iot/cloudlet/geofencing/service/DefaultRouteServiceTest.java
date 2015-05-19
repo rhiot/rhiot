@@ -34,7 +34,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Collections;
 import java.util.Date;
 
-import static com.github.camellabs.iot.cloudlet.document.sdk.Pojos.pojoClassToCollection;
+import static com.jayway.awaitility.Awaitility.await;
+import static com.jayway.awaitility.Duration.ONE_MINUTE;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
 
@@ -111,6 +112,18 @@ public class DefaultRouteServiceTest extends Assert {
         assertEquals(3, routeService.analyzeRoutes(client));
 
         assertEquals(2, routeService.routes(client).size());
+    }
+
+    @Test
+    public void shouldTriggerRouteAnalysisTimer() {
+        // Given
+        documentDriver.save(new SaveOperation(point1));
+
+        // When
+        await().atMost(ONE_MINUTE).until(() -> !routeService.routes(client).isEmpty());
+
+        // Then
+        assertEquals(1, routeService.routes(client).size());
     }
 
 }

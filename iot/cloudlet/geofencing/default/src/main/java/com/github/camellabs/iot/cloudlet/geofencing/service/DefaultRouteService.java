@@ -38,7 +38,7 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-@Component
+@Component("routeService")
 public class DefaultRouteService implements RouteService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRouteService.class);
