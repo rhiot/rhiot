@@ -107,6 +107,7 @@ public class MCP23017LCD extends I2CProducer {
     private int displayMode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
     private int displayControl = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;
     private MCP23017LCDColor color = MCP23017LCDColor.WHITE;
+    private String startupText = "Ready ";
 
     private boolean clearOnEachMessage = true;
 
@@ -176,9 +177,11 @@ public class MCP23017LCD extends I2CProducer {
         internalWrite(LCD_RETURNHOME);
 
         setColor(color);
+        writeTextToDevice(this.startupText);
     }
 
     protected void doStop() throws Exception {
+        writeTextToDevice("");
         portA = 0xC0; // Turn off LEDs on the way out
         portB = 0x01;
         sleep(2);
@@ -211,6 +214,10 @@ public class MCP23017LCD extends I2CProducer {
 
     public MCP23017LCDColor getColor() {
         return color;
+    }
+
+    public String getStartupText() {
+        return startupText;
     }
 
     private void home() throws IOException {
@@ -364,6 +371,10 @@ public class MCP23017LCD extends I2CProducer {
             displayControl &= ~LCD_DISPLAYON;
             internalWrite(LCD_DISPLAYCONTROL | displayControl);
         }
+    }
+
+    public void setStartupText(String startupText) {
+        this.startupText = startupText;
     }
 
     private void setText(int row, String string) throws IOException {
