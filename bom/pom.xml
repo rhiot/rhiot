@@ -52,6 +52,12 @@
 
             <dependency>
                 <groupId>com.github.camel-labs</groupId>
+                <artifactId>camel-labs-iot-cloudlet-document-sdk</artifactId>
+                <version>${camel-labs.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.camel-labs</groupId>
                 <artifactId>camel-labs-iot-utils</artifactId>
                 <version>${camel-labs.version}</version>
             </dependency>
