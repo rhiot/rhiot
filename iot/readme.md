@@ -311,15 +311,20 @@ Plug an button on GPIO 1, and LED on GPIO 2 (with Resistor) and code a route lik
 | `bufferSize`         |  `-1`                     |                                                           |
 | `driver`             |                           | cf available i2c driver                                   |
 
+i2c component is realy simplist, for consumer endpoint you can just read byte or buffer byte,
+for producer one you can 
+
+for smarter device, you nust implement an driver 
+
 ###### i2c driver
 
-| Driver            | Feature                                            |
-|-------------------|----------------------------------------------------|
-| bmp180            | Temp and Pressure sensor   (http://www.adafruit.com/products/1603)                        |
-| tsl2561           | Light sensor            (http://www.adafruit.com/products/439)                           |
-| lsm303-accel      | Accelerometer sensor    (http://www.adafruit.com/products/1120)                         |
-| lsm303-magne      | Magnetometer sensor     (http://www.adafruit.com/products/1120)                          |
-| mcp23017-lcd      | LCD 2x16 char           (http://www.adafruit.com/products/1109)                           |
+| Driver            | Feature                                                            |
+|-------------------|--------------------------------------------------------------------|
+| bmp180            | Temp and Pressure sensor   (http://www.adafruit.com/products/1603) |
+| tsl2561           | Light sensor            (http://www.adafruit.com/products/439)     |
+| lsm303-accel      | Accelerometer sensor    (http://www.adafruit.com/products/1120)    |
+| lsm303-magne      | Magnetometer sensor     (http://www.adafruit.com/products/1120)    |
+| mcp23017-lcd      | LCD 2x16 char           (http://www.adafruit.com/products/1109)    |
 
 
 ---
@@ -403,3 +408,4 @@ Here is the bunch of useful resources regarding Camel IoT project:
 - [IoT gateway dream team - Eclipse Kura and Apache Camel](https://www.youtube.com/watch?v=mli5c-oTN1U) - video from the Henryk Konsek talk for Eclipse IoT Virtual Meetup (2015)
 - [Apache Camel & RaspberryPi PoC w/ GPIO & LED & Button](http://gautric.github.io/blog/2015/04/03/apache-camel-raspberrypi-integration.html) - Greg's blog post (video included) (April 2015) 
 - [Using Camel & Tinkerforge in Jboss Fuse](https://www.youtube.com/watch?v=J1hN9NLLbro) - Interview with Geert, includes live demo of Camel loadbalancer via RGB Led Strip (October 2014)
+- [Camel IoT Labs i2c gpio mqtt lcd](http://gautric.github.io/blog/2015/05/20/camel-iot-labs-i2c-gpio-mqtt-lcd.html) - Greg's blog post (video included) (may 2015) 
