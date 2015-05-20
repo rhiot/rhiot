@@ -293,6 +293,35 @@ Plug an button on GPIO 1, and LED on GPIO 2 (with Resistor) and code a route lik
     from("pi4j-gpio://1?mode=DIGITAL_INPUT&state=HIGH").id("switch-led")
     .to("pi4j-gpio://2?&action=TOGGLE");
 
+
+#### URI format for I2C
+
+    pi4j-i2c://busId/deviceId[?options]
+
+###### Optional URI Parameters
+
+| Parameter            | Default value             | Description                                               |
+|----------------------|---------------------------|-----------------------------------------------------------|
+| `busId`              |                           | i2c bus                                                   |
+| `deviceId`           |                           | i2c device                                                |
+| `address`            |  `0x00`                   | address to read                                           |
+| `readAction`         |                           | READ, READ_ADDR, READ_BUFFER, READ_ADDR_BUFFER            |
+| `size`               |  `-1`                     |                                                           |
+| `offset`             |  `-1`                     |                                                           |
+| `bufferSize`         |  `-1`                     |                                                           |
+| `driver`             |                           | cf available i2c driver                                   |
+
+###### i2c driver
+
+| Driver            | Feature                                            |
+|-------------------|----------------------------------------------------|
+| bmp180            | Temp and Pressure sensor   (http://www.adafruit.com/products/1603)                        |
+| tsl2561           | Light sensor            (http://www.adafruit.com/products/439)                           |
+| lsm303-accel      | Accelerometer sensor    (http://www.adafruit.com/products/1120)                         |
+| lsm303-magne      | Magnetometer sensor     (http://www.adafruit.com/products/1120)                          |
+| mcp23017-lcd      | LCD 2x16 char           (http://www.adafruit.com/products/1109)                           |
+
+
 ---
 
 ### Camel PubNub component
