@@ -57,19 +57,19 @@ public class I2CEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "")
     private int deviceId;
 
-    @UriParam(defaultValue = "")
-    private int address;
+    @UriParam(defaultValue = "0x00")
+    private int address = 0x00;
 
     @UriParam(defaultValue = "")
     private I2CReadAction readAction;
 
-    @UriParam(defaultValue = "")
+    @UriParam(defaultValue = "-1")
     private int size = -1;
 
-    @UriParam(defaultValue = "")
+    @UriParam(defaultValue = "-1")
     private int offset = -1;
 
-    @UriParam(defaultValue = "")
+    @UriParam(defaultValue = "-1")
     private int bufferSize = -1;
 
     @UriParam(defaultValue = "")
