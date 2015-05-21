@@ -28,7 +28,6 @@
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
-        <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-lifecycle-mapping.version>1.0.0</maven-lifecycle-mapping.version>
     </properties>
 
@@ -152,19 +151,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${maven-source-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
