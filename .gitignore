@@ -22,7 +22,3 @@ soapui-errors.log
 # These are needed solely to make Eclipse stop whining.
 /.settings
 /.project
-
-# Hawt.io
-
-node/
