@@ -32,24 +32,26 @@ import org.slf4j.LoggerFactory;
 /**
  * Code from Marcus Hirt, 2015, Code From http://hirt.se/blog/?p=652
  */
-public class BMP180Consumer extends I2CConsumer {
+public final class BMP180Consumer extends I2CConsumer {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(BMP180Consumer.class);
 
     // Calibration data
     private static final int CALIBRATION_START = 0xAA;
+
     private static final int CALIBRATION_END = 0xBF;
+    private final static short BMP085_CONTROL = 0xF4;
+    private final static short BMP085_TEMPDATA = 0xF6;
+    private final static short BMP085_PRESSUREDATA = 0xF6;
+    private final static byte BMP085_READTEMPCMD = 0x2E;
 
-    private final static short BMP180_CONTROL = 0xF4;
-    private final static short BMP180_TEMPDATA = 0xF6;
-    private final static short BMP180_PRESSUREDATA = 0xF6;
-    private final static byte BMP180_READTEMPCMD = 0x2E;
-    private final static byte BMP180_READPRESSURECMD = 0x34;
+    private final static byte BMP085_READPRESSURECMD = 0x34;
 
-    private BMP180OperatingMode operatingMode = BMP180OperatingMode.STANDARD;
+    private BMP180OperatingMode mode = BMP180OperatingMode.STANDARD;
 
     // Calibration variables
     private short AC1;
+
     private short AC2;
     private short AC3;
     private int AC4;
@@ -64,92 +66,6 @@ public class BMP180Consumer extends I2CConsumer {
         super(endpoint, processor, device);
     }
 
-    /**
-     * Returns the temperature in degrees Celcius.
-     * 
-     * @return the temperature in degrees Celcius.
-     * @throws IOException if there was communication problem
-     */
-    private float readTemperature() throws IOException {
-        int UT = readRawTemp();
-        int X1 = ((UT - AC6) * AC5) >> 15;
-        int X2 = (MC << 11) / (X1 + MD);
-        int B5 = X1 + X2;
-        return ((B5 + 8) >> 4) / 10.0f;
-    }
-
-    /**
-     * Returns the pressure in Pascal.
-     * 
-     * @return the pressure in Pascal.
-     * @throws IOException if there was communication problem
-     */
-    private int readPressure() throws IOException {
-        long p = 0;
-        int UT = readRawTemp();
-        int UP = readRawPressure();
-
-        int X1 = ((UT - AC6) * AC5) >> 15;
-        int X2 = (MC << 11) / (X1 + MD);
-        int B5 = X1 + X2;
-
-        int B6 = B5 - 4000;
-        X1 = (B2 * ((B6 * B6) >> 12)) >> 11;
-        X2 = (AC2 * B6) >> 11;
-        int X3 = X1 + X2;
-        int B3 = (((AC1 * 4 + X3) << operatingMode.getOverSamplingSetting()) + 2) / 4;
-
-        X1 = (AC3 * B6) >> 13;
-        X2 = (B1 * ((B6 * B6) >> 12)) >> 16;
-        X3 = ((X1 + X2) + 2) >> 2;
-        long B4 = (AC4 * ((long)(X3 + 32768))) >> 15;
-        long B7 = ((long)UP - B3) * (50000 >> operatingMode.getOverSamplingSetting());
-
-        if (B7 < 0x80000000) {
-            p = (B7 * 2) / B4;
-        } else {
-            p = (B7 / B4) * 2;
-        }
-
-        X1 = (int)((p >> 8) * (p >> 8));
-        X1 = (X1 * 3038) >> 16;
-        X2 = (int)(-7357 * p) >> 16;
-        p = p + ((X1 + X2 + 3791) >> 4);
-        return (int)p;
-    }
-
-    /**
-     * Returns the raw temperature sensor data. Mostly for debugging.
-     * 
-     * @return the raw temperature sensor data.
-     * @throws IOException if there was a communication problem
-     */
-    private int readRawTemp() throws IOException {
-        write(BMP180_CONTROL, BMP180_READTEMPCMD);
-        sleep(50);
-        return readU16BigEndian(BMP180_TEMPDATA);
-    }
-
-    /**
-     * Returns the raw pressure sensor data. Mostly for debugging.
-     * 
-     * @return the raw pressure sensor data.
-     * @throws IOException if there was a communication problem
-     */
-    private int readRawPressure() throws IOException {
-        write(BMP180_CONTROL, BMP180_READPRESSURECMD);
-        sleep(operatingMode.getWaitTime());
-        return readU3(BMP180_PRESSUREDATA) >> (8 - operatingMode.getOverSamplingSetting());
-    }
-
-    public BMP180OperatingMode getOperatingMode() {
-        return operatingMode;
-    }
-
-    public void setOperatingMode(BMP180OperatingMode operatingMode) {
-        this.operatingMode = operatingMode;
-    }
-
     @Override
     protected void createBody(Exchange exchange) throws IOException {
         BMP180Value body = new BMP180Value();
@@ -159,19 +75,6 @@ public class BMP180Consumer extends I2CConsumer {
         LOG.debug("" + body);
 
         exchange.getIn().setBody(body);
-    }
-
-    /**
-     * Read 3 bytes unsigned.
-     */
-    private int readU3(int address) throws IOException {
-        // TODO: Check if there is any potential performance benefit to reading
-        // them all at once into a byte array. It's probably translated to
-        // to consecutive byte reads anyways, so probably not.
-        int msb = read(address);
-        int lsb = read(address + 1);
-        int xlsb = read(address + 2);
-        return (msb << 16) + (lsb << 8) + xlsb;
     }
 
     protected void doStart() throws Exception {
@@ -196,8 +99,78 @@ public class BMP180Consumer extends I2CConsumer {
         MC = calibrationData.readShort();
         MD = calibrationData.readShort();
 
-        LOG.info("AC1:" + AC1 + ", AC2:" + AC2 + ", AC3:" + AC3 + ", AC4:" + AC4 + ", AC5:" + AC5 + ", AC6:" + AC6 + ", B1:" + B1 + ", B2:" + B2 + ", MC:" + MC + ", MD:" + MD);
-
+        LOG.debug(String.format("AC1:%d, AC2:%d, AC3:%d, AC4:%d, AC5:%d, AC6:%d, B1:%d, B2:%d, MC:%d, MD:%d", AC1, AC2, AC3, AC4, AC5, AC6, B1, B2, MC, MD));
     }
 
+    public BMP180OperatingMode getMode() {
+        return mode;
+    }
+
+    public int readPressure() throws IOException {
+        long p = 0;
+        int UT = readRawTemp();
+        int UP = readRawPressure();
+
+        int X1 = ((UT - AC6) * AC5) >> 15;
+        int X2 = (MC << 11) / (X1 + MD);
+        int B5 = X1 + X2;
+
+        int B6 = B5 - 4000;
+        X1 = (B2 * ((B6 * B6) >> 12)) >> 11;
+        X2 = (AC2 * B6) >> 11;
+        int X3 = X1 + X2;
+        int B3 = (((AC1 * 4 + X3) << mode.getOverSamplingSetting()) + 2) / 4;
+
+        X1 = (AC3 * B6) >> 13;
+        X2 = (B1 * ((B6 * B6) >> 12)) >> 16;
+        X3 = ((X1 + X2) + 2) >> 2;
+        long B4 = (AC4 * ((long)(X3 + 32768))) >> 15;
+        long B7 = ((long)UP - B3) * (50000 >> mode.getOverSamplingSetting());
+
+        if (B7 < 0x80000000) {
+            p = (B7 * 2) / B4;
+        } else {
+            p = (B7 / B4) * 2;
+        }
+
+        X1 = (int)((p >> 8) * (p >> 8));
+        X1 = (X1 * 3038) >> 16;
+        X2 = (int)(-7357 * p) >> 16;
+        p = p + ((X1 + X2 + 3791) >> 4);
+        return (int)p;
+    }
+
+    private int readRawPressure() throws IOException {
+        write(BMP085_CONTROL, BMP085_READPRESSURECMD);
+        sleep(mode.getWaitTime());
+        return readU3(BMP085_PRESSUREDATA) >> (8 - mode.getOverSamplingSetting());
+    }
+
+    private int readRawTemp() throws IOException {
+        write(BMP085_CONTROL, BMP085_READTEMPCMD);
+        sleep(50);
+        return readU16LittleEndian(BMP085_TEMPDATA);
+    }
+
+    private float readTemperature() throws IOException {
+        int UT = readRawTemp();
+        int X1 = ((UT - AC6) * AC5) >> 15;
+        int X2 = (MC << 11) / (X1 + MD);
+        int B5 = X1 + X2;
+        return ((B5 + 8) >> 4) / 10.0f;
+    }
+
+    private int readU3(int address) throws IOException {
+        // TODO: Check if there is any potential performance benefit to reading
+        // them all at once into a byte array. It's probably translated to
+        // to consecutive byte reads anyways, so probably not.
+        int msb = read(address);
+        int lsb = read(address + 1);
+        int xlsb = read(address + 2);
+        return (msb << 16) + (lsb << 8) + xlsb;
+    }
+
+    public void setMode(BMP180OperatingMode mode) {
+        this.mode = mode;
+    }
 }
