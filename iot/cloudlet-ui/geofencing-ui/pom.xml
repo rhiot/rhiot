@@ -43,7 +43,16 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>install wiredep event-stream gulp-load-plugins vinyl-map gulp-size URIjs gulp</arguments>
+                            <arguments>install gulp bower karma wiredep</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>bower install</id>
+                        <goals>
+                            <goal>bower</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
                         </configuration>
                     </execution>
                     <execution>
