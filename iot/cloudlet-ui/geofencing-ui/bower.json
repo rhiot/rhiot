@@ -1,0 +1,28 @@
+{
+  "name": "geofencing-ui",
+  "version": "0.0.0",
+  "keywords": [
+    "hawtio"
+  ],
+  "main": [
+    "dist/geofencing-ui.js",
+    "dist/geofencing-ui.css"
+  ],
+  "ignore": [
+    "dist/geofencing-ui-test.js",
+    "**/.*",
+    "node_modules",
+    "libs",
+    "plugins"
+  ],
+  "dependencies": {
+    "hawtio-core": "~2.0.0",
+    "hawtio-core-navigation": "~2.0.0",
+    "hawtio-utilities": "~2.0.0"
+  },
+  "devDependencies": {
+    "bootstrap": "~3.3.1",
+    "patternfly": "~1.1.2",
+    "hawtio-core-dts": "~2.0.0"
+  }
+}
