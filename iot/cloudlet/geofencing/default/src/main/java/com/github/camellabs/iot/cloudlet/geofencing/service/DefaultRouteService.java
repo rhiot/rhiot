@@ -21,6 +21,8 @@ import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.Route;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteGpsCoordinates;
+import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
+import com.google.maps.model.LatLng;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +32,17 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.camellabs.iot.cloudlet.document.driver.spi.Pojos.collectionName;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.util.Assert.isTrue;
 
 @Component("routeService")
 public class DefaultRouteService implements RouteService {
@@ -81,7 +87,7 @@ public class DefaultRouteService implements RouteService {
           }
 
           lastRouteCoordinates = new RouteGpsCoordinates(null, routeId, coordinates.getId(), client);
-          mongoTemplate.save(lastRouteCoordinates);
+          mongoTemplate.save(lastRouteCoordinates, collectionName(RouteGpsCoordinates.class));
           lastCoordinates = coordinates;
         }
         return coordinatesToAnalyze.size();
@@ -95,6 +101,19 @@ public class DefaultRouteService implements RouteService {
     @Override
     public List<Route> routes(String client) {
         return mongoTemplate.findAll(Route.class, Route.class.getSimpleName());
+    }
+
+    @Override
+    public URL renderRouteUrl(String routeId) {
+        isTrue(routeId != null, "Route ID can't be null.");
+
+        Query query = new Query().addCriteria(where("routeId").is(routeId));
+        List<ObjectId> coordinatesIds = mongoTemplate.find(query, RouteGpsCoordinates.class, collectionName(RouteGpsCoordinates.class)).
+                parallelStream().map(coordinates -> new ObjectId(coordinates.getCoordinatesId())).collect(toList());
+        query = new Query().addCriteria(where("_id").in(coordinatesIds));
+        List<LatLng> coordinatesToEncode = mongoTemplate.find(query, GpsCoordinates.class, collectionName(GpsCoordinates.class)).
+                parallelStream().map(coordinates -> new LatLng(coordinates.getLatitude().doubleValue(), coordinates.getLongitude().doubleValue())).collect(toList());
+        return StaticMaps.renderRouteUrl(coordinatesToEncode);
     }
 
     // Callbacks

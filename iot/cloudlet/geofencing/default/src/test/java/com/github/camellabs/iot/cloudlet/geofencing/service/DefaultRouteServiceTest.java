@@ -20,6 +20,10 @@ import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
 import com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
+import com.github.camellabs.iot.cloudlet.geofencing.domain.Route;
+import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
+import com.google.maps.internal.PolylineEncoding;
+import com.google.maps.model.LatLng;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,8 +37,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -174,6 +180,30 @@ public class DefaultRouteServiceTest extends Assert {
 
         // Then
         assertEquals(1, routeService.routes(client).size());
+    }
+
+    @Test
+    public void shouldDrawRouteOnMap() throws URISyntaxException, MalformedURLException {
+        // Given
+        documentDriver.save(new SaveOperation(point1));
+        documentDriver.save(new SaveOperation(point2));
+        routeService.analyzeRoutes(client);
+        URI clientsRequestUri = new URI(restApi + "routes/routes/" + client);
+        @SuppressWarnings("unchecked")
+        Map<String, List<Map<String,String>>> routes = restTemplate.getForObject(clientsRequestUri, Map.class);
+        URI routeUrlRequest = new URI(restApi + "routes/routeUrl/" + routes.get("routes").get(0).get("id"));
+
+        // When
+        String routeUrl = restTemplate.getForObject(routeUrlRequest, Map.class).get("routeUrl").toString();
+
+        // Then
+        String encodedCoordinates = StaticMaps.extractEncodedPath(new URL(routeUrl));
+        List <LatLng> coordinates = PolylineEncoding.decode(encodedCoordinates);
+        assertEquals(coordinates.get(0).lat, point1.getLatitude().doubleValue(), 0.1);
+        assertEquals(coordinates.get(0).lng, point1.getLongitude().doubleValue(), 0.1);
+        assertEquals(coordinates.get(1).lat, point2.getLatitude().doubleValue(), 0.1);
+        assertEquals(coordinates.get(1).lng, point2.getLongitude().doubleValue(), 0.1);
+
     }
 
 }

@@ -18,6 +18,7 @@ package com.github.camellabs.iot.cloudlet.geofencing.service;
 
 import com.github.camellabs.iot.cloudlet.geofencing.domain.Route;
 
+import java.net.URL;
 import java.util.List;
 
 public interface RouteService {
@@ -27,5 +28,7 @@ public interface RouteService {
     List<String> clients();
 
     List<Route> routes(String client);
+
+    URL renderRouteUrl(String routeId);
 
 }
