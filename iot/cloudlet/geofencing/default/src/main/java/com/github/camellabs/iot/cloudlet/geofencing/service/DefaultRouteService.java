@@ -27,6 +27,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -53,11 +54,17 @@ public class DefaultRouteService implements RouteService {
 
     private final MongoTemplate mongoTemplate;
 
+    private final int routeAnalysisBatchSize;
+
     @Autowired
-    public DefaultRouteService(DocumentDriver documentDriver, MongoTemplate mongoTemplate) {
+    public DefaultRouteService(DocumentDriver documentDriver, MongoTemplate mongoTemplate,
+                               @Value("${camel.labs.iot.cloudlet.geofencing.routeAnalysis.batch.size:20}") int routeAnalysisBatchSize) {
         this.documentDriver = documentDriver;
         this.mongoTemplate = mongoTemplate;
+        this.routeAnalysisBatchSize = routeAnalysisBatchSize;
     }
+
+    // Overridden
 
     @Override
     public int analyzeRoutes(String client) {
@@ -120,7 +127,7 @@ public class DefaultRouteService implements RouteService {
 
     protected RouteGpsCoordinates findLastRouteCoordinates(String client) {
         Query lastRouteCoordinatesQuery = new Query().addCriteria(where("client").is(client)).with(new Sort(DESC, "_id")).limit(1);
-        return mongoTemplate.findOne(lastRouteCoordinatesQuery, RouteGpsCoordinates.class);
+        return mongoTemplate.findOne(lastRouteCoordinatesQuery, RouteGpsCoordinates.class, collectionName(RouteGpsCoordinates.class));
     }
 
 }
