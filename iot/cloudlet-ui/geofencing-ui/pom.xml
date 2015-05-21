@@ -43,7 +43,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>install --save-dev gulp</arguments>
+                            <arguments>install wiredep gulp</arguments>
                         </configuration>
                     </execution>
                     <execution>
