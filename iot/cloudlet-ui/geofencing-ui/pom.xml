@@ -43,7 +43,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>install wiredep event-stream gulp-load-plugins vinyl-map gulp</arguments>
+                            <arguments>install wiredep event-stream gulp-load-plugins vinyl-map gulp-size gulp</arguments>
                         </configuration>
                     </execution>
                     <execution>
