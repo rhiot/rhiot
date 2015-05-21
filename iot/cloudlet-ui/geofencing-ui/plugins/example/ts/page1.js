@@ -21,8 +21,8 @@ var Example;
             $http.get('http://localhost:15001/api/geofencing/routes/routes/' + $scope.selectedOption.id).success(function (data, status, headers, config) {
                 $scope.routes = data.routes.map(function (val) {
                     return {
-                        name: val,
-                        id: val
+                        name: val.created,
+                        id: val.id
                     };
                 });
                 if (data.routes.length > 0) {

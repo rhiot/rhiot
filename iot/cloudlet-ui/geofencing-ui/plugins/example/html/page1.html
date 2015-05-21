@@ -8,9 +8,11 @@
         <p ng-show="clients.length == 0">No clients in the database.</p>
 
         <select ng-show="routes.length > 0" data-ng-options="o.name for o in routes"
-                data-ng-model="selectedRoute"></select>
+                data-ng-model="selectedRoute" ng-change="routeSelected()"></select>
 
-        <p ng-show="selectedRoute">{{selectedRoute}}</p>
+        <p ng-show="selectedRoute">
+            <img ng-src="{{routeUrl}}" />
+        </p>
         <p ng-show="clients.length > 0 && routes.length == 0">No routes for the given client.</p>
     </div>
 </div>

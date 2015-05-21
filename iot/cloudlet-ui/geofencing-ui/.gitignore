@@ -2,3 +2,5 @@ dist/
 libs/
 node/
 node_modules/
+**/ts/*.js
+**/ts/*.js.map
