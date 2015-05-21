@@ -32,7 +32,7 @@ module Example {
             }
           }).
           error(function(data, status, headers, config) {
-            $scope.clients = 'Connection error';
+            $scope.flash = 'Cannot connect to the geofencing service.';
           });
     };
     $http.get('http://localhost:15001/api/geofencing/routes/clients').
@@ -49,7 +49,7 @@ module Example {
           }
         }).
         error(function(data, status, headers, config) {
-          $scope.clients = 'Connection error';
+          $scope.flash = 'Cannot connect to the geofencing service.';
         });
   }]);
 

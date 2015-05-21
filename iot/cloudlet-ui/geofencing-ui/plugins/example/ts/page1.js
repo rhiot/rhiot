@@ -29,7 +29,7 @@ var Example;
                     $scope.selectedRoute = $scope.routes[0];
                 }
             }).error(function (data, status, headers, config) {
-                $scope.clients = 'Connection error';
+                $scope.flash = 'Cannot connect to the geofencing service.';
             });
         };
         $http.get('http://localhost:15001/api/geofencing/routes/clients').success(function (data, status, headers, config) {
@@ -44,7 +44,7 @@ var Example;
                 $scope.clientSelected();
             }
         }).error(function (data, status, headers, config) {
-            $scope.clients = 'Connection error';
+            $scope.flash = 'Cannot connect to the geofencing service.';
         });
     }]);
 })(Example || (Example = {}));
