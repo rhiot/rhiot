@@ -38,6 +38,15 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>install gulp</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install gulp</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>gulp build</id>
                         <goals>
                             <goal>gulp</goal>
