@@ -314,7 +314,7 @@ Plug an button on GPIO 1, and LED on GPIO 2 (with Resistor) and code a route lik
 i2c component is realy simplist, for consumer endpoint you can just read byte or buffer byte,
 for producer one you can 
 
-for smarter device, you nust implement an driver 
+for smarter device, you must implement an driver 
 
 ###### i2c driver
 
