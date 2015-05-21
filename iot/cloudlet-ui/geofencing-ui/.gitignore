@@ -1,3 +1,4 @@
+dist/
+libs/
 node/
 node_modules/
-libs/
