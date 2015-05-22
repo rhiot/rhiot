@@ -12,6 +12,13 @@
     <artifactId>camel-labs-bom</artifactId>
     <packaging>pom</packaging>
 
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
     <properties>
         <activemq.version>5.11.1</activemq.version>
         <apache-commons-lang3.version>3.3.2</apache-commons-lang3.version>
@@ -24,7 +31,6 @@
         <pubnub.version>3.7.2</pubnub.version>
         <tinkerforge.version>2.1.4</tinkerforge.version>
 
-        <apache-rat-plugin.version>0.11</apache-rat-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
@@ -182,36 +188,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.rat</groupId>
-                    <artifactId>apache-rat-plugin</artifactId>
-                    <version>${apache-rat-plugin.version}</version>
-                    <configuration>
-                        <licenses>
-                            <license
-                                    implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                                <licenseFamilyCategory>AL</licenseFamilyCategory>
-                                <licenseFamilyName>camel-labs</licenseFamilyName>
-                                <patterns>
-                                    <pattern>http://www.apache.org/licenses/LICENSE-2.0</pattern>
-                                </patterns>
-                            </license>
-                        </licenses>
-                        <licenseFamilies>
-                            <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-                                <familyName>camel-labs</familyName>
-                            </licenseFamily>
-                        </licenseFamilies>
-                        <excludes>
-                            <exclude>**/readme.md</exclude>
-                            <exclude>**/README.md</exclude>
-                        </excludes>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
     <profiles>
@@ -229,25 +205,6 @@
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>withRatCheck</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.rat</groupId>
-                        <artifactId>apache-rat-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>initialize</phase>
-                                <goals>
-                                    <goal>check</goal>
                                 </goals>
                             </execution>
                         </executions>

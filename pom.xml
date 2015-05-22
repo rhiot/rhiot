@@ -174,7 +174,8 @@
                         </licenseFamilies>
                         <excludes>
                             <exclude>build.out</exclude>
-                            <exclude>README.md</exclude>
+                            <exclude>**/readme.md</exclude>
+                            <exclude>**/README.md</exclude>
                             <exclude>global-groovy.log</exclude>
                             <exclude>soapui.log</exclude>
                             <exclude>soapui-errors.log</exclude>
