@@ -182,10 +182,19 @@
                             <exclude>.travis.yml</exclude>
                             <exclude>travis.sh</exclude>
                             <!-- Hawt.io plugins -->
-                            <exclude>dist/*</exclude>
-                            <exclude>node/*</exclude>
-                            <exclude>node_modules/*</exclude>
-                            <exclude>lib/*</exclude>
+                            <exclude>**/dist/**</exclude>
+                            <exclude>**/node/**</exclude>
+                            <exclude>**/node_modules/**</exclude>
+                            <exclude>**/libs/**</exclude>
+                            <exclude>**/.bowerrc</exclude>
+                            <exclude>**/bower.json</exclude>
+                            <exclude>**/package.json</exclude>
+                            <exclude>**/plugins/includes.js</exclude>
+                            <exclude>**/plugins/includes.js.map</exclude>
+                            <exclude>**/ts/*.js</exclude>
+                            <exclude>**/ts/*.js.map</exclude>
+                            <exclude>**/test-plugins/**/*.js</exclude>
+                            <exclude>**/test-plugins/**/*.js.map</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
