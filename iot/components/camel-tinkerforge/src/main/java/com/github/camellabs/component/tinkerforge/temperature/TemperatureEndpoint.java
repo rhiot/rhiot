@@ -19,13 +19,11 @@ package com.github.camellabs.component.tinkerforge.temperature;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 
 import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
 import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
 
-@UriEndpoint(scheme = "tinkerforge", title = "Tinkerforge", syntax = "tinkerforge:temperature/<uid>", consumerClass = TemperatureConsumer.class, label = "iot,tinkerforge,temperature")
 public class TemperatureEndpoint extends TinkerforgeEndpoint {
     @UriParam private String uid = "t1";
     @UriParam private String host = "localhost";
