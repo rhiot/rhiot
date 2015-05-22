@@ -16,13 +16,9 @@
  */
 package com.github.camellabs.component.tinkerforge;
 
-import java.net.URI;
 import java.util.Map;
 
-import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.DefaultComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,32 +42,41 @@ import com.github.camellabs.component.tinkerforge.temperature.TemperatureEndpoin
 public class TinkerforgeComponent extends DefaultComponent {
 	private static final transient Logger LOG = LoggerFactory.getLogger(TinkerforgeComponent.class);
 
-    protected Endpoint createEndpoint(String uri, String brickletType, Map<String, Object> parameters) throws Exception {
-    	LOG.info("TinkerforgeComponent: creating endpoint. brickletType: "+brickletType+", Parameters: "+parameters);
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+    	LOG.info("TinkerforgeComponent: creating endpoint. Uri: " + uri);
     	
-    	Endpoint endpoint;
+    	TinkerforgeURI tinkerforgeUri = new TinkerforgeURI(uri);
     	
-    	switch (brickletType) {
-            case "ambientlight" :   endpoint = new AmbientlightEndpoint(uri, this); break;
-            case "temperature" :    endpoint = new TemperatureEndpoint(uri, this); break;
-            case "lcd20x4" :        endpoint = new Lcd20x4Endpoint(uri, this); break;
-            case "humidity" :       endpoint = new HumidityEndpoint(uri, this); break;
-            case "io4" :            endpoint = new IO4Endpoint(uri, this); break;
-            case "io16" :           endpoint = new IO16Endpoint(uri, this); break;
-            case "distance" :       endpoint = new DistanceEndpoint(uri, this); break;
-            case "ledstrip" :       endpoint = new LedstripEndpoint(uri, this); break;
-            case "motion" :         endpoint = new MotionEndpoint(uri, this); break;
-            case "soundintensity" : endpoint = new SoundIntensityEndpoint(uri, this); break;
-            case "piezospeaker" :   endpoint = new PiezoSpeakerEndpoint(uri, this); break;
-            case "linearpoti" :     endpoint = new LinearPotentiometerEndpoint(uri, this); break;
-            case "rotarypoti" :     endpoint = new RotaryPotentiometerEndpoint(uri, this); break;
-            case "dualrelay" :      endpoint = new DualRelayEndpoint(uri, this); break;
-            case "solidstaterelay" :endpoint = new SolidStateRelayEndpoint(uri, this); break;
-            default:                throw new IllegalArgumentException("Unsupported BrickletType: "+brickletType);
+    	Endpoint endpoint = null;
+    	
+    	switch (tinkerforgeUri.getDeviceType()) {
+            case ambientlight :     endpoint = new AmbientlightEndpoint(uri, this); break;
+            case temperature :      endpoint = new TemperatureEndpoint(uri, this); break;
+            case lcd20x4 :          endpoint = new Lcd20x4Endpoint(uri, this); break;
+            case humidity :         endpoint = new HumidityEndpoint(uri, this); break;
+            case io4 :              endpoint = new IO4Endpoint(uri, this); break;
+            case io16 :             endpoint = new IO16Endpoint(uri, this); break;
+            case distance :         endpoint = new DistanceEndpoint(uri, this); break;
+            case ledstrip :         endpoint = new LedstripEndpoint(uri, this); break;
+            case motion :           endpoint = new MotionEndpoint(uri, this); break;
+            case soundintensity :   endpoint = new SoundIntensityEndpoint(uri, this); break;
+            case piezospeaker :     endpoint = new PiezoSpeakerEndpoint(uri, this); break;
+            case linearpoti :       endpoint = new LinearPotentiometerEndpoint(uri, this); break;
+            case rotarypoti :       endpoint = new RotaryPotentiometerEndpoint(uri, this); break;
+            case dualrelay :        endpoint = new DualRelayEndpoint(uri, this); break;
+            case solidstaterelay :  endpoint = new SolidStateRelayEndpoint(uri, this); break;
         }
         
-        setProperties(endpoint, parameters);
+        setProperties(endpoint, tinkerforgeUri, parameters);
 
         return endpoint;
+    }
+    
+    private void setProperties(Endpoint endpoint, TinkerforgeURI tinkerforgeUri, Map<String, Object> parameters) throws Exception {
+        if (tinkerforgeUri.getUid() != null)        parameters.put("uid", tinkerforgeUri.getUid());
+        if (tinkerforgeUri.getHost() != null)       parameters.put("host", tinkerforgeUri.getHost());
+        if (tinkerforgeUri.getPort() != null)       parameters.put("port", tinkerforgeUri.getPort());
+        //TODO: add credential properties to parameter map (The endpoints don't support this yet)
+        setProperties(endpoint, parameters);
     }
 }
