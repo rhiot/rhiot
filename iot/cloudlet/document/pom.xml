@@ -9,7 +9,7 @@
         <version>0.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>camel-labs-iot-cloudlet-document</artifactId>
+    <artifactId>camel-labs-iot-cloudlet-document-parent</artifactId>
     <packaging>pom</packaging>
 
     <licenses>
