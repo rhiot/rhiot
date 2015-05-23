@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>camel-labs-iot-cloudlet-geofencing</artifactId>
-    <packaging>war</packaging>
 
     <licenses>
         <license>
@@ -52,10 +51,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.jolokia</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
