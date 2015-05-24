@@ -16,9 +16,8 @@
 var Example;
 (function (Example) {
     Example.Page1Controller = Example._module.controller("Example.Page1Controller", ["$scope", "$http", function ($scope, $http) {
-        $scope.target = "World!";
         $scope.clientSelected = function () {
-            $http.get('http://localhost:15001/api/geofencing/routes/routes/' + $scope.selectedOption.id).success(function (data, status, headers, config) {
+            $http.get(window.location.host + '/api/geofencing/routes/routes/' + $scope.selectedOption.id).success(function (data, status, headers, config) {
                 $scope.routes = data.routes.map(function (val) {
                     return {
                         name: val.created,
@@ -32,7 +31,14 @@ var Example;
                 $scope.flash = 'Cannot connect to the geofencing service.';
             });
         };
-        $http.get('http://localhost:15001/api/geofencing/routes/clients').success(function (data, status, headers, config) {
+        $scope.routeSelected = function () {
+            $http.get(window.location.host + '/api/geofencing/routes/routeUrl/' + $scope.selectedRoute.id).success(function (data, status, headers, config) {
+                $scope.routeUrl = data.url;
+            }).error(function (data, status, headers, config) {
+                $scope.flash = 'Cannot connect to the geofencing service.';
+            });
+        };
+        $http.get(window.location.host + '/api/geofencing/routes/clients').success(function (data, status, headers, config) {
             $scope.clients = data.clients.map(function (val) {
                 return {
                     name: val,
