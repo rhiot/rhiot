@@ -1,0 +1,29 @@
+{
+  "name": "cloudlet-hawtio",
+  "version": "0.0.0",
+  "keywords": [
+    "hawtio"
+  ],
+  "main": [
+    "dist/hawtio.js",
+    "dist/hawtio.css"
+  ],
+  "ignore": [
+    "dist/hawtio-test.js",
+    "**/.*",
+    "node_modules",
+    "libs",
+    "plugins"
+  ],
+  "dependencies": {
+    "hawtio-core": "~2.0.0",
+    "hawtio-core-navigation": "~2.0.0",
+    "hawtio-utilities": "~2.0.0",
+    "angular-utils-pagination": "~0.7.0"
+  },
+  "devDependencies": {
+    "bootstrap": "~3.3.1",
+    "patternfly": "~1.1.2",
+    "hawtio-core-dts": "~2.0.0"
+  }
+}

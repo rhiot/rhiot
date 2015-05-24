@@ -1,0 +1,75 @@
+<div class="row">
+    <div class="col-md-2" ng-controller="ListController">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>
+                         <h3>Collections</h3>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="c in collections">
+                    <td ng-click="select(c)" ng-class="isSelected(c) ? 'active' : ''">{{ c }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-10" ng-controller="CriteriaController">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h2 class="panel-title pull-left">Search criteria</h2>
+                <div class="btn-group pull-right">
+                  <button type="button" class="btn btn-default" ng-click="toggleViewMode()">
+                      <span class="glyphicon glyphicon-eye-open"></span>
+                  </button>                                   
+                </div>
+            </div>
+            <div class="panel-body search-criteria">
+                <div ng-repeat="c in queryConditions" ng-form="criteriaForm">
+                    <div class="row">                
+                        <div class="col-md-4">
+                            <input placeholder="search key" name="key" type="text" ng-model="c.key" required />
+                        </div> 
+                        <div class="col-md-2">
+                            <select ng-model="c.operator" required>
+                                <option ng-repeat="op in operators">{{ op }}</option>
+                            </select>
+                        </div> 
+                        <div class="col-md-4">
+                            <input placeholder="search value" name="value" type="text" ng-model="c.value" required />
+                        </div>  
+                        <div class="col-md-1" ng-show="$index < (queryConditions.length-1)">
+                            <button ng-click="removeCondition($index)" ng-disabled="criteriaForm.$invalid">Remove</button>
+                        </div>                                      
+                        <div class="col-md-1" ng-class="{'col-md-offset-1': $index >= (queryConditions.length-1)}">
+                            <button ng-click="addCondition()" ng-disabled="criteriaForm.$invalid">Add</button>
+                        </div>    
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <button ng-click="search()">Search</button>
+                </div>                                                                                
+            </div>                
+        </div>                
+    </div>
+    <div class="col-md-10  col-md-offset-2" ng-controller="DetailsController">
+        <div ng-show="!isTableView" dir-paginate="d in documents | itemsPerPage: query.size" total-items="total" current-page="pagination.current">
+           <pre>{{ d | json }}</pre> 
+        </div>
+        <div ng-show="isTableView" class="table-responsive">
+           <table class="table">
+               <thead>
+                   <td ng-repeat="h in headers">{{ h }}</td>
+               </thead>
+               <tbody>
+                   <tr dir-paginate="d in documents | itemsPerPage: query.size" total-items="total" current-page="pagination.current">
+                       <td ng-repeat="h in headers"> {{ d | getProperty: h }} </td>
+                   </tr>
+               </tbody>
+           </table>
+        </div>    
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" ng-show="documents"></dir-pagination-controls>    
+    </div>      
+</div>
+

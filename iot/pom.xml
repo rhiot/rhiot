@@ -25,6 +25,7 @@
         <module>components</module>
         <module>gateway</module>
         <module>cloudlet</module>
+        <module>cloudlet-hawtio</module>
         <module>cloudlet-ui</module>
     </modules>
 
