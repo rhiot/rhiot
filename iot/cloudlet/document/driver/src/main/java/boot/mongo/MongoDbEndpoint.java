@@ -25,6 +25,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class MongoDbEndpoint extends AbstractEndpoint<DBObject> {
 
@@ -41,6 +42,13 @@ public class MongoDbEndpoint extends AbstractEndpoint<DBObject> {
 
         CommandResult serverStatus = mongo.executeCommand("{ serverStatus: 1 }");
         result.put("serverStatus", serverStatus);
+
+        List<String> collectionNames = new LinkedList<>();
+        Set<String> collectionNamesSet = mongo.getDb().getCollectionNames();
+        for (String name : collectionNamesSet) {
+            collectionNames.add(name);
+        }
+        result.put("collections", collectionNames);
 
         List<DBObject> slowQueries = new LinkedList<>();
         DBCursor slowQueriesCursor = mongo.getDb().getCollection("system.profile").find();
