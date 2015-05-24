@@ -165,10 +165,6 @@
                             <goals>
                                 <goal>npm</goal>
                             </goals>
-                            <!-- Optional configuration which provides for running any npm command -->
-                            <configuration>
-                                <arguments>install</arguments>
-                            </configuration>
                         </execution>
                         <execution>
                             <id>bower install</id>
