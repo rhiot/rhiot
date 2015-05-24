@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.github.camel-labs</groupId>
+		<version>0.0.0-SNAPSHOT</version>
+		<artifactId>camel-labs-iot</artifactId>
+	</parent>
+	
+	<artifactId>camel-labs-iot-feature</artifactId>
+	<packaging>feature</packaging>
+	<description>This feature file contains all dependencies needed for installation on Karaf 4</description>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.github.camel-labs</groupId>
+			<artifactId>camel-device-io</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.camel-labs</groupId>
+			<artifactId>camel-kura</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.camel-labs</groupId>
+			<artifactId>camel-pi4j</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.camel-labs</groupId>
+			<artifactId>camel-pubnub</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.camel-labs</groupId>
+			<artifactId>camel-tinkerforge</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.karaf.tooling</groupId>
+                <artifactId>karaf-maven-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+	</build>
+</project>
