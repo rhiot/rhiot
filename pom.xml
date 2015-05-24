@@ -21,6 +21,7 @@
 
         <spring-boot.version>1.2.3.RELEASE</spring-boot.version>
 
+        <maven-frontend-plugin.version>0.0.23</maven-frontend-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
     </properties>
@@ -144,6 +145,51 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>${maven-frontend-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>install node and npm</id>
+                            <goals>
+                                <goal>install-node-and-npm</goal>
+                            </goals>
+                            <configuration>
+                                <nodeVersion>v0.10.30</nodeVersion>
+                                <npmVersion>1.4.21</npmVersion>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>npm install</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <!-- Optional configuration which provides for running any npm command -->
+                            <configuration>
+                                <arguments>install</arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>bower install</id>
+                            <goals>
+                                <goal>bower</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>install</arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>gulp build</id>
+                            <goals>
+                                <goal>gulp</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>build --no-color</arguments>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
