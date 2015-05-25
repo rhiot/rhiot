@@ -21,4 +21,9 @@ module Example {
   export var log: Logging.Logger = Logger.get(pluginName);
 
   export var templatePath = "plugins/example/html";
+
+  export function geofencingCloudletApiBase() {
+    return 'http://' + window.location.hostname + ':15001/api/geofencing';
+  }
+
 }

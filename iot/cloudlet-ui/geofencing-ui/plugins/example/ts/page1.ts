@@ -18,7 +18,7 @@ module Example {
 
   export var Page1Controller = _module.controller("Example.Page1Controller", ["$scope", "$http", ($scope, $http) => {
     $scope.clientSelected = function() {
-      $http.get('http://' + window.location.hostname + ':15001/api/geofencing/routes/routes/' + $scope.selectedOption.id).
+      $http.get(geofencingCloudletApiBase() + '/routes/routes/' + $scope.selectedOption.id).
           success(function(data, status, headers, config) {
             $scope.routes = data.routes.map(function (val) {
               return {
@@ -35,13 +35,13 @@ module Example {
           });
     };
     $scope.routeSelected = function () {
-          $http.get('http://' + window.location.hostname + ':15001/api/geofencing/routes/routeUrl/' + $scope.selectedRoute.id).success(function (data, status, headers, config) {
+          $http.get(geofencingCloudletApiBase() + '/routes/routeUrl/' + $scope.selectedRoute.id).success(function (data, status, headers, config) {
               $scope.routeUrl = data.url;
           }).error(function (data, status, headers, config) {
               $scope.flash = 'Cannot connect to the geofencing service.';
           });
     };
-    $http.get('http://' + window.location.hostname + ':15001/api/geofencing/routes/clients').
+    $http.get(geofencingCloudletApiBase() + '/routes/clients').
         success(function(data, status, headers, config) {
           $scope.clients = data.clients.map(function (val) {
             return {
