@@ -3,4 +3,5 @@ declare module Example {
     var pluginName: string;
     var log: Logging.Logger;
     var templatePath: string;
+    function geofencingCloudletApiBase(): string;
 }
