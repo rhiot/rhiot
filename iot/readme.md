@@ -404,6 +404,29 @@ Route the collect data and sendt it to pubnub channel mychannel:
 
 ---
 
+## Cloudlets
+
+Cloudlets are server-side microservices that come with some common functionalities required by the IoT systems. Cloudlets
+UI are [Hawt.io](http://hawt.io)-based plugins which provides nice web UI for the cloudlets back-end services.
+
+### On-premises deployment
+
+If you would like to deploy Camel IoT Labs cloud onto the on-premises server, execute the `deploy-cloud.sh` script, from
+the `iot/cloudlet/deployment/onpremises` directory.
+
+    CLOUD_SSH_ROOT=root@215.217.115.37
+    cd iot/cloudlet/deployment/onpremises
+    ./deploy-cloud.sh
+
+The cloudlets will be deployed into the `/var/camel-iot-labs` directory on the target server.
+
+If you would like to deploy only back-end services, add DEPLOY_CLOUDLETS parameter to the script:
+
+    ./deploy-cloud.sh DEPLOY_CLOUDLETS
+
+To deploy only UI artifacts, add DEPLOY_UI parameter to the script, just as demonstrated on the example below:
+
+    ./deploy-cloud.sh DEPLOY_UI       
 
 ## Articles, presentations & videos
 
