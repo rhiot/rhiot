@@ -22,6 +22,7 @@
 
 	<modules>
 		<module>camel-device-io</module>
+		<module>camel-grape</module>
 		<module>camel-kura</module>
 		<module>camel-pi4j</module>
 		<module>camel-pubnub</module>
