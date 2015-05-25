@@ -81,7 +81,7 @@ public class DefaultRouteService implements RouteService {
         if(lastRouteCoordinates != null) {
             query.addCriteria(where("_id").gt(new ObjectId(lastRouteCoordinates.getCoordinatesId())));
         }
-        query.limit(20);
+        query.limit(routeAnalysisBatchSize);
         query.with(new Sort(ASC, "_id"));
         List<GpsCoordinates> coordinatesToAnalyze = mongoTemplate.find(query, GpsCoordinates.class, GpsCoordinates.class.getSimpleName());
         for(GpsCoordinates coordinates : coordinatesToAnalyze) {
