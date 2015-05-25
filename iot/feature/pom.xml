@@ -13,7 +13,14 @@
 	<artifactId>camel-labs-iot-feature</artifactId>
 	<packaging>feature</packaging>
 	<description>This feature file contains all dependencies needed for installation on Karaf 4</description>
-	
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.github.camel-labs</groupId>
