@@ -27,6 +27,7 @@
 		<module>camel-pi4j</module>
 		<module>camel-pubnub</module>
 		<module>camel-tinkerforge</module>
+		<module>camel-coap</module>
 	</modules>
 
 	<build>
