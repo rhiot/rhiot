@@ -16,11 +16,11 @@
  */
 package com.github.camellabs.iot.component.grape
 
-import org.apache.camel.CamelContext
 import org.apache.camel.ServiceStatus
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.impl.DefaultCamelContext
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 import static com.github.camellabs.iot.component.grape.GrapeEndpoint.loadPatches
@@ -30,11 +30,16 @@ class GrapeComponentTest extends Assert {
 
     def pathesRepository = new FilePatchesRepository()
 
+    def camelContext = new DefaultCamelContext()
+
+    @Before
+    void before() {
+        camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
+    }
+
     @Test
     void shouldLoadStreamComponent() {
         pathesRepository.clear()
-        CamelContext camelContext = new DefaultCamelContext()
-        camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
         camelContext.start()
         camelContext.createProducerTemplate().sendBody('grape:org.apache.camel/camel-stream/2.15.2', 'msg')
         camelContext.createProducerTemplate().sendBody('stream:out', 'msg')
@@ -43,8 +48,6 @@ class GrapeComponentTest extends Assert {
     @Test
     void shouldLoadStreamComponentViaBodyRequest() {
         pathesRepository.clear()
-        CamelContext camelContext = new DefaultCamelContext()
-        camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
         camelContext.start()
         camelContext.createProducerTemplate().sendBody('grape:grape', 'org.apache.camel/camel-stream/2.15.2')
         camelContext.createProducerTemplate().sendBody('stream:out', 'msg')
@@ -53,8 +56,6 @@ class GrapeComponentTest extends Assert {
     @Test
     void shouldLoadBeanAtRuntime() {
         pathesRepository.clear()
-        CamelContext camelContext = new DefaultCamelContext()
-        camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
         camelContext.start()
         camelContext.createProducerTemplate().sendBody('grape:grape', 'org.apache.camel/camel-stream/2.15.2')
         def status = camelContext.createProducerTemplate().requestBody('bean:org.apache.camel.component.stream.StreamComponent?method=getStatus', null, ServiceStatus.class)
@@ -62,11 +63,9 @@ class GrapeComponentTest extends Assert {
     }
 
     @Test
-    void shouldLoadPatchesAtRuntime() {
+    void shouldLoadPatchesAtStartup() {
         // Given
         pathesRepository.clear()
-        CamelContext camelContext = new DefaultCamelContext()
-        camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
         camelContext.start()
         camelContext.createProducerTemplate().sendBody('grape:grape', 'org.apache.camel/camel-stream/2.15.2')
         camelContext.stop()
@@ -75,7 +74,7 @@ class GrapeComponentTest extends Assert {
         camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
         camelContext.addRoutes(new RouteBuilder() {
             @Override
-            void configure() throws Exception {
+            void configure() {
                 loadPatches(camelContext)
             }
         })
@@ -86,6 +85,15 @@ class GrapeComponentTest extends Assert {
 
         // Then
         assertEquals(Stopped, status)
+    }
+
+    @Test
+    void shouldListPatches() {
+        pathesRepository.clear()
+        camelContext.start()
+        camelContext.createProducerTemplate().sendBody('grape:grape', 'org.apache.camel/camel-stream/2.15.2')
+        def patches = pathesRepository.listPatches()
+        assertEquals(['org.apache.camel/camel-stream/2.15.2'], patches)
     }
 
 }
