@@ -16,23 +16,10 @@
  */
 package com.github.camellabs.iot.component.grape
 
-import org.apache.camel.impl.DefaultComponent
+enum GrapeCommand {
 
-class GrapeComponent extends DefaultComponent {
-
-    PatchesRepository patchesRepository = new FilePatchesRepository()
-
-    @Override
-    protected GrapeEndpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        new GrapeEndpoint(uri, remaining, this)
-    }
-
-    PatchesRepository getPatchesRepository() {
-        return patchesRepository
-    }
-
-    void setPatchesRepository(PatchesRepository patchesRepository) {
-        this.patchesRepository = patchesRepository
-    }
+    grab,
+    listPatches,
+    clearPatches
 
 }

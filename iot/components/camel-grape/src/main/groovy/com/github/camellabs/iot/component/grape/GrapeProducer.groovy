@@ -19,6 +19,9 @@ package com.github.camellabs.iot.component.grape
 import org.apache.camel.Exchange
 import org.apache.camel.impl.DefaultProducer
 
+import static com.github.camellabs.iot.component.grape.GrapeCommand.clearPatches
+import static com.github.camellabs.iot.component.grape.GrapeCommand.listPatches
+import static GrapeConstants.GRAPE_COMMAND
 import static groovy.grape.Grape.grab
 
 class GrapeProducer extends DefaultProducer {
@@ -29,12 +32,29 @@ class GrapeProducer extends DefaultProducer {
 
     @Override
     void process(Exchange exchange) {
-        def coordinates = exchange.in.getBody(String.class).split('/')
-        if (coordinates.length != 3) {
-            coordinates = getEndpoint().defaultCoordinates.split('/')
+        def command = exchange.in.getHeader(GRAPE_COMMAND, GrapeCommand.grab, GrapeCommand.class)
+        switch(command) {
+            case GrapeCommand.grab:
+                def rawCoordinates = exchange.in.getBody(String.class)
+                def coordinates = rawCoordinates.split('/')
+                if (coordinates.length != 3) {
+                    coordinates = getEndpoint().defaultCoordinates.split('/')
+                    rawCoordinates = getEndpoint().defaultCoordinates
+                }
+                def classLoader = exchange.context.applicationContextClassLoader
+                grab(classLoader: classLoader, group: coordinates[0], module: coordinates[1], version: coordinates[2])
+                endpoint.component.patchesRepository.install(rawCoordinates)
+                break
+
+            case listPatches:
+                def patches = endpoint.component.patchesRepository.listPatches()
+                exchange.getIn().setBody(patches)
+                break
+
+            case clearPatches:
+                endpoint.component.patchesRepository.clear()
+                break
         }
-        def classLoader = exchange.context.applicationContextClassLoader
-        grab(classLoader: classLoader, group: coordinates[0], module: coordinates[1], version: coordinates[2])
     }
 
     @Override

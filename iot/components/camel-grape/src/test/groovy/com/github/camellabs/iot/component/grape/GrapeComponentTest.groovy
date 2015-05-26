@@ -18,16 +18,21 @@ package com.github.camellabs.iot.component.grape
 
 import org.apache.camel.CamelContext
 import org.apache.camel.ServiceStatus
+import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.impl.DefaultCamelContext
 import org.junit.Assert
 import org.junit.Test
 
+import static com.github.camellabs.iot.component.grape.GrapeEndpoint.loadPatches
 import static org.apache.camel.ServiceStatus.Stopped
 
 class GrapeComponentTest extends Assert {
 
+    def pathesRepository = new FilePatchesRepository()
+
     @Test
     void shouldLoadStreamComponent() {
+        pathesRepository.clear()
         CamelContext camelContext = new DefaultCamelContext()
         camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
         camelContext.start()
@@ -37,6 +42,7 @@ class GrapeComponentTest extends Assert {
 
     @Test
     void shouldLoadStreamComponentViaBodyRequest() {
+        pathesRepository.clear()
         CamelContext camelContext = new DefaultCamelContext()
         camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
         camelContext.start()
@@ -46,11 +52,39 @@ class GrapeComponentTest extends Assert {
 
     @Test
     void shouldLoadBeanAtRuntime() {
+        pathesRepository.clear()
         CamelContext camelContext = new DefaultCamelContext()
         camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
         camelContext.start()
         camelContext.createProducerTemplate().sendBody('grape:grape', 'org.apache.camel/camel-stream/2.15.2')
         def status = camelContext.createProducerTemplate().requestBody('bean:org.apache.camel.component.stream.StreamComponent?method=getStatus', null, ServiceStatus.class)
+        assertEquals(Stopped, status)
+    }
+
+    @Test
+    void shouldLoadPatchesAtRuntime() {
+        // Given
+        pathesRepository.clear()
+        CamelContext camelContext = new DefaultCamelContext()
+        camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
+        camelContext.start()
+        camelContext.createProducerTemplate().sendBody('grape:grape', 'org.apache.camel/camel-stream/2.15.2')
+        camelContext.stop()
+
+        camelContext = new DefaultCamelContext()
+        camelContext.setApplicationContextClassLoader(new GroovyClassLoader())
+        camelContext.addRoutes(new RouteBuilder() {
+            @Override
+            void configure() throws Exception {
+                loadPatches(camelContext)
+            }
+        })
+
+        // When
+        camelContext.start()
+        def status = camelContext.createProducerTemplate().requestBody('bean:org.apache.camel.component.stream.StreamComponent?method=getStatus', null, ServiceStatus.class)
+
+        // Then
         assertEquals(Stopped, status)
     }
 
