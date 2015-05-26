@@ -24,7 +24,6 @@ import org.apache.camel.Processor;
 import com.github.camellabs.component.tinkerforge.TinkerforgeConsumer;
 import com.tinkerforge.AlreadyConnectedException;
 import com.tinkerforge.BrickletAmbientLight;
-import com.tinkerforge.BrickletDistanceIR;
 import com.tinkerforge.IPConnection;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
@@ -34,7 +33,7 @@ public class AmbientlightConsumer extends TinkerforgeConsumer<AmbientlightEndpoi
     private final AmbientlightEndpoint endpoint;
 
     public AmbientlightConsumer(AmbientlightEndpoint endpoint, Processor processor) throws IOException, AlreadyConnectedException {
-        super(endpoint, processor, BrickletDistanceIR.DEVICE_IDENTIFIER);
+        super(endpoint, processor, BrickletAmbientLight.DEVICE_IDENTIFIER);
         this.endpoint = endpoint;
     }
 
