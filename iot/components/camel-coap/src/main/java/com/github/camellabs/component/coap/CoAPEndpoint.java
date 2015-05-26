@@ -44,6 +44,8 @@ public class CoAPEndpoint extends DefaultEndpoint {
 
     private int coapMediaType = MediaTypeRegistry.TEXT_PLAIN;
 
+    private long coapTimeout = 1000L;
+
     public CoAPEndpoint() {
     }
 
@@ -76,6 +78,10 @@ public class CoAPEndpoint extends DefaultEndpoint {
         return coapMethod;
     }
 
+    public long getCoapTimeout() {
+        return coapTimeout;
+    }
+
     public URI getCoapUri() {
         return coapUri;
     }
@@ -98,6 +104,10 @@ public class CoAPEndpoint extends DefaultEndpoint {
 
     public void setCoapMethod(Code coapMethod) {
         this.coapMethod = coapMethod;
+    }
+
+    public void setCoapTimeout(long coapTimeout) {
+        this.coapTimeout = coapTimeout;
     }
 
     public void setCoapUri(URI coapUri) {

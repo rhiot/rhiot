@@ -61,6 +61,8 @@ public class CoAPProducer extends DefaultProducer {
             client.setURI(createURI(exchange).toString());
         }
 
+        client.setTimeout(extractTimeOut(exchange));
+
         switch (method) {
         case GET:
             response = client.get();
@@ -79,8 +81,9 @@ public class CoAPProducer extends DefaultProducer {
 
         }
 
-        populateResponse(exchange, response);
-
+        if (response != null) {
+            populateResponse(exchange, response);
+        }
     }
 
     private CoapClient createClient(Exchange exchange) {
@@ -106,6 +109,16 @@ public class CoAPProducer extends DefaultProducer {
         // Always use CoAP mediaType from header else default from endpoint
         if (ret == null) {
             ret = endpoint.getCoapMediaType();
+        }
+
+        return ret;
+    }
+
+    private long extractTimeOut(Exchange exchange) {
+        Long ret = exchange.getIn().getHeader(CoAPConstants.COAP_TIMEOUT, Long.class);
+        // Always use CoAP timeOut from header else default from endpoint
+        if (ret == null) {
+            ret = endpoint.getCoapTimeout();
         }
 
         return ret;

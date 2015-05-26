@@ -23,7 +23,7 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
-public class coapComponentTest extends CamelTestSupport {
+public class CoAPLargeTest extends CamelTestSupport {
 
     @Produce(uri = "direct:start")
     protected ProducerTemplate sender;
@@ -43,7 +43,7 @@ public class coapComponentTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:start").to("coap://iot.eclipse.org:5683").to("mock:result");
+                from("direct:start").to("coap://iot.eclipse.org:5683/large?coapTimeOut=10000").to("mock:result");
             }
         };
     }

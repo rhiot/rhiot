@@ -20,10 +20,12 @@ public final class CoAPConstants {
     public static final String CAMEL_COAP_URL_PATTERN = "(?<host>[^:]+)(:(?<port>[0-9]+))";
     public static final String CAMEL_RBPI_URL_PATTERN = "((?<scheme>)raspberrypi):(//)?)?(?<type>gpio|i2c|serial|spi)/(?<id>[a-zA-Z0-9_-]+)(/(?<device>[a-zA-Z0-9_-]+))?";
     public static final String COAP_URI_ATTRIBUT = "coapUri";
+    public static final String COAP_TIMEOUT_ATTRIBUT = "coapTimeout";
 
     public static final String COAP_URI = "CamelCoAPUri";
     public static final String COAP_METHOD = "CamelCoAPMethod";
     public static final String COAP_MEDIA_TYPE = "CamelCoAPMediaType";
     public static final String COAP_RESPONSE_CODE = "CamelCoAPResponseCode";
     public static final String COAP_RESPONSE_OPTIONS = "CamelCoAPResponseOptions";
+    public static final String COAP_TIMEOUT = "CamelCoAPTimeout";
 }
