@@ -24,6 +24,7 @@ import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriEndpoint;
+import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriPath;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.coap.CoAP.Code;
@@ -40,10 +41,13 @@ public class CoAPEndpoint extends DefaultEndpoint {
 
     private CoapClient client = null;
 
+    @UriParam(defaultValue = "GET", description = "", enums = "GET,POST,POST,PUT")
     private Code coapMethod = Code.GET;
 
+    @UriParam(defaultValue = "0 = TEXT_PLAIN", description = "cf. MediaTypeRegistry")
     private int coapMediaType = MediaTypeRegistry.TEXT_PLAIN;
 
+    @UriParam(defaultValue = "1000L", description = "timeout")
     private long coapTimeout = 1000L;
 
     public CoAPEndpoint() {
