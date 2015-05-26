@@ -17,13 +17,12 @@
 package com.github.camellabs.iot.component.grape
 
 import org.apache.camel.CamelContext
-import org.apache.camel.Component
 import org.apache.camel.Consumer
 import org.apache.camel.Processor
 import org.apache.camel.Producer
-import org.apache.camel.impl.DefaultCamelContext
 import org.apache.camel.impl.DefaultEndpoint
 
+import static com.github.camellabs.iot.component.grape.MavenCoordinates.parseMavenCoordinates
 import static groovy.grape.Grape.grab
 
 class GrapeEndpoint extends DefaultEndpoint {
@@ -36,11 +35,12 @@ class GrapeEndpoint extends DefaultEndpoint {
     }
 
     static def loadPatches(CamelContext camelContext) {
-            def classLoader = camelContext.applicationContextClassLoader
-            def patchesRepository = camelContext.getComponent('grape', GrapeComponent.class).patchesRepository
-            patchesRepository.listPatches().each {
-            def coordinates = it.split('/')
-            grab(classLoader: classLoader, group: coordinates[0], module: coordinates[1], version: coordinates[2])
+        def classLoader = camelContext.applicationContextClassLoader
+        def patchesRepository = camelContext.getComponent('grape', GrapeComponent.class).patchesRepository
+        patchesRepository.listPatches().each {
+            def coordinates = parseMavenCoordinates(it)
+            grab(classLoader: classLoader,
+                    group: coordinates.groupId, module: coordinates.artifactId, version: coordinates.version)
         }
     }
 

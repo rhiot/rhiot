@@ -16,13 +16,15 @@
  */
 package com.github.camellabs.iot.component.grape
 
+import groovy.grape.Grape
 import org.apache.camel.Exchange
 import org.apache.camel.impl.DefaultProducer
 
 import static com.github.camellabs.iot.component.grape.GrapeCommand.clearPatches
+import static com.github.camellabs.iot.component.grape.GrapeCommand.grab
 import static com.github.camellabs.iot.component.grape.GrapeCommand.listPatches
 import static GrapeConstants.GRAPE_COMMAND
-import static groovy.grape.Grape.grab
+import static com.github.camellabs.iot.component.grape.MavenCoordinates.parseMavenCoordinates
 
 class GrapeProducer extends DefaultProducer {
 
@@ -32,18 +34,20 @@ class GrapeProducer extends DefaultProducer {
 
     @Override
     void process(Exchange exchange) {
-        def command = exchange.in.getHeader(GRAPE_COMMAND, GrapeCommand.grab, GrapeCommand.class)
+        def command = exchange.in.getHeader(GRAPE_COMMAND, grab, GrapeCommand.class)
         switch(command) {
-            case GrapeCommand.grab:
-                def rawCoordinates = exchange.in.getBody(String.class)
-                def coordinates = rawCoordinates.split('/')
-                if (coordinates.length != 3) {
-                    coordinates = getEndpoint().defaultCoordinates.split('/')
-                    rawCoordinates = getEndpoint().defaultCoordinates
-                }
+            case grab:
                 def classLoader = exchange.context.applicationContextClassLoader
-                grab(classLoader: classLoader, group: coordinates[0], module: coordinates[1], version: coordinates[2])
-                endpoint.component.patchesRepository.install(rawCoordinates)
+                def rawCoordinates = exchange.in.getBody(String.class)
+                try {
+                    def coordinates = parseMavenCoordinates(rawCoordinates)
+                    Grape.grab(classLoader: classLoader, group: coordinates.groupId, module: coordinates.artifactId, version: coordinates.version)
+                    endpoint.component.patchesRepository.install(rawCoordinates)
+                } catch (IllegalArgumentException ex) {
+                    def coordinates = parseMavenCoordinates(getEndpoint().defaultCoordinates)
+                    Grape.grab(classLoader: classLoader, group: coordinates.groupId, module: coordinates.artifactId, version: coordinates.version)
+                    endpoint.component.patchesRepository.install(getEndpoint().defaultCoordinates)
+                }
                 break
 
             case listPatches:
