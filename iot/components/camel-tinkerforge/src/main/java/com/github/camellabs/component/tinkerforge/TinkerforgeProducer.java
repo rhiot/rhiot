@@ -27,14 +27,23 @@ import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 
 public abstract class TinkerforgeProducer<EndpointType extends TinkerforgeEndpoint, BrickletType extends Device> extends DefaultProducer {
-    protected IPConnection connection = new IPConnection();
+    protected IPConnection connection;
     protected BrickletType bricklet;
     protected EndpointType endpoint;
+    private int deviceIdentifier;
 
     public TinkerforgeProducer(final EndpointType endpoint, final int deviceIdentifier) throws IOException, AlreadyConnectedException {
         super(endpoint);
         this.endpoint = endpoint;
-
+        this.deviceIdentifier = deviceIdentifier;
+    }
+    
+    @Override
+    protected void doStart() throws Exception {
+        super.doStart();
+        
+        connection = new IPConnection();
+        
         connection.addConnectedListener(new IPConnection.ConnectedListener() {
             @Override
             public void connected(short reason) {
@@ -76,6 +85,16 @@ public abstract class TinkerforgeProducer<EndpointType extends TinkerforgeEndpoi
         });
 
         connection.connect(endpoint.getHost(),endpoint.getPort());
+    }
+    
+    @Override
+    protected void doStop() throws Exception {
+        try {
+            connection.disconnect();
+        } catch (Exception e) {
+            log.warn("Could not disconnect the connection properly", e);
+        }
+        super.doStop();
     }
 
     protected abstract BrickletType createBricklet(String uid, IPConnection connection);
