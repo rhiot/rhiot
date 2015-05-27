@@ -21,15 +21,15 @@ import java.io.IOException;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 
 import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
 import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
 
+@UriEndpoint(scheme = "tinkerforge", syntax = "tinkerforge:/lcd20x4/<uid>", producerOnly=true, label = "iot", title = "Tinkerforge")
 public class Lcd20x4Endpoint extends TinkerforgeEndpoint {
-    @UriParam private String uid = "Lcd1";
-    @UriParam private String host = "localhost";
-    @UriParam private int port = 4223;
+    
     @UriParam private short line = 0;
     @UriParam private short position = 0;
     @UriParam private boolean cursor = false;
@@ -51,21 +51,6 @@ public class Lcd20x4Endpoint extends TinkerforgeEndpoint {
 		throw new Exception("Cannot create a consumer object since the brickletType 'lcd20x4' cannot generate events.");
     }
 
-    @Override
-    public String getHost() {
-        return host;
-    }
-
-    @Override
-    public int getPort() {
-        return port;
-    }
-
-    @Override
-    public String getUid() {
-        return uid;
-    }
-
     public boolean getBlink() {
         return blink;
     }
@@ -81,18 +66,6 @@ public class Lcd20x4Endpoint extends TinkerforgeEndpoint {
     public short getPosition() {
         return position;
     }
-
-    public void setHost(String host) {
-		this.host = host;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
 
 	public void setLine(short line) {
 		this.line = line;

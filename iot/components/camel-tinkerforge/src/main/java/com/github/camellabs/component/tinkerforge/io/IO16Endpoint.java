@@ -18,17 +18,21 @@ package com.github.camellabs.component.tinkerforge.io;
 
 import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
 import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 
+@UriEndpoint(scheme = "tinkerforge", syntax = "tinkerforge:/io16/<uid>", consumerClass = IO16Consumer.class, label = "iot", title = "Tinkerforge")
 public class IO16Endpoint extends TinkerforgeEndpoint {
-    @UriParam private String uid = "io16";
-    @UriParam private String host = "localhost";
-    @UriParam private int port = 4223;
-    @UriParam private char ioport = 'a';
-    @UriParam private int debounce = 100;
+    
+    @UriParam(name="ioport", defaultValue="a")
+    private char ioport = 'a';
+    
+    @UriParam(name="debounce", defaultValue="100")
+    private int debounce = 100;
 
     private IO16Producer producer;
     private IO16Consumer consumer;
@@ -55,22 +59,6 @@ public class IO16Endpoint extends TinkerforgeEndpoint {
         this.ioport = ioport;
     }
 
-    public String getHost() {
-		return host;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
     public int getDebounce() {
         return debounce;
     }
@@ -78,14 +66,6 @@ public class IO16Endpoint extends TinkerforgeEndpoint {
     public void setDebounce(int debounce) {
         this.debounce = debounce;
     }
-
-    public String getUid() {
-		return uid;
-	}
-
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
 
     @Override
 	public boolean isSingleton() {

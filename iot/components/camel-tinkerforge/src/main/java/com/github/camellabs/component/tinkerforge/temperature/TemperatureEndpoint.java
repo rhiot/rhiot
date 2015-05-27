@@ -19,15 +19,16 @@ package com.github.camellabs.component.tinkerforge.temperature;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 
 import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
 import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
+import com.github.camellabs.component.tinkerforge.distance.DistanceIRConsumer;
 
+@UriEndpoint(scheme = "tinkerforge", syntax = "tinkerforge:/temperature/<uid>", consumerClass = DistanceIRConsumer.class, label = "iot", title = "Tinkerforge")
 public class TemperatureEndpoint extends TinkerforgeEndpoint {
-    @UriParam private String uid = "t1";
-    @UriParam private String host = "localhost";
-    @UriParam private int port = 4223;
+    
     @UriParam private int interval = 1000;
 
     private TemperatureConsumer consumer;
@@ -45,30 +46,6 @@ public class TemperatureEndpoint extends TinkerforgeEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         return consumer != null ? consumer : (consumer = new TemperatureConsumer(this, processor));
     }
-
-    public String getHost() {
-		return host;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public String getUid() {
-		return uid;
-	}
-
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
 
 	public boolean isSingleton() {
         return false;

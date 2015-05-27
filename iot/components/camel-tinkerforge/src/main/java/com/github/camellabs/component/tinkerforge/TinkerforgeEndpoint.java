@@ -19,12 +19,35 @@ package com.github.camellabs.component.tinkerforge;
 import org.apache.camel.impl.DefaultEndpoint;
 
 public abstract class TinkerforgeEndpoint extends DefaultEndpoint {
+    private String host = "localhost";
+    private int port = 4223;
+    private String uid;
 
     public TinkerforgeEndpoint(String uri, TinkerforgeComponent tinkerforgeComponent) {
         super(uri, tinkerforgeComponent);
     }
 
-    public abstract String getHost();
-    public abstract int getPort();
-    public abstract String getUid();
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 }

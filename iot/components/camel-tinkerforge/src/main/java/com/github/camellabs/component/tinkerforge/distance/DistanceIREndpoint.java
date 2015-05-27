@@ -20,20 +20,20 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.RuntimeCamelException;
+import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 
 import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
 import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
 
-public class DistanceEndpoint extends TinkerforgeEndpoint {
-    @UriParam private String uid = "d1";
-    @UriParam private String host = "localhost";
-    @UriParam private int port = 4223;
-    @UriParam private int interval = 100;
+@UriEndpoint(scheme = "tinkerforge", syntax = "tinkerforge:/distanceIR/<uid>", consumerClass = DistanceIRConsumer.class, label = "iot", title = "Tinkerforge")
+public class DistanceIREndpoint extends TinkerforgeEndpoint {
+    @UriParam(defaultValue="100")
+    private int interval = 100;
 
-    private DistanceConsumer consumer;
+    private DistanceIRConsumer consumer;
     
-    public DistanceEndpoint(String uri, TinkerforgeComponent tinkerforgeComponent) {
+    public DistanceIREndpoint(String uri, TinkerforgeComponent tinkerforgeComponent) {
 		super(uri, tinkerforgeComponent);
 	}
 
@@ -44,34 +44,9 @@ public class DistanceEndpoint extends TinkerforgeEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        return consumer != null ? consumer : (consumer = new DistanceConsumer(this, processor));
+        return consumer != null ? consumer : (consumer = new DistanceIRConsumer(this, processor));
     }
     
-
-    public String getHost() {
-		return host;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public String getUid() {
-		return uid;
-	}
-
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
-
     @Override
 	public boolean isSingleton() {
         return false;
