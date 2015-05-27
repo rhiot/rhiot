@@ -16,19 +16,20 @@
  */
 package com.github.camellabs.component.tinkerforge.ledstrip;
 
-import com.tinkerforge.BrickletLEDStrip;
-import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
-import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.RuntimeCamelException;
+import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 
+import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
+import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
+import com.tinkerforge.BrickletLEDStrip;
+
+@UriEndpoint(scheme = "tinkerforge", syntax = "tinkerforge:/ledstrip/<uid>", producerOnly=true, label = "iot", title = "Tinkerforge")
 public class LedstripEndpoint extends TinkerforgeEndpoint {
-    @UriParam protected String uid = "ls1";
-    @UriParam protected String host = "localhost";
-    @UriParam protected int port = 4223;
+    
     @UriParam private int chipType = BrickletLEDStrip.CHIP_TYPE_WS2801;
     @UriParam private int frameDuration = 50;
     @UriParam private int amountOfLeds = 50;
@@ -49,30 +50,6 @@ public class LedstripEndpoint extends TinkerforgeEndpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         throw new RuntimeCamelException("Cannot create a consumer object since the brickletType 'ledstrip' has no input sensors.");
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
     }
 
     public int getChipType() {

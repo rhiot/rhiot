@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.camellabs.component.tinkerforge.ambientlight.AmbientlightEndpoint;
-import com.github.camellabs.component.tinkerforge.distance.DistanceEndpoint;
+import com.github.camellabs.component.tinkerforge.distance.DistanceIREndpoint;
 import com.github.camellabs.component.tinkerforge.dualrelay.DualRelayEndpoint;
 import com.github.camellabs.component.tinkerforge.humidity.HumidityEndpoint;
 import com.github.camellabs.component.tinkerforge.io.IO16Endpoint;
@@ -56,7 +56,7 @@ public class TinkerforgeComponent extends DefaultComponent {
             case humidity :         endpoint = new HumidityEndpoint(uri, this); break;
             case io4 :              endpoint = new IO4Endpoint(uri, this); break;
             case io16 :             endpoint = new IO16Endpoint(uri, this); break;
-            case distance :         endpoint = new DistanceEndpoint(uri, this); break;
+            case distanceIR :       endpoint = new DistanceIREndpoint(uri, this); break;
             case ledstrip :         endpoint = new LedstripEndpoint(uri, this); break;
             case motion :           endpoint = new MotionEndpoint(uri, this); break;
             case soundintensity :   endpoint = new SoundIntensityEndpoint(uri, this); break;

@@ -28,11 +28,11 @@ import com.tinkerforge.IPConnection;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 
-public class DistanceConsumer extends TinkerforgeConsumer<DistanceEndpoint, BrickletDistanceIR> implements BrickletDistanceIR.DistanceListener {
+public class DistanceIRConsumer extends TinkerforgeConsumer<DistanceIREndpoint, BrickletDistanceIR> implements BrickletDistanceIR.DistanceListener {
 	
-    private final DistanceEndpoint endpoint;
+    private final DistanceIREndpoint endpoint;
 
-    public DistanceConsumer(DistanceEndpoint endpoint, Processor processor) throws IOException, AlreadyConnectedException {
+    public DistanceIRConsumer(DistanceIREndpoint endpoint, Processor processor) throws IOException, AlreadyConnectedException {
         super(endpoint, processor, BrickletDistanceIR.DEVICE_IDENTIFIER);
         this.endpoint = endpoint;
     }
