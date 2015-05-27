@@ -41,8 +41,8 @@ public class CoAPEndpoint extends DefaultEndpoint {
 
     private CoapClient client = null;
 
-    @UriParam(defaultValue = "GET", description = "", enums = "GET,POST,POST,PUT")
-    private Code coapMethod = Code.GET;
+    @UriParam(description = "", enums = "GET,POST,POST,PUT")
+    private Code coapMethod;
 
     @UriParam(defaultValue = "0 = TEXT_PLAIN", description = "cf. MediaTypeRegistry")
     private int coapMediaType = MediaTypeRegistry.TEXT_PLAIN;

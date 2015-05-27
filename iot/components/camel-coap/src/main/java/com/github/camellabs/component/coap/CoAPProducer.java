@@ -130,6 +130,14 @@ public class CoAPProducer extends DefaultProducer {
         if (ret == null) {
             ret = endpoint.getCoapMethod();
         }
+        if (ret == null) {
+            Object body = exchange.getIn().getBody();
+            if (body == null) {
+                ret = Code.GET;
+            } else {
+                ret = Code.POST;
+            }
+        }
         return ret;
     }
 
