@@ -22,7 +22,6 @@
 
 	<modules>
 		<module>camel-device-io</module>
-		<module>camel-grape</module>
 		<module>camel-kura</module>
 		<module>camel-pi4j</module>
 		<module>camel-pubnub</module>
@@ -129,7 +128,7 @@
 					<groupId>org.apache.camel</groupId>
 					<artifactId>apt</artifactId>
 					<version>${camel.version}</version>
-					<scope>provided</scope>
+					<scope>progvided</scope>
 				</dependency>
 			</dependencies>
 		</profile>
