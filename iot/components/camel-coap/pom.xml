@@ -21,7 +21,7 @@
 
 	<artifactId>camel-coap</artifactId>
 	<packaging>bundle</packaging>
-	<name>Camel CoAP Component</name>
+	<name>camel-labs-iot-components-coap</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
