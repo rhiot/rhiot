@@ -22,6 +22,13 @@ All you need to build the project is Maven 3 and Java 8 JDK:
     cd camel-labs
     mvn install
 
+## Compatibility Matrix
+
+| Apache Camel | Camel Labs Projet |
+|--------------|-------------------|
+|0.0.0-SNAPSHOT| 2.15.2|
+   
+
 ## Build status
 
 [![Build Status](https://travis-ci.org/camel-labs/camel-labs.svg?branch=master)](https://travis-ci.org/camel-labs/camel-labs)
