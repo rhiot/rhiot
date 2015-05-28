@@ -35,12 +35,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.tinkerforge</groupId>
-            <artifactId>tinkerforge</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tinkerforge</groupId>
+            <artifactId>tinkerforge</artifactId>
         </dependency>
         
         <!-- testing -->
