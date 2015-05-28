@@ -38,7 +38,12 @@
             <groupId>com.tinkerforge</groupId>
             <artifactId>tinkerforge</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        
         <!-- testing -->
         <dependency>
             <groupId>org.apache.camel</groupId>
