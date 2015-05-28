@@ -24,10 +24,10 @@ All you need to build the project is Maven 3 and Java 8 JDK:
 
 ## Compatibility Matrix
 
-| Apache Camel | Camel Labs|
-|--------------|-----------|
-| 2.15.2|0.0.0-SNAPSHOT|
-   
+| Apache Camel | Camel Labs| Release date |
+|--------------|-----------|--------------|
+| 2.15.2|0.0.0-SNAPSHOT| n/a |
+| 2.15.2|0.1.0| TDB |   
 
 ## Build status
 
