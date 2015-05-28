@@ -28,7 +28,7 @@ public class LEDHeartbeatRouteBuilderCallback implements RouteBuilderCallback {
 
     @Override
     public void beforeRoutesDefinition(RouteBuilder routeBuilder) {
-        routeBuilder.interceptFrom(HEARTBEAT_ENDPOINT).to("pi4j-gpio://{{camellabs.iot.gateway.heartbeat.led.gpioId}}?mode=DIGITAL_OUTPUT&state=LOW&action=BLINK");
+        routeBuilder.interceptFrom(HEARTBEAT_ENDPOINT).to("pi4j-gpio://{{camellabs.iot.gateway.heartbeat.led.gpioId:0}}?mode=DIGITAL_OUTPUT&state=LOW&action=BLINK");
     }
 
 }
