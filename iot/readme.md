@@ -66,6 +66,19 @@ By default MQTT heartbeat sends events to the `heartbeat` topic. You can change 
 The heartbeat message format is `hostname:timestamp`, where `hostname` is the name of the device host and `timestamp` is
 the current time converted to the Java miliseconds.
 
+#### LED heartbeat
+
+For activating LED heartbead set `camellabs.iot.gateway.heartbeat.led` environment variable to `true`. Like this 
+
+    export camellabs.iot.gateway.heartbeat.led=true
+    
+The LED output port can be set via `camellabs.iot.gateway.heartbeat.led.gpioId` environment variable, Default value is 0 *wiring lib pin index*
+Change LED output port like this :
+
+    export camellabs.iot.gateway.heartbeat.led.gpioId=11
+
+Please add resistor (220 Ohms) between LED and Mass (0v) to avoid excessive current through it.
+
 ## Camel IoT components
 
 Camel IoT Labs brings some extra components for the Apache Camel intended to make both device- and server-side IoT
