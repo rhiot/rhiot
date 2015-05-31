@@ -33,6 +33,10 @@ All you need to build the project is Maven 3 and Java 8 JDK:
 
 [![Build Status](https://travis-ci.org/camel-labs/camel-labs.svg?branch=master)](https://travis-ci.org/camel-labs/camel-labs)
 
+## Issues
+
+You can create new issue, bug, comment [here](https://github.com/camel-labs/camel-labs/issues)
+
 ## License
 
 The Camel Labs project is distributed under the [Apache 2.0 Software License](https://www.apache.org/licenses/LICENSE-2.0).
