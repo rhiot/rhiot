@@ -5,6 +5,14 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
 [Apache Camel](http://camel.apache.org).
 <br><br>
 
+## Index 
+
+[Camel IoT gateway](#camel-iot-gateway)
+[Camel IoT components](#camel-iot-components)
+[Cloudlets](#cloudlets)
+[Articles, presentations & videos](#articles-presentations--videos)
+
+
 ## Camel IoT gateway
 
 Camel IoT gateway is the small fat jar application that can be installed into the field device. Gateway acts as a bridge
