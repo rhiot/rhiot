@@ -32,7 +32,6 @@
         <tinkerforge.version>2.1.4</tinkerforge.version>
         <californium-core.version>1.0.0-M1</californium-core.version>
 
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-lifecycle-mapping.version>1.0.0</maven-lifecycle-mapping.version>
@@ -170,30 +169,6 @@
         </dependency>
         </dependencies>
     </dependencyManagement>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5</version>
-        <configuration>
-          <autoVersionSubmodules>true</autoVersionSubmodules>
-          <releaseProfiles>release</releaseProfiles>
-          <goals>deploy</goals>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven-compiler-plugin.version}</version>
-        <configuration>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.target}</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
   <profiles>
     <profile>
