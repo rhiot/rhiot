@@ -10,6 +10,10 @@ because of the wider scope of these or because of the licensing reasons.
 - [Camel IoT Labs](https://github.com/camel-labs/camel-labs/tree/master/iot) - covers modules providing the Internet Of 
 Things functionalities
 
+## Current release
+
+The latest and the greatest version of the Camel Labs is 0.1.0. Wondering what's new there? Here are the [release notes](https://github.com/camel-labs/camel-labs/blob/master/release-notes.md).
+
 ## Mailing list
 
 You're more than welcome to join out [Camel IoT Labs mailing list](https://groups.google.com/forum/#!forum/camel-iot-labs).
