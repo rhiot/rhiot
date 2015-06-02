@@ -18,6 +18,10 @@ The latest and the greatest version of the Camel Labs is 0.1.0. Wondering what's
 
 You're more than welcome to join out [Camel IoT Labs mailing list](https://groups.google.com/forum/#!forum/camel-iot-labs).
 
+## Issues
+
+You can create [new issue, bug, comment here](https://github.com/camel-labs/camel-labs/issues/new).
+
 ## Building the project
 
 All you need to build the project is Maven 3 and Java 8 JDK:
@@ -26,20 +30,15 @@ All you need to build the project is Maven 3 and Java 8 JDK:
     cd camel-labs
     mvn install
 
-## Compatibility Matrix
-
-| Apache Camel | Camel Labs| Release date |
-|--------------|-----------|--------------|
-| 2.15.2|0.0.0-SNAPSHOT| n/a |
-| 2.15.2|0.1.0| TBD |   
-
 ## Build status
 
 [![Build Status](https://travis-ci.org/camel-labs/camel-labs.svg?branch=master)](https://travis-ci.org/camel-labs/camel-labs)
 
-## Issues
+## Camel compatibility matrix
 
-You can create [new issue, bug, comment here](https://github.com/camel-labs/camel-labs/issues/new).
+| Camel Labs | Apache Camel | Release date |
+|--------------|-----------|--------------|
+| 0.1.0 |2.15.2| 2015-06-02 |
 
 ## License
 
