@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.github.camel-labs</groupId>
     <artifactId>camel-labs</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>camel-labs-bom</artifactId>
   <packaging>pom</packaging>
@@ -22,7 +22,7 @@
         <activemq.version>5.11.1</activemq.version>
         <apache-commons-lang3.version>3.3.2</apache-commons-lang3.version>
         <camel.version>2.15.2</camel.version>
-        <camel-labs.version>0.1.0</camel-labs.version>
+        <camel-labs.version>0.1.1-SNAPSHOT</camel-labs.version>
         <embedmongo.version>1.46.4</embedmongo.version>
         <ivy.version>2.4.0</ivy.version>
         <kura.version>1.0.3</kura.version>

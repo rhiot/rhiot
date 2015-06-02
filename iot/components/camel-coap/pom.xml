@@ -15,7 +15,7 @@
 	<parent>
 		<artifactId>camel-labs-iot-components</artifactId>
 		<groupId>com.github.camel-labs</groupId>
-		<version>0.1.0</version>
+		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>camel-coap</artifactId>

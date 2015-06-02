@@ -14,7 +14,7 @@
 	<parent>  <!-- should be removed -->
 		<groupId>com.github.camel-labs</groupId>
 		<artifactId>camel-labs-iot-components</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>camel-pubnub</artifactId>
