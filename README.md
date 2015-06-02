@@ -43,4 +43,4 @@ The Camel Labs project is distributed under the [Apache 2.0 Software License](ht
 
 ## IoT ecosystem
 
-Camel IoT Labs is the part of the bigger IoT effort including [SilverSpoon](http://www.silverspoon.io) and [Silverware](http://www.silverware.io) projects.
+Camel IoT Labs is the part of the bigger IoT effort including [SilverSpoon](http://www.silverspoon.io) and [SilverWare](http://www.silverware.io) projects.
