@@ -35,7 +35,7 @@ All you need to build the project is Maven 3 and Java 8 JDK:
 
 ## Issues
 
-You can create [new issue, bug, comment here](https://github.com/camel-labs/camel-labs/issues/new)
+You can create [new issue, bug, comment here](https://github.com/camel-labs/camel-labs/issues/new).
 
 ## License
 
