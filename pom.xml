@@ -214,9 +214,11 @@
                             </licenseFamily>
                         </licenseFamilies>
                         <excludes>
+                            <exclude>**/Californium.properties</exclude>
                             <exclude>build.out</exclude>
                             <exclude>**/readme.md</exclude>
                             <exclude>**/README.md</exclude>
+                            <exclude>release-notes.md</exclude>
                             <exclude>global-groovy.log</exclude>
                             <exclude>soapui.log</exclude>
                             <exclude>soapui-errors.log</exclude>
