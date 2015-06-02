@@ -6,7 +6,7 @@
     <parent>
         <artifactId>camel-labs-iot-cloudlet-document-parent</artifactId>
         <groupId>com.github.camel-labs</groupId>
-        <version>0.0.0-SNAPSHOT</version>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>camel-labs-iot-cloudlet-document-driver</artifactId>
