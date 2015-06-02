@@ -7,7 +7,7 @@ because of the wider scope of these or because of the licensing reasons.
 
 ## Subprojects
 
-- [Camel IoT Labs](https://github.com/camel-labs/camel-labs/tree/master/iot) - covers modules providing the Internet Of 
+- [Camel IoT Labs](https://github.com/camel-labs/camel-labs/tree/master/iot) - covers modules providing the Internet Of
 Things functionalities
 
 ## Current release
@@ -48,9 +48,9 @@ The Camel Labs project is distributed under the [Apache 2.0 Software License](ht
 
 | Name | Contact | URL | Compagny | Spoken Lang |
 |------|---------|-----|----------|-------------|
-| Henryk K. | @hekonsek | https://about.me/hekonsek | Red Hat | PL (native), EN |
-| Greg A. | @gautric_io | http://gautric.github.io/ | Red Hat | FR (native), EN, JP (beginner) |
-| Geert S. | @geertschuring | https://geertschuring.wordpress.com/ | Geert Schuring | NL (native), EN |
+| Henryk K. | [@hekonsek](https://twitter.com/hekonsek) | https://about.me/hekonsek | Red Hat | PL (native), EN |
+| Greg A. | [@gautric_io](https://twitter.com/gautric_io) | http://gautric.github.io/ | Red Hat | FR (native), EN, JP (beginner) |
+| Geert S. | [@geertschuring](https://twitter.com/geertschuring) | https://geertschuring.wordpress.com/ | Geert Schuring | NL (native), EN |
 
 ## IoT ecosystem
 
