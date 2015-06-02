@@ -44,6 +44,14 @@ All you need to build the project is Maven 3 and Java 8 JDK:
 
 The Camel Labs project is distributed under the [Apache 2.0 Software License](https://www.apache.org/licenses/LICENSE-2.0).
 
+## The Team
+
+|Name|Contact|URL|Compagny|Spoken Lang|
+|-|-|-|-|-|
+|Henryk K.|@hekonsek|https://about.me/hekonsek|Red Hat|PL (native), EN|
+|Greg A.|@gautric_io|http://gautric.github.io/|Red Hat|FR (native), EN|
+|Geert S.|@geertschuring |https://geertschuring.wordpress.com/|Geert Schuring|NL (native), EN |
+
 ## IoT ecosystem
 
 Camel IoT Labs is the part of the bigger IoT effort including [SilverSpoon](http://www.silverspoon.io) and [SilverWare](http://www.silverware.io) projects.
