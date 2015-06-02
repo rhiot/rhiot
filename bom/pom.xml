@@ -33,10 +33,10 @@
         <californium-core.version>1.0.0-M1</californium-core.version>
 
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
-    <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
-    <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
-    <maven-lifecycle-mapping.version>1.0.0</maven-lifecycle-mapping.version>
-  </properties>
+        <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
+        <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+        <maven-lifecycle-mapping.version>1.0.0</maven-lifecycle-mapping.version>
+    </properties>
 
   <dependencyManagement>
     <dependencies>
