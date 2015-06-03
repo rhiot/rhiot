@@ -46,7 +46,7 @@ The Camel Labs project is distributed under the [Apache 2.0 Software License](ht
 
 ## The Team
 
-| Name | Contact | URL | Compagny | Spoken Lang |
+| Name | Contact | URL | Company | Spoken Lang |
 |------|---------|-----|----------|-------------|
 | Henryk K. | [@hekonsek](https://twitter.com/hekonsek) | https://about.me/hekonsek | Red Hat | PL (native), EN |
 | Greg A. | [@gautric_io](https://twitter.com/gautric_io) | http://gautric.github.io/ | Red Hat | FR (native), EN, JP (beginner) |
