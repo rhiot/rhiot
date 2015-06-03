@@ -39,6 +39,7 @@ All you need to build the project is Maven 3 and Java 8 JDK:
 | Camel Labs | Apache Camel | Release date |
 |--------------|-----------|--------------|
 | 0.1.0 |2.15.2| 2015-06-02 |
+| 0.1.1-SNAPSHOT |2.15.2| TBD |
 
 ## License
 
