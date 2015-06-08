@@ -16,17 +16,29 @@
  */
 package com.github.camellabs.iot.component.gps.bu353;
 
+import org.apache.camel.EndpointInject;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
 public class GpsBu353ConsumerTest extends CamelTestSupport {
 
+    @EndpointInject(uri = "mock:shouldReadTwoGpsCoordinates")
+    MockEndpoint mockEndpoint;
+
     @Test
     public void shouldReadGpsCoordinates() {
         GpsCoordinates coordinates = consumer.receiveBody("gps-bu353://gps", GpsCoordinates.class);
         assertEquals(49.493202, coordinates.lng(), 0.01);
         assertEquals(19.032611, coordinates.lat(), 0.01);
+    }
+
+    @Test
+    public void shouldReadTwoGpsCoordinates() throws InterruptedException {
+        mockEndpoint.setExpectedCount(2);
+        mockEndpoint.assertIsSatisfied();
     }
 
     @Override
@@ -36,4 +48,14 @@ public class GpsBu353ConsumerTest extends CamelTestSupport {
         return registry;
     }
 
+    @Override
+    protected RouteBuilder createRouteBuilder() throws Exception {
+        return new RouteBuilder() {
+            @Override
+            public void configure() throws Exception {
+                from("gps-bu353://shouldReadTwoGpsCoordinates").
+                        to("mock:shouldReadTwoGpsCoordinates");
+            }
+        };
+    }
 }

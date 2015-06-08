@@ -21,17 +21,15 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.ExchangeBuilder;
 import org.apache.camel.impl.DefaultConsumer;
+import org.apache.camel.util.IOHelper;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
 
 import static java.lang.Thread.sleep;
 
 public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
-
-    private InputStream source;
 
     private ExecutorService executorService;
 
@@ -42,7 +40,6 @@ public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
     @Override
     protected void doStart() throws Exception {
         super.doStart();
-        source = getEndpoint().getGpsCoordinatesSource().source();
 
         executorService = getEndpoint().getCamelContext().getExecutorServiceManager().newSingleThreadExecutor(this, getEndpoint().getEndpointUri());
         executorService.execute(this);
@@ -54,7 +51,6 @@ public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
             getEndpoint().getCamelContext().getExecutorServiceManager().shutdownNow(executorService);
             executorService = null;
         }
-        source.close();
         super.doStop();
     }
 
@@ -66,24 +62,36 @@ public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
     @Override
     public void run() {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(source));
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
+            while (true) {
+                BufferedReader source = null;
                 try {
-                    log.debug("Consuming line: {}", line);
-                    if(line.startsWith("$GPRMC")) {
-                        GpsCoordinates coordinates = GpsCoordinates.parse(line);
-                        Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(coordinates).build();
-                        getProcessor().process(exchange);
-                    } else {
-                        log.debug("Not supported line read from the NMEA file. Ignoring: {}", line);
+                    source = new BufferedReader(new InputStreamReader(getEndpoint().getGpsCoordinatesSource().source()));
+                    while (true) {
+                        try {
+                            String line = source.readLine();
+                            log.debug("Consuming line: {}", line);
+                            if (line.startsWith("$GPRMC")) {
+                                GpsCoordinates coordinates = GpsCoordinates.parse(line);
+                                Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(coordinates).build();
+                                getProcessor().process(exchange);
+                                break;
+                            } else {
+                                log.debug("Not supported line read from the NMEA file. Ignoring: {}", line);
+                            }
+                        } catch (Exception e) {
+                            getExceptionHandler().handleException(e);
+                        }
                     }
                 } catch (Exception e) {
                     getExceptionHandler().handleException(e);
+                } finally {
+                    if(source != null) {
+                        IOHelper.close(source);
+                    }
                 }
                 sleep(getEndpoint().getScanningInterval());
             }
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             getExceptionHandler().handleException(e);
         }
     }
