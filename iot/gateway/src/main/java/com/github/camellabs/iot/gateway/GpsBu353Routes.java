@@ -33,7 +33,7 @@ public class GpsBu353Routes extends RouteBuilder {
     public void configure() throws Exception {
         from("gps-bu353://gps").process(exchange -> {
             GpsCoordinates coordinates = exchange.getIn().getBody(GpsCoordinates.class);
-            exchange.getIn().setBody(currentTimeMillis() + "," + coordinates.lat() + "," + coordinates.lng());
+            exchange.getIn().setBody(currentTimeMillis() + "," + coordinates.lng() + "," + coordinates.lat());
         }).to("file:///var/camel-labs-iot-gateway/gps");
     }
 
