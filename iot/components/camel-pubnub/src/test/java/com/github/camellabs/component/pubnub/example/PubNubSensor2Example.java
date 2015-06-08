@@ -42,10 +42,10 @@ public class PubNubSensor2Example {
     }
 
     static private class SimulatedDeviceEventGeneratorRoute extends RouteBuilder {
-        private String deviceEP = "pubnub://pubsub:iot?uuid=device2&publisherKey=" + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY + "&subscriberKey="
-                                  + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY;
-        private String devicePrivateEP = "pubnub://pubsub:device2private?uuid=device2&publisherKey=" + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY + "&subscriberKey="
-                                         + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY;
+        private final String deviceEP = "pubnub://pubsub:iot?uuid=device2&publisherKey=" + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY + "&subscriberKey="
+                                        + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY;
+        private final String devicePrivateEP = "pubnub://pubsub:device2private?uuid=device2&publisherKey=" + PubNubExampleConstants.PUBNUB_PUBLISHER_KEY + "&subscriberKey="
+                                               + PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY;
 
         @Override
         public void configure() throws Exception {
@@ -116,7 +116,7 @@ public class PubNubSensor2Example {
     public static class EventGeneratorBean {
         public static String getRandomEvent(String device) throws JSONException {
             Random rand = new Random();
-            String s = "{uuid:" + device + ", humidity:" + rand.nextInt(100) + ", temperatur=" + rand.nextInt(40) + "}";
+            String s = "{uuid:" + device + ", humidity:" + rand.nextInt(100) + ", temperature=" + rand.nextInt(40) + "}";
             return s;
         }
     }
