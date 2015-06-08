@@ -16,12 +16,18 @@
 
 #!/usr/bin/env bash
 
+CAMEL_GATEWAY_HOME=/var/camel-labs-iot-gateway
+
 # Prepare gateway home directory
-mkdir -p /var/camel-labs-iot-gateway
+mkdir -p CAMEL_GATEWAY_HOME
+
+# Remove existing Gateway artifacts
+echo 'This is dummy file used by the installation script.' > ${CAMEL_GATEWAY_HOME}/camel-labs-iot-gateway-TMP.jar
+rm ${CAMEL_GATEWAY_HOME}/camel-labs-iot-gateway-*.jar
 
 # Download and install the latest gateway
 wget http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.github.camellabs&a=camel-labs-iot-gateway&v=LATEST --directory-prefix=/tmp
-mv /tmp/camel-labs-iot-gateway-*.jar /var/camel-labs-iot-gateway/
+mv /tmp/camel-labs-iot-gateway-*.jar ${CAMEL_GATEWAY_HOME}/
 
 # Download and install the init.d script
 sudo wget https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/raspbian/camel-labs-iot-gateway.sh -O /etc/init.d/camel-labs-iot-gateway
