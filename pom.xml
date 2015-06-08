@@ -239,6 +239,7 @@
                             <exclude>**/ts/*.js.map</exclude>
                             <exclude>**/test-plugins/**/*.js</exclude>
                             <exclude>**/test-plugins/**/*.js.map</exclude>
+                            <exclude>**/coordinates.txt</exclude>
                         </excludes>
                     </configuration>
                 </plugin>

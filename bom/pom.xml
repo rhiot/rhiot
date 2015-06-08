@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.github.camel-labs</groupId>
-    <artifactId>camel-labs</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>camel-labs-bom</artifactId>
-  <packaging>pom</packaging>
+    <parent>
+        <groupId>com.github.camel-labs</groupId>
+        <artifactId>camel-labs</artifactId>
+        <version>0.1.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>camel-labs-bom</artifactId>
+    <packaging>pom</packaging>
 
-  <licenses>
-    <license>
-      <name>The Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
     <properties>
         <activemq.version>5.11.1</activemq.version>
@@ -37,23 +38,23 @@
         <maven-lifecycle-mapping.version>1.0.0</maven-lifecycle-mapping.version>
     </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <!-- BOMs -->
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring-boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.camel</groupId>
-        <artifactId>camel-parent</artifactId>
-        <version>${camel.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <!-- BOMs -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-parent</artifactId>
+                <version>${camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <dependency>
                 <groupId>com.github.camel-labs</groupId>
@@ -71,6 +72,17 @@
                 <artifactId>camel-labs-iot-utils</artifactId>
                 <version>${camel-labs.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.camel-labs</groupId>
+                <artifactId>camel-pi4j</artifactId>
+                <version>${camel-labs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.camel-labs</groupId>
+                <artifactId>camel-gps-bu353</artifactId>
+                <version>${camel-labs.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-core</artifactId>
@@ -122,11 +134,11 @@
                 <artifactId>activemq-mqtt</artifactId>
                 <version>${activemq.version}</version>
             </dependency>
-        <dependency>
-            <groupId>org.apache.ivy</groupId>
-            <artifactId>ivy</artifactId>
-            <version>${ivy.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.apache.ivy</groupId>
+                <artifactId>ivy</artifactId>
+                <version>${ivy.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
@@ -162,60 +174,60 @@
                 <artifactId>pubnub</artifactId>
                 <version>${pubnub.version}</version>
             </dependency>
-        <dependency>
-            <groupId>org.eclipse.californium</groupId>
-            <artifactId>californium-core</artifactId>
-            <version>${californium-core.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.eclipse.californium</groupId>
+                <artifactId>californium-core</artifactId>
+                <version>${californium-core.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
-  <profiles>
-    <profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>${maven-gpg-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>CopyDependencyforLab</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>copy-dependencies</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>copy-dependencies</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>${project.build.directory}</outputDirectory>
-                  <!-- configure the plugin here -->
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpg-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>CopyDependencyforLab</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-dependencies</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                    <!-- configure the plugin here -->
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
