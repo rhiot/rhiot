@@ -16,15 +16,14 @@
  */
 package com.github.camellabs.iot.gateway;
 
+import com.github.camellabs.iot.component.gps.bu353.GpsCoordinates;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.net.UnknownHostException;
-
-import static com.github.camellabs.iot.gateway.CamelIotGatewayConstants.HEARTBEAT_ENDPOINT;
 import static java.lang.System.currentTimeMillis;
-import static java.net.InetAddress.getLocalHost;
 
 @Component
 @ConditionalOnProperty(value = "camellabs.iot.gateway.gps.bu353", havingValue = "true")
@@ -32,7 +31,10 @@ public class GpsBu353RouteBuilderCallback extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("gps-bu353://gps").to("file:///var/camel-labs-iot-gateway/gps");
+        from("gps-bu353://gps").process(exchange -> {
+            GpsCoordinates coordinates = exchange.getIn().getBody(GpsCoordinates.class);
+            exchange.getIn().setBody(currentTimeMillis() + "," + coordinates.lat() + "," + coordinates.lng());
+        }).to("file:///var/camel-labs-iot-gateway/gps");
     }
 
 }

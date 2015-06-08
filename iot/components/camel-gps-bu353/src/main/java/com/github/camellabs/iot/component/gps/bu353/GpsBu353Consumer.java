@@ -23,14 +23,15 @@ import org.apache.camel.builder.ExchangeBuilder;
 import org.apache.camel.impl.DefaultConsumer;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
 
-public class GpsBu353Consumer extends DefaultConsumer {
+public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
 
     private InputStream source;
+
+    private ExecutorService executorService;
 
     public GpsBu353Consumer(Endpoint endpoint, Processor processor) {
         super(endpoint, processor);
@@ -40,34 +41,40 @@ public class GpsBu353Consumer extends DefaultConsumer {
     protected void doStart() throws Exception {
         super.doStart();
         source = getEndpoint().getGpsCoordinatesSource().source();
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(source));
-                    String line = null;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        GpsCoordinates coordinates = GpsCoordinates.parse(line);
-                        Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(coordinates).build();
-                        getProcessor().process(exchange);
-                        Thread.sleep(1000);
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }.start();
+
+        executorService = getEndpoint().getCamelContext().getExecutorServiceManager().newSingleThreadExecutor(this, getEndpoint().getEndpointUri());
+        executorService.execute(this);
     }
 
     @Override
     protected void doStop() throws Exception {
-        super.doStop();
+        if (executorService != null) {
+            getEndpoint().getCamelContext().getExecutorServiceManager().shutdownNow(executorService);
+            executorService = null;
+        }
         source.close();
+        super.doStop();
     }
 
     @Override
     public GpsBu353Endpoint getEndpoint() {
         return (GpsBu353Endpoint) super.getEndpoint();
+    }
+
+    @Override
+    public void run() {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(source));
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                GpsCoordinates coordinates = GpsCoordinates.parse(line);
+                Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(coordinates).build();
+                getProcessor().process(exchange);
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+            getExceptionHandler().handleException(e);
+        }
     }
 
 }
