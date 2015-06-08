@@ -16,25 +16,28 @@
  */
 package com.github.camellabs.iot.component.gps.bu353;
 
-import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.spi.UriEndpoint;
+import org.apache.camel.spi.UriParam;
 
 import java.util.Set;
 
+@UriEndpoint(scheme = "gps-bu353", title = "GPS BU353", syntax = "gps-bu353:label", consumerClass = GpsBu353Consumer.class, label = "iot,messaging,gps")
 public class GpsBu353Endpoint extends DefaultEndpoint {
 
-    GpsCoordinatesSource gpsCoordinatesSource;
+    @UriParam(defaultValue = "new SerialGpsCoordinatesSource()")
+    private GpsCoordinatesSource gpsCoordinatesSource;
 
-    public GpsBu353Endpoint(String endpointUri, Component component) {
+    public GpsBu353Endpoint(String endpointUri, GpsBu353Component component) {
         super(endpointUri, component);
     }
 
     @Override
     public Producer createProducer() throws Exception {
-        return null;
+        throw new UnsupportedOperationException("GPS BU353 component supports only consumer endpoints.");
     }
 
     @Override
@@ -45,14 +48,7 @@ public class GpsBu353Endpoint extends DefaultEndpoint {
     @Override
     protected void doStart() throws Exception {
         super.doStart();
-        if(gpsCoordinatesSource == null) {
-            Set<GpsCoordinatesSource> sources = getCamelContext().getRegistry().findByType(GpsCoordinatesSource.class);
-            if(sources.size() == 1) {
-                gpsCoordinatesSource = sources.iterator().next();
-            } else {
-                gpsCoordinatesSource = new SerialGpsCoordinatesSource();
-            }
-        }
+        gpsCoordinatesSource = resolveGpsCoordinatesSource();
     }
 
     @Override
@@ -60,12 +56,30 @@ public class GpsBu353Endpoint extends DefaultEndpoint {
         return true;
     }
 
+    /**
+     * GPS coordinates source. Usually serial port (/dev/ttyUSB0).
+     */
     public GpsCoordinatesSource getGpsCoordinatesSource() {
         return gpsCoordinatesSource;
     }
 
     public void setGpsCoordinatesSource(GpsCoordinatesSource gpsCoordinatesSource) {
         this.gpsCoordinatesSource = gpsCoordinatesSource;
+    }
+
+    // Helpers
+
+    protected GpsCoordinatesSource resolveGpsCoordinatesSource() {
+        if(gpsCoordinatesSource == null) {
+            Set<GpsCoordinatesSource> sources = getCamelContext().getRegistry().findByType(GpsCoordinatesSource.class);
+            if(sources.size() == 1) {
+                return sources.iterator().next();
+            } else {
+                return new SerialGpsCoordinatesSource();
+            }
+        } else {
+            return gpsCoordinatesSource;
+        }
     }
 
 }
