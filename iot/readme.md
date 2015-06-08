@@ -30,6 +30,14 @@ Or the same remotely using SSH:
 From this point forward Camel IoT gateway will be installed on your device as `camel-iot-gateway` service and started
 whenever the device boots up.
 
+### Gateway logger configuration
+
+By default gateway keeps the logging history from the last 14 days. Logs are grouped by the days and split into the 
+5 MB files. The default logging level is `INFO`. You can change it by setting the `camellabs_iot_gateway_log_root_level`
+environment variable:
+
+    export camellabs_iot_gateway_log_root_level=DEBUG
+
 ### Device heartbeats
 
 Camel gateway generates heartbeats indicating that the device is alive and optionally connected to the data
