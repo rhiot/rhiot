@@ -27,7 +27,7 @@ import static java.lang.System.currentTimeMillis;
 
 @Component
 @ConditionalOnProperty(value = "camellabs.iot.gateway.gps.bu353", havingValue = "true")
-public class GpsBu353RouteBuilderCallback extends RouteBuilder {
+public class GpsBu353Routes extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
