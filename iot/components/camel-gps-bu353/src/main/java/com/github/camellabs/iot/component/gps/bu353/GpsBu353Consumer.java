@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
 
+import static java.lang.Thread.sleep;
+
 public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
 
     private InputStream source;
@@ -67,10 +69,19 @@ public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(source));
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
-                GpsCoordinates coordinates = GpsCoordinates.parse(line);
-                Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(coordinates).build();
-                getProcessor().process(exchange);
-                Thread.sleep(1000);
+                try {
+                    log.debug("Consuming line: {}", line);
+                    if(line.startsWith("$GPRMC")) {
+                        GpsCoordinates coordinates = GpsCoordinates.parse(line);
+                        Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(coordinates).build();
+                        getProcessor().process(exchange);
+                    } else {
+                        log.debug("Not supported line read from the NMEA file. Ignoring: {}", line);
+                    }
+                } catch (Exception e) {
+                    getExceptionHandler().handleException(e);
+                }
+                sleep(getEndpoint().getScanningInterval());
             }
         } catch (Exception e) {
             getExceptionHandler().handleException(e);

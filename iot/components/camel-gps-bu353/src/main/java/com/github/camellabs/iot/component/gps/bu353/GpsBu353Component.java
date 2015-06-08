@@ -29,7 +29,9 @@ public class GpsBu353Component extends UriEndpointComponent {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new GpsBu353Endpoint(uri, this);
+        GpsBu353Endpoint endpoint = new GpsBu353Endpoint(uri, this);
+        setProperties(endpoint, parameters);
+        return endpoint;
     }
 
 }

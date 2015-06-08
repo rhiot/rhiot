@@ -28,6 +28,9 @@ import java.util.Set;
 @UriEndpoint(scheme = "gps-bu353", title = "GPS BU353", syntax = "gps-bu353:label", consumerClass = GpsBu353Consumer.class, label = "iot,messaging,gps")
 public class GpsBu353Endpoint extends DefaultEndpoint {
 
+    @UriParam(defaultValue = "5000", description = "How long the consumer should wait between each scan (in miliseconds).")
+    private int scanningInterval = 5000;
+
     @UriParam(defaultValue = "new SerialGpsCoordinatesSource()")
     private GpsCoordinatesSource gpsCoordinatesSource;
 
@@ -54,6 +57,16 @@ public class GpsBu353Endpoint extends DefaultEndpoint {
     @Override
     public boolean isSingleton() {
         return true;
+    }
+
+    // Configuration getters and setters
+
+    public int getScanningInterval() {
+        return scanningInterval;
+    }
+
+    public void setScanningInterval(int scanningInterval) {
+        this.scanningInterval = scanningInterval;
     }
 
     /**
