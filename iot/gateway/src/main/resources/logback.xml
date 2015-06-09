@@ -12,7 +12,7 @@
     the specific language governing permissions and limitations under the License. -->
 <configuration>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/srv/logs/application.log</file>
+        <file>/var/camel-labs-iot-gateway/logs/gateway.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>/var/camel-labs-iot-gateway/logs/gateway_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
