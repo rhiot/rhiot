@@ -30,6 +30,15 @@ Or the same remotely using SSH:
 From this point forward Camel IoT gateway will be installed on your device as `camel-iot-gateway` service and started
 whenever the device boots up.
 
+### Configuration of the gateway
+
+The gateway configuration file is `/etc/default/camel-labs-iot-gateway`. The latter file is loaded by the gateway 
+starting script. It means that all the configuration environment variables can be added there. For example to set the
+`foo_bar_baz` configuration property to value `qux`, the following environment variable should be added to the
+`/etc/default/camel-labs-iot-gateway` file:
+
+    export foo_bar_baz=qux
+
 ### Gateway logger configuration
 
 By default gateway keeps the logging history from the last 14 days. Logs are grouped by the days and split into the 

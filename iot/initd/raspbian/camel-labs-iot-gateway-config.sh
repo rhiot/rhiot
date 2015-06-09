@@ -16,5 +16,8 @@
 
 #!/bin/bash
 
+## Change logging level (default is INFO)
+# export camellabs_iot_gateway_log_root_level=DEBUG
+
 ## Collect GPS data from BU353 GPS device
 # export camellabs_iot_gateway_gps_bu353=true
