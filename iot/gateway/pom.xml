@@ -37,12 +37,10 @@
         <dependency>
             <groupId>com.github.camel-labs</groupId>
             <artifactId>camel-pi4j</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.camel-labs</groupId>
             <artifactId>camel-gps-bu353</artifactId>
-            <version>${project.version}</version>
         </dependency>
         
         <!-- Testing -->
