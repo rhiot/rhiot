@@ -16,6 +16,7 @@
  */
 package com.github.camellabs.iot.component.gps.bu353;
 
+import com.github.camellabs.iot.utils.process.MockProcessManager;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -27,6 +28,27 @@ public class GpsBu353ConsumerTest extends CamelTestSupport {
 
     @EndpointInject(uri = "mock:shouldReadTwoGpsCoordinates")
     MockEndpoint mockEndpoint;
+
+    @Override
+    protected JndiRegistry createRegistry() throws Exception {
+        JndiRegistry registry = super.createRegistry();
+        registry.bind("gpsCoordinatesSource", new MockGpsCoordinatesSource());
+        registry.bind("processManager", new MockProcessManager());
+        return registry;
+    }
+
+    @Override
+    protected RouteBuilder createRouteBuilder() throws Exception {
+        return new RouteBuilder() {
+            @Override
+            public void configure() throws Exception {
+                from("gps-bu353://shouldReadTwoGpsCoordinates").
+                        to("mock:shouldReadTwoGpsCoordinates");
+            }
+        };
+    }
+
+    // Tests
 
     @Test
     public void shouldReadGpsCoordinates() {
@@ -41,21 +63,4 @@ public class GpsBu353ConsumerTest extends CamelTestSupport {
         mockEndpoint.assertIsSatisfied();
     }
 
-    @Override
-    protected JndiRegistry createRegistry() throws Exception {
-        JndiRegistry registry = super.createRegistry();
-        registry.bind("gpsCoordinatesSource", new MockGpsCoordinatesSource());
-        return registry;
-    }
-
-    @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                from("gps-bu353://shouldReadTwoGpsCoordinates").
-                        to("mock:shouldReadTwoGpsCoordinates");
-            }
-        };
-    }
 }

@@ -16,10 +16,13 @@
  */
 package com.github.camellabs.iot.component.gps.bu353;
 
+import com.github.camellabs.iot.utils.process.DefaultProcessManager;
+import com.github.camellabs.iot.utils.process.ProcessManager;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
 
 import java.util.Map;
+import java.util.Set;
 
 public class GpsBu353Component extends UriEndpointComponent {
 
@@ -32,6 +35,29 @@ public class GpsBu353Component extends UriEndpointComponent {
         GpsBu353Endpoint endpoint = new GpsBu353Endpoint(uri, this);
         setProperties(endpoint, parameters);
         return endpoint;
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+        super.doStart();
+
+        ProcessManager processManager = resolveProcessManager();
+        processManager.executeAndJoinOutput("killall", "gpsd");
+        processManager.executeAndJoinOutput("gpsd", "/dev/ttyUSB0");
+        processManager.executeAndJoinOutput("killall", "gpsd");
+        processManager.executeAndJoinOutput("gpsd", "/dev/ttyUSB0");
+        processManager.executeAndJoinOutput("gpsctl", "-f", "-n", "/dev/ttyUSB0");
+    }
+
+    protected ProcessManager resolveProcessManager() {
+        Set<ProcessManager> processManagers = getCamelContext().getRegistry().findByType(ProcessManager.class);
+        if(processManagers.isEmpty()) {
+            return new DefaultProcessManager();
+        } else if(processManagers.size() == 1) {
+            return processManagers.iterator().next();
+        } else {
+            return new DefaultProcessManager();
+        }
     }
 
 }
