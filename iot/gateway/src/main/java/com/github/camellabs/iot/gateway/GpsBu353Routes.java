@@ -17,16 +17,17 @@
 package com.github.camellabs.iot.gateway;
 
 import com.github.camellabs.iot.component.gps.bu353.GpsCoordinates;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import static java.lang.System.currentTimeMillis;
 
+/**
+ * Camel route reading current position data from the BU353 GPS device.
+ */
 @Component
-@ConditionalOnProperty(value = "camellabs.iot.gateway.gps.bu353", havingValue = "true")
+@ConditionalOnProperty(value = "camellabs_iot_gateway_gps_bu353", havingValue = "true")
 public class GpsBu353Routes extends RouteBuilder {
 
     @Override
