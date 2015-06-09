@@ -20,11 +20,17 @@ import com.github.camellabs.iot.utils.process.DefaultProcessManager;
 import com.github.camellabs.iot.utils.process.ProcessManager;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Set;
 
+import static java.lang.Thread.sleep;
+
 public class GpsBu353Component extends UriEndpointComponent {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GpsBu353Component.class);
 
     public GpsBu353Component() {
         super(GpsBu353Endpoint.class);
@@ -37,17 +43,15 @@ public class GpsBu353Component extends UriEndpointComponent {
         return endpoint;
     }
 
+    // Life-cycle
+
     @Override
     protected void doStart() throws Exception {
         super.doStart();
-
-        ProcessManager processManager = resolveProcessManager();
-        processManager.executeAndJoinOutput("killall", "gpsd");
-        processManager.executeAndJoinOutput("gpsd", "/dev/ttyUSB0");
-        processManager.executeAndJoinOutput("killall", "gpsd");
-        processManager.executeAndJoinOutput("gpsd", "/dev/ttyUSB0");
-        processManager.executeAndJoinOutput("gpsctl", "-f", "-n", "/dev/ttyUSB0");
+        restartGpsDaemon();
     }
+
+    // Helpers
 
     protected ProcessManager resolveProcessManager() {
         Set<ProcessManager> processManagers = getCamelContext().getRegistry().findByType(ProcessManager.class);
@@ -57,6 +61,23 @@ public class GpsBu353Component extends UriEndpointComponent {
             return processManagers.iterator().next();
         } else {
             return new DefaultProcessManager();
+        }
+    }
+
+    protected void restartGpsDaemon() {
+        try {
+            ProcessManager processManager = resolveProcessManager();
+            String gpsctlResult = "";
+            do {
+                LOG.info("(Re)starting GPS daemon.");
+                processManager.executeAndJoinOutput("killall", "gpsd");
+                processManager.executeAndJoinOutput("gpsd", "/dev/ttyUSB0");
+                sleep(5000);
+                gpsctlResult = processManager.executeAndJoinOutput("gpsctl", "-n", "/dev/ttyUSB0").trim();
+                LOG.info("gpsctl result: {}", gpsctlResult);
+            } while (!gpsctlResult.equals("gpsctl:ERROR: /dev/ttyUSB0 mode change to NMEA failed"));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
