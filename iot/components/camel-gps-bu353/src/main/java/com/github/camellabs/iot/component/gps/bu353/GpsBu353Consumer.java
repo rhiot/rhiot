@@ -62,9 +62,11 @@ public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
     @Override
     public void run() {
         try {
+            log.debug("Started BU353 consumer thread.");
             while (true) {
                 BufferedReader source = null;
                 try {
+                    log.debug("Opening connection with the GPS serial port.");
                     source = new BufferedReader(new InputStreamReader(getEndpoint().getGpsCoordinatesSource().source()));
                     while (true) {
                         try {
@@ -85,6 +87,7 @@ public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
                 } catch (Exception e) {
                     getExceptionHandler().handleException(e);
                 } finally {
+                    log.debug("Closing connection with the GPS serial port.");
                     if(source != null) {
                         IOHelper.close(source);
                     }
