@@ -32,6 +32,7 @@ case "$1" in
     start)
         echo "Starting Camel Labs IoT Gateway"
         mkdir -p /var/camel-labs-iot-gateway
+        source /etc/default/camel-labs-iot-gateway
         java -jar /var/camel-labs-iot-gateway/camel-labs-iot-gateway-*.jar >/var/camel-labs-iot-gateway/camel-labs-iot-gateway.log 2>&1 &
         echo $! > /var/camel-labs-iot-gateway/pid
         echo "Camel Labs IoT Gateway started."

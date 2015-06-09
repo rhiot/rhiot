@@ -31,6 +31,7 @@ mv /tmp/camel-labs-iot-gateway-*.jar ${CAMEL_GATEWAY_HOME}/
 
 # Download and install the init.d script
 sudo wget https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/raspbian/camel-labs-iot-gateway.sh -O /etc/init.d/camel-labs-iot-gateway
+sudo wget https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/raspbian/camel-labs-iot-gateway-config.sh -O /etc/default/camel-labs-iot-gateway
 sudo chmod +x /etc/init.d/camel-labs-iot-gateway
 sudo update-rc.d camel-labs-iot-gateway defaults
 
