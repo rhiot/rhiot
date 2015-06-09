@@ -34,10 +34,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-pi4j</artifactId>
-        </dependency>
+        <!-- Commented out until https://github.com/camel-labs/camel-labs/issues/97 is solved. -->
+        <!--<dependency>-->
+            <!--<groupId>com.github.camel-labs</groupId>-->
+            <!--<artifactId>camel-pi4j</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.github.camel-labs</groupId>
             <artifactId>camel-gps-bu353</artifactId>
