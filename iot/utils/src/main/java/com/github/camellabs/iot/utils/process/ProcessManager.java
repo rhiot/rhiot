@@ -16,8 +16,13 @@
  */
 package com.github.camellabs.iot.utils.process;
 
+import java.util.List;
+
+/**
+ * Executes and manages system processes.
+ */
 public interface ProcessManager {
 
-    String executeAndJoinOutput(String... command);
+    List<String> executeAndJoinOutput(String... command);
 
 }

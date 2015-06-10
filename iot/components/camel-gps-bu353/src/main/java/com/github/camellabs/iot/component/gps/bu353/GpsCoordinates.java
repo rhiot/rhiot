@@ -20,29 +20,28 @@ import static java.lang.Double.parseDouble;
 
 public class GpsCoordinates {
 
-    private final double lng;
-
     private final double lat;
 
-    public GpsCoordinates(double lng, double lat) {
-        this.lng = lng;
+    private final double lng;
+
+    public GpsCoordinates(double lat, double lng) {
         this.lat = lat;
+        this.lng = lng;
     }
 
     public static GpsCoordinates parse(String line) {
-        // $GPRMC,154142.000,A,4949.3204,N,01903.2606,E,0.00,49.63,210515,,,A*5F
         String[] lineParts = line.split(",");
-        double lng = parseDouble(lineParts[3]) / 100;
-        double lat = parseDouble(lineParts[5]) / 100;
-        return new GpsCoordinates(lng, lat);
-    }
-
-    public double lng() {
-        return lng;
+        double lat = parseDouble(lineParts[3]) / 100;
+        double lng = parseDouble(lineParts[5]) / 100;
+        return new GpsCoordinates(lat, lng);
     }
 
     public double lat() {
         return lat;
+    }
+
+    public double lng() {
+        return lng;
     }
 
 }

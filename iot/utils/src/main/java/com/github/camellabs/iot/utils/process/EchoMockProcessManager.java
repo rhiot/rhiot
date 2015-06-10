@@ -16,13 +16,15 @@
  */
 package com.github.camellabs.iot.utils.process;
 
-import java.util.Arrays;
+import java.util.List;
 
-public class MockProcessManager implements ProcessManager {
+import static java.util.Arrays.asList;
+
+public class EchoMockProcessManager implements ProcessManager {
 
     @Override
-    public String executeAndJoinOutput(String... command) {
-        return Arrays.toString(command);
+    public List<String> executeAndJoinOutput(String... command) {
+        return asList(command);
     }
 
 }

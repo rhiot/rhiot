@@ -23,6 +23,7 @@ import org.apache.camel.impl.UriEndpointComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -67,15 +68,15 @@ public class GpsBu353Component extends UriEndpointComponent {
     protected void restartGpsDaemon() {
         try {
             ProcessManager processManager = resolveProcessManager();
-            String gpsctlResult = "";
+            List<String> gpsctlResult;
             do {
                 LOG.info("(Re)starting GPS daemon.");
                 processManager.executeAndJoinOutput("killall", "gpsd");
                 processManager.executeAndJoinOutput("gpsd", "/dev/ttyUSB0");
                 sleep(5000);
-                gpsctlResult = processManager.executeAndJoinOutput("gpsctl", "-n", "/dev/ttyUSB0").trim();
+                gpsctlResult = processManager.executeAndJoinOutput("gpsctl", "-n", "/dev/ttyUSB0");
                 LOG.info("gpsctl result: {}", gpsctlResult);
-            } while (!gpsctlResult.equals("gpsctl:ERROR: /dev/ttyUSB0 mode change to NMEA failed"));
+            } while (!gpsctlResult.contains("gpsctl:ERROR: /dev/ttyUSB0 mode change to NMEA failed"));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

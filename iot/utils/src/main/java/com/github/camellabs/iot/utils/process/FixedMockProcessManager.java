@@ -16,21 +16,22 @@
  */
 package com.github.camellabs.iot.utils.process;
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
-public class DefaultProcessManager implements ProcessManager {
+import static java.util.Arrays.asList;
+
+public class FixedMockProcessManager implements ProcessManager {
+
+    private final List<String> result;
+
+    public FixedMockProcessManager(String... result) {
+        this.result = asList(result);
+    }
 
     @Override
     public List<String> executeAndJoinOutput(String... command) {
-        try {
-            Process process = new ProcessBuilder().redirectErrorStream(true).command(command).start();
-            return IOUtils.readLines(process.getInputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return result;
     }
 
 }

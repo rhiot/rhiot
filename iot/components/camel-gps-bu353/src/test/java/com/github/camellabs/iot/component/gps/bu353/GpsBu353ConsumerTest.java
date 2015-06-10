@@ -16,7 +16,7 @@
  */
 package com.github.camellabs.iot.component.gps.bu353;
 
-import com.github.camellabs.iot.utils.process.MockProcessManager;
+import com.github.camellabs.iot.utils.process.FixedMockProcessManager;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -33,7 +33,7 @@ public class GpsBu353ConsumerTest extends CamelTestSupport {
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = super.createRegistry();
         registry.bind("gpsCoordinatesSource", new MockGpsCoordinatesSource());
-        registry.bind("processManager", new MockProcessManager());
+        registry.bind("processManager", new FixedMockProcessManager("gpsctl:ERROR: /dev/ttyUSB0 mode change to NMEA failed"));
         return registry;
     }
 
@@ -53,8 +53,8 @@ public class GpsBu353ConsumerTest extends CamelTestSupport {
     @Test
     public void shouldReadGpsCoordinates() {
         GpsCoordinates coordinates = consumer.receiveBody("gps-bu353://gps", GpsCoordinates.class);
-        assertEquals(49.493202, coordinates.lng(), 0.01);
-        assertEquals(19.032611, coordinates.lat(), 0.01);
+        assertEquals(49.493202, coordinates.lat(), 0.01);
+        assertEquals(19.032611, coordinates.lng(), 0.01);
     }
 
     @Test
