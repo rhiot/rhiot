@@ -95,7 +95,7 @@ public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
                 sleep(getEndpoint().getScanningInterval());
             }
         } catch (InterruptedException e) {
-            getExceptionHandler().handleException(e);
+            log.info("Interrupted GPS scanning. Probably due to the context shutdown.");
         }
     }
 
