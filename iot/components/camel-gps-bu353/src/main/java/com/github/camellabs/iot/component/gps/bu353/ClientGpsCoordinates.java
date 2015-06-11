@@ -21,6 +21,7 @@ import java.util.Date;
 import static java.lang.Double.parseDouble;
 import static java.lang.Long.parseLong;
 import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * GPS coordinates collected and stored on the device.
@@ -41,6 +42,11 @@ public class ClientGpsCoordinates {
 
     public static ClientGpsCoordinates parseNMEA(String line) {
         String[] lineParts = line.split(",");
+        String latText = lineParts[3];
+        String lngText = lineParts[5];
+        if(isBlank(latText) || isBlank(lngText)) {
+            throw new SatelliteOutOfReachException();
+        }
         double lat = parseDouble(lineParts[3]) / 100;
         double lng = parseDouble(lineParts[5]) / 100;
         return new ClientGpsCoordinates(new Date(), lat, lng);
@@ -57,6 +63,8 @@ public class ClientGpsCoordinates {
         double lng = parseDouble(serializedCoordinatesParts[2]);
         return new ClientGpsCoordinates(new Date(timestamp), lat, lng);
     }
+
+    // Getters
 
     public Date timestamp() {
         return timestamp;

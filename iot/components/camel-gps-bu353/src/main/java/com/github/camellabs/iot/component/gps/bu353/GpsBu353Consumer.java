@@ -80,6 +80,8 @@ public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
                             } else {
                                 log.debug("Not supported line read from the NMEA file. Ignoring: {}", line);
                             }
+                        } catch (SatelliteOutOfReachException e) {
+                            log.info("GPS satellite out of reach.");
                         } catch (Exception e) {
                             getExceptionHandler().handleException(e);
                         }
