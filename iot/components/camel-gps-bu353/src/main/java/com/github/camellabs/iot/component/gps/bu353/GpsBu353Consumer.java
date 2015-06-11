@@ -73,7 +73,7 @@ public class GpsBu353Consumer extends DefaultConsumer implements Runnable {
                             String line = source.readLine();
                             log.debug("Consuming line: {}", line);
                             if (line.startsWith("$GPRMC")) {
-                                GpsCoordinates coordinates = GpsCoordinates.parse(line);
+                                ClientGpsCoordinates coordinates = ClientGpsCoordinates.parseNMEA(line);
                                 Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(coordinates).build();
                                 getProcessor().process(exchange);
                                 break;

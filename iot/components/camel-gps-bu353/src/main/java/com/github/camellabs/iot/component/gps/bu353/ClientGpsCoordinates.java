@@ -16,24 +16,50 @@
  */
 package com.github.camellabs.iot.component.gps.bu353;
 
-import static java.lang.Double.parseDouble;
+import java.util.Date;
 
-public class GpsCoordinates {
+import static java.lang.Double.parseDouble;
+import static java.lang.Long.parseLong;
+import static java.lang.String.format;
+
+/**
+ * GPS coordinates collected and stored on the device.
+ */
+public class ClientGpsCoordinates {
+
+    private final Date timestamp;
 
     private final double lat;
 
     private final double lng;
 
-    public GpsCoordinates(double lat, double lng) {
+    public ClientGpsCoordinates(Date timestamp, double lat, double lng) {
+        this.timestamp = timestamp;
         this.lat = lat;
         this.lng = lng;
     }
 
-    public static GpsCoordinates parse(String line) {
+    public static ClientGpsCoordinates parseNMEA(String line) {
         String[] lineParts = line.split(",");
         double lat = parseDouble(lineParts[3]) / 100;
         double lng = parseDouble(lineParts[5]) / 100;
-        return new GpsCoordinates(lat, lng);
+        return new ClientGpsCoordinates(new Date(), lat, lng);
+    }
+
+    public String serialize() {
+        return format("%d,%s,%s", timestamp.getTime(), lat, lng);
+    }
+
+    public static ClientGpsCoordinates deserialize(String serializedCoordinates) {
+        String[] serializedCoordinatesParts = serializedCoordinates.split(",");
+        long timestamp = parseLong(serializedCoordinatesParts[0]);
+        double lat = parseDouble(serializedCoordinatesParts[1]);
+        double lng = parseDouble(serializedCoordinatesParts[2]);
+        return new ClientGpsCoordinates(new Date(timestamp), lat, lng);
+    }
+
+    public Date timestamp() {
+        return timestamp;
     }
 
     public double lat() {

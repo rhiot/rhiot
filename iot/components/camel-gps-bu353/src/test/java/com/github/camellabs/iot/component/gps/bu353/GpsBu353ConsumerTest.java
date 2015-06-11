@@ -52,7 +52,7 @@ public class GpsBu353ConsumerTest extends CamelTestSupport {
 
     @Test
     public void shouldReadGpsCoordinates() {
-        GpsCoordinates coordinates = consumer.receiveBody("gps-bu353://gps", GpsCoordinates.class);
+        ClientGpsCoordinates coordinates = consumer.receiveBody("gps-bu353://gps", ClientGpsCoordinates.class);
         assertEquals(49.493202, coordinates.lat(), 0.01);
         assertEquals(19.032611, coordinates.lng(), 0.01);
     }
