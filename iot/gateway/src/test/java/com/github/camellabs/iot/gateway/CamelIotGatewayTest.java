@@ -66,9 +66,11 @@ public class CamelIotGatewayTest extends Assert {
         setProperty("camellabs.iot.gateway.heartbeat.mqtt.broker.url", "tcp://localhost:" + mqttPort);
     }
 
+    // Tests
+
     @Test
     public void shouldInterceptHeartbeatEndpoint() throws InterruptedException {
-        mockEndpoint.setExpectedCount(1);
+        mockEndpoint.setMinimumExpectedMessageCount(1);
         mockEndpoint.assertIsSatisfied();
     }
 
