@@ -110,6 +110,49 @@ development easier.
 
 ---
 
+### Camel GPS BU353 component
+
+[BU353](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg) is one of the most popular and the 
+cheapest GPS units on the market. It is connected to the device via the USB port. Camel GPS BU353 component can be used
+to read current GPS information from that device.
+
+With Camel GPS BU353 you can just connect that device to your
+computer's USB port and read the GPS data - the component will take care of making sure that GPS daemon is up, running and
+switched to the [NMEA mode](http://www.gpsinformation.org/dale/nmea.htm). The component also takes care of parsing the
+NMEA data read from the serial port, so you can enjoy the `com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates`
+instances received by your Camel routes.
+
+#### Maven dependency
+
+Maven users should add the following dependency to their POM file:
+
+    <dependency>
+      <groupId>com.github.camel-labs</groupId>
+      <artifactId>camel-gps-bu353</artifactId>
+      <version>0.1.1</version>
+    </dependency>
+
+#### URI format
+
+BU353 component supports only consumer endpoints. The URI format is as follows:
+
+    gps-bu353:label
+    
+Where both `label` can be replaced any text label:
+
+    from("gps-bu353:current-position").
+      to("file:///var/gps-coordinates");
+      
+BU353 consumer receives the `com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates` instances:
+
+    ClientGpsCoordinates currentPosition = consumerTemplate.receiveBody("gps-bu353:current-position", ClientGpsCoordinates.class);
+
+`ClientGpsCoordinates` is prefixes with the `Client` to indicate that these coordinates has been created on the device,
+not on the server side of the IoT solution.
+
+
+---
+
 ### Camel Kura Wifi component
 
 The common scenario for the mobile IoT Gateways, for example those mounted on the trucks or other vehicles, is to cache
