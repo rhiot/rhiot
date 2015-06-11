@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.UUID;
 
 import static com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates.deserialize;
-import static java.lang.Double.parseDouble;
 import static org.apache.camel.Exchange.HTTP_METHOD;
 import static org.apache.camel.model.dataformat.JsonLibrary.Jackson;
 
@@ -39,21 +38,21 @@ public class GpsCloudletSyncRoutes extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("file://{{camellabs_iot_gateway_gps_store_directory:/var/camel-labs-iot-gateway/gps}}?sortBy=file:name").
+        from("file://{{camellabs_iot_gateway_gps_store_directory:/var/camel-labs-iot-gateway/gps}}?sortBy=file:modified").
                 onException(Exception.class).maximumRedeliveries(100000).useExponentialBackOff().end().
                 process(exc -> {
                     ClientGpsCoordinates clientCoordinates = deserialize(exc.getIn().getBody(String.class));
-                    Coordinates serverCoordinates = new Coordinates(InetAddress.getLocalHost().getHostName(), UUID.randomUUID().toString(), clientCoordinates.timestamp(), clientCoordinates.lat(), clientCoordinates.lng());
+                    ServerCoordinates serverCoordinates = new ServerCoordinates(InetAddress.getLocalHost().getHostName(), UUID.randomUUID().toString(), clientCoordinates.timestamp(), clientCoordinates.lat(), clientCoordinates.lng());
                     exc.getIn().setBody(serverCoordinates);
                 }).
                 marshal().json(Jackson).
                 setHeader(HTTP_METHOD, constant("POST")).
-                to("netty4-http:http://{{camellabs_iot_gateway_gps_cloudlet_url}}/api/document/save/GpsCoordinates");
+                to("netty4-http:http://{{camellabs_iot_gateway_gps_cloudlet_address}}/api/document/save/GpsCoordinates");
     }
 
 }
 
-class Coordinates {
+class ServerCoordinates {
 
     private final String client;
 
@@ -65,7 +64,7 @@ class Coordinates {
 
     private final double longitude;
 
-    public Coordinates(String client, String clientId, Date timestamp, double latitude, double longitude) {
+    public ServerCoordinates(String client, String clientId, Date timestamp, double latitude, double longitude) {
         this.client = client;
         this.clientId = clientId;
         this.timestamp = timestamp;
