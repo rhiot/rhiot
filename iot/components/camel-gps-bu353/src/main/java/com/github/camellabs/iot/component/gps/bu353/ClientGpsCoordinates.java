@@ -40,8 +40,8 @@ public class ClientGpsCoordinates {
         this.lng = lng;
     }
 
-    public static ClientGpsCoordinates parseNMEA(String line) {
-        String[] lineParts = line.split(",");
+    public static ClientGpsCoordinates parseNMEA(String nmeaLine) {
+        String[] lineParts = nmeaLine.split(",");
         String latText = lineParts[3];
         String lngText = lineParts[5];
         if(isBlank(latText) || isBlank(lngText)) {
@@ -67,7 +67,7 @@ public class ClientGpsCoordinates {
     // Getters
 
     public Date timestamp() {
-        return timestamp;
+        return new Date(timestamp.getTime());
     }
 
     public double lat() {
