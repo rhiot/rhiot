@@ -18,27 +18,27 @@ package com.github.camellabs.iot.gateway;
 
 import com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet;
 import com.mongodb.DBObject;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import static com.github.camellabs.iot.utils.Properties.booleanProperty;
 import static com.github.camellabs.iot.utils.Properties.intProperty;
 import static com.google.common.io.Files.createTempDir;
+import static com.jayway.awaitility.Awaitility.await;
 import static java.lang.System.setProperty;
+import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -52,8 +52,10 @@ public class GpsCloudletSyncTest extends Assert {
 
     static String dbName;
 
+    static MongoClient mongoClient;
+
     @BeforeClass
-    public static void beforeClass() {
+    public static void beforeClass() throws UnknownHostException {
         // Gateway GPS store fixtures
         setProperty("camellabs_iot_gateway_gps_store_directory", gpsCoordinatesStore.getAbsolutePath());
         setProperty("camellabs_iot_gateway_gps_cloudlet_url", "localhost:" + geofencingApiPort);
@@ -70,15 +72,21 @@ public class GpsCloudletSyncTest extends Assert {
                 GeofencingCloudlet.main("--spring.main.sources=com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet");
             }
         }.start();
+
+        mongoClient = new MongoClient();
     }
 
     @Test
     public void shouldSendGpsCoordinatesToTheGeofencingCloudlet() throws InterruptedException, IOException {
         Thread.sleep(10000);
         IOUtils.write(System.currentTimeMillis() + ",10,20", new FileOutputStream(new File(gpsCoordinatesStore, "foo")));
-        Thread.sleep(20000);
-        assertEquals(1, new MongoClient().getDB(dbName).getCollection("GpsCoordinates").count());
-        DBObject object = new MongoClient().getDB(dbName).getCollection("GpsCoordinates").findOne();
+
+        // When
+        await().atMost(2, MINUTES).until(() -> mongoClient.getDB(dbName).getCollection("GpsCoordinates").count() > 0);
+
+        // Then
+        assertEquals(1, mongoClient.getDB(dbName).getCollection("GpsCoordinates").count());
+        DBObject object = mongoClient.getDB(dbName).getCollection("GpsCoordinates").findOne();
         assertEquals(10d, (Double) object.get("latitude"), 0.0);
         assertEquals(20d, (Double) object.get("longitude"), 0.0);
     }
