@@ -73,10 +73,10 @@ public class GpsCloudletSyncTest extends Assert {
     }
 
     @Test
-    public void shouldInterceptHeartbeatEndpoint() throws InterruptedException, IOException {
+    public void shouldSendGpsCoordinatesToTheGeofencingCloudlet() throws InterruptedException, IOException {
         Thread.sleep(10000);
         IOUtils.write(System.currentTimeMillis() + ",10,20", new FileOutputStream(new File(gpsCoordinatesStore, "foo")));
-        Thread.sleep(10000);
+        Thread.sleep(20000);
         assertEquals(1, new MongoClient().getDB(dbName).getCollection("GpsCoordinates").count());
         DBObject object = new MongoClient().getDB(dbName).getCollection("GpsCoordinates").findOne();
         assertEquals(10d, (Double) object.get("latitude"), 0.0);
