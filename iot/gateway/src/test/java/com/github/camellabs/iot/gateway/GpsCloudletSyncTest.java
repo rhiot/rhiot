@@ -86,9 +86,9 @@ public class GpsCloudletSyncTest extends Assert {
 
         // Then
         assertEquals(1, mongoClient.getDB(dbName).getCollection("GpsCoordinates").count());
-        DBObject object = mongoClient.getDB(dbName).getCollection("GpsCoordinates").findOne();
-        assertEquals(10d, (Double) object.get("latitude"), 0.0);
-        assertEquals(20d, (Double) object.get("longitude"), 0.0);
+        DBObject coordinates = mongoClient.getDB(dbName).getCollection("GpsCoordinates").findOne();
+        assertEquals(10d, (Double) coordinates.get("latitude"), 0.0);
+        assertEquals(20d, (Double) coordinates.get("longitude"), 0.0);
     }
 
 }
