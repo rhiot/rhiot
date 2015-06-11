@@ -21,10 +21,22 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.camel-labs</groupId>
+            <artifactId>camel-gps-bu353</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-paho</artifactId>
             <!-- TODO: Paho is available starting from Camel 2.16. Remove as soon as 2.16 is out. -->
             <version>2.16-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-netty4-http</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -36,15 +48,16 @@
         </dependency>
         <!-- Commented out until https://github.com/camel-labs/camel-labs/issues/97 is solved. -->
         <!--<dependency>-->
-            <!--<groupId>com.github.camel-labs</groupId>-->
-            <!--<artifactId>camel-pi4j</artifactId>-->
+        <!--<groupId>com.github.camel-labs</groupId>-->
+        <!--<artifactId>camel-pi4j</artifactId>-->
         <!--</dependency>-->
+
+        <!-- Testing -->
         <dependency>
             <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-gps-bu353</artifactId>
+            <artifactId>camel-labs-iot-cloudlet-geofencing</artifactId>
+            <scope>test</scope>
         </dependency>
-        
-        <!-- Testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

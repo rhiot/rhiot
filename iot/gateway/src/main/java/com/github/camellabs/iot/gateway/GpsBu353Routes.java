@@ -16,12 +16,10 @@
  */
 package com.github.camellabs.iot.gateway;
 
-import com.github.camellabs.iot.component.gps.bu353.GpsCoordinates;
+import com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-
-import static java.lang.System.currentTimeMillis;
 
 /**
  * Camel route reading current position data from the BU353 GPS device.
@@ -33,9 +31,9 @@ public class GpsBu353Routes extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("gps-bu353://gps").process(exchange -> {
-            GpsCoordinates coordinates = exchange.getIn().getBody(GpsCoordinates.class);
-            exchange.getIn().setBody(currentTimeMillis() + "," + coordinates.lng() + "," + coordinates.lat());
-        }).to("file:///var/camel-labs-iot-gateway/gps");
+            ClientGpsCoordinates coordinates = exchange.getIn().getBody(ClientGpsCoordinates.class);
+            exchange.getIn().setBody(coordinates.serialize());
+        }).to("file://{{camellabs_iot_gateway_gps_store_directory:/var/camel-labs-iot-gateway/gps}}");
     }
 
 }
