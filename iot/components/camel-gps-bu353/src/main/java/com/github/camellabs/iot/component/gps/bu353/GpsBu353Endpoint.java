@@ -22,11 +22,17 @@ import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 
 @UriEndpoint(scheme = "gps-bu353", title = "GPS BU353", syntax = "gps-bu353:label", consumerClass = GpsBu353Consumer.class, label = "iot,messaging,gps")
 public class GpsBu353Endpoint extends DefaultEndpoint {
+
+    private final static Logger LOG = LoggerFactory.getLogger(GpsBu353Endpoint.class);
+
+    // Collaborators
 
     @UriParam(defaultValue = "new SerialGpsCoordinatesSource()")
     private GpsCoordinatesSource gpsCoordinatesSource;
@@ -46,7 +52,12 @@ public class GpsBu353Endpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        return new GpsBu353Consumer(this, processor);
+        GpsBu353Consumer consumer = new GpsBu353Consumer(this, processor);
+        if(!getConsumerProperties().containsKey("delay")) {
+            consumer.setDelay(5000);
+        }
+        configureConsumer(consumer);
+        return consumer;
     }
 
     // Life cycle
@@ -83,7 +94,9 @@ public class GpsBu353Endpoint extends DefaultEndpoint {
         if(gpsCoordinatesSource == null) {
             Set<GpsCoordinatesSource> sources = getCamelContext().getRegistry().findByType(GpsCoordinatesSource.class);
             if(sources.size() == 1) {
-                return sources.iterator().next();
+                GpsCoordinatesSource source = sources.iterator().next();
+                LOG.info("Found single instance of the GpsCoordinatesSource in the registry. {} will be used.", source);
+                return source;
             } else {
                 return new SerialGpsCoordinatesSource();
             }

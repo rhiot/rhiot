@@ -150,6 +150,14 @@ BU353 consumer receives the `com.github.camellabs.iot.component.gps.bu353.Client
 `ClientGpsCoordinates` is prefixes with the `Client` to indicate that these coordinates has been created on the device,
 not on the server side of the IoT solution.
 
+#### Options
+
+| Option                    | Default value                                                                 | Description   |
+|:------------------------- |:-----------------------------------------------------------------------       |:------------- |
+| `consumer.initialDelay`   | 1000                                                                          | Milliseconds before the polling starts. |
+| `consumer.delay`          | 5000 | Delay between each GPS scan. |
+| `consumer.useFixedDelay`  | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
+
 
 ---
 
