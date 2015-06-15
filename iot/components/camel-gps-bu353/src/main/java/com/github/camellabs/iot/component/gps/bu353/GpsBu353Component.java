@@ -33,6 +33,8 @@ public class GpsBu353Component extends UriEndpointComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(GpsBu353Component.class);
 
+    private GpsCoordinatesSource gpsCoordinatesSource;
+
     public GpsBu353Component() {
         super(GpsBu353Endpoint.class);
     }
@@ -80,6 +82,16 @@ public class GpsBu353Component extends UriEndpointComponent {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Getters and setters
+
+    public GpsCoordinatesSource getGpsCoordinatesSource() {
+        return gpsCoordinatesSource;
+    }
+
+    public void setGpsCoordinatesSource(GpsCoordinatesSource gpsCoordinatesSource) {
+        this.gpsCoordinatesSource = gpsCoordinatesSource;
     }
 
 }

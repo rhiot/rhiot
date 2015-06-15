@@ -77,6 +77,12 @@ public class GpsBu353Endpoint extends DefaultEndpoint {
 
     // Configuration getters and setters
 
+
+    @Override
+    public GpsBu353Component getComponent() {
+        return (GpsBu353Component) super.getComponent();
+    }
+
     /**
      * GPS coordinates source. Usually serial port (/dev/ttyUSB0).
      */
@@ -97,6 +103,8 @@ public class GpsBu353Endpoint extends DefaultEndpoint {
                 GpsCoordinatesSource source = sources.iterator().next();
                 LOG.info("Found single instance of the GpsCoordinatesSource in the registry. {} will be used.", source);
                 return source;
+            } else if(getComponent().getGpsCoordinatesSource() != null){
+                return getComponent().getGpsCoordinatesSource();
             } else {
                 return new SerialGpsCoordinatesSource();
             }
