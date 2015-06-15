@@ -28,15 +28,16 @@ import java.util.Set;
 @UriEndpoint(scheme = "gps-bu353", title = "GPS BU353", syntax = "gps-bu353:label", consumerClass = GpsBu353Consumer.class, label = "iot,messaging,gps")
 public class GpsBu353Endpoint extends DefaultEndpoint {
 
-    @UriParam(defaultValue = "5000", description = "How long the consumer should wait between each scan (in miliseconds).")
-    private int scanningInterval = 5000;
-
     @UriParam(defaultValue = "new SerialGpsCoordinatesSource()")
     private GpsCoordinatesSource gpsCoordinatesSource;
+
+    // Constructors
 
     public GpsBu353Endpoint(String endpointUri, GpsBu353Component component) {
         super(endpointUri, component);
     }
+
+    // Producer/consumer factories
 
     @Override
     public Producer createProducer() throws Exception {
@@ -48,11 +49,15 @@ public class GpsBu353Endpoint extends DefaultEndpoint {
         return new GpsBu353Consumer(this, processor);
     }
 
+    // Life cycle
+
     @Override
     protected void doStart() throws Exception {
         super.doStart();
         gpsCoordinatesSource = resolveGpsCoordinatesSource();
     }
+
+    // Configuration
 
     @Override
     public boolean isSingleton() {
@@ -60,14 +65,6 @@ public class GpsBu353Endpoint extends DefaultEndpoint {
     }
 
     // Configuration getters and setters
-
-    public int getScanningInterval() {
-        return scanningInterval;
-    }
-
-    public void setScanningInterval(int scanningInterval) {
-        this.scanningInterval = scanningInterval;
-    }
 
     /**
      * GPS coordinates source. Usually serial port (/dev/ttyUSB0).
