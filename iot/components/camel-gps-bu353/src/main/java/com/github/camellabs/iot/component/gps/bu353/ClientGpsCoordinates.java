@@ -47,8 +47,8 @@ public class ClientGpsCoordinates {
         if(isBlank(latText) || isBlank(lngText)) {
             throw new SatelliteOutOfReachException();
         }
-        double lat = parseDouble(lineParts[3]) / 100;
-        double lng = parseDouble(lineParts[5]) / 100;
+        double lat = convertHourToDecimal(latText);
+        double lng = convertHourToDecimal(lngText);
         return new ClientGpsCoordinates(new Date(), lat, lng);
     }
 
@@ -62,6 +62,17 @@ public class ClientGpsCoordinates {
         double lat = parseDouble(serializedCoordinatesParts[1]);
         double lng = parseDouble(serializedCoordinatesParts[2]);
         return new ClientGpsCoordinates(new Date(timestamp), lat, lng);
+    }
+
+    // Helpers
+
+    public static double convertHourToDecimal(String nmeaDegrees) {
+        String[] parts = nmeaDegrees.split("\\.");
+        int hoursStringLength = parts[0].length();
+        double degrees = Double.parseDouble(parts[0].substring(0, hoursStringLength - 2));
+        double minutes = Double.parseDouble(parts[0].substring(hoursStringLength - 2));
+        double seconds = Double.parseDouble(parts[1]) / 100;
+        return degrees + minutes/60 + seconds/3600;
     }
 
     // Getters

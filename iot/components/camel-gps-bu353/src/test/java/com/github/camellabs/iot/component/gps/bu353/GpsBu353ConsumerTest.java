@@ -26,8 +26,7 @@ import org.junit.Test;
 
 public class GpsBu353ConsumerTest extends CamelTestSupport {
 
-    @EndpointInject(uri = "mock:shouldReadTwoGpsCoordinates")
-    MockEndpoint mockEndpoint;
+    // Collaborators fixtures
 
     @Override
     protected JndiRegistry createRegistry() throws Exception {
@@ -36,6 +35,11 @@ public class GpsBu353ConsumerTest extends CamelTestSupport {
         registry.bind("processManager", new FixedMockProcessManager("gpsctl:ERROR: /dev/ttyUSB0 mode change to NMEA failed"));
         return registry;
     }
+
+    // Route fixtures
+
+    @EndpointInject(uri = "mock:shouldReadTwoGpsCoordinates")
+    MockEndpoint mockEndpoint;
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
@@ -53,8 +57,8 @@ public class GpsBu353ConsumerTest extends CamelTestSupport {
     @Test
     public void shouldReadGpsCoordinates() {
         ClientGpsCoordinates coordinates = consumer.receiveBody("gps-bu353://gps", ClientGpsCoordinates.class);
-        assertEquals(49.493202, coordinates.lat(), 0.01);
-        assertEquals(19.032611, coordinates.lng(), 0.01);
+        assertEquals(49.82, coordinates.lat(), 0.01);
+        assertEquals(19.05, coordinates.lng(), 0.01);
     }
 
     @Test
