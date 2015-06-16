@@ -36,7 +36,7 @@ module Example {
     };
     $scope.routeSelected = function () {
           $http.get(geofencingCloudletApiBase() + '/routes/routeUrl/' + $scope.selectedRoute.id).success(function (data, status, headers, config) {
-              $scope.routeUrl = data.url;
+              $scope.routeUrl = data.routeUrl;
           }).error(function (data, status, headers, config) {
               $scope.flash = 'Cannot connect to the geofencing service.';
           });
