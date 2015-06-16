@@ -33,12 +33,12 @@ if [ ! -z "$DEPLOY_CLOUDLETS" ]
 then
   echo Deploying cloudlets UI.
   ssh $CLOUD_SSH_ROOT 'mkdir -p /var/camel-iot-labs/cloudlets'
-  scp ../geofencing/default/target/camel-labs-iot-cloudlet-geofencing-0.0.0-SNAPSHOT.jar $CLOUD_SSH_ROOT:/var/camel-iot-labs/cloudlets
+  scp ../geofencing/default/target/camel-labs-iot-cloudlet-geofencing-0.1.1-SNAPSHOT.jar $CLOUD_SSH_ROOT:/var/camel-iot-labs/cloudlets
 fi
 
 if [ ! -z "$DEPLOY_UI" ]
 then
   echo Deploying cloudlets UI.
   ssh $CLOUD_SSH_ROOT 'mkdir -p /var/camel-iot-labs/cloudlets-ui'
-  scp ././../../cloudlet-ui/geofencing-ui/target/camel-labs-iot-cloudlet-ui-geofencing-0.0.0-SNAPSHOT-plugin.zip $CLOUD_SSH_ROOT:/var/camel-iot-labs/cloudlets-ui
+  scp ././../../../cloudlet-ui/geofencing-ui/target/camel-labs-iot-cloudlet-ui-geofencing-0.1.1-SNAPSHOT-plugin.zip $CLOUD_SSH_ROOT:/var/camel-iot-labs/cloudlets-ui
 fi
