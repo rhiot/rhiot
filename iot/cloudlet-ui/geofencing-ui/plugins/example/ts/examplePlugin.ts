@@ -27,7 +27,7 @@ module Example {
       .id(Example.pluginName)
       .title(() => "Geofencing")
       .href(() => "/geofencing")
-      .subPath("Routes", "routes", builder.join(Example.templatePath, "page1.html"))
+      .subPath("Routes", "routes", builder.join(Example.templatePath, "routes.html"))
       .build();
     builder.configureRouting($routeProvider, tab);
     $locationProvider.html5Mode(true);

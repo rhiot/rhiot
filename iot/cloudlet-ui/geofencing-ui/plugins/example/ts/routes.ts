@@ -16,7 +16,7 @@
 /// <reference path="examplePlugin.ts"/>
 module Example {
 
-  export var Page1Controller = _module.controller("Example.Page1Controller", ["$scope", "$http", ($scope, $http) => {
+  export var RoutesController = _module.controller("Example.RoutesController", ["$scope", "$http", ($scope, $http) => {
     $scope.clientSelected = function() {
       $http.get(geofencingCloudletApiBase() + '/routes/routes/' + $scope.selectedOption.id).
           success(function(data, status, headers, config) {
@@ -28,6 +28,7 @@ module Example {
             });
             if(data.routes.length > 0) {
               $scope.selectedRoute = $scope.routes[0];
+              $scope.routeSelected();
             }
           }).
           error(function(data, status, headers, config) {

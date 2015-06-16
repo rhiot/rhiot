@@ -19,7 +19,7 @@ var Example;
     Example._module = angular.module(Example.pluginName, []);
     var tab = undefined;
     Example._module.config(["$locationProvider", "$routeProvider", "HawtioNavBuilderProvider", function ($locationProvider, $routeProvider, builder) {
-        tab = builder.create().id(Example.pluginName).title(function () { return "Geofencing"; }).href(function () { return "/geofencing"; }).subPath("Routes", "routes", builder.join(Example.templatePath, "page1.html")).build();
+        tab = builder.create().id(Example.pluginName).title(function () { return "Geofencing"; }).href(function () { return "/geofencing"; }).subPath("Routes", "routes", builder.join(Example.templatePath, "routes.html")).build();
         builder.configureRouting($routeProvider, tab);
         $locationProvider.html5Mode(true);
     }]);
