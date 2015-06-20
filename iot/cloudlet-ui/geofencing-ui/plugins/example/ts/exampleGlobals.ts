@@ -23,7 +23,24 @@ module Example {
   export var templatePath = "plugins/example/html";
 
   export function geofencingCloudletApiBase() {
-    return 'http://' + window.location.hostname + ':15001/api/geofencing';
+    var cloudUri = uriParam('cloudUri');
+    var uri = cloudUri == null ? window.location.hostname : cloudUri;
+    return 'http://' + uri + ':15001/api/geofencing';
+  }
+
+  export function cloudletApiBase() {
+    var cloudUri = uriParam('cloudUri');
+    var uri = cloudUri == null ? window.location.hostname : cloudUri;
+    return 'http://' + uri + ':15001/api';
+  }
+
+  export function uriParam(name) {
+    var url = location.href;
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    return results == null ? null : results[1];
   }
 
 }

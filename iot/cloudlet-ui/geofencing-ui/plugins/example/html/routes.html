@@ -28,6 +28,11 @@
 
         <p ng-show="selectedRoute">
             <img ng-src="{{routeUrl}}" />
+            <p>Route comments:</p>
+        <input type="text" ng-model="newComment"/>
+        <button ng-click="addComment()">
+            New comment
+        </button>
         </p>
         <p ng-show="clients.length > 0 && routes.length == 0">No routes for the given client.</p>
     </div>

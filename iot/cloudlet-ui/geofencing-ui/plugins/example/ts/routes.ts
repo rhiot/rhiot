@@ -21,8 +21,10 @@ module Example {
       $http.get(geofencingCloudletApiBase() + '/routes/routes/' + $scope.selectedOption.id).
           success(function(data, status, headers, config) {
             $scope.routes = data.routes.map(function (val) {
+                var routeTimestamp = new Date(val.created);
+                var timestamp = (routeTimestamp.getMonth() + 1) + "-" + routeTimestamp.getDate() + "-" + routeTimestamp.getFullYear() + ' ' + routeTimestamp.getHours() + ":" + routeTimestamp.getMinutes() + ":" + routeTimestamp.getSeconds();
               return {
-                name: val.created,
+                name: timestamp,
                 id: val.id
               };
             });
@@ -58,6 +60,15 @@ module Example {
         error(function(data, status, headers, config) {
           $scope.flash = 'Cannot connect to the geofencing service.';
         });
+      $scope.addComment = function() {
+          $http.post(cloudletApiBase() + '/document/save/RouteComment', {routeId: $scope.selectedRoute.id, text: $scope.newComment, created: new Date().getTime()}).
+              success(function(data, status, headers, config) {
+                  $scope.flash = 'New comment has been added to the route.';
+              }).
+              error(function(data, status, headers, config) {
+                  $scope.flash = 'There was problem with adding comment to the route.';
+              });
+      };
   }]);
 
 }
