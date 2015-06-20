@@ -69,10 +69,14 @@ public class ClientGpsCoordinates {
     public static double convertHourToDecimal(String nmeaDegrees) {
         String[] parts = nmeaDegrees.split("\\.");
         int hoursStringLength = parts[0].length();
-        double degrees = Double.parseDouble(parts[0].substring(0, hoursStringLength - 2));
+        double hours = Double.parseDouble(parts[0].substring(0, hoursStringLength - 2));
         double minutes = Double.parseDouble(parts[0].substring(hoursStringLength - 2));
-        double seconds = Double.parseDouble(parts[1]) / 100;
-        return degrees + minutes/60 + seconds/3600;
+        String secondsText = parts[1];
+        if(secondsText.length() > 2) {
+            secondsText = secondsText.substring(0, 2) + "." + secondsText.substring(2);
+        }
+        double seconds = Double.parseDouble(secondsText);
+        return hours + minutes/60 + seconds/3600;
     }
 
     // Getters
