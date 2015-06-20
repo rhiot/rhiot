@@ -14,6 +14,7 @@
 /// limitations under the License.
 
 /// <reference path="../../includes.ts"/>
+/// <reference path="geofencing.ts"/>
 module Example {
 
   export var pluginName = "hawtio-assembly";
@@ -35,7 +36,7 @@ module Example {
   }
 
   export function uriParam(name) {
-    var url = location.href;
+    var url = Geofencing.windowLocationHref();
     name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
     var regexS = "[\\?&]"+name+"=([^&#]*)";
     var regex = new RegExp( regexS );
