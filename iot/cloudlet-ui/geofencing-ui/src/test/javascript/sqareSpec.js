@@ -1,5 +1,7 @@
-describe('The square function', function () {
-    it('should square a number', function () {
-        expect(9).toBe(9);
+describe('Geofencing utils', function () {
+    it('Should mock location href.', function () {
+        var location = 'someLocation';
+        Geofencing.windowLocationHref = function(){return location};
+        expect(Geofencing.windowLocationHref()).toBe(location);
     });
 });
