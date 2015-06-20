@@ -4,4 +4,6 @@ declare module Example {
     var log: Logging.Logger;
     var templatePath: string;
     function geofencingCloudletApiBase(): string;
+    function cloudletApiBase(): string;
+    function uriParam(name: any): string;
 }
