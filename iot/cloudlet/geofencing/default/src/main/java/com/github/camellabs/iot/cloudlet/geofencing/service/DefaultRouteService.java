@@ -5,9 +5,9 @@
  * The licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,9 +20,15 @@ import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.Route;
+import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteComment;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteGpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
+import com.google.common.collect.ImmutableList;
 import com.google.maps.model.LatLng;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,12 +39,18 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.camellabs.iot.cloudlet.document.driver.spi.Pojos.collectionName;
+import static com.google.common.collect.Lists.newLinkedList;
+import static com.google.common.collect.Maps.newHashMap;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -70,7 +82,7 @@ public class DefaultRouteService implements RouteService {
     public int analyzeRoutes(String client) {
         RouteGpsCoordinates lastRouteCoordinates = findLastRouteCoordinates(client);
         GpsCoordinates lastCoordinates = null;
-        if(lastRouteCoordinates == null) {
+        if (lastRouteCoordinates == null) {
             LOG.info("No GPS coordinates assigned to routes for client {}", client);
         } else {
             lastCoordinates = mongoTemplate.findById(lastRouteCoordinates.getCoordinatesId(), GpsCoordinates.class, GpsCoordinates.class.getSimpleName());
@@ -78,24 +90,24 @@ public class DefaultRouteService implements RouteService {
 
         Query query = new Query();
         query.addCriteria(where("client").is(client));
-        if(lastRouteCoordinates != null) {
+        if (lastRouteCoordinates != null) {
             query.addCriteria(where("_id").gt(new ObjectId(lastRouteCoordinates.getCoordinatesId())));
         }
         query.limit(routeAnalysisBatchSize);
         query.with(new Sort(ASC, "_id"));
         List<GpsCoordinates> coordinatesToAnalyze = mongoTemplate.find(query, GpsCoordinates.class, GpsCoordinates.class.getSimpleName());
-        for(GpsCoordinates coordinates : coordinatesToAnalyze) {
-          String routeId;
-          if(lastCoordinates == null || (TimeUnit.MILLISECONDS.toMinutes(coordinates.getTimestamp().getTime() - lastCoordinates.getTimestamp().getTime()) > 5)) {
-              Route newRoute = new Route(null, client, new Date());
-              routeId = documentDriver.save(new SaveOperation(newRoute));
-          } else {
-              routeId = lastRouteCoordinates.getRouteId();
-          }
+        for (GpsCoordinates coordinates : coordinatesToAnalyze) {
+            String routeId;
+            if (lastCoordinates == null || (TimeUnit.MILLISECONDS.toMinutes(coordinates.getTimestamp().getTime() - lastCoordinates.getTimestamp().getTime()) > 5)) {
+                Route newRoute = new Route(null, client, new Date());
+                routeId = documentDriver.save(new SaveOperation(newRoute));
+            } else {
+                routeId = lastRouteCoordinates.getRouteId();
+            }
 
-          lastRouteCoordinates = new RouteGpsCoordinates(null, routeId, coordinates.getId(), client);
-          mongoTemplate.save(lastRouteCoordinates, collectionName(RouteGpsCoordinates.class));
-          lastCoordinates = coordinates;
+            lastRouteCoordinates = new RouteGpsCoordinates(null, routeId, coordinates.getId(), client);
+            mongoTemplate.save(lastRouteCoordinates, collectionName(RouteGpsCoordinates.class));
+            lastCoordinates = coordinates;
         }
         return coordinatesToAnalyze.size();
     }
@@ -121,6 +133,51 @@ public class DefaultRouteService implements RouteService {
         List<LatLng> coordinatesToEncode = mongoTemplate.find(query, GpsCoordinates.class, collectionName(GpsCoordinates.class)).
                 parallelStream().map(coordinates -> new LatLng(coordinates.getLatitude().doubleValue(), coordinates.getLongitude().doubleValue())).collect(toList());
         return StaticMaps.renderRouteUrl(coordinatesToEncode);
+    }
+
+    @Override
+    public byte[] exportRoutes(String client, String format) {
+        try {
+            List<List<String>> exportedRoutes = exportRoutes(client);
+            Workbook workbook = new HSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Routes report for " + client);
+
+            for (int i = 0; i < exportedRoutes.size(); i++) {
+                Row row = sheet.createRow(i);
+                for (int j = 0; j < exportedRoutes.get(i).size(); j++) {
+                    row.createCell(j).setCellValue(exportedRoutes.get(i).get(j));
+                }
+            }
+
+            ByteArrayOutputStream xlsBytes = new ByteArrayOutputStream();
+            workbook.write(xlsBytes);
+            xlsBytes.close();
+            return xlsBytes.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<List<String>> exportRoutes(String client) {
+        List<Route> routes = routes(client);
+        List<String> routesIds = routes.parallelStream().map(Route::getId).collect(toList());
+        Query commentsQuery = new Query().addCriteria(where("routeId").in(routesIds));
+        List<RouteComment> routeComments = mongoTemplate.find(commentsQuery, RouteComment.class, "RouteComment");
+        Map<String, List<String>> commentsForRoute = newHashMap();
+        for (RouteComment comment : routeComments) {
+            String routeId = comment.getRouteId();
+            if (!commentsForRoute.containsKey(routeId)) {
+                commentsForRoute.put(routeId, newLinkedList());
+            }
+            commentsForRoute.get(routeId).add(comment.getCreated().toString());
+            commentsForRoute.get(routeId).add(comment.getText());
+        }
+        return routes.parallelStream().map(route ->
+                        ImmutableList.<String>builder().
+                                add(route.getCreated().toString()).
+                                addAll(commentsForRoute.getOrDefault(route.getId(), emptyList())).
+                                build()
+        ).collect(toList());
     }
 
     // Callbacks

@@ -31,4 +31,6 @@ public interface RouteService {
 
     URL renderRouteUrl(String routeId);
 
+    byte[] exportRoutes(String client, String format);
+
 }

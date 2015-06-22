@@ -16,6 +16,8 @@
  */
 package com.github.camellabs.iot.cloudlet.geofencing;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.spring.boot.FatJarRouter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +28,8 @@ import org.springframework.data.mongodb.core.convert.CustomConversions;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.apache.camel.model.rest.RestBindingMode.off;
 
 @SpringBootApplication
 @ComponentScan("com.github.camellabs.iot.cloudlet")
@@ -47,9 +51,17 @@ public class GeofencingCloudlet extends FatJarRouter {
                 transform().header("route").
                 beanRef("routeService", "renderRouteUrl").transform().groovy("[routeUrl: request.body]");
 
+        rest("/api/geofencing/routes").
+                get("/export/{client}/{format}").bindingMode(off).route().
+                transform().groovy("[request.headers.get('client'), request.headers.get('format')]").
+                beanRef("routeService", "exportRoutes", true).
+                setHeader(Exchange.CONTENT_TYPE, constant("application/octet-stream")).
+                setHeader("Content-Disposition", constant("attachment; filename=routes.xls"));
+
         from("timer:analyzeRoutes?period=60000&delay={{camellabs.iot.cloudlet.geofencing.routes.analysis.delay:15000}}").
                 beanRef("routeService", "clients").split().body().parallelProcessing().
                 beanRef("routeService", "analyzeRoutes");
+
     }
 
     @Bean

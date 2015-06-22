@@ -21,9 +21,13 @@ import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
 import com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.Route;
+import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteComment;
 import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.LatLng;
+import org.apache.commons.io.IOUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,6 +41,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -203,6 +211,25 @@ public class DefaultRouteServiceTest extends Assert {
         assertEquals(coordinates.get(0).lng, point1.getLongitude().doubleValue(), 0.1);
         assertEquals(coordinates.get(1).lat, point2.getLatitude().doubleValue(), 0.1);
         assertEquals(coordinates.get(1).lng, point2.getLongitude().doubleValue(), 0.1);
+    }
+
+    @Test
+    public void shouldGenerateRoutesReport() throws URISyntaxException, IOException, InterruptedException {
+        // Given
+        documentDriver.save(new SaveOperation(point1));
+        routeService.analyzeRoutes(client);
+        String routeId = routeService.routes(client).get(0).getId();
+        RouteComment routeComment = new RouteComment(null, routeId, new Date(), "text");
+        documentDriver.save(new SaveOperation(routeComment));
+        URI clientsRequestUri = new URI(restApi + "routes/export/" + client + "/xls");
+
+        // When
+        byte[] xls = IOUtils.toByteArray(clientsRequestUri);
+
+        // Then
+        HSSFWorkbook wb = new HSSFWorkbook(new POIFSFileSystem(new ByteArrayInputStream(xls)));
+        String comment = wb.getSheetAt(0).getRow(0).getCell(2).getStringCellValue();
+        assertEquals(routeComment.getText(), comment);
 
     }
 
