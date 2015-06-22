@@ -58,6 +58,7 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- Dependencies -->
             <dependency>
                 <groupId>com.github.camel-labs</groupId>
                 <artifactId>camel-labs-iot-cloudlet-document-default</artifactId>
@@ -113,6 +114,16 @@
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-service</artifactId>
                 <version>${pi4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.tinkerforge</groupId>
+                <artifactId>tinkerforge</artifactId>
+                <version>${tinkerforge.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pubnub</groupId>
+                <artifactId>pubnub</artifactId>
+                <version>${pubnub.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.flapdoodle.embed</groupId>
@@ -179,16 +190,6 @@
                 <groupId>org.eclipse.kura</groupId>
                 <artifactId>org.eclipse.kura.core</artifactId>
                 <version>${kura.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.tinkerforge</groupId>
-                <artifactId>tinkerforge</artifactId>
-                <version>${tinkerforge.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.pubnub</groupId>
-                <artifactId>pubnub</artifactId>
-                <version>${pubnub.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.californium</groupId>
