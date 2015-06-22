@@ -79,7 +79,7 @@ module Example {
               error(function(data, status, headers, config) {
                   $scope.flash = 'There was problem reading route comments.';
               });
-      }
+      };
   }]);
 
 }
