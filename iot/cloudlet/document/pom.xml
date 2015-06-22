@@ -21,7 +21,7 @@
 
     <modules>
         <module>sdk</module>
-        <module>driver</module>
+        <module>default</module>
     </modules>
 
 </project>

@@ -58,7 +58,7 @@
 
             <dependency>
                 <groupId>com.github.camel-labs</groupId>
-                <artifactId>camel-labs-iot-cloudlet-document-driver</artifactId>
+                <artifactId>camel-labs-iot-cloudlet-document-default</artifactId>
                 <version>${camel-labs.version}</version>
                 <classifier>classes</classifier>
             </dependency>

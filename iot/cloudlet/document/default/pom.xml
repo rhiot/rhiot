@@ -9,7 +9,7 @@
         <version>0.1.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>camel-labs-iot-cloudlet-document-driver</artifactId>
+    <artifactId>camel-labs-iot-cloudlet-document-default</artifactId>
     <packaging>war</packaging>
 
     <licenses>
