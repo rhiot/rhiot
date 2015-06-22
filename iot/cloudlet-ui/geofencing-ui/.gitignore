@@ -5,3 +5,5 @@ node_modules/
 **/ts/*.js
 **/ts/*.js.map
 /target/
+**/d.ts/**
+defs.d.ts
