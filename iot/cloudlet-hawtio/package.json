@@ -23,6 +23,8 @@
     "underscore.string": "^2.4.0",
     "vinyl-map": "^1.0.1",
     "which": "^1.0.8",
-    "wiredep": "^2.2.2"
+    "wiredep": "^2.2.2",
+    "karma-jasmine": "~0.1.5",
+    "karma-phantomjs-launcher": "~0.1.1"
   }
 }
