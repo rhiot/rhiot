@@ -40,6 +40,7 @@ module Example {
     $scope.routeSelected = function () {
           $http.get(geofencingCloudletApiBase() + '/routes/routeUrl/' + $scope.selectedRoute.id).success(function (data, status, headers, config) {
               $scope.routeUrl = data.routeUrl;
+              $scope.loadRouteComments();
           }).error(function (data, status, headers, config) {
               $scope.flash = 'Cannot connect to the geofencing service.';
           });
@@ -63,12 +64,22 @@ module Example {
       $scope.addComment = function() {
           $http.post(cloudletApiBase() + '/document/save/RouteComment', {routeId: $scope.selectedRoute.id, text: $scope.newComment, created: new Date().getTime()}).
               success(function(data, status, headers, config) {
+                  $scope.loadRouteComments();
                   $scope.flash = 'New comment has been added to the route.';
               }).
               error(function(data, status, headers, config) {
                   $scope.flash = 'There was problem with adding comment to the route.';
               });
       };
+      $scope.loadRouteComments = function() {
+          $http.post(cloudletApiBase() + '/document/findByQuery/RouteComment', {page: 0, size: 100, orderBy: ['created'], sortAscending: -1, query: {routeIdIn: [$scope.selectedRoute.id]}}).
+              success(function(data, status, headers, config) {
+                  $scope.routeComments = data;
+              }).
+              error(function(data, status, headers, config) {
+                  $scope.flash = 'There was problem reading route comments.';
+              });
+      }
   }]);
 
 }
