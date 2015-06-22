@@ -22,9 +22,11 @@
     <properties>
         <activemq.version>5.11.1</activemq.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
+        <apache-poi.version>3.10.1</apache-poi.version>
         <camel.version>2.15.2</camel.version>
         <camel-labs.version>0.1.1-SNAPSHOT</camel-labs.version>
         <embedmongo.version>1.47.3</embedmongo.version>
+        <google-maps-services.version>0.1.4</google-maps-services.version>
         <ivy.version>2.4.0</ivy.version>
         <kura.version>1.0.3</kura.version>
         <logback.version>1.1.2</logback.version>
@@ -87,7 +89,11 @@
                 <artifactId>camel-gps-bu353</artifactId>
                 <version>${camel-labs.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.google.maps</groupId>
+                <artifactId>google-maps-services</artifactId>
+                <version>${google-maps-services.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-core</artifactId>
@@ -150,6 +156,11 @@
                 <version>${apache-commons-lang3.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${apache-poi.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.eclipse.kura</groupId>
                 <artifactId>org.eclipse.kura.linux.net</artifactId>
                 <version>${kura.version}</version>
@@ -188,27 +199,6 @@
     </dependencyManagement>
 
     <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven-gpg-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>CopyDependencyforLab</id>
             <build>
