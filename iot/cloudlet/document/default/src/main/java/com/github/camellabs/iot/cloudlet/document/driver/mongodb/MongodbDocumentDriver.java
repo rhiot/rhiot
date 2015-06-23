@@ -19,7 +19,7 @@ package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
-import com.google.common.collect.Lists;
+import com.mongodb.DBObject;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +29,11 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapperProcessor.mapBsonToJson;
-import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoDbSortConditionExpression.sortCondition;
+import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapper.bsonToJson;
 import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoQueryBuilderProcessor.queryBuilder;
+import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static org.apache.camel.component.mongodb.MongoDbConstants.LIMIT;
 import static org.apache.camel.component.mongodb.MongoDbConstants.NUM_TO_SKIP;
@@ -78,12 +79,12 @@ public class MongodbDocumentDriver implements DocumentDriver {
                         exchange.getIn().setBody(findByQueryOperation.queryBuilder().get("query"));
                         queryBuilder().process(exchange);
                     });
-            exc.getIn().setBody(exc.getOut().getBody());
-            mapBsonToJson().process(exc);
-            Object result = exc.getIn().getBody();
+            Object result = exc.getOut().getBody();
             if(result instanceof Iterable) {
-                return Lists.newArrayList((Iterable)result);
+                List<DBObject> documents =  newArrayList((Iterable) result);
+                return (List<T>) documents.parallelStream().map(BsonMapper::bsonToJson).collect(toList());
             } else {
+                result = bsonToJson((DBObject) result);
                 return Arrays.asList((T)result);
             }
         } catch (Exception e) {

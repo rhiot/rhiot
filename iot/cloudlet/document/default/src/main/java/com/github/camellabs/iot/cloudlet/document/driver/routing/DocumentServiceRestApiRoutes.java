@@ -25,13 +25,9 @@ import org.springframework.stereotype.Component;
 
 import static java.lang.String.format;
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
-import static org.apache.camel.component.mongodb.MongoDbConstants.LIMIT;
-import static org.apache.camel.component.mongodb.MongoDbConstants.NUM_TO_SKIP;
-import static org.apache.camel.component.mongodb.MongoDbConstants.SORT_BY;
 import static org.apache.camel.model.rest.RestBindingMode.json;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapperProcessor.mapBsonToJson;
-import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoDbSortConditionExpression.sortCondition;
 import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoQueryBuilderProcessor.queryBuilder;
 
 @Component
