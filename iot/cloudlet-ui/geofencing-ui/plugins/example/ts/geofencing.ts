@@ -19,4 +19,16 @@ module Geofencing {
         return window.location.href;
     };
 
+    export var windowLocationHostname = function() {
+        return window.location.hostname;
+    };
+
+    export function uriParam(name) {
+        var url = Geofencing.windowLocationHref();
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        var regex = new RegExp( "[\\?&]"+name+"=([^&#]*)" );
+        var results = regex.exec( url );
+        return results == null ? null : results[1];
+    }
+
 }

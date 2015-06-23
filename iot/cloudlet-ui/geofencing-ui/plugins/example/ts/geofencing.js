@@ -17,5 +17,16 @@ var Geofencing;
     Geofencing.windowLocationHref = function () {
         return window.location.href;
     };
+    Geofencing.windowLocationHostname = function () {
+        return window.location.hostname;
+    };
+    function uriParam(name) {
+        var url = Geofencing.windowLocationHref();
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+        var results = regex.exec(url);
+        return results == null ? null : results[1];
+    }
+    Geofencing.uriParam = uriParam;
 })(Geofencing || (Geofencing = {}));
 //# sourceMappingURL=geofencing.js.map

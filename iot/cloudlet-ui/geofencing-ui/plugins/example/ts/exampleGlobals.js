@@ -20,25 +20,16 @@ var Example;
     Example.log = Logger.get(Example.pluginName);
     Example.templatePath = "plugins/example/html";
     function geofencingCloudletApiBase() {
-        var cloudUri = uriParam('cloudUri');
-        var uri = cloudUri == null ? window.location.hostname : cloudUri;
+        var cloudUri = Geofencing.uriParam('cloudUri');
+        var uri = cloudUri == null ? Geofencing.windowLocationHostname() : cloudUri;
         return 'http://' + uri + ':15001/api/geofencing';
     }
     Example.geofencingCloudletApiBase = geofencingCloudletApiBase;
     function cloudletApiBase() {
-        var cloudUri = uriParam('cloudUri');
-        var uri = cloudUri == null ? window.location.hostname : cloudUri;
+        var cloudUri = Geofencing.uriParam('cloudUri');
+        var uri = cloudUri == null ? Geofencing.windowLocationHostname() : cloudUri;
         return 'http://' + uri + ':15001/api';
     }
     Example.cloudletApiBase = cloudletApiBase;
-    function uriParam(name) {
-        var url = Geofencing.windowLocationHref();
-        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-        var regexS = "[\\?&]" + name + "=([^&#]*)";
-        var regex = new RegExp(regexS);
-        var results = regex.exec(url);
-        return results == null ? null : results[1];
-    }
-    Example.uriParam = uriParam;
 })(Example || (Example = {}));
 //# sourceMappingURL=exampleGlobals.js.map

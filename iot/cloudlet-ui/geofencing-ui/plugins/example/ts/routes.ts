@@ -18,6 +18,8 @@ module Example {
 
   export var RoutesController = _module.controller("Example.RoutesController", ["$scope", "$http", ($scope, $http) => {
     $scope.clientSelected = function() {
+      $scope.client = $scope.selectedOption.id;
+      $scope.routesExportLink = geofencingCloudletApiBase() + '/routes/export/' + $scope.client + '/xls';
       $http.get(geofencingCloudletApiBase() + '/routes/routes/' + $scope.selectedOption.id).
           success(function(data, status, headers, config) {
             $scope.routes = data.routes.map(function (val) {

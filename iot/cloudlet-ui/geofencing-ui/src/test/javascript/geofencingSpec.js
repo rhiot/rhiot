@@ -21,4 +21,9 @@ describe('Geofencing utils', function () {
         Geofencing.windowLocationHref = function(){return location};
         expect(Geofencing.windowLocationHref()).toBe(location);
     });
+
+    it('Should find URI parameter.', function () {
+        Geofencing.windowLocationHref = function(){return 'http://example.com?foo=bar'};
+        expect(Geofencing.uriParam('foo')).toBe('bar');
+    });
 });

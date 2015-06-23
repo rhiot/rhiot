@@ -18,13 +18,17 @@
     <div class="col-md-12" ng-controller="Example.RoutesController">
         <p ng-show="flash">{{flash}}</p>
 
-        <select ng-show="clients.length > 0" data-ng-options="o.name for o in clients"
+        Show routes for <select ng-show="clients.length > 0" data-ng-options="o.name for o in clients"
                 data-ng-model="selectedOption" ng-change="clientSelected()"></select>
 
         <p ng-show="clients.length == 0">No clients in the database.</p>
 
         <select ng-show="routes.length > 0" data-ng-options="o.name for o in routes"
                 data-ng-model="selectedRoute" ng-change="routeSelected()"></select>
+
+        <p ng-show="clients.length > 0">
+            <a ng-href="{{routesExportLink}}">Excel report for {{client}}</a>
+        </p>
 
         <p ng-show="selectedRoute">
             <img ng-src="{{routeUrl}}" />
