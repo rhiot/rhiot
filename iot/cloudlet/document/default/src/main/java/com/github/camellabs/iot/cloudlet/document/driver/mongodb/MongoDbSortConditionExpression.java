@@ -18,7 +18,7 @@ package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.support.ExpressionAdapter;
-import com.github.camellabs.iot.cloudlet.document.driver.routing.FindByQueryOperation;
+import com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation;
 
 public class MongoDbSortConditionExpression extends ExpressionAdapter {
 

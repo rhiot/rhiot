@@ -104,8 +104,8 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/findByQuery/{collection}").route().
-                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.FindByQueryOperation(headers['collection'], body)").
-                to("direct:findByQuery");
+                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation(headers['collection'], body)").
+                to("bean:mongodbDocumentDriver?method=findByQuery");
 
         rest("/api/document")
                 .verb("OPTIONS", "/").route()
@@ -135,16 +135,6 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
         from("direct:findMany").
                 setHeader(COLLECTION).groovy("body.collection").
                 setBody().groovy("new com.mongodb.BasicDBObject('_id', new com.mongodb.BasicDBObject('$in', body.ids.collect{new org.bson.types.ObjectId(it)}))").
-                to(baseMongoDbEndpoint() + "findAll").
-                process(mapBsonToJson());
-
-        from("direct:findByQuery").
-                setHeader(COLLECTION).groovy("body.collection").
-                setHeader(LIMIT).groovy("body.queryBuilder.size").
-                setHeader(NUM_TO_SKIP).groovy("body.queryBuilder.page * body.queryBuilder.size"). // TODO Use defaults if not sent by client
-                setHeader(SORT_BY).expression(sortCondition()).
-                setBody().groovy("body.queryBuilder.query"). // Use default == empty
-                process(queryBuilder()).
                 to(baseMongoDbEndpoint() + "findAll").
                 process(mapBsonToJson());
 

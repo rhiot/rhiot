@@ -14,11 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.document.driver.routing;
+package com.github.camellabs.iot.cloudlet.document.driver.spi;
 
 import java.util.Map;
 
-public class FindByQueryOperation {
+import static com.github.camellabs.iot.cloudlet.document.driver.spi.Pojos.collectionName;
+
+public class FindByQueryOperation<T> {
 
     private final String collection;
 
@@ -26,6 +28,11 @@ public class FindByQueryOperation {
 
     public FindByQueryOperation(String collection, Map<String, Object> queryBuilder) {
         this.collection = collection;
+        this.queryBuilder = queryBuilder;
+    }
+
+    public FindByQueryOperation(Class<T> pojoClass, Map<String, Object> queryBuilder) {
+        this.collection = collectionName(pojoClass);
         this.queryBuilder = queryBuilder;
     }
 

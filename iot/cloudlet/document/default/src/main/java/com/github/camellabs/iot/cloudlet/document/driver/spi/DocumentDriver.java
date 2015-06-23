@@ -16,8 +16,12 @@
  */
 package com.github.camellabs.iot.cloudlet.document.driver.spi;
 
+import java.util.List;
+
 public interface DocumentDriver {
 
     String save(SaveOperation saveOperation);
+
+    <T> List<T> findByQuery(FindByQueryOperation<T> findByQueryOperation);
 
 }
