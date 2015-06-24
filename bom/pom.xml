@@ -23,6 +23,7 @@
         <activemq.version>5.11.1</activemq.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
         <apache-poi.version>3.12</apache-poi.version>
+        <californium-core.version>1.0.0-M3</californium-core.version>
         <camel.version>2.15.2</camel.version>
         <camel-labs.version>0.1.1-SNAPSHOT</camel-labs.version>
         <embedmongo.version>1.48.0</embedmongo.version>
@@ -34,7 +35,6 @@
         <pi4j-version>1.0</pi4j-version>
         <pubnub.version>3.7.3</pubnub.version>
         <tinkerforge.version>2.1.4</tinkerforge.version>
-        <californium-core.version>1.0.0-M3</californium-core.version>
 
         <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
