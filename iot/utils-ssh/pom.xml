@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
+        <artifactId>camel-labs-iot</artifactId>
         <groupId>com.github.camel-labs</groupId>
         <version>0.1.1-SNAPSHOT</version>
-        <artifactId>camel-labs-bom</artifactId>
-        <relativePath>../bom</relativePath>
+        <relativePath>..</relativePath>
     </parent>
-    <artifactId>camel-labs-iot</artifactId>
-    <packaging>pom</packaging>
+
+    <artifactId>camel-labs-iot-utils-ssh</artifactId>
 
     <licenses>
         <license>
@@ -19,15 +19,15 @@
         </license>
     </licenses>
 
-    <modules>
-        <module>utils</module>
-        <module>utils-ssh</module>
-        <module>components</module>
-        <module>gateway</module>
-        <module>cloudlet</module>
-        <module>cloudlet-hawtio</module>
-        <module>cloudlet-ui</module>
-        <module>feature</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.camel-labs</groupId>
+            <artifactId>camel-labs-iot-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
