@@ -28,6 +28,7 @@
         <embedmongo.version>1.48.0</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
         <ivy.version>2.4.0</ivy.version>
+        <jsch.version>0.1.51</jsch.version>
         <kura.version>1.0.3</kura.version>
         <logback.version>1.1.2</logback.version>
         <pi4j-version>1.0</pi4j-version>
@@ -94,6 +95,11 @@
                 <groupId>com.google.maps</groupId>
                 <artifactId>google-maps-services</artifactId>
                 <version>${google-maps-services.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>${jsch.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.pi4j</groupId>
