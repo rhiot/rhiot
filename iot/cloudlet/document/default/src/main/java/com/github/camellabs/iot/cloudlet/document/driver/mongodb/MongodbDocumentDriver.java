@@ -19,20 +19,24 @@ package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
+import org.bson.BSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapper.bsonToJson;
-import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoQueryBuilderProcessor.queryBuilder;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static org.apache.camel.component.mongodb.MongoDbConstants.LIMIT;
@@ -68,25 +72,25 @@ public class MongodbDocumentDriver implements DocumentDriver {
     }
 
     @Override
-    public <T> List<T> findByQuery(FindByQueryOperation<T> findByQueryOperation) {
+    public List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation) {
+        Map<String,Object> query = (Map<String, Object>) findByQueryOperation.queryBuilder().getOrDefault("query", emptyMap());
         try {
             Exchange exc = producerTemplate.request(baseMongoDbEndpoint() + "findAll",
                     exchange -> {
                         exchange.getIn().setHeader(COLLECTION, findByQueryOperation.collection());
-                        exchange.getIn().setHeader(LIMIT, findByQueryOperation.queryBuilder().get("size"));
-                        exchange.getIn().setHeader(NUM_TO_SKIP, ((int) findByQueryOperation.queryBuilder().get("page")) * ((int) findByQueryOperation.queryBuilder().get("size")));
+                        exchange.getIn().setHeader(LIMIT, findByQueryOperation.queryBuilder().getOrDefault("size", 100));
+                        exchange.getIn().setHeader(NUM_TO_SKIP, ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100)));
                         exchange.getIn().setHeader(SORT_BY, new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder()));
-                        exchange.getIn().setBody(findByQueryOperation.queryBuilder().get("query"));
-                        queryBuilder().process(exchange);
+                        exchange.getIn().setBody(new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(query)));
                     });
-            Object result = exc.getOut().getBody();
-            if(result instanceof Iterable) {
-                List<DBObject> documents =  newArrayList((Iterable) result);
-                return (List<T>) documents.parallelStream().map(BsonMapper::bsonToJson).collect(toList());
+            Object mongoOutput = exc.getOut().getBody();
+            List<DBObject> documents;
+            if(mongoOutput instanceof Iterable) {
+                documents =  newArrayList((Iterable) mongoOutput);
             } else {
-                result = bsonToJson((DBObject) result);
-                return Arrays.asList((T)result);
+                documents = singletonList((DBObject) mongoOutput);
             }
+            return documents.parallelStream().map(BsonMapper::bsonToJson).map(document->(Map<String,Object>)document.toMap()).collect(toList());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

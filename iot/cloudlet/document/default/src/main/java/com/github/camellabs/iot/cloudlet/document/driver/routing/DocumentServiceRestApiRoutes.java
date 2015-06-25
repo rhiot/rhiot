@@ -16,7 +16,9 @@
  */
 package com.github.camellabs.iot.cloudlet.document.driver.routing;
 
+import com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoQueryBuilder;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,6 @@ import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static org.apache.camel.model.rest.RestBindingMode.json;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapperProcessor.mapBsonToJson;
-import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoQueryBuilderProcessor.queryBuilder;
 
 @Component
 public class DocumentServiceRestApiRoutes extends RouteBuilder {
@@ -142,7 +143,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
         from("direct:countByQuery").
                 setHeader(COLLECTION).groovy("body.collection").
                 setBody().groovy("body.queryBuilder.query").
-                process(queryBuilder()).
+                process(it -> it.getIn().setBody(new MongoQueryBuilder().jsonToMongoQuery(it.getIn().getBody(DBObject.class)))).
                 to(baseMongoDbEndpoint() + "count");
 
         from("direct:remove").

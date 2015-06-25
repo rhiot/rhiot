@@ -20,7 +20,7 @@ import java.util.Map;
 
 import static com.github.camellabs.iot.cloudlet.document.driver.spi.Pojos.collectionName;
 
-public class FindByQueryOperation<T> {
+public class FindByQueryOperation {
 
     private final String collection;
 
@@ -31,7 +31,7 @@ public class FindByQueryOperation<T> {
         this.queryBuilder = queryBuilder;
     }
 
-    public FindByQueryOperation(Class<T> pojoClass, Map<String, Object> queryBuilder) {
+    public FindByQueryOperation(Class<?> pojoClass, Map<String, Object> queryBuilder) {
         this.collection = collectionName(pojoClass);
         this.queryBuilder = queryBuilder;
     }

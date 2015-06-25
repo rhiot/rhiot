@@ -16,17 +16,16 @@
  */
 package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 
-import com.google.common.base.Predicate;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static com.github.camellabs.iot.utils.Maps.immutableMapOf;
-import static com.google.common.collect.Iterables.filter;
 import static java.lang.Boolean.parseBoolean;
+import static java.util.stream.Collectors.toList;
 
 public class MongoQueryBuilder {
 
@@ -41,7 +40,7 @@ public class MongoQueryBuilder {
     public DBObject jsonToMongoQuery(DBObject jsonQuery) {
         BasicDBObject mongoQuery = new BasicDBObject();
         for (String originalKey : jsonQuery.keySet()) {
-            String compoundKey = originalKey.replace('_', '.');
+            String compoundKey = originalKey.replaceAll("(.)_", "$1.");
 
             String suffixOperator = findFirstMatchOperator(originalKey);
             if (suffixOperator != null) {
@@ -60,8 +59,8 @@ public class MongoQueryBuilder {
 
     // TODO Don't return stack traces
     public DBObject queryBuilderToSortConditions(Map<String, Object> queryBuilder) {
-        int order = parseBoolean(queryBuilder.get("sortAscending").toString()) ? 1 : -1; // TODO Use defaults
-        List<String> orderBy = (List<String>) queryBuilder.get("orderBy");  // TODO Use defaults // Suggest that it should list here
+        int order = parseBoolean(queryBuilder.getOrDefault("sortAscending", true).toString()) ? 1 : -1;
+        List<String> orderBy = (List<String>) queryBuilder.getOrDefault("orderBy", Collections.emptyList()); // Suggest that it should list here
         if (orderBy.size() == 0) {
             return new BasicDBObject("$natural", order);
         } else {
@@ -73,14 +72,11 @@ public class MongoQueryBuilder {
         }
     }
 
+    // Helpers
+
     private String findFirstMatchOperator(String originalKey) {
-        Iterator<String> matchingSuffixOperators = filter(SIMPLE_SUFFIX_OPERATORS.keySet(), new Predicate<String>() {
-            @Override
-            public boolean apply(String suffixOperator) {
-                return originalKey.endsWith(suffixOperator);
-            }
-        }).iterator();
-        return matchingSuffixOperators.hasNext() ? matchingSuffixOperators.next() : null;
+        List<String> matchingSuffixOperators = SIMPLE_SUFFIX_OPERATORS.keySet().parallelStream().filter(originalKey::endsWith).collect(toList());
+        return matchingSuffixOperators.isEmpty() ? null : matchingSuffixOperators.get(0);
     }
 
     private void addRestriction(BasicDBObject query, String propertyWithOperator, String propertyOperator, String operator, Object value) {
