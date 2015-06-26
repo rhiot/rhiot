@@ -5,9 +5,9 @@
  * The licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * <p>
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,22 +19,20 @@ package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
+import com.google.common.collect.ImmutableMap;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
-import org.bson.BSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -72,28 +70,26 @@ public class MongodbDocumentDriver implements DocumentDriver {
     }
 
     @Override
-    public List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation) {
-        Map<String,Object> query = (Map<String, Object>) findByQueryOperation.queryBuilder().getOrDefault("query", emptyMap());
-        try {
-            Exchange exc = producerTemplate.request(baseMongoDbEndpoint() + "findAll",
-                    exchange -> {
-                        exchange.getIn().setHeader(COLLECTION, findByQueryOperation.collection());
-                        exchange.getIn().setHeader(LIMIT, findByQueryOperation.queryBuilder().getOrDefault("size", 100));
-                        exchange.getIn().setHeader(NUM_TO_SKIP, ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100)));
-                        exchange.getIn().setHeader(SORT_BY, new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder()));
-                        exchange.getIn().setBody(new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(query)));
-                    });
-            Object mongoOutput = exc.getOut().getBody();
-            List<DBObject> documents;
-            if(mongoOutput instanceof Iterable) {
-                documents =  newArrayList((Iterable) mongoOutput);
-            } else {
-                documents = singletonList((DBObject) mongoOutput);
-            }
-            return documents.parallelStream().map(BsonMapper::bsonToJson).map(document->(Map<String,Object>)document.toMap()).collect(toList());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public List<Map<String, Object>> findByQuery(FindByQueryOperation findByQueryOperation) {
+        Map<String, Object> universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder().getOrDefault("query", emptyMap());
+        DBObject mongoQuery = new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(universalQuery));
+        Map<String, Object> headers = ImmutableMap.of(
+                COLLECTION, findByQueryOperation.collection(),
+                LIMIT, findByQueryOperation.queryBuilder().getOrDefault("size", 100),
+                NUM_TO_SKIP, ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100)),
+                SORT_BY, new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder())
+        );
+        Object mongoOutput = producerTemplate.requestBodyAndHeaders(baseMongoDbEndpoint() + "findAll", mongoQuery, headers);
+
+        List<DBObject> documents;
+        if (mongoOutput == null) {
+            return emptyList();
+        } else if (mongoOutput instanceof Iterable) {
+            documents = newArrayList((Iterable) mongoOutput);
+        } else {
+            documents = singletonList((DBObject) mongoOutput);
         }
+        return documents.parallelStream().map(BsonMapper::bsonToJson).map(document -> (Map<String, Object>) document.toMap()).collect(toList());
     }
 
     private String baseMongoDbEndpoint() {

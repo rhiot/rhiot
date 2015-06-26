@@ -1,0 +1,106 @@
+package camel.labs.iot.cloudlet.document.mongodb;
+
+import com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapper;
+import com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongodbDocumentDriver;
+import com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation;
+import com.google.common.collect.ImmutableMap;
+import de.flapdoodle.embed.mongo.MongodExecutable;
+import de.flapdoodle.embed.mongo.MongodStarter;
+import de.flapdoodle.embed.mongo.config.IMongodConfig;
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
+import de.flapdoodle.embed.mongo.config.Net;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.TypeConverter;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.IntegrationTest;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import spring.boot.EmbedMongoConfiguration;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import static de.flapdoodle.embed.mongo.distribution.Version.V2_6_1;
+import static de.flapdoodle.embed.process.runtime.Network.localhostIsIPv6;
+import static org.springframework.util.SocketUtils.findAvailableTcpPort;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = MongoDbDocumentDriverTest.class)
+@SpringBootApplication
+@IntegrationTest("spring.main.sources=camel.labs.iot.cloudlet.document.mongodb")
+public class MongoDbDocumentDriverTest extends Assert {
+
+    @Autowired
+    ProducerTemplate producerTemplate;
+
+    @Autowired
+    TypeConverter typeConverter;
+
+    @Bean
+    MongodbDocumentDriver documentDriver() {
+        return new MongodbDocumentDriver("testdb", producerTemplate, new BsonMapper(typeConverter));
+    }
+
+    @Autowired
+    MongodbDocumentDriver driver;
+
+    public static final int port = findAvailableTcpPort();
+
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public MongodExecutable mongodExecutable() throws IOException {
+        IMongodConfig mongodConfig = new MongodConfigBuilder()
+                .version(V2_6_1)
+                .net(new Net(port, localhostIsIPv6()))
+                .build();
+        return MongodStarter.getDefaultInstance().prepare(mongodConfig);
+    }
+
+    @BeforeClass
+    public static void beforeClass() {
+        System.setProperty("spring.data.mongodb.port", port + "");
+    }
+
+    @Test
+    public void shouldReturnEmptyList() {
+        Map<String, Object> query = ImmutableMap.of("name", "someRandomName");
+        Map<String, Object> queryBuilder = ImmutableMap.of("query", query);
+
+        // When
+        List<Map<String, Object>> people = driver.findByQuery(new FindByQueryOperation(Person.class, queryBuilder));
+
+        // Then
+        assertEquals(0, people.size());
+    }
+
+}
+
+class Person {
+
+    private String id;
+
+    private String name;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+}
