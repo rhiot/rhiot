@@ -44,6 +44,7 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,7 @@ import static com.github.camellabs.iot.cloudlet.geofencing.domain.Route.createNe
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -127,7 +129,7 @@ public class DefaultRouteService implements RouteService {
 
     @Override
     public void deleteRoute(String routeId) {
-        Map<String, Object> queryBuilder = ImmutableMap.of("query", ImmutableMap.of("_id", new ObjectId(routeId)));
+        Map<String, Object> queryBuilder = ImmutableMap.of("query", ImmutableMap.of("_idIn", singletonList(new ObjectId(routeId))));
         Map<String,Object> route = documentDriver.findByQuery(new FindByQueryOperation(Route.class, queryBuilder)).get(0);
         route.put("deleted", new Date());
         documentDriver.save(new SaveOperation(collectionName(Route.class), route));
