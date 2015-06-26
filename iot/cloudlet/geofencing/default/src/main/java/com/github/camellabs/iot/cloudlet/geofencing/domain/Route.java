@@ -26,10 +26,17 @@ public class Route {
 
     private final Date created;
 
-    public Route(String id, String client, Date created) {
+    private final Date deleted;
+
+    public Route(String id, String client, Date created, Date deleted) {
         this.id = id;
         this.client = client;
         this.created = created;
+        this.deleted = deleted;
+    }
+
+    public static Route createNewRoute(String client) {
+        return new Route(null, client, new Date(), null);
     }
 
     public String getId() {
@@ -42,6 +49,10 @@ public class Route {
 
     public Date getCreated() {
         return created;
+    }
+
+    public Date getDeleted() {
+        return deleted;
     }
 
 }

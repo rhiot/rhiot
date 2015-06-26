@@ -29,6 +29,8 @@ public interface RouteService {
 
     List<Route> routes(String client);
 
+    void deleteRoute(String routeId);
+
     URL renderRouteUrl(String routeId);
 
     byte[] exportRoutes(String client, String format);

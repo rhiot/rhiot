@@ -17,6 +17,7 @@
 package com.github.camellabs.iot.cloudlet.geofencing.service;
 
 import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
+import com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation;
 import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.Route;
@@ -24,6 +25,7 @@ import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteComment;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteGpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.maps.model.LatLng;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -48,6 +50,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.camellabs.iot.cloudlet.document.driver.spi.Pojos.collectionName;
+import static com.github.camellabs.iot.cloudlet.geofencing.domain.Route.createNewRoute;
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
 import static java.util.Collections.emptyList;
@@ -99,7 +102,7 @@ public class DefaultRouteService implements RouteService {
         for (GpsCoordinates coordinates : coordinatesToAnalyze) {
             String routeId;
             if (lastCoordinates == null || (TimeUnit.MILLISECONDS.toMinutes(coordinates.getTimestamp().getTime() - lastCoordinates.getTimestamp().getTime()) > 5)) {
-                Route newRoute = new Route(null, client, new Date());
+                Route newRoute = createNewRoute(client);
                 routeId = documentDriver.save(new SaveOperation(newRoute));
             } else {
                 routeId = lastRouteCoordinates.getRouteId();
@@ -119,7 +122,15 @@ public class DefaultRouteService implements RouteService {
 
     @Override
     public List<Route> routes(String client) {
-        return mongoTemplate.findAll(Route.class, Route.class.getSimpleName());
+        return mongoTemplate.find(new Query().addCriteria(where("deleted").is(null)), Route.class, collectionName(Route.class));
+    }
+
+    @Override
+    public void deleteRoute(String routeId) {
+        Map<String, Object> queryBuilder = ImmutableMap.of("query", ImmutableMap.of("_id", new ObjectId(routeId)));
+        Map<String,Object> route = documentDriver.findByQuery(new FindByQueryOperation(Route.class, queryBuilder)).get(0);
+        route.put("deleted", new Date());
+        documentDriver.save(new SaveOperation(collectionName(Route.class), route));
     }
 
     @Override

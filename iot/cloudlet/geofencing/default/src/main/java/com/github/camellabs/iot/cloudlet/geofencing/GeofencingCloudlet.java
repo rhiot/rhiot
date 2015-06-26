@@ -47,6 +47,11 @@ public class GeofencingCloudlet extends FatJarRouter {
                 beanRef("routeService", "routes").transform().groovy("[routes: request.body]");
 
         rest("/api/geofencing/routes").
+                delete("/delete/{routeId}").route().
+                transform().header("routeId").
+                beanRef("routeService", "deleteRoute").transform().groovy("[routes: request.body]");
+
+        rest("/api/geofencing/routes").
                 get("/routeUrl/{route}").route().
                 transform().header("route").
                 beanRef("routeService", "renderRouteUrl").transform().groovy("[routeUrl: request.body]");

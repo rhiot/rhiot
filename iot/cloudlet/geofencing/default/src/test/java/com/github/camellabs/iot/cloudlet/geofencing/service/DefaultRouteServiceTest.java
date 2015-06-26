@@ -79,14 +79,6 @@ public class DefaultRouteServiceTest extends Assert {
 
     static int restPort = findAvailableTcpPort();
 
-    String restApi = "http://localhost:" + restPort + "/api/geofencing/";
-
-    String client = "client";
-
-    GpsCoordinates point1 = new GpsCoordinates(null, client, "clientId", new Date(), TEN, TEN);
-    GpsCoordinates point2 = new GpsCoordinates(null, client, "clientId", new Date(), TEN.add(ONE), TEN.add(ONE));
-    GpsCoordinates point3 = new GpsCoordinates(null, client, "clientId", new DateTime(point2.getTimestamp()).plusMinutes(6).toDate(), TEN.add(ONE), TEN.add(ONE));
-
     @BeforeClass
     public static void beforeClass() {
         System.setProperty("server.port", findAvailableTcpPort() + "");
@@ -98,6 +90,15 @@ public class DefaultRouteServiceTest extends Assert {
         System.setProperty("spring.data.mongodb.port", mongodbPort + "");
     }
 
+    // Test data fixtures
+
+    String restApi = "http://localhost:" + restPort + "/api/geofencing/";
+
+    String client = "client";
+
+    GpsCoordinates point1 = new GpsCoordinates(null, client, "clientId", new Date(), TEN, TEN);
+    GpsCoordinates point2 = new GpsCoordinates(null, client, "clientId", new Date(), TEN.add(ONE), TEN.add(ONE));
+    GpsCoordinates point3 = new GpsCoordinates(null, client, "clientId", new DateTime(point2.getTimestamp()).plusMinutes(6).toDate(), TEN.add(ONE), TEN.add(ONE));
 
     @Before
     public void before() {
@@ -138,6 +139,24 @@ public class DefaultRouteServiceTest extends Assert {
 
         // Then
         assertEquals(1, routes.get("routes").size());
+    }
+
+    @Test
+    public void shouldDeleteRoute() throws URISyntaxException {
+        // Given
+        documentDriver.save(new SaveOperation(point1));
+        routeService.analyzeRoutes(client);
+        URI routesRequestUri = new URI(restApi + "routes/routes/" + client);
+        @SuppressWarnings("unchecked")
+        Map<String, List<Map<String,Object>>> routes = restTemplate.getForObject(routesRequestUri, Map.class);
+        URI deleteRouteUri = new URI(restApi + "routes/delete/" + routes.get("routes").get(0).get("id"));
+
+        // When
+        restTemplate.delete(deleteRouteUri);
+
+        // Then
+        routes = restTemplate.getForObject(routesRequestUri, Map.class);
+        assertEquals(0, routes.get("routes").size());
     }
 
     @Test
