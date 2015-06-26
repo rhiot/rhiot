@@ -83,6 +83,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.camel-labs</groupId>
+                <artifactId>camel-labs-iot-utils-ssh</artifactId>
+                <version>${camel-labs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.camel-labs</groupId>
                 <artifactId>camel-pi4j</artifactId>
                 <version>${camel-labs.version}</version>
             </dependency>
