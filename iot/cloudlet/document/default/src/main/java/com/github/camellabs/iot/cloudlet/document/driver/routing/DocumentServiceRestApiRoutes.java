@@ -104,7 +104,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
                 setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation(headers['collection'], body)").
                 to("bean:mongodbDocumentDriver?method=findByQuery");
 
-        rest("/api/document")
+        rest("/api/")
                 .verb("OPTIONS", "/").route()
                 .setHeader("Access-Control-Allow-Origin", constant("*"))
                 .setHeader("Access-Control-Allow-Methods", constant("GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH"))
