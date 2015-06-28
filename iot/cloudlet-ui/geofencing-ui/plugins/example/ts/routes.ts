@@ -16,38 +16,44 @@
 /// <reference path="examplePlugin.ts"/>
 module Example {
 
-  export var RoutesController = _module.controller("Example.RoutesController", ["$scope", "$http", ($scope, $http) => {
+  export var RoutesController = _module.controller("Example.RoutesController", ["$scope", "$http", "$route", ($scope, $http, $route) => {
+    $scope.loadRoutes = function() {
+        $http.get(Geofencing.geofencingCloudletApiBase() + '/routes/routes/' + $scope.selectedOption.id).
+            success(function(data, status, headers, config) {
+                $scope.routes = data.routes.map(function (val) {
+                    var routeTimestamp = new Date(val.created);
+                    var timestamp = (routeTimestamp.getMonth() + 1) + "-" + routeTimestamp.getDate() + "-" + routeTimestamp.getFullYear() + ' ' + routeTimestamp.getHours() + ":" + routeTimestamp.getMinutes() + ":" + routeTimestamp.getSeconds();
+                    return {
+                        name: timestamp,
+                        id: val.id
+                    };
+                });
+                if(data.routes.length > 0) {
+                    $scope.selectedRoute = $scope.routes[0];
+                    $scope.routeSelected();
+                }
+            }).
+            error(function(data, status, headers, config) {
+                $scope.flash = 'Cannot connect to the geofencing service.';
+            });
+    };
+
     $scope.clientSelected = function() {
       $scope.client = $scope.selectedOption.id;
-      $scope.routesExportLink = geofencingCloudletApiBase() + '/routes/export/' + $scope.client + '/xls';
-      $http.get(geofencingCloudletApiBase() + '/routes/routes/' + $scope.selectedOption.id).
-          success(function(data, status, headers, config) {
-            $scope.routes = data.routes.map(function (val) {
-                var routeTimestamp = new Date(val.created);
-                var timestamp = (routeTimestamp.getMonth() + 1) + "-" + routeTimestamp.getDate() + "-" + routeTimestamp.getFullYear() + ' ' + routeTimestamp.getHours() + ":" + routeTimestamp.getMinutes() + ":" + routeTimestamp.getSeconds();
-              return {
-                name: timestamp,
-                id: val.id
-              };
-            });
-            if(data.routes.length > 0) {
-              $scope.selectedRoute = $scope.routes[0];
-              $scope.routeSelected();
-            }
-          }).
-          error(function(data, status, headers, config) {
-            $scope.flash = 'Cannot connect to the geofencing service.';
-          });
+      $scope.routesExportLink = Geofencing.geofencingCloudletApiBase() + '/routes/export/' + $scope.client + '/xls';
+      $scope.loadRoutes();
     };
+
     $scope.routeSelected = function () {
-          $http.get(geofencingCloudletApiBase() + '/routes/routeUrl/' + $scope.selectedRoute.id).success(function (data, status, headers, config) {
+          $http.get(Geofencing.geofencingCloudletApiBase() + '/routes/routeUrl/' + $scope.selectedRoute.id).success(function (data, status, headers, config) {
               $scope.routeUrl = data.routeUrl;
               $scope.loadRouteComments();
           }).error(function (data, status, headers, config) {
               $scope.flash = 'Cannot connect to the geofencing service.';
           });
     };
-    $http.get(geofencingCloudletApiBase() + '/routes/clients').
+
+    $http.get(Geofencing.geofencingCloudletApiBase() + '/routes/clients').
         success(function(data, status, headers, config) {
           $scope.clients = data.clients.map(function (val) {
             return {
@@ -64,7 +70,7 @@ module Example {
           $scope.flash = 'Cannot connect to the geofencing service.';
         });
       $scope.addComment = function() {
-          $http.post(cloudletApiBase() + '/document/save/RouteComment', {routeId: $scope.selectedRoute.id, text: $scope.newComment, created: new Date().getTime()}).
+          $http.post(Geofencing.cloudletApiBase() + '/document/save/RouteComment', {routeId: $scope.selectedRoute.id, text: $scope.newComment, created: new Date().getTime()}).
               success(function(data, status, headers, config) {
                   $scope.loadRouteComments();
                   $scope.flash = 'New comment has been added to the route.';
@@ -74,13 +80,18 @@ module Example {
               });
       };
       $scope.loadRouteComments = function() {
-          $http.post(cloudletApiBase() + '/document/findByQuery/RouteComment', {page: 0, size: 100, orderBy: ['created'], sortAscending: -1, query: {routeIdIn: [$scope.selectedRoute.id]}}).
+          $http.post(Geofencing.cloudletApiBase() + '/document/findByQuery/RouteComment', {page: 0, size: 100, orderBy: ['created'], sortAscending: -1, query: {routeIdIn: [$scope.selectedRoute.id]}}).
               success(function(data, status, headers, config) {
                   $scope.routeComments = data;
               }).
               error(function(data, status, headers, config) {
                   $scope.flash = 'There was problem reading route comments.';
               });
+      };
+
+      $scope.deleteRoute = function() {
+          $http.delete(Geofencing.geofencingCloudletApiBase() + '/routes/delete/' + $scope.selectedRoute.id);
+          $route.reload();
       };
   }]);
 

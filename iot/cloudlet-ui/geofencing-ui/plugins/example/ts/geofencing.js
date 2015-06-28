@@ -28,5 +28,20 @@ var Geofencing;
         return results == null ? null : results[1];
     }
     Geofencing.uriParam = uriParam;
+    Geofencing.cloudUriParam = 'cloudUri';
+    function cloudletApiBase() {
+        var cloudUriFromParam = uriParam(Geofencing.cloudUriParam);
+        var uri = cloudUriFromParam == null ? Geofencing.windowLocationHostname() : cloudUriFromParam;
+        return 'http://' + uri + ':15001/api';
+    }
+    Geofencing.cloudletApiBase = cloudletApiBase;
+    function geofencingCloudletApiBase() {
+        return cloudletApiBase() + '/geofencing';
+    }
+    Geofencing.geofencingCloudletApiBase = geofencingCloudletApiBase;
+    function documentCloudletApiBase() {
+        return cloudletApiBase() + '/document';
+    }
+    Geofencing.documentCloudletApiBase = documentCloudletApiBase;
 })(Geofencing || (Geofencing = {}));
 //# sourceMappingURL=geofencing.js.map

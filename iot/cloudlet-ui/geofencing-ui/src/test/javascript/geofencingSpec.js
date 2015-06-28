@@ -26,4 +26,14 @@ describe('Geofencing utils', function () {
         Geofencing.windowLocationHref = function(){return 'http://example.com?foo=bar'};
         expect(Geofencing.uriParam('foo')).toBe('bar');
     });
+
+    it('Should return cloudlet API base.', function () {
+        Geofencing.windowLocationHostname = function(){return 'foo.com'};
+        expect(Geofencing.cloudletApiBase()).toBe('http://foo.com:15001/api');
+    });
+
+    it('Should return overridden document API base.', function () {
+        Geofencing.windowLocationHref = function(){return 'http://example.com?' + Geofencing.cloudUriParam + '=bar.com'};
+        expect(Geofencing.documentCloudletApiBase()).toBe('http://bar.com:15001/api/document');
+    });
 });

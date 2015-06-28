@@ -23,16 +23,4 @@ module Example {
 
   export var templatePath = "plugins/example/html";
 
-  export function geofencingCloudletApiBase() {
-    var cloudUri = Geofencing.uriParam('cloudUri');
-    var uri = cloudUri == null ? Geofencing.windowLocationHostname() : cloudUri;
-    return 'http://' + uri + ':15001/api/geofencing';
-  }
-
-  export function cloudletApiBase() {
-    var cloudUri = Geofencing.uriParam('cloudUri');
-    var uri = cloudUri == null ? Geofencing.windowLocationHostname() : cloudUri;
-    return 'http://' + uri + ':15001/api';
-  }
-
 }

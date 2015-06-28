@@ -23,8 +23,12 @@
 
         <p ng-show="clients.length == 0">No clients in the database.</p>
 
-        <select ng-show="routes.length > 0" data-ng-options="o.name for o in routes"
+        <select ng-show="routes.length > 0" ng-options="o.name for o in routes"
                 data-ng-model="selectedRoute" ng-change="routeSelected()"></select>
+
+        <button ng-show="routes.length > 0" ng-click="deleteRoute()">
+            Delete route
+        </button>
 
         <p ng-show="clients.length > 0">
             <a ng-href="{{routesExportLink}}">Excel report for {{client}}</a>

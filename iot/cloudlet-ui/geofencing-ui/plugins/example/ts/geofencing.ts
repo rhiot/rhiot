@@ -31,4 +31,20 @@ module Geofencing {
         return results == null ? null : results[1];
     }
 
+    export var cloudUriParam = 'cloudUri';
+
+    export function cloudletApiBase() {
+        var cloudUriFromParam = uriParam(cloudUriParam);
+        var uri = cloudUriFromParam == null ? windowLocationHostname() : cloudUriFromParam;
+        return 'http://' + uri + ':15001/api';
+    }
+
+    export function geofencingCloudletApiBase() {
+        return cloudletApiBase() + '/geofencing';
+    }
+
+    export function documentCloudletApiBase() {
+        return cloudletApiBase() + '/document';
+    }
+
 }
