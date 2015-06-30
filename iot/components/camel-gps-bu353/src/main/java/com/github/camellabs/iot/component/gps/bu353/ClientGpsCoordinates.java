@@ -16,6 +16,9 @@
  */
 package com.github.camellabs.iot.component.gps.bu353;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Date;
 
 import static java.lang.Double.parseDouble;
@@ -27,6 +30,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * GPS coordinates collected and stored on the device.
  */
 public class ClientGpsCoordinates {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ClientGpsCoordinates.class);
 
     private final Date timestamp;
 
@@ -40,6 +45,8 @@ public class ClientGpsCoordinates {
         this.lng = lng;
     }
 
+    // Encoding
+
     public static ClientGpsCoordinates parseNMEA(String nmeaLine) {
         String[] lineParts = nmeaLine.split(",");
         String latText = lineParts[3];
@@ -47,8 +54,8 @@ public class ClientGpsCoordinates {
         if(isBlank(latText) || isBlank(lngText)) {
             throw new SatelliteOutOfReachException();
         }
-        double lat = convertHourToDecimal(latText);
-        double lng = convertHourToDecimal(lngText);
+        double lat = convertDdmCoordinatesToDecimal(latText);
+        double lng = convertDdmCoordinatesToDecimal(lngText);
         return new ClientGpsCoordinates(new Date(), lat, lng);
     }
 
@@ -66,17 +73,13 @@ public class ClientGpsCoordinates {
 
     // Helpers
 
-    public static double convertHourToDecimal(String nmeaDegrees) {
-        String[] parts = nmeaDegrees.split("\\.");
-        int hoursStringLength = parts[0].length();
-        double hours = Double.parseDouble(parts[0].substring(0, hoursStringLength - 2));
-        double minutes = Double.parseDouble(parts[0].substring(hoursStringLength - 2));
-        String secondsText = parts[1];
-        if(secondsText.length() > 2) {
-            secondsText = secondsText.substring(0, 2) + "." + secondsText.substring(2);
-        }
-        double seconds = Double.parseDouble(secondsText);
-        return hours + minutes/60 + seconds/3600;
+    public static double convertDdmCoordinatesToDecimal(String dmCoordinates) {
+        int dotIndex = dmCoordinates.indexOf('.');
+        double degrees = Double.parseDouble(dmCoordinates.substring(0, dotIndex - 2));
+        double minutes = Double.parseDouble(dmCoordinates.substring(dotIndex - 2));
+        double decimalCoordinates = degrees + minutes/60;
+        LOG.debug("Converted NMEA DDM degree coordinates {} (degrees/minutes: {}/{}) to decimal coordinates {}.", dmCoordinates, degrees, minutes, decimalCoordinates);
+        return decimalCoordinates;
     }
 
     // Getters
