@@ -103,6 +103,12 @@ Change LED output port like this :
 
 Please add resistor (220 Ohms) between LED and Mass (0v) to avoid excessive current through it.
 
+### Monitoring gateway with Jolokia
+
+The gateway exposes its JMX beans using the [Jolokia REST API](https://jolokia.org). The default Jolokia URL for the
+gateway is `http://0.0.0.0:8080/jolokia`. You can take advantage of the Jolokia to monitor and perform administrative
+tasks on your gateway.
+
 ## Camel IoT components
 
 Camel IoT Labs brings some extra components for the Apache Camel intended to make both device- and server-side IoT
