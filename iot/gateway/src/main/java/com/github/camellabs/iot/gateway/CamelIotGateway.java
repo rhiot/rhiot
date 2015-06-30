@@ -21,13 +21,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import static com.github.camellabs.iot.gateway.CamelIotGatewayConstants.HEARTBEAT_ENDPOINT;
+import static com.github.camellabs.iot.gateway.CamelIotGatewayConstants.HEARTBEAT_TRIGGER_ROUTE_ID;
 import static org.apache.camel.LoggingLevel.INFO;
 
 @SpringBootApplication
 public class CamelIotGateway extends FatJarRouter {
 
+    // SPI callbacks
+
     @Autowired(required = false)
     RouteBuilderCallback[] routeBuilderCallbacks;
+
+    // Routes
 
     @Override
     public void configure() throws Exception {
@@ -37,8 +42,10 @@ public class CamelIotGateway extends FatJarRouter {
             }
         }
 
-        from("timer:heartbeat?delay={{camellabs.iot.gateway.heartbeat.rate:5000}}").to(HEARTBEAT_ENDPOINT);
-        from(HEARTBEAT_ENDPOINT).log(INFO, "Heartbeat", "Ping!");
+        from("timer:heartbeat?delay={{camellabs.iot.gateway.heartbeat.rate:5000}}").routeId(HEARTBEAT_TRIGGER_ROUTE_ID).
+                to(HEARTBEAT_ENDPOINT);
+
+        from(HEARTBEAT_ENDPOINT).routeId("heartbeatLogger").log(INFO, "Heartbeat", "Ping!");
     }
 
 }

@@ -57,6 +57,10 @@ can change the heartbeat rate by setting the `camellabs.iot.gateway.heartbeat.ra
 number of the rate miliseconds. The snippet below demonstrates how to change the heartbeat rate to 10 seconds:
 
     export camellabs.iot.gateway.heartbeat.rate=10000
+    
+The ID of the timer route triggering the heartbeats is `heartbeatTrigger` (
+`com.github.camellabs.iot.gateway.CamelIotGatewayConstants.HEARTBEAT_TRIGGER_ROUTE_ID` constant). The trigger route
+sends the heatbeats to the `direct:heartbeat` endpoint (`CamelIotGatewayConstants.HEARTBEAT_ENDPOINT` constant);
 
 #### Logging heartbeat
 
