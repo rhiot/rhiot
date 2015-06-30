@@ -41,8 +41,8 @@ starting script. It means that all the configuration environment variables can b
 
 ### Gateway logger configuration
 
-By default gateway keeps the logging history from the last 14 days. Logs are grouped by the days and split into the 
-5 MB files. The default logging level is `INFO`. You can change it by setting the `camellabs_iot_gateway_log_root_level`
+By default gateway keeps the last 100 MB of the logging history. Logs are grouped by the days and split into the 
+10 MB files. The default logging level is `INFO`. You can change it by setting the `camellabs_iot_gateway_log_root_level`
 environment variable:
 
     export camellabs_iot_gateway_log_root_level=DEBUG
