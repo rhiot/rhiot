@@ -63,6 +63,27 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
   - [Articles, presentations & videos](#articles-presentations-&-videos)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Camel IoT Labs stack
+
+The Camel IoT Labs stack is based on the following libraries and frameworks:
+
+**IoT Gateway stack**
+
+| Scope             | Libraries/Frameworks                      | 
+|-------------------|-------------------------------------------|
+| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan)**(evaluation)** |
+| Message routing   | - [Apache Camel](http://camel.apache.org) |
+
+
+**Cloudlet stack**
+
+| Scope             | Libraries/Frameworks                      | 
+|-------------------|-------------------------------------------|
+| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan)**(evaluation)** |
+| Message routing   | - [Apache Camel](http://camel.apache.org) |
+
+
 ## Camel IoT gateway
 
 Camel IoT gateway is the small fat jar application that can be installed into the field device. Gateway acts as a bridge
