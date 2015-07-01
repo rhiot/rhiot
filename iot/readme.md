@@ -5,7 +5,10 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
 [Apache Camel](http://camel.apache.org).
 <br><br>
 
-## Index 
+## Index
+ 
+* auto-gen TOC:
+{:toc}
 
 - [Camel IoT gateway](#camel-iot-gateway)
 - [Camel IoT components](#camel-iot-components)
