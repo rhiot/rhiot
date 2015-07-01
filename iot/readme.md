@@ -74,7 +74,7 @@ The Camel IoT Labs stack is based on the following libraries and frameworks:
 
 | Scope             | Libraries/Frameworks                      | 
 |-------------------|-------------------------------------------|
-| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan)** (evaluation)** |
+| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan) **(evaluation)** |
 | Message routing   | - [Apache Camel](http://camel.apache.org) |
 
 <br>
@@ -83,7 +83,7 @@ The Camel IoT Labs stack is based on the following libraries and frameworks:
 
 | Scope             | Libraries/Frameworks                      | 
 |-------------------|-------------------------------------------|
-| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan)** (evaluation)** |
+| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan) **(evaluation)** |
 | Message routing   | - [Apache Camel](http://camel.apache.org) |
 
 
