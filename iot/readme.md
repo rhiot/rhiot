@@ -10,57 +10,57 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Camel IoT Labs](#camel-iot-labs)
-  - [Index](#index)
-  - [Camel IoT gateway](#camel-iot-gateway)
-    - [Installing gateway on the Raspbian](#installing-gateway-on-the-raspbian)
-    - [Configuration of the gateway](#configuration-of-the-gateway)
-    - [Gateway logger configuration](#gateway-logger-configuration)
-    - [Device heartbeats](#device-heartbeats)
-      - [Logging heartbeat](#logging-heartbeat)
-      - [MQTT heartbeat](#mqtt-heartbeat)
-      - [LED heartbeat](#led-heartbeat)
-    - [Monitoring gateway with Jolokia](#monitoring-gateway-with-jolokia)
-  - [Camel IoT components](#camel-iot-components)
-    - [Camel GPS BU353 component](#camel-gps-bu353-component)
-      - [Maven dependency](#maven-dependency)
-      - [URI format](#uri-format)
-      - [Options](#options)
-    - [Camel Kura Wifi component](#camel-kura-wifi-component)
-      - [Maven dependency](#maven-dependency-1)
-      - [URI format](#uri-format-1)
-      - [Options](#options-1)
-      - [Detecting Kura NetworkService](#detecting-kura-networkservice)
-    - [Camel TinkerForge component](#camel-tinkerforge-component)
-      - [Maven dependency](#maven-dependency-2)
-      - [General URI format](#general-uri-format)
-        - [Ambientlight](#ambientlight)
-        - [Temperature](#temperature)
-        - [Lcd20x4](#lcd20x4)
-          - [Optional URI Parameters](#optional-uri-parameters)
-      - [Humidity](#humidity)
-      - [Io16](#io16)
-        - [Consuming:](#consuming)
-        - [Producing](#producing)
-    - [Camel Pi4j component](#camel-pi4j-component)
-      - [Maven dependency](#maven-dependency-3)
-      - [URI format for GPIO](#uri-format-for-gpio)
-          - [Optional URI Parameters](#optional-uri-parameters-1)
-        - [Consuming:](#consuming-1)
-        - [Producing](#producing-1)
-        - [Simple button w/ LED mode](#simple-button-w-led-mode)
-      - [URI format for I2C](#uri-format-for-i2c)
-          - [Optional URI Parameters](#optional-uri-parameters-2)
-          - [i2c driver](#i2c-driver)
-    - [Camel PubNub component](#camel-pubnub-component)
-      - [Maven dependency](#maven-dependency-4)
-      - [General URI format](#general-uri-format-1)
-          - [URI Parameters](#uri-parameters)
-        - [Consuming:](#consuming-2)
-        - [Producing](#producing-2)
-  - [Cloudlets](#cloudlets)
-    - [On-premises deployment](#on-premises-deployment)
-  - [Articles, presentations & videos](#articles-presentations-&-videos)
+
+- [Camel IoT Labs stack](#camel-iot-labs-stack)
+- [Camel IoT gateway](#camel-iot-gateway)
+  - [Installing gateway on the Raspbian](#installing-gateway-on-the-raspbian)
+  - [Configuration of the gateway](#configuration-of-the-gateway)
+  - [Gateway logger configuration](#gateway-logger-configuration)
+  - [Device heartbeats](#device-heartbeats)
+    - [Logging heartbeat](#logging-heartbeat)
+    - [MQTT heartbeat](#mqtt-heartbeat)
+    - [LED heartbeat](#led-heartbeat)
+  - [Monitoring gateway with Jolokia](#monitoring-gateway-with-jolokia)
+- [Camel IoT components](#camel-iot-components)
+  - [Camel GPS BU353 component](#camel-gps-bu353-component)
+    - [Maven dependency](#maven-dependency)
+    - [URI format](#uri-format)
+    - [Options](#options)
+  - [Camel Kura Wifi component](#camel-kura-wifi-component)
+    - [Maven dependency](#maven-dependency-1)
+    - [URI format](#uri-format-1)
+    - [Options](#options-1)
+    - [Detecting Kura NetworkService](#detecting-kura-networkservice)
+  - [Camel TinkerForge component](#camel-tinkerforge-component)
+    - [Maven dependency](#maven-dependency-2)
+    - [General URI format](#general-uri-format)
+      - [Ambientlight](#ambientlight)
+      - [Temperature](#temperature)
+      - [Lcd20x4](#lcd20x4)
+        - [Optional URI Parameters](#optional-uri-parameters)
+    - [Humidity](#humidity)
+    - [Io16](#io16)
+      - [Consuming:](#consuming)
+      - [Producing](#producing)
+  - [Camel Pi4j component](#camel-pi4j-component)
+    - [Maven dependency](#maven-dependency-3)
+    - [URI format for GPIO](#uri-format-for-gpio)
+        - [Optional URI Parameters](#optional-uri-parameters-1)
+      - [Consuming:](#consuming-1)
+      - [Producing](#producing-1)
+      - [Simple button w/ LED mode](#simple-button-w-led-mode)
+    - [URI format for I2C](#uri-format-for-i2c)
+        - [Optional URI Parameters](#optional-uri-parameters-2)
+        - [i2c driver](#i2c-driver)
+  - [Camel PubNub component](#camel-pubnub-component)
+    - [Maven dependency](#maven-dependency-4)
+    - [General URI format](#general-uri-format-1)
+        - [URI Parameters](#uri-parameters)
+      - [Consuming:](#consuming-2)
+      - [Producing](#producing-2)
+- [Cloudlets](#cloudlets)
+  - [On-premises deployment](#on-premises-deployment)
+- [Articles, presentations & videos](#articles-presentations-&-videos)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -68,19 +68,22 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
 
 The Camel IoT Labs stack is based on the following libraries and frameworks:
 
+<br>
+
 **IoT Gateway stack**
 
 | Scope             | Libraries/Frameworks                      | 
 |-------------------|-------------------------------------------|
-| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan)**(evaluation)** |
+| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan)** (evaluation)** |
 | Message routing   | - [Apache Camel](http://camel.apache.org) |
 
+<br>
 
 **Cloudlet stack**
 
 | Scope             | Libraries/Frameworks                      | 
 |-------------------|-------------------------------------------|
-| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan)**(evaluation)** |
+| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan)** (evaluation)** |
 | Message routing   | - [Apache Camel](http://camel.apache.org) |
 
 
