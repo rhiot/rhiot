@@ -281,6 +281,7 @@
                             <exclude>**/test-plugins/**/*.js</exclude>
                             <exclude>**/test-plugins/**/*.js.map</exclude>
                             <exclude>**/coordinates.txt</exclude>
+                            <exclude>**/security.data</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
