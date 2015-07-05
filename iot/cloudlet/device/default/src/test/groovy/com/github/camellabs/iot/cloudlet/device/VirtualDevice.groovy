@@ -25,49 +25,7 @@ import org.eclipse.leshan.core.response.ValueResponse
 
 import java.text.SimpleDateFormat
 
-class GenericDevice extends BaseInstanceEnabler {
-
-    @Override
-    public ValueResponse read(int resourceid) {
-        System.out.println("Read on Device Resource " + resourceid);
-        switch (resourceid) {
-            case 0:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getManufacturer())));
-            case 1:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getModelNumber())));
-            case 2:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getSerialNumber())));
-            case 3:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getFirmwareVersion())));
-            case 9:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newIntegerValue(getBatteryLevel())));
-            case 10:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newIntegerValue(getMemoryFree())));
-            case 11:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        [Value.newIntegerValue(getErrorCode())]));
-            case 13:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newDateValue(getCurrentTime())));
-            case 14:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getUtcOffset())));
-            case 15:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getTimezone())));
-            case 16:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getSupportedBinding())));
-            default:
-                return super.read(resourceid);
-        }
-    }
+class VirtualDevice extends BaseInstanceEnabler {
 
     @Override
     public LwM2mResponse execute(int resourceid, byte[] params) {

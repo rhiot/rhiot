@@ -16,7 +16,6 @@
  */
 package com.github.camellabs.iot.cloudlet.device
 
-import groovy.transform.Immutable
 import org.eclipse.leshan.ResponseCode
 import org.eclipse.leshan.client.californium.LeshanClient
 import org.eclipse.leshan.client.resource.LwM2mObjectEnabler
@@ -30,11 +29,11 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort
 
 class LeshanCloudClient {
 
-    String clientId
+    private final String clientId
 
-    String server
+    private final String server
 
-    LeshanClient leshanClient
+    private LeshanClient leshanClient
 
     int clientPort = findAvailableTcpPort()
 
