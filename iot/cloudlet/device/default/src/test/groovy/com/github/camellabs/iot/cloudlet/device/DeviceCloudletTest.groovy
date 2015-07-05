@@ -26,7 +26,7 @@ import org.junit.Test
 import org.springframework.web.client.RestTemplate
 
 import static com.github.camellabs.iot.cloudlet.device.DeviceCloudlet.jackson
-import static com.github.camellabs.iot.cloudlet.device.LeshanCloudClient.createLeshanCloudClient
+import static DefaultLeshanClient.createLeshanCloudClient
 import static de.flapdoodle.embed.mongo.distribution.Version.V3_1_0
 import static de.flapdoodle.embed.process.runtime.Network.localhostIsIPv6
 import static java.util.UUID.randomUUID

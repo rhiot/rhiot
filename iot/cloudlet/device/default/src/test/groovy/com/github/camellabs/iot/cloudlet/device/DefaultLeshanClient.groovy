@@ -18,16 +18,12 @@ package com.github.camellabs.iot.cloudlet.device
 
 import org.eclipse.leshan.ResponseCode
 import org.eclipse.leshan.client.californium.LeshanClient
-import org.eclipse.leshan.client.resource.LwM2mObjectEnabler
-import org.eclipse.leshan.client.resource.ObjectEnabler
 import org.eclipse.leshan.client.resource.ObjectsInitializer
 import org.eclipse.leshan.core.request.RegisterRequest
-import org.eclipse.leshan.core.response.RegisterResponse
-import org.springframework.util.SocketUtils
 
 import static org.springframework.util.SocketUtils.findAvailableTcpPort
 
-class LeshanCloudClient {
+class DefaultLeshanClient {
 
     private final String clientId
 
@@ -35,13 +31,18 @@ class LeshanCloudClient {
 
     private LeshanClient leshanClient
 
-    int clientPort = findAvailableTcpPort()
+    private int clientPort = findAvailableTcpPort()
 
-    static LeshanCloudClient createLeshanCloudClient(String clientId) {
-        new LeshanCloudClient(clientId: clientId, server: 'localhost:5683')
+    DefaultLeshanClient(String clientId, String server) {
+        this.clientId = clientId
+        this.server = server
     }
 
-    LeshanCloudClient connect() {
+    static DefaultLeshanClient createLeshanCloudClient(String clientId) {
+        new DefaultLeshanClient(clientId, 'localhost:5683')
+    }
+
+    DefaultLeshanClient connect() {
         def initializer = new ObjectsInitializer()
         initializer.setClassForObject(3, GenericDevice.class)
         def enablers = initializer.createMandatory()
@@ -73,7 +74,7 @@ class LeshanCloudClient {
         this
     }
 
-    LeshanCloudClient disconnect() {
+    DefaultLeshanClient disconnect() {
         leshanClient.stop()
         this
     }
