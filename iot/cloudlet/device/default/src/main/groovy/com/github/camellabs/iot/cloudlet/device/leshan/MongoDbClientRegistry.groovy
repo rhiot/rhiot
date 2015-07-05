@@ -33,10 +33,17 @@ class MongoDbClientRegistry implements ClientRegistry {
 
     private final Mongo mongo
 
+    private final ObjectMapper objectMapper
+
     private final List<ClientRegistryListener> listeners = new CopyOnWriteArrayList<>()
 
-    MongoDbClientRegistry(Mongo mongo) {
+    MongoDbClientRegistry(Mongo mongo, ObjectMapper objectMapper) {
         this.mongo = mongo
+        this.objectMapper = objectMapper
+    }
+
+    MongoDbClientRegistry(Mongo mongo) {
+        this(mongo, defaultObjectMapper())
     }
 
     @Override
@@ -73,7 +80,7 @@ class MongoDbClientRegistry implements ClientRegistry {
         }
 
         def previousClient = get(client.endpoint)
-        def clientMap = new ObjectMapper().convertValue(client, Map.class)
+        def clientMap = objectMapper.convertValue(client, Map.class)
         mongo.getDB('leshan').getCollection('Client').insert(new BasicDBObject(clientMap))
 
         if (previousClient != null) {
@@ -91,7 +98,7 @@ class MongoDbClientRegistry implements ClientRegistry {
             return null
         } else {
             def clientUpdated = update.updateClient(clientWrapperFromMap(client.toMap()).toLeshanClient());
-            def clientToUpdate = new ObjectMapper().convertValue(clientUpdated, Map.class)
+            def clientToUpdate = objectMapper.convertValue(clientUpdated, Map.class)
             clientToUpdate['_id'] = client.get('_id')
             mongo.getDB('leshan').getCollection('Client').save(clientToUpdate)
 
@@ -116,6 +123,12 @@ class MongoDbClientRegistry implements ClientRegistry {
             }
             return unregistered;
         }
+    }
+
+    // Helpers
+
+    static ObjectMapper defaultObjectMapper() {
+        new ObjectMapper()
     }
 
 }
