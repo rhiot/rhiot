@@ -202,8 +202,8 @@ development easier.
 cheapest GPS units on the market. It is connected to the device via the USB port. Camel GPS BU353 component can be used
 to read current GPS information from that device.
 
-With Camel GPS BU353 you can just connect that device to your
-computer's USB port and read the GPS data - the component will take care of making sure that GPS daemon is up, running and
+With Camel GPS BU353 you can just connect the receiver to your computer's USB port and read the GPS data - the component
+will take care of making sure that GPS daemon is up, running and
 switched to the [NMEA mode](http://www.gpsinformation.org/dale/nmea.htm). The component also takes care of parsing the
 NMEA data read from the serial port, so you can enjoy the `com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates`
 instances received by your Camel routes.
