@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
+import static com.github.camellabs.iot.utils.geo.Geos.convertDdmCoordinatesToDecimal;
 import static java.lang.Double.parseDouble;
 import static java.lang.Long.parseLong;
 import static java.lang.String.format;
@@ -51,7 +52,7 @@ public class ClientGpsCoordinates {
         String[] lineParts = nmeaLine.split(",");
         String latText = lineParts[3];
         String lngText = lineParts[5];
-        if(isBlank(latText) || isBlank(lngText)) {
+        if (isBlank(latText) || isBlank(lngText)) {
             throw new SatelliteOutOfReachException();
         }
         double lat = convertDdmCoordinatesToDecimal(latText);
@@ -69,17 +70,6 @@ public class ClientGpsCoordinates {
         double lat = parseDouble(serializedCoordinatesParts[1]);
         double lng = parseDouble(serializedCoordinatesParts[2]);
         return new ClientGpsCoordinates(new Date(timestamp), lat, lng);
-    }
-
-    // Helpers
-
-    public static double convertDdmCoordinatesToDecimal(String dmCoordinates) {
-        int dotIndex = dmCoordinates.indexOf('.');
-        double degrees = Double.parseDouble(dmCoordinates.substring(0, dotIndex - 2));
-        double minutes = Double.parseDouble(dmCoordinates.substring(dotIndex - 2));
-        double decimalCoordinates = degrees + minutes/60;
-        LOG.debug("Converted NMEA DDM degree coordinates {} (degrees/minutes: {}/{}) to decimal coordinates {}.", dmCoordinates, degrees, minutes, decimalCoordinates);
-        return decimalCoordinates;
     }
 
     // Getters
