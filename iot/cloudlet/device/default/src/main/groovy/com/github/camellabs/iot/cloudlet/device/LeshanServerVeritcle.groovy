@@ -17,12 +17,13 @@
 package com.github.camellabs.iot.cloudlet.device
 
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
+import com.github.camellabs.iot.cloudlet.device.vertx.Vertxes
 import com.mongodb.Mongo
 import io.vertx.core.Future
 import io.vertx.lang.groovy.GroovyVerticle
 import org.eclipse.leshan.server.californium.LeshanServerBuilder
 
-import static com.github.camellabs.iot.cloudlet.device.DeviceCloudlet.jackson
+import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.wrapIntoJsonResponse
 
 class LeshanServerVeritcle extends GroovyVerticle {
 
@@ -32,36 +33,25 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     @Override
     void start(Future<Void> startFuture) throws Exception {
-        new Thread(){
-            @Override
-            void run() {
-                leshanServer.start()
+        vertx.runOnContext {
+            leshanServer.start()
 
-                vertx.eventBus().localConsumer('listClients', {
-                    msg ->
-                        def clients = leshanServer.clientRegistry.allClients()
-                        def json = jackson.writeValueAsString([clients: clients])
-                        msg.reply(json)
-                })
-
-                vertx.eventBus().localConsumer('deleteClients', {
-                    msg ->
-                        leshanServer.clientRegistry.allClients().each {
-                            client -> leshanServer.clientRegistry.deregisterClient(client.registrationId) }
-                        def json = jackson.writeValueAsString([Status: 'Success'])
-                        msg.reply(json)
-                })
-
-                vertx.eventBus().localConsumer('getClient', {
-                    msg ->
-                        def client = leshanServer.clientRegistry.get(msg.body().toString())
-                        def json = jackson.writeValueAsString([client: client])
-                        msg.reply(json)
-                })
-
-                startFuture.complete()
+            vertx.eventBus().localConsumer('listClients') { msg ->
+                wrapIntoJsonResponse(msg, 'clients', leshanServer.clientRegistry.allClients())
             }
-        }.start()
+
+            vertx.eventBus().localConsumer('deleteClients') { msg ->
+                leshanServer.clientRegistry.allClients().each {
+                        client -> leshanServer.clientRegistry.deregisterClient(client.registrationId) }
+                wrapIntoJsonResponse(msg, 'Status', 'Success')
+            }
+
+            vertx.eventBus().localConsumer('getClient') { msg ->
+                wrapIntoJsonResponse(msg, 'client', leshanServer.clientRegistry.get(msg.body().toString()))
+            }
+
+            startFuture.complete()
+        }
     }
 
 }

@@ -16,6 +16,7 @@
  */
 package com.github.camellabs.iot.cloudlet.device.vertx
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import groovy.transform.CompileStatic
 import io.vertx.core.AsyncResult
 import io.vertx.groovy.core.eventbus.Message
@@ -24,6 +25,8 @@ import io.vertx.groovy.ext.web.RoutingContext
 
 @CompileStatic
 final class Vertxes {
+
+    private static final ObjectMapper JACKSON = new ObjectMapper()
 
     private Vertxes() {
     }
@@ -38,6 +41,11 @@ final class Vertxes {
 
     static String parameter(RoutingContext routingContext, String parameter) {
         routingContext.request().getParam(parameter)
+    }
+
+    static def wrapIntoJsonResponse(Message message, String root, Object pojo) {
+        def json = JACKSON.writeValueAsString(["${root}": pojo])
+        message.reply(json)
     }
 
 }
