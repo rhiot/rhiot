@@ -18,6 +18,7 @@ package com.github.camellabs.iot.cloudlet.device.leshan
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mongodb.BasicDBObject
+import com.mongodb.DBCollection
 import com.mongodb.DBObject
 import com.mongodb.Mongo
 import org.eclipse.leshan.server.client.Client
@@ -48,13 +49,13 @@ class MongoDbClientRegistry implements ClientRegistry {
 
     @Override
     Client get(String endpoint) {
-        def client = mongo.getDB('leshan').getCollection('Client').findOne(new BasicDBObject([endpoint: endpoint]))
+        def client = clientsCollection().findOne(new BasicDBObject([endpoint: endpoint]))
         client == null ? null : clientWrapperFromMap(client.toMap()).toLeshanClient()
     }
 
     @Override
     Collection<Client> allClients() {
-        def bsonClients = mongo.getDB('leshan').getCollection('Client').find()
+        def bsonClients = clientsCollection().find()
         List<DBObject> clients = []
         while (bsonClients.hasNext()) {
             clients += bsonClients.next()
@@ -74,14 +75,14 @@ class MongoDbClientRegistry implements ClientRegistry {
 
     @Override
     boolean registerClient(Client client) {
-        def existingClient = mongo.getDB('leshan').getCollection('Client').findOne(new BasicDBObject([endpoint: client.endpoint]))
+        def existingClient = clientsCollection().findOne(new BasicDBObject([endpoint: client.endpoint]))
         if (existingClient != null) {
-            mongo.getDB('leshan').getCollection('Client').remove(new BasicDBObject([_id: existingClient.get('_id')]))
+            clientsCollection().remove(new BasicDBObject([_id: existingClient._id]))
         }
 
         def previousClient = get(client.endpoint)
         def clientMap = objectMapper.convertValue(client, Map.class)
-        mongo.getDB('leshan').getCollection('Client').insert(new BasicDBObject(clientMap))
+        clientsCollection().insert(new BasicDBObject(clientMap))
 
         if (previousClient != null) {
             listeners.each { it.unregistered(previousClient) }
@@ -93,14 +94,14 @@ class MongoDbClientRegistry implements ClientRegistry {
 
     @Override
     Client updateClient(ClientUpdate update) {
-        def client = mongo.getDB('leshan').getCollection('Client').findOne(new BasicDBObject([registrationId: update.registrationId]))
+        def client = clientsCollection().findOne(new BasicDBObject([registrationId: update.registrationId]))
         if (client == null) {
             return null
         } else {
             def clientUpdated = update.updateClient(clientWrapperFromMap(client.toMap()).toLeshanClient());
             def clientToUpdate = objectMapper.convertValue(clientUpdated, Map.class)
-            clientToUpdate['_id'] = client.get('_id')
-            mongo.getDB('leshan').getCollection('Client').save(clientToUpdate)
+            clientToUpdate._id = client._id
+            clientsCollection().save(new BasicDBObject(clientToUpdate))
 
             // notify listener
             for (ClientRegistryListener l : listeners) {
@@ -112,11 +113,11 @@ class MongoDbClientRegistry implements ClientRegistry {
 
     @Override
     Client deregisterClient(String registrationId) {
-        def toBeUnregistered = mongo.getDB('leshan').getCollection('Client').findOne(new BasicDBObject([registrationId: registrationId]))
+        def toBeUnregistered = clientsCollection().findOne(new BasicDBObject([registrationId: registrationId]))
         if (toBeUnregistered == null) {
             return null;
         } else {
-            mongo.getDB('leshan').getCollection('Client').remove(new BasicDBObject([endpoint: toBeUnregistered.get('endpoint')]))
+            clientsCollection().remove(new BasicDBObject([endpoint: toBeUnregistered.endpoint]))
             Client unregistered = clientWrapperFromMap(toBeUnregistered.toMap()).toLeshanClient()
             for (ClientRegistryListener l : listeners) {
                 l.unregistered(unregistered);
@@ -129,6 +130,10 @@ class MongoDbClientRegistry implements ClientRegistry {
 
     static ObjectMapper defaultObjectMapper() {
         new ObjectMapper()
+    }
+
+    protected DBCollection clientsCollection() {
+        mongo.getDB('leshan').getCollection('Client')
     }
 
 }
