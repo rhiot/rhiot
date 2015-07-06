@@ -56,10 +56,13 @@ public class MockSensorTest extends Assert {
     @Bean(initMethod = "start", destroyMethod = "stop")
     BrokerService broker() throws Exception {
         BrokerService broker = new BrokerService();
+        broker.setBrokerName(getClass().getName());
         broker.setPersistent(false);
         broker.addConnector("mqtt://localhost:" + mqttPort);
         return broker;
     }
+
+    // Test routing fixtures
 
     @Bean
     RoutesBuilder mqttConsumer() {
@@ -72,8 +75,10 @@ public class MockSensorTest extends Assert {
         };
     }
 
+    // Tests
+
     @Test
-    public void shouldSendGpsCoordinatesToTheGeofencingCloudlet() throws InterruptedException {
+    public void shouldSendMockEventsToTheMqttServer() throws InterruptedException {
         mockEndpoint.setMinimumExpectedMessageCount(1000);
         mockEndpoint.assertIsSatisfied();
     }

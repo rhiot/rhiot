@@ -56,6 +56,7 @@ public class CamelIotGatewayTest extends Assert {
     @Bean(initMethod = "start", destroyMethod = "stop")
     BrokerService broker() throws Exception {
         BrokerService broker = new BrokerService();
+        broker.setBrokerName(getClass().getName());
         broker.setPersistent(false);
         broker.addConnector("mqtt://localhost:" + mqttPort);
         return broker;
