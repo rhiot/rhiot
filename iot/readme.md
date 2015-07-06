@@ -238,13 +238,35 @@ not on the server side of the IoT solution.
 
 #### Options
 
-| Option                    | Default value                                                                 | Description   |
-|:------------------------- |:-----------------------------------------------------------------------       |:------------- |
-| `consumer.initialDelay`   | 1000                                                                          | Milliseconds before the polling starts. |
-| `consumer.delay`          | 5000 | Delay between each GPS scan. |
-| `consumer.useFixedDelay`  | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
-| `gpsCoordinatesSource`   | `new SerialGpsCoordinatesSource()`                                               | `com.github.camellabs.iot.component.gps.bu353.GpsCoordinatesSource` instance used to read the current GPS coordinates. |
+| Option                   | Default value                                                                 | Description   |
+|:-------------------------|:-----------------------------------------------------------------------       |:------------- |
+| `consumer.initialDelay`  | 1000                                                                          | Milliseconds before the polling starts. |
+| `consumer.delay`         | 5000 | Delay between each GPS scan. |
+| `consumer.useFixedDelay` | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
+| `gpsCoordinatesSource`   | `new SerialGpsCoordinatesSource()`                                               | reference to the`com.github.camellabs.iot.component.gps.bu353.GpsCoordinatesSource` instance used to read the current GPS coordinates. |
 
+#### Process manager
+
+Process manager is used by the BU353 component to execute Linux commands responsible for starting GPSD daemon or
+configuring the GPS receive to provide GPS coordinates in the NMEA mode. If for some reason you would like to change
+the default implementation of the process manager used by Camel (i.e. `com.github.camellabs.iot.utils.process.DefaultProcessManager`),
+you can set it on the component level:
+
+    GpsBu353Component bu353 = new GpsBu353Component();
+    bu353.setProcessManager(new CustomProcessManager());
+    camelContext.addComponent("gps-bu353", bu353);
+
+If custom process manager is not set on the component, Camel will try to find the manager instance in the
+[registry](http://camel.apache.org/registry.html). So for example for Spring application, you can just configure
+the manager as the bean:
+
+    @Bean
+    ProcessManager myProcessManager() {
+        new CustomProcessManager();
+    }
+
+Custom process manager may be useful if for some reasons your Linux distribution requires executing some unusual commands
+in order to make the GPSD up and running.
 
 ---
 

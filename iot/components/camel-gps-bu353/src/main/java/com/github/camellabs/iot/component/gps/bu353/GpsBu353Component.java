@@ -33,6 +33,10 @@ public class GpsBu353Component extends UriEndpointComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(GpsBu353Component.class);
 
+    private int gpsdRestartInterval = 5000;
+
+    private ProcessManager processManager;
+
     private GpsCoordinatesSource gpsCoordinatesSource;
 
     public GpsBu353Component() {
@@ -57,8 +61,14 @@ public class GpsBu353Component extends UriEndpointComponent {
     // Helpers
 
     protected ProcessManager resolveProcessManager() {
+        LOG.debug("Started resolving ProcessManager...");
+        if(processManager != null) {
+            LOG.debug("ProcessManager has been set on the component level. Camel will use it: {}", processManager);
+            return processManager;
+        }
         Set<ProcessManager> processManagers = getCamelContext().getRegistry().findByType(ProcessManager.class);
         if(processManagers.isEmpty()) {
+            LOG.debug("No ProcessManager found in the registry - creating new DefaultProcessManager.");
             return new DefaultProcessManager();
         } else if(processManagers.size() == 1) {
             return processManagers.iterator().next();
@@ -75,7 +85,7 @@ public class GpsBu353Component extends UriEndpointComponent {
                 LOG.info("(Re)starting GPS daemon.");
                 processManager.executeAndJoinOutput("killall", "gpsd");
                 processManager.executeAndJoinOutput("gpsd", "/dev/ttyUSB0");
-                sleep(5000);
+                sleep(gpsdRestartInterval);
                 gpsctlResult = processManager.executeAndJoinOutput("gpsctl", "-n", "/dev/ttyUSB0");
                 LOG.info("gpsctl result: {}", gpsctlResult);
             } while (!gpsctlResult.contains("gpsctl:ERROR: /dev/ttyUSB0 mode change to NMEA failed"));
@@ -85,6 +95,23 @@ public class GpsBu353Component extends UriEndpointComponent {
     }
 
     // Getters and setters
+
+
+    public int getGpsdRestartInterval() {
+        return gpsdRestartInterval;
+    }
+
+    public void setGpsdRestartInterval(int gpsdRestartInterval) {
+        this.gpsdRestartInterval = gpsdRestartInterval;
+    }
+
+    public ProcessManager getProcessManager() {
+        return processManager;
+    }
+
+    public void setProcessManager(ProcessManager processManager) {
+        this.processManager = processManager;
+    }
 
     public GpsCoordinatesSource getGpsCoordinatesSource() {
         return gpsCoordinatesSource;
