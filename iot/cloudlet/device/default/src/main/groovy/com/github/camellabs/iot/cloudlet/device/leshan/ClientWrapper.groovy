@@ -17,12 +17,15 @@
 package com.github.camellabs.iot.cloudlet.device.leshan
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.eclipse.leshan.LinkObject
 import org.eclipse.leshan.core.request.BindingMode
 import org.eclipse.leshan.server.client.Client
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 
 class ClientWrapper {
+
+    private static final def OBJECT_MAPPER = new ObjectMapper().configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     private Date registrationDate
 
@@ -48,12 +51,17 @@ class ClientWrapper {
 
     private Date lastUpdate
 
+    private LinkObjectWrapper[] objectLinks
+
     static ClientWrapper clientWrapperFromMap(Map map) {
-        new ObjectMapper().configure(FAIL_ON_UNKNOWN_PROPERTIES, false).convertValue(map, ClientWrapper.class)
+        OBJECT_MAPPER.convertValue(map, ClientWrapper.class)
     }
 
     Client toLeshanClient() {
-        new Client(registrationId, endpoint, address, port, registrationEndpointAddress)
+        def links = objectLinks.collect { OBJECT_MAPPER.convertValue(it, LinkObject.class) } as LinkObject[]
+        new Client(registrationId, endpoint, address, port, lwM2mVersion,
+                lifeTimeInSec, smsNumber, bindingMode, links,
+                registrationEndpointAddress, registrationDate, lastUpdate)
     }
 
     Date getRegistrationDate() {
@@ -150,6 +158,14 @@ class ClientWrapper {
 
     void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate
+    }
+
+    LinkObjectWrapper[] getObjectLinks() {
+        return objectLinks
+    }
+
+    void setObjectLinks(LinkObjectWrapper[] objectLinks) {
+        this.objectLinks = objectLinks
     }
 
 }
