@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.device
+package com.github.camellabs.iot.cloudlet.device.client
 
 import org.eclipse.leshan.ResponseCode
 import org.eclipse.leshan.client.resource.BaseInstanceEnabler
@@ -25,45 +25,46 @@ import org.eclipse.leshan.core.response.ValueResponse
 
 import java.text.SimpleDateFormat
 
+import static org.eclipse.leshan.ResponseCode.CONTENT
+import static org.eclipse.leshan.core.node.Value.newStringValue
+
 class GenericDevice extends BaseInstanceEnabler {
 
     @Override
     public ValueResponse read(int resourceid) {
-        System.out.println("Read on Device Resource " + resourceid);
         switch (resourceid) {
             case 0:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getManufacturer())));
+                return generateValueResponse(resourceid, manufacturer())
             case 1:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getModelNumber())));
+                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
+                        newStringValue(getModelNumber())));
             case 2:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getSerialNumber())));
+                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
+                        newStringValue(getSerialNumber())));
             case 3:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getFirmwareVersion())));
+                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
+                        newStringValue(getFirmwareVersion())));
             case 9:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
+                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
                         Value.newIntegerValue(getBatteryLevel())));
             case 10:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
+                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
                         Value.newIntegerValue(getMemoryFree())));
             case 11:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
+                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
                         [Value.newIntegerValue(getErrorCode())]));
             case 13:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
+                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
                         Value.newDateValue(getCurrentTime())));
             case 14:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getUtcOffset())));
+                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
+                        newStringValue(getUtcOffset())));
             case 15:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getTimezone())));
+                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
+                        newStringValue(getTimezone())));
             case 16:
-                return new ValueResponse(ResponseCode.CONTENT, new LwM2mResource(resourceid,
-                        Value.newStringValue(getSupportedBinding())));
+                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
+                        newStringValue(getSupportedBinding())));
             default:
                 return super.read(resourceid);
         }
@@ -96,12 +97,21 @@ class GenericDevice extends BaseInstanceEnabler {
         }
     }
 
-    private String getManufacturer() {
-        return "Leshan Example Device";
+    protected ValueResponse generateValueResponse(int resourceid, String value) {
+        if(value == null) {
+            return super.read(resourceid)
+        }
+        new ValueResponse(CONTENT, new LwM2mResource(resourceid, newStringValue(value)))
+    }
+
+    // Device parameters callbacks
+
+    protected String manufacturer() {
+        null
     }
 
     private String getModelNumber() {
-        return "Model 500";
+        "Model 500"
     }
 
     private String getSerialNumber() {

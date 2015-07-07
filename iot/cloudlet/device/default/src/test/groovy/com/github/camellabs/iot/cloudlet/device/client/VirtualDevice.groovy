@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.device
+package com.github.camellabs.iot.cloudlet.device.client
 
 import org.eclipse.leshan.ResponseCode
 import org.eclipse.leshan.client.resource.BaseInstanceEnabler

@@ -35,17 +35,17 @@ class DeviceCloudlet {
         def http = vertx.createHttpServer()
         def router = router(vertx)
 
-        router.route("/client").method(GET).handler({ rc ->
+        router.route("/client").method(GET).handler { rc ->
             vertx.eventBus().send('listClients', null, { clients -> jsonResponse(rc, clients) })
-        })
+        }
 
-        router.route("/client").method(DELETE).handler({ rc ->
+        router.route("/client").method(DELETE).handler { rc ->
             vertx.eventBus().send('deleteClients', null, { status -> jsonResponse(rc, status) })
-        })
+        }
 
-        router.route("/client/:clientId").method(GET).handler({ rc ->
+        router.route("/client/:clientId").method(GET).handler { rc ->
             vertx.eventBus().send('getClient', parameter(rc, 'clientId'), { client -> jsonResponse(rc, client) })
-        })
+        }
 
         http.requestHandler(router.&accept).listen(8080)
 
