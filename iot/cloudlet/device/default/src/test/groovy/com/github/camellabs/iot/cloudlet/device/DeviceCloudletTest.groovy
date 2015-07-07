@@ -22,7 +22,9 @@ import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
 import de.flapdoodle.embed.mongo.config.Net
 import org.apache.commons.io.IOUtils
 import org.junit.Assert
+import org.junit.BeforeClass
 import org.junit.Test
+import org.springframework.util.SocketUtils
 import org.springframework.web.client.RestTemplate
 
 import static com.github.camellabs.iot.cloudlet.device.DeviceCloudlet.jackson
@@ -30,23 +32,28 @@ import static com.github.camellabs.iot.cloudlet.device.client.DefaultLeshanClien
 import static de.flapdoodle.embed.mongo.distribution.Version.V3_1_0
 import static de.flapdoodle.embed.process.runtime.Network.localhostIsIPv6
 import static java.util.UUID.randomUUID
+import static org.springframework.util.SocketUtils.findAvailableTcpPort
 
 class DeviceCloudletTest extends Assert {
 
-    static def cloudlet = new DeviceCloudlet().start()
+    static def int restApiPort = findAvailableTcpPort()
 
-    static {
+    @BeforeClass
+    static void beforeClass() {
         IMongodConfig mongodConfig = new MongodConfigBuilder()
                 .version(V3_1_0)
                 .net(new Net(27017, localhostIsIPv6()))
                 .build();
         MongodStarter.getDefaultInstance().prepare(mongodConfig).start()
+
+        System.setProperty('camellabs_iot_cloudlet_device_api_rest_port', "${restApiPort}")
+        new DeviceCloudlet().start()
     }
 
     @Test
     void shouldReturnNoClients() {
-        new RestTemplate().delete(new URI('http://localhost:8080/client'))
-        def clients = IOUtils.toString(new URI('http://localhost:8080/client'))
+        new RestTemplate().delete(new URI("http://localhost:${restApiPort}/client"))
+        def clients = IOUtils.toString(new URI("http://localhost:${restApiPort}/client"))
         def response = jackson.readValue(clients, Map.class)
         assertEquals(0, response['clients'].asType(List.class).size())
     }
@@ -54,7 +61,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldNotRegisterClientTwice() {
         // Given
-        new RestTemplate().delete(new URI('http://localhost:8080/client'))
+        new RestTemplate().delete(new URI("http://localhost:${restApiPort}/client"))
         def firstClient = 'foo'
         def secondClient = 'bar'
 
@@ -64,7 +71,7 @@ class DeviceCloudletTest extends Assert {
         createLeshanCloudClient(secondClient).connect()
 
         // Then
-        def clients = new RestTemplate().getForObject(new URI('http://localhost:8080/client'), Map.class)
+        def clients = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client"), Map.class)
         assertEquals(2, clients['clients'].asType(List.class).size())
     }
 
@@ -75,10 +82,35 @@ class DeviceCloudletTest extends Assert {
         createLeshanCloudClient(clientId).connect()
 
         // When
-        def client = new RestTemplate().getForObject(new URI("http://localhost:8080/client/${clientId}"), Map.class)
+        def client = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}"), Map.class)
 
         // Then
         assertEquals(clientId, client['client']['endpoint'])
+    }
+
+    @Test
+    void shouldReadClientManufacturer() {
+        // Given
+        def clientId = randomUUID().toString()
+        createLeshanCloudClient(clientId).connect()
+
+        // When
+        def manufacturer = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/manufacturer"), Map.class)
+
+        // Then
+        assertEquals('Generic manufacturer', manufacturer['manufacturer'])
+    }
+
+    @Test
+    void shouldReturnManufacturerFailureForNonExistingClient() {
+        // Given
+        createLeshanCloudClient(randomUUID().toString()).connect()
+
+        // When
+        def manufacturer = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client/invalidEndpoint/manufacturer"), Map.class)
+
+        // Then
+        assertNotNull('Generic manufacturer', manufacturer['failure'])
     }
 
 }

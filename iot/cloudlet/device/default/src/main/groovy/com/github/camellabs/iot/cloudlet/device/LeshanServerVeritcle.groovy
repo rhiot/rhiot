@@ -17,13 +17,17 @@
 package com.github.camellabs.iot.cloudlet.device
 
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
-import com.github.camellabs.iot.cloudlet.device.vertx.Vertxes
 import com.mongodb.Mongo
 import io.vertx.core.Future
 import io.vertx.lang.groovy.GroovyVerticle
+import org.eclipse.leshan.core.node.LwM2mResource
+import org.eclipse.leshan.core.request.ReadRequest
+import org.eclipse.leshan.core.response.LwM2mResponse
+import org.eclipse.leshan.core.response.ValueResponse
 import org.eclipse.leshan.server.californium.LeshanServerBuilder
 
 import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.wrapIntoJsonResponse
+import static org.eclipse.leshan.ResponseCode.CONTENT
 
 class LeshanServerVeritcle extends GroovyVerticle {
 
@@ -50,8 +54,31 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 wrapIntoJsonResponse(msg, 'client', leshanServer.clientRegistry.get(msg.body().toString()))
             }
 
+            vertx.eventBus().localConsumer('client.manufacturer') { msg ->
+                def clientId = msg.body().toString()
+                def client = leshanServer.clientRegistry.get(clientId)
+                if(client == null) {
+                    msg.fail(0, "No client with ID ${clientId}.")
+                } else {
+                    wrapIntoJsonResponse(msg, 'manufacturer', stringResponse(leshanServer.send(client, new ReadRequest('/3/0/0'))))
+                }
+            }
+
             startFuture.complete()
         }
+    }
+
+    // Helpers
+
+    private String stringResponse(LwM2mResponse response) {
+        if(response.code != CONTENT || !(response instanceof ValueResponse)) {
+            return null
+        }
+        def content = response.asType(ValueResponse.class).content
+        if(!(content instanceof LwM2mResource)) {
+            return null
+        }
+        content.asType(LwM2mResource).value.value
     }
 
 }

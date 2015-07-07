@@ -23,6 +23,9 @@ import io.vertx.groovy.core.eventbus.Message
 import io.vertx.groovy.core.http.HttpServerResponse
 import io.vertx.groovy.ext.web.RoutingContext
 
+import static java.lang.System.getenv
+
+
 @CompileStatic
 final class Vertxes {
 
@@ -31,12 +34,47 @@ final class Vertxes {
     private Vertxes() {
     }
 
+    static String stringProperty(String key, String defaultValue) {
+        def property = System.getProperty(key)
+        if(property != null) {
+            return property
+        }
+
+        property = getenv(key)
+        if(property != null) {
+            return property
+        }
+
+        return defaultValue
+    }
+
+    static String stringProperty(String key) {
+        stringProperty(key, null)
+    }
+
+    static Integer intProperty(String key) {
+        def property = stringProperty(key)
+        property == null ? null : property.toInteger()
+    }
+
+    static int intProperty(String key, int defaultValue) {
+        def property = stringProperty(key)
+        if(property != null) {
+            return property.toInteger()
+        }
+        defaultValue
+    }
+
     static HttpServerResponse jsonResponse(RoutingContext routingContext) {
         routingContext.response().putHeader("content-type", "application/json")
     }
 
     static void jsonResponse(RoutingContext routingContext, AsyncResult<Message> message) {
-        jsonResponse(routingContext).end(message.result().body().toString())
+        if(message.succeeded()) {
+            jsonResponse(routingContext).end(message.result().body().toString())
+        } else {
+            jsonResponse(routingContext).end(JACKSON.writeValueAsString([failure: message.cause().message]))
+        }
     }
 
     static String parameter(RoutingContext routingContext, String parameter) {

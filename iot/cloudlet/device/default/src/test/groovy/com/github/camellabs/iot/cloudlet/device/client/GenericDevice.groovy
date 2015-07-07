@@ -33,11 +33,8 @@ class GenericDevice extends BaseInstanceEnabler {
     @Override
     public ValueResponse read(int resourceid) {
         switch (resourceid) {
-            case 0:
-                return generateValueResponse(resourceid, manufacturer())
-            case 1:
-                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
-                        newStringValue(getModelNumber())));
+            case 0: return generateValueResponse(resourceid, manufacturer())
+            case 1: return generateValueResponse(resourceid, modelNumber())
             case 2:
                 return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
                         newStringValue(getSerialNumber())));
@@ -107,11 +104,11 @@ class GenericDevice extends BaseInstanceEnabler {
     // Device parameters callbacks
 
     protected String manufacturer() {
-        null
+        'Generic manufacturer'
     }
 
-    private String getModelNumber() {
-        "Model 500"
+    protected String modelNumber() {
+        'Generic model number'
     }
 
     private String getSerialNumber() {

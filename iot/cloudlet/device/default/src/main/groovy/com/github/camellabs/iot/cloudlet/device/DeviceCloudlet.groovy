@@ -19,6 +19,7 @@ package com.github.camellabs.iot.cloudlet.device
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.vertx.groovy.core.Vertx
 
+import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.intProperty
 import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.jsonResponse
 import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.parameter
 import static io.vertx.core.http.HttpMethod.DELETE
@@ -44,10 +45,16 @@ class DeviceCloudlet {
         }
 
         router.route("/client/:clientId").method(GET).handler { rc ->
-            vertx.eventBus().send('getClient', parameter(rc, 'clientId'), { client -> jsonResponse(rc, client) })
+            vertx.eventBus().send('getClient', parameter(rc, 'clientId')) { client -> jsonResponse(rc, client) }
         }
 
-        http.requestHandler(router.&accept).listen(8080)
+        router.route("/client/:clientId/manufacturer").method(GET).handler { rc ->
+            vertx.eventBus().send('client.manufacturer', parameter(rc, 'clientId')) { client ->
+                jsonResponse(rc, client)
+            }
+        }
+
+        http.requestHandler(router.&accept).listen(intProperty('camellabs_iot_cloudlet_device_api_rest_port', 8080))
 
         vertx.deployVerticle("groovy:${LeshanServerVeritcle.class.name}")
 
