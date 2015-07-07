@@ -58,7 +58,7 @@ class ClientWrapper {
     }
 
     Client toLeshanClient() {
-        def links = objectLinks.collect { OBJECT_MAPPER.convertValue(it, LinkObject.class) } as LinkObject[]
+        def links = objectLinks.collect { new LinkObject(it.url, it.attributes) } as LinkObject[]
         new Client(registrationId, endpoint, address, port, lwM2mVersion,
                 lifeTimeInSec, smsNumber, bindingMode, links,
                 registrationEndpointAddress, registrationDate, lastUpdate)
