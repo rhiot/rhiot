@@ -377,18 +377,18 @@
         </profile>
     </profiles>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <!-- Groovy Maven plugin tries to download the artifacts from the dead Codehaus repository. -->
-            <id>codehaus.org</id>
-            <url>http://repository.codehaus.org</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--&lt;!&ndash; Groovy Maven plugin tries to download the artifacts from the dead Codehaus repository. &ndash;&gt;-->
+            <!--<id>codehaus.org</id>-->
+            <!--<url>http://repository.codehaus.org</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
 
 </project>
