@@ -40,7 +40,7 @@ case "$1" in
         ;;
     stop)
         echo "Stopping Camel Labs IoT Gateway"
-        kill `cat /var/camel-labs-iot-gateway/pid`
+        kill -9 `cat /var/camel-labs-iot-gateway/pid`
         ;;
     *)
         echo "Usage: /etc/init.d/camel-labs-iot-gateway start|stop"

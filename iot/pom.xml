@@ -28,6 +28,7 @@
         <module>cloudlet-hawtio</module>
         <module>cloudlet-ui</module>
         <module>feature</module>
+        <module>deployer</module>
     </modules>
 
 </project>

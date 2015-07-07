@@ -1,4 +1,3 @@
- #
  # Licensed to the Camel Labs under one or more
  # contributor license agreements.  See the NOTICE file distributed with
  # this work for additional information regarding copyright ownership.
@@ -21,3 +20,7 @@
 
 ## Collect GPS data from BU353 GPS device
 # export camellabs_iot_gateway_gps_bu353=true
+
+##
+# export camellabs_iot_gateway_gps_cloudlet_sync=true
+# export camellabs_iot_gateway_gps_cloudlet_address=my-geofencing.com:15001
