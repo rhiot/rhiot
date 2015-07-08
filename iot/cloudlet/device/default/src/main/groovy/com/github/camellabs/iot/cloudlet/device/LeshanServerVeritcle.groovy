@@ -17,6 +17,7 @@
 package com.github.camellabs.iot.cloudlet.device
 
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
+import com.github.camellabs.iot.cloudlet.device.vertx.Vertxes
 import com.mongodb.Mongo
 import io.vertx.core.Future
 import io.vertx.lang.groovy.GroovyVerticle
@@ -26,7 +27,13 @@ import org.eclipse.leshan.core.response.LwM2mResponse
 import org.eclipse.leshan.core.response.ValueResponse
 import org.eclipse.leshan.server.californium.LeshanServerBuilder
 
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
+
 import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.wrapIntoJsonResponse
+import static java.time.Instant.ofEpochMilli
+import static java.time.LocalDateTime.ofInstant
 import static org.eclipse.leshan.ResponseCode.CONTENT
 
 class LeshanServerVeritcle extends GroovyVerticle {
@@ -35,6 +42,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     final def leshanServer = new LeshanServerBuilder().setClientRegistry(new MongoDbClientRegistry(mongo)).build()
 
+    final def disconnectionPeriod = Vertxes.intProperty('camellabs_iot_cloudlet_device_disconnectionPeriod', 60 * 1000)
+
     @Override
     void start(Future<Void> startFuture) throws Exception {
         vertx.runOnContext {
@@ -42,6 +51,10 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
             vertx.eventBus().localConsumer('listClients') { msg ->
                 wrapIntoJsonResponse(msg, 'clients', leshanServer.clientRegistry.allClients())
+            }
+
+            vertx.eventBus().localConsumer('clients.disconnected') { msg ->
+                wrapIntoJsonResponse(msg, 'disconnectedClients', disconnectedClients())
             }
 
             vertx.eventBus().localConsumer('deleteClients') { msg ->
@@ -79,6 +92,13 @@ class LeshanServerVeritcle extends GroovyVerticle {
             return null
         }
         content.asType(LwM2mResource).value.value
+    }
+
+    private List<String> disconnectedClients() {
+        leshanServer.clientRegistry.allClients().findAll { client ->
+            def updated = ofInstant(ofEpochMilli(client.lastUpdate.time), ZoneId.systemDefault()).toLocalTime()
+            updated.plus(disconnectionPeriod, ChronoUnit.MILLIS).isBefore(LocalTime.now())
+        }.collect { client -> client.endpoint }
     }
 
 }

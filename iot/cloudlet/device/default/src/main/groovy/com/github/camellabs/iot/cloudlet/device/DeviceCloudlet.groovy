@@ -40,6 +40,10 @@ class DeviceCloudlet {
             vertx.eventBus().send('listClients', null, { clients -> jsonResponse(rc, clients) })
         }
 
+        router.route("/clients/disconnected").method(GET).handler { rc ->
+            vertx.eventBus().send('clients.disconnected', null, { clients -> jsonResponse(rc, clients) })
+        }
+
         router.route("/client").method(DELETE).handler { rc ->
             vertx.eventBus().send('deleteClients', null, { status -> jsonResponse(rc, status) })
         }

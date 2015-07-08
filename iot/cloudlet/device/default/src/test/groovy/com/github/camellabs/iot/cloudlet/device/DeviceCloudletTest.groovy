@@ -47,6 +47,8 @@ class DeviceCloudletTest extends Assert {
         MongodStarter.getDefaultInstance().prepare(mongodConfig).start()
 
         System.setProperty('camellabs_iot_cloudlet_device_api_rest_port', "${restApiPort}")
+        System.setProperty('camellabs_iot_cloudlet_device_disconnectionPeriod', "${5000}")
+
         new DeviceCloudlet().start()
     }
 
@@ -86,6 +88,35 @@ class DeviceCloudletTest extends Assert {
 
         // Then
         assertEquals(clientId, client['client']['endpoint'])
+    }
+
+    @Test
+    void shouldListDisconnectedClient() {
+        // Given
+        new RestTemplate().delete(new URI("http://localhost:${restApiPort}/client"))
+        def clientId = randomUUID().toString()
+        createLeshanCloudClient(clientId).connect()
+
+        // When
+        sleep(5000)
+        def clients = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/clients/disconnected"), Map.class)
+
+        // Then
+        assertEquals([clientId], clients['disconnectedClients'].asType(List.class))
+    }
+
+    @Test
+    void shouldNotListDisconnectedClient() {
+        // Given
+        new RestTemplate().delete(new URI("http://localhost:${restApiPort}/client"))
+        def clientId = randomUUID().toString()
+        createLeshanCloudClient(clientId).connect()
+
+        // When
+        def clients = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/clients/disconnected"), Map.class)
+
+        // Then
+        assertEquals(0, clients['disconnectedClients'].asType(List.class).size())
     }
 
     @Test
