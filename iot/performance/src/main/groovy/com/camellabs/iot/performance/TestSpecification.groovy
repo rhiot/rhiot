@@ -20,6 +20,6 @@ interface TestSpecification {
 
     boolean supportsHardwareKit(String kit)
 
-    Map<String, String> additionalProperties()
+    Map<String, Object> additionalProperties()
 
 }

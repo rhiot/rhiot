@@ -29,7 +29,7 @@ class MockMqtt_qos0 implements TestSpecification {
     }
 
     @Override
-    Map<String, String> additionalProperties() {
+    Map<String, Object> additionalProperties() {
         [camellabs_iot_gateway_mock_sensor                         : true,
          camellabs_iot_gateway_mock_sensor_number                  : 15,
          camellabs_iot_gateway_mock_sensor_period                  : 5,
