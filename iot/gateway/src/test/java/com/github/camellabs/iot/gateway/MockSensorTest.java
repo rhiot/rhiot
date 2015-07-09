@@ -42,11 +42,6 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
         "camellabs_iot_gateway_mock_sensor_consumer=true"})
 public class MockSensorTest extends Assert {
 
-    // Routes fixtures
-
-    @EndpointInject(uri = "mock:test")
-    MockEndpoint mockEndpoint;
-
     // Collaborators fixtures
 
     static int mqttPort = findAvailableTcpPort();
@@ -67,6 +62,9 @@ public class MockSensorTest extends Assert {
     }
 
     // Test routing fixtures
+
+    @EndpointInject(uri = "mock:test")
+    MockEndpoint mockEndpoint;
 
     @Bean
     RoutesBuilder mqttConsumer() {
