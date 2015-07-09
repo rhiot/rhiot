@@ -16,6 +16,8 @@
  */
 package com.github.camellabs.iot.cloudlet.device.verticles
 
+import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
+import com.github.camellabs.iot.cloudlet.device.leshan.GuavaCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
 import com.github.camellabs.iot.cloudlet.device.vertx.Vertxes
 import com.mongodb.Mongo
@@ -26,6 +28,7 @@ import org.eclipse.leshan.core.request.ReadRequest
 import org.eclipse.leshan.core.response.LwM2mResponse
 import org.eclipse.leshan.core.response.ValueResponse
 import org.eclipse.leshan.server.californium.LeshanServerBuilder
+import org.eclipse.leshan.server.californium.impl.LeshanServer
 
 import java.time.LocalTime
 import java.time.ZoneId
@@ -38,11 +41,15 @@ import static org.eclipse.leshan.ResponseCode.CONTENT
 
 class LeshanServerVeritcle extends GroovyVerticle {
 
-    final def mongo = new Mongo()
-
-    final def leshanServer = new LeshanServerBuilder().setClientRegistry(new MongoDbClientRegistry(mongo)).build()
+    final def LeshanServer leshanServer
 
     final def disconnectionPeriod = Vertxes.intProperty('camellabs_iot_cloudlet_device_disconnectionPeriod', 60 * 1000)
+
+    LeshanServerVeritcle() {
+        def mongo = new Mongo()
+        def clientRegistry = new CachingClientRegistry(new MongoDbClientRegistry(mongo), new GuavaCacheProvider())
+        leshanServer = new LeshanServerBuilder().setClientRegistry(clientRegistry).build()
+    }
 
     @Override
     void start(Future<Void> startFuture) throws Exception {
