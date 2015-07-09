@@ -16,16 +16,13 @@
  */
 package com.github.camellabs.iot.cloudlet.device
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle
 import com.github.camellabs.iot.cloudlet.device.verticles.RestApiVerticle
 import io.vertx.groovy.core.Vertx
 
 class DeviceCloudlet {
 
-    final def vertx = Vertx.vertx()
-
-    static final def jackson = new ObjectMapper()
+    private final def vertx = Vertx.vertx()
 
     DeviceCloudlet start() {
         vertx.deployVerticle("groovy:${LeshanServerVeritcle.class.name}")

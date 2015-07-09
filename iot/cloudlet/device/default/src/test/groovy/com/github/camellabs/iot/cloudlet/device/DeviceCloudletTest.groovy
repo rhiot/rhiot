@@ -55,8 +55,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldReturnNoClients() {
         new RestTemplate().delete(new URI("http://localhost:${restApiPort}/client"))
-        def clients = IOUtils.toString(new URI("http://localhost:${restApiPort}/client"))
-        def response = jackson.readValue(clients, Map.class)
+        def response = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client"), Map.class)
         assertEquals(0, response['clients'].asType(List.class).size())
     }
 
