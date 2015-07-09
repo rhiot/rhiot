@@ -23,6 +23,7 @@ import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.*
 import static io.vertx.core.http.HttpMethod.DELETE
 import static io.vertx.core.http.HttpMethod.GET
 import static io.vertx.groovy.ext.web.Router.router
+import static java.lang.Boolean.parseBoolean
 
 class RestApiVerticle extends GroovyVerticle {
 
@@ -32,12 +33,17 @@ class RestApiVerticle extends GroovyVerticle {
             def http = vertx.createHttpServer()
             def router = router(vertx)
 
-            router.route("/client").method(GET).handler { rc ->
-                vertx.eventBus().send('listClients', null, { clients -> jsonResponse(rc, clients) })
-            }
+            // Get list of clients
+            router.route('/client').method(GET).handler { rc ->
+                switch (rc.request().getParam('disconnected')) {
+                    case { parseBoolean(it) }:
+                        vertx.eventBus().send('clients.disconnected', null, { clients -> jsonResponse(rc, clients) })
+                        break
 
-            router.route("/clients/disconnected").method(GET).handler { rc ->
-                vertx.eventBus().send('clients.disconnected', null, { clients -> jsonResponse(rc, clients) })
+                    default:
+                        vertx.eventBus().send('listClients', null, { clients -> jsonResponse(rc, clients) })
+                        break
+                }
             }
 
             router.route("/client").method(DELETE).handler { rc ->

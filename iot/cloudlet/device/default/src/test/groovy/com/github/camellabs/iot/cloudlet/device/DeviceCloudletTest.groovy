@@ -98,7 +98,7 @@ class DeviceCloudletTest extends Assert {
 
         // When
         sleep(5000)
-        def clients = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/clients/disconnected"), Map.class)
+        def clients = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client?disconnected=true"), Map.class)
 
         // Then
         assertEquals([clientId], clients['disconnectedClients'].asType(List.class))
@@ -112,7 +112,7 @@ class DeviceCloudletTest extends Assert {
         createLeshanCloudClient(clientId).connect()
 
         // When
-        def clients = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/clients/disconnected"), Map.class)
+        def clients = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client?disconnected=true"), Map.class)
 
         // Then
         assertEquals(0, clients['disconnectedClients'].asType(List.class).size())
