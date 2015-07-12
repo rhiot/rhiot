@@ -14,10 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.camellabs.iot.performance
+package com.github.camellabs.iot.performance
 
-class HardwareKit {
+import org.reflections.Reflections
 
-    static def RPI2 = 'RPI2'
+import static java.lang.reflect.Modifier.isAbstract
+
+class TestResolver {
+
+    def reflections = new Reflections(getClass().getPackage().getName())
+
+    List<TestSpecification> testsForKit(String kit) {
+        reflections.getSubTypesOf(TestSpecification.class).
+                findAll { !isAbstract(it.modifiers) }.
+                collect { it.newInstance() }.findAll { test -> test.supportsHardwareKit(kit) }.
+                sort { it.variationLabel() }
+    }
 
 }

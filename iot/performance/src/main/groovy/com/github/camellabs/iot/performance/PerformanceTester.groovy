@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.camellabs.iot.performance
+package com.github.camellabs.iot.performance
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.camellabs.iot.deployer.Deployer
 
 import java.text.SimpleDateFormat
 
-import static com.camellabs.iot.performance.HardwareKit.RPI2
+import static HardwareKit.RPI2
 import static java.util.concurrent.TimeUnit.MINUTES
 
 class PerformanceTester {

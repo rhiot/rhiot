@@ -14,16 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.camellabs.iot.performance;
+package com.github.camellabs.iot.performance.tests
 
-interface TestSpecification {
+class MockMqtt_qos0 extends BaseMockMqttTest {
 
-    boolean supportsHardwareKit(String kit)
+    @Override
+    String variationLabel() {
+        return 'MQTT QOS 0'
+    }
 
-    String variationLabel()
-
-    String testGroup()
-
-    Map<String, Object> additionalProperties()
+    @Override
+    protected int qos() {
+        return 0
+    }
 
 }

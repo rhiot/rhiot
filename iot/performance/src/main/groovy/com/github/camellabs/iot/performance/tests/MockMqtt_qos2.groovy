@@ -14,27 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.camellabs.iot.performance
+package com.github.camellabs.iot.performance.tests
 
-import org.apache.activemq.broker.BrokerService
+class MockMqtt_qos2 extends BaseMockMqttTest {
 
-import static org.springframework.util.SocketUtils.findAvailableTcpPort
-
-class MqttServer {
-
-    static final int mqttPort = findAvailableTcpPort();
-
-    def broker = new BrokerService();
-
-    BrokerService start() {
-        broker.setPersistent(false);
-        broker.addConnector("mqtt://0.0.0.0:" + mqttPort);
-        broker.start()
-        broker
+    @Override
+    String variationLabel() {
+        'MQTT QOS 2'
     }
 
-    def stop() {
-        broker.stop()
+    @Override
+    protected int qos() {
+        2
     }
 
 }

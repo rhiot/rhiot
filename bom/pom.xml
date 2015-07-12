@@ -29,6 +29,7 @@
         <embedmongo.version>1.48.0</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
         <ivy.version>2.4.0</ivy.version>
+        <jfreechart.version>1.0.19</jfreechart.version>
         <jsch.version>0.1.51</jsch.version>
         <kura.version>1.0.3</kura.version>
         <logback.version>1.1.2</logback.version>
@@ -208,6 +209,11 @@
                 <groupId>org.eclipse.californium</groupId>
                 <artifactId>californium-core</artifactId>
                 <version>${californium-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jfree</groupId>
+                <artifactId>jfreechart</artifactId>
+                <version>${jfreechart.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.reflections</groupId>

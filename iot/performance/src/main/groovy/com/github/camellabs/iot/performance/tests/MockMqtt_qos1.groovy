@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.camellabs.iot.performance
+package com.github.camellabs.iot.performance.tests
 
-import org.reflections.Reflections;
+class MockMqtt_qos1 extends BaseMockMqttTest {
 
-class TestResolver {
+    @Override
+    String variationLabel() {
+        'MQTT QOS 1'
+    }
 
-    def reflections = new Reflections(getClass().getPackage().getName())
-
-    List<TestSpecification> testsForKit(String kit) {
-        reflections.getSubTypesOf(TestSpecification.class).collect{it.newInstance()}.findAll { test ->
-            test.supportsHardwareKit(kit)
-        }.sort{it.variationLabel()}
+    @Override
+    protected int qos() {
+        1
     }
 
 }
