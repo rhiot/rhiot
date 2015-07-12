@@ -20,6 +20,10 @@ interface TestSpecification {
 
     boolean supportsHardwareKit(String kit)
 
+    String variationLabel()
+
+    String testGroup()
+
     Map<String, Object> additionalProperties()
 
 }

@@ -39,7 +39,7 @@ class PerformanceTester {
     }
 
     def runTestsForKit(String kit) {
-        testResolver.testsForKit(kit).each { test ->
+        def results = testResolver.testsForKit(kit).collect { test ->
             def device = deployer.deploy(test.additionalProperties())
 
             MINUTES.sleep(3)
@@ -55,7 +55,10 @@ class PerformanceTester {
             def processingTime = finished.time - started.time
             println("Processed $processed messages in $processingTime.")
             println("Processed ${processed / (processingTime / 1000)} messages per second.")
+            new TestResult(test.testGroup(), test.variationLabel(), processed / (processingTime / 1000))
         }
+
+        new DiagramDrawer().draw(results[0].testGroup, results)
     }
 
 }

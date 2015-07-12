@@ -17,12 +17,11 @@
 package com.camellabs.iot.performance.tests
 
 import com.camellabs.iot.performance.TestSpecification
-import com.github.camellabs.iot.utils.Networks
 
 import static com.camellabs.iot.performance.MqttServer.mqttPort
 import static com.github.camellabs.iot.utils.Networks.localNetworkIp
 
-class MockMqtt_qos1 implements TestSpecification {
+class MockMqtt_qos2 implements TestSpecification {
 
     @Override
     boolean supportsHardwareKit(String kit) {
@@ -31,7 +30,7 @@ class MockMqtt_qos1 implements TestSpecification {
 
     @Override
     String variationLabel() {
-        return 'MQTT QOS 1'
+        return 'MQTT QOS 2'
     }
 
     @Override
@@ -47,7 +46,7 @@ class MockMqtt_qos1 implements TestSpecification {
          camellabs_iot_gateway_mock_sensor_consumer                : true,
          camellabs_iot_gateway_mock_sensor_consumer_number         : 20,
          camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url: "tcp://${localNetworkIp().get()}:${mqttPort}",
-         camellabs_iot_gateway_mock_sensor_consumer_mqtt_qos       : 1]
+         camellabs_iot_gateway_mock_sensor_consumer_mqtt_qos       : 2]
     }
 
 }

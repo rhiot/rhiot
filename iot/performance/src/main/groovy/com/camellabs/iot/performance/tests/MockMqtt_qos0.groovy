@@ -29,6 +29,16 @@ class MockMqtt_qos0 implements TestSpecification {
     }
 
     @Override
+    String variationLabel() {
+        return 'MQTT QOS 0'
+    }
+
+    @Override
+    String testGroup() {
+        'Mock sensor to external MQTT broker'
+    }
+
+    @Override
     Map<String, Object> additionalProperties() {
         [camellabs_iot_gateway_mock_sensor                         : true,
          camellabs_iot_gateway_mock_sensor_number                  : 15,

@@ -25,7 +25,7 @@ class TestResolver {
     List<TestSpecification> testsForKit(String kit) {
         reflections.getSubTypesOf(TestSpecification.class).collect{it.newInstance()}.findAll { test ->
             test.supportsHardwareKit(kit)
-        }
+        }.sort{it.variationLabel()}
     }
 
 }
