@@ -81,6 +81,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.camel-labs</groupId>
+                <artifactId>camel-labs-iot-deployer</artifactId>
+                <version>${camel-labs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.camel-labs</groupId>
                 <artifactId>camel-labs-iot-utils</artifactId>
                 <version>${camel-labs.version}</version>
             </dependency>

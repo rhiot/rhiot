@@ -18,7 +18,15 @@
         </license>
     </licenses>
 
+    <properties>
+        <docker.image.target>performance-tester</docker.image.target>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>com.github.camel-labs</groupId>
+            <artifactId>camel-labs-iot-deployer</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-broker</artifactId>
@@ -34,11 +42,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-deployer</artifactId>
-            <version>0.1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.camel-labs</groupId>
@@ -63,5 +66,35 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.github.camellabs.iot.performance.PerformanceTester</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jolokia</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
