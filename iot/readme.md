@@ -627,6 +627,43 @@ To deploy only UI artifacts, add DEPLOY_UI parameter to the script, just as demo
 
     ./deploy-cloud.sh DEPLOY_UI       
 
+## Performance testing framework
+
+The key part of tailoring the perfect IoT solution is to choose the proper hardware for the gateway device.
+In general the more expensive gateway hardware is, the more messages per second you can process. However the more
+expensive the gateway device is, the less affordable your IoT solution becomes for the end client. That is the main
+reason why would you like to have a proper tool for measuring the given IoT messages flow scenario in the unified way,
+on multiple devices.
+
+Camel IoT Labs comes with the *Performance testing framework* that can be used to define the hardware profile and
+test scenarios. Performance framework takes care of detecting the devices connected to your local network, deploying the
+test application into these, executing the actual tests and generating the results as the human-readable chart.
+For example the sample output for the MQTT QOS testing could generate the following diagram:
+
+<a href="https://github.com/camel-labs/camel-labs"><img src="../sample_perf_chart.png" align="left" height="120" hspace="30"></a>
+
+### Hardware profiles
+
+This section covers the *hardware profiles* for the performance tests. Profiles are used to describe the particular
+hardware configuration.
+
+#### Raspberry PI 2 B+ (aka RPI2)
+
+The `RPI2` hardware profile is just the Raspberry Pi 2 B+ model equipped with the network connector (WiFi adapter or
+the ethernet cable). Currently we assume that the device is running [Raspbian](https://www.raspbian.org/) operating
+system (version 2015-05-05).
+
+<a href="https://github.com/camel-labs/camel-labs"><img src="../rpi2_open.jpg" align="left" height="120" hspace="30"></a>
+<a href="https://github.com/camel-labs/camel-labs"><img src="../rpi2_closed.jpg" align="left" height="120" hspace="30"></a>
+
+#### Raspberry PI 2 B+ (aka RPI2_BU353)
+
+The `RPI2_BU353` hardware profile is the same as `RPI2` profile, but additionally equipped into the []BU353 GPS receiver](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg)
+plugged into the USB port.
+
+<a href="https://github.com/camel-labs/camel-labs"><img src="../rpi2_bu353_open.jpg" align="left" height="120" hspace="30"></a>
+<a href="https://github.com/camel-labs/camel-labs"><img src="../rpi2_bu353_closed.jpg" align="left" height="120" hspace="30"></a>
+
 ## Articles, presentations & videos
 
 Here is the bunch of useful resources regarding Camel IoT project:
