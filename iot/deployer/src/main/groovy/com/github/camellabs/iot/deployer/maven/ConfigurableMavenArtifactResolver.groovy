@@ -14,28 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer.maven;
+package com.github.camellabs.iot.deployer.maven
 
-import com.google.common.collect.ImmutableList;
+import static com.github.camellabs.iot.deployer.maven.Repository.mavenCentral
 
-import java.io.InputStream;
-import java.util.List;
+abstract class ConfigurableMavenArtifactResolver implements MavenArtifactResolver {
 
-public abstract class ConfigurableMavenArtifactResolver implements MavenArtifactResolver {
+    protected final List<Repository> repositories
 
-    protected final List<Repository> repositories;
-
-    public ConfigurableMavenArtifactResolver(List<Repository> repositories) {
-        this.repositories = ImmutableList.copyOf(repositories);
+    ConfigurableMavenArtifactResolver(List<Repository> repositories) {
+        this.repositories = repositories.collect().asImmutable()
     }
 
-    public ConfigurableMavenArtifactResolver() {
-        this.repositories = ImmutableList.of(Repository.mavenCentral());
+    ConfigurableMavenArtifactResolver() {
+        this.repositories = [mavenCentral()].asImmutable();
     }
 
     @Override
-    public InputStream artifactStream(String groupId, String artifactId, String version) {
-        return artifactStream(groupId, artifactId, version, "jar");
+    InputStream artifactStream(String groupId, String artifactId, String version) {
+        return artifactStream(groupId, artifactId, version, 'jar');
     }
 
 }
