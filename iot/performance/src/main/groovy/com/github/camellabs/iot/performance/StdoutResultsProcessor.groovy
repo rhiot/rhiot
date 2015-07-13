@@ -16,10 +16,15 @@
  */
 package com.github.camellabs.iot.performance
 
-class HardwareKit {
+class StdoutResultsProcessor implements ResultsProcessor {
 
-    static def RPI2 = 'RPI2'
+    @Override
+    void processResult(TestResult testResult) {
+        println "Processed ${testResult.messagesPerSecond()} messages per second."
+    }
 
-    static def RPI2_BU353 = 'RPI2_BU353'
+    @Override
+    void complete() {
+    }
 
 }

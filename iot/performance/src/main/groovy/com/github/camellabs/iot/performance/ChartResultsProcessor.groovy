@@ -16,10 +16,20 @@
  */
 package com.github.camellabs.iot.performance
 
-class HardwareKit {
+class ChartResultsProcessor implements ResultsProcessor {
 
-    static def RPI2 = 'RPI2'
+    private final List<TestResult> results = []
 
-    static def RPI2_BU353 = 'RPI2_BU353'
+    private final def drawer = new DiagramDrawer()
+
+    @Override
+    void processResult(TestResult testResult) {
+        results << testResult
+    }
+
+    @Override
+    void complete() {
+        drawer.draw(results[0].testGroup, results)
+    }
 
 }

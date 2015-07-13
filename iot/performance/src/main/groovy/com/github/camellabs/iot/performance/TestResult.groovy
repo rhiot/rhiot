@@ -18,6 +18,8 @@ package com.github.camellabs.iot.performance
 
 import groovy.transform.Immutable
 
+import java.util.concurrent.TimeUnit
+
 @Immutable
 class TestResult {
 
@@ -25,6 +27,13 @@ class TestResult {
 
     String label
 
-    double messagesPerSecond
+    long messagesProcessed
+
+    long processingTime
+
+    double messagesPerSecond() {
+        def processingTimeInSeconds = (processingTime / 1000)
+        messagesProcessed / processingTimeInSeconds
+    }
 
 }

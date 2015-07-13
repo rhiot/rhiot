@@ -16,10 +16,10 @@
  */
 package com.github.camellabs.iot.performance
 
-class HardwareKit {
+interface ResultsProcessor {
 
-    static def RPI2 = 'RPI2'
+    void processResult(TestResult testResult)
 
-    static def RPI2_BU353 = 'RPI2_BU353'
+    void complete()
 
 }

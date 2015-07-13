@@ -16,10 +16,17 @@
  */
 package com.github.camellabs.iot.performance
 
-class HardwareKit {
+import org.junit.Assert
+import org.junit.Test
 
-    static def RPI2 = 'RPI2'
+import static java.util.concurrent.TimeUnit.SECONDS
 
-    static def RPI2_BU353 = 'RPI2_BU353'
+class TestResults extends Assert {
+
+    @Test
+    void shouldCalculateMessagesPerSecond() {
+        def results = new TestResult('testGroup', 'label', 100, SECONDS.toMillis(10))
+        assertEquals(10, results.messagesPerSecond(), 0.01)
+    }
 
 }
