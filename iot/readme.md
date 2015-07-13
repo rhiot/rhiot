@@ -96,20 +96,19 @@ The Camel IoT Labs stack is based on the following libraries and frameworks:
 ## Camel IoT gateway
 
 Camel IoT gateway is the small fat jar application that can be installed into the field device. Gateway acts as a bridge
-between the sensors and the data center.
+between the sensors and the data center. Under the hood, Camel IoT gateway is the fat jat running
+[Vert.x](http://vertx.io) and Apache Camel.
 
 ### Installing gateway on the Raspbian
 
-In order to install Camel IoT gateway on the Raspbian, execute the following command:
+In order to install Camel IoT gateway on the Raspberry Pi running Raspbian, connect the device to your local network
+(using WiFi or the ethernet cable) and execute the following command:
 
-    bash <(curl https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/raspbian/get-camel-labs-iot-gateway-raspbian.sh)
-    
-Or the same remotely using SSH:
+    docker run --net=host camellabs/deployer
 
-    ssh pi@$YOUR_RASPBERRY_PI_DEVICE 'bash <(curl https://raw.githubusercontent.com/camel-labs/camel-labs/master/iot/initd/raspbian/get-camel-labs-iot-gateway-raspbian.sh)'
-    
 From this point forward Camel IoT gateway will be installed on your device as `camel-iot-gateway` service and started
-whenever the device boots up.
+whenever the device boots up. Under the hood, gateway deployer performs the simple port scanning in the local network
+and attempts to connect to the Raspian devices using the default SSH credentials.
 
 ### Configuration of the gateway
 
