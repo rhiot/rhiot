@@ -645,7 +645,7 @@ test scenarios. Performance framework takes care of detecting the devices connec
 test application into these, executing the actual tests and generating the results as the human-readable chart.
 For example the sample output for the MQTT QOS testing could generate the following diagram:
 
-<a href="https://github.com/camel-labs/camel-labs"><img src="images/sample_perf_chart.png" align="left" height="120" hspace="30"></a>
+<a href="https://github.com/camel-labs/camel-labs"><img src="images/sample_perf_chart.png" align="center" height="400" hspace="30"></a>
 
 ### Hardware profiles
 
@@ -658,16 +658,17 @@ The `RPI2` hardware profile is just the Raspberry Pi 2 B+ model equipped with th
 the ethernet cable). Currently we assume that the device is running [Raspbian](https://www.raspbian.org/) operating
 system (version 2015-05-05).
 
-<a href="https://github.com/camel-labs/camel-labs"><img src="images/rpi2_open.jpg" align="left" height="120" hspace="30"></a>
-<a href="https://github.com/camel-labs/camel-labs"><img src="images/rpi2_closed.jpg" align="left" height="120" hspace="30"></a>
+<a href="https://github.com/camel-labs/camel-labs"><img src="images/rpi2_open.jpg" align="center" height="400" hspace="30"></a>
+<a href="https://github.com/camel-labs/camel-labs"><img src="images/rpi2_closed.jpg" align="center" height="400" hspace="30"></a>
 
 #### Raspberry PI 2 B+ (aka RPI2_BU353)
 
 The `RPI2_BU353` hardware profile is the same as `RPI2` profile, but additionally equipped into the []BU353 GPS receiver](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg)
 plugged into the USB port.
 
-<a href="https://github.com/camel-labs/camel-labs"><img src="images/rpi2_bu353_open.jpg" align="left" height="120" hspace="30"></a>
-<a href="https://github.com/camel-labs/camel-labs"><img src="images/rpi2_bu353_closed.jpg" align="left" height="120" hspace="30"></a>
+<a href="https://github.com/camel-labs/camel-labs"><img src="images/rpi2_bu353_open.jpg" align="center" height="400" hspace="30"></a>
+<a href="https://github.com/camel-labs/camel-labs"><img src="images/rpi2_bu353_closed.jpg" align="center" height="400" hspace="30"></a>
+
 
 ## Articles, presentations & videos
 
