@@ -16,8 +16,8 @@
  */
 package com.github.camellabs.iot.deployer.device;
 
+import com.github.camellabs.iot.deployer.DeviceDetector;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Test;
 
 import java.io.IOException;

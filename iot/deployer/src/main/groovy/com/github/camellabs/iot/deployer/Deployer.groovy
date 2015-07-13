@@ -16,8 +16,6 @@
  */
 package com.github.camellabs.iot.deployer
 
-import com.github.camellabs.iot.deployer.device.Device
-import com.github.camellabs.iot.deployer.device.DeviceDetector
 import com.github.camellabs.iot.utils.ssh.client.SshClient
 import groovy.transform.Immutable
 import org.apache.commons.lang3.SystemUtils
