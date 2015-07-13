@@ -666,8 +666,8 @@ system (version 2015-05-05).
 The `RPI2_BU353` hardware profile is the same as `RPI2` profile, but additionally equipped into the []BU353 GPS receiver](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg)
 plugged into the USB port.
 
-<a href="https://github.com/camel-labs/camel-labs"><img src="images/rpi2_bu353_open.jpg" align="center" height="400" hspace="30"></a>
-<a href="https://github.com/camel-labs/camel-labs"><img src="images/rpi2_bu353_closed.jpg" align="center" height="400" hspace="30"></a>
+<img src="images/rpi2_bu353_open.jpg" align="center" height="600" hspace="30">
+<img src="images/rpi2_bu353_closed.jpg" align="center" height="600" hspace="30">
 
 
 ## Articles, presentations & videos
