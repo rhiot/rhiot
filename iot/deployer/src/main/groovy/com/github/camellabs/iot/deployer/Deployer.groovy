@@ -17,15 +17,28 @@
 package com.github.camellabs.iot.deployer
 
 import com.github.camellabs.iot.utils.ssh.client.SshClient
-import groovy.transform.Immutable
 import org.apache.commons.lang3.SystemUtils
 
 import java.nio.file.Paths
 
-@Immutable
 class Deployer {
 
-    private def deviceDetector = new DeviceDetector()
+    private final def deviceDetector
+
+    private final boolean debug
+
+    Deployer(deviceDetector, boolean debug) {
+        this.deviceDetector = deviceDetector
+        this.debug = debug
+    }
+
+    Deployer(boolean debug) {
+        this(new DeviceDetector(), debug)
+    }
+
+    Deployer() {
+        this(false)
+    }
 
     Device deploy(Map<String, String> additionalProperties) {
         println('Detecting devices...')
@@ -60,13 +73,13 @@ class Deployer {
         ssh.scp(getClass().getResourceAsStream('/camel-labs-iot-gateway.initd.sh'), new File('/etc/init.d/camel-labs-iot-gateway'), false)
 
         ssh.printCommand("sudo chown pi /etc/default")
-        def p = new Properties()
-        p.load(getClass().getResourceAsStream('/camel-labs-iot-gateway.config.sh'))
-        p.putAll(additionalProperties)
+        def properties = new Properties()
+        properties.load(getClass().getResourceAsStream('/camel-labs-iot-gateway.config.sh'))
+        properties.putAll(additionalProperties)
 
         def output = new ByteArrayOutputStream()
         def pw = new PrintWriter(output)
-        p.each { pw.println('export ' + it.key + '=' + it.value) }
+        properties.each { pw.println('export ' + it.key + '=' + it.value) }
         pw.flush()
         ssh.scp(new ByteArrayInputStream(output.toByteArray()), new File('/etc/default/camel-labs-iot-gateway'), false)
 
@@ -82,8 +95,19 @@ class Deployer {
         deploy([:])
     }
 
+    // Main runner
+
     public static void main(String[] args) {
-        new Deployer().deploy()
+        def debug = args.contains('--debug') || args.contains('-d')
+
+        try {
+            new Deployer(debug).deploy([:])
+        } catch (Exception e) {
+            println "Error: ${e.message}"
+            if(debug) {
+                e.printStackTrace()
+            }
+        }
     }
 
 }

@@ -18,6 +18,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <fatjar.mainClass>com.example.DefaultMainClas</fatjar.mainClass>
         <docker.image.target>${project.artifactId}</docker.image.target>
 
         <groovy-eclipse-batch.version>2.4.3-01</groovy-eclipse-batch.version>
@@ -227,6 +228,27 @@
                             </goals>
                             <configuration>
                                 <karmaConfPath>src/test/javascript/karma.conf.ci.js</karmaConfPath>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>2.3</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                            <configuration>
+                                <createDependencyReducedPom>false</createDependencyReducedPom>
+                                <transformers>
+                                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <mainClass>${fatjar.mainClass}</mainClass>
+                                    </transformer>
+                                </transformers>
                             </configuration>
                         </execution>
                     </executions>
