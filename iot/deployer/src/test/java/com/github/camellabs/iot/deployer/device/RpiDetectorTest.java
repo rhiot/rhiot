@@ -16,7 +16,7 @@
  */
 package com.github.camellabs.iot.deployer.device;
 
-import com.github.camellabs.iot.deployer.DeviceDetector;
+import com.github.camellabs.iot.deployer.SimplePortScanningDeviceDetector;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,12 +28,12 @@ import static org.junit.Assume.assumeFalse;
 
 public class RpiDetectorTest extends Assert {
 
-    DeviceDetector rpiDetector = new DeviceDetector();
+    SimplePortScanningDeviceDetector detector = new SimplePortScanningDeviceDetector();
 
     @Test
     public void shouldReachDevice() throws IOException {
         // Given
-        List<Inet4Address> addresses = rpiDetector.detectReachableAddresses();
+        List<Inet4Address> addresses = detector.detectReachableAddresses();
         assumeFalse("The test should be executed only when the proper network interfaces are available.",
                 addresses.isEmpty());
 
@@ -46,7 +46,7 @@ public class RpiDetectorTest extends Assert {
 
     @Test
     public void shouldNotReachPiDevice() {
-        List addresses = rpiDetector.detectDevices();
+        List addresses = detector.detectDevices();
         assertEquals(0, addresses.size());
     }
 

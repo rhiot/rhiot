@@ -16,10 +16,26 @@
  */
 package com.github.camellabs.iot.deployer
 
-interface DeviceDetector {
+import org.junit.Assert
+import org.junit.Test
 
-    List<Inet4Address> detectReachableAddresses();
+import static org.mockito.Mockito.mock
 
-    List<Device> detectDevices();
+class DeployerTest extends Assert {
+
+    def deviceDetector = mock(DeviceDetector.class)
+
+    def deployer = new Deployer(deviceDetector, true)
+
+    @Test
+    void shouldDetectNoSupportedDevices() {
+        try {
+            deployer.deploy()
+        } catch (ConsoleInformation info) {
+            assertTrue(info.message.contains('No supported devices detected'))
+            return
+        }
+        fail()
+    }
 
 }

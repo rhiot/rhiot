@@ -16,10 +16,14 @@
  */
 package com.github.camellabs.iot.deployer
 
-interface DeviceDetector {
+class ConsoleInformation extends RuntimeException {
 
-    List<Inet4Address> detectReachableAddresses();
+    ConsoleInformation(Throwable exception) {
+        super(exception)
+    }
 
-    List<Device> detectDevices();
+    ConsoleInformation(String message) {
+        super(message)
+    }
 
 }

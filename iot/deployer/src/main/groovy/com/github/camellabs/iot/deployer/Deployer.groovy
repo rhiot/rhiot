@@ -21,17 +21,17 @@ import com.github.camellabs.iot.utils.ssh.client.SshClient
 
 class Deployer {
 
-    private final def deviceDetector
+    private final DeviceDetector deviceDetector
 
     private final boolean debug
 
-    Deployer(deviceDetector, boolean debug) {
+    Deployer(DeviceDetector deviceDetector, boolean debug) {
         this.deviceDetector = deviceDetector
         this.debug = debug
     }
 
     Deployer(boolean debug) {
-        this(new DeviceDetector(), debug)
+        this(new SimplePortScanningDeviceDetector(), debug)
     }
 
     Deployer() {
@@ -44,10 +44,10 @@ class Deployer {
         println('Detecting devices...')
         def supportedDevices = deviceDetector.detectDevices()
         if (supportedDevices.isEmpty()) {
-            throw new IllegalStateException('No supported devices detected.')
+            throw new ConsoleInformation('No supported devices detected.')
         }
         if (supportedDevices.size() > 1) {
-            throw new IllegalStateException("More than one device detected: ${supportedDevices.size()}")
+            throw new ConsoleInformation("More than one device detected: ${supportedDevices.size()}")
         }
         def device = supportedDevices.first()
         println("Detected Raspberry Pi at ${device.address().hostAddress}")
@@ -99,7 +99,10 @@ class Deployer {
         try {
             new Deployer(debug).deploy([:])
         } catch (Exception e) {
-            println "Error: ${e.message}"
+            if(!(e instanceof ConsoleInformation)) {
+                print 'Error: '
+            }
+            println e.message
             if(debug) {
                 e.printStackTrace()
             }
