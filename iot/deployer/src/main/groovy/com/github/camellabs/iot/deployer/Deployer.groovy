@@ -16,10 +16,8 @@
  */
 package com.github.camellabs.iot.deployer
 
+import com.github.camellabs.iot.deployer.maven.JcabiMavenArtifactResolver
 import com.github.camellabs.iot.utils.ssh.client.SshClient
-import org.apache.commons.lang3.SystemUtils
-
-import java.nio.file.Paths
 
 class Deployer {
 
@@ -41,6 +39,8 @@ class Deployer {
     }
 
     Device deploy(Map<String, String> additionalProperties) {
+        def gatewayJar = new JcabiMavenArtifactResolver().artifactStream('com.github.camel-labs', 'camel-labs-iot-gateway', '0.1.1-SNAPSHOT')
+
         println('Detecting devices...')
         def supportedDevices = deviceDetector.detectDevices()
         if (supportedDevices.isEmpty()) {
@@ -51,10 +51,6 @@ class Deployer {
         }
         def device = supportedDevices.first()
         println("Detected Raspberry Pi at ${device.address().hostAddress}")
-
-        def gatewayJar = Paths.get(SystemUtils.userHome.absolutePath, '.m2', 'repository',
-                'com', 'github', 'camel-labs', 'camel-labs-iot-gateway', '0.1.1-SNAPSHOT',
-                'camel-labs-iot-gateway-0.1.1-SNAPSHOT.jar').toFile()
 
         def ssh = new SshClient(device.address().hostAddress, 'pi', 'raspberry')
         def gatewayHome = '/var/camel-labs-iot-gateway'
@@ -67,7 +63,7 @@ class Deployer {
 
         println("Cleaning old artifacts from gateway home directory ($gatewayHome)...")
         ssh.printCommand("sudo rm ${gatewayHome}/camel-labs-iot-gateway-*.jar")
-        ssh.scp(new FileInputStream(gatewayJar), new File("${gatewayHome}/camel-labs-iot-gateway-0.1.1-SNAPSHOT.jar"), false)
+        ssh.scp(gatewayJar, new File("${gatewayHome}/camel-labs-iot-gateway-0.1.1-SNAPSHOT.jar"), false)
 
         ssh.printCommand("sudo chown pi /etc/init.d")
         ssh.scp(getClass().getResourceAsStream('/camel-labs-iot-gateway.initd.sh'), new File('/etc/init.d/camel-labs-iot-gateway'), false)

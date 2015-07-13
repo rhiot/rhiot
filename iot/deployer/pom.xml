@@ -33,6 +33,43 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-aether</artifactId>
+            <version>0.10.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>aws-java-sdk</artifactId>
+                    <!-- Fat jar optimization. We don't need 9 MB of AWS-related code. -->
+                    <groupId>com.amazonaws</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>${maven.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>aether-impl</artifactId>
+                    <groupId>org.sonatype.aether</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>sisu-inject-plexus</artifactId>
+                    <groupId>org.sonatype.sisu</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version>${maven.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-settings-builder</artifactId>
+            <version>${maven.version}</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
