@@ -26,13 +26,26 @@ import static java.util.concurrent.TimeUnit.MINUTES
 
 class PerformanceTester {
 
-    private final testResolver = new TestResolver()
+    // Collaborators
 
-    private final deployer = new Deployer()
+    private final testResolver
 
-    private final mqttServer = new MqttServer().start()
+    private final deployer
 
-    private final List<ResultsProcessor> resultsProcessors = [new StdoutResultsProcessor(), new ChartResultsProcessor()]
+    private final mqttServer
+
+    // Listeners
+
+    private final List<ResultsProcessor> resultsProcessors
+
+    // Constructors
+
+    PerformanceTester(testResolver, deployer, mqttServer, List<ResultsProcessor> resultsProcessors) {
+        this.testResolver = testResolver
+        this.deployer = deployer
+        this.mqttServer = mqttServer
+        this.resultsProcessors = resultsProcessors
+    }
 
     // Running tests
 
@@ -60,7 +73,8 @@ class PerformanceTester {
     // Main handler
 
     public static void main(String... args) {
-        def tester = new PerformanceTester()
+        def resultListeners = [new StdoutResultsProcessor(), new ChartResultsProcessor()]
+        def tester = new PerformanceTester(new TestResolver(), new Deployer(), new MqttServer().start(), resultListeners)
         tester.runTestsForKit(args.size() == 0 ? RPI2 : args[0])
         tester.mqttServer.stop()
     }
