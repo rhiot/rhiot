@@ -28,7 +28,7 @@ import static java.util.Collections.list
 import static java.util.stream.Collectors.toList
 import static org.slf4j.LoggerFactory.getLogger
 
-public class DeviceDetector {
+class DeviceDetector {
 
     // Constants
 
@@ -54,46 +54,42 @@ public class DeviceDetector {
 
     // Operations
 
-    public List<Inet4Address> detectReachableAddresses() {
-        try {
-            List<NetworkInterface> networkInterfaces = list(getNetworkInterfaces()).parallelStream().
-                    filter { iface -> iface.getDisplayName().startsWith("wlan") || iface.getDisplayName().startsWith("eth") }.
-                    collect(toList());
+    List<Inet4Address> detectReachableAddresses() {
+        List<NetworkInterface> networkInterfaces = list(getNetworkInterfaces()).parallelStream().
+                filter { iface -> iface.getDisplayName().startsWith("wlan") || iface.getDisplayName().startsWith("eth") }.
+                collect(toList());
 
-            if (networkInterfaces.isEmpty()) {
-                return emptyList();
-            }
+        if (networkInterfaces.isEmpty()) {
+            return emptyList();
+        }
 
-            InterfaceAddress interfaceAddress = networkInterfaces.get(0).getInterfaceAddresses().parallelStream().
-                    filter { ifaceAddress -> ifaceAddress.getAddress().getHostAddress().length() < 15 }.
-                    collect(toList()).get(0);
-            String address = interfaceAddress.getBroadcast().getHostAddress();
-            int lastDot = address.lastIndexOf('.') + 1;
-            String addressBase = address.substring(0, lastDot);
-            int addressesNumber = parseInt(address.substring(lastDot));
-            List<Inet4Address> addressesToScan = newLinkedList();
-            for (int i = 0; i < addressesNumber; i++) {
-                addressesToScan.add((Inet4Address) Inet4Address.getByName(addressBase + (i + 1)));
-            }
-            return addressesToScan.parallelStream().filter {
-                addressToScan ->
-                    try {
-                        return addressToScan.isReachable(timeout);
-                    } catch (SocketException e) {
-                        if(e.message.contains('Permission denied')) {
-                            LOG.debug('Cannot scan {} - permission denied.', addressesToScan)
-                            return false
-                        } else {
-                            throw new RuntimeException(e);
-                        }
-                    } catch (IOException e) {
+        InterfaceAddress interfaceAddress = networkInterfaces.get(0).getInterfaceAddresses().parallelStream().
+                filter { ifaceAddress -> ifaceAddress.getAddress().getHostAddress().length() < 15 }.
+                collect(toList()).get(0);
+        String address = interfaceAddress.getBroadcast().getHostAddress();
+        int lastDot = address.lastIndexOf('.') + 1;
+        String addressBase = address.substring(0, lastDot);
+        int addressesNumber = parseInt(address.substring(lastDot));
+        List<Inet4Address> addressesToScan = newLinkedList();
+        for (int i = 0; i < addressesNumber; i++) {
+            addressesToScan.add((Inet4Address) Inet4Address.getByName(addressBase + (i + 1)));
+        }
+        return addressesToScan.parallelStream().filter {
+            addressToScan ->
+                try {
+                    return addressToScan.isReachable(timeout);
+                } catch (SocketException e) {
+                    if (e.message.contains('Permission denied')) {
+                        LOG.debug('Cannot scan {} - permission denied.', addressesToScan)
+                        return false
+                    } else {
                         throw new RuntimeException(e);
                     }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
-            }.collect(toList());
-        } catch (UnknownHostException | SocketException e) {
-            throw new RuntimeException(e);
-        }
+        }.collect(toList());
     }
 
     public List<Device> detectDevices() {
