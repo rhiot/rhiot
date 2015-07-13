@@ -37,7 +37,7 @@ class PerformanceTester {
     // Running tests
 
     def runTestsForKit(String kit) {
-        def results = testResolver.testsForKit(kit).collect { test ->
+        testResolver.testsForKit(kit).collect { test ->
             def device = deployer.deploy(test.additionalProperties())
 
             MINUTES.sleep(3)
@@ -53,7 +53,6 @@ class PerformanceTester {
             def processingTime = finished.time - started.time
             def result = new TestResult(test.testGroup(), test.variationLabel(), processed, processingTime)
             resultsProcessors.each { it.processResult(result) }
-            result
         }
         resultsProcessors.each { it.complete() }
     }
