@@ -31,6 +31,7 @@
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
         <maven-frontend-plugin.version>0.0.23</maven-frontend-plugin.version>
+        <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
         <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
@@ -325,7 +326,7 @@
                             <image>
                                 <name>camellabs/${docker.image.target}</name>
                                 <build>
-                                    <from>hekonsek/fatjar:0.0.10-SNAPSHOT</from>
+                                    <from>hekonsek/fatjar:0.0.14-SNAPSHOT</from>
                                     <tags>
                                         <tag>latest</tag>
                                         <tag>${project.version}</tag>
@@ -366,7 +367,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
