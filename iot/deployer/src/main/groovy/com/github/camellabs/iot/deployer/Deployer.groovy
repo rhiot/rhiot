@@ -39,6 +39,7 @@ class Deployer {
     }
 
     Device deploy(Map<String, String> additionalProperties) {
+        println('Downloading gateway binaries...')
         def gatewayJar = new JcabiMavenArtifactResolver().artifactStream('com.github.camel-labs', 'camel-labs-iot-gateway', '0.1.1-SNAPSHOT')
 
         println('Detecting devices...')
@@ -96,8 +97,17 @@ class Deployer {
     public static void main(String[] args) {
         def debug = args.contains('--debug') || args.contains('-d')
 
+        def properties = args.findAll{ it.startsWith('-P') }.inject([:]){ props, propertyArgument ->
+            def propertyWithoutPrefix = propertyArgument.substring(2)
+            def separatorIndex = propertyWithoutPrefix.indexOf('=')
+            def propertyKey = propertyWithoutPrefix.substring(0, separatorIndex)
+            def propertyValue = propertyWithoutPrefix.substring(separatorIndex + 1)
+            props[propertyKey] = propertyValue
+            props
+        }
+
         try {
-            new Deployer(debug).deploy([:])
+            new Deployer(debug).deploy(properties)
         } catch (Exception e) {
             if(!(e instanceof ConsoleInformation)) {
                 print 'Error: '
