@@ -16,19 +16,23 @@
  */
 package com.github.camellabs.iot.deployer.maven;
 
-public class Repository {
+class Repository {
 
-    private final String id;
+    private final String id
 
-    private final String url;
+    private final String url
 
     public Repository(String id, String url) {
         this.id = id;
         this.url = url;
     }
 
-    public static Repository mavenCentral() {
-        return new Repository("mavenCentral", "https://repo1.maven.org/maven2");
+    static Repository mavenCentral() {
+        new Repository("mavenCentral", "https://repo1.maven.org/maven2");
+    }
+
+    static Repository sonatypeSnapshots() {
+        new Repository('sonatypeSnapshots', "https://oss.sonatype.org/content/repositories/snapshots");
     }
 
     public String id() {

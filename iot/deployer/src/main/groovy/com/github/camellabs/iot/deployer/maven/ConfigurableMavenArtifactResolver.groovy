@@ -17,6 +17,7 @@
 package com.github.camellabs.iot.deployer.maven
 
 import static com.github.camellabs.iot.deployer.maven.Repository.mavenCentral
+import static com.github.camellabs.iot.deployer.maven.Repository.sonatypeSnapshots
 
 abstract class ConfigurableMavenArtifactResolver implements MavenArtifactResolver {
 
@@ -27,7 +28,7 @@ abstract class ConfigurableMavenArtifactResolver implements MavenArtifactResolve
     }
 
     ConfigurableMavenArtifactResolver() {
-        this.repositories = [mavenCentral()].asImmutable();
+        this.repositories = [mavenCentral(), sonatypeSnapshots()].asImmutable();
     }
 
     @Override
