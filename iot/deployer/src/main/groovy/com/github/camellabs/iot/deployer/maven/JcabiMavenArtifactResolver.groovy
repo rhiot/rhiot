@@ -16,19 +16,15 @@
  */
 package com.github.camellabs.iot.deployer.maven
 
-import com.google.common.base.Function
 import com.jcabi.aether.Aether
-import org.sonatype.aether.artifact.Artifact
 import org.sonatype.aether.repository.RemoteRepository
 import org.sonatype.aether.resolution.DependencyResolutionException
 import org.sonatype.aether.util.artifact.DefaultArtifact
 import org.sonatype.aether.util.artifact.JavaScopes
 
-import static com.google.common.collect.Lists.transform
-
 class JcabiMavenArtifactResolver extends ConfigurableMavenArtifactResolver {
 
-    private final Aether aether;
+    private final Aether aether
 
     public JcabiMavenArtifactResolver(List<Repository> repositories) {
         super(repositories);
@@ -41,12 +37,8 @@ class JcabiMavenArtifactResolver extends ConfigurableMavenArtifactResolver {
     }
 
     private Aether initializeAether() {
-        return new Aether(transform(repositories, new Function<Repository, RemoteRepository>() {
-            @Override
-            public RemoteRepository apply(Repository repository) {
-                return new RemoteRepository(repository.id(), "default", repository.url());
-            }
-        }), new File(System.getProperty("user.home") + "/.m2/repository"));
+        new Aether(repositories.collect { new RemoteRepository(it.id(), "default", it.url()) },
+                new File(System.getProperty("user.home") + "/.m2/repository"));
     }
 
     @Override
@@ -56,14 +48,12 @@ class JcabiMavenArtifactResolver extends ConfigurableMavenArtifactResolver {
                     new DefaultArtifact(groupId, artifactId, "", extension, version),
                     JavaScopes.RUNTIME)
             def mainArtifacts = artifactWithDependencies.findAll { dependency ->
-                dependency.getArtifactId().equals(artifactId) &&
-                        dependency.getGroupId().equals(groupId) &&
-                        dependency.getVersion().equals(version)
+                dependency.artifactId == artifactId && dependency.groupId == groupId
             }
             if (mainArtifacts.size() > 1) {
                 throw new RuntimeException("More than single main artifacts found: " + mainArtifacts);
             }
-            return new FileInputStream(mainArtifacts.get(0).getFile());
+            return new FileInputStream(mainArtifacts.first().getFile());
         } catch (DependencyResolutionException e) {
             throw new MavenDependencyResolutionException(e);
         } catch (FileNotFoundException e) {
