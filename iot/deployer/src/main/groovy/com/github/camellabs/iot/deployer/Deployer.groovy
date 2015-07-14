@@ -95,25 +95,20 @@ class Deployer {
     // Main runner
 
     public static void main(String[] args) {
-        def debug = args.contains('--debug') || args.contains('-d')
-
-        def properties = args.findAll{ it.startsWith('-P') }.inject([:]){ props, propertyArgument ->
-            def propertyWithoutPrefix = propertyArgument.substring(2)
-            def separatorIndex = propertyWithoutPrefix.indexOf('=')
-            def propertyKey = propertyWithoutPrefix.substring(0, separatorIndex)
-            def propertyValue = propertyWithoutPrefix.substring(separatorIndex + 1)
-            props[propertyKey] = propertyValue
-            props
+        def parser = new ConsoleInputParser(args)
+        if(parser.help) {
+            println(parser.helpText())
+            return
         }
 
         try {
-            new Deployer(debug).deploy(properties)
+            new Deployer(parser.debug).deploy(parser.properties())
         } catch (Exception e) {
             if(!(e instanceof ConsoleInformation)) {
                 print 'Error: '
             }
             println e.message
-            if(debug) {
+            if(parser.debug) {
                 e.printStackTrace()
             }
         }
