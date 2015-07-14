@@ -28,6 +28,7 @@
         <camel-labs.version>0.1.1-SNAPSHOT</camel-labs.version>
         <embedmongo.version>1.48.0</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
+        <infinispan.version>7.2.0.Final</infinispan.version>
         <ivy.version>2.4.0</ivy.version>
         <jfreechart.version>1.0.19</jfreechart.version>
         <jsch.version>0.1.53</jsch.version>
@@ -39,6 +40,7 @@
         <reflections.version>0.9.10</reflections.version>
         <slfj4.version>1.7.12</slfj4.version>
         <tinkerforge.version>2.1.4</tinkerforge.version>
+        <vertx.version>3.0.0</vertx.version>
 
         <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
@@ -152,6 +154,16 @@
                 <scope>compile</scope>
             </dependency>
             <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-lang-groovy</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-web</artifactId>
+                <version>${vertx.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>activemq-broker</artifactId>
                 <version>${activemq.version}</version>
@@ -220,6 +232,11 @@
                 <groupId>org.jfree</groupId>
                 <artifactId>jfreechart</artifactId>
                 <version>${jfreechart.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-core</artifactId>
+                <version>${infinispan.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.reflections</groupId>

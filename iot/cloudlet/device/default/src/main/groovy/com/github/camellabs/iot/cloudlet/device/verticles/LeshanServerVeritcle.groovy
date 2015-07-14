@@ -18,6 +18,7 @@ package com.github.camellabs.iot.cloudlet.device.verticles
 
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
 import com.github.camellabs.iot.cloudlet.device.leshan.GuavaCacheProvider
+import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
 import com.github.camellabs.iot.cloudlet.device.vertx.Vertxes
 import com.mongodb.Mongo
@@ -29,6 +30,11 @@ import org.eclipse.leshan.core.response.LwM2mResponse
 import org.eclipse.leshan.core.response.ValueResponse
 import org.eclipse.leshan.server.californium.LeshanServerBuilder
 import org.eclipse.leshan.server.californium.impl.LeshanServer
+import org.infinispan.configuration.cache.CacheMode
+import org.infinispan.configuration.cache.Configuration
+import org.infinispan.configuration.cache.ConfigurationBuilder
+import org.infinispan.configuration.global.GlobalConfigurationBuilder
+import org.infinispan.manager.DefaultCacheManager
 
 import java.time.LocalTime
 import java.time.ZoneId
@@ -38,6 +44,7 @@ import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.wrapIntoJso
 import static java.time.Instant.ofEpochMilli
 import static java.time.LocalDateTime.ofInstant
 import static org.eclipse.leshan.ResponseCode.CONTENT
+import static org.infinispan.configuration.cache.CacheMode.INVALIDATION_ASYNC
 
 class LeshanServerVeritcle extends GroovyVerticle {
 
@@ -47,7 +54,12 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     LeshanServerVeritcle() {
         def mongo = new Mongo()
-        def clientRegistry = new CachingClientRegistry(new MongoDbClientRegistry(mongo), new GuavaCacheProvider())
+
+        def cacheManager = new DefaultCacheManager(new GlobalConfigurationBuilder().transport().defaultTransport().build())
+        Configuration builder = new ConfigurationBuilder().clustering().cacheMode(INVALIDATION_ASYNC).build();
+        cacheManager.defineConfiguration("clients", builder);
+
+        def clientRegistry = new CachingClientRegistry(new MongoDbClientRegistry(mongo), new InfinispanCacheProvider(cacheManager))
         leshanServer = new LeshanServerBuilder().setClientRegistry(clientRegistry).build()
     }
 
