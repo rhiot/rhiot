@@ -36,14 +36,6 @@
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-aether</artifactId>
-            <version>0.10.1</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>aws-java-sdk</artifactId>
-                    <!-- Fat jar optimization. We don't need 9 MB of AWS-related code. -->
-                    <groupId>com.amazonaws</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
