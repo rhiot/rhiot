@@ -657,16 +657,16 @@ The `RPI2` hardware profile is just the Raspberry Pi 2 B+ model equipped with th
 the ethernet cable). Currently we assume that the device is running [Raspbian](https://www.raspbian.org/) operating
 system (version 2015-05-05).
 
-<img src="images/rpi2_open.jpg" align="center" height="400" hspace="30">
-<img src="images/rpi2_closed.jpg" align="center" height="400" hspace="30">
+<img src="images/rpi2_open.jpg" align="center" height="600" hspace="30">
+<img src="images/rpi2_closed.jpg" align="center" height="600" hspace="30">
 
 #### Raspberry PI 2 B+ (aka RPI2_BU353)
 
 The `RPI2_BU353` hardware profile is the same as `RPI2` profile, but additionally equipped into the []BU353 GPS receiver](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg)
 plugged into the USB port.
 
-<img src="images/rpi2_bu353_open.jpg" align="center" height="600" hspace="30">
-<img src="images/rpi2_bu353_closed.jpg" align="center" height="600" hspace="30">
+<img src="images/rpi2_bu353_open.jpg" align="center" height="500" hspace="30">
+<img src="images/rpi2_bu353_closed.jpg" align="center" height="500" hspace="30">
 
 
 ## Articles, presentations & videos
