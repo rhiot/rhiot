@@ -20,7 +20,7 @@
 
     <properties>
         <fatjar.mainClass>com.github.camellabs.iot.performance.PerformanceTester</fatjar.mainClass>
-        <docker.image.target>performance-tester</docker.image.target>
+        <docker.image.target>performance-of</docker.image.target>
     </properties>
 
     <dependencies>
