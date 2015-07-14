@@ -25,6 +25,8 @@ class Deployer {
 
     private final boolean debug
 
+    def JcabiMavenArtifactResolver artifactResolver = new JcabiMavenArtifactResolver()
+
     Deployer(DeviceDetector deviceDetector, boolean debug) {
         this.deviceDetector = deviceDetector
         this.debug = debug
@@ -39,8 +41,7 @@ class Deployer {
     }
 
     Device deploy(Map<String, String> additionalProperties) {
-        println('Downloading gateway binaries...')
-        def gatewayJar = new JcabiMavenArtifactResolver().artifactStream('com.github.camel-labs', 'camel-labs-iot-gateway', '0.1.1-SNAPSHOT')
+        def gatewayJar = artifactResolver.artifactStream('com.github.camel-labs', 'camel-labs-iot-gateway', '0.1.1-SNAPSHOT')
 
         println('Detecting devices...')
         def supportedDevices = deviceDetector.detectDevices()
@@ -64,7 +65,7 @@ class Deployer {
 
         println("Cleaning old artifacts from gateway home directory ($gatewayHome)...")
         ssh.printCommand("sudo rm ${gatewayHome}/camel-labs-iot-gateway-*.jar")
-        ssh.scp(gatewayJar, new File("${gatewayHome}/camel-labs-iot-gateway-0.1.1-SNAPSHOT.jar"), false)
+        ssh.scp(gatewayJar.get(), new File("${gatewayHome}/camel-labs-iot-gateway-0.1.1-SNAPSHOT.jar"), false)
 
         ssh.printCommand("sudo chown pi /etc/init.d")
         ssh.scp(getClass().getResourceAsStream('/camel-labs-iot-gateway.initd.sh'), new File('/etc/init.d/camel-labs-iot-gateway'), false)
@@ -111,6 +112,8 @@ class Deployer {
             if(parser.debug) {
                 e.printStackTrace()
             }
+        } finally {
+            Runtime.getRuntime().exit(0)
         }
     }
 

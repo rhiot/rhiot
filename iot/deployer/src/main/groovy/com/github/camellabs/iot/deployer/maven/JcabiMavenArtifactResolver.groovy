@@ -50,12 +50,12 @@ class JcabiMavenArtifactResolver extends ConfigurableMavenArtifactResolver {
     }
 
     @Override
-    public InputStream artifactStream(String groupId, String artifactId, String version, String extension) {
+    protected InputStream fetchArtifactStream(String groupId, String artifactId, String version, String extension) {
         try {
-            List<Artifact> artifactWithDependencies = aether.resolve(
+            def artifactWithDependencies = aether.resolve(
                     new DefaultArtifact(groupId, artifactId, "", extension, version),
-                    JavaScopes.RUNTIME);
-            List<Artifact> mainArtifacts = artifactWithDependencies.findAll { dependency ->
+                    JavaScopes.RUNTIME)
+            def mainArtifacts = artifactWithDependencies.findAll { dependency ->
                 dependency.getArtifactId().equals(artifactId) &&
                         dependency.getGroupId().equals(groupId) &&
                         dependency.getVersion().equals(version)

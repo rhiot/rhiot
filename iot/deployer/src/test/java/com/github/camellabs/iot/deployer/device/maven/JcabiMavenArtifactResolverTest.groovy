@@ -30,7 +30,7 @@ class JcabiMavenArtifactResolverTest extends Assert {
         def artifact = resolver.artifactStream('com.google.guava', 'guava', '18.0')
 
         // Then
-        assertTrue(artifact.available() > 0)
+        assertTrue(artifact.get().available() > 0)
     }
 
 }

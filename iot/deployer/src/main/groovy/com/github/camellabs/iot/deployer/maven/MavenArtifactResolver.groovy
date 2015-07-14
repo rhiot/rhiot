@@ -14,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer.maven;
+package com.github.camellabs.iot.deployer.maven
+
+import java.util.concurrent.Future;
 
 interface MavenArtifactResolver {
 
-    InputStream artifactStream(String groupId, String artifactId, String version, String type)
+    Future<InputStream> artifactStream(String groupId, String artifactId, String version, String extension)
 
-    InputStream artifactStream(String groupId, String artifactId, String version)
+    Future<InputStream> artifactStream(String groupId, String artifactId, String version)
 
 }
