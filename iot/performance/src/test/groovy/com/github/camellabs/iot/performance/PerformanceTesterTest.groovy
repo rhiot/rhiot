@@ -16,31 +16,24 @@
  */
 package com.github.camellabs.iot.performance
 
-import org.apache.activemq.broker.BrokerService
+import com.github.camellabs.iot.deployer.ConsoleInformation
+import org.junit.Assert
+import org.junit.Test
 
-import static org.springframework.util.SocketUtils.findAvailableTcpPort
+class PerformanceTesterTest extends Assert {
 
-class MqttServer {
+    def tester = new PerformanceTester()
 
-    // Static members
+    @Test
+    void shouldDetectInvalidKit() {
+        try {
+            tester.runTestsForKit('inavlidKit')
 
-    static final int mqttPort = findAvailableTcpPort()
-
-    // Members
-
-    def broker = new BrokerService()
-
-    // Service lifecycle
-
-    MqttServer start() {
-        broker.setPersistent(false)
-        broker.addConnector("mqtt://0.0.0.0:${mqttPort}")
-        broker.start()
-        this
-    }
-
-    def stop() {
-        broker.stop()
+        } catch (ConsoleInformation info) {
+            assertTrue(info.message.contains('No tests found for hardware kit'))
+            return
+        }
+        fail()
     }
 
 }

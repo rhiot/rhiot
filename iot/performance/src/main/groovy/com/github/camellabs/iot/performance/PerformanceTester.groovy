@@ -17,6 +17,7 @@
 package com.github.camellabs.iot.performance
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.camellabs.iot.deployer.ConsoleInformation
 import com.github.camellabs.iot.deployer.Deployer
 
 import java.text.SimpleDateFormat
@@ -28,11 +29,11 @@ class PerformanceTester {
 
     // Collaborators
 
-    private final testResolver
+    private final TestResolver testResolver
 
-    private final deployer
+    private final Deployer deployer
 
-    private final mqttServer
+    private final MqttServer mqttServer
 
     // Listeners
 
@@ -40,17 +41,25 @@ class PerformanceTester {
 
     // Constructors
 
-    PerformanceTester(testResolver, deployer, mqttServer, List<ResultsProcessor> resultsProcessors) {
+    PerformanceTester(TestResolver testResolver, deployer, mqttServer, List<ResultsProcessor> resultsProcessors) {
         this.testResolver = testResolver
         this.deployer = deployer
         this.mqttServer = mqttServer
         this.resultsProcessors = resultsProcessors
     }
 
+    PerformanceTester() {
+        this(new TestResolver(), new Deployer(), new MqttServer().start(), [new StdoutResultsProcessor(), new ChartResultsProcessor()])
+    }
+
     // Running tests
 
     def runTestsForKit(String kit) {
-        testResolver.testsForKit(kit).collect { test ->
+        def tests = testResolver.testsForKit(kit)
+        if(tests.isEmpty()) {
+            throw new ConsoleInformation("No tests found for hardware kit ${kit}.")
+        }
+        tests.collect { test ->
             def device = deployer.deploy(test.additionalProperties())
 
             MINUTES.sleep(3)
@@ -73,10 +82,14 @@ class PerformanceTester {
     // Main handler
 
     public static void main(String... args) {
-        def resultListeners = [new StdoutResultsProcessor(), new ChartResultsProcessor()]
-        def tester = new PerformanceTester(new TestResolver(), new Deployer(), new MqttServer().start(), resultListeners)
-        tester.runTestsForKit(args.size() == 0 ? RPI2 : args[0])
-        tester.mqttServer.stop()
+        def tester = new PerformanceTester()
+        try {
+            tester.runTestsForKit(args.size() == 0 ? RPI2 : args[0])
+        } catch(ConsoleInformation info) {
+            println(info.message)
+        } finally {
+            tester.mqttServer.stop()
+        }
     }
 
 }
