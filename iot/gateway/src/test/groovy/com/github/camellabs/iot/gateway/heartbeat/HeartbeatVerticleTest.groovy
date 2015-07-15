@@ -14,17 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.gateway;
+package com.github.camellabs.iot.gateway.heartbeat
 
-public final class CamelIotGatewayConstants {
+import com.github.camellabs.iot.gateway.VertxGateway
+import org.junit.Assert
+import org.junit.Test
 
-    public static String BUS_HEARTBEAT = "heartbeat";
+import java.util.concurrent.CountDownLatch
 
-    public static String HEARTBEAT_ENDPOINT = "direct:heartbeat";
+class HeartbeatVerticleTest extends Assert {
 
-    public static String HEARTBEAT_TRIGGER_ROUTE_ID = "heartbeatTrigger";
+    def gateway = new VertxGateway()
 
-    private CamelIotGatewayConstants() {
+    @Test
+    void shouldReceiveHeartbeatFromEventBus() {
+        // Given
+        def assertHeartbeatReceived = new CountDownLatch(1)
+
+        gateway.vertx.eventBus().consumer('heartbeat') {
+            // When
+            assertHeartbeatReceived.countDown()
+        }
+
+        // Then
+        assertHeartbeatReceived.await()
     }
 
 }

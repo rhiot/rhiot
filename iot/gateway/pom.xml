@@ -25,6 +25,11 @@
             <artifactId>camel-gps-bu353</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.github.camel-labs</groupId>
+            <artifactId>camel-labs-iot-vertx</artifactId>
+            <version>0.1.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-groovy</artifactId>
         </dependency>

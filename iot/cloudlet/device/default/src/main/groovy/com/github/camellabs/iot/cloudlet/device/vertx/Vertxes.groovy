@@ -34,37 +34,6 @@ final class Vertxes {
     private Vertxes() {
     }
 
-    static String stringProperty(String key, String defaultValue) {
-        def property = System.getProperty(key)
-        if(property != null) {
-            return property
-        }
-
-        property = getenv(key)
-        if(property != null) {
-            return property
-        }
-
-        return defaultValue
-    }
-
-    static String stringProperty(String key) {
-        stringProperty(key, null)
-    }
-
-    static Integer intProperty(String key) {
-        def property = stringProperty(key)
-        property == null ? null : property.toInteger()
-    }
-
-    static int intProperty(String key, int defaultValue) {
-        def property = stringProperty(key)
-        if(property != null) {
-            return property.toInteger()
-        }
-        defaultValue
-    }
-
     static HttpServerResponse jsonResponse(RoutingContext routingContext) {
         routingContext.response().putHeader("content-type", "application/json")
     }

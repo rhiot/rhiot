@@ -14,17 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.gateway;
+package com.github.camellabs.iot.gateway
 
-public final class CamelIotGatewayConstants {
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.camellabs.iot.gateway.heartbeat.HeartbeatVerticle
+import com.github.camellabs.iot.gateway.heartbeat.LoggingHeartbeatVerticle
 
-    public static String BUS_HEARTBEAT = "heartbeat";
+import static io.vertx.groovy.core.Vertx.vertx
 
-    public static String HEARTBEAT_ENDPOINT = "direct:heartbeat";
+class VertxGateway {
 
-    public static String HEARTBEAT_TRIGGER_ROUTE_ID = "heartbeatTrigger";
+    final def vertx = vertx()
 
-    private CamelIotGatewayConstants() {
+    static final def JSON = new ObjectMapper()
+
+    VertxGateway() {
+        vertx.deployVerticle("groovy:${HeartbeatVerticle.class.getName()}")
+        vertx.deployVerticle("groovy:${LoggingHeartbeatVerticle.class.getName()}")
+    }
+
+    public static void main(String[] args) {
+        new VertxGateway()
     }
 
 }

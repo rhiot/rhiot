@@ -17,10 +17,8 @@
 package com.github.camellabs.iot.cloudlet.device.verticles
 
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
-import com.github.camellabs.iot.cloudlet.device.leshan.GuavaCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
-import com.github.camellabs.iot.cloudlet.device.vertx.Vertxes
 import com.mongodb.Mongo
 import io.vertx.core.Future
 import io.vertx.lang.groovy.GroovyVerticle
@@ -30,7 +28,6 @@ import org.eclipse.leshan.core.response.LwM2mResponse
 import org.eclipse.leshan.core.response.ValueResponse
 import org.eclipse.leshan.server.californium.LeshanServerBuilder
 import org.eclipse.leshan.server.californium.impl.LeshanServer
-import org.infinispan.configuration.cache.CacheMode
 import org.infinispan.configuration.cache.Configuration
 import org.infinispan.configuration.cache.ConfigurationBuilder
 import org.infinispan.configuration.global.GlobalConfigurationBuilder
@@ -41,6 +38,7 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.wrapIntoJsonResponse
+import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
 import static java.time.Instant.ofEpochMilli
 import static java.time.LocalDateTime.ofInstant
 import static org.eclipse.leshan.ResponseCode.CONTENT
@@ -50,7 +48,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     final def LeshanServer leshanServer
 
-    final def disconnectionPeriod = Vertxes.intProperty('camellabs_iot_cloudlet_device_disconnectionPeriod', 60 * 1000)
+    final def disconnectionPeriod = intProperty('camellabs_iot_cloudlet_device_disconnectionPeriod', 60 * 1000)
 
     LeshanServerVeritcle() {
         def mongo = new Mongo()
@@ -78,7 +76,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
             vertx.eventBus().localConsumer('deleteClients') { msg ->
                 leshanServer.clientRegistry.allClients().each {
-                        client -> leshanServer.clientRegistry.deregisterClient(client.registrationId) }
+                    client -> leshanServer.clientRegistry.deregisterClient(client.registrationId)
+                }
                 wrapIntoJsonResponse(msg, 'Status', 'Success')
             }
 
@@ -89,7 +88,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
             vertx.eventBus().localConsumer('client.manufacturer') { msg ->
                 def clientId = msg.body().toString()
                 def client = leshanServer.clientRegistry.get(clientId)
-                if(client == null) {
+                if (client == null) {
                     msg.fail(0, "No client with ID ${clientId}.")
                 } else {
                     wrapIntoJsonResponse(msg, 'manufacturer', stringResponse(leshanServer.send(client, new ReadRequest('/3/0/0'))))
@@ -103,11 +102,11 @@ class LeshanServerVeritcle extends GroovyVerticle {
     // Helpers
 
     private String stringResponse(LwM2mResponse response) {
-        if(response.code != CONTENT || !(response instanceof ValueResponse)) {
+        if (response.code != CONTENT || !(response instanceof ValueResponse)) {
             return null
         }
         def content = response.asType(ValueResponse.class).content
-        if(!(content instanceof LwM2mResource)) {
+        if (!(content instanceof LwM2mResource)) {
             return null
         }
         content.asType(LwM2mResource).value.value

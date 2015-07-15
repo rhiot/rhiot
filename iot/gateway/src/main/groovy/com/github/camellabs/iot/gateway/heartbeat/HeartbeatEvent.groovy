@@ -14,17 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.gateway;
+package com.github.camellabs.iot.gateway.heartbeat
 
-public final class CamelIotGatewayConstants {
+class HeartbeatEvent {
 
-    public static String BUS_HEARTBEAT = "heartbeat";
-
-    public static String HEARTBEAT_ENDPOINT = "direct:heartbeat";
-
-    public static String HEARTBEAT_TRIGGER_ROUTE_ID = "heartbeatTrigger";
-
-    private CamelIotGatewayConstants() {
-    }
+    final def timestamp = new Date()
 
 }

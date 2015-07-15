@@ -14,17 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.gateway;
+package com.github.camellabs.iot.gateway.heartbeat
 
-public final class CamelIotGatewayConstants {
+import io.vertx.lang.groovy.GroovyVerticle
+import org.slf4j.Logger
 
-    public static String BUS_HEARTBEAT = "heartbeat";
+import static org.slf4j.LoggerFactory.getLogger
 
-    public static String HEARTBEAT_ENDPOINT = "direct:heartbeat";
+class LoggingHeartbeatVerticle extends GroovyVerticle {
 
-    public static String HEARTBEAT_TRIGGER_ROUTE_ID = "heartbeatTrigger";
+    private static final Logger LOG = getLogger(LoggingHeartbeatVerticle.class)
 
-    private CamelIotGatewayConstants() {
+    @Override
+    void start() throws Exception {
+        vertx.eventBus().consumer('heartbeat') {
+            LOG.info("Ping!")
+        }
     }
 
 }

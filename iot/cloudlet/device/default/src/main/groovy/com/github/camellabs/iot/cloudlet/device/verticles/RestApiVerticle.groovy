@@ -16,10 +16,12 @@
  */
 package com.github.camellabs.iot.cloudlet.device.verticles
 
+import com.github.camellabs.iot.vertx.PropertyResolver
 import io.vertx.core.Future
 import io.vertx.lang.groovy.GroovyVerticle
 
 import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.*
+import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
 import static io.vertx.core.http.HttpMethod.DELETE
 import static io.vertx.core.http.HttpMethod.GET
 import static io.vertx.groovy.ext.web.Router.router

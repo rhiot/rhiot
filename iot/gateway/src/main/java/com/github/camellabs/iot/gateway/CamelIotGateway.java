@@ -27,6 +27,8 @@ import static org.apache.camel.LoggingLevel.INFO;
 @SpringBootApplication
 public class CamelIotGateway extends FatJarRouter {
 
+    VertxGateway vertxGateway = new VertxGateway();
+
     // SPI callbacks
 
     @Autowired(required = false)
@@ -45,7 +47,7 @@ public class CamelIotGateway extends FatJarRouter {
         from("timer:heartbeat?delay={{camellabs.iot.gateway.heartbeat.rate:5000}}").routeId(HEARTBEAT_TRIGGER_ROUTE_ID).
                 to(HEARTBEAT_ENDPOINT);
 
-        from(HEARTBEAT_ENDPOINT).routeId("heartbeatLogger").log(INFO, "Heartbeat", "Ping!");
+        from(HEARTBEAT_ENDPOINT).process(exchange -> {});
     }
 
 }

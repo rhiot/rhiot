@@ -138,15 +138,14 @@ number of the rate miliseconds. The snippet below demonstrates how to change the
 
     export camellabs.iot.gateway.heartbeat.rate=10000
     
-The ID of the timer route triggering the heartbeats is `heartbeatTrigger` (
-`com.github.camellabs.iot.gateway.CamelIotGatewayConstants.HEARTBEAT_TRIGGER_ROUTE_ID` constant). The trigger route
-sends the heatbeats to the `direct:heartbeat` endpoint (`CamelIotGatewayConstants.HEARTBEAT_ENDPOINT` constant);
+The heartbeat events are broadcasted to the Vert.x event bus address `heartbeat` (
+`com.github.camellabs.iot.gateway.CamelIotGatewayConstants.BUS_HEARTBEAT` constant).
 
 #### Logging heartbeat
 
-By default Camel gateway sends the heartbeat event to the application log. Logging heartbeats are useful when verifying that
-gateway is still running by looking into the application log files. The name of the logger is `Heartbeat` and the
-message is `Ping!`.
+By default Camel gateway sends the heartbeat event to the application log (at the `INFO` level). Logging heartbeats are
+useful when verifying that gateway is still running - you can just take a look into the application log files. The name of the logger is `com.github.camellabs.iot.gateway.heartbeat.LoggingHeartbeatVerticle`
+and the message is `Ping!`.
 
 #### MQTT heartbeat
 
