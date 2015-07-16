@@ -19,6 +19,7 @@ package com.github.camellabs.iot.performance
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.camellabs.iot.deployer.ConsoleInformation
 import com.github.camellabs.iot.deployer.Deployer
+import com.github.camellabs.iot.utils.ssh.client.SshClient
 
 import java.text.SimpleDateFormat
 
@@ -64,15 +65,10 @@ class PerformanceTester {
 
             MINUTES.sleep(3)
             def json = new ObjectMapper()
-            def startedString = json.readValue(
-                    new URL("http://${device.address().hostAddress}:8080/jolokia/read/org.apache.camel:context=camel-1,type=routes,name=\"mockSensorConsumer\"/ResetTimestamp"),
-                    Map.class)['value'].toString().replaceAll(/\+\d\d:\d\d/, '')
-            def started = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(startedString)
-            def finished = new Date()
+            def processingTime = test.processingTime(device)
             def processed = json.readValue(
                     new URL("http://${device.address().hostAddress}:8080/jolokia/read/org.apache.camel:context=camel-1,type=routes,name=\"mockSensorConsumer\"/ExchangesTotal"),
                     Map.class)['value'].toString().toLong()
-            def processingTime = finished.time - started.time
             def result = new TestResult(test.testGroup(), test.variationLabel(), processed, processingTime)
             resultsProcessors.each { it.processResult(result) }
         }

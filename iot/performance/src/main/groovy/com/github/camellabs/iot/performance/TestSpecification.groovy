@@ -14,7 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.performance;
+package com.github.camellabs.iot.performance
+
+import com.github.camellabs.iot.deployer.Device;
 
 interface TestSpecification {
 
@@ -25,5 +27,7 @@ interface TestSpecification {
     String testGroup()
 
     Map<String, Object> additionalProperties()
+
+    long processingTime(Device device)
 
 }
