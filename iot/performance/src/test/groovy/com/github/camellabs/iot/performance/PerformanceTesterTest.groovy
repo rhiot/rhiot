@@ -32,7 +32,7 @@ class PerformanceTesterTest extends Assert {
             assertTrue(info.message.contains('No tests found for hardware kit'))
             return
         }
-        fail()
+        fail('Console information was expected.')
     }
 
 }
