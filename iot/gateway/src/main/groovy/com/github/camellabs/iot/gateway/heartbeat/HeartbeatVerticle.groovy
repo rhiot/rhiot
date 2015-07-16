@@ -25,7 +25,7 @@ class HeartbeatVerticle extends GroovyVerticle {
 
     @Override
     void start() throws Exception {
-        vertx.setPeriodic(intProperty('camellabs.iot.gateway.heartbeat.rate', 5000)) {
+        vertx.setPeriodic(intProperty('camellabs_iot_gateway_heartbeat_rate', 5000)) {
             vertx.eventBus().publish('heartbeat', JSON.writeValueAsString(new HeartbeatEvent()))
         }
     }

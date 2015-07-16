@@ -105,11 +105,24 @@ between the sensors and the data center. Under the hood, Camel IoT gateway is th
 In order to install Camel IoT gateway on the Raspberry Pi running Raspbian, connect the device to your local network
 (using WiFi or the ethernet cable) and execute the following command:
 
-    docker run --net=host camellabs/deployer
+    docker run --net=host camellabs/deploy-gateway
 
 From this point forward Camel IoT gateway will be installed on your device as `camel-iot-gateway` service and started
 whenever the device boots up. Under the hood, gateway deployer performs the simple port scanning in the local network
 and attempts to connect to the Raspian devices using the default SSH credentials.
+
+To see all the options available for the gateway deployer, execute the following command:
+
+    docker run --net=host camellabs/deploy-gateway --help
+
+In case of problems with the gateway, you can try to run it in verbose mode (called *debug mode*):
+
+    docker run --net=host camellabs/deploy-gateway --debug
+
+You can also configure the gateway during the deployment process using the `-P` option. For example to set the configuration property
+responsible for gateway heartbeats interval, execute the following command:
+
+    docker run --net=host camellabs/deploy-gateway -Pcamellabs_iot_gateway_heartbeat_rate=10000
 
 ### Configuration of the gateway
 
@@ -134,10 +147,10 @@ Camel gateway generates heartbeats indicating that the device is alive and optio
 center.
 
 The default heartbeat rate is 5 seconds, which means that heartbeat events will be generated every 5 second. You
-can change the heartbeat rate by setting the `camellabs.iot.gateway.heartbeat.rate` environment variable to the desired
+can change the heartbeat rate by setting the `camellabs_iot_gateway_heartbeat_rate` environment variable to the desired
 number of the rate miliseconds. The snippet below demonstrates how to change the heartbeat rate to 10 seconds:
 
-    export camellabs.iot.gateway.heartbeat.rate=10000
+    export camellabs_iot_gateway_heartbeat_rate=10000
     
 The heartbeat events are broadcasted to the Vert.x event bus address `heartbeat` (
 `com.github.camellabs.iot.gateway.CamelIotGatewayConstants.BUS_HEARTBEAT` constant).

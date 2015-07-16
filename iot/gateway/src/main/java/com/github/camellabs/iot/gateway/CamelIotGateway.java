@@ -44,7 +44,7 @@ public class CamelIotGateway extends FatJarRouter {
             }
         }
 
-        from("timer:heartbeat?delay={{camellabs.iot.gateway.heartbeat.rate:5000}}").routeId(HEARTBEAT_TRIGGER_ROUTE_ID).
+        from("timer:heartbeat?delay={{camellabs_iot_gateway_heartbeat_rate:5000}}").routeId(HEARTBEAT_TRIGGER_ROUTE_ID).
                 to(HEARTBEAT_ENDPOINT);
 
         from(HEARTBEAT_ENDPOINT).process(exchange -> {});

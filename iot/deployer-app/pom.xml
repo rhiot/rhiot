@@ -21,7 +21,7 @@
 
     <properties>
         <fatjar.mainClass>com.github.camellabs.iot.deployer.Deployer</fatjar.mainClass>
-        <docker.image.target>deploy</docker.image.target>
+        <docker.image.target>deploy-gateway</docker.image.target>
     </properties>
 
     <dependencies>
