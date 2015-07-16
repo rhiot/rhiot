@@ -124,6 +124,10 @@ responsible for gateway heartbeats interval, execute the following command:
 
     docker run --net=host camellabs/deploy-gateway -Pcamellabs_iot_gateway_heartbeat_rate=10000
 
+You can use the `-P` option multiple times:
+
+    docker run --net=host camellabs/deploy-gateway -Pfoo=bar -Pbar=qux
+
 ### Configuration of the gateway
 
 The gateway configuration file is `/etc/default/camel-labs-iot-gateway`. The latter file is loaded by the gateway 
