@@ -128,6 +128,11 @@ You can use the `-P` option multiple times:
 
     docker run --net=host camellabs/deploy-gateway -Pfoo=bar -Pbar=qux
 
+If you would like to use different SSH credentials then default (username `pi`, password `raspberry`), then pass the
+`--username` and `--password` options to the deployer:
+
+    docker run --net=host camellabs/deploy-gateway --username=john --password=secret
+
 ### Configuration of the gateway
 
 The gateway configuration file is `/etc/default/camel-labs-iot-gateway`. The latter file is loaded by the gateway 

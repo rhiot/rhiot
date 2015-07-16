@@ -34,11 +34,11 @@ class ConsoleInputParser {
 Usage: docker run -t camellabs/deployer
 
 Options:
- -h --help                  Prints this help page.
- -d --debug                 Debug (verbose) mode.
- -Pfoo=bar                  Adds foo=bar configuration property to the deployed gateway. Can be used multiple times.
- -u=user --username=user    SSH username of the target device.
- -p=pass --password=pass    SSH password of the target device"""
+ -h --help                      Prints this help page.
+ -d --debug                     Debug (verbose) mode.
+ -Pfoo=bar                      Adds foo=bar configuration property to the deployed gateway. Can be used multiple times.
+ -u=user --username=user        SSH username of the target device.
+ -p=secret --password=secret    SSH password of the target device."""
     }
 
     boolean isDebug() {
