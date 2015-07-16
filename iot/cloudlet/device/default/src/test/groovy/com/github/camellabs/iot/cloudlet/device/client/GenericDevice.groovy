@@ -35,9 +35,7 @@ class GenericDevice extends BaseInstanceEnabler {
         switch (resourceid) {
             case 0: return generateValueResponse(resourceid, manufacturer())
             case 1: return generateValueResponse(resourceid, modelNumber())
-            case 2:
-                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
-                        newStringValue(getSerialNumber())));
+            case 2: return generateValueResponse(resourceid, serialNumber())
             case 3:
                 return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
                         newStringValue(getFirmwareVersion())));
@@ -111,8 +109,8 @@ class GenericDevice extends BaseInstanceEnabler {
         'Generic model number'
     }
 
-    private String getSerialNumber() {
-        return "LT-500-000-0001";
+    private String serialNumber() {
+        'Generic serial number'
     }
 
     private String getFirmwareVersion() {

@@ -95,6 +95,26 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 }
             }
 
+            vertx.eventBus().localConsumer('client.model') { msg ->
+                def clientId = msg.body().toString()
+                def client = leshanServer.clientRegistry.get(clientId)
+                if (client == null) {
+                    msg.fail(0, "No client with ID ${clientId}.")
+                } else {
+                    wrapIntoJsonResponse(msg, 'model', stringResponse(leshanServer.send(client, new ReadRequest('/3/0/1'))))
+                }
+            }
+
+            vertx.eventBus().localConsumer('client.serial') { msg ->
+                def clientId = msg.body().toString()
+                def client = leshanServer.clientRegistry.get(clientId)
+                if (client == null) {
+                    msg.fail(0, "No client with ID ${clientId}.")
+                } else {
+                    wrapIntoJsonResponse(msg, 'serial', stringResponse(leshanServer.send(client, new ReadRequest('/3/0/2'))))
+                }
+            }
+
             startFuture.complete()
         }
     }

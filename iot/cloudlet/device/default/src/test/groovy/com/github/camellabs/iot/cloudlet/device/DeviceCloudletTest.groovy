@@ -38,6 +38,8 @@ class DeviceCloudletTest extends Assert {
 
     static def int restApiPort = findAvailableTcpPort()
 
+    def rest = new RestTemplate()
+
     @BeforeClass
     static void beforeClass() {
         IMongodConfig mongodConfig = new MongodConfigBuilder()
@@ -54,15 +56,15 @@ class DeviceCloudletTest extends Assert {
 
     @Test
     void shouldReturnNoClients() {
-        new RestTemplate().delete(new URI("http://localhost:${restApiPort}/client"))
-        def response = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client"), Map.class)
+        rest.delete(new URI("http://localhost:${restApiPort}/client"))
+        def response = rest.getForObject(new URI("http://localhost:${restApiPort}/client"), Map.class)
         assertEquals(0, response['clients'].asType(List.class).size())
     }
 
     @Test
     void shouldNotRegisterClientTwice() {
         // Given
-        new RestTemplate().delete(new URI("http://localhost:${restApiPort}/client"))
+        rest.delete(new URI("http://localhost:${restApiPort}/client"))
         def firstClient = 'foo'
         def secondClient = 'bar'
 
@@ -72,7 +74,7 @@ class DeviceCloudletTest extends Assert {
         createLeshanCloudClient(secondClient).connect()
 
         // Then
-        def clients = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client"), Map.class)
+        def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/client"), Map.class)
         assertEquals(2, clients['clients'].asType(List.class).size())
     }
 
@@ -83,7 +85,7 @@ class DeviceCloudletTest extends Assert {
         createLeshanCloudClient(clientId).connect()
 
         // When
-        def client = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}"), Map.class)
+        def client = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}"), Map.class)
 
         // Then
         assertEquals(clientId, client['client']['endpoint'])
@@ -92,13 +94,13 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldListDisconnectedClient() {
         // Given
-        new RestTemplate().delete(new URI("http://localhost:${restApiPort}/client"))
+        rest.delete(new URI("http://localhost:${restApiPort}/client"))
         def clientId = randomUUID().toString()
         createLeshanCloudClient(clientId).connect()
 
         // When
         sleep(5000)
-        def clients = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client?disconnected=true"), Map.class)
+        def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/client?disconnected=true"), Map.class)
 
         // Then
         assertEquals([clientId], clients['disconnectedClients'].asType(List.class))
@@ -107,12 +109,12 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldNotListDisconnectedClient() {
         // Given
-        new RestTemplate().delete(new URI("http://localhost:${restApiPort}/client"))
+        rest.delete(new URI("http://localhost:${restApiPort}/client"))
         def clientId = randomUUID().toString()
         createLeshanCloudClient(clientId).connect()
 
         // When
-        def clients = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client?disconnected=true"), Map.class)
+        def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/client?disconnected=true"), Map.class)
 
         // Then
         assertEquals(0, clients['disconnectedClients'].asType(List.class).size())
@@ -125,7 +127,7 @@ class DeviceCloudletTest extends Assert {
         createLeshanCloudClient(clientId).connect()
 
         // When
-        def manufacturer = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/manufacturer"), Map.class)
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/manufacturer"), Map.class)
 
         // Then
         assertEquals('Generic manufacturer', manufacturer['manufacturer'])
@@ -137,10 +139,36 @@ class DeviceCloudletTest extends Assert {
         createLeshanCloudClient(randomUUID().toString()).connect()
 
         // When
-        def manufacturer = new RestTemplate().getForObject(new URI("http://localhost:${restApiPort}/client/invalidEndpoint/manufacturer"), Map.class)
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/invalidEndpoint/manufacturer"), Map.class)
 
         // Then
         assertNotNull('Generic manufacturer', manufacturer['failure'])
+    }
+
+    @Test
+    void shouldReadClientModel() {
+        // Given
+        def clientId = randomUUID().toString()
+        createLeshanCloudClient(clientId).connect()
+
+        // When
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/model"), Map.class)
+
+        // Then
+        assertEquals('Generic model number', manufacturer['model'])
+    }
+
+    @Test
+    void shouldReadClientSerial() {
+        // Given
+        def clientId = randomUUID().toString()
+        createLeshanCloudClient(clientId).connect()
+
+        // When
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/serial"), Map.class)
+
+        // Then
+        assertEquals('Generic serial number', manufacturer['serial'])
     }
 
 }

@@ -62,6 +62,18 @@ class RestApiVerticle extends GroovyVerticle {
                 }
             }
 
+            router.route("/client/:clientId/model").method(GET).handler { rc ->
+                vertx.eventBus().send('client.model', parameter(rc, 'clientId')) { client ->
+                    jsonResponse(rc, client)
+                }
+            }
+
+            router.route("/client/:clientId/serial").method(GET).handler { rc ->
+                vertx.eventBus().send('client.serial', parameter(rc, 'clientId')) { client ->
+                    jsonResponse(rc, client)
+                }
+            }
+
             http.requestHandler(router.&accept).listen(intProperty('camellabs_iot_cloudlet_device_api_rest_port', 8080))
 
             startFuture.complete()
