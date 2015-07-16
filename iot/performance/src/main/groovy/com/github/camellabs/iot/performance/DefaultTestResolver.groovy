@@ -16,23 +16,19 @@
  */
 package com.github.camellabs.iot.performance
 
-import org.junit.Assert
-import org.junit.Test
+import org.reflections.Reflections
 
-import static com.github.camellabs.iot.performance.HardwareKit.RPI2
+import static java.lang.reflect.Modifier.isAbstract
 
-class TestResolverTest extends Assert {
+class DefaultTestResolver implements TestResolver {
 
-    def resolver = new DefaultTestResolver()
+    def reflections = new Reflections(getClass().getPackage().getName())
 
-    @Test
-    void shouldNotFindBaseTest() {
-        // When
-        def tests = resolver.testsForKit(RPI2)
-
-        // Then
-        def mockMqttTest = tests.findAll { test -> test.class.name.contains('MockMqtt') }
-        assertEquals(3, mockMqttTest.size())
+    List<TestSpecification> testsForKit(String kit) {
+        reflections.getSubTypesOf(TestSpecification.class).
+                findAll { !isAbstract(it.modifiers) }.
+                collect { it.newInstance() }.findAll { test -> test.supportsHardwareKit(kit) }.
+                sort { it.variationLabel() }
     }
 
 }

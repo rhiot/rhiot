@@ -27,8 +27,7 @@ class PerformanceTesterTest extends Assert {
     @Test
     void shouldDetectInvalidKit() {
         try {
-            tester.runTestsForKit('inavlidKit')
-
+            tester.runTestsForKit('invalid kit')
         } catch (ConsoleInformation info) {
             assertTrue(info.message.contains('No tests found for hardware kit'))
             return

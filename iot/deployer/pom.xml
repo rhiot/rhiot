@@ -60,6 +60,11 @@
 
         <!-- Testing -->
         <dependency>
+            <groupId>com.cyrusinnovation</groupId>
+            <artifactId>mockito-groovy-support</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>

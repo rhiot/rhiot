@@ -21,7 +21,7 @@ import org.junit.Test
 
 import static java.util.concurrent.TimeUnit.SECONDS
 
-class TestResults extends Assert {
+class TestResultTest extends Assert {
 
     @Test
     void shouldCalculateMessagesPerSecond() {

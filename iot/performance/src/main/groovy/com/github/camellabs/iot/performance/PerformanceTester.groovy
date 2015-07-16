@@ -19,9 +19,6 @@ package com.github.camellabs.iot.performance
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.camellabs.iot.deployer.ConsoleInformation
 import com.github.camellabs.iot.deployer.Deployer
-import com.github.camellabs.iot.utils.ssh.client.SshClient
-
-import java.text.SimpleDateFormat
 
 import static HardwareKit.RPI2
 import static java.util.concurrent.TimeUnit.MINUTES
@@ -42,7 +39,7 @@ class PerformanceTester {
 
     // Constructors
 
-    PerformanceTester(TestResolver testResolver, deployer, mqttServer, List<ResultsProcessor> resultsProcessors) {
+    PerformanceTester(TestResolver testResolver, Deployer deployer, mqttServer, List<ResultsProcessor> resultsProcessors) {
         this.testResolver = testResolver
         this.deployer = deployer
         this.mqttServer = mqttServer
@@ -50,7 +47,7 @@ class PerformanceTester {
     }
 
     PerformanceTester() {
-        this(new TestResolver(), new Deployer(), new MqttServer().start(), [new StdoutResultsProcessor(), new ChartResultsProcessor()])
+        this(new DefaultTestResolver(), new Deployer(), new MqttServer().start(), [new StdoutResultsProcessor(), new ChartResultsProcessor()])
     }
 
     // Running tests
