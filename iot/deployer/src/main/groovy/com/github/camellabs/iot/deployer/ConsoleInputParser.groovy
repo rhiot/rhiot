@@ -34,9 +34,11 @@ class ConsoleInputParser {
 Usage: docker run -t camellabs/deployer
 
 Options:
- -h --help      Prints this help page.
- -d --debug     Debug (verbose) mode.
- -Pfoo=bar      Adds foo=bar configuration property to the deployed gateway. Can be used multiple times."""
+ -h --help                  Prints this help page.
+ -d --debug                 Debug (verbose) mode.
+ -Pfoo=bar                  Adds foo=bar configuration property to the deployed gateway. Can be used multiple times.
+ -u=user --username=user    SSH username of the target device.
+ -p=pass --password=pass    SSH password of the target device"""
     }
 
     boolean isDebug() {
@@ -52,6 +54,25 @@ Options:
             props[propertyKey] = propertyValue
             props
         }
+    }
+
+    boolean hasCredentials() {
+        def hasUsername = args.find{ it.startsWith('--username=')} || args.find{ it.startsWith('-u=')}
+        def hasPassword = args.find{ it.startsWith('--password=')} || args.find{ it.startsWith('-p=')}
+        if(hasUsername ^ hasPassword) {
+            throw new ConsoleInformation('Both username and password must be specified.')
+        }
+        hasUsername && hasPassword
+    }
+
+    String username() {
+        def argument = args.find{it.startsWith('--username=') || it.startsWith('-u=')}
+        argument.substring(argument.indexOf('=') + 1)
+    }
+
+    String password() {
+        def argument = args.find{it.startsWith('--password=') || it.startsWith('-p=')}
+        argument.substring(argument.indexOf('=') + 1)
     }
 
 }

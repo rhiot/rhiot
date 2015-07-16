@@ -25,15 +25,29 @@ class Deployer {
 
     private final boolean debug
 
+    private final String username
+
+    private final String password
+
     def JcabiMavenArtifactResolver artifactResolver = new JcabiMavenArtifactResolver()
 
-    Deployer(DeviceDetector deviceDetector, boolean debug) {
+    Deployer(DeviceDetector deviceDetector, String username, String password, boolean debug) {
         this.deviceDetector = deviceDetector
+        this.username = username
+        this.password = password
         this.debug = debug
     }
 
+    Deployer(String username, String password, boolean debug) {
+        this(new SimplePortScanningDeviceDetector(), username, password, debug)
+    }
+
+    Deployer(DeviceDetector deviceDetector, boolean debug) {
+        this(deviceDetector, 'pi', 'raspberry', debug)
+    }
+
     Deployer(boolean debug) {
-        this(new SimplePortScanningDeviceDetector(), debug)
+        this('pi', 'raspberry', debug)
     }
 
     Deployer() {
@@ -54,7 +68,7 @@ class Deployer {
         def device = supportedDevices.first()
         println("Detected Raspberry Pi at ${device.address().hostAddress}")
 
-        def ssh = new SshClient(device.address().hostAddress, 'pi', 'raspberry')
+        def ssh = new SshClient(device.address().hostAddress, username, password)
         def gatewayHome = '/var/camel-labs-iot-gateway'
 
         ssh.printCommand('sudo /etc/init.d/camel-labs-iot-gateway stop')
@@ -97,19 +111,20 @@ class Deployer {
 
     public static void main(String[] args) {
         def parser = new ConsoleInputParser(args)
-        if(parser.help) {
+        if (parser.help) {
             println(parser.helpText())
             return
         }
 
         try {
-            new Deployer(parser.debug).deploy(parser.properties())
+            def deployer = parser.hasCredentials() ? new Deployer(parser.username(), parser.password(), parser.debug) : new Deployer(parser.debug)
+            deployer.deploy(parser.properties())
         } catch (Exception e) {
-            if(!(e instanceof ConsoleInformation)) {
+            if (!(e instanceof ConsoleInformation)) {
                 print 'Error: '
             }
             println e.message
-            if(parser.debug) {
+            if (parser.debug) {
                 e.printStackTrace()
             }
         } finally {
