@@ -27,11 +27,6 @@
         <dependency>
             <groupId>com.github.camel-labs</groupId>
             <artifactId>camel-labs-iot-vertx</artifactId>
-            <version>0.1.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-groovy</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -39,13 +34,13 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-paho</artifactId>
-            <!-- TODO: Paho is available starting from Camel 2.16. Remove as soon as 2.16 is out. -->
-            <version>2.16-SNAPSHOT</version>
+            <artifactId>camel-netty4-http</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-netty4-http</artifactId>
+            <artifactId>camel-paho</artifactId>
+            <!-- TODO: Paho is available starting from Camel 2.16. Remove as soon as 2.16 is out. -->
+            <version>2.16-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
