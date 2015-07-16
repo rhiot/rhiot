@@ -28,6 +28,8 @@ import static com.github.camellabs.iot.utils.Networks.localNetworkIp
 
 abstract class BaseMockMqttTest implements TestSpecification {
 
+    static private final def CAMEL_ROUTE_RESET_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+
     @Override
     boolean supportsHardwareKit(String kit) {
         kit.startsWith('RPI2')
@@ -54,11 +56,16 @@ abstract class BaseMockMqttTest implements TestSpecification {
     @Override
     long processingTime(Device device) {
         def json = new ObjectMapper()
-        def startedString = json.readValue(
-                new URL("http://${device.address().hostAddress}:8080/jolokia/read/org.apache.camel:context=camel-1,type=routes,name=\"mockSensorConsumer\"/ResetTimestamp"),
-                Map.class)['value'].toString().replaceAll(/\+\d\d:\d\d/, '')
-        def started = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(startedString)
-        new SshClient(device.address().hostAddress, 'pi', 'raspberry').command('date +%s%3N').first().toLong() - started.time
+        def startedString = json.readValue(jolokiaRouteStartedUrl(device, 'mockSensorConsumer'), Map.class)['value'].
+                toString().replaceAll(/\+\d\d:\d\d/, '')
+        def started = CAMEL_ROUTE_RESET_FORMAT.parse(startedString)
+        CAMEL_ROUTE_RESET_FORMAT.parse(new SshClient(device.address().hostAddress, 'pi', 'raspberry').command('date +%Y-%m-%dT%H:%M:%S').first()).time - started.time
+    }
+
+    // Helpers
+
+    private URL jolokiaRouteStartedUrl(Device device, String routeId) {
+        new URL("http://${device.address().hostAddress}:8080/jolokia/read/org.apache.camel:context=camel-1,type=routes,name=\"${routeId}\"/ResetTimestamp")
     }
 
 }
