@@ -215,6 +215,27 @@ The gateway exposes its JMX beans using the [Jolokia REST API](https://jolokia.o
 gateway is `http://0.0.0.0:8080/jolokia`. You can take advantage of the Jolokia to monitor and perform administrative
 tasks on your gateway.
 
+### Adding the custom code to the gateway
+
+Camel IoT gateway comes with the set of predefined components and features that can be used out of the box. It is
+however very likely that your gateway will execute some custom logic related to your business domain. This section of
+the documentation covers how can you add the custom code to the gateway.
+
+We highly recommend to deploy the gateway as a fat jar. This approach reduces the devOps cycles needed to deliver the
+working solution. If you would like to add the custom logic to the gateway, we recommend to create the fat jar Maven
+project including the gateway core dependency:
+
+    <dependencies>
+      <dependency>
+        <groupId>com.github.camel-labs</groupId>
+        <artifactId>camel-labs-iot-gateway</artifactId>
+        <version>0.1.1</version>
+      </dependency>
+    </dependencies>
+
+Now all your custom code can just be added to the project. The resulting fat jar will contain both gateway core logic
+and your custom code.
+
 ## Camel IoT components
 
 Camel IoT Labs brings some extra components for the Apache Camel intended to make both device- and server-side IoT
