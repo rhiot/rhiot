@@ -97,15 +97,6 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
     <repositories>
        <repository>
            <!-- TODO: Paho is available starting from Camel 2.16. Remove as soon as 2.16 is out. -->

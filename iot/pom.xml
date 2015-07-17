@@ -25,6 +25,7 @@
         <module>utils-ssh</module>
         <module>components</module>
         <module>gateway</module>
+        <module>gateway-app</module>
         <module>cloudlet</module>
         <module>cloudlet-hawtio</module>
         <module>cloudlet-ui</module>
