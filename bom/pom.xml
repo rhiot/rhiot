@@ -96,6 +96,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.camel-labs</groupId>
+                <artifactId>camel-labs-iot-gateway</artifactId>
+                <version>${camel-labs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.camel-labs</groupId>
                 <artifactId>camel-labs-iot-utils</artifactId>
                 <version>${camel-labs.version}</version>
             </dependency>
@@ -241,6 +246,11 @@
                 <version>${californium-core.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-core</artifactId>
+                <version>${infinispan.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.jcabi</groupId>
                 <artifactId>jcabi-aether</artifactId>
                 <version>${jcabi-aether.version}</version>
@@ -261,11 +271,6 @@
                 <groupId>org.jfree</groupId>
                 <artifactId>jfreechart</artifactId>
                 <version>${jfreechart.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-core</artifactId>
-                <version>${infinispan.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.reflections</groupId>

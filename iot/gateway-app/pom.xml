@@ -23,7 +23,6 @@
         <dependency>
             <groupId>com.github.camel-labs</groupId>
             <artifactId>camel-labs-iot-gateway</artifactId>
-            <version>0.1.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
