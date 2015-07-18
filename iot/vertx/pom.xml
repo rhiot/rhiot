@@ -28,6 +28,27 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-lang-groovy</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-vertx</artifactId>
+            <!-- Vert.x 3 is supported only in Camel 2.16. Remove this when Camel 2.16 is out. -->
+            <version>2.16-SNAPSHOT</version>
+        </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <!-- Vert.x 3 is supported only in Camel 2.16. Remove this when Camel 2.16 is out. -->
+            <id>apache.snapshots</id>
+            <name>Apache Development Snapshot Repository</name>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>
