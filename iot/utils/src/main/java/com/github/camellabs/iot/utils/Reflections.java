@@ -17,9 +17,12 @@
 package com.github.camellabs.iot.utils;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import static java.lang.Character.toLowerCase;
@@ -53,6 +56,18 @@ public final class Reflections {
             }
             return (T) FieldUtils.readField(actualField, object, true);
         } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void runMain(Class<?> classWithMain, String... args) {
+        try {
+            Method mainMethod = classWithMain.getMethod("main", String[].class);
+            if(mainMethod == null) {
+                throw new IllegalArgumentException("No main method in class " + classWithMain.getName());
+            }
+            mainMethod.invoke(null, new Object[]{args});
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
