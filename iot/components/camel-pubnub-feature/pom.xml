@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>  <!-- should be removed -->
+		<groupId>com.github.camel-labs</groupId>
+		<artifactId>camel-labs-iot-components</artifactId>
+		<version>0.1.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>camel-pubnub-feature</artifactId>
+	<name>camel-labs-iot-components-pubnub-feature</name>
+	<packaging>feature</packaging>
+	<description>This feature contains all dependencies needed to install the camel-pubnub component on Karaf 2</description>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.github.camel-labs</groupId>
+			<artifactId>camel-pubnub</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.camel</groupId>
+					<artifactId>camel-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+                <groupId>org.apache.karaf.tooling</groupId>
+                <artifactId>karaf-maven-plugin</artifactId>
+                <version>3.0.3</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>features-generate-descriptor</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+		</plugins>
+	</build>
+</project>

@@ -11,7 +11,7 @@
 	
 	<artifactId>camel-labs-iot-feature</artifactId>
 	<packaging>feature</packaging>
-	<description>This feature file contains all dependencies needed for installation on Karaf 4</description>
+	<description>This feature repo contains all camel-labs camel components</description>
 
 	<licenses>
 		<license>
@@ -21,7 +21,7 @@
 	</licenses>
 
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.github.camel-labs</groupId>
 			<artifactId>camel-device-io</artifactId>
 			<version>${project.version}</version>
@@ -35,16 +35,20 @@
 			<groupId>com.github.camel-labs</groupId>
 			<artifactId>camel-pi4j</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>com.github.camel-labs</groupId>
-			<artifactId>camel-pubnub</artifactId>
+			<artifactId>camel-pubnub-feature</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+			<type>feature</type>
+            <classifier>features</classifier>
+		</dependency> 
 		<dependency>
 			<groupId>com.github.camel-labs</groupId>
-			<artifactId>camel-tinkerforge</artifactId>
+			<artifactId>camel-tinkerforge-feature</artifactId>
 			<version>${project.version}</version>
+			<type>feature</type>
+			<classifier>features</classifier>
 		</dependency>
 	</dependencies>
 
@@ -53,7 +57,19 @@
             <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
+                <version>3.0.3</version>
                 <extensions>true</extensions>
+                <configuration>
+                    <aggregateFeatures>true</aggregateFeatures>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>features-generate-descriptor</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 	</build>
