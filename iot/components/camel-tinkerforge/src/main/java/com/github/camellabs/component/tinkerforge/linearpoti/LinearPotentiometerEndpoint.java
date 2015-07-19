@@ -46,10 +46,6 @@ public class LinearPotentiometerEndpoint extends TinkerforgeEndpoint {
         return consumer != null ? consumer : (consumer = new LinearPotentiometerConsumer(this, processor));
     }
 
-	public boolean isSingleton() {
-        return false;
-    }
-
     public int getInterval() {
         return interval;
     }

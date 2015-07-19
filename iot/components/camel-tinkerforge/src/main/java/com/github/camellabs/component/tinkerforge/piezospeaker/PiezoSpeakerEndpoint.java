@@ -64,8 +64,4 @@ public class PiezoSpeakerEndpoint extends TinkerforgeEndpoint {
     public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
-
-    public boolean isSingleton() {
-        return false;
-    }
 }

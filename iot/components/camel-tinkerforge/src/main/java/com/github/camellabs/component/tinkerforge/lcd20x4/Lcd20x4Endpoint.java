@@ -82,8 +82,4 @@ public class Lcd20x4Endpoint extends TinkerforgeEndpoint {
 	public void setBlink(boolean blink) {
 		this.blink = blink;
 	}
-
-	public boolean isSingleton() {
-        return false;
-    }
 }

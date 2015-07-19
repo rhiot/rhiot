@@ -50,4 +50,9 @@ public abstract class TinkerforgeEndpoint extends DefaultEndpoint {
     public void setUid(String uid) {
         this.uid = uid;
     }
+    
+    @Override
+    public boolean isSingleton() {
+        return true;
+    }
 }

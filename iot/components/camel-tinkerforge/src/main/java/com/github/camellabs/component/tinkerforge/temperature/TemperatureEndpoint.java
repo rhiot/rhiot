@@ -47,10 +47,6 @@ public class TemperatureEndpoint extends TinkerforgeEndpoint {
         return consumer != null ? consumer : (consumer = new TemperatureConsumer(this, processor));
     }
 
-	public boolean isSingleton() {
-        return false;
-    }
-
     public int getInterval() {
         return interval;
     }

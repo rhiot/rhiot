@@ -91,9 +91,4 @@ public class LedstripEndpoint extends TinkerforgeEndpoint {
     public void setRgbPattern(String rgbPattern) {
         this.rgbPattern = rgbPattern;
     }
-
-    @Override
-	public boolean isSingleton() {
-        return false;
-    }
 }

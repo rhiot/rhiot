@@ -47,11 +47,6 @@ public class HumidityEndpoint extends TinkerforgeEndpoint {
         return consumer != null ? consumer : (consumer = new HumidityConsumer(this, processor));
     }
 
-    @Override
-	public boolean isSingleton() {
-        return false;
-    }
-
     public int getInterval() {
         return interval;
     }

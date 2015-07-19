@@ -42,9 +42,4 @@ public class MotionEndpoint extends TinkerforgeEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         return consumer != null ? consumer : (consumer = new MotionConsumer(this, processor));
     }
-
-    @Override
-	public boolean isSingleton() {
-        return false;
-    }
 }

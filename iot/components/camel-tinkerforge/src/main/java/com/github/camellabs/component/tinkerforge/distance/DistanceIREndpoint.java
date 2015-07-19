@@ -46,11 +46,6 @@ public class DistanceIREndpoint extends TinkerforgeEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         return consumer != null ? consumer : (consumer = new DistanceIRConsumer(this, processor));
     }
-    
-    @Override
-	public boolean isSingleton() {
-        return false;
-    }
 
     public Integer getInterval() {
         return interval;

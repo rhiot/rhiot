@@ -56,8 +56,4 @@ public class SolidStateRelayEndpoint extends TinkerforgeEndpoint {
     public void setDuration(int duration) {
         this.duration = duration;
     }
-
-    public boolean isSingleton() {
-        return false;
-    }
 }

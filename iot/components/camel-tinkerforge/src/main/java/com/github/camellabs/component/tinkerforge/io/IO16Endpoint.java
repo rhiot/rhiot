@@ -66,9 +66,4 @@ public class IO16Endpoint extends TinkerforgeEndpoint {
     public void setDebounce(int debounce) {
         this.debounce = debounce;
     }
-
-    @Override
-	public boolean isSingleton() {
-        return false;
-    }
 }

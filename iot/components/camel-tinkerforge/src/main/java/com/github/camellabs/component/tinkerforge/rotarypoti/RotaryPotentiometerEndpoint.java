@@ -47,10 +47,6 @@ public class RotaryPotentiometerEndpoint extends TinkerforgeEndpoint {
         return consumer != null ? consumer : (consumer = new RotaryPotentiometerConsumer(this, processor));
     }
 
-	public boolean isSingleton() {
-        return false;
-    }
-
     public int getInterval() {
         return interval;
     }

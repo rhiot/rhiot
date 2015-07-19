@@ -31,18 +31,22 @@ public class PiezoSpeakerProducer extends TinkerforgeProducer<PiezoSpeakerEndpoi
 
     public PiezoSpeakerProducer(PiezoSpeakerEndpoint endpoint) throws IOException, AlreadyConnectedException {
         super(endpoint, BrickletPiezoSpeaker.DEVICE_IDENTIFIER);
+        System.out.println("PiezoSpeakerProducer()");
     }
 
     @Override
     protected BrickletPiezoSpeaker createBricklet(String uid, IPConnection connection) {
+        System.out.println("createBricklet()");
         return new BrickletPiezoSpeaker(uid, connection);
     }
 
     @Override
     protected void configureBricklet() throws TimeoutException, NotConnectedException {
+        System.out.println("configureBricklet()");
     }
 
     public void process(Exchange exchange) throws Exception {
+        System.out.println("process()");
         Integer frequency = exchange.getIn().getHeader("frequency", endpoint.getFrequency(), Integer.class);
         Integer duration = exchange.getIn().getHeader("duration", endpoint.getDuration(), Integer.class);
 

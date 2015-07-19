@@ -66,8 +66,4 @@ public class DualRelayEndpoint extends TinkerforgeEndpoint {
     public void setDuration(int duration) {
         this.duration = duration;
     }
-
-    public boolean isSingleton() {
-        return false;
-    }
 }

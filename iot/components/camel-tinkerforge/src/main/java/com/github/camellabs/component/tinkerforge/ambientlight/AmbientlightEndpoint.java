@@ -47,11 +47,6 @@ public class AmbientlightEndpoint extends TinkerforgeEndpoint {
         return consumer != null ? consumer : (consumer = new AmbientlightConsumer(this, processor));
     }
 
-    @Override
-	public boolean isSingleton() {
-        return false;
-    }
-
     public Integer getInterval() {
         return interval;
     }

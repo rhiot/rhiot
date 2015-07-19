@@ -46,10 +46,6 @@ public class SoundIntensityEndpoint extends TinkerforgeEndpoint {
         return consumer != null ? consumer : (consumer = new SoundIntensityConsumer(this, processor));
     }
 
-	public boolean isSingleton() {
-        return false;
-    }
-
     public int getInterval() {
         return interval;
     }
