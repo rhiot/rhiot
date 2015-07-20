@@ -16,10 +16,25 @@
  */
 package com.github.camellabs.iot.vertx.camel
 
+import org.apache.camel.CamelContext
+
+/**
+ * Static singleton access point for the CamelContext instance shared between the verticles in the same JVM.
+ */
 class CamelContextFactories {
+
+    private static CamelContext camelContext
 
     static CamelContextFactory resolveCamelContextFactory() {
         new DefaultCamelContextFactory()
+    }
+
+    static CamelContext camelContext() {
+        if(camelContext == null) {
+            camelContext = resolveCamelContextFactory().createCamelContext()
+            camelContext.start()
+        }
+        camelContext
     }
 
 }
