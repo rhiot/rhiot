@@ -17,12 +17,11 @@
 package com.github.camellabs.iot.gateway
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.camellabs.iot.gateway.heartbeat.HeartbeatVerticle
-import com.github.camellabs.iot.gateway.heartbeat.LoggingHeartbeatVerticle
-import com.github.camellabs.iot.vertx.PropertyResolver
+import io.vertx.core.Vertx
 import org.reflections.Reflections
 
 import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
+import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.connect
 import static io.vertx.groovy.core.Vertx.vertx
 import static java.lang.Boolean.parseBoolean
 
@@ -33,6 +32,7 @@ class VertxGateway {
     static final def JSON = new ObjectMapper()
 
     VertxGateway() {
+        connect(vertx.delegate.asType(Vertx.class))
         new Reflections('').getTypesAnnotatedWith(GatewayVerticle.class).each {
             String conditionProperty = it.getAnnotation(GatewayVerticle.class).conditionProperty()
             if(conditionProperty.isEmpty() || parseBoolean(stringProperty(conditionProperty))) {
