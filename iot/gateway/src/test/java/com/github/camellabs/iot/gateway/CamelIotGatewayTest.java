@@ -30,26 +30,20 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static com.github.camellabs.iot.gateway.CamelIotGatewayConstants.HEARTBEAT_ENDPOINT;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = CamelIotGatewayTest.class)
-@IntegrationTest("camellabs.iot.gateway.heartbeat.mqtt=true")
 public class CamelIotGatewayTest extends Assert {
 
     static int mqttPort = findAvailableTcpPort();
 
-    @EndpointInject(uri = "mock:test")
-    MockEndpoint mockEndpoint;
-
     @Autowired
     ConsumerTemplate consumerTemplate;
 
-    @Bean
-    RouteBuilderCallback mockRouteBuilderCallback() {
-        return routeBuilder -> routeBuilder.interceptFrom(HEARTBEAT_ENDPOINT).to("mock:test");
+    static {
+        System.setProperty("camellabs.iot.gateway.heartbeat.mqtt", true + "");
     }
 
     // TODO https://github.com/camel-labs/camel-labs/issues/66 (Camel Spring Boot should start embedded MQTT router for tests)
@@ -70,14 +64,8 @@ public class CamelIotGatewayTest extends Assert {
     // Tests
 
     @Test
-    public void shouldInterceptHeartbeatEndpoint() throws InterruptedException {
-        mockEndpoint.setMinimumExpectedMessageCount(1);
-        mockEndpoint.assertIsSatisfied();
-    }
-
-    @Test
     public void shouldReceiveHeartbeatMqttMessage() {
-        String heartbeat = consumerTemplate.receiveBody("paho:heartbeat?brokerUrl={{camellabs.iot.gateway.heartbeat.mqtt.broker.url}}", String.class);
+        String heartbeat = consumerTemplate.receiveBody("paho:heartbeat?brokerUrl=tcp://localhost:" + mqttPort, String.class);
         assertNotNull(heartbeat);
     }
 

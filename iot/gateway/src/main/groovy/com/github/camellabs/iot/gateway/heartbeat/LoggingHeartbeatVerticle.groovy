@@ -16,11 +16,13 @@
  */
 package com.github.camellabs.iot.gateway.heartbeat
 
+import com.github.camellabs.iot.gateway.GatewayVerticle
 import io.vertx.lang.groovy.GroovyVerticle
 import org.slf4j.Logger
 
 import static org.slf4j.LoggerFactory.getLogger
 
+@GatewayVerticle
 class LoggingHeartbeatVerticle extends GroovyVerticle {
 
     private static final Logger LOG = getLogger(LoggingHeartbeatVerticle.class)

@@ -16,11 +16,13 @@
  */
 package com.github.camellabs.iot.gateway.heartbeat
 
+import com.github.camellabs.iot.gateway.GatewayVerticle
 import io.vertx.lang.groovy.GroovyVerticle
 
 import static com.github.camellabs.iot.gateway.VertxGateway.JSON
 import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
 
+@GatewayVerticle
 class HeartbeatVerticle extends GroovyVerticle {
 
     @Override
