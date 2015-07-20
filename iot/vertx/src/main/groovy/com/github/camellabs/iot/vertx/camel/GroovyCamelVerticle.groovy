@@ -16,24 +16,21 @@
  */
 package com.github.camellabs.iot.vertx.camel
 
-import io.vertx.core.Vertx
 import io.vertx.lang.groovy.GroovyVerticle
 import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.component.vertx.VertxComponent
 import org.apache.camel.model.RouteDefinition
 
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
 
+/**
+ * Base class for the verticles that are supposed to access CamelContext and bridge Camel with the event bus.
+ */
 class GroovyCamelVerticle extends GroovyVerticle {
 
-    @Override
-    void start() throws Exception {
-        def vertxComponent = new VertxComponent(vertx: vertx.delegate.asType(Vertx.class))
-        camelContext().addComponent('vertx', vertxComponent)
-    }
+    protected def camelContext = camelContext()
 
     def fromEventBus(String address, Closure<RouteDefinition> routeCallback) {
-        camelContext().addRoutes(new RouteBuilder() {
+        camelContext.addRoutes(new RouteBuilder() {
             @Override
             void configure() throws Exception {
                 routeCallback(from("vertx:${address}"))

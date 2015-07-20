@@ -16,7 +16,9 @@
  */
 package com.github.camellabs.iot.vertx.camel
 
+import io.vertx.core.Vertx
 import org.apache.camel.CamelContext
+import org.apache.camel.component.vertx.VertxComponent
 
 /**
  * Static singleton access point for the CamelContext instance shared between the verticles in the same JVM.
@@ -27,6 +29,14 @@ class CamelContextFactories {
 
     static CamelContextFactory resolveCamelContextFactory() {
         new DefaultCamelContextFactory()
+    }
+
+    synchronized static connect(Vertx vertx){
+        if(camelContext().getComponent('vertx') != null) {
+            camelContext().removeComponent('vertx')
+        }
+        def vertxComponent = new VertxComponent(vertx: vertx)
+        camelContext().addComponent('vertx', vertxComponent)
     }
 
     static CamelContext camelContext() {
