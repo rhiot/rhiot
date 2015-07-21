@@ -82,6 +82,7 @@ class PerformanceTester {
             println(info.message)
         } finally {
             tester.mqttServer.stop()
+            System.exit(0)
         }
     }
 
