@@ -19,11 +19,16 @@ package com.github.camellabs.iot.vertx.camel
 import io.vertx.core.Vertx
 import org.apache.camel.CamelContext
 import org.apache.camel.component.vertx.VertxComponent
+import org.slf4j.Logger
+
+import static org.slf4j.LoggerFactory.getLogger
 
 /**
  * Static singleton access point for the CamelContext instance shared between the verticles in the same JVM.
  */
 class CamelContextFactories {
+
+    private static final Logger LOG = getLogger(CamelContextFactories.class)
 
     private static CamelContext camelContext
 
@@ -31,15 +36,21 @@ class CamelContextFactories {
         new DefaultCamelContextFactory()
     }
 
-    synchronized static connect(Vertx vertx){
-        if(camelContext().getComponent('vertx') != null) {
+    synchronized static connect(Vertx vertx) {
+        LOG.debug('Connecting to the Vert.x instance {}.', vertx)
+        if(camelContext().hasComponent('vertx') != null) {
             camelContext().removeComponent('vertx')
         }
         def vertxComponent = new VertxComponent(vertx: vertx)
         camelContext().addComponent('vertx', vertxComponent)
     }
 
-    static CamelContext camelContext() {
+    /**
+     * Global access point for accessing singleton CamelContext instance.
+     *
+     * @return Started singleton CamelContext instance.
+     */
+    synchronized static CamelContext camelContext() {
         if(camelContext == null) {
             camelContext = resolveCamelContextFactory().createCamelContext()
             camelContext.start()
