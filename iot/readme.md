@@ -713,6 +713,22 @@ plugged into the USB port.
 <img src="images/rpi2_bu353_open.jpg" align="center" height="500" hspace="30">
 <img src="images/rpi2_bu353_closed.jpg" align="center" height="500" hspace="30">
 
+### Running the performance tester
+
+The easiest way to run the performance benchmark is to execute it as a Docker image, using the following command:
+
+    docker run -v=/tmp/gateway-performance:/tmp/gateway-performance --net=host camellabs/performance-of RPI2
+
+Keep in mind that `RPI2` can be replaced with the other supported hardware profile (like `RPI2_BU353`). The performance
+tester detects the tests that can be executed for the given hardware profile, deploy the gateway software to the target
+device, executes the tests and collects the results.
+
+When the execution
+of the benchmark ends, the result diagrams will be located in the `/tmp/gateway-performance` directory (or any other
+directory you specified when executing the command above). The sample diagram may look as follows:
+
+<a href="https://github.com/camel-labs/camel-labs/iot"><img src="images/sample_perf_chart.png" align="center" height="400" hspace="30"></a>
+
 
 ## Articles, presentations & videos
 
