@@ -198,12 +198,14 @@ the current time converted to the Java miliseconds.
 
 #### LED heartbeat
 
-For activating LED heartbead set `camellabs.iot.gateway.heartbeat.led` environment variable to `true`. Like this 
+Heartbeats can blink the LED node connected to the gateway device. This is great visual indication that the gateway
+software is still up and running. For activating LED heartbeat set `camellabs.iot.gateway.heartbeat.led` property to `true`.
+Like this
 
     export camellabs.iot.gateway.heartbeat.led=true
     
 The LED output port can be set via `camellabs.iot.gateway.heartbeat.led.gpioId` environment variable, Default value is 0 *wiring lib pin index*
-Change LED output port like this :
+Change LED output port like this:
 
     export camellabs.iot.gateway.heartbeat.led.gpioId=11
 

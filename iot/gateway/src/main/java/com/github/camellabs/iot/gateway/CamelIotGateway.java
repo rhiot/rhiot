@@ -29,25 +29,4 @@ public class CamelIotGateway extends FatJarRouter {
 
     VertxGateway vertxGateway = new VertxGateway().start();
 
-    // SPI callbacks
-
-    @Autowired(required = false)
-    RouteBuilderCallback[] routeBuilderCallbacks;
-
-    // Routes
-
-    @Override
-    public void configure() throws Exception {
-        if(routeBuilderCallbacks != null) {
-            for (RouteBuilderCallback builderCallback : routeBuilderCallbacks) {
-                builderCallback.beforeRoutesDefinition(this);
-            }
-        }
-
-        from("timer:heartbeat?delay={{camellabs_iot_gateway_heartbeat_rate:5000}}").routeId(HEARTBEAT_TRIGGER_ROUTE_ID).
-                to(HEARTBEAT_ENDPOINT);
-
-        from(HEARTBEAT_ENDPOINT).process(exchange -> {});
-    }
-
 }
