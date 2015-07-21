@@ -24,7 +24,7 @@ import java.util.concurrent.CountDownLatch
 
 class HeartbeatVerticleTest extends Assert {
 
-    def gateway = new VertxGateway()
+    def gateway = new VertxGateway().start()
 
     @Test
     void shouldReceiveHeartbeatFromEventBus() {

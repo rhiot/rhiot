@@ -19,26 +19,34 @@ package com.github.camellabs.iot.gateway
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.vertx.core.Vertx
 import org.reflections.Reflections
+import org.reflections.util.ConfigurationBuilder
 
 import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.connect
 import static io.vertx.groovy.core.Vertx.vertx
 import static java.lang.Boolean.parseBoolean
+import static org.reflections.util.ClasspathHelper.forJavaClassPath
 
+/**
+ * IoT gateway boostrap. Starts Vert.x event bus, detects verticles and starts these.
+ */
 class VertxGateway {
 
     final def vertx = vertx()
 
+    final def classpath = new Reflections(new ConfigurationBuilder().setUrls(forJavaClassPath()))
+
     static final def JSON = new ObjectMapper()
 
-    VertxGateway() {
+    VertxGateway start() {
         connect(vertx.delegate.asType(Vertx.class))
-        new Reflections('').getTypesAnnotatedWith(GatewayVerticle.class).each {
+        classpath.getTypesAnnotatedWith(GatewayVerticle.class).each {
             String conditionProperty = it.getAnnotation(GatewayVerticle.class).conditionProperty()
             if(conditionProperty.isEmpty() || parseBoolean(stringProperty(conditionProperty))) {
                 vertx.deployVerticle("groovy:${it.getName()}")
             }
         }
+        this
     }
 
 }

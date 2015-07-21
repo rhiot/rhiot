@@ -27,7 +27,7 @@ import static org.apache.camel.LoggingLevel.INFO;
 @SpringBootApplication
 public class CamelIotGateway extends FatJarRouter {
 
-    VertxGateway vertxGateway = new VertxGateway();
+    VertxGateway vertxGateway = new VertxGateway().start();
 
     // SPI callbacks
 
