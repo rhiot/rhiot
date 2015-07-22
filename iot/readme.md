@@ -703,7 +703,8 @@ and compare the generated diagrams.
 ### Hardware profiles
 
 This section covers the *hardware profiles* for the performance tests. Profiles are used to describe the particular
-hardware configuration that can be used as a target device for the performance benchmark.
+hardware configuration that can be used as a target device for the performance benchmark. Every performance test
+definition can be executed on the particular hardware profiles.
 
 #### Raspberry PI 2 B+ (aka RPI2)
 
