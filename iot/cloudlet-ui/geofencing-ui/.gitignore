@@ -1,9 +1,0 @@
-dist/
-libs/
-node/
-node_modules/
-# **/ts/*.js # This file is not generated on the Travsic CI.
-**/ts/*.js.map
-/target/
-**/d.ts/**
-defs.d.ts

@@ -27,8 +27,6 @@
         <module>gateway</module>
         <module>gateway-app</module>
         <module>cloudlet</module>
-        <module>cloudlet-hawtio</module>
-        <module>cloudlet-ui</module>
         <module>feature</module>
         <module>deployer</module>
         <module>deployer-app</module>
