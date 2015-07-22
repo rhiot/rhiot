@@ -21,6 +21,7 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
     - [MQTT heartbeat](#mqtt-heartbeat)
     - [LED heartbeat](#led-heartbeat)
   - [Monitoring gateway with Jolokia](#monitoring-gateway-with-jolokia)
+  - [Adding the custom code to the gateway](#adding-the-custom-code-to-the-gateway)
 - [Camel IoT components](#camel-iot-components)
   - [Camel GPS BU353 component](#camel-gps-bu353-component)
     - [Maven dependency](#maven-dependency)
@@ -65,6 +66,10 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
   - [Hardware profiles](#hardware-profiles)
     - [Raspberry PI 2 B+ (aka RPI2)](#raspberry-pi-2-b-aka-rpi2)
     - [Raspberry PI 2 B+ (aka RPI2_BU353)](#raspberry-pi-2-b-aka-rpi2_bu353)
+  - [Running the performance tester](#running-the-performance-tester)
+  - [Analysis of the selected tests results](#analysis-of-the-selected-tests-results)
+    - [Mock sensor to the external MQTT broker](#mock-sensor-to-the-external-mqtt-broker)
+    - [Sample results for the RPI2 hardware kit](#sample-results-for-the-rpi2-hardware-kit)
 - [Articles, presentations & videos](#articles-presentations-&-videos)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
