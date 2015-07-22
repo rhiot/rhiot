@@ -64,7 +64,7 @@ class PerformanceTester {
             def json = new ObjectMapper()
             def processingTime = test.processingTime(device)
             def processed = json.readValue(
-                    new URL("http://${device.address().hostAddress}:8080/jolokia/read/org.apache.camel:context=camel-1,type=routes,name=\"mockSensorConsumer\"/ExchangesTotal"),
+                    new URL("http://${device.address().hostAddress}:8080/jolokia/read/org.apache.camel:context=camel-2,type=routes,name=\"mockSensorConsumer\"/ExchangesTotal"),
                     Map.class)['value'].toString().toLong()
             def result = new TestResult(test.testGroup(), test.variationLabel(), processed, processingTime)
             resultsProcessors.each { it.processResult(result) }
@@ -82,7 +82,7 @@ class PerformanceTester {
             println(info.message)
         } finally {
             tester.mqttServer.stop()
-            System.exit(0)
+            tester.deployer.close()
         }
     }
 
