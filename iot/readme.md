@@ -62,7 +62,7 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
       - [Producing](#producing-2)
 - [Cloudlets](#cloudlets)
   - [On-premises deployment](#on-premises-deployment)
-- [Performance testing framework](#performance-testing-framework)
+- [Performance Testing Framework](#performance-testing-framework)
   - [Hardware profiles](#hardware-profiles)
     - [Raspberry PI 2 B+ (aka RPI2)](#raspberry-pi-2-b-aka-rpi2)
     - [Raspberry PI 2 B+ (aka RPI2_BU353)](#raspberry-pi-2-b-aka-rpi2_bu353)
@@ -681,7 +681,7 @@ To deploy only UI artifacts, add DEPLOY_UI parameter to the script, just as demo
 
     ./deploy-cloud.sh DEPLOY_UI       
 
-## Performance testing framework
+## Performance Testing Framework
 
 The key part of the process of tailoring the perfect IoT solution is choosing the proper hardware for the gateway device.
 In general the more expensive gateway hardware is, the more messages per second you can process. However the more
@@ -695,6 +695,10 @@ test application into these, executing the actual tests and generating the resul
 For example the sample output for the MQTT QOS testing could generate the following diagram:
 
 <img src="images/sample_perf_chart.png" align="center" height="400" hspace="30">
+
+Performance Testing Framework excels when you would like to answer the following question - how the different field hardware setups
+perform against the given task. Just connect your devices to the local network, execute the performance testing application
+and compare the generated diagrams.
 
 ### Hardware profiles
 
