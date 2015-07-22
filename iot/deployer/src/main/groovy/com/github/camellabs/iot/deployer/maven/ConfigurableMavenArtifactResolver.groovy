@@ -20,8 +20,7 @@ import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
 
-import static com.github.camellabs.iot.deployer.maven.Repository.mavenCentral
-import static com.github.camellabs.iot.deployer.maven.Repository.sonatypeSnapshots
+import static com.github.camellabs.iot.deployer.maven.Repository.standardRepositories
 import static java.util.concurrent.Executors.newSingleThreadExecutor
 
 abstract class ConfigurableMavenArtifactResolver implements MavenArtifactResolver {
@@ -35,11 +34,14 @@ abstract class ConfigurableMavenArtifactResolver implements MavenArtifactResolve
     }
 
     ConfigurableMavenArtifactResolver() {
-        this.repositories = [mavenCentral(), sonatypeSnapshots()].asImmutable();
+        this(standardRepositories())
     }
 
     abstract protected InputStream fetchArtifactStream(String groupId, String artifactId, String version, String extension)
 
+    // Overridden
+
+    @Override
     Future<InputStream> artifactStream(String groupId, String artifactId, String version, String extension) {
         executor.submit(new Callable() {
             @Override

@@ -35,6 +35,14 @@ class Repository {
         new Repository('sonatypeSnapshots', "https://oss.sonatype.org/content/repositories/snapshots");
     }
 
+    static Repository apacheSnapshots() {
+        new Repository('apacheSnapshots', 'https://repository.apache.org/content/repositories/snapshots')
+    }
+
+    static List<Repository> standardRepositories() {
+        [mavenCentral(), sonatypeSnapshots(), apacheSnapshots()].asImmutable()
+    }
+
     public String id() {
         return id;
     }
