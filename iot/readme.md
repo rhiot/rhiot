@@ -729,6 +729,34 @@ directory you specified when executing the command above). The sample diagram ma
 
 <a href="https://github.com/camel-labs/camel-labs/iot"><img src="images/sample_perf_chart.png" align="center" height="400" hspace="30"></a>
 
+### Analysis of the selected tests results
+
+Below we present some performance benchmarks with the comments regarding the resulted numbers.
+
+#### Mock sensor to the external MQTT broker
+
+In this test we generate mock sensor events in the gateway using the timer trigger. The message is the random UUID encoded
+to the array of bytes. Then we send those messages to the
+external MQTT broker. We test and compare various MQTT QOS levels. The MQTT client used to send the messages is
+[Eclipse Paho](https://www.eclipse.org/paho/).
+
+#### Sample results for the RPI2 hardware kit
+
+<img src="images/RPI2 Mock sensor to external MQTT broker.png" align="center" height="500" hspace="30">
+
+The very first question that comes to the mind when you look at these benchmarks is why there is so huge difference between
+the MQTT QOS level 0 and the other QOS levels? The reason is that currently Eclipse Paho client doesn't work well with
+QOS greater than 0 and the high messages load. The reason for that is that Paho client enforces inflight messages limit to 10. This
+is pretty restrictive treshold considering that MQTT client should have more time for receiving the acknowledgement from the
+MQTT server. Such acknowledgement is required for the MQTT QOS levels greater than 0. Waiting for the acknowledge reply
+from the server increases the number of the inflight messages hold by the Paho client. As a result Paho client
+throughput for QOS 1 and 2 is limited for the extremely large number of messages.
+
+Regardless of the current Paho limits (that are very likely to be changed in the future), the overall performance of the
+MQTT client is really great. As the majority of the gateway solutions can safely uses the QOS 0 for forwarding the data
+from the field to the data center (as losing the single message from the stream of the sensors data, is definitely acceptable).
+Almost 2000 messages per second for QOS 0 and around 100 messages per second for the highest QOS 2 is really good result
+considering the class of the Raspberry Pi 2 hardware.
 
 ## Articles, presentations & videos
 
