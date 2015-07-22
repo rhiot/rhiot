@@ -54,6 +54,10 @@ class Deployer {
         this(false)
     }
 
+    def close() {
+        artifactResolver.close()
+    }
+
     Device deploy(Map<String, String> additionalProperties) {
         def gatewayJar = artifactResolver.artifactStream('com.github.camel-labs', 'camel-labs-iot-gateway-app', '0.1.1-SNAPSHOT')
 

@@ -56,4 +56,9 @@ abstract class ConfigurableMavenArtifactResolver implements MavenArtifactResolve
         return artifactStream(groupId, artifactId, version, 'jar');
     }
 
+    @Override
+    void close() {
+        executor.shutdownNow()
+    }
+
 }

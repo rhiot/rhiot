@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer.device.maven
+package com.github.camellabs.iot.deployer.maven
 
-import com.github.camellabs.iot.deployer.maven.JcabiMavenArtifactResolver
 import org.junit.Assert
 import org.junit.Test
 
@@ -31,6 +30,15 @@ class JcabiMavenArtifactResolverTest extends Assert {
 
         // Then
         assertTrue(artifact.get().available() > 0)
+    }
+
+    @Test
+    void shouldShutdownExecutor() {
+        // When
+        resolver.close()
+
+        // Then
+        assertTrue(resolver.@executor.isShutdown())
     }
 
 }

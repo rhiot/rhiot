@@ -24,4 +24,6 @@ interface MavenArtifactResolver {
 
     Future<InputStream> artifactStream(String groupId, String artifactId, String version)
 
+    void close()
+
 }
