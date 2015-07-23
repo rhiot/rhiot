@@ -65,7 +65,7 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
 - [Performance Testing Framework](#performance-testing-framework)
   - [Hardware profiles](#hardware-profiles)
     - [Raspberry PI 2 B+ (aka RPI2)](#raspberry-pi-2-b-aka-rpi2)
-    - [Raspberry PI 2 B+ (aka RPI2_BU353)](#raspberry-pi-2-b-aka-rpi2_bu353)
+    - [Raspberry PI 2 B+ with BU353 (aka RPI2_BU353)](#raspberry-pi-2-b-with-bu353-aka-rpi2_bu353)
   - [Running the performance tester](#running-the-performance-tester)
   - [Analysis of the selected tests results](#analysis-of-the-selected-tests-results)
     - [Mock sensor to the external MQTT broker](#mock-sensor-to-the-external-mqtt-broker)
@@ -715,7 +715,7 @@ system (version 2015-05-05).
 <img src="images/rpi2_open.jpg" align="center" height="600" hspace="30">
 <img src="images/rpi2_closed.jpg" align="center" height="600" hspace="30">
 
-#### Raspberry PI 2 B+ (aka RPI2_BU353)
+#### Raspberry PI 2 B+ with BU353 (aka RPI2_BU353)
 
 The `RPI2_BU353` hardware profile is the same as `RPI2` profile, but additionally equipped with the
 [BU353 GPS receiver](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg)
