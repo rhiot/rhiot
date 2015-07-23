@@ -726,7 +726,9 @@ plugged into the USB port.
 
 ### Running the performance tester
 
-The easiest way to run the performance benchmark is to execute it as a Docker image, using the following command:
+The easiest way to run the performance benchmark is to connect the target device (for example Rapsberry Pi) into your
+local network (for example via the WiFi or the Ethernet cable) and start the tester as a Docker container, using the
+following command:
 
     docker run -v=/tmp/gateway-performance:/tmp/gateway-performance --net=host camellabs/performance-of RPI2
 
