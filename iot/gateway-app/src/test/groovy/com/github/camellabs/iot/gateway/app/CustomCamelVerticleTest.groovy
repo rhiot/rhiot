@@ -32,10 +32,15 @@ class CustomCamelVerticleTest {
         runMainInNewThread(FatJarRouter.class)
     }
 
+    // Tests
+
     @Test
     void shouldReceiveHeartbeat() {
+        // Given
         def mockEndpoint = camelContext().getEndpoint('mock:camelHeartbeatConsumer', MockEndpoint.class)
         mockEndpoint.setMinimumExpectedMessageCount(1)
+
+        // Then
         MockEndpoint.assertIsSatisfied(1, MINUTES, mockEndpoint)
     }
 
@@ -46,7 +51,6 @@ class HeartbeatConsumerVerticle extends GroovyCamelVerticle {
 
     @Override
     void start() {
-        super.start()
         fromEventBus('heartbeat') { it.to('mock:camelHeartbeatConsumer') }
     }
 
