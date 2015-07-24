@@ -17,12 +17,8 @@
 package com.github.camellabs.iot.gateway;
 
 import org.apache.camel.spring.boot.FatJarRouter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import static com.github.camellabs.iot.gateway.CamelIotGatewayConstants.HEARTBEAT_ENDPOINT;
-import static com.github.camellabs.iot.gateway.CamelIotGatewayConstants.HEARTBEAT_TRIGGER_ROUTE_ID;
-import static org.apache.camel.LoggingLevel.INFO;
 
 @SpringBootApplication
 public class CamelIotGateway extends FatJarRouter {

@@ -18,12 +18,6 @@ package com.github.camellabs.iot.gateway;
 
 public final class CamelIotGatewayConstants {
 
-    public static String BUS_HEARTBEAT = "heartbeat";
-
-    public static String HEARTBEAT_ENDPOINT = "direct:heartbeat";
-
-    public static String HEARTBEAT_TRIGGER_ROUTE_ID = "heartbeatTrigger";
-
     private CamelIotGatewayConstants() {
     }
 

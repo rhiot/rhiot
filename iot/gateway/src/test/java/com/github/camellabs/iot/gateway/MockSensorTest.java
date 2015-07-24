@@ -37,9 +37,6 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = MockSensorTest.class)
-@IntegrationTest({
-        "camellabs_iot_gateway_mock_sensor=true",
-        "camellabs_iot_gateway_mock_sensor_consumer=true"})
 public class MockSensorTest extends Assert {
 
     // Collaborators fixtures
@@ -48,6 +45,8 @@ public class MockSensorTest extends Assert {
 
     @BeforeClass
     public static void beforeClass() throws UnknownHostException {
+        setProperty("camellabs_iot_gateway_mock_sensor", "true");
+        setProperty("camellabs_iot_gateway_mock_sensor_consumer", "true");
         setProperty("camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url", "tcp://localhost:" + mqttPort);
     }
 
