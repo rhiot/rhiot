@@ -243,6 +243,54 @@ project including the gateway core dependency:
 Now all your custom code can just be added to the project. The resulting fat jar will contain both gateway core logic
 and your custom code.
 
+#### Adding custom Groovy Camel verticle to the gateway
+
+As Camel Labs gateway uses Vert.x event bus as its messaging core, the recommended option to add new Camel routes to the
+gateway is to deploy those as the Vert.x verticle. The Vert.x helper classes for the gateway are available in the
+following jar:
+
+    <dependencies>
+      <dependency>
+        <groupId>com.github.camel-labs</groupId>
+        <artifactId>camel-labs-iot-vertx</artifactId>
+        <version>0.1.1</version>
+      </dependency>
+    </dependencies>
+
+In order to create Vert.x verticle that can access single `CamelContex` instance shared between all the verticles
+within the given JVM, extend the `com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle` class:
+
+    @GatewayVerticle
+    class HeartbeatConsumerVerticle extends GroovyCamelVerticle {
+
+        @Override
+        void start() {
+            fromEventBus('heartbeat') { it.to('mock:camelHeartbeatConsumer') }
+        }
+
+    }
+
+Camel Labs gateway scans the classpath for the verticle classes marked with the `com.github.camellabs.iot.gateway.GatewayVerticle`
+annotation. All those verticles are automatically loaded into the Vert.x backbone.
+
+As you can see in the example above you can read the messages from the event bus and forward these to your Camel
+route using the `fromEventBus(channel, closure(route))` method. You can also access the Camel context directly:
+
+    @GatewayVerticle
+    class HeartbeatConsumerVerticle extends GroovyCamelVerticle {
+
+        @Override
+        void start() {
+            camelContext.addRoutes(new RouteBuilder(){
+                @Override
+                void configure() {
+                    from('timer:test').to('seda:test')
+                }
+            })
+        }
+
+    }
+
 ## Camel IoT components
 
 Camel IoT Labs brings some extra components for the Apache Camel intended to make both device- and server-side IoT
