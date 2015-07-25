@@ -28,7 +28,7 @@
         <camel-labs.version>0.1.1-SNAPSHOT</camel-labs.version>
         <embedmongo.version>1.48.0</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
-        <infinispan.version>8.0.0.Beta1</infinispan.version>
+        <infinispan.version>8.0.0.Beta2</infinispan.version>
         <ivy.version>2.4.0</ivy.version>
         <jcabi-aether.version>0.10.1</jcabi-aether.version>
         <jfreechart.version>1.0.19</jfreechart.version>
