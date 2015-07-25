@@ -16,6 +16,7 @@
  */
 package com.github.camellabs.iot.gateway;
 
+import com.github.camellabs.iot.vertx.camel.CamelContextFactories;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.RoutesBuilder;
@@ -25,6 +26,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -35,8 +37,6 @@ import java.net.UnknownHostException;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = MockSensorTest.class)
 public class MockSensorTest extends Assert {
 
     // Collaborators fixtures
@@ -44,42 +44,33 @@ public class MockSensorTest extends Assert {
     static int mqttPort = findAvailableTcpPort();
 
     @BeforeClass
-    public static void beforeClass() throws UnknownHostException {
-        setProperty("camellabs_iot_gateway_mock_sensor", "true");
-        setProperty("camellabs_iot_gateway_mock_sensor_consumer", "true");
-        setProperty("camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url", "tcp://localhost:" + mqttPort);
-    }
-
-    // TODO https://github.com/camel-labs/camel-labs/issues/66 (Camel Spring Boot should start embedded MQTT router for tests)
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    BrokerService broker() throws Exception {
+    public static void beforeClass() throws Exception {
         BrokerService broker = new BrokerService();
-        broker.setBrokerName(getClass().getName());
+        broker.setBrokerName(MockSensorTest.class.getName());
         broker.setPersistent(false);
         broker.addConnector("mqtt://localhost:" + mqttPort);
-        return broker;
-    }
+        broker.start();
 
-    // Test routing fixtures
-
-    @EndpointInject(uri = "mock:test")
-    MockEndpoint mockEndpoint;
-
-    @Bean
-    RoutesBuilder mqttConsumer() {
-        return new RouteBuilder() {
+        CamelContextFactories.camelContext().addRoutes(new RouteBuilder() {
             @Override
             public void configure() throws Exception {
                 from("paho:mock?brokerUrl=tcp://localhost:" + mqttPort).
                         to("mock:test");
             }
-        };
+        });
+
+        setProperty("camellabs_iot_gateway_mock_sensor", "true");
+        setProperty("camellabs_iot_gateway_mock_sensor_consumer", "true");
+        setProperty("camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url", "tcp://localhost:" + mqttPort);
+
+        new VertxGateway().start();
     }
 
     // Tests
 
     @Test
     public void shouldSendMockEventsToTheMqttServer() throws InterruptedException {
+        MockEndpoint mockEndpoint = CamelContextFactories.camelContext().getEndpoint("mock:test", MockEndpoint.class);
         mockEndpoint.setMinimumExpectedMessageCount(1000);
         mockEndpoint.assertIsSatisfied();
     }

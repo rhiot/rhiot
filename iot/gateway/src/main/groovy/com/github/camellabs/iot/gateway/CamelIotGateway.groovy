@@ -14,15 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.gateway;
+package com.github.camellabs.iot.gateway
 
-import org.apache.camel.spring.boot.FatJarRouter;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import org.apache.camel.spring.boot.FatJarRouter
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
 
 @SpringBootApplication
 public class CamelIotGateway extends FatJarRouter {
 
-    VertxGateway vertxGateway = new VertxGateway().start();
+    public static void main(String... args) {
+        new VertxGateway().start()
+        new SpringApplication(CamelIotGateway.class).run(args);
+    }
 
 }

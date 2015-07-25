@@ -18,8 +18,11 @@ package com.github.camellabs.iot.gateway
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.vertx.core.Vertx
+import org.jolokia.jvmagent.JvmAgent
 import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.connect
@@ -32,6 +35,8 @@ import static org.reflections.util.ClasspathHelper.forJavaClassPath
  */
 class VertxGateway {
 
+    private static final Logger LOG = LoggerFactory.getLogger(VertxGateway.class)
+
     final def vertx = vertx()
 
     final def classpath = new Reflections(new ConfigurationBuilder().setUrls(forJavaClassPath()))
@@ -41,12 +46,19 @@ class VertxGateway {
     VertxGateway start() {
         connect(vertx.delegate.asType(Vertx.class))
         classpath.getTypesAnnotatedWith(GatewayVerticle.class).each {
+            LOG.debug('Classpath scanner found gateway verticle {}.', it.name)
             String conditionProperty = it.getAnnotation(GatewayVerticle.class).conditionProperty()
             if(conditionProperty.isEmpty() || parseBoolean(stringProperty(conditionProperty))) {
-                vertx.deployVerticle("groovy:${it.getName()}")
+                LOG.debug('Loading gateway verticle {}.', it.name)
+                vertx.deployVerticle("groovy:${it.name}")
             }
         }
         this
+    }
+
+    public static void main(String[] args) {
+        JvmAgent.agentmain('')
+        new VertxGateway().start()
     }
 
 }

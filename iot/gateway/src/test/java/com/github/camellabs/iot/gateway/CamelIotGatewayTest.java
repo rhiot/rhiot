@@ -16,6 +16,7 @@
  */
 package com.github.camellabs.iot.gateway;
 
+import com.github.camellabs.iot.vertx.camel.CamelContextFactories;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.EndpointInject;
@@ -33,38 +34,32 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = CamelIotGatewayTest.class)
 public class CamelIotGatewayTest extends Assert {
 
     static int mqttPort = findAvailableTcpPort();
-
-    @Autowired
-    ConsumerTemplate consumerTemplate;
 
     static {
         System.setProperty("camellabs.iot.gateway.heartbeat.mqtt", true + "");
     }
 
-    // TODO https://github.com/camel-labs/camel-labs/issues/66 (Camel Spring Boot should start embedded MQTT router for tests)
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    BrokerService broker() throws Exception {
+    @BeforeClass
+    public static void beforeClass() throws Exception {
         BrokerService broker = new BrokerService();
-        broker.setBrokerName(getClass().getName());
+        broker.setBrokerName(CamelIotGatewayTest.class.getName());
         broker.setPersistent(false);
         broker.addConnector("mqtt://localhost:" + mqttPort);
-        return broker;
-    }
+        broker.start();
 
-    @BeforeClass
-    public static void beforeClass() {
         setProperty("camellabs.iot.gateway.heartbeat.mqtt.broker.url", "tcp://localhost:" + mqttPort);
+
+        new VertxGateway().start();
     }
 
     // Tests
 
     @Test
     public void shouldReceiveHeartbeatMqttMessage() {
+        ConsumerTemplate consumerTemplate = CamelContextFactories.camelContext().createConsumerTemplate();
         String heartbeat = consumerTemplate.receiveBody("paho:heartbeat?brokerUrl=tcp://localhost:" + mqttPort, String.class);
         assertNotNull(heartbeat);
     }

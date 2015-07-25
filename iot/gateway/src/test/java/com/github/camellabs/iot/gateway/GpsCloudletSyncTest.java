@@ -43,7 +43,6 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = GpsCloudletSyncTest.class)
-@IntegrationTest("camellabs_iot_gateway_gps_cloudlet_sync=true")
 public class GpsCloudletSyncTest extends Assert {
 
     static File gpsCoordinatesStore = createTempDir();
@@ -56,6 +55,8 @@ public class GpsCloudletSyncTest extends Assert {
 
     @BeforeClass
     public static void beforeClass() throws UnknownHostException {
+        setProperty("camellabs_iot_gateway_gps_cloudlet_sync", "true");
+
         // Gateway GPS store fixtures
         setProperty("camellabs_iot_gateway_gps_store_directory", gpsCoordinatesStore.getAbsolutePath());
         setProperty("camellabs_iot_gateway_gps_cloudlet_address", "localhost:" + geofencingApiPort);
