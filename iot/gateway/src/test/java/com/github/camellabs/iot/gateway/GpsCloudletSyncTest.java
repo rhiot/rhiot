@@ -41,8 +41,6 @@ import static java.lang.System.setProperty;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = GpsCloudletSyncTest.class)
 public class GpsCloudletSyncTest extends Assert {
 
     static File gpsCoordinatesStore = createTempDir();
@@ -75,6 +73,7 @@ public class GpsCloudletSyncTest extends Assert {
         }.start();
 
         mongoClient = new MongoClient();
+        new VertxGateway().start();
     }
 
     @Test
