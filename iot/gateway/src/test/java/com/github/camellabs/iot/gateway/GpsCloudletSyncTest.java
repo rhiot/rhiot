@@ -17,7 +17,6 @@
 package com.github.camellabs.iot.gateway;
 
 import com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet;
-import com.github.camellabs.iot.vertx.camel.CamelContextFactories;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoTimeoutException;
@@ -25,6 +24,8 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,6 +42,8 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 public class GpsCloudletSyncTest extends Assert {
+
+    Logger LOG = LoggerFactory.getLogger(getClass());
 
     static File gpsCoordinatesStore = createTempDir();
 
@@ -86,6 +89,7 @@ public class GpsCloudletSyncTest extends Assert {
             try {
                 return mongoClient.getDB(dbName).getCollection("GpsCoordinates").count() > 0;
             } catch (MongoTimeoutException ex) {
+                LOG.info("MongoDB connection timeout:", ex);
                 return false;
             }
         });
