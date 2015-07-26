@@ -20,6 +20,7 @@ import com.github.camellabs.iot.vertx.camel.CamelContextFactories;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -55,6 +56,12 @@ public class MockSensorTest extends Assert {
         setProperty("camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url", "tcp://localhost:" + mqttPort);
 
         new VertxGateway().start();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        setProperty("camellabs_iot_gateway_mock_sensor", "false");
+        setProperty("camellabs_iot_gateway_mock_sensor_consumer", "false");
     }
 
     // Tests
