@@ -17,6 +17,7 @@
 package com.github.camellabs.iot.gateway;
 
 import com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet;
+import com.github.camellabs.iot.vertx.camel.CamelContextFactories;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoTimeoutException;
@@ -29,10 +30,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.concurrent.Callable;
 
 import static com.github.camellabs.iot.utils.Properties.booleanProperty;
 import static com.github.camellabs.iot.utils.Properties.intProperty;
+import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext;
 import static com.google.common.io.Files.createTempDir;
 import static com.jayway.awaitility.Awaitility.await;
 import static java.lang.System.setProperty;
@@ -51,6 +52,8 @@ public class GpsCloudletSyncTest extends Assert {
 
     @BeforeClass
     public static void beforeClass() throws UnknownHostException {
+        closeCamelContext();
+
         setProperty("camellabs_iot_gateway_gps_cloudlet_sync", "true");
 
         // Gateway GPS store fixtures

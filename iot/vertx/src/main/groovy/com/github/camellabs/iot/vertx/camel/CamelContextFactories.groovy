@@ -54,8 +54,10 @@ final class CamelContextFactories {
      * context.
      */
     synchronized static void closeCamelContext() {
-        camelContext.stop()
-        camelContext = null
+        if(camelContext != null) {
+            camelContext.stop()
+            camelContext = null
+        }
     }
 
     /**
