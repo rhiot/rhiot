@@ -19,9 +19,12 @@ package com.github.camellabs.iot.gateway.mock
 import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
 
+import static com.github.camellabs.iot.utils.Uuids.uuid
 import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
-import static java.util.UUID.randomUUID
 
+/**
+ * Verticle emulating device sensor. It generate random UUID events on the given basis.
+ */
 @GatewayVerticle(conditionProperty = 'camellabs_iot_gateway_mock_sensor')
 class MockSensorVerticle extends GroovyCamelVerticle {
 
@@ -31,10 +34,9 @@ class MockSensorVerticle extends GroovyCamelVerticle {
 
     @Override
     void start() {
-        def producer = camelContext.createProducerTemplate()
         for (int i = 1; i <= sourcesNumber; i++) {
             vertx.setPeriodic(period) {
-                producer.sendBody("seda:mockSensor?blockWhenFull=true", randomUUID().toString())
+                vertx.eventBus().publish('mockSensor', uuid())
             }
         }
     }
