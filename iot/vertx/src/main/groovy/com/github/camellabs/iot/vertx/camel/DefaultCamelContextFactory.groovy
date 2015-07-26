@@ -24,6 +24,7 @@ class DefaultCamelContextFactory implements CamelContextFactory {
     @Override
     CamelContext createCamelContext() {
         def context = new DefaultCamelContext()
+        context.name = 'SingletonVertxCamelContext'
         context
     }
 

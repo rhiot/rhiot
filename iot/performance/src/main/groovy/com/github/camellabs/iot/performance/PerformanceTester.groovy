@@ -64,7 +64,7 @@ class PerformanceTester {
             def json = new ObjectMapper()
             def processingTime = test.processingTime(device)
             def processed = json.readValue(
-                    new URL("http://${device.address().hostAddress}:8778/jolokia/read/org.apache.camel:context=camel-1,type=routes,name=%22mockSensorConsumer%22/ExchangesTotal"),
+                    new URL("http://${device.address().hostAddress}:8778/jolokia/read/org.apache.camel:context=SingletonVertxCamelContext,type=routes,name=%22mockSensorConsumer%22/ExchangesTotal"),
                     Map.class)['value'].toString().toLong()
             def result = new TestResult(test.testGroup(), test.variationLabel(), processed, processingTime)
             resultsProcessors.each { it.processResult(result) }

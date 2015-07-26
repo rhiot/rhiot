@@ -65,7 +65,7 @@ abstract class BaseMockMqttTest implements TestSpecification {
     // Helpers
 
     private URL jolokiaRouteStartedUrl(Device device, String routeId) {
-        new URL("http://${device.address().hostAddress}:8778/jolokia/read/org.apache.camel:context=camel-1,type=routes,name=%22${routeId}%22/ResetTimestamp")
+        new URL("http://${device.address().hostAddress}:8778/jolokia/read/org.apache.camel:context=SingletonVertxCamelContext,type=routes,name=%22${routeId}%22/ResetTimestamp")
     }
 
 }

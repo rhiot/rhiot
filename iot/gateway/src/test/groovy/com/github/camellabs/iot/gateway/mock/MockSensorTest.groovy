@@ -61,9 +61,9 @@ class MockSensorTest extends Assert {
     }
 
     @AfterClass
-    public static void afterClass() {
-        booleanProperty("camellabs_iot_gateway_mock_sensor", false);
-        booleanProperty("camellabs_iot_gateway_mock_sensor_consumer", false);
+    static void afterClass() {
+        booleanProperty('camellabs_iot_gateway_mock_sensor', false);
+        booleanProperty('camellabs_iot_gateway_mock_sensor_consumer', false);
 
         closeCamelContext()
     }
@@ -71,7 +71,7 @@ class MockSensorTest extends Assert {
     // Tests
 
     @Test
-    public void shouldSendMockEventsToTheMqttServer() {
+    void shouldSendMockEventsToTheMqttServer() {
         def mock = mockEndpoint('mock:test')
         mock.setMinimumExpectedMessageCount(1000)
         mock.assertIsSatisfied()
