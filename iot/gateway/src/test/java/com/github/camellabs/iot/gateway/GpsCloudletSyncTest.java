@@ -74,7 +74,7 @@ public class GpsCloudletSyncTest extends Assert {
 
     @Test
     public void shouldSendGpsCoordinatesToTheGeofencingCloudlet() throws InterruptedException, IOException {
-        Thread.sleep(10000);
+        Thread.sleep(15000);
         IOUtils.write(System.currentTimeMillis() + ",10,20", new FileOutputStream(new File(gpsCoordinatesStore, "foo")));
 
         // When
