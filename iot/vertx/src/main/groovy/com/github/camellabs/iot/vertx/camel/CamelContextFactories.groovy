@@ -46,6 +46,15 @@ class CamelContextFactories {
     }
 
     /**
+     * Stop and dispose the singleton CamelContext. Next call to {@code camelContext()} method will re-initialize the
+     * context.
+     */
+    synchronized static void closeCamelContext() {
+        camelContext.stop()
+        camelContext = null
+    }
+
+    /**
      * Global access point for accessing singleton CamelContext instance.
      *
      * @return Started singleton CamelContext instance.

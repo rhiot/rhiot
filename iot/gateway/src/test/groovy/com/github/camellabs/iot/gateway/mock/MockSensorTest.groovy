@@ -14,33 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.gateway;
+package com.github.camellabs.iot.gateway.mock
 
-import com.github.camellabs.iot.vertx.camel.CamelContextFactories;
+import com.github.camellabs.iot.gateway.VertxGateway
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.Test
 
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext;
+import static com.github.camellabs.iot.utils.Properties.booleanProperty;
+import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
+import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
-public class MockSensorTest extends Assert {
+class MockSensorTest extends Assert {
 
     // Collaborators fixtures
 
     static int mqttPort = findAvailableTcpPort();
 
     @BeforeClass
-    public static void beforeClass() throws Exception {
+    static void beforeClass() {
         BrokerService broker = new BrokerService();
         broker.setBrokerName(MockSensorTest.class.getName());
         broker.setPersistent(false);
-        broker.addConnector("mqtt://localhost:" + mqttPort);
+        broker.addConnector("mqtt://localhost:${mqttPort}");
         broker.start();
 
         camelContext().addRoutes(new RouteBuilder() {
@@ -51,17 +53,19 @@ public class MockSensorTest extends Assert {
             }
         });
 
-        setProperty("camellabs_iot_gateway_mock_sensor", "true");
-        setProperty("camellabs_iot_gateway_mock_sensor_consumer", "true");
-        setProperty("camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url", "tcp://localhost:" + mqttPort);
+        booleanProperty('camellabs_iot_gateway_mock_sensor', true)
+        booleanProperty('camellabs_iot_gateway_mock_sensor_consumer', true)
+        setProperty("camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url", "tcp://localhost:${mqttPort}")
 
         new VertxGateway().start();
     }
 
     @AfterClass
     public static void afterClass() {
-        setProperty("camellabs_iot_gateway_mock_sensor", "false");
-        setProperty("camellabs_iot_gateway_mock_sensor_consumer", "false");
+        closeCamelContext()
+
+        booleanProperty("camellabs_iot_gateway_mock_sensor", false);
+        booleanProperty("camellabs_iot_gateway_mock_sensor_consumer", false);
     }
 
     // Tests
