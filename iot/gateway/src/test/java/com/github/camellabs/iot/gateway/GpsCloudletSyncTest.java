@@ -19,6 +19,7 @@ package com.github.camellabs.iot.gateway;
 import com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoTimeoutException;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -28,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.concurrent.Callable;
 
 import static com.github.camellabs.iot.utils.Properties.booleanProperty;
 import static com.github.camellabs.iot.utils.Properties.intProperty;
@@ -74,11 +76,16 @@ public class GpsCloudletSyncTest extends Assert {
 
     @Test
     public void shouldSendGpsCoordinatesToTheGeofencingCloudlet() throws InterruptedException, IOException {
-        Thread.sleep(15000);
         IOUtils.write(System.currentTimeMillis() + ",10,20", new FileOutputStream(new File(gpsCoordinatesStore, "foo")));
 
         // When
-        await().atMost(2, MINUTES).until(() -> mongoClient.getDB(dbName).getCollection("GpsCoordinates").count() > 0);
+        await().atMost(2, MINUTES).until(() -> {
+            try {
+                return mongoClient.getDB(dbName).getCollection("GpsCoordinates").count() > 0;
+            } catch (MongoTimeoutException ex) {
+                return false;
+            }
+        });
 
         // Then
         assertEquals(1, mongoClient.getDB(dbName).getCollection("GpsCoordinates").count());
