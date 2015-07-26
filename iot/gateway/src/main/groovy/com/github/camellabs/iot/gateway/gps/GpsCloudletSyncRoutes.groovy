@@ -20,12 +20,6 @@ import com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates
 import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle;
 import org.apache.camel.builder.RouteBuilder;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
-
-import java.net.InetAddress;
-import java.util.Date;
-import java.util.UUID;
 
 import static com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates.deserialize
 import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty;

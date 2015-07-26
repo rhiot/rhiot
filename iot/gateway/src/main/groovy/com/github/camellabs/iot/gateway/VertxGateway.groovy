@@ -57,7 +57,7 @@ class VertxGateway {
     }
 
     public static void main(String[] args) {
-        JvmAgent.agentmain('')
+        JvmAgent.agentmain('host=0.0.0.0')
         new VertxGateway().start()
     }
 

@@ -32,6 +32,7 @@
         <ivy.version>2.4.0</ivy.version>
         <jcabi-aether.version>0.10.1</jcabi-aether.version>
         <jfreechart.version>1.0.19</jfreechart.version>
+        <jolokia.version>1.3.1</jolokia.version>
         <jsch.version>0.1.53</jsch.version>
         <kura.version>1.0.3</kura.version>
         <logback.version>1.1.2</logback.version>
@@ -40,6 +41,7 @@
         <pi4j-version>1.0</pi4j-version>
         <pubnub.version>3.7.4</pubnub.version>
         <reflections.version>0.9.10</reflections.version>
+        <servlet-api.version>2.5</servlet-api.version>
         <slfj4.version>1.7.12</slfj4.version>
         <tinkerforge.version>2.1.4</tinkerforge.version>
         <vertx.version>3.0.0</vertx.version>
@@ -181,6 +183,11 @@
                 <version>${vertx.version}</version>
             </dependency>
             <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>activemq-broker</artifactId>
                 <version>${activemq.version}</version>
@@ -271,6 +278,16 @@
                 <groupId>org.jfree</groupId>
                 <artifactId>jfreechart</artifactId>
                 <version>${jfreechart.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jolokia</groupId>
+                <artifactId>jolokia-core</artifactId>
+                <version>${jolokia.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jolokia</groupId>
+                <artifactId>jolokia-jvm</artifactId>
+                <version>${jolokia.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.reflections</groupId>

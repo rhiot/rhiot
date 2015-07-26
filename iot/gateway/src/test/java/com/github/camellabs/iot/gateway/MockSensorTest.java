@@ -18,22 +18,13 @@ package com.github.camellabs.iot.gateway;
 
 import com.github.camellabs.iot.vertx.camel.CamelContextFactories;
 import org.apache.activemq.broker.BrokerService;
-import org.apache.camel.EndpointInject;
-import org.apache.camel.RoutesBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.net.UnknownHostException;
-
+import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
@@ -51,7 +42,7 @@ public class MockSensorTest extends Assert {
         broker.addConnector("mqtt://localhost:" + mqttPort);
         broker.start();
 
-        CamelContextFactories.camelContext().addRoutes(new RouteBuilder() {
+        camelContext().addRoutes(new RouteBuilder() {
             @Override
             public void configure() throws Exception {
                 from("paho:mock?brokerUrl=tcp://localhost:" + mqttPort).
@@ -70,7 +61,7 @@ public class MockSensorTest extends Assert {
 
     @Test
     public void shouldSendMockEventsToTheMqttServer() throws InterruptedException {
-        MockEndpoint mockEndpoint = CamelContextFactories.camelContext().getEndpoint("mock:test", MockEndpoint.class);
+        MockEndpoint mockEndpoint = camelContext().getEndpoint("mock:test", MockEndpoint.class);
         mockEndpoint.setMinimumExpectedMessageCount(1000);
         mockEndpoint.assertIsSatisfied();
     }
