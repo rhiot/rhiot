@@ -19,7 +19,15 @@
         </license>
     </licenses>
 
+    <properties>
+        <fatjar.mainClass>com.github.camellabs.iot.gateway.VertxGateway</fatjar.mainClass>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.github.camel-labs</groupId>
             <artifactId>camel-labs-iot-gateway</artifactId>
@@ -41,11 +49,8 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>com.github.camellabs.iot.gateway.CamelIotGateway</mainClass>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
