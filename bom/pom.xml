@@ -41,14 +41,10 @@
         <pi4j-version>1.0</pi4j-version>
         <pubnub.version>3.7.4</pubnub.version>
         <reflections.version>0.9.10</reflections.version>
-        <servlet-api.version>2.5</servlet-api.version>
+        <servlet-api.version>3.1.0</servlet-api.version>
         <slfj4.version>1.7.12</slfj4.version>
         <tinkerforge.version>2.1.4</tinkerforge.version>
         <vertx.version>3.0.0</vertx.version>
-
-        <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
-        <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
-        <maven-lifecycle-mapping.version>1.0.0</maven-lifecycle-mapping.version>
     </properties>
 
     <dependencyManagement>
@@ -184,7 +180,7 @@
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
+                <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet-api.version}</version>
             </dependency>
             <dependency>
@@ -225,14 +221,14 @@
                 <version>2.16-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.ivy</groupId>
-                <artifactId>ivy</artifactId>
-                <version>${ivy.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${apache-commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.ivy</groupId>
+                <artifactId>ivy</artifactId>
+                <version>${ivy.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.poi</groupId>
