@@ -212,6 +212,18 @@
                 <artifactId>activemq-mqtt</artifactId>
                 <version>${activemq.version}</version>
             </dependency>
+            <!-- TODO: Paho is available starting from Camel 2.16. Remove as soon as 2.16 is out. -->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-paho</artifactId>
+                <version>2.16-SNAPSHOT</version>
+            </dependency>
+            <!-- TODO: Vert.x 3 is supported starting from Camel 2.16. Remove as soon as 2.16 is out. -->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-vertx</artifactId>
+                <version>2.16-SNAPSHOT</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.ivy</groupId>
                 <artifactId>ivy</artifactId>
@@ -301,5 +313,20 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <!-- -->
+            <id>apache.snapshots</id>
+            <name>Apache Development Snapshot Repository</name>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>

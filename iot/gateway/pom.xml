@@ -26,6 +26,10 @@
         </dependency>
         <dependency>
             <groupId>com.github.camel-labs</groupId>
+            <artifactId>camel-pi4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.camel-labs</groupId>
             <artifactId>camel-labs-iot-vertx</artifactId>
         </dependency>
         <dependency>
@@ -47,13 +51,10 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-paho</artifactId>
-            <!-- TODO: Paho is available starting from Camel 2.16. Remove as soon as 2.16 is out. -->
-            <version>2.16-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-vertx</artifactId>
-            <version>2.16-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.jolokia</groupId>
@@ -63,11 +64,6 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
         </dependency>
-        <!-- Commented out until https://github.com/camel-labs/camel-labs/issues/97 is solved. -->
-        <!--<dependency>-->
-        <!--<groupId>com.github.camel-labs</groupId>-->
-        <!--<artifactId>camel-pi4j</artifactId>-->
-        <!--</dependency>-->
 
         <!-- Testing -->
         <dependency>
@@ -96,21 +92,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-
-    <repositories>
-       <repository>
-           <!-- TODO: Paho is available starting from Camel 2.16. Remove as soon as 2.16 is out. -->
-           <id>apache.snapshots</id>
-            <name>Apache Development Snapshot Repository</name>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
 </project>
