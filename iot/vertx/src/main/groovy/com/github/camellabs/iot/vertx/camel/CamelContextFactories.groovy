@@ -18,6 +18,7 @@ package com.github.camellabs.iot.vertx.camel
 
 import io.vertx.core.Vertx
 import org.apache.camel.CamelContext
+import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.component.vertx.VertxComponent
 import org.slf4j.Logger
 
@@ -26,11 +27,14 @@ import static org.slf4j.LoggerFactory.getLogger
 /**
  * Static singleton access point for the CamelContext instance shared between the verticles in the same JVM.
  */
-class CamelContextFactories {
+final class CamelContextFactories {
 
     private static final Logger LOG = getLogger(CamelContextFactories.class)
 
     private static CamelContext camelContext
+
+    private CamelContextFactories() {
+    }
 
     static CamelContextFactory resolveCamelContextFactory() {
         new DefaultCamelContextFactory()
@@ -65,6 +69,10 @@ class CamelContextFactories {
             camelContext.start()
         }
         camelContext
+    }
+
+    static MockEndpoint mockEndpoint(String uri) {
+        camelContext().getEndpoint(uri, MockEndpoint.class)
     }
 
 }

@@ -19,7 +19,6 @@ package com.github.camellabs.iot.gateway.mock
 import com.github.camellabs.iot.gateway.VertxGateway
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -27,7 +26,8 @@ import org.junit.Test
 
 import static com.github.camellabs.iot.utils.Properties.booleanProperty;
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext;
+import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext
+import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.mockEndpoint;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
@@ -39,11 +39,11 @@ class MockSensorTest extends Assert {
 
     @BeforeClass
     static void beforeClass() {
-        BrokerService broker = new BrokerService();
+        def broker = new BrokerService()
         broker.setBrokerName(MockSensorTest.class.getName());
         broker.setPersistent(false);
         broker.addConnector("mqtt://localhost:${mqttPort}");
-        broker.start();
+        broker.start()
 
         camelContext().addRoutes(new RouteBuilder() {
             @Override
@@ -51,30 +51,30 @@ class MockSensorTest extends Assert {
                 from("paho:mock?brokerUrl=tcp://localhost:" + mqttPort).
                         to("mock:test");
             }
-        });
+        })
 
         booleanProperty('camellabs_iot_gateway_mock_sensor', true)
         booleanProperty('camellabs_iot_gateway_mock_sensor_consumer', true)
-        setProperty("camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url", "tcp://localhost:${mqttPort}")
+        setProperty('camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url', "tcp://localhost:${mqttPort}")
 
-        new VertxGateway().start();
+        new VertxGateway().start()
     }
 
     @AfterClass
     public static void afterClass() {
-        closeCamelContext()
-
         booleanProperty("camellabs_iot_gateway_mock_sensor", false);
         booleanProperty("camellabs_iot_gateway_mock_sensor_consumer", false);
+
+        closeCamelContext()
     }
 
     // Tests
 
     @Test
-    public void shouldSendMockEventsToTheMqttServer() throws InterruptedException {
-        MockEndpoint mockEndpoint = camelContext().getEndpoint("mock:test", MockEndpoint.class);
-        mockEndpoint.setMinimumExpectedMessageCount(1000);
-        mockEndpoint.assertIsSatisfied();
+    public void shouldSendMockEventsToTheMqttServer() {
+        def mock = mockEndpoint('mock:test')
+        mock.setMinimumExpectedMessageCount(1000)
+        mock.assertIsSatisfied()
     }
 
 }
