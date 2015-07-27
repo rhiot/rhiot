@@ -25,6 +25,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
+import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.connect
 import static io.vertx.groovy.core.Vertx.vertx
 import static java.lang.Boolean.parseBoolean
@@ -56,9 +57,13 @@ class VertxGateway {
         this
     }
 
+    void stop() {
+        closeCamelContext();
+        vertx.close()
+    }
+
     public static void main(String[] args) {
         JvmAgent.agentmain('host=0.0.0.0')
         new VertxGateway().start()
     }
-
 }
