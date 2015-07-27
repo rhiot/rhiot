@@ -253,7 +253,7 @@ following jar:
     <dependencies>
       <dependency>
         <groupId>com.github.camel-labs</groupId>
-        <artifactId>camel-labs-iot-vertx</artifactId>
+        <artifactId>rhiot-vertx</artifactId>
         <version>0.1.1</version>
       </dependency>
     </dependencies>

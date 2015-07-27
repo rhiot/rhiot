@@ -10,7 +10,7 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>camel-labs-iot-vertx</artifactId>
+    <artifactId>rhiot-vertx</artifactId>
 
     <licenses>
         <license>

@@ -30,7 +30,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-vertx</artifactId>
+            <artifactId>rhiot-vertx</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
