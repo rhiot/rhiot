@@ -22,6 +22,7 @@ Camel IoT Labs project covers modules providing the Internet Of Things functiona
     - [LED heartbeat](#led-heartbeat)
   - [Monitoring gateway with Jolokia](#monitoring-gateway-with-jolokia)
   - [Adding the custom code to the gateway](#adding-the-custom-code-to-the-gateway)
+    - [Adding custom Groovy Camel verticle to the gateway](#adding-custom-groovy-camel-verticle-to-the-gateway)
 - [Camel IoT components](#camel-iot-components)
   - [Camel GPS BU353 component](#camel-gps-bu353-component)
     - [Maven dependency](#maven-dependency)
