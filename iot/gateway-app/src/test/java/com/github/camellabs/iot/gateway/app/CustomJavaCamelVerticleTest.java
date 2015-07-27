@@ -1,7 +1,7 @@
 package com.github.camellabs.iot.gateway.app;
 
 import com.github.camellabs.iot.gateway.GatewayVerticle;
-import com.github.camellabs.iot.gateway.VertxGateway;
+import com.github.camellabs.iot.gateway.Gateway;
 import com.github.camellabs.iot.vertx.camel.JavaCamelVerticle;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.AfterClass;
@@ -13,7 +13,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class CustomJavaCamelVerticleTest {
 
-    static VertxGateway vertxGateway = new VertxGateway();
+    static Gateway vertxGateway = new Gateway();
 
     @BeforeClass
     public static void beforeClass() {

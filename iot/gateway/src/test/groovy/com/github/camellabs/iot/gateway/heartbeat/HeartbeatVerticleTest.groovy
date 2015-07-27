@@ -16,7 +16,7 @@
  */
 package com.github.camellabs.iot.gateway.heartbeat
 
-import com.github.camellabs.iot.gateway.VertxGateway
+import com.github.camellabs.iot.gateway.Gateway
 import org.junit.Assert
 import org.junit.Test
 
@@ -24,7 +24,7 @@ import java.util.concurrent.CountDownLatch
 
 class HeartbeatVerticleTest extends Assert {
 
-    def gateway = new VertxGateway().start()
+    def gateway = new Gateway().start()
 
     @Test
     void shouldReceiveHeartbeatFromEventBus() {

@@ -77,7 +77,7 @@ public class GpsCloudletSyncTest extends Assert {
         }.start();
 
         mongoClient = new MongoClient();
-        new VertxGateway().start();
+        new Gateway().start();
     }
 
     @Test

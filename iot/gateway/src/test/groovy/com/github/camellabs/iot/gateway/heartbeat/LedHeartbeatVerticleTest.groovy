@@ -16,7 +16,7 @@
  */
 package com.github.camellabs.iot.gateway.heartbeat
 
-import com.github.camellabs.iot.gateway.VertxGateway
+import com.github.camellabs.iot.gateway.Gateway
 import com.github.camellabs.iot.vertx.camel.CamelContextFactories
 import org.apache.camel.component.mock.MockEndpoint
 import org.junit.Assert
@@ -27,7 +27,7 @@ class LedHeartbeatVerticleTest extends Assert {
     static {
         System.setProperty('camellabs.iot.gateway.heartbeat.led', 'true')
         System.setProperty('camellabs.iot.gateway.heartbeat.led.component', 'mock')
-        new VertxGateway().start()
+        new Gateway().start()
         Thread.sleep(5000)
     }
 

@@ -17,7 +17,7 @@
 package com.github.camellabs.iot.gateway.app
 
 import com.github.camellabs.iot.gateway.GatewayVerticle
-import com.github.camellabs.iot.gateway.VertxGateway
+import com.github.camellabs.iot.gateway.Gateway
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.component.mock.MockEndpoint
 import org.junit.Test
@@ -29,7 +29,7 @@ import static java.util.concurrent.TimeUnit.MINUTES
 class CustomCamelVerticleTest {
 
     static {
-        runMainInNewThread(VertxGateway.class)
+        runMainInNewThread(Gateway.class)
     }
 
     // Tests

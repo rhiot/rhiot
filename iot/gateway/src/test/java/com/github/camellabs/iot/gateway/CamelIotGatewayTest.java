@@ -19,8 +19,6 @@ package com.github.camellabs.iot.gateway;
 import com.github.camellabs.iot.vertx.camel.CamelContextFactories;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.ConsumerTemplate;
-import org.apache.camel.EndpointInject;
-import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -46,7 +44,7 @@ public class CamelIotGatewayTest extends Assert {
 
         setProperty("camellabs.iot.gateway.heartbeat.mqtt.broker.url", "tcp://localhost:" + mqttPort);
 
-        new VertxGateway().start();
+        new Gateway().start();
     }
 
     // Tests

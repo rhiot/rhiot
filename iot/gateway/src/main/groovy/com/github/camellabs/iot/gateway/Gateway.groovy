@@ -22,7 +22,6 @@ import org.jolokia.jvmagent.JvmAgent
 import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext
@@ -30,13 +29,14 @@ import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.connect
 import static io.vertx.groovy.core.Vertx.vertx
 import static java.lang.Boolean.parseBoolean
 import static org.reflections.util.ClasspathHelper.forJavaClassPath
+import static org.slf4j.LoggerFactory.getLogger
 
 /**
  * IoT gateway boostrap. Starts Vert.x event bus, detects verticles and starts these.
  */
-class VertxGateway {
+class Gateway {
 
-    private static final Logger LOG = LoggerFactory.getLogger(VertxGateway.class)
+    private static final Logger LOG = getLogger(Gateway.class)
 
     final def vertx = vertx()
 
@@ -44,7 +44,7 @@ class VertxGateway {
 
     static final def JSON = new ObjectMapper()
 
-    VertxGateway start() {
+    Gateway start() {
         connect(vertx.delegate.asType(Vertx.class))
         classpath.getTypesAnnotatedWith(GatewayVerticle.class).each {
             LOG.debug('Classpath scanner found gateway verticle {}.', it.name)
@@ -62,8 +62,11 @@ class VertxGateway {
         vertx.close()
     }
 
+    // Main method handler
+
     public static void main(String[] args) {
         JvmAgent.agentmain('host=0.0.0.0')
-        new VertxGateway().start()
+        new Gateway().start()
     }
+
 }
