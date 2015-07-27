@@ -246,7 +246,7 @@ and your custom code.
 
 #### Adding custom Groovy Camel verticle to the gateway
 
-As Camel Labs gateway uses Vert.x event bus as its messaging core, the recommended option to add new Camel routes to the
+As the Rhiot gateway uses Vert.x event bus as its internal messaging core, the recommended option to add new Camel routes to the
 gateway is to deploy those as the Vert.x verticle. The Vert.x helper classes for the gateway are available in the
 following jar:
 
@@ -271,7 +271,7 @@ within the given JVM, extend the `com.github.camellabs.iot.vertx.camel.GroovyCam
 
     }
 
-Camel Labs gateway scans the classpath for the verticle classes marked with the `com.github.camellabs.iot.gateway.GatewayVerticle`
+Rhiot gateway scans the classpath for the verticle classes marked with the `com.github.camellabs.iot.gateway.GatewayVerticle`
 annotation. All those verticles are automatically loaded into the Vert.x backbone.
 
 As you can see in the example above you can read the messages from the event bus and forward these to your Camel
