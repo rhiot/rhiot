@@ -16,32 +16,32 @@
  */
 package com.github.camellabs.iot.vertx.camel
 
-import io.vertx.lang.groovy.GroovyVerticle
+import io.vertx.core.AbstractVerticle
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
-import org.slf4j.LoggerFactory
 
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
 
 /**
- * Base Groovy class for the verticles that are supposed to access CamelContext and bridge Camel with the event bus.
+ * Base Java class for the verticles that are supposed to access CamelContext and bridge Camel with the event bus.
  */
-class GroovyCamelVerticle extends GroovyVerticle {
-
-    private static def LOG = LoggerFactory.getLogger(GroovyCamelVerticle.class)
+class JavaCamelVerticle extends AbstractVerticle {
 
     protected def camelContext = camelContext()
 
-    // Helper methods
-
-    def fromEventBus(String address, Closure<RouteDefinition> routeCallback) {
-        LOG.debug('Registering Camel route consuming from Vert.x event bus address {}.', address)
+    def fromEventBus(String address, RouteDefinitionCallback routeDefinitionCallback) {
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             void configure() {
-                routeCallback(from("vertx:${address}"))
+                routeDefinitionCallback.route(from("vertx:${address}"))
             }
         })
     }
+
+}
+
+interface RouteDefinitionCallback {
+
+    void route(RouteDefinition route)
 
 }
