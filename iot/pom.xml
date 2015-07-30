@@ -9,6 +9,7 @@
         <artifactId>rhiot-bom</artifactId>
         <relativePath>../bom</relativePath>
     </parent>
+    <groupId>com.github.camel-labs</groupId>
     <artifactId>camel-labs-iot</artifactId>
     <packaging>pom</packaging>
 
