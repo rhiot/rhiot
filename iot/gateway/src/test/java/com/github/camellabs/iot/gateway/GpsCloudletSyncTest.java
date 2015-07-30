@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.net.UnknownHostException;
 
 import static com.github.camellabs.iot.utils.Properties.booleanProperty;
@@ -82,14 +83,24 @@ public class GpsCloudletSyncTest extends Assert {
 
     @Test
     public void shouldSendGpsCoordinatesToTheGeofencingCloudlet() throws InterruptedException, IOException {
-        IOUtils.write(System.currentTimeMillis() + ",10,20", new FileOutputStream(new File(gpsCoordinatesStore, "foo")));
-
-        // When
+        // Given
+        URL countOperationUri = new URL("http://localhost:" + geofencingApiPort + "/api/document/count/GpsCoordinates");
         await().atMost(5, MINUTES).until(() -> {
             try {
-                return mongoClient.getDB(dbName).getCollection("GpsCoordinates").count() > 0;
-            } catch (MongoTimeoutException ex) {
-                LOG.info("MongoDB connection timeout:", ex);
+                countOperationUri.openStream();
+                return true;
+            } catch (Exception ex) {
+                LOG.debug("Can't connect to the geofencing cloudlet:", ex);
+                return false;
+            }
+        });
+        IOUtils.write(System.currentTimeMillis() + ",10,20", new FileOutputStream(new File(gpsCoordinatesStore, "foo")));
+        await().atMost(5, MINUTES).until(() -> {
+            try {
+                String countString = IOUtils.toString(countOperationUri);
+                return Integer.parseInt(countString) == 1;
+            } catch (Exception ex) {
+                LOG.debug("Can't connect to the geofencing cloudlet:", ex);
                 return false;
             }
         });
