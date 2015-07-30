@@ -14,25 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.utils
+package io.rhiot.utils;
 
-import org.junit.Assert
-import org.junit.Test
+import static java.util.UUID.randomUUID;
 
-import static com.github.camellabs.iot.utils.Uuids.uuid
+/**
+ * Utilities for working with the UUIDs.
+ */
+final class Uuids {
 
-class UuidsTest extends Assert {
+    private Uuids() {
+    }
 
-    @Test
-    void shouldGenerateUuidString() {
-        // Given
-        def uuidString = uuid()
-
-        // When
-        def parsedUuid = UUID.fromString(uuidString)
-
-        // Then
-        assertEquals(uuidString, parsedUuid.toString())
+    static String uuid() {
+        return randomUUID().toString();
     }
 
 }
