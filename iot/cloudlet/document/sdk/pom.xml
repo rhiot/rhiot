@@ -31,8 +31,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-utils</artifactId>
-            <version>0.1.1-SNAPSHOT</version>
+            <artifactId>rhiot-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

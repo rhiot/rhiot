@@ -10,7 +10,7 @@
         <relativePath>../bom</relativePath>
     </parent>
 
-    <artifactId>camel-labs-iot-utils</artifactId>
+    <artifactId>rhiot-utils</artifactId>
 
     <licenses>
         <license>

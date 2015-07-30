@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-utils</artifactId>
+            <artifactId>rhiot-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jcraft</groupId>

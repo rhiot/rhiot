@@ -99,7 +99,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.camel-labs</groupId>
-                <artifactId>camel-labs-iot-utils</artifactId>
+                <artifactId>rhiot-utils</artifactId>
                 <version>${camel-labs.version}</version>
             </dependency>
             <dependency>
