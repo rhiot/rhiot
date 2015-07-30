@@ -18,9 +18,12 @@ package com.github.camellabs.iot.utils;
 
 import java.util.UUID;
 
+/**
+ * Utilities for working with the UUIDs.
+ */
 public final class Uuids {
 
-    public Uuids() {
+    private Uuids() {
     }
 
     public static String uuid() {
