@@ -38,7 +38,7 @@ All you need to build the project is Maven 3 and Java 8 JDK:
 
 ## Build status
 
-[![Build Status](https://travis-ci.org/camel-labs/camel-labs.svg?branch=master)](https://travis-ci.org/camel-labs/camel-labs)
+[![Build Status](https://travis-ci.org/rhiot/rhiot.svg?branch=master)](https://travis-ci.org/rhiot/rhiot)
 
 ## Camel compatibility matrix
 
