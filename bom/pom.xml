@@ -9,7 +9,7 @@
         <artifactId>rhiot</artifactId>
         <version>0.1.1-SNAPSHOT</version>
     </parent>
-    <artifactId>camel-labs-bom</artifactId>
+    <artifactId>rhiot-bom</artifactId>
     <packaging>pom</packaging>
 
     <licenses>

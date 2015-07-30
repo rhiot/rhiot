@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>camel-labs-bom</artifactId>
-        <groupId>com.github.camel-labs</groupId>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-bom</artifactId>
         <version>0.1.1-SNAPSHOT</version>
         <relativePath>../bom</relativePath>
     </parent>
