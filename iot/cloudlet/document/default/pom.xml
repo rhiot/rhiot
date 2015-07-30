@@ -25,7 +25,7 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.camel-labs</groupId>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-utils</artifactId>
         </dependency>
         <dependency>
