@@ -1,9 +1,15 @@
-# Camel Labs
+# Rhiot - the messaging platform for the Internet Of Things
 
-<a href="https://github.com/camel-labs/camel-labs"><img src="camel-labs.png" align="left" height="80" hspace="30"></a>
-This is an umbrella project covering Camel-related subprojects for the Internet Of Things and the other bleeding edge use cases.
-Camel Labs includes all the hot features and tools that can't be distributed with the [Apache Camel](http://camel.apache.org)
-because of the wider scope of these or because of the licensing reasons.
+<a href="https://github.com/rhiot/rhiot"><img src="camel-labs.png" align="left" height="80" hspace="30"></a>
+Rhiot is a messaging platform for the Internet Of Things. We are focused on the adoption of the
+[Red Hat JBoss middleware portfolio](http://www.redhat.com/en/technologies/jboss-middleware) to provide the solutions to
+the common IoT-related challenges.
+
+Rhiot comes with the following features:
+- IoT gateway software
+- Camel components for IoT
+- Backend cloud services (Cloudlets)
+- Web console for managing the devices, gateways and Cloudlets
 
 ## Subprojects
 
@@ -53,6 +59,3 @@ The Camel Labs project is distributed under the [Apache 2.0 Software License](ht
 | Greg A. | [@gautric_io](https://twitter.com/gautric_io) | http://gautric.github.io/ | Red Hat | FR (native), EN, JP (beginner) |
 | Geert S. | [@geertschuring](https://twitter.com/geertschuring) | https://geertschuring.wordpress.com/ | Geert Schuring | NL (native), EN |
 
-## IoT ecosystem
-
-Camel IoT Labs is the part of the bigger IoT effort including [SilverSpoon](http://www.silverspoon.io) and [SilverWare](http://www.silverware.io) projects.
