@@ -3,9 +3,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.camel-labs</groupId>
+    <groupId>io.rhiot</groupId>
+    <artifactId>rhiot</artifactId>
     <version>0.1.1-SNAPSHOT</version>
-    <artifactId>camel-labs</artifactId>
     <packaging>pom</packaging>
 
     <modules>
@@ -35,6 +35,7 @@
         <maven-frontend-plugin.version>0.0.23</maven-frontend-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
+        <maven-release-plugin.version>2.5.2</maven-release-plugin.version>
         <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
@@ -65,9 +66,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:camel-labs/camel-labs.git</connection>
-        <developerConnection>scm:git:git@github.com:camel-labs/camel-labs.git</developerConnection>
-        <url>git@github.com:camel-labs/camel-labs.git</url>
+        <connection>scm:git:git@github.com:rhiot/rhiot.git</connection>
+        <developerConnection>scm:git:git@github.com:rhiot/rhiot.git</developerConnection>
+        <url>git@github.com:rhiot/rhiot.git</url>
         <tag>camel-labs-0.1.0</tag>
     </scm>
 
@@ -175,7 +176,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.2</version>
+                <version>${maven-release-plugin.version}</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <releaseProfiles>release</releaseProfiles>
@@ -185,56 +186,6 @@
         </plugins>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>com.github.eirslett</groupId>
-                    <artifactId>frontend-maven-plugin</artifactId>
-                    <version>${maven-frontend-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>install node and npm</id>
-                            <goals>
-                                <goal>install-node-and-npm</goal>
-                            </goals>
-                            <configuration>
-                                <nodeVersion>v0.10.30</nodeVersion>
-                                <npmVersion>1.4.21</npmVersion>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>npm install</id>
-                            <goals>
-                                <goal>npm</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>bower install</id>
-                            <goals>
-                                <goal>bower</goal>
-                            </goals>
-                            <configuration>
-                                <arguments>install</arguments>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>gulp build</id>
-                            <goals>
-                                <goal>gulp</goal>
-                            </goals>
-                            <configuration>
-                                <arguments>build --no-color</arguments>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>javascript tests</id>
-                            <goals>
-                                <goal>karma</goal>
-                            </goals>
-                            <configuration>
-                                <karmaConfPath>src/test/javascript/karma.conf.ci.js</karmaConfPath>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>

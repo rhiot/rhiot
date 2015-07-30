@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.camel-labs</groupId>
-        <artifactId>camel-labs</artifactId>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot</artifactId>
         <version>0.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>camel-labs-bom</artifactId>
@@ -312,7 +312,7 @@
 
     <repositories>
         <repository>
-            <!-- -->
+            <!-- We need this for the latest Camel SNAPSHOTs. -->
             <id>apache.snapshots</id>
             <name>Apache Development Snapshot Repository</name>
             <url>https://repository.apache.org/content/repositories/snapshots/</url>
