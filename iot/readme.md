@@ -91,13 +91,22 @@ The Camel IoT Labs stack is based on the following libraries and frameworks:
 
 <br>
 
-**Cloudlet stack**
+**Cloudlet API stack**
 
 | Scope                 | Libraries/Frameworks                      |
 |-----------------------|-------------------------------------------|
 | Device management     | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan) **(evaluation)** |
 | Message routing       | - [Apache Camel](http://camel.apache.org) |
 | Application framework | - [Vert.x](http://vertx.io)           |
+
+<br>
+
+**Cloudlet Console stack**
+
+| Scope                 | Libraries/Frameworks                      |
+|-----------------------|-------------------------------------------|
+| Application framework       | - [Hawt.io](http://hawt.io) |
+| Application server       | - [Gulp](http://gulpjs.com) |
 
 
 ## Camel IoT gateway
