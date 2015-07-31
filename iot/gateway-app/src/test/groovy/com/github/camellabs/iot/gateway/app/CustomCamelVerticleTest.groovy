@@ -20,16 +20,17 @@ import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.gateway.Gateway
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.component.mock.MockEndpoint
+import org.junit.BeforeClass
 import org.junit.Test
 
-import static com.github.camellabs.iot.utils.Concurrency.runMainInNewThread
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
 import static java.util.concurrent.TimeUnit.MINUTES
 
 class CustomCamelVerticleTest {
 
-    static {
-        runMainInNewThread(Gateway.class)
+    @BeforeClass
+    static void beforeClass() {
+        new Gateway().start()
     }
 
     // Tests
