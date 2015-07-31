@@ -1,7 +1,7 @@
 # Rhiot - the messaging platform for the Internet Of Things
 
 <a href="https://github.com/rhiot/rhiot"><img src="camel-labs.png" align="left" height="80" hspace="30"></a>
-Rhiot is a messaging platform for the Internet Of Things. We are focused on the adoption of the
+Rhiot is the messaging platform for the Internet Of Things. We are focused on the adoption of the
 [Red Hat JBoss middleware portfolio](http://www.redhat.com/en/technologies/jboss-middleware) to provide the solutions to
 the common IoT-related challenges.
 
@@ -10,15 +10,16 @@ Rhiot comes with the following features:
 - Camel components for IoT
 - Backend cloud services (Cloudlets)
 - Web console for managing the devices, gateways and Cloudlets
+- IoT deployment utilities
+- Performance Testing Framework for the IoT gateways
 
-## Subprojects
+## Documentation
 
-- [Camel IoT Labs](https://github.com/camel-labs/camel-labs/tree/master/iot) - covers modules providing the Internet Of
-Things functionalities
+[Here](https://github.com/rhiot/rhiot/tree/master/iot) you can find the reference documentation for the Rhiot.
 
 ## Current release
 
-The latest and the greatest version of the Camel Labs is 0.1.0. Wondering what's new there? Here are the [release notes](https://github.com/camel-labs/camel-labs/blob/master/release-notes.md).
+The latest and the greatest version of the Rhiot is 0.1.0. Wondering what's new there? Here are the [release notes](https://github.com/rhiot/rhiot/blob/master/release-notes.md).
 
 ## Mailing list
 
