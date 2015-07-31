@@ -5,8 +5,6 @@ Rhiot is the messaging platform for the Internet Of Things. We are focused on th
 [Red Hat JBoss middleware portfolio](http://www.redhat.com/en/technologies/jboss-middleware) to provide the solutions to
 the common IoT-related challenges.
 
-<br>
-
 Rhiot comes with the following features:
 - [IoT gateway software](https://github.com/rhiot/rhiot/blob/master/iot/readme.md#camel-iot-gateway)
 - [Camel components for the IoT](https://github.com/rhiot/rhiot/blob/master/iot/readme.md#camel-iot-components)
