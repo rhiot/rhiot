@@ -25,30 +25,32 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext;
+import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.mockEndpoint;
 import static java.util.concurrent.TimeUnit.MINUTES;
+import static org.apache.camel.component.mock.MockEndpoint.assertIsSatisfied;
 
 public class CustomJavaCamelVerticleTest {
 
-    static Gateway vertxGateway = new Gateway();
+    static Gateway gateway = new Gateway();
 
     @BeforeClass
     public static void beforeClass() {
-        vertxGateway.start();
+        gateway.start();
     }
 
     @AfterClass
     public static void afterClass() {
-        vertxGateway.stop();
+        gateway.stop();
     }
 
     @Test
     public void shouldReceiveHeartbeat() throws InterruptedException {
         // Given
-        MockEndpoint mockEndpoint = camelContext().getEndpoint("mock:customJava", MockEndpoint.class);
+        MockEndpoint mockEndpoint = mockEndpoint("mock:customJava");
         mockEndpoint.setMinimumExpectedMessageCount(1);
 
         // Then
-        MockEndpoint.assertIsSatisfied(1, MINUTES, mockEndpoint);
+        assertIsSatisfied(5, MINUTES, mockEndpoint);
     }
 
 }
