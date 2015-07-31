@@ -800,6 +800,8 @@ directory you specified when executing the command above). The sample diagram ma
 
 <a href="https://github.com/camel-labs/camel-labs/iot"><img src="images/sample_perf_chart.png" align="center" height="400" hspace="30"></a>
 
+Keep in mind that currently we assume that your Raspberry Pi has the default Raspbian SSH account available (username: *pi* / password: *raspberry*).
+
 ### Analysis of the selected tests results
 
 Below you can find some performance benchmarks with the comments regarding the resulted numbers.
