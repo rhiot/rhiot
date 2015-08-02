@@ -15,7 +15,7 @@ Rhiot comes with the following features:
 
 ## Documentation
 
-[Here](https://github.com/rhiot/rhiot/blob/master/iot/readme.md) you can find the reference documentation for the Rhiot.
+[Here](https://github.com/rhiot/rhiot/blob/master/docs/readme.md) you can find the reference documentation for the Rhiot.
 
 ## Current release
 
