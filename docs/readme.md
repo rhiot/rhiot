@@ -8,12 +8,12 @@ the common IoT-related challenges.
 <br>
 
 Rhiot comes with the following features:
-- [IoT gateway software](https://github.com/rhiot/rhiot/blob/master/iot/readme.md#camel-iot-gateway)
-- [Camel components for the IoT](https://github.com/rhiot/rhiot/blob/master/iot/readme.md#camel-iot-components)
-- [Backend cloud services (Cloudlets)](https://github.com/rhiot/rhiot/blob/master/iot/readme.md#cloudlets)
+- [IoT gateway software](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#camel-iot-gateway)
+- [Camel components for the IoT](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#camel-iot-components)
+- [Backend cloud services (Cloudlets)](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#cloudlets)
 - Web console for managing the devices, gateways and Cloudlets
 - IoT deployment utilities
-- [Performance Testing Framework for the IoT gateways](https://github.com/rhiot/rhiot/blob/master/iot/readme.md#performance-testing-framework)
+- [Performance Testing Framework for the IoT gateways](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#performance-testing-framework)
 
 ## Table Of Contents
  
