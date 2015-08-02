@@ -727,27 +727,21 @@ Route the collect data and sendt it to pubnub channel mychannel:
 
 ## Cloudlets
 
-Cloudlets are server-side microservices that come with some common functionalities required by the IoT systems. Cloudlets
-UI are [Hawt.io](http://hawt.io)-based plugins which provides nice web UI for the cloudlets back-end services.
+*Cloudlets* are server-side microservices that come with some common functionalities required by the IoT systems. *Cloudlets
+UI plugins* are [Hawt.io](http://hawt.io)-based plugins which provides nice web UI for the cloudlets back-end services. *Cloudlet
+Console* is the web application assembling all the Cloudlets UI plugins. At last but not least *Rhiot Cloud* is the
+complete cloud-based installation setup including Cloudlet Console, Cloudlets backend services and all the other necessary
+services (like database servers) installed.
 
-### On-premises deployment
+### Dockerized Rhiot Cloud
 
-If you would like to deploy Camel IoT Labs cloud onto the on-premises server, execute the `deploy-cloud.sh` script, from
-the `iot/cloudlet/deployment/onpremises` directory.
+We recommend to run the Rhiot Cloud using the Docker container. We love Docker and believe that containers are the
+future of the applications deployment. To install the Rhiot Cloud on the server of your choice, just install Docker 1.7.1
+(or higher) on it and execute the following command:
 
-    CLOUD_SSH_ROOT=root@215.217.115.37
-    cd iot/cloudlet/deployment/onpremises
-    ./deploy-cloud.sh
+    bash <(curl -s https://raw.githubusercontent.com/rhiot/rhiot/master/iot/cloudlet/deployment/rhiot-cloud.sh)
 
-The cloudlets will be deployed into the `/var/camel-iot-labs` directory on the target server.
-
-If you would like to deploy only back-end services, add DEPLOY_CLOUDLETS parameter to the script:
-
-    ./deploy-cloud.sh DEPLOY_CLOUDLETS
-
-To deploy only UI artifacts, add DEPLOY_UI parameter to the script, just as demonstrated on the example below:
-
-    ./deploy-cloud.sh DEPLOY_UI       
+The script above installs and starts the Cloudlet Console and MongoDB containers.
 
 ## Performance Testing Framework
 
