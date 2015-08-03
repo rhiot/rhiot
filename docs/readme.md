@@ -736,12 +736,14 @@ services (like database servers) installed.
 ### Dockerized Rhiot Cloud
 
 We recommend to run the Rhiot Cloud using the Docker container. We love Docker and believe that containers are the
-future of the applications deployment. To install the Rhiot Cloud on the server of your choice, just install Docker 1.7.1
-(or higher) on it and execute the following command:
+future of the applications deployment. To install the Rhiot Cloud on the Linux server of your choice, just execute the
+following command:
 
     bash <(curl -s https://raw.githubusercontent.com/rhiot/rhiot/master/iot/cloudlet/deployment/rhiot-cloud.sh)
 
-The script above installs and starts the Cloudlet Console and MongoDB containers.
+The script above installs the proper version of Docker server. Keep in mind that the minimal Docker version required by
+Rhiot Cloud is 1.7.1 - if the older version of the Docker is installed, our script will upgrade your Docker server. After
+Docker server is properly installed, our script downloads and starts the Cloudlet Console and MongoDB containers.
 
 ## Performance Testing Framework
 

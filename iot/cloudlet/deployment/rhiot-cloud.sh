@@ -15,6 +15,26 @@
 
 #!/usr/bin/env bash
 
+### Docker server setup
+
+echo Checking Docker setup...
+
+if ! type "$foobar_command_name" > /dev/null; then
+  echo 'Docker not found - installing...'
+  wget -qO- https://get.docker.com/ | sh
+fi
+
+REQUIRED_DOCKER_VERSION=1.7.1
+DOCKER_VERSION=`docker version | grep 'Server version' | cut -d ' ' -f 3`
+if [[ "$DOCKER_VERSION" < "$REQUIRED_DOCKER_VERSION" ]]; then
+  echo "Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot Cloud. Version ${DOCKER_VERSION} found - upgrading..."
+  wget -qO- https://get.docker.com/ | sh
+fi
+
+echo Docker has been properly installed.
+
+### Docker server setup ends
+
 service docker start
 
 docker stop $(docker ps -q)
