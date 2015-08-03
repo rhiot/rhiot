@@ -17,7 +17,6 @@
 package com.github.camellabs.iot.cloudlet.device.verticles
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.camellabs.iot.cloudlet.device.client.DefaultLeshanClient
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
 import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
@@ -39,6 +38,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
+import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.wrapIntoJsonResponse
 import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
 import static java.time.Instant.ofEpochMilli
@@ -72,7 +72,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
             vertx.eventBus().localConsumer('clients.create.virtual') { msg ->
                 def device = new ObjectMapper().readValue(msg.body().toString(), Map.class)
-                DefaultLeshanClient.createLeshanCloudClient(device.clientId).connect().disconnect()
+                createVirtualLeshanClientTemplate(device.clientId).connect().disconnect()
                 wrapIntoJsonResponse(msg, 'Status', 'Success')
             }
 

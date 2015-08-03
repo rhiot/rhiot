@@ -18,33 +18,46 @@ package com.github.camellabs.iot.cloudlet.device.client
 
 import org.eclipse.leshan.ResponseCode
 import org.eclipse.leshan.client.californium.LeshanClient
+import org.eclipse.leshan.client.resource.LwM2mInstanceEnabler
 import org.eclipse.leshan.client.resource.ObjectsInitializer
 import org.eclipse.leshan.core.request.RegisterRequest
 
 import static io.rhiot.utils.Networks.findAvailableTcpPort
+import static org.slf4j.LoggerFactory.getLogger
 
-class DefaultLeshanClient {
+class LeshanClientTemplate {
+
+    private static final def LOG = getLogger(LeshanClientTemplate.class)
 
     private final String clientId
 
     private final String server
 
+    private final Class<? extends LwM2mInstanceEnabler> deviceClass
+
     private LeshanClient leshanClient
 
     private int clientPort = findAvailableTcpPort()
 
-    DefaultLeshanClient(String clientId, String server) {
+    LeshanClientTemplate(String clientId, String server, Class<? extends LwM2mInstanceEnabler> deviceClass) {
         this.clientId = clientId
         this.server = server
+        this.deviceClass = deviceClass
     }
 
-    static DefaultLeshanClient createLeshanCloudClient(String clientId) {
-        new DefaultLeshanClient(clientId, 'localhost:5683')
+    static LeshanClientTemplate createGenericLeshanClientTemplate(String clientId) {
+        new LeshanClientTemplate(clientId, 'localhost:5683', GenericDevice.class)
     }
 
-    DefaultLeshanClient connect() {
+    static LeshanClientTemplate createVirtualLeshanClientTemplate(String clientId) {
+        new LeshanClientTemplate(clientId, 'localhost:5683', VirtualDevice.class)
+    }
+
+    // Connection operations
+
+    LeshanClientTemplate connect() {
         def initializer = new ObjectsInitializer()
-        initializer.setClassForObject(3, GenericDevice.class)
+        initializer.setClassForObject(3, deviceClass)
         def enablers = initializer.createMandatory()
         enablers.addAll(initializer.create(6))
 
@@ -65,16 +78,12 @@ class DefaultLeshanClient {
             String registrationID = response.getRegistrationID();
             println(">>>>>>>>>>>>>> " + registrationID)
         } else {
-            // TODO Should we have a error message on response ?
-            // System.err.println("\tDevice Registration Error: " + response.getErrorMessage());
-            System.err.println("\tDevice Registration Error: " + response.getCode());
-            System.err
-                    .println("If you're having issues connecting to the LWM2M endpoint, try using the DTLS port instead");
+            throw new RuntimeException("Device Registration Error. Server response code: ${response.getCode()}")
         }
         this
     }
 
-    DefaultLeshanClient disconnect() {
+    LeshanClientTemplate disconnect() {
         leshanClient.stop()
         this
     }

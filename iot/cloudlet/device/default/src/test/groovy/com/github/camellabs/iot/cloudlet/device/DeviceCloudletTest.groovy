@@ -25,7 +25,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.springframework.web.client.RestTemplate
 
-import static com.github.camellabs.iot.cloudlet.device.client.DefaultLeshanClient.createLeshanCloudClient
+import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createGenericLeshanClientTemplate
 import static de.flapdoodle.embed.mongo.distribution.Version.V3_1_0
 import static de.flapdoodle.embed.process.runtime.Network.localhostIsIPv6
 import static io.rhiot.utils.Networks.findAvailableTcpPort
@@ -86,9 +86,9 @@ class DeviceCloudletTest extends Assert {
         def secondClient = 'bar'
 
         // When
-        createLeshanCloudClient(firstClient).connect()
-        createLeshanCloudClient(firstClient).connect()
-        createLeshanCloudClient(secondClient).connect()
+        createGenericLeshanClientTemplate(firstClient).connect()
+        createGenericLeshanClientTemplate(firstClient).connect()
+        createGenericLeshanClientTemplate(secondClient).connect()
 
         // Then
         def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/client"), Map.class)
@@ -99,7 +99,7 @@ class DeviceCloudletTest extends Assert {
     void shouldListRegisteredClient() {
         // Given
         def clientId = randomUUID().toString()
-        createLeshanCloudClient(clientId).connect()
+        createGenericLeshanClientTemplate(clientId).connect()
 
         // When
         def client = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}"), Map.class)
@@ -113,7 +113,7 @@ class DeviceCloudletTest extends Assert {
         // Given
         rest.delete(new URI("http://localhost:${restApiPort}/client"))
         def clientId = randomUUID().toString()
-        createLeshanCloudClient(clientId).connect()
+        createGenericLeshanClientTemplate(clientId).connect()
 
         // When
         sleep(5000)
@@ -128,7 +128,7 @@ class DeviceCloudletTest extends Assert {
         // Given
         rest.delete(new URI("http://localhost:${restApiPort}/client"))
         def clientId = randomUUID().toString()
-        createLeshanCloudClient(clientId).connect()
+        createGenericLeshanClientTemplate(clientId).connect()
 
         // When
         def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/client?disconnected=true"), Map.class)
@@ -141,7 +141,7 @@ class DeviceCloudletTest extends Assert {
     void shouldReadClientManufacturer() {
         // Given
         def clientId = randomUUID().toString()
-        createLeshanCloudClient(clientId).connect()
+        createGenericLeshanClientTemplate(clientId).connect()
 
         // When
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/manufacturer"), Map.class)
@@ -153,7 +153,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldReturnManufacturerFailureForNonExistingClient() {
         // Given
-        createLeshanCloudClient(randomUUID().toString()).connect()
+        createGenericLeshanClientTemplate(randomUUID().toString()).connect()
 
         // When
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/invalidEndpoint/manufacturer"), Map.class)
@@ -166,7 +166,7 @@ class DeviceCloudletTest extends Assert {
     void shouldReadClientModel() {
         // Given
         def clientId = randomUUID().toString()
-        createLeshanCloudClient(clientId).connect()
+        createGenericLeshanClientTemplate(clientId).connect()
 
         // When
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/model"), Map.class)
@@ -179,7 +179,7 @@ class DeviceCloudletTest extends Assert {
     void shouldReadClientSerial() {
         // Given
         def clientId = randomUUID().toString()
-        createLeshanCloudClient(clientId).connect()
+        createGenericLeshanClientTemplate(clientId).connect()
 
         // When
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/serial"), Map.class)
