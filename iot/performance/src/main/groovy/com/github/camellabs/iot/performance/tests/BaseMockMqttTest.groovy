@@ -24,7 +24,7 @@ import com.github.camellabs.iot.utils.ssh.client.SshClient
 import java.text.SimpleDateFormat
 
 import static com.github.camellabs.iot.performance.MqttServer.getMqttPort
-import static com.github.camellabs.iot.utils.Networks.localNetworkIp
+import static io.rhiot.utils.Networks.localNetworkIp
 
 abstract class BaseMockMqttTest implements TestSpecification {
 
