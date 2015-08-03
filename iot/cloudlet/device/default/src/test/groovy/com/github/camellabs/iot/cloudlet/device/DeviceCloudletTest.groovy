@@ -20,31 +20,34 @@ import de.flapdoodle.embed.mongo.MongodStarter
 import de.flapdoodle.embed.mongo.config.IMongodConfig
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
 import de.flapdoodle.embed.mongo.config.Net
-import org.apache.commons.io.IOUtils
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
-import org.springframework.util.SocketUtils
 import org.springframework.web.client.RestTemplate
 
-import static com.github.camellabs.iot.cloudlet.device.DeviceCloudlet.jackson
 import static com.github.camellabs.iot.cloudlet.device.client.DefaultLeshanClient.createLeshanCloudClient
 import static de.flapdoodle.embed.mongo.distribution.Version.V3_1_0
 import static de.flapdoodle.embed.process.runtime.Network.localhostIsIPv6
+import static io.rhiot.utils.Networks.findAvailableTcpPort
+import static io.rhiot.utils.Uuids.uuid
 import static java.util.UUID.randomUUID
-import static org.springframework.util.SocketUtils.findAvailableTcpPort
 
 class DeviceCloudletTest extends Assert {
 
     static def int restApiPort = findAvailableTcpPort()
 
+    static def int mongodbPort = findAvailableTcpPort()
+
+    def apiBase = "http://localhost:${restApiPort}"
+
     def rest = new RestTemplate()
 
     @BeforeClass
     static void beforeClass() {
+        System.setProperty('mongodb_port', "${mongodbPort}")
         IMongodConfig mongodConfig = new MongodConfigBuilder()
                 .version(V3_1_0)
-                .net(new Net(27017, localhostIsIPv6()))
+                .net(new Net(mongodbPort, localhostIsIPv6()))
                 .build();
         MongodStarter.getDefaultInstance().prepare(mongodConfig).start()
 
@@ -52,13 +55,27 @@ class DeviceCloudletTest extends Assert {
         System.setProperty('camellabs_iot_cloudlet_device_disconnectionPeriod', "${5000}")
 
         new DeviceCloudlet().start()
+        sleep(2000)
     }
 
     @Test
     void shouldReturnNoClients() {
-        rest.delete(new URI("http://localhost:${restApiPort}/client"))
+        rest.delete(apiBase + '/client')
         def response = rest.getForObject(new URI("http://localhost:${restApiPort}/client"), Map.class)
         assertEquals(0, response['clients'].asType(List.class).size())
+    }
+
+    @Test
+    void shouldReturnVirtualClient() {
+        // Given
+        rest.delete(apiBase + '/client')
+
+        // When
+        rest.postForLocation(apiBase + '/client', new TestVirtualDevice(clientId: uuid()))
+        def response = rest.getForObject(apiBase + '/client', Map.class)
+
+        // Then
+        assertEquals(1, response['clients'].asType(List.class).size())
     }
 
     @Test
@@ -169,6 +186,20 @@ class DeviceCloudletTest extends Assert {
 
         // Then
         assertEquals('Generic serial number', manufacturer['serial'])
+    }
+
+}
+
+class TestVirtualDevice {
+
+    String clientId
+
+    String getClientId() {
+        return clientId
+    }
+
+    void setClientId(String clientId) {
+        this.clientId = clientId
     }
 
 }

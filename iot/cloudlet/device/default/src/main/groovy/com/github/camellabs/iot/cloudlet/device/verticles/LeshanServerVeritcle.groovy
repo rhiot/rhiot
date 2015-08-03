@@ -16,6 +16,8 @@
  */
 package com.github.camellabs.iot.cloudlet.device.verticles
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.camellabs.iot.cloudlet.device.client.DefaultLeshanClient
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
 import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
@@ -48,10 +50,12 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     final def LeshanServer leshanServer
 
+    final def registryMongoDbPort = intProperty('mongodb_port', 27017)
+
     final def disconnectionPeriod = intProperty('camellabs_iot_cloudlet_device_disconnectionPeriod', 60 * 1000)
 
     LeshanServerVeritcle() {
-        def mongo = new Mongo()
+        def mongo = new Mongo('localhost', registryMongoDbPort)
 
         def cacheManager = new DefaultCacheManager(new GlobalConfigurationBuilder().transport().defaultTransport().build())
         Configuration builder = new ConfigurationBuilder().clustering().cacheMode(INVALIDATION_ASYNC).build();
@@ -65,6 +69,12 @@ class LeshanServerVeritcle extends GroovyVerticle {
     void start(Future<Void> startFuture) throws Exception {
         vertx.runOnContext {
             leshanServer.start()
+
+            vertx.eventBus().localConsumer('clients.create.virtual') { msg ->
+                def device = new ObjectMapper().readValue(msg.body().toString(), Map.class)
+                DefaultLeshanClient.createLeshanCloudClient(device.clientId).connect().disconnect()
+                wrapIntoJsonResponse(msg, 'Status', 'Success')
+            }
 
             vertx.eventBus().localConsumer('listClients') { msg ->
                 wrapIntoJsonResponse(msg, 'clients', leshanServer.clientRegistry.allClients())

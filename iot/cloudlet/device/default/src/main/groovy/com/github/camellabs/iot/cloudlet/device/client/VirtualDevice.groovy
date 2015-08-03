@@ -19,9 +19,7 @@ package com.github.camellabs.iot.cloudlet.device.client
 import org.eclipse.leshan.ResponseCode
 import org.eclipse.leshan.client.resource.BaseInstanceEnabler
 import org.eclipse.leshan.core.node.LwM2mResource
-import org.eclipse.leshan.core.node.Value
 import org.eclipse.leshan.core.response.LwM2mResponse
-import org.eclipse.leshan.core.response.ValueResponse
 
 import java.text.SimpleDateFormat
 

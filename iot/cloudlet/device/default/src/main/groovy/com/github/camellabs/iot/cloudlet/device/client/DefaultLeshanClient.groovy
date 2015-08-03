@@ -21,7 +21,7 @@ import org.eclipse.leshan.client.californium.LeshanClient
 import org.eclipse.leshan.client.resource.ObjectsInitializer
 import org.eclipse.leshan.core.request.RegisterRequest
 
-import static org.springframework.util.SocketUtils.findAvailableTcpPort
+import static io.rhiot.utils.Networks.findAvailableTcpPort
 
 class DefaultLeshanClient {
 
