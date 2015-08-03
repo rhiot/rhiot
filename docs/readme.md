@@ -271,7 +271,7 @@ following jar:
 
     <dependencies>
       <dependency>
-        <groupId>com.github.camel-labs</groupId>
+        <groupId>io.rhiot</groupId>
         <artifactId>rhiot-vertx</artifactId>
         <version>0.1.1</version>
       </dependency>

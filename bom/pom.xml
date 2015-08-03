@@ -108,7 +108,7 @@
                 <version>${camel-labs.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.camel-labs</groupId>
+                <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-vertx</artifactId>
                 <version>${camel-labs.version}</version>
             </dependency>

@@ -21,7 +21,6 @@
     </licenses>
 
     <modules>
-        <module>vertx</module>
         <module>utils-ssh</module>
         <module>components</module>
         <module>gateway</module>
