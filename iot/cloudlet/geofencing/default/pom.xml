@@ -18,6 +18,10 @@
         </license>
     </licenses>
 
+    <properties>
+        <docker.image.target>cloudlet-geofencing</docker.image.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.github.camel-labs</groupId>

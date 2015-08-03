@@ -289,7 +289,7 @@
                     <configuration>
                         <images>
                             <image>
-                                <name>camellabs/${docker.image.target}</name>
+                                <name>rhiot/${docker.image.target}</name>
                                 <build>
                                     <from>hekonsek/fatjar:0.0.14-SNAPSHOT</from>
                                     <tags>
