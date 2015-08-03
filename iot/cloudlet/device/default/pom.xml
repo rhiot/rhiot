@@ -19,7 +19,8 @@
     </licenses>
 
     <properties>
-        <main.verticle>com.github.camellabs.iot.cloudlet.device.DeviceCloudlet</main.verticle>
+        <fatjar.mainClass>com.github.camellabs.iot.cloudlet.device.DeviceCloudlet</fatjar.mainClass>
+        <docker.image.target>cloudlet-device</docker.image.target>
     </properties>
 
     <dependencies>
@@ -37,19 +38,11 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.leshan</groupId>
-            <artifactId>leshan-standalone</artifactId>
-            <version>0.1.11-M4</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-slf4j-impl</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>leshan-server-cf</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.leshan</groupId>
             <artifactId>leshan-client-cf</artifactId>
-            <version>0.1.11-M4</version>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
@@ -82,23 +75,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.github.camellabs.iot.cloudlet.device.DeviceCloudlet</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jolokia</groupId>
