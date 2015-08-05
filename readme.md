@@ -34,7 +34,7 @@ You can create [new issue, bug, comment here](https://github.com/rhiot/rhiot/iss
 All you need to build the project is Maven 3 and Java 8 JDK:
 
     git clone https://github.com/rhiot/rhiot.git
-    cd camel-labs
+    cd rhiot
     mvn install
 
 ## Build status
