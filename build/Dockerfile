@@ -28,7 +28,7 @@ MAINTAINER Greg Autric <gautric@redhat.com> (@gautric_io)
 
 RUN yum -y install java-1.8.0-openjdk-devel git maven
 
-ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk
-ENV RHIOT_SRC_DIR /rhiot
+ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+ENV RHIOT_SRC_DIR=/rhiot
 
 CMD cd $RHIOT_SRC_DIR; mvn clean package
