@@ -42,15 +42,15 @@ Via Docker
 * 1st step (once)
 
 
-    git clone https://github.com/rhiot/rhiot.git
-    cd rhiot
+    git clone https://github.com/rhiot/rhiot.git;
+    cd rhiot;
     docker build -t rhiot build
 
 
 * 2nd step
 
 
-    cd rhiot
+    cd rhiot;
     docker run -v `pwd`:/rhiot --privileged -i -t rhiot
 
 
