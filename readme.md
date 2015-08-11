@@ -39,7 +39,7 @@ All you need to build the project is Maven 3 and Java 8 JDK:
 
 Via Docker
 
-* 1st step (once)
+1st step (once)
 
 
     git clone https://github.com/rhiot/rhiot.git;
@@ -47,7 +47,7 @@ Via Docker
     docker build -t rhiot build
 
 
-* 2nd step
+2nd step
 
 
     cd rhiot;
