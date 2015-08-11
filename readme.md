@@ -37,6 +37,17 @@ All you need to build the project is Maven 3 and Java 8 JDK:
     cd rhiot
     mvn install
 
+Via Docker
+
+1st step (once)
+    git clone https://github.com/rhiot/rhiot.git
+    cd rhiot
+    docker build -t rhiot build
+
+2nd step
+    cd rhiot
+    docker run -v `pwd`:/rhiot --privileged -i -t rhiot
+
 ## Build status
 
 [![Build Status](https://travis-ci.org/rhiot/rhiot.svg?branch=master)](https://travis-ci.org/rhiot/rhiot)
