@@ -45,7 +45,7 @@
 
     <name>${project.artifactId}</name>
     <description>Camel Labs</description>
-    <url>https://github.com/camel-labs/camel-labs</url>
+    <url>https://github.com/rhiot/rhiot</url>
 
     <licenses>
         <license>
@@ -131,7 +131,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>1.8</version>
+                                    <version>${maven.compiler.source}</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
