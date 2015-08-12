@@ -44,8 +44,8 @@
     </properties>
 
     <name>${project.artifactId}</name>
-    <description>Camel Labs</description>
-    <url>https://github.com/rhiot/rhiot</url>
+    <description>Rhiot Project</description>
+    <url>http://rhiot.io</url>
 
     <licenses>
         <license>
@@ -58,6 +58,12 @@
         <developer>
             <name>Henryk Konsek</name>
             <email>hekonsek@gmail.com</email>
+            <organization>Red Hat</organization>
+            <organizationUrl>http://www.redhat.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Greg Autric</name>
+            <email>gautric@redhat.com</email>
             <organization>Red Hat</organization>
             <organizationUrl>http://www.redhat.com</organizationUrl>
         </developer>
