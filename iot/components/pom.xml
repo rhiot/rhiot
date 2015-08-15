@@ -117,8 +117,9 @@
 		<!-- enables the APT dependency so that it can be disabled in IDE builds -->
 		<profile>
 			<id>apt</id>
-            <!-- Disabling APT profile for a while, as it causes Maven build to fail with the OutOfMemoryError. -->
-			<!--<activation>-->
+            <!-- Disabled APT profile for a while, as it causes Maven build to fail with the OutOfMemoryError. -->
+			<!-- See - https://github.com/rhiot/rhiot/issues/169 -->
+            <!--<activation>-->
 				<!--<property>-->
 					<!--<name>!dummy.prop.to.keep.this.profile.active.even.when.other.profiles.are.active</name>-->
 				<!--</property>-->
