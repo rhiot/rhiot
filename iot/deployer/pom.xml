@@ -21,8 +21,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-utils-ssh</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-utils-ssh</artifactId>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>

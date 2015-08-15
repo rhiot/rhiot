@@ -45,8 +45,8 @@
             <artifactId>slf4j-nop</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-utils-ssh</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-utils-ssh</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

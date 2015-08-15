@@ -21,7 +21,6 @@
     </licenses>
 
     <modules>
-        <module>utils-ssh</module>
         <module>components</module>
         <module>gateway</module>
         <module>gateway-app</module>

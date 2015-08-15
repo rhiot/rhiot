@@ -104,8 +104,8 @@
                 <version>${camel-labs.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.camel-labs</groupId>
-                <artifactId>camel-labs-iot-utils-ssh</artifactId>
+                <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-utils-ssh</artifactId>
                 <version>${camel-labs.version}</version>
             </dependency>
             <dependency>
