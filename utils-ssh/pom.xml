@@ -20,10 +20,13 @@
     </licenses>
 
     <dependencies>
+        <!-- Rhiot dependencies -->
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-utils</artifactId>
         </dependency>
+
+        <!-- 3rd parties dependencies -->
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
