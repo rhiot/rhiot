@@ -117,11 +117,11 @@
 		<!-- enables the APT dependency so that it can be disabled in IDE builds -->
 		<profile>
 			<id>apt</id>
-			<activation>
-				<property>
-					<name>!dummy.prop.to.keep.this.profile.active.even.when.other.profiles.are.active</name>
-				</property>
-			</activation>
+			<!--<activation>-->
+				<!--<property>-->
+					<!--<name>!dummy.prop.to.keep.this.profile.active.even.when.other.profiles.are.active</name>-->
+				<!--</property>-->
+			<!--</activation>-->
 
 			<dependencies>
 				<!-- enable the APT processor -->
@@ -129,7 +129,7 @@
 					<groupId>org.apache.camel</groupId>
 					<artifactId>apt</artifactId>
 					<version>${camel.version}</version>
-					<scope>progvided</scope>
+					<scope>provided</scope>
 				</dependency>
 			</dependencies>
 		</profile>
