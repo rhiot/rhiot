@@ -81,7 +81,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldNotRegisterClientTwice() {
         // Given
-        rest.delete(new URI("http://localhost:${restApiPort}/client"))
+        rest.delete(apiBase + '/client')
         def firstClient = 'foo'
         def secondClient = 'bar'
 
@@ -111,16 +111,16 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldListDisconnectedClient() {
         // Given
-        rest.delete(new URI("http://localhost:${restApiPort}/client"))
+        rest.delete(apiBase + '/client')
         def clientId = randomUUID().toString()
         createGenericLeshanClientTemplate(clientId).connect()
 
         // When
         sleep(5000)
-        def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/device?disconnected=true"), Map.class)
+        def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/disconnectedDevices"), Map.class)
 
         // Then
-        assertEquals([clientId], clients['disconnectedClients'].asType(List.class))
+        assertEquals([clientId], clients['disconnectedDevices'].asType(List.class))
     }
 
     @Test
@@ -131,10 +131,10 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(clientId).connect()
 
         // When
-        def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/device?disconnected=true"), Map.class)
+        def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/disconnectedDevices"), Map.class)
 
         // Then
-        assertEquals(0, clients['disconnectedClients'].asType(List.class).size())
+        assertEquals(0, clients['disconnectedDevices'].asType(List.class).size())
     }
 
     @Test

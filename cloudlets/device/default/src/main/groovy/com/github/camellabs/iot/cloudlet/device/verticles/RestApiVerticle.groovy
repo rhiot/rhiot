@@ -27,7 +27,6 @@ import static io.vertx.core.http.HttpMethod.DELETE
 import static io.vertx.core.http.HttpMethod.GET
 import static io.vertx.core.http.HttpMethod.POST
 import static io.vertx.groovy.ext.web.Router.router
-import static java.lang.Boolean.parseBoolean
 
 class RestApiVerticle extends BaseRestApiVerticle {
 
@@ -39,15 +38,12 @@ class RestApiVerticle extends BaseRestApiVerticle {
 
             // Get list of clients
             router.route('/device').method(GET).handler { rc ->
-                switch (rc.request().getParam('disconnected')) {
-                    case { parseBoolean(it) }:
-                        vertx.eventBus().send('clients.disconnected', null, { clients -> jsonResponse(rc, clients) })
-                        break
+                vertx.eventBus().send('listDevices', null, { clients -> jsonResponse(rc, clients) })
+            }
 
-                    default:
-                        vertx.eventBus().send('listDevices', null, { clients -> jsonResponse(rc, clients) })
-                        break
-                }
+            // Get list of disconnected clients' identifiers
+            router.route('/disconnectedDevices').method(GET).handler { rc ->
+                vertx.eventBus().send('clients.disconnected', null, { clients -> jsonResponse(rc, clients) })
             }
 
             router.route("/client").method(POST).handler { rc ->

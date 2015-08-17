@@ -44,16 +44,19 @@ import static com.github.camellabs.iot.vertx.jackson.Jacksons.json
 import static com.github.camellabs.iot.vertx.jackson.Jacksons.jsonMessageToMap
 import static java.time.Instant.ofEpochMilli
 import static java.time.LocalDateTime.ofInstant
+import static java.util.concurrent.TimeUnit.MINUTES
 import static org.eclipse.leshan.ResponseCode.CONTENT
 import static org.infinispan.configuration.cache.CacheMode.INVALIDATION_ASYNC
 
 class LeshanServerVeritcle extends GroovyVerticle {
 
+    private static final def DEFAULT_DISCONNECTION_PERIOD = MINUTES.toMillis(1)
+
     final def LeshanServer leshanServer
 
     final def registryMongoDbPort = intProperty('mongodb_port', 27017)
 
-    final def disconnectionPeriod = intProperty('camellabs_iot_cloudlet_device_disconnectionPeriod', 60 * 1000)
+    final def disconnectionPeriod = intProperty('camellabs_iot_cloudlet_device_disconnectionPeriod', DEFAULT_DISCONNECTION_PERIOD.intValue())
 
     LeshanServerVeritcle() {
         def mongo = new Mongo('localhost', registryMongoDbPort)
@@ -82,7 +85,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
             }
 
             vertx.eventBus().localConsumer('clients.disconnected') { msg ->
-                wrapIntoJsonResponse(msg, 'disconnectedClients', disconnectedClients())
+                wrapIntoJsonResponse(msg, 'disconnectedDevices', disconnectedClients())
             }
 
             vertx.eventBus().localConsumer('deleteClients') { msg ->
