@@ -16,12 +16,12 @@
  */
 package com.github.camellabs.iot.cloudlet.device.verticles
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
 import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
 import com.mongodb.Mongo
 import io.vertx.core.Future
+import io.vertx.groovy.core.eventbus.Message
 import io.vertx.lang.groovy.GroovyVerticle
 import org.eclipse.leshan.core.node.LwM2mResource
 import org.eclipse.leshan.core.request.ReadRequest
@@ -39,8 +39,9 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
-import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.wrapIntoJsonResponse
 import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
+import static com.github.camellabs.iot.vertx.jackson.Jacksons.json
+import static com.github.camellabs.iot.vertx.jackson.Jacksons.jsonMessageToMap
 import static java.time.Instant.ofEpochMilli
 import static java.time.LocalDateTime.ofInstant
 import static org.eclipse.leshan.ResponseCode.CONTENT
@@ -71,7 +72,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
             leshanServer.start()
 
             vertx.eventBus().localConsumer('clients.create.virtual') { msg ->
-                def device = new ObjectMapper().readValue(msg.body().toString(), Map.class)
+                def device = jsonMessageToMap(msg.body())
                 createVirtualLeshanClientTemplate(device.clientId).connect().disconnect()
                 wrapIntoJsonResponse(msg, 'Status', 'Success')
             }
@@ -147,6 +148,11 @@ class LeshanServerVeritcle extends GroovyVerticle {
             def updated = ofInstant(ofEpochMilli(client.lastUpdate.time), ZoneId.systemDefault()).toLocalTime()
             updated.plus(disconnectionPeriod, ChronoUnit.MILLIS).isBefore(LocalTime.now())
         }.collect { client -> client.endpoint }
+    }
+
+    def wrapIntoJsonResponse(Message message, String root, Object pojo) {
+        def json = json().writeValueAsString(["${root}": pojo])
+        message.reply(json)
     }
 
 }

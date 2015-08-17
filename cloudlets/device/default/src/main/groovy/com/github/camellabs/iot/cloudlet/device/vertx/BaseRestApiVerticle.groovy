@@ -22,23 +22,20 @@ import io.vertx.core.AsyncResult
 import io.vertx.groovy.core.eventbus.Message
 import io.vertx.groovy.core.http.HttpServerResponse
 import io.vertx.groovy.ext.web.RoutingContext
+import io.vertx.lang.groovy.GroovyVerticle
 
-import static java.lang.System.getenv
-
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 
 @CompileStatic
-final class Vertxes {
+class BaseRestApiVerticle extends GroovyVerticle {
 
-    private static final ObjectMapper JACKSON = new ObjectMapper()
-
-    private Vertxes() {
-    }
+    private final ObjectMapper JACKSON = new ObjectMapper().setSerializationInclusion(NON_NULL)
 
     static HttpServerResponse jsonResponse(RoutingContext routingContext) {
         routingContext.response().putHeader("content-type", "application/json")
     }
 
-    static void jsonResponse(RoutingContext routingContext, AsyncResult<Message> message) {
+    protected void jsonResponse(RoutingContext routingContext, AsyncResult<Message> message) {
         if(message.succeeded()) {
             jsonResponse(routingContext).end(message.result().body().toString())
         } else {
@@ -48,11 +45,6 @@ final class Vertxes {
 
     static String parameter(RoutingContext routingContext, String parameter) {
         routingContext.request().getParam(parameter)
-    }
-
-    static def wrapIntoJsonResponse(Message message, String root, Object pojo) {
-        def json = JACKSON.writeValueAsString(["${root}": pojo])
-        message.reply(json)
     }
 
 }

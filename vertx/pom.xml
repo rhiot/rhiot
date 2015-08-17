@@ -34,6 +34,12 @@
             <!-- Vert.x 3 is supported only in Camel 2.16. Remove this when Camel 2.16 is out. -->
             <version>2.16-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <repositories>

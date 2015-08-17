@@ -16,15 +16,12 @@
  */
 package com.github.camellabs.iot.cloudlet.device.verticles
 
-import com.github.camellabs.iot.vertx.PropertyResolver
+import com.github.camellabs.iot.cloudlet.device.vertx.BaseRestApiVerticle
 import io.vertx.core.Future
 import io.vertx.core.Handler
-import io.vertx.core.json.Json
 import io.vertx.groovy.core.buffer.Buffer
-import io.vertx.groovy.ext.web.handler.BodyHandler
-import io.vertx.lang.groovy.GroovyVerticle
 
-import static com.github.camellabs.iot.cloudlet.device.vertx.Vertxes.*
+import static com.github.camellabs.iot.cloudlet.device.vertx.BaseRestApiVerticle.*
 import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
 import static io.vertx.core.http.HttpMethod.DELETE
 import static io.vertx.core.http.HttpMethod.GET
@@ -32,7 +29,7 @@ import static io.vertx.core.http.HttpMethod.POST
 import static io.vertx.groovy.ext.web.Router.router
 import static java.lang.Boolean.parseBoolean
 
-class RestApiVerticle extends GroovyVerticle {
+class RestApiVerticle extends BaseRestApiVerticle {
 
     @Override
     void start(Future<Void> startFuture) throws Exception {
