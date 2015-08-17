@@ -23,15 +23,7 @@ import org.eclipse.leshan.core.response.LwM2mResponse
 
 import java.text.SimpleDateFormat
 
-class VirtualDevice extends BaseInstanceEnabler {
-
-    @Override
-    public LwM2mResponse execute(int resourceid, byte[] params) {
-        System.out.println("Execute on Device resource " + resourceid);
-        if (params != null && params.length != 0)
-            System.out.println("\t params " + new String(params));
-        return new LwM2mResponse(ResponseCode.CHANGED);
-    }
+class VirtualDevice extends GenericDevice {
 
     @Override
     public LwM2mResponse write(int resourceid, LwM2mResource value) {
@@ -50,18 +42,6 @@ class VirtualDevice extends BaseInstanceEnabler {
             default:
                 return super.write(resourceid, value);
         }
-    }
-
-    private String getManufacturer() {
-        return "Leshan Example Device";
-    }
-
-    private String getModelNumber() {
-        return "Model 500";
-    }
-
-    private String getSerialNumber() {
-        return "LT-500-000-0001";
     }
 
     private String getFirmwareVersion() {
