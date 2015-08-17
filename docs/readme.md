@@ -761,10 +761,10 @@ The device management cloudlet is distributed as a fat jar. Its Maven coordinate
 The device management cloudlet exposes REST API that can be used to work with the devices. By default the device
 management REST API is exposed using the following base URI - `http:0.0.0.0:15000`.
 
-To list the devices send the `GET` request to the following URL `http:localhost:15000/client`. You should receive
+To list the devices send the `GET` request to the following URL `http:localhost:15000/device`. You should receive
 response similar to the following JSON:
 
-    {"clients":
+    {"devices":
       [{"registrationDate":1439822565254,
       "address":"127.0.0.1",
       "port":1103,

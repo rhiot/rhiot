@@ -32,20 +32,20 @@ import static java.lang.Boolean.parseBoolean
 class RestApiVerticle extends BaseRestApiVerticle {
 
     @Override
-    void start(Future<Void> startFuture) throws Exception {
+    void start(Future<Void> startFuture) {
         vertx.runOnContext {
             def http = vertx.createHttpServer()
             def router = router(vertx)
 
             // Get list of clients
-            router.route('/client').method(GET).handler { rc ->
+            router.route('/device').method(GET).handler { rc ->
                 switch (rc.request().getParam('disconnected')) {
                     case { parseBoolean(it) }:
                         vertx.eventBus().send('clients.disconnected', null, { clients -> jsonResponse(rc, clients) })
                         break
 
                     default:
-                        vertx.eventBus().send('listClients', null, { clients -> jsonResponse(rc, clients) })
+                        vertx.eventBus().send('listDevices', null, { clients -> jsonResponse(rc, clients) })
                         break
                 }
             }

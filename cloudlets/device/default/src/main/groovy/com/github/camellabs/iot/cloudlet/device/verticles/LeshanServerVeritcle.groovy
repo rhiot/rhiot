@@ -77,8 +77,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 wrapIntoJsonResponse(msg, 'Status', 'Success')
             }
 
-            vertx.eventBus().localConsumer('listClients') { msg ->
-                wrapIntoJsonResponse(msg, 'clients', leshanServer.clientRegistry.allClients())
+            vertx.eventBus().localConsumer('listDevices') { msg ->
+                wrapIntoJsonResponse(msg, 'devices', leshanServer.clientRegistry.allClients())
             }
 
             vertx.eventBus().localConsumer('clients.disconnected') { msg ->
