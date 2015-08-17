@@ -88,7 +88,7 @@ class RestApiVerticle extends GroovyVerticle {
                 }
             }
 
-            http.requestHandler(router.&accept).listen(intProperty('camellabs_iot_cloudlet_device_api_rest_port', 8080))
+            http.requestHandler(router.&accept).listen(intProperty('camellabs_iot_cloudlet_device_api_rest_port', 15000))
 
             startFuture.complete()
         }

@@ -20,6 +20,7 @@ import de.flapdoodle.embed.mongo.MongodStarter
 import de.flapdoodle.embed.mongo.config.IMongodConfig
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
 import de.flapdoodle.embed.mongo.config.Net
+import org.apache.commons.io.IOUtils
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test

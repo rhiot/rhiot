@@ -4,12 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>camel-labs-iot-cloudlet-device-parent</artifactId>
-        <groupId>com.github.camel-labs</groupId>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-cloudlet-device-parent</artifactId>
         <version>0.1.1-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>camel-labs-iot-cloudlet-device</artifactId>
+    <artifactId>rhiot-cloudlet-device</artifactId>
 
     <licenses>
         <license>

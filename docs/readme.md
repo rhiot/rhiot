@@ -95,7 +95,7 @@ The Camel IoT Labs stack is based on the following libraries and frameworks:
 
 | Scope             | Libraries/Frameworks                      | 
 |-------------------|-------------------------------------------|
-| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan) **(evaluation)** |
+| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan) |
 | Message routing   | - [Apache Camel](http://camel.apache.org) |
 | Application framework | - [Vert.x](http://vertx.io)           |
 
@@ -105,7 +105,7 @@ The Camel IoT Labs stack is based on the following libraries and frameworks:
 
 | Scope                 | Libraries/Frameworks                      |
 |-----------------------|-------------------------------------------|
-| Device management     | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan) **(evaluation)** |
+| Device management     | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan) |
 | Message routing       | - [Apache Camel](http://camel.apache.org) |
 | Application framework | - [Vert.x](http://vertx.io)           |
 
@@ -743,8 +743,46 @@ following command:
 
 The script above installs the proper version of Docker server. Keep in mind that the minimal Docker version required by
 Rhiot Cloud is 1.7.1 - if the older version of the Docker is installed, our script will upgrade your Docker server. After
-Docker server is properly installed, our script downloads and starts the Cloudlet Console, geofencing cloudlet and
-MongoDB containers.
+Docker server is properly installed, our script downloads and starts the Cloudlet Console, device management cloudlet,
+geofencing cloudlet and MongoDB containers.
+
+### Device management cloudlet
+
+Device management cloudlet provides backend service for registering and tracking devices connected to the Rhiot Cloud.
+Under the hood device management cloudlet uses [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan), the
+open source implementation of the [LWM2M](https://en.wikipedia.org/wiki/OMA_LWM2M) protocol.
+
+The device management cloudlet is distributed as a fat jar. Its Maven coordinates are
+`io.rhiot/rhiot-cloudlet-device/0.1.1`. The dockerized artifact is available in Docker Hub as
+[rhiot/cloudlet-device:0.1.1](https://hub.docker.com/r/rhiot/cloudlet-device).
+
+#### Device management REST API
+
+The device management cloudlet exposes REST API that can be used to work with the devices. By default the device
+management REST API is exposed using the following base URI - `http:0.0.0.0:15000`.
+
+To list the devices send the `GET` request to the following URL `http:localhost:15000/client`. You should receive
+response similar to the following JSON:
+
+    {"clients":
+      [{"registrationDate":1439822565254,
+      "address":"127.0.0.1",
+      "port":1103,
+      "registrationEndpointAddress":"0.0.0.0:5683",
+      "lifeTimeInSec":86400,
+      "smsNumber":null,
+      "lwM2mVersion":"1.0",
+      "bindingMode":"U",
+      "endpoint":"f4650db1-01e7-49e0-a8d7-da6217213907",
+      "registrationId":"7OjdvHCVUb",
+      "objectLinks":[{"url":"/",
+        "attributes":{"rt":"oma.lwm2m"},
+        "objectId":null,
+        "objectInstanceId":null,
+        "resourceId":null,
+        "path":"/"},
+        ...],
+      "alive":true}]}
 
 ## Performance Testing Framework
 

@@ -4,12 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.camel-labs</groupId>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-cloudlets</artifactId>
         <version>0.1.1-SNAPSHOT</version>
-        <artifactId>camel-labs-iot</artifactId>
         <relativePath>..</relativePath>
     </parent>
-    <artifactId>camel-labs-iot-cloudlet</artifactId>
+
+    <artifactId>rhiot-cloudlet-device-parent</artifactId>
     <packaging>pom</packaging>
 
     <licenses>
@@ -20,9 +21,7 @@
     </licenses>
 
     <modules>
-        <module>sdk</module>
-        <module>document</module>
-        <module>geofencing</module>
+        <module>default</module>
     </modules>
 
 </project>

@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>camel-labs-iot-cloudlet</artifactId>
-        <groupId>com.github.camel-labs</groupId>
+        <groupId>io.rhiot</groupId>
         <version>0.1.1-SNAPSHOT</version>
+        <artifactId>rhiot-bom</artifactId>
+        <relativePath>../bom</relativePath>
     </parent>
-
-    <artifactId>camel-labs-iot-cloudlet-device-parent</artifactId>
+    <artifactId>rhiot-cloudlets</artifactId>
     <packaging>pom</packaging>
 
     <licenses>
@@ -20,7 +20,7 @@
     </licenses>
 
     <modules>
-        <module>default</module>
+        <module>device</module>
     </modules>
 
 </project>
