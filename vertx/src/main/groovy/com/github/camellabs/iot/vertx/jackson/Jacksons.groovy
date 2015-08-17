@@ -17,12 +17,13 @@
 package com.github.camellabs.iot.vertx.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.vertx.core.json.Json
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 
 final class Jacksons {
 
-    private final static def JSON = new ObjectMapper().setSerializationInclusion(NON_NULL)
+    private final static def JSON = Json.mapper.setSerializationInclusion(NON_NULL)
 
     static ObjectMapper json() {
         JSON
