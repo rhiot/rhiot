@@ -23,14 +23,18 @@ import org.apache.camel.component.mock.MockEndpoint
 import org.junit.BeforeClass
 import org.junit.Test
 
+import java.util.concurrent.TimeUnit
+
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
 import static java.util.concurrent.TimeUnit.MINUTES
+import static java.util.concurrent.TimeUnit.SECONDS
 
 class CustomCamelVerticleTest {
 
     @BeforeClass
     static void beforeClass() {
         new Gateway().start()
+        SECONDS.sleep(15) // Attempt to fix the unstable build
     }
 
     // Tests
