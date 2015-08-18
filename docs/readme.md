@@ -725,11 +725,13 @@ Route the collect data and sendt it to pubnub channel mychannel:
 
 ---
 
-## Cloudlets
+## Rhiot Cloud
+
+Rhiot Cloud is the set of the backend (micro)services and UI application used to managed these.
 
 *Cloudlets* are server-side microservices that come with some common functionalities required by the IoT systems. *Cloudlets
 UI plugins* are [Hawt.io](http://hawt.io)-based plugins which provides nice web UI for the cloudlets back-end services. *Cloudlet
-Console* is the web application assembling all the Cloudlets UI plugins. At last but not least *Rhiot Cloud* is the
+Console* is the web application assembling all the Cloudlets UI plugins. The *Rhiot Cloud* then is the
 complete cloud-based installation setup including Cloudlet Console, Cloudlets backend services and all the other necessary
 services (like database servers) installed.
 
@@ -739,12 +741,20 @@ We recommend to run the Rhiot Cloud using the Docker container. We love Docker a
 future of the applications deployment. To install the Rhiot Cloud on the Linux server of your choice, just execute the
 following command:
 
-    bash <(curl -s https://raw.githubusercontent.com/rhiot/rhiot/master/iot/cloudlet/deployment/rhiot-cloud.sh)
+    GOOGLE_OAUTH_CLIENT_ID=foo.apps.googleusercontent.com \
+    GOOGLE_OAUTH_CLIENT_SECRET=yourSecret \
+    GOOGLE_OAUTH_REDIRECT_URI=http://myapp.com:9000 \
+      bash <(curl -s https://raw.githubusercontent.com/rhiot/rhiot/master/iot/cloudlet/deployment/rhiot-cloud.sh)
 
 The script above installs the proper version of Docker server. Keep in mind that the minimal Docker version required by
 Rhiot Cloud is 1.7.1 - if the older version of the Docker is installed, our script will upgrade your Docker server. After
 Docker server is properly installed, our script downloads and starts the Cloudlet Console, device management cloudlet,
-geofencing cloudlet and MongoDB containers.
+geofencing cloudlet and MongoDB server containers.
+
+Environment variables starting with `GOOGLE_OAUTH` prefix are used to configure the Google OAuth authentication
+used by the Cloudlet Console. You have to create the Google application in the
+[Developers Console](https://console.developers.google.com) to get your client identifier, secret and configure the
+accepted redirect URIs. If `GOOGLE_OAUTH_REDIRECT_URI` variable is net given, `http://localhost:9000` will be used.
 
 ### Device management cloudlet
 

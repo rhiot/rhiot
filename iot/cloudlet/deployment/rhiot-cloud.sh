@@ -42,6 +42,9 @@ docker stop $(docker ps -q)
 docker rm mongodb
 docker run -d --name mongodb -p 27017:27017 mongo
 
+if [ -z "$GOOGLE_OAUTH_REDIRECT_URI" ]; then
+    GOOGLE_OAUTH_REDIRECT_URI=http://localhost:9000
+fi
 docker run -d -p 9000:9000 -e LIVE_RELOAD=false \
   -e GOOGLE_OAUTH_CLIENT_ID=$GOOGLE_OAUTH_CLIENT_ID -e GOOGLE_OAUTH_CLIENT_SECRET=$GOOGLE_OAUTH_CLIENT_SECRET \
   -e GOOGLE_OAUTH_REDIRECT_URI=$GOOGLE_OAUTH_REDIRECT_URI \
