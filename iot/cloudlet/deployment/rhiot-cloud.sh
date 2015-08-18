@@ -47,6 +47,8 @@ fi
 docker rm mongodb
 docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 
+docker run -d --link mongodb:mongodb -p 15000:15000 rhiot/cloudlet-device
+
 if [ -z "$GOOGLE_OAUTH_REDIRECT_URI" ]; then
     GOOGLE_OAUTH_REDIRECT_URI=http://localhost:9000
 fi

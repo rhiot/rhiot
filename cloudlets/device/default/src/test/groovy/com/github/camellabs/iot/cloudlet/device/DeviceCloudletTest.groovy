@@ -52,7 +52,7 @@ class DeviceCloudletTest extends Assert {
         MongodStarter.getDefaultInstance().prepare(mongodConfig).start()
 
         System.setProperty('camellabs_iot_cloudlet_device_api_rest_port', "${restApiPort}")
-        System.setProperty('camellabs_iot_cloudlet_device_disconnectionPeriod', "${5000}")
+        System.setProperty('disconnectionPeriod', "${5000}")
 
         new DeviceCloudlet().start()
         sleep(2000)

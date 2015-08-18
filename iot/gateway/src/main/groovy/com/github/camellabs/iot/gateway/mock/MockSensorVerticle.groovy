@@ -19,7 +19,7 @@ package com.github.camellabs.iot.gateway.mock
 import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
 
-import static com.github.camellabs.iot.utils.Uuids.uuid
+import static io.rhiot.utils.Uuids.uuid
 import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
 
 /**

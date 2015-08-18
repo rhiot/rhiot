@@ -792,6 +792,14 @@ default). The list will be formatted as the JSON document similar to the followi
 
     {"disconnectedDevices": ["device1", "device2", ...]}
 
+#### Device registry
+
+Device registry is used by Leshan to store the information about the managed devices. By default the device cloudlet uses
+the MongoDB registry. If environment variables `mongodb_host` are no specified, the cloudlet will try to
+connect to the `mongodb` and `localhost` hosts respectively, using default MongoDB port (`27017`) or the one specified by
+the `mongodb_port` environment variable.
+
+
 ## Performance Testing Framework
 
 The key part of the process of tailoring the perfect IoT solution is choosing the proper hardware for the gateway device.

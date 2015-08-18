@@ -17,16 +17,16 @@
 package io.rhiot.utils
 
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import java.util.concurrent.atomic.AtomicInteger
 
 import static java.net.NetworkInterface.getNetworkInterfaces;
-import static java.util.Optional.empty;
+import static java.util.Optional.empty
+import static org.slf4j.LoggerFactory.getLogger;
 
 final class Networks {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Networks.class);
+    private static final def LOG = getLogger(Networks.class)
 
     private Networks() {
     }
@@ -49,16 +49,30 @@ final class Networks {
         }
     }
 
+    static boolean isReachable(String host, int timeout) {
+        try {
+            return InetAddress.getByName(host).isReachable(timeout)
+        } catch (UnknownHostException e) {
+            LOG.debug('Cannot find host {}. Returning false.', host)
+            LOG.trace('Due to the: ', e)
+            return false
+        }
+    }
+
+    static boolean isReachable(String host) {
+        isReachable(host, 2000)
+    }
+
     /**
      * The minimum server currentMinPort number for IPv4.
      * Set at 1100 to avoid returning privileged currentMinPort numbers.
      */
-    public static final int MIN_PORT_NUMBER = 1100;
+    static final int MIN_PORT_NUMBER = 1100
 
     /**
      * The maximum server currentMinPort number for IPv4.
      */
-    public static final int MAX_PORT_NUMBER = 65535;
+    static final int MAX_PORT_NUMBER = 65535
 
     /**
      * We'll hold open the lowest port in this process

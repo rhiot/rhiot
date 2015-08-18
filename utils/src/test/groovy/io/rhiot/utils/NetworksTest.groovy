@@ -21,12 +21,24 @@ import org.junit.Test
 
 import static io.rhiot.utils.Networks.MIN_PORT_NUMBER
 import static io.rhiot.utils.Networks.findAvailableTcpPort
+import static io.rhiot.utils.Networks.isReachable
+import static java.lang.System.currentTimeMillis
 
 class NetworksTest extends Assert {
 
     @Test
     void shouldReturnAvailablePort() {
         assertTrue(findAvailableTcpPort() > MIN_PORT_NUMBER)
+    }
+
+    @Test
+    void shouldReachHost() {
+        assertTrue(isReachable('rhiot.io'))
+    }
+
+    @Test
+    void shouldNotReachHost() {
+        assertFalse(isReachable("someReallyCrazyHostName${currentTimeMillis()}"))
     }
 
 }

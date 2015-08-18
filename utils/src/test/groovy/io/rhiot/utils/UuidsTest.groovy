@@ -19,7 +19,7 @@ package io.rhiot.utils
 import org.junit.Assert
 import org.junit.Test
 
-import static com.github.camellabs.iot.utils.Uuids.uuid
+import static io.rhiot.utils.Uuids.uuid
 
 class UuidsTest extends Assert {
 
