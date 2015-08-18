@@ -39,8 +39,13 @@ service docker start
 
 docker stop $(docker ps -q)
 
+MONGODB_DATA_VOLUMES=`docker ps -a | grep mongodb_data | wc -l`
+if [ "$MONGODB_DATA_VOLUMES" \< 1 ]; then
+    echo "MongoDB data volume doesn't exist. Creating..."
+    docker run -v /data/db --name mongodb_data busybox true
+fi
 docker rm mongodb
-docker run -d --name mongodb -p 27017:27017 mongo
+docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 
 if [ -z "$GOOGLE_OAUTH_REDIRECT_URI" ]; then
     GOOGLE_OAUTH_REDIRECT_URI=http://localhost:9000

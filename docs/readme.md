@@ -756,6 +756,10 @@ used by the Cloudlet Console. You have to create the Google application in the
 [Developers Console](https://console.developers.google.com) to get your client identifier, secret and configure the
 accepted redirect URIs. If `GOOGLE_OAUTH_REDIRECT_URI` variable is net given, `http://localhost:9000` will be used.
 
+Rhiot Cloud relies on the MongoDB to store some of the data processed by it. For example MongoDB backend is the default
+store used by the device management cloudlet's Leshan server. By default the MongoDB data is stored in the `mongodb_data`
+volume container. If such volume doesn't exist, Rhiot Cloud script will create it for you.
+
 ### Device management cloudlet
 
 Device management cloudlet provides backend service for registering and tracking devices connected to the Rhiot Cloud.
