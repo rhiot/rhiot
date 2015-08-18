@@ -27,25 +27,15 @@ import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
 import static io.vertx.core.http.HttpMethod.DELETE
 import static io.vertx.core.http.HttpMethod.GET
 import static io.vertx.core.http.HttpMethod.POST
-import static io.vertx.groovy.ext.web.Router.router
 
 class RestApiVerticle extends BaseRestApiVerticle {
 
     @Override
     void start(Future<Void> startFuture) {
+        super.start(startFuture)
         vertx.runOnContext {
-            def http = vertx.createHttpServer()
-            def router = router(vertx)
-
-            // Get list of clients
-            router.route('/device').method(GET).handler { rc ->
-                vertx.eventBus().send('listDevices', null, { clients -> jsonResponse(rc, clients) })
-            }
-
-            // Get list of disconnected clients' identifiers
-            router.route('/device/disconnected').method(GET).handler { rc ->
-                vertx.eventBus().send(CHANNEL_DEVICES_DISCONNECTED, null, { clients -> jsonResponse(rc, clients) })
-            }
+            get('/device', 'listDevices')
+            get('/device/disconnected', CHANNEL_DEVICES_DISCONNECTED)
 
             router.route('/client').method(POST).handler { rc ->
                 rc.request().bodyHandler(new Handler<Buffer>(){

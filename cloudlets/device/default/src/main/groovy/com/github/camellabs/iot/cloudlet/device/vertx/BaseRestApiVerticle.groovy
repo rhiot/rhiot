@@ -16,20 +16,38 @@
  */
 package com.github.camellabs.iot.cloudlet.device.vertx
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import groovy.transform.CompileStatic
 import io.vertx.core.AsyncResult
+import io.vertx.core.Future
 import io.vertx.groovy.core.eventbus.Message
+import io.vertx.groovy.core.http.HttpServer
 import io.vertx.groovy.core.http.HttpServerResponse
+import io.vertx.groovy.ext.web.Router
 import io.vertx.groovy.ext.web.RoutingContext
 import io.vertx.lang.groovy.GroovyVerticle
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
+import static com.github.camellabs.iot.vertx.jackson.Jacksons.json
+import static io.vertx.core.http.HttpMethod.GET
+import static io.vertx.groovy.ext.web.Router.router
 
-@CompileStatic
 class BaseRestApiVerticle extends GroovyVerticle {
 
-    private final ObjectMapper JACKSON = new ObjectMapper().setSerializationInclusion(NON_NULL)
+    protected HttpServer http
+
+    protected Router router
+
+    @Override
+    void start(Future<Void> startFuture) {
+        vertx.runOnContext {
+            http = vertx.createHttpServer()
+            router = router(vertx)
+        }
+    }
+
+    def get(String uri, String channel) {
+        router.route(uri).method(GET).handler { rc ->
+            vertx.eventBus().send(channel, null, { result -> jsonResponse(rc, result) })
+        }
+    }
 
     static HttpServerResponse jsonResponse(RoutingContext routingContext) {
         routingContext.response().putHeader("content-type", "application/json")
@@ -39,7 +57,7 @@ class BaseRestApiVerticle extends GroovyVerticle {
         if(message.succeeded()) {
             jsonResponse(routingContext).end(message.result().body().toString())
         } else {
-            jsonResponse(routingContext).end(JACKSON.writeValueAsString([failure: message.cause().message]))
+            jsonResponse(routingContext).end(json().writeValueAsString([failure: message.cause().message]))
         }
     }
 
