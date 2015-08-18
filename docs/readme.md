@@ -71,8 +71,10 @@ Rhiot comes with the following features:
         - [URI Parameters](#uri-parameters)
       - [Consuming:](#consuming-2)
       - [Producing](#producing-2)
-- [Cloudlets](#cloudlets)
-  - [On-premises deployment](#on-premises-deployment)
+- [Rhiot Cloud](#rhiot-cloud)
+  - [Dockerized Rhiot Cloud](#dockerized-rhiot-cloud)
+  - [Device management cloudlet](#device-management-cloudlet)
+    - [Device management REST API](#device-management-rest-api)
 - [Performance Testing Framework](#performance-testing-framework)
   - [Hardware profiles](#hardware-profiles)
     - [Raspberry PI 2 B+ (aka RPI2)](#raspberry-pi-2-b-aka-rpi2)
@@ -316,8 +318,6 @@ route using the `fromEventBus(channel, closure(route))` method. You can also acc
 Camel IoT Labs brings some extra components for the Apache Camel intended to make both device- and server-side IoT
 development easier.
 
----
-
 ### Camel GPS BU353 component
 
 [BU353](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg) is one of the most popular and the 
@@ -392,8 +392,6 @@ the manager as the bean:
 Custom process manager may be useful if for some reasons your Linux distribution requires executing some unusual commands
 in order to make the GPSD up and running.
 
----
-
 ### Camel Kura Wifi component
 
 The common scenario for the mobile IoT Gateways, for example those mounted on the trucks or other vehicles, is to cache
@@ -460,8 +458,6 @@ In the first place `com.github.camellabs.iot.component.kura.wifi.KuraAccessPoint
 in the Camel registry. If exactly one instance of the `NetworkService`  is found (this is usually the case when
 if you deploy the route into the Kura container), that instance will be used by the Kura component. Otherwise new instance of the
 `org.eclipse.kura.linux.net.NetworkServiceImpl` will be created and cached by the `KuraAccessPointsProvider`.
-
----
 
 ### Camel TinkerForge component
 
@@ -559,8 +555,6 @@ be a header on the exchange.
     .setBody(constant("on"))
     .to("tinkerforge:/io16/io9?ioport=b");
 
----
-
 ### Camel Pi4j component
 
 Camel Pi4j component can be used to manage GPIO and I2C bus features from Raspberry Pi.
@@ -653,7 +647,6 @@ for smarter device, you must implement an driver
 | mcp23017-lcd      | LCD 2x16 char           (http://www.adafruit.com/products/1109)    |
 
 
----
 
 ### Camel PubNub component
 
@@ -722,8 +715,6 @@ Route the collect data and sendt it to pubnub channel mychannel:
     .bean(EventGeneratorBean.class, "getEvent()")
     .convertBodyTo(JSONObject.class)
     .to("pubnub://pubsub:mychannel?uuid=deviceuuid&publisherKey=mypubkey");
-
----
 
 ## Rhiot Cloud
 
