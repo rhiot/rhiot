@@ -50,9 +50,17 @@ import static org.infinispan.configuration.cache.CacheMode.INVALIDATION_ASYNC
 
 class LeshanServerVeritcle extends GroovyVerticle {
 
+    // Constants
+
     private static final def DEFAULT_DISCONNECTION_PERIOD = MINUTES.toMillis(1)
 
+    static final def CHANNEL_DEVICES_DISCONNECTED = 'devices.disconnected'
+
+    // Collaborators
+
     final def LeshanServer leshanServer
+
+    // Configuration
 
     final def registryMongoDbPort = intProperty('mongodb_port', 27017)
 
@@ -74,32 +82,32 @@ class LeshanServerVeritcle extends GroovyVerticle {
         vertx.runOnContext {
             leshanServer.start()
 
-            vertx.eventBus().localConsumer('clients.create.virtual') { msg ->
+            vertx.eventBus().consumer('clients.create.virtual') { msg ->
                 def device = jsonMessageToMap(msg.body())
                 createVirtualLeshanClientTemplate(device.clientId).connect().disconnect()
                 wrapIntoJsonResponse(msg, 'Status', 'Success')
             }
 
-            vertx.eventBus().localConsumer('listDevices') { msg ->
+            vertx.eventBus().consumer('listDevices') { msg ->
                 wrapIntoJsonResponse(msg, 'devices', leshanServer.clientRegistry.allClients())
             }
 
-            vertx.eventBus().localConsumer('clients.disconnected') { msg ->
+            vertx.eventBus().consumer(CHANNEL_DEVICES_DISCONNECTED) { msg ->
                 wrapIntoJsonResponse(msg, 'disconnectedDevices', disconnectedClients())
             }
 
-            vertx.eventBus().localConsumer('deleteClients') { msg ->
+            vertx.eventBus().consumer('deleteClients') { msg ->
                 leshanServer.clientRegistry.allClients().each {
                     client -> leshanServer.clientRegistry.deregisterClient(client.registrationId)
                 }
                 wrapIntoJsonResponse(msg, 'Status', 'Success')
             }
 
-            vertx.eventBus().localConsumer('getClient') { msg ->
+            vertx.eventBus().consumer('getClient') { msg ->
                 wrapIntoJsonResponse(msg, 'client', leshanServer.clientRegistry.get(msg.body().toString()))
             }
 
-            vertx.eventBus().localConsumer('client.manufacturer') { msg ->
+            vertx.eventBus().consumer('client.manufacturer') { msg ->
                 def clientId = msg.body().toString()
                 def client = leshanServer.clientRegistry.get(clientId)
                 if (client == null) {
@@ -109,7 +117,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 }
             }
 
-            vertx.eventBus().localConsumer('client.model') { msg ->
+            vertx.eventBus().consumer('client.model') { msg ->
                 def clientId = msg.body().toString()
                 def client = leshanServer.clientRegistry.get(clientId)
                 if (client == null) {
@@ -119,7 +127,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 }
             }
 
-            vertx.eventBus().localConsumer('client.serial') { msg ->
+            vertx.eventBus().consumer('client.serial') { msg ->
                 def clientId = msg.body().toString()
                 def client = leshanServer.clientRegistry.get(clientId)
                 if (client == null) {

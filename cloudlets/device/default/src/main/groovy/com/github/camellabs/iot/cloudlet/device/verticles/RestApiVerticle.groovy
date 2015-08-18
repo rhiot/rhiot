@@ -21,6 +21,7 @@ import io.vertx.core.Future
 import io.vertx.core.Handler
 import io.vertx.groovy.core.buffer.Buffer
 
+import static com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_DISCONNECTED
 import static com.github.camellabs.iot.cloudlet.device.vertx.BaseRestApiVerticle.*
 import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
 import static io.vertx.core.http.HttpMethod.DELETE
@@ -42,11 +43,11 @@ class RestApiVerticle extends BaseRestApiVerticle {
             }
 
             // Get list of disconnected clients' identifiers
-            router.route('/disconnectedDevices').method(GET).handler { rc ->
-                vertx.eventBus().send('clients.disconnected', null, { clients -> jsonResponse(rc, clients) })
+            router.route('/device/disconnected').method(GET).handler { rc ->
+                vertx.eventBus().send(CHANNEL_DEVICES_DISCONNECTED, null, { clients -> jsonResponse(rc, clients) })
             }
 
-            router.route("/client").method(POST).handler { rc ->
+            router.route('/client').method(POST).handler { rc ->
                 rc.request().bodyHandler(new Handler<Buffer>(){
                     @Override
                     void handle(Buffer event) {

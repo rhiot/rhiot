@@ -781,7 +781,7 @@ response similar to the following JSON:
       "alive":true}]}
 
 To return the list of identifiers of the disconnected devices send the `GET` request to the following URL -
-`http:localhost:15000/disconnectedDevices`. In the response you will receive the list of the identifiers of the devices
+`http:localhost:15000/device/disconnected`. In the response you will receive the list of the identifiers of the devices
 that have not send the heartbeat signal to the device management cloudlet for the given *disconnection period* (one minute by
 default). The list will be formatted as the JSON document similar to the following one:
 
