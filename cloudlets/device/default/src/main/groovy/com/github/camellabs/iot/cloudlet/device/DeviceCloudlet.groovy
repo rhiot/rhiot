@@ -17,7 +17,7 @@
 package com.github.camellabs.iot.cloudlet.device
 
 import com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle
-import com.github.camellabs.iot.cloudlet.device.verticles.RestApiVerticle
+import com.github.camellabs.iot.cloudlet.device.verticles.DeviceRestApiVerticle
 import io.vertx.groovy.core.Vertx
 
 class DeviceCloudlet {
@@ -26,7 +26,7 @@ class DeviceCloudlet {
 
     DeviceCloudlet start() {
         vertx.deployVerticle("groovy:${LeshanServerVeritcle.class.name}")
-        vertx.deployVerticle("groovy:${RestApiVerticle.class.name}")
+        vertx.deployVerticle("groovy:${DeviceRestApiVerticle.class.name}")
         return this
     }
 

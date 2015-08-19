@@ -28,7 +28,7 @@ import static io.vertx.core.http.HttpMethod.DELETE
 import static io.vertx.core.http.HttpMethod.GET
 import static io.vertx.core.http.HttpMethod.POST
 
-class RestApiVerticle extends BaseRestApiVerticle {
+class DeviceRestApiVerticle extends BaseRestApiVerticle {
 
     @Override
     void start(Future<Void> startFuture) {
@@ -36,6 +36,12 @@ class RestApiVerticle extends BaseRestApiVerticle {
         vertx.runOnContext {
             get('/device', 'listDevices')
             get('/device/disconnected', CHANNEL_DEVICES_DISCONNECTED)
+            delete('/client', 'deleteClients')
+            get('/client/:clientId', 'getClient')
+            get('/client/:clientId/manufacturer', 'client.manufacturer')
+            get('/client/:clientId/model', 'client.model')
+            get('/client/:clientId/serial', 'client.serial')
+
 
             router.route('/client').method(POST).handler { rc ->
                 rc.request().bodyHandler(new Handler<Buffer>(){
@@ -44,32 +50,6 @@ class RestApiVerticle extends BaseRestApiVerticle {
                         vertx.eventBus().send('clients.create.virtual', event.toString('utf-8'), { status -> jsonResponse(rc, status) })
                     }
                 })
-            }
-
-            router.route("/client").method(DELETE).handler { rc ->
-                vertx.eventBus().send('deleteClients', null, { status -> jsonResponse(rc, status) })
-            }
-
-            router.route("/client/:clientId").method(GET).handler { rc ->
-                vertx.eventBus().send('getClient', parameter(rc, 'clientId')) { client -> jsonResponse(rc, client) }
-            }
-
-            router.route("/client/:clientId/manufacturer").method(GET).handler { rc ->
-                vertx.eventBus().send('client.manufacturer', parameter(rc, 'clientId')) { client ->
-                    jsonResponse(rc, client)
-                }
-            }
-
-            router.route("/client/:clientId/model").method(GET).handler { rc ->
-                vertx.eventBus().send('client.model', parameter(rc, 'clientId')) { client ->
-                    jsonResponse(rc, client)
-                }
-            }
-
-            router.route("/client/:clientId/serial").method(GET).handler { rc ->
-                vertx.eventBus().send('client.serial', parameter(rc, 'clientId')) { client ->
-                    jsonResponse(rc, client)
-                }
             }
 
             http.requestHandler(router.&accept).listen(intProperty('camellabs_iot_cloudlet_device_api_rest_port', 15000))

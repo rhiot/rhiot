@@ -18,15 +18,20 @@ package com.github.camellabs.iot.cloudlet.device.vertx
 
 import io.vertx.core.AsyncResult
 import io.vertx.core.Future
+import io.vertx.core.http.HttpMethod
 import io.vertx.groovy.core.eventbus.Message
 import io.vertx.groovy.core.http.HttpServer
 import io.vertx.groovy.core.http.HttpServerResponse
 import io.vertx.groovy.ext.web.Router
 import io.vertx.groovy.ext.web.RoutingContext
+import io.vertx.groovy.ext.web.handler.CorsHandler
 import io.vertx.lang.groovy.GroovyVerticle
 
 import static com.github.camellabs.iot.vertx.jackson.Jacksons.json
+import static io.vertx.core.http.HttpMethod.DELETE
 import static io.vertx.core.http.HttpMethod.GET
+import static io.vertx.core.http.HttpMethod.OPTIONS
+import static io.vertx.core.http.HttpMethod.POST
 import static io.vertx.groovy.ext.web.Router.router
 
 class BaseRestApiVerticle extends GroovyVerticle {
@@ -40,14 +45,40 @@ class BaseRestApiVerticle extends GroovyVerticle {
         vertx.runOnContext {
             http = vertx.createHttpServer()
             router = router(vertx)
+
+            router.route().handler(CorsHandler.create('*').
+                    allowedMethod(GET).allowedMethod(OPTIONS).allowedHeader('Authorization'))
+        }
+    }
+
+    // REST DSL
+
+    def forMethods(String uri, String channel, HttpMethod... method) {
+        def route = router.route(uri)
+        method.each { route.method(it) }
+        route.handler { rc ->
+            String parameter = null
+            if(rc.request().params().size() == 1) {
+                def parameterName = rc.request().params().names().first()
+                parameter = rc.request().getParam(parameterName)
+            }
+            vertx.eventBus().send(channel, parameter, { result -> jsonResponse(rc, result) })
         }
     }
 
     def get(String uri, String channel) {
-        router.route(uri).method(GET).handler { rc ->
-            vertx.eventBus().send(channel, null, { result -> jsonResponse(rc, result) })
-        }
+        forMethods(uri, channel, GET)
     }
+
+    def post(String uri, String channel) {
+        forMethods(uri, channel, POST)
+    }
+
+    def delete(String uri, String channel) {
+        forMethods(uri, channel, DELETE)
+    }
+
+    // Helpers
 
     static HttpServerResponse jsonResponse(RoutingContext routingContext) {
         routingContext.response().putHeader("content-type", "application/json")
@@ -59,10 +90,6 @@ class BaseRestApiVerticle extends GroovyVerticle {
         } else {
             jsonResponse(routingContext).end(json().writeValueAsString([failure: message.cause().message]))
         }
-    }
-
-    static String parameter(RoutingContext routingContext, String parameter) {
-        routingContext.request().getParam(parameter)
     }
 
 }
