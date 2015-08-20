@@ -17,43 +17,34 @@
 package com.github.camellabs.iot.cloudlet.device.verticles
 
 import com.github.camellabs.iot.cloudlet.device.vertx.BaseRestApiVerticle
-import io.vertx.core.Future
 import io.vertx.core.Handler
 import io.vertx.groovy.core.buffer.Buffer
 
 import static com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_DISCONNECTED
-import static com.github.camellabs.iot.cloudlet.device.vertx.BaseRestApiVerticle.*
-import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
-import static io.vertx.core.http.HttpMethod.DELETE
-import static io.vertx.core.http.HttpMethod.GET
+import static com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_HEARTBEAT_SEND
 import static io.vertx.core.http.HttpMethod.POST
 
 class DeviceRestApiVerticle extends BaseRestApiVerticle {
 
-    @Override
-    void start(Future<Void> startFuture) {
-        super.start(startFuture)
-        vertx.runOnContext {
+    {
+        restApi { verticle ->
             get('/device', 'listDevices')
             get('/device/disconnected', CHANNEL_DEVICES_DISCONNECTED)
             delete('/client', 'deleteClients')
-            get('/client/:clientId', 'getClient')
-            get('/client/:clientId/manufacturer', 'client.manufacturer')
-            get('/client/:clientId/model', 'client.model')
-            get('/client/:clientId/serial', 'client.serial')
+            get('/client/:deviceId', 'getClient')
+            get('/device/:deviceId/heartbeat', CHANNEL_DEVICE_HEARTBEAT_SEND)
+            get('/client/:deviceId/manufacturer', 'client.manufacturer')
+            get('/client/:deviceId/model', 'client.model')
+            get('/client/:deviceId/serial', 'client.serial')
 
             router.route('/client').method(POST).handler { rc ->
-                rc.request().bodyHandler(new Handler<Buffer>(){
+                rc.request().bodyHandler(new Handler<Buffer>() {
                     @Override
                     void handle(Buffer event) {
                         vertx.eventBus().send('clients.create.virtual', event.toString('utf-8'), { status -> jsonResponse(rc, status) })
                     }
                 })
             }
-
-            http.requestHandler(router.&accept).listen(intProperty('camellabs_iot_cloudlet_device_api_rest_port', 15000))
-
-            startFuture.complete()
         }
     }
 

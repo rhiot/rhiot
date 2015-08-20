@@ -29,6 +29,7 @@ import org.eclipse.leshan.core.response.LwM2mResponse
 import org.eclipse.leshan.core.response.ValueResponse
 import org.eclipse.leshan.server.californium.LeshanServerBuilder
 import org.eclipse.leshan.server.californium.impl.LeshanServer
+import org.eclipse.leshan.server.client.ClientUpdate
 import org.infinispan.configuration.cache.Configuration
 import org.infinispan.configuration.cache.ConfigurationBuilder
 import org.infinispan.configuration.global.GlobalConfigurationBuilder
@@ -57,6 +58,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
     private static final def DEFAULT_DISCONNECTION_PERIOD = MINUTES.toMillis(1)
 
     static final def CHANNEL_DEVICES_DISCONNECTED = 'devices.disconnected'
+
+    static final def CHANNEL_DEVICE_HEARTBEAT_SEND = 'device.heartbeat.update'
 
     // Collaborators
 
@@ -113,6 +116,13 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
             vertx.eventBus().consumer('getClient') { msg ->
                 wrapIntoJsonResponse(msg, 'client', leshanServer.clientRegistry.get(msg.body().toString()))
+            }
+
+            vertx.eventBus().consumer(CHANNEL_DEVICE_HEARTBEAT_SEND) { msg ->
+                def client = leshanServer.clientRegistry.get(msg.body().toString())
+                leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, client.lifeTimeInSec, client.smsNumber,
+                        client.bindingMode, client.objectLinks))
+                wrapIntoJsonResponse(msg, 'status', 'success')
             }
 
             vertx.eventBus().consumer('client.manufacturer') { msg ->

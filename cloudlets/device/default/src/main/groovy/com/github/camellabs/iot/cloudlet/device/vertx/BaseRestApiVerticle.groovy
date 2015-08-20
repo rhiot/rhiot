@@ -27,6 +27,7 @@ import io.vertx.groovy.ext.web.RoutingContext
 import io.vertx.groovy.ext.web.handler.CorsHandler
 import io.vertx.lang.groovy.GroovyVerticle
 
+import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
 import static com.github.camellabs.iot.vertx.jackson.Jacksons.json
 import static io.vertx.core.http.HttpMethod.DELETE
 import static io.vertx.core.http.HttpMethod.GET
@@ -34,11 +35,13 @@ import static io.vertx.core.http.HttpMethod.OPTIONS
 import static io.vertx.core.http.HttpMethod.POST
 import static io.vertx.groovy.ext.web.Router.router
 
-class BaseRestApiVerticle extends GroovyVerticle {
+abstract class BaseRestApiVerticle extends GroovyVerticle {
 
     protected HttpServer http
 
     protected Router router
+
+    protected Closure restApi
 
     @Override
     void start(Future<Void> startFuture) {
@@ -48,7 +51,17 @@ class BaseRestApiVerticle extends GroovyVerticle {
 
             router.route().handler(CorsHandler.create('*').
                     allowedMethod(GET).allowedMethod(OPTIONS).allowedHeader('Authorization'))
+
+            http.requestHandler(router.&accept).listen(intProperty('camellabs_iot_cloudlet_device_api_rest_port', 15000))
+
+            restApi(this)
+
+            startFuture.complete()
         }
+    }
+
+    protected restApi(Closure restApi) {
+        this.restApi = restApi
     }
 
     // REST DSL

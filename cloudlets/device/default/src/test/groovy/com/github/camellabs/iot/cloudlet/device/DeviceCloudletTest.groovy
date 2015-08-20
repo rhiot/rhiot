@@ -79,6 +79,22 @@ class DeviceCloudletTest extends Assert {
     }
 
     @Test
+    void shouldSendHeartbeatToVirtualDevice() {
+        // Given
+        rest.delete(apiBase + '/client')
+        def deviceId = uuid()
+        rest.postForLocation(apiBase + '/client', new TestVirtualDevice(clientId: deviceId))
+        sleep(5000)
+
+        // When
+        rest.getForEntity(apiBase + "/device/${deviceId}/heartbeat", Map.class)
+
+        // Then
+        def response = rest.getForObject(apiBase + '/device/disconnected', Map.class)
+        assertEquals(0, response['disconnectedDevices'].asType(List.class).size())
+    }
+
+    @Test
     void shouldNotRegisterClientTwice() {
         // Given
         rest.delete(apiBase + '/client')
