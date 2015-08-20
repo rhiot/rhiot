@@ -16,25 +16,32 @@
  */
 package io.rhiot.utils
 
-import org.slf4j.Logger
-
 import java.util.concurrent.atomic.AtomicInteger
 
 import static java.net.NetworkInterface.getNetworkInterfaces;
 import static java.util.Optional.empty
 import static org.slf4j.LoggerFactory.getLogger;
 
+/**
+ * IP networking related utilities.
+ */
 final class Networks {
 
+    // Logger
+
     private static final def LOG = getLogger(Networks.class)
+
+    // Constructors
 
     private Networks() {
     }
 
+    // Utilities API
+
     static Optional<String> localNetworkIp() {
         try {
             List<NetworkInterface> interfaces = getNetworkInterfaces().findAll {
-                iface -> iface.getName().startsWith("wlan") || iface.getName().startsWith("eth")
+                iface -> iface.getName().startsWith('wlan') || iface.getName().startsWith("eth")
             }
             if (interfaces.isEmpty()) {
                 return empty();
