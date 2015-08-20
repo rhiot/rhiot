@@ -13,6 +13,7 @@
         <module>utils</module>
         <module>utils-ssh</module>
         <module>vertx</module>
+        <module>gateway</module>
         <module>cloudlets</module>
         <module>iot</module>
     </modules>

@@ -256,8 +256,8 @@ project including the gateway core dependency:
 
     <dependencies>
       <dependency>
-        <groupId>com.github.camel-labs</groupId>
-        <artifactId>camel-labs-iot-gateway</artifactId>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-gateway</artifactId>
         <version>0.1.1</version>
       </dependency>
     </dependencies>

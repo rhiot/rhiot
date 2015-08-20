@@ -22,7 +22,6 @@
 
     <modules>
         <module>components</module>
-        <module>gateway</module>
         <module>gateway-app</module>
         <module>cloudlet</module>
         <module>feature</module>
