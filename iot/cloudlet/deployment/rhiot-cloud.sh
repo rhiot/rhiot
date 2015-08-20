@@ -49,10 +49,14 @@ docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 
 docker run -d --link mongodb:mongodb -p 15000:15000 rhiot/cloudlet-device
 
-if [ -z "$GOOGLE_OAUTH_REDIRECT_URI" ]; then
-    GOOGLE_OAUTH_REDIRECT_URI=http://localhost:9000
+if [ -z "$HTTP_PORT" ]; then
+    echo 'HTTP port not set, running Cloudlet Console using the default development port 9000.'
+    HTTP_PORT=9000
 fi
-docker run -d -p 9000:9000 -e LIVE_RELOAD=false \
+if [ -z "$GOOGLE_OAUTH_REDIRECT_URI" ]; then
+    GOOGLE_OAUTH_REDIRECT_URI=http://localhost:${HTTP_PORT}
+fi
+docker run -d -p ${HTTP_PORT}:${HTTP_PORT} -e HTTP_PORT=${HTTP_PORT} -e LIVE_RELOAD=false \
   -e GOOGLE_OAUTH_CLIENT_ID=$GOOGLE_OAUTH_CLIENT_ID -e GOOGLE_OAUTH_CLIENT_SECRET=$GOOGLE_OAUTH_CLIENT_SECRET \
   -e GOOGLE_OAUTH_REDIRECT_URI=$GOOGLE_OAUTH_REDIRECT_URI \
   rhiot/cloudlet-console
