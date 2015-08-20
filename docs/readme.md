@@ -735,7 +735,7 @@ following command:
     GOOGLE_OAUTH_CLIENT_ID=foo.apps.googleusercontent.com \
     GOOGLE_OAUTH_CLIENT_SECRET=yourSecret \
     GOOGLE_OAUTH_REDIRECT_URI=http://myapp.com \
-      bash <(curl -s https://raw.githubusercontent.com/rhiot/rhiot/master/iot/cloudlet/deployment/rhiot-cloud.sh)
+      bash <(curl -s https://raw.githubusercontent.com/rhiot/rhiot/master/cloudlets/deployment/rhiot-cloud.sh)
 
 The script above installs the proper version of Docker server. Keep in mind that the minimal Docker version required by
 Rhiot Cloud is 1.7.1 - if the older version of the Docker is installed, our script will upgrade your Docker server. After
@@ -747,7 +747,7 @@ environment variable:
 
     HTTP_PORT=80 \
       ...
-      bash <(curl -s https://raw.githubusercontent.com/rhiot/rhiot/master/iot/cloudlet/deployment/rhiot-cloud.sh)
+      bash <(curl -s https://raw.githubusercontent.com/rhiot/rhiot/master/cloudlets/deployment/rhiot-cloud.sh)
 
 Environment variables starting with `GOOGLE_OAUTH` prefix are used to configure the Google OAuth authentication
 used by the Cloudlet Console. You have to create the Google application in the
