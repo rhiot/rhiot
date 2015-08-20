@@ -119,10 +119,19 @@ class LeshanServerVeritcle extends GroovyVerticle {
             }
 
             vertx.eventBus().consumer(CHANNEL_DEVICE_HEARTBEAT_SEND) { msg ->
-                def client = leshanServer.clientRegistry.get(msg.body().toString())
-                leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, client.lifeTimeInSec, client.smsNumber,
-                        client.bindingMode, client.objectLinks))
-                wrapIntoJsonResponse(msg, 'status', 'success')
+                if(msg == null) {
+                    msg.fail(-1, 'Device ID cannot be null.')
+                    return
+                }
+                def deviceId = msg.body().toString()
+                def client = leshanServer.clientRegistry.get(deviceId)
+                if(client == null) {
+                    msg.fail(-1, "No device with id ${deviceId}.")
+                } else {
+                    leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, client.lifeTimeInSec, client.smsNumber,
+                            client.bindingMode, client.objectLinks))
+                    wrapIntoJsonResponse(msg, 'status', 'success')
+                }
             }
 
             vertx.eventBus().consumer('client.manufacturer') { msg ->
