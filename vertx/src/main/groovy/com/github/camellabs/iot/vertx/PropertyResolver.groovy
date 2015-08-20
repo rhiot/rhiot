@@ -51,10 +51,17 @@ final class PropertyResolver {
 
     static int intProperty(String key, int defaultValue) {
         def property = stringProperty(key)
-        if (property != null) {
-            return property.toInteger()
-        }
-        defaultValue
+        property == null ? defaultValue : property.toInteger()
+    }
+
+    static Long longProperty(String key) {
+        def property = stringProperty(key)
+        property == null ? null : property.toLong()
+    }
+
+    static long longProperty(String key, long defaultValue) {
+        def property = stringProperty(key)
+        property == null ? defaultValue : property.toLong()
     }
 
 }

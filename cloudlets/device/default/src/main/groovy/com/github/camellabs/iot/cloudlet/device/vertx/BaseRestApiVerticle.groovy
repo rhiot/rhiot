@@ -52,7 +52,7 @@ abstract class BaseRestApiVerticle extends GroovyVerticle {
             router.route().handler(CorsHandler.create('*').
                     allowedMethod(GET).allowedMethod(OPTIONS).allowedHeader('Authorization'))
 
-            http.requestHandler(router.&accept).listen(intProperty('camellabs_iot_cloudlet_device_api_rest_port', 15000))
+            http.requestHandler(router.&accept).listen(intProperty('api_rest_port', 15000))
 
             restApi(this)
 

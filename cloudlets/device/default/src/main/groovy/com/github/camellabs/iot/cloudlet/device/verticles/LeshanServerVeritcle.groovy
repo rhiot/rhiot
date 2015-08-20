@@ -41,6 +41,7 @@ import java.time.temporal.ChronoUnit
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
+import static com.github.camellabs.iot.vertx.PropertyResolver.longProperty
 import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
 import static com.github.camellabs.iot.vertx.jackson.Jacksons.json
 import static com.github.camellabs.iot.vertx.jackson.Jacksons.jsonMessageToMap
@@ -71,7 +72,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     final def registryMongoDbPort = intProperty('mongodb_port', 27017)
 
-    final def disconnectionPeriod = intProperty('disconnectionPeriod', DEFAULT_DISCONNECTION_PERIOD.intValue())
+    final def disconnectionPeriod = longProperty('disconnectionPeriod', DEFAULT_DISCONNECTION_PERIOD)
 
     LeshanServerVeritcle() {
         def mongoHost = registryMongoDbHost == null ? 'localhost' : registryMongoDbHost
