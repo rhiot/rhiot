@@ -47,6 +47,7 @@ fi
 docker rm mongodb
 docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 
+docker pull rhiot/cloudlet-device
 docker run -d --link mongodb:mongodb -p 15000:15000 rhiot/cloudlet-device
 
 if [ -z "$HTTP_PORT" ]; then
@@ -56,6 +57,7 @@ fi
 if [ -z "$GOOGLE_OAUTH_REDIRECT_URI" ]; then
     GOOGLE_OAUTH_REDIRECT_URI=http://localhost:${HTTP_PORT}
 fi
+docker pull rhiot/cloudlet-console
 docker run -d -p ${HTTP_PORT}:${HTTP_PORT} -e HTTP_PORT=${HTTP_PORT} -e LIVE_RELOAD=false \
   -e GOOGLE_OAUTH_CLIENT_ID=$GOOGLE_OAUTH_CLIENT_ID -e GOOGLE_OAUTH_CLIENT_SECRET=$GOOGLE_OAUTH_CLIENT_SECRET \
   -e GOOGLE_OAUTH_REDIRECT_URI=$GOOGLE_OAUTH_REDIRECT_URI \
