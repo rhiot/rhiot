@@ -791,6 +791,8 @@ REST API using the `api_rest_port` environment variable. For example the snippet
 
     docker run -d -e api_rest_port=16000 -p 16000:16000 io.rhiot/rhiot-cloudlet-device/0.1.1
 
+##### Listing devices
+
 To list the devices send the `GET` request to the following URL `http:localhost:15000/device`. You should receive
 response similar to the following JSON:
 
@@ -810,6 +812,12 @@ response similar to the following JSON:
         ...],
       "alive":true}]}
 
+##### Disconnected devices
+
+Devices registered in the Rhiot cloud can be in the *connected* or *disconnected* status. Connected devices can exchange
+messages with the cloud, while disconnected can't. Disconnection usually occurs when device temporarily lost the network
+connectivity.
+
 To return the list of identifiers of the disconnected devices send the `GET` request to the following URL -
 `http:localhost:15000/device/disconnected`. In the response you will receive the list of the identifiers of the devices
 that have not send the heartbeat signal to the device management cloudlet for the given *disconnection period* (one minute by
@@ -821,6 +829,13 @@ The disconnection period can be changed globally using the `disconnectionPeriod`
 disconnection period value in miliseconds. For example the snippet below sets the disconnection period to 20 seconds:
 
     docker run -d -e disconnectionPeriod=20000 io.rhiot/rhiot-cloudlet-device/0.1.1
+
+The device which is running and operational should periodically send the hearbeat signal to the device cloudlet in order to avoid
+being marked as disconnected. You can do it be sending the GET request to the
+`http:localhost:15000/device/myDeviceId/heartbeat` URI. If the heartbeat has been successfully send to the cloud,
+you will receive the HTTP response similar to the following one:
+
+    {"status": "success"}
 
 #### Device registry
 
