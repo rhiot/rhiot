@@ -58,13 +58,6 @@ All you need to build the project is Maven 3 and Java 8 JDK
 
 [![Build Status](https://travis-ci.org/rhiot/rhiot.svg?branch=master)](https://travis-ci.org/rhiot/rhiot)
 
-## Rhiot compatibility matrix
-
-| Rhiot | Apache Camel | Release date |
-|--------------|-----------|--------------|
-| 0.1.0 |2.15.2| 2015-06-02 |
-| 0.1.1-SNAPSHOT |2.15.2| TBD |
-
 ## License
 
 The Rhiot project is distributed under the [Apache 2.0 Software License](https://www.apache.org/licenses/LICENSE-2.0).
