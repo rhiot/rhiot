@@ -38,31 +38,40 @@ final class Networks {
 
     // Utilities API
 
-    static Optional<String> localNetworkIp() {
-        try {
-            List<NetworkInterface> interfaces = getNetworkInterfaces().findAll {
-                iface -> iface.getName().startsWith('wlan') || iface.getName().startsWith("eth")
-            }
-            if (interfaces.isEmpty()) {
-                return empty();
-            }
-            if (interfaces.size() > 1) {
-                throw new IllegalStateException("Expected single or zero interfaces, found: " + interfaces.size());
-            }
-            List<InetAddress> addresses = interfaces.get(0).getInetAddresses().findAll{address -> address instanceof Inet4Address}
-            return Optional.of(addresses.get(0).getHostAddress());
-        } catch (SocketException e) {
-            throw new RuntimeException(e);
+    /**
+     * Returns IPv4 address of the current machine in the local network.
+     *
+     * @return String representing IPv4 address of the current machine in the local network or empty option is no
+     * interface or address can be found.
+     */
+    static Optional<String> currentLocalNetworkIp() {
+        List<NetworkInterface> interfacesWithV4Address = getNetworkInterfaces().findAll {
+            !it.getInetAddresses().findAll{address -> address instanceof Inet4Address}.isEmpty()
+        }.asImmutable()
+
+        // Prefer standard interfaces
+        def interfaces = interfacesWithV4Address.findAll {
+            iface -> iface.name.startsWith('wlan') || iface.name.startsWith('eth')
         }
+        if (interfaces.isEmpty()) {
+            if(interfacesWithV4Address.isEmpty()) {
+                return empty()
+            } else {
+                interfaces = interfacesWithV4Address
+            }
+        }
+
+        List<InetAddress> addresses = interfaces.first().getInetAddresses().findAll{address -> address instanceof Inet4Address}
+        return Optional.of(addresses.first().getHostAddress());
     }
 
     static boolean isReachable(String host, int timeout) {
         try {
-            return InetAddress.getByName(host).isReachable(timeout)
+            InetAddress.getByName(host).isReachable(timeout)
         } catch (UnknownHostException e) {
             LOG.debug('Cannot find host {}. Returning false.', host)
             LOG.trace('Due to the: ', e)
-            return false
+            false
         }
     }
 

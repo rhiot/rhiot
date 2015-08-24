@@ -22,7 +22,9 @@ import org.junit.Test
 import static io.rhiot.utils.Networks.MIN_PORT_NUMBER
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Networks.isReachable
+import static io.rhiot.utils.Networks.currentLocalNetworkIp
 import static java.lang.System.currentTimeMillis
+import static java.util.concurrent.TimeUnit.SECONDS
 
 class NetworksTest extends Assert {
 
@@ -33,12 +35,17 @@ class NetworksTest extends Assert {
 
     @Test
     void shouldReachHost() {
-        assertTrue(isReachable('rhiot.io'))
+        assertTrue(isReachable('rhiot.io', (int) SECONDS.toMillis(10)))
     }
 
     @Test
     void shouldNotReachHost() {
-        assertFalse(isReachable("someReallyCrazyHostName${currentTimeMillis()}"))
+        assertFalse(isReachable("someUnreachableHostName${currentTimeMillis()}"))
+    }
+
+    @Test
+    void shouldReturnCurrentLocalNetworkIp() {
+        assertNotNull(currentLocalNetworkIp())
     }
 
 }

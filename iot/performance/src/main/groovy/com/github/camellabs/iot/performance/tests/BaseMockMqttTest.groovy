@@ -24,7 +24,7 @@ import com.github.camellabs.iot.utils.ssh.client.SshClient
 import java.text.SimpleDateFormat
 
 import static com.github.camellabs.iot.performance.MqttServer.getMqttPort
-import static io.rhiot.utils.Networks.localNetworkIp
+import static io.rhiot.utils.Networks.currentLocalNetworkIp
 
 abstract class BaseMockMqttTest implements TestSpecification {
 
@@ -49,7 +49,7 @@ abstract class BaseMockMqttTest implements TestSpecification {
          camellabs_iot_gateway_mock_sensor_period                  : 5,
          camellabs_iot_gateway_mock_sensor_consumer                : true,
          camellabs_iot_gateway_mock_sensor_consumer_number         : 20,
-         camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url: "tcp://${localNetworkIp().get()}:${mqttPort}",
+         camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url: "tcp://${currentLocalNetworkIp().get()}:${mqttPort}",
          camellabs_iot_gateway_mock_sensor_consumer_mqtt_qos       : qos()]
     }
 
