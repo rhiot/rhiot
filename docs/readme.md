@@ -855,14 +855,14 @@ To list the devices
 using the cloudlet console navigate to the `Devices` tab. You will see the list of the devices registered to the
 device management cloudlet. Devices with the grayed icon are the disconnected ones.
 
-<img src="images/console-device-list.png" align="center" height="600" hspace="30">
+<img src="images/console-device-list.png" align="center" height="400" hspace="30">
 
 ##### Sending heartbeat to the device
 
 In order to send heartbeat message to the given device and make it visible as connected again, you can use the
 `Send heartbeat` button near the device.
 
-<img src="images/console-device-heartbeat.png" align="center" height="600" hspace="30">
+<img src="images/console-device-heartbeat.png" align="center" height="400" hspace="30">
 
 #### Device registry
 
