@@ -837,6 +837,26 @@ you will receive the HTTP response similar to the following one:
 
     {"status": "success"}
 
+#### Device management web UI
+
+Rhiot Cloudlet Console comes with the web interface on the top of the device management REST API. The web UI makes it easier
+to monitor and manage your devices using the web brower, the mobile phone or the tablet.
+
+##### Listing devices
+
+To list the devices
+using the cloudlet console navigate to the `Devices` tab. You will see the list of the devices registered to the
+device management cloudlet. Devices with the grayed icon are the disconnected ones.
+
+<img src="images/console-device-list.png" align="center" height="600" hspace="30">
+
+##### Sending heartbeat to the device
+
+In order to send heartbeat message to the given device and make it visible as connected again, you can use the
+`Send heartbeat` button near the device.
+
+<img src="images/console-device-heartbeat.png" align="center" height="600" hspace="30">
+
 #### Device registry
 
 Device registry is used by Leshan to store the information about the managed devices. By default the device cloudlet uses
