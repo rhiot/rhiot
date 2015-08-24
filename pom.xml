@@ -14,6 +14,7 @@
         <module>utils-ssh</module>
         <module>vertx</module>
         <module>gateway</module>
+        <module>gateway-app</module>
         <module>cloudlets</module>
         <module>iot</module>
     </modules>

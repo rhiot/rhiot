@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>camel-labs-iot</artifactId>
-        <groupId>com.github.camel-labs</groupId>
+        <artifactId>io.rhiot</artifactId>
+        <groupId>rhiot-bom</groupId>
         <version>0.1.1-SNAPSHOT</version>
-        <relativePath>..</relativePath>
+        <relativePath>../bom</relativePath>
     </parent>
 
-    <artifactId>camel-labs-iot-gateway-app</artifactId>
+    <artifactId>rhiot-gateway-app</artifactId>
 
     <licenses>
         <license>

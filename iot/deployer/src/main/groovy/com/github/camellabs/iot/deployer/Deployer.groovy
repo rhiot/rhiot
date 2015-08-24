@@ -59,7 +59,7 @@ class Deployer {
     }
 
     Device deploy(Map<String, String> additionalProperties) {
-        def gatewayJar = artifactResolver.artifactStream('com.github.camel-labs', 'camel-labs-iot-gateway-app', '0.1.1-SNAPSHOT')
+        def gatewayJar = artifactResolver.artifactStream('io.rhiot', 'rhiot-gateway-app', '0.1.1-SNAPSHOT')
 
         println('Detecting devices...')
         def supportedDevices = deviceDetector.detectDevices()
