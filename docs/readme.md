@@ -851,7 +851,7 @@ to monitor and manage your devices using the web brower, the mobile phone or the
 
 To list the devices
 using the cloudlet console navigate to the `Devices` tab. You will see the list of the devices registered to the
-device management cloudlet. Devices with the grayed icon are the disconnected ones.
+device management cloudlet. Devices with the icon representing white (empty) heart are the disconnected ones.
 
 <img src="images/console-device-list.png" align="center" height="400" hspace="30">
 
