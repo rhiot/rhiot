@@ -67,8 +67,8 @@
 
         <!-- Testing -->
         <dependency>
-            <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-cloudlet-geofencing</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-cloudlet-geofencing</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

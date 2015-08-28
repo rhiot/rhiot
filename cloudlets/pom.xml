@@ -21,6 +21,7 @@
 
     <modules>
         <module>device</module>
+        <module>geofencing</module>
     </modules>
 
 </project>

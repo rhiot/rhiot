@@ -85,8 +85,8 @@
                 <version>${camel-labs.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.camel-labs</groupId>
-                <artifactId>camel-labs-iot-cloudlet-geofencing</artifactId>
+                <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-cloudlet-geofencing</artifactId>
                 <version>${camel-labs.version}</version>
             </dependency>
             <dependency>

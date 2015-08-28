@@ -22,7 +22,6 @@
     <modules>
         <module>sdk</module>
         <module>document</module>
-        <module>geofencing</module>
     </modules>
 
 </project>
