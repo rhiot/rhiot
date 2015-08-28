@@ -108,7 +108,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
                 .verb("OPTIONS", "/").route()
                 .setHeader("Access-Control-Allow-Origin", constant("*"))
                 .setHeader("Access-Control-Allow-Methods", constant("GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH"))
-                .setHeader("Access-Control-Allow-Headers", constant("Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"))
+                .setHeader("Access-Control-Allow-Headers", constant("Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization"))
                 .setHeader("Allow", constant("GET, OPTIONS, POST, PATCH"));
 
         rest("/api/document").
