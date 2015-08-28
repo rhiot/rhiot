@@ -47,8 +47,15 @@ fi
 docker rm mongodb
 docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 
+### Device Management Cloudlet
+docker rm cloudlet-device
 docker pull rhiot/cloudlet-device
-docker run -d --link mongodb:mongodb -p 15000:15000 rhiot/cloudlet-device
+docker run --name cloudlet-device -d --link mongodb:mongodb -p 15000:15000 rhiot/cloudlet-device
+
+### Geofencing Cloudlet
+docker rm cloudlet-geofencing
+docker pull rhiot/cloudlet-geofencing
+docker run -d --name cloudlet-geofencing --link mongodb:mongodb -p 15001:15001 rhiot/cloudlet-geofencing
 
 if [ -z "$HTTP_PORT" ]; then
     echo 'HTTP port not set, running Cloudlet Console using the default development port 9000.'
