@@ -21,11 +21,13 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
+import org.apache.camel.model.rest.RestPropertyDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import static java.lang.String.format;
+import static java.util.Collections.singletonList;
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static org.apache.camel.model.rest.RestBindingMode.json;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -69,9 +71,14 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         // REST API facade
 
+        RestPropertyDefinition corsAllowedHeaders = new RestPropertyDefinition();
+        corsAllowedHeaders.setKey("Access-Control-Allow-Headers");
+        corsAllowedHeaders.setValue("Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+
         RestConfigurationDefinition restConfiguration = restConfiguration().component("netty4-http").
                 host("0.0.0.0").port(restPort).bindingMode(json).enableCORS(enableCors).
                 endpointProperty("chunkedMaxContentLength", maxAttachmentSize + "").endpointProperty("matchOnUriPrefix", "true");
+        restConfiguration.setCorsHeaders(singletonList(corsAllowedHeaders));
         if (isNotBlank(apiEndpointOptions)) {
             for (String apiEndpointOption : apiEndpointOptions.split(":")) {
                 String[] splittedOption = apiEndpointOption.split("=");
