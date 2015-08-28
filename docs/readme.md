@@ -869,6 +869,9 @@ the MongoDB registry. If environment variables `mongodb_host` are no specified, 
 connect to the `mongodb` and `localhost` hosts respectively, using default MongoDB port (`27017`) or the one specified by
 the `mongodb_port` environment variable.
 
+### Geofencing cloudlet
+
+Geofencing cloudlet provides backend cloud service for collecting and the basic analysis of the GPS data.
 
 ## Performance Testing Framework
 
