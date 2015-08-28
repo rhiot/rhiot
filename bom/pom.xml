@@ -135,6 +135,23 @@
                 <version>${google-truth.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.jcabi</groupId>
+                <artifactId>jcabi-aether</artifactId>
+                <version>${jcabi-aether.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- Fat jar optimization. We don't need 9 MB of AWS-related code. -->
+                        <artifactId>aws-java-sdk</artifactId>
+                        <groupId>com.amazonaws</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <!-- Optional dependency. Excluding as it writes to STDERR and pollutes the application output. -->
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-validator</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
                 <groupId>com.jcraft</groupId>
                 <artifactId>jsch</artifactId>
                 <version>${jsch.version}</version>
@@ -243,6 +260,11 @@
                 <version>${apache-poi.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.eclipse.californium</groupId>
+                <artifactId>californium-core</artifactId>
+                <version>${californium-core.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.eclipse.kura</groupId>
                 <artifactId>org.eclipse.kura.linux.net</artifactId>
                 <version>${kura.version}</version>
@@ -261,11 +283,6 @@
                 <groupId>org.eclipse.kura</groupId>
                 <artifactId>org.eclipse.kura.core</artifactId>
                 <version>${kura.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.californium</groupId>
-                <artifactId>californium-core</artifactId>
-                <version>${californium-core.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.leshan</groupId>
@@ -287,23 +304,6 @@
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-core</artifactId>
                 <version>${infinispan.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jcabi</groupId>
-                <artifactId>jcabi-aether</artifactId>
-                <version>${jcabi-aether.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <!-- Fat jar optimization. We don't need 9 MB of AWS-related code. -->
-                        <artifactId>aws-java-sdk</artifactId>
-                        <groupId>com.amazonaws</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <!-- Optional dependency. Excluding as it writes to STDERR and pollutes the application output. -->
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-validator</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.jfree</groupId>
