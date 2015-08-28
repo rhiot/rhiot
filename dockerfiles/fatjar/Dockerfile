@@ -1,4 +1,4 @@
-FROM java:8u40
+FROM java:8u66
 
 MAINTAINER hekonsek@gmail.com
 
