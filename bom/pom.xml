@@ -28,6 +28,7 @@
         <camel-labs.version>0.1.1-SNAPSHOT</camel-labs.version>
         <embedmongo.version>1.48.2</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
+        <google-truth.version>0.27</google-truth.version>
         <infinispan.version>8.0.0.Beta2</infinispan.version>
         <ivy.version>2.4.0</ivy.version>
         <jcabi-aether.version>0.10.1</jcabi-aether.version>
@@ -127,6 +128,11 @@
                 <groupId>com.google.maps</groupId>
                 <artifactId>google-maps-services</artifactId>
                 <version>${google-maps-services.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.truth</groupId>
+                <artifactId>truth</artifactId>
+                <version>${google-truth.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jcraft</groupId>
