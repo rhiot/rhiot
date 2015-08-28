@@ -26,7 +26,6 @@
         <dependency>
             <groupId>com.github.camel-labs</groupId>
             <artifactId>camel-labs-iot-cloudlet-document-default</artifactId>
-            <classifier>classes</classifier>
         </dependency>
         <dependency>
             <groupId>com.google.maps</groupId>
