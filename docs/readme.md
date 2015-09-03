@@ -862,6 +862,12 @@ In order to send heartbeat message to the given device and make it visible as co
 
 <img src="images/console-device-heartbeat.png" align="center" height="400" hspace="30">
 
+#### Accessing LWM2M server directly
+
+While we suggest to use the universal REST API whenever possible, you can also consider using the LWM2M server directly.
+By default the LWM2M server is exposed using the default IANA port i.e. 5683. The embedded LWM2M server is started
+together with the cloudlet.
+
 #### Device registry
 
 Device registry is used by Leshan to store the information about the managed devices. By default the device cloudlet uses
@@ -884,6 +890,9 @@ you to run it in the cluster, behind the load balancer of your choice. The defau
 shared by all the cloudlet instances in the cluster. Also the device registry cache used internally by Device Management Cloudlet
 will be automatically synchronized between the deployed cloudlet instances. All you need to do, is to be sure that you have
 multicast enabled for your local network, so the JGroups cluster can be established between the cloudlets instances.
+
+Keep in mind that each clustered instance of the Device Management Cloudlet exposes both REST and LWM2M API, so you can
+take advantage of load balancing over all the APIs available.
 
 ### Geofencing cloudlet
 
