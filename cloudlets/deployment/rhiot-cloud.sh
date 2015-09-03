@@ -50,7 +50,13 @@ docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 ### Device Management Cloudlet
 docker rm cloudlet-device
 docker pull rhiot/cloudlet-device
-docker run --name cloudlet-device -d --link mongodb:mongodb -p 15000:15000 -e XMX=64m rhiot/cloudlet-device
+if [ ! -z "$lwm2m_port" ]; then
+    lwm2m_port="-p ${lwm2m_port}:${lwm2m_port}"
+else
+    echo "Using default LWM2M port (5683)."
+    lwm2m_port="-p 5683:5683"
+fi
+docker run --name cloudlet-device -d --link mongodb:mongodb -p 15000:15000 ${lwm2m_port} -e XMX=64m rhiot/cloudlet-device
 
 ### Geofencing Cloudlet
 docker rm cloudlet-geofencing

@@ -868,6 +868,11 @@ While we suggest to use the universal REST API whenever possible, you can also c
 By default the LWM2M server is exposed using the default IANA port i.e. 5683. The embedded LWM2M server is started
 together with the cloudlet.
 
+In order to use custom LWM2M server port, set the `lwm2m_port` environment variable when starting the device
+management cloudlet (or Rhiot Cloud). For example:
+
+    docker run -d -e lwm2m_port=16000 io.rhiot/rhiot-cloudlet-device/0.1.1
+
 #### Device registry
 
 Device registry is used by Leshan to store the information about the managed devices. By default the device cloudlet uses
