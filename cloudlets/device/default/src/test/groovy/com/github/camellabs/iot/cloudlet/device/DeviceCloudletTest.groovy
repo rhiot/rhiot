@@ -38,6 +38,8 @@ class DeviceCloudletTest extends Assert {
 
     static def int mongodbPort = findAvailableTcpPort()
 
+    static def int lwm2mPort = findAvailableTcpPort()
+
     def apiBase = "http://localhost:${restApiPort}"
 
     def rest = new RestTemplate()
@@ -53,6 +55,7 @@ class DeviceCloudletTest extends Assert {
 
         System.setProperty('api_rest_port', "${restApiPort}")
         System.setProperty('disconnectionPeriod', "${5000}")
+        System.setProperty('lwm2m_port', "${lwm2mPort}")
 
         new DeviceCloudlet().start()
         sleep(2000)
@@ -102,9 +105,9 @@ class DeviceCloudletTest extends Assert {
         def secondClient = 'bar'
 
         // When
-        createGenericLeshanClientTemplate(firstClient).connect()
-        createGenericLeshanClientTemplate(firstClient).connect()
-        createGenericLeshanClientTemplate(secondClient).connect()
+        createGenericLeshanClientTemplate(firstClient, lwm2mPort).connect()
+        createGenericLeshanClientTemplate(firstClient, lwm2mPort).connect()
+        createGenericLeshanClientTemplate(secondClient, lwm2mPort).connect()
 
         // Then
         def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/device"), Map.class)
@@ -115,7 +118,7 @@ class DeviceCloudletTest extends Assert {
     void shouldListRegisteredClient() {
         // Given
         def clientId = uuid()
-        createGenericLeshanClientTemplate(clientId).connect()
+        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
 
         // When
         def client = rest.getForObject("${apiBase}/client/${clientId}", Map.class)
@@ -129,7 +132,7 @@ class DeviceCloudletTest extends Assert {
         // Given
         rest.delete("${apiBase}/client")
         def clientId = randomUUID().toString()
-        createGenericLeshanClientTemplate(clientId).connect()
+        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
 
         // When
         sleep(5000)
@@ -144,7 +147,7 @@ class DeviceCloudletTest extends Assert {
         // Given
         rest.delete("${apiBase}/client")
         def clientId = randomUUID().toString()
-        createGenericLeshanClientTemplate(clientId).connect()
+        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
 
         // When
         def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/device/disconnected"), Map.class)
@@ -157,7 +160,7 @@ class DeviceCloudletTest extends Assert {
     void shouldReadClientManufacturer() {
         // Given
         def clientId = randomUUID().toString()
-        createGenericLeshanClientTemplate(clientId).connect()
+        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
 
         // When
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/manufacturer"), Map.class)
@@ -169,7 +172,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldReturnManufacturerFailureForNonExistingClient() {
         // Given
-        createGenericLeshanClientTemplate(randomUUID().toString()).connect()
+        createGenericLeshanClientTemplate(randomUUID().toString(), lwm2mPort).connect()
 
         // When
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/invalidEndpoint/manufacturer"), Map.class)
@@ -182,7 +185,7 @@ class DeviceCloudletTest extends Assert {
     void shouldReadClientModel() {
         // Given
         def clientId = randomUUID().toString()
-        createGenericLeshanClientTemplate(clientId).connect()
+        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
 
         // When
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/model"), Map.class)
@@ -195,7 +198,7 @@ class DeviceCloudletTest extends Assert {
     void shouldReadClientSerial() {
         // Given
         def clientId = randomUUID().toString()
-        createGenericLeshanClientTemplate(clientId).connect()
+        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
 
         // When
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/serial"), Map.class)

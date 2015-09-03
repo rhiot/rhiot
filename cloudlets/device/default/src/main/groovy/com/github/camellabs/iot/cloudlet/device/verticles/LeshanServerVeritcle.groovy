@@ -72,6 +72,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     final def registryMongoDbPort = intProperty('mongodb_port', 27017)
 
+    final def lwm2mPort = intProperty('lwm2m_port', LeshanServerBuilder.PORT)
+
     final def disconnectionPeriod = longProperty('disconnectionPeriod', DEFAULT_DISCONNECTION_PERIOD)
 
     LeshanServerVeritcle() {
@@ -86,7 +88,9 @@ class LeshanServerVeritcle extends GroovyVerticle {
         cacheManager.defineConfiguration("clients", builder);
 
         def clientRegistry = new CachingClientRegistry(new MongoDbClientRegistry(mongo), new InfinispanCacheProvider(cacheManager))
-        leshanServer = new LeshanServerBuilder().setClientRegistry(clientRegistry).build()
+        def leshanServerBuilder = new LeshanServerBuilder()
+        leshanServerBuilder.setLocalAddress('0.0.0.0', lwm2mPort)
+        leshanServer = leshanServerBuilder.setClientRegistry(clientRegistry).build()
     }
 
     @Override
@@ -96,7 +100,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
             vertx.eventBus().consumer('clients.create.virtual') { msg ->
                 def device = jsonMessageToMap(msg.body())
-                createVirtualLeshanClientTemplate(device.clientId).connect().disconnect()
+                createVirtualLeshanClientTemplate(device.clientId, lwm2mPort).connect().disconnect()
                 wrapIntoJsonResponse(msg, 'Status', 'Success')
             }
 

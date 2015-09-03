@@ -21,6 +21,7 @@ import org.eclipse.leshan.client.californium.LeshanClient
 import org.eclipse.leshan.client.resource.LwM2mInstanceEnabler
 import org.eclipse.leshan.client.resource.ObjectsInitializer
 import org.eclipse.leshan.core.request.RegisterRequest
+import org.eclipse.leshan.server.californium.LeshanServerBuilder
 
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static org.slf4j.LoggerFactory.getLogger
@@ -45,12 +46,21 @@ class LeshanClientTemplate {
         this.deviceClass = deviceClass
     }
 
+    static LeshanClientTemplate createGenericLeshanClientTemplate(String clientId, int port) {
+        new LeshanClientTemplate(clientId, "localhost:${port}", GenericDevice.class)
+    }
+
     static LeshanClientTemplate createGenericLeshanClientTemplate(String clientId) {
-        new LeshanClientTemplate(clientId, 'localhost:5683', GenericDevice.class)
+        createGenericLeshanClientTemplate(clientId, LeshanServerBuilder.PORT)
+    }
+
+    static LeshanClientTemplate createVirtualLeshanClientTemplate(String clientId, int port) {
+        new LeshanClientTemplate(clientId, "localhost:${port}", VirtualDevice.class)
     }
 
     static LeshanClientTemplate createVirtualLeshanClientTemplate(String clientId) {
-        new LeshanClientTemplate(clientId, 'localhost:5683', VirtualDevice.class)
+        LOG.debug("Creating virtual Leshan client template using default LWM2M port.")
+        createVirtualLeshanClientTemplate(clientId, LeshanServerBuilder.PORT)
     }
 
     // Connection operations
@@ -74,9 +84,7 @@ class LeshanClientTemplate {
         // Report registration response.
         System.out.println("Device Registration (Success? " + response.getCode() + ")");
         if (response.getCode() == ResponseCode.CREATED) {
-            System.out.println("\tDevice: Registered Client Location '" + response.getRegistrationID() + "'");
-            String registrationID = response.getRegistrationID();
-            println(">>>>>>>>>>>>>> " + registrationID)
+            LOG.debug("Registered Leshan client. Registration ID: {}", response.registrationID)
         } else {
             throw new RuntimeException("Device Registration Error. Server response code: ${response.getCode()}")
         }
