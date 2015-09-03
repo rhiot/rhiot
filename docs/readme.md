@@ -869,6 +869,14 @@ the MongoDB registry. If environment variables `mongodb_host` are no specified, 
 connect to the `mongodb` and `localhost` hosts respectively, using default MongoDB port (`27017`) or the one specified by
 the `mongodb_port` environment variable.
 
+##### Registry cache
+
+As the access to the device information is crucial for all the IoT systems, it should have be implemented as efficiently
+as possible. As devices information doesn't change very often, it is a good candidate for being cached. Device
+Management Cloudlet uses the [Infinispan](http://infinispan.org) cache cluster under to hood, to provide the faster access
+to the device information. The Infinispan cache used is clustered (using JGroups under the hood), so the cached information
+remains up-to-date even when many Device Manager Cloudlets instances are executed in the cluster.
+
 ### Geofencing cloudlet
 
 Geofencing cloudlet provides backend cloud service for collecting and the basic analysis of the GPS data.
