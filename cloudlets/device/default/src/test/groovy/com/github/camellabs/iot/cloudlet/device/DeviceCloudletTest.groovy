@@ -16,7 +16,6 @@
  */
 package com.github.camellabs.iot.cloudlet.device
 
-import com.google.common.truth.Truth
 import de.flapdoodle.embed.mongo.MongodStarter
 import de.flapdoodle.embed.mongo.config.IMongodConfig
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
@@ -167,14 +166,14 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldReadClientManufacturer() {
         // Given
-        def clientId = randomUUID().toString()
+        def clientId = uuid()
         createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
 
         // When
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/manufacturer"), Map.class)
 
         // Then
-        assertEquals('Generic manufacturer', manufacturer['manufacturer'])
+        assertThat(manufacturer.manufacturer).isEqualTo('Generic manufacturer')
     }
 
     @Test
@@ -186,7 +185,7 @@ class DeviceCloudletTest extends Assert {
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/invalidEndpoint/manufacturer"), Map.class)
 
         // Then
-        assertNotNull('Generic manufacturer', manufacturer['failure'])
+        assertThat(manufacturer.failure).isNotNull()
     }
 
     @Test
