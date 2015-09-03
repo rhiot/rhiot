@@ -877,6 +877,14 @@ Management Cloudlet uses the [Infinispan](http://infinispan.org) cache cluster u
 to the device information. The Infinispan cache used is clustered (using JGroups under the hood), so the cached information
 remains up-to-date even when many Device Manager Cloudlets instances are executed in the cluster.
 
+#### Clustering Device Management Cloudlet
+
+Device Management Cloudlet has been designed with the scalablity in mind. Default configuration of the cloudlet allows
+you to run it in the cluster, behind the load balancer of your choice. The default MongoDB device registry will be
+shared by all the cloudlet instances in the cluster. Also the device registry cache used internally by Device Management Cloudlet
+will be automatically synchronized between the deployed cloudlet instances. All you need to do, is to be sure that you have
+multicast enabled for your local network, so the JGroups cluster can be established between the cloudlets instances.
+
 ### Geofencing cloudlet
 
 Geofencing cloudlet provides backend cloud service for collecting and the basic analysis of the GPS data.
