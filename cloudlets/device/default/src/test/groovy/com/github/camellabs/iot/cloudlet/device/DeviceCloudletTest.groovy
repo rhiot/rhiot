@@ -16,6 +16,7 @@
  */
 package com.github.camellabs.iot.cloudlet.device
 
+import com.google.common.truth.Truth
 import de.flapdoodle.embed.mongo.MongodStarter
 import de.flapdoodle.embed.mongo.config.IMongodConfig
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
@@ -26,6 +27,7 @@ import org.junit.Test
 import org.springframework.web.client.RestTemplate
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createGenericLeshanClientTemplate
+import static com.google.common.truth.Truth.assertThat
 import static de.flapdoodle.embed.mongo.distribution.Version.V3_1_0
 import static de.flapdoodle.embed.process.runtime.Network.localhostIsIPv6
 import static io.rhiot.utils.Networks.findAvailableTcpPort
@@ -61,11 +63,18 @@ class DeviceCloudletTest extends Assert {
         sleep(2000)
     }
 
+    // Tests
+
     @Test
     void shouldReturnNoClients() {
+        // Given
         rest.delete("${apiBase}/client")
-        def response = rest.getForObject(new URI("http://localhost:${restApiPort}/device"), Map.class)
-        assertEquals(0, response['devices'].asType(List.class).size())
+
+        // When
+        def response = rest.getForObject("${apiBase}/device", Map.class)
+
+        // Then
+        assertThat(response.devices.asType(List.class).size()).isEqualTo(0)
     }
 
     @Test
@@ -131,7 +140,7 @@ class DeviceCloudletTest extends Assert {
     void shouldListDisconnectedClient() {
         // Given
         rest.delete("${apiBase}/client")
-        def clientId = randomUUID().toString()
+        def clientId = uuid()
         createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
 
         // When
@@ -146,8 +155,7 @@ class DeviceCloudletTest extends Assert {
     void shouldNotListDisconnectedClient() {
         // Given
         rest.delete("${apiBase}/client")
-        def clientId = randomUUID().toString()
-        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
+        createGenericLeshanClientTemplate(uuid(), lwm2mPort).connect()
 
         // When
         def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/device/disconnected"), Map.class)
