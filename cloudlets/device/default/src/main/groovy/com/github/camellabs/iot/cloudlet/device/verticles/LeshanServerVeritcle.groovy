@@ -43,8 +43,8 @@ import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTempla
 import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
 import static com.github.camellabs.iot.vertx.PropertyResolver.longProperty
 import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
-import static com.github.camellabs.iot.vertx.jackson.Jacksons.json
-import static com.github.camellabs.iot.vertx.jackson.Jacksons.jsonMessageToMap
+import static io.rhiot.vertx.jackson.Jacksons.json
+import static io.rhiot.vertx.jackson.Jacksons.jsonMessageToMap
 import static io.rhiot.utils.Networks.isReachable
 import static java.time.Instant.ofEpochMilli
 import static java.time.LocalDateTime.ofInstant

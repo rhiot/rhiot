@@ -16,7 +16,6 @@
  */
 package io.rhiot.vertx.di.classpath
 
-import com.google.common.base.Preconditions
 import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
 

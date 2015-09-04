@@ -28,7 +28,7 @@ import io.vertx.groovy.ext.web.handler.CorsHandler
 import io.vertx.lang.groovy.GroovyVerticle
 
 import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
-import static com.github.camellabs.iot.vertx.jackson.Jacksons.json
+import static io.rhiot.vertx.jackson.Jacksons.json
 import static io.vertx.core.http.HttpMethod.DELETE
 import static io.vertx.core.http.HttpMethod.GET
 import static io.vertx.core.http.HttpMethod.OPTIONS

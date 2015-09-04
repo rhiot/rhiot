@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.vertx.jackson
+package io.rhiot.vertx.jackson
 
 import org.junit.Assert
 import org.junit.Test
 
-import static com.github.camellabs.iot.vertx.jackson.Jacksons.json
+import static io.rhiot.vertx.jackson.Jacksons.json
 
 class JacksonsTest extends Assert {
 
