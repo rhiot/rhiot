@@ -14,20 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.vertx.di.classpath
+package io.rhiot.steroids
 
+import com.github.camellabs.iot.vertx.PropertyResolver
 import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
 
+
+import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
 import static com.google.common.base.Preconditions.checkNotNull
 import static java.util.Optional.empty
-import static org.reflections.util.ClasspathHelper.forJavaClassPath
 
-final class ClasspathDependencyInjection {
+final class Steroids {
 
-    final static def classpath = new Reflections(new ConfigurationBuilder().setUrls(forJavaClassPath()))
+    static def APPLICATION_PACKAGE_PROPERTY = 'application_package'
 
-    private ClasspathDependencyInjection() {
+    final static def classpath
+    static {
+        def classpathConfiguration = new ConfigurationBuilder().forPackages('io.rhiot')
+        if(PropertyResolver.hasProperty(APPLICATION_PACKAGE_PROPERTY)) {
+            classpathConfiguration.forPackages(stringProperty(APPLICATION_PACKAGE_PROPERTY))
+        }
+        classpath = new Reflections(classpathConfiguration)
+    }
+
+    private Steroids() {
     }
 
     static <T> Optional<T> bean(Class<T> type) {
@@ -41,7 +52,7 @@ final class ClasspathDependencyInjection {
     }
 
     static <T> List<T> beans(Class<T> type) {
-        checkNotNull(type, 'Types of the bean cannot be null.')
+        checkNotNull(type, 'Type of the beans cannot be null.')
         classpath.getSubTypesOf(type).toList().collect{ it.newInstance() }
     }
 

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.vertx.di.classpath
+package io.rhiot.steroids
 
+import com.google.common.truth.Truth
 import org.junit.Assert
 import org.junit.Test
 
-import static ClasspathDependencyInjection.bean
-import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.vertx.di.classpath.ClasspathDependencyInjection.beans
+import static Steroids.bean
+import static Steroids.beans
 
 class ClasspathDependencyInjectionTest extends Assert {
 
@@ -32,12 +32,12 @@ class ClasspathDependencyInjectionTest extends Assert {
 
     @Test
     void shouldFindAllCallbacks() {
-        assertThat(beans(ConfigurationCallback.class)).hasSize(1)
+        Truth.assertThat(beans(ConfigurationCallback.class)).hasSize(1)
     }
 
     @Test
     void shouldNotFindBean() {
-        assertThat(bean(NotImplementedCallback.class).isPresent()).isFalse()
+        Truth.assertThat(bean(NotImplementedCallback.class).isPresent()).isFalse()
     }
 
 }

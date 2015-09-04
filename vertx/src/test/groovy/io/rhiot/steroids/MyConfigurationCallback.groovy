@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.vertx.di.classpath
+package io.rhiot.steroids
 
-interface ConfigurationCallback {
+class MyConfigurationCallback implements ConfigurationCallback {
 
-    void configureMe()
+    @Override
+    void configureMe() {}
 
 }

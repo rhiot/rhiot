@@ -26,6 +26,10 @@ final class PropertyResolver {
     private PropertyResolver() {
     }
 
+    static boolean hasProperty(String key) {
+        stringProperty(key) != null
+    }
+
     static String stringProperty(String key, String defaultValue) {
         def property = System.getProperty(key)
         if (property != null) {
