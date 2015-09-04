@@ -19,11 +19,6 @@
         </license>
     </licenses>
 
-    <properties>
-        <fatjar.mainClass>com.github.camellabs.iot.cloudlet.device.DeviceCloudlet</fatjar.mainClass>
-        <docker.image.target>cloudlet-device</docker.image.target>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -32,10 +27,6 @@
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-vertx</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.leshan</groupId>
@@ -76,18 +67,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.jolokia</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
