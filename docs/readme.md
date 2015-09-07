@@ -731,6 +731,8 @@ Console* is the web application assembling all the Cloudlets UI plugins. The *Rh
 complete cloud-based installation setup including Cloudlet Console, Cloudlets backend services and all the other necessary
 services (like database servers) installed.
 
+<img src="images/cloudlet-arch.png" align="center" height="400" hspace="30">
+
 ### Dockerized Rhiot Cloud
 
 We recommend to run the Rhiot Cloud using the Docker container. We love Docker and believe that containers are the
