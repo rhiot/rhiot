@@ -18,6 +18,8 @@ package io.rhiot.utils
 
 import groovy.transform.CompileStatic
 
+import javax.swing.text.html.Option
+
 import static java.lang.System.getenv
 import static java.lang.System.setProperty
 
@@ -30,6 +32,8 @@ final class Properties {
     static boolean hasProperty(String key) {
         stringProperty(key) != null
     }
+
+    // String properties
 
     static String stringProperty(String key, String defaultValue) {
         def property = System.getProperty(key)
@@ -49,6 +53,12 @@ final class Properties {
         stringProperty(key, null)
     }
 
+    static String setStringProperty(String key, String value) {
+        System.setProperty(key, value)
+    }
+
+    // Integer properties
+
     static Integer intProperty(String key) {
         def property = stringProperty(key)
         property == null ? null : property.toInteger()
@@ -63,15 +73,23 @@ final class Properties {
         System.setProperty(key, "${value}")
     }
 
-    static Long longProperty(String key) {
-        def property = stringProperty(key)
-        property == null ? null : property.toLong()
-    }
+    // Long properties
 
     static long longProperty(String key, long defaultValue) {
         def property = stringProperty(key)
         property == null ? defaultValue : property.toLong()
     }
+
+    static Optional<Long> longProperty(String key) {
+        def property = stringProperty(key)
+        property == null ? Optional.empty() : Optional.of(property.toLong())
+    }
+
+    static void setLongProperty(String key, long value) {
+        System.setProperty(key, "${value}")
+    }
+
+    // Boolean properties
 
     static void setBooleanProperty(String key, boolean value) {
         System.setProperty(key, "${value}")
