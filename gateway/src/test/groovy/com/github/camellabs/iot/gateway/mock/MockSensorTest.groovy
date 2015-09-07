@@ -24,10 +24,10 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test
 
-import static com.github.camellabs.iot.utils.Properties.booleanProperty;
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.mockEndpoint;
+import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.mockEndpoint
+import static io.rhiot.utils.Properties.setBooleanProperty;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
@@ -53,8 +53,8 @@ class MockSensorTest extends Assert {
             }
         })
 
-        booleanProperty('camellabs_iot_gateway_mock_sensor', true)
-        booleanProperty('camellabs_iot_gateway_mock_sensor_consumer', true)
+        setBooleanProperty('camellabs_iot_gateway_mock_sensor', true)
+        setBooleanProperty('camellabs_iot_gateway_mock_sensor_consumer', true)
         setProperty('camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url', "tcp://localhost:${mqttPort}")
 
         new Gateway().start()
@@ -62,8 +62,8 @@ class MockSensorTest extends Assert {
 
     @AfterClass
     static void afterClass() {
-        booleanProperty('camellabs_iot_gateway_mock_sensor', false);
-        booleanProperty('camellabs_iot_gateway_mock_sensor_consumer', false);
+        setBooleanProperty('camellabs_iot_gateway_mock_sensor', false)
+        setBooleanProperty('camellabs_iot_gateway_mock_sensor_consumer', false)
 
         closeCamelContext()
     }

@@ -16,12 +16,11 @@
  */
 package io.rhiot.steroids
 
-import com.github.camellabs.iot.vertx.PropertyResolver
+import io.rhiot.utils.Properties
 import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
 
-
-import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
+import static io.rhiot.utils.Properties.stringProperty
 import static com.google.common.base.Preconditions.checkNotNull
 import static java.util.Optional.empty
 
@@ -32,7 +31,7 @@ final class Steroids {
     final static def classpath
     static {
         def classpathConfiguration = new ConfigurationBuilder().forPackages('io.rhiot')
-        if(PropertyResolver.hasProperty(APPLICATION_PACKAGE_PROPERTY)) {
+        if(Properties.hasProperty(APPLICATION_PACKAGE_PROPERTY)) {
             classpathConfiguration.forPackages(stringProperty(APPLICATION_PACKAGE_PROPERTY))
         }
         classpath = new Reflections(classpathConfiguration)

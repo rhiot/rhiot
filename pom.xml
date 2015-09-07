@@ -12,6 +12,7 @@
         <module>bom</module>
         <module>utils</module>
         <module>utils-ssh</module>
+        <module>steroids</module>
         <module>vertx</module>
         <module>gateway</module>
         <module>gateway-app</module>

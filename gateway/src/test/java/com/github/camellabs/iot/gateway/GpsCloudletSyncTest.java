@@ -20,6 +20,7 @@ import com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoTimeoutException;
+import io.rhiot.utils.Properties;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -33,11 +34,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import static com.github.camellabs.iot.utils.Properties.booleanProperty;
-import static com.github.camellabs.iot.utils.Properties.intProperty;
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext;
 import static com.google.common.io.Files.createTempDir;
 import static com.jayway.awaitility.Awaitility.await;
+import static io.rhiot.utils.Properties.setBooleanProperty;
+import static io.rhiot.utils.Properties.setIntProperty;
 import static java.lang.System.setProperty;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
@@ -67,8 +68,8 @@ public class GpsCloudletSyncTest extends Assert {
         // Geofencing cloudlet fixtures
         dbName = "test";
         setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.db", dbName);
-        booleanProperty("camel.labs.iot.cloudlet.document.driver.mongodb.embedded", true);
-        intProperty("camel.labs.iot.cloudlet.rest.port", geofencingApiPort);
+        setBooleanProperty("camel.labs.iot.cloudlet.document.driver.mongodb.embedded", true);
+        setIntProperty("camel.labs.iot.cloudlet.rest.port", geofencingApiPort);
 
         new Thread() {
             @Override

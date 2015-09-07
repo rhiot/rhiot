@@ -26,6 +26,10 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-steroids</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-vertx</artifactId>
         </dependency>
         <dependency>
