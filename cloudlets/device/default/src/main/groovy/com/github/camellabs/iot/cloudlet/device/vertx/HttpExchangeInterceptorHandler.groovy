@@ -22,15 +22,15 @@ import io.vertx.groovy.ext.web.RoutingContext
 import static io.rhiot.steroids.Steroids.beans
 import static org.slf4j.LoggerFactory.getLogger
 
-class HttpRequestInterceptorHandler implements Handler<RoutingContext> {
+class HttpExchangeInterceptorHandler implements Handler<RoutingContext> {
 
-    private static final def LOG = getLogger(HttpRequestInterceptorHandler.class)
+    private static final def LOG = getLogger(HttpExchangeInterceptorHandler.class)
 
-    def interceptors = beans(HttpRequestInterceptor.class)
+    def interceptors = beans(HttpExchangeInterceptor.class)
 
     @Override
     void handle(RoutingContext event) {
-        for(HttpRequestInterceptor interceptor : interceptors) {
+        for(HttpExchangeInterceptor interceptor : interceptors) {
             try {
                 interceptor.intercept(event)
             } catch (Exception ex) {

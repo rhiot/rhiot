@@ -18,7 +18,7 @@ package com.github.camellabs.iot.cloudlet.device.vertx
 
 import io.vertx.groovy.ext.web.RoutingContext
 
-interface HttpRequestInterceptor {
+interface HttpExchangeInterceptor {
 
     void intercept(RoutingContext routingContext)
 
