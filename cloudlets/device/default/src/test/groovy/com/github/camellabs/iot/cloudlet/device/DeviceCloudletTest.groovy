@@ -58,8 +58,7 @@ class DeviceCloudletTest extends Assert {
         System.setProperty('disconnectionPeriod', "${5000}")
         System.setProperty('lwm2m_port', "${lwm2mPort}")
 
-        new DeviceCloudlet().start()
-        sleep(2000)
+        new DeviceCloudlet().start().waitFor()
     }
 
     // Tests

@@ -16,6 +16,7 @@
  */
 package com.github.camellabs.iot.cloudlet.device.verticles
 
+import com.github.camellabs.iot.cloudlet.device.DeviceCloudlet
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
 import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
@@ -169,6 +170,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 }
             }
 
+            DeviceCloudlet.@isStarted.countDown()
             startFuture.complete()
         }
     }

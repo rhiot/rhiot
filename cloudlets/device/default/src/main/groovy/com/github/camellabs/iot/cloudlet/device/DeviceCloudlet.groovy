@@ -20,14 +20,25 @@ import com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle
 import com.github.camellabs.iot.cloudlet.device.verticles.DeviceRestApiVerticle
 import io.vertx.groovy.core.Vertx
 
+import java.util.concurrent.CountDownLatch
+
+import static java.util.concurrent.TimeUnit.SECONDS
+
 class DeviceCloudlet {
 
     private final def vertx = Vertx.vertx()
+
+    private static final def isStarted = new CountDownLatch(2)
 
     DeviceCloudlet start() {
         vertx.deployVerticle("groovy:${LeshanServerVeritcle.class.name}")
         vertx.deployVerticle("groovy:${DeviceRestApiVerticle.class.name}")
         return this
+    }
+
+    DeviceCloudlet waitFor() {
+        isStarted.await(15, SECONDS)
+        this
     }
 
     public static void main(String[] args) {
