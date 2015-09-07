@@ -76,10 +76,15 @@ Rhiot comes with the following features:
     - [Device management REST API](#device-management-rest-api)
       - [Listing devices](#listing-devices)
       - [Disconnected devices](#disconnected-devices)
+      - [Intercepting REST API requests](#intercepting-rest-api-requests)
     - [Device management web UI](#device-management-web-ui)
       - [Listing devices](#listing-devices-1)
       - [Sending heartbeat to the device](#sending-heartbeat-to-the-device)
+    - [Accessing LWM2M server directly](#accessing-lwm2m-server-directly)
     - [Device registry](#device-registry)
+      - [Registry cache](#registry-cache)
+    - [Clustering Device Management Cloudlet](#clustering-device-management-cloudlet)
+  - [Geofencing cloudlet](#geofencing-cloudlet)
 - [Performance Testing Framework](#performance-testing-framework)
   - [Hardware profiles](#hardware-profiles)
     - [Raspberry PI 2 B+ (aka RPI2)](#raspberry-pi-2-b-aka-rpi2)
@@ -731,7 +736,7 @@ Console* is the web application assembling all the Cloudlets UI plugins. The *Rh
 complete cloud-based installation setup including Cloudlet Console, Cloudlets backend services and all the other necessary
 services (like database servers) installed.
 
-<img src="images/cloudlet-arch.png" align="center" height="400" hspace="30">
+<img src="images/cloudlet-arch.png" align="center" height="500">
 
 ### Dockerized Rhiot Cloud
 
