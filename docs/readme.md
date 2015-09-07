@@ -70,6 +70,7 @@ Rhiot comes with the following features:
       - [Consuming:](#consuming-2)
       - [Producing](#producing-2)
 - [Rhiot Cloud](#rhiot-cloud)
+  - [Architecture](#architecture)
   - [Dockerized Rhiot Cloud](#dockerized-rhiot-cloud)
   - [Device management cloudlet](#device-management-cloudlet)
     - [Running the device management cloudlet](#running-the-device-management-cloudlet)
@@ -736,11 +737,15 @@ Console* is the web application assembling all the Cloudlets UI plugins. The *Rh
 complete cloud-based installation setup including Cloudlet Console, Cloudlets backend services and all the other necessary
 services (like database servers) installed.
 
+### Architecture
+
 The high-level architecture diagram of the Rhiot Cloud is presented on the image below:
 
 <img src="images/cloudlet-arch.png" align="center" height="600">
 
-Notice that we assume that cloudlets dockerized and deployed as the Docker containers.
+Notice that we assume that cloudlets dockerized and deployed as the Docker containers. The HTTP REST API as been listed
+at the top of the diagram not without the reason - we think of the REST API as the first-class citizen considering the
+access to the Rhiot Cloud.
 
 ### Dockerized Rhiot Cloud
 
@@ -784,6 +789,10 @@ Device management cloudlet provides backend service for registering and tracking
 Under the hood device management cloudlet uses [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan), the
 open source implementation of the [LWM2M](https://en.wikipedia.org/wiki/OMA_LWM2M) protocol. LWM2M becomes the standard
 for the IoT devices management so we decided to make it a heart of the Rhiot device management service.
+
+The diagram below presents the high-level overview of the device cloudlet architecture.
+
+<img src="images/cloudlet-device-arch.png" align="center" height="600">
 
 #### Running the device management cloudlet
 
