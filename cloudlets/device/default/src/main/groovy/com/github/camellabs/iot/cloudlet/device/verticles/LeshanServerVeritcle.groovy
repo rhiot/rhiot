@@ -49,6 +49,7 @@ import static io.rhiot.vertx.jackson.Jacksons.jsonMessageToMap
 import static io.rhiot.utils.Networks.isReachable
 import static java.time.Instant.ofEpochMilli
 import static java.time.LocalDateTime.ofInstant
+import static java.util.concurrent.TimeUnit.DAYS
 import static java.util.concurrent.TimeUnit.MINUTES
 import static org.eclipse.leshan.ResponseCode.CONTENT
 import static org.infinispan.configuration.cache.CacheMode.INVALIDATION_ASYNC
@@ -104,6 +105,9 @@ class LeshanServerVeritcle extends GroovyVerticle {
             vertx.eventBus().consumer('clients.create.virtual') { msg ->
                 def device = jsonMessageToMap(msg.body())
                 createVirtualLeshanClientTemplate(device.clientId, lwm2mPort).connect().disconnect()
+                def client = leshanServer.clientRegistry.get(device.clientId)
+                leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, DAYS.toSeconds(365), client.smsNumber,
+                        client.bindingMode, client.objectLinks))
                 wrapIntoJsonResponse(msg, 'Status', 'Success')
             }
 
