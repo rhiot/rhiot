@@ -22,6 +22,7 @@ import io.vertx.core.Handler
 import io.vertx.groovy.core.buffer.Buffer
 
 import static com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_DISCONNECTED
+import static com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_DELETE
 import static com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_HEARTBEAT_SEND
 import static io.vertx.core.http.HttpMethod.POST
 
@@ -33,6 +34,7 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
             get('/device/disconnected', CHANNEL_DEVICES_DISCONNECTED)
             delete('/client', 'deleteClients')
             get('/client/:deviceId', 'getClient')
+            delete('/device/:deviceId', CHANNEL_DEVICE_DELETE)
             get('/device/:deviceId/heartbeat', CHANNEL_DEVICE_HEARTBEAT_SEND)
             get('/client/:deviceId/manufacturer', 'client.manufacturer')
             get('/client/:deviceId/model', 'client.model')

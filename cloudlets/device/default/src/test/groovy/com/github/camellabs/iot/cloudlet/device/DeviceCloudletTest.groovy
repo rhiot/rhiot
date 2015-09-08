@@ -122,16 +122,30 @@ class DeviceCloudletTest extends Assert {
     }
 
     @Test
-    void shouldListRegisteredClient() {
+    void shouldListRegisteredDevices() {
         // Given
-        def clientId = uuid()
-        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
+        def deviceId = uuid()
+        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def client = rest.getForObject("${apiBase}/client/${clientId}", Map.class)
+        def device = rest.getForObject("${apiBase}/client/${deviceId}", Map.class)
 
         // Then
-        assertEquals(clientId, client['client']['endpoint'])
+        assertThat(deviceId).isEqualTo(device['client']['endpoint'])
+    }
+
+    @Test
+    void shouldListDeregisteredDevice() {
+        // Given
+        def deviceId = uuid()
+        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
+
+        // When
+        rest.delete("${apiBase}/device/${deviceId}")
+
+        // Then
+        def client = rest.getForObject("${apiBase}/client/${deviceId}", Map.class)
+        assertThat(client.client).isNull()
     }
 
     @Test

@@ -61,6 +61,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     static final def CHANNEL_DEVICES_DISCONNECTED = 'devices.disconnected'
 
+    static final def CHANNEL_DEVICE_DELETE = 'device.delete'
+
     static final def CHANNEL_DEVICE_HEARTBEAT_SEND = 'device.heartbeat.update'
 
     // Collaborators
@@ -122,6 +124,16 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
             vertx.eventBus().consumer('getClient') { msg ->
                 wrapIntoJsonResponse(msg, 'client', leshanServer.clientRegistry.get(msg.body().toString()))
+            }
+
+            vertx.eventBus().consumer(CHANNEL_DEVICE_DELETE) { msg ->
+                if(msg == null) {
+                    msg.fail(-1, 'Device ID cannot be null.')
+                    return
+                }
+                def client = leshanServer.clientRegistry.get(msg.body().toString())
+                leshanServer.clientRegistry.deregisterClient(client.registrationId)
+                wrapIntoJsonResponse(msg, 'Status', 'Success')
             }
 
             vertx.eventBus().consumer(CHANNEL_DEVICE_HEARTBEAT_SEND) { msg ->
