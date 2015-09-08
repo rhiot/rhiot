@@ -128,7 +128,7 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def device = rest.getForObject("${apiBase}/client/${deviceId}", Map.class)
+        def device = rest.getForObject("${apiBase}/device/${deviceId}", Map.class)
 
         // Then
         assertThat(deviceId).isEqualTo(device['client']['endpoint'])
@@ -144,7 +144,7 @@ class DeviceCloudletTest extends Assert {
         rest.delete("${apiBase}/device/${deviceId}")
 
         // Then
-        def client = rest.getForObject("${apiBase}/client/${deviceId}", Map.class)
+        def client = rest.getForObject("${apiBase}/device/${deviceId}", Map.class)
         assertThat(client.client).isNull()
     }
 

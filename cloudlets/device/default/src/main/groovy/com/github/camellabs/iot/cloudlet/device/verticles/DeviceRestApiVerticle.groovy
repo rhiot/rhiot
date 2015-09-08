@@ -33,7 +33,7 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
             get('/device', 'listDevices')
             get('/device/disconnected', CHANNEL_DEVICES_DISCONNECTED)
             delete('/device', 'deleteClients')
-            get('/client/:deviceId', 'getClient')
+            get('/device/:deviceId', 'getClient')
             delete('/device/:deviceId', CHANNEL_DEVICE_DELETE)
             get('/device/:deviceId/heartbeat', CHANNEL_DEVICE_HEARTBEAT_SEND)
             get('/client/:deviceId/manufacturer', 'client.manufacturer')
