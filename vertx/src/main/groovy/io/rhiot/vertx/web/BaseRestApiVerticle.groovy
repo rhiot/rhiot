@@ -58,7 +58,7 @@ abstract class BaseRestApiVerticle extends GroovyVerticle {
 
             router.route().handler(CorsHandler.create('*').
                     allowedMethod(OPTIONS).allowedMethod(GET).allowedMethod(POST).allowedMethod(DELETE).
-                    allowedHeader('Authorization'))
+                    allowedHeaders(['Origin', 'Accept', 'X-Requested-With', 'Content-Type', 'Access-Control-Request-Method', 'Access-Control-Request-Headers', 'Authorization'].toSet()))
 
             http.requestHandler(router.&accept).listen(intProperty(PROPERTY_REST_API_PORT, 15000))
 
