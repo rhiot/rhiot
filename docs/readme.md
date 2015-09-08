@@ -857,10 +857,18 @@ disconnection period value in miliseconds. For example the snippet below sets th
 
 The device which is running and operational should periodically send the hearbeat signal to the device cloudlet in order to avoid
 being marked as disconnected. You can do it be sending the GET request to the
-`http:localhost:15000/device/myDeviceId/heartbeat` URI. If the heartbeat has been successfully send to the cloud,
+`http:localhost:15000/device/DEVICE_ID/heartbeat` URI. If the heartbeat has been successfully send to the cloud,
 you will receive the HTTP response similar to the following one:
 
     {"status": "success"}
+
+##### Deregistering devices
+
+Sometimes you would like to explictly remove the registered device from the cloudlet database. In such case execute the
+`DELETE` request against the `http:localhost:15000/device/DEVICE_ID`. If the device has been successfully removed, the
+following response will be returned by the server:
+
+        {"status": "success"}
 
 ##### Intercepting REST API requests
 
