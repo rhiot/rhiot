@@ -20,7 +20,7 @@ import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
 
 import static io.rhiot.utils.Uuids.uuid
-import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
+import static io.rhiot.utils.Properties.intProperty
 
 /**
  * Verticle emulating device sensor. It generate random UUID events on the given basis.

@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-utils</artifactId>
+            <artifactId>rhiot-steroids</artifactId>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>

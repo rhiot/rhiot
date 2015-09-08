@@ -41,9 +41,9 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
-import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
-import static com.github.camellabs.iot.vertx.PropertyResolver.longProperty
-import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
+import static io.rhiot.utils.Properties.intProperty
+import static io.rhiot.utils.Properties.longProperty
+import static io.rhiot.utils.Properties.stringProperty
 import static io.rhiot.vertx.jackson.Jacksons.json
 import static io.rhiot.vertx.jackson.Jacksons.jsonMessageToMap
 import static io.rhiot.utils.Networks.isReachable

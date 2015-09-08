@@ -19,8 +19,8 @@ package com.github.camellabs.iot.gateway.heartbeat
 import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
 
-import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
-import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
+import static io.rhiot.utils.Properties.intProperty
+import static io.rhiot.utils.Properties.stringProperty
 
 @GatewayVerticle(conditionProperty = 'camellabs.iot.gateway.heartbeat.led')
 class LedHeartbeatVerticle extends GroovyCamelVerticle {

@@ -16,7 +16,7 @@
  */
 package com.example
 
-import com.github.camellabs.iot.cloudlet.device.vertx.HttpExchangeInterceptor
+import io.rhiot.vertx.web.HttpExchangeInterceptor
 import io.vertx.groovy.ext.web.RoutingContext
 
 class MockHttpExchangeInterceptor implements HttpExchangeInterceptor {

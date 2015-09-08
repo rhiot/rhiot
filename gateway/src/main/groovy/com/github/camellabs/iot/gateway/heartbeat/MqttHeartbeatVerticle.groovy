@@ -20,7 +20,7 @@ import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.model.RouteDefinition
 
-import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
+import static io.rhiot.utils.Properties.stringProperty
 import static java.lang.System.currentTimeMillis
 import static java.net.InetAddress.getLocalHost
 

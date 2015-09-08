@@ -19,8 +19,8 @@ package com.github.camellabs.iot.gateway.mock
 import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
 
-import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
-import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
+import static io.rhiot.utils.Properties.intProperty
+import static io.rhiot.utils.Properties.stringProperty
 
 @GatewayVerticle(conditionProperty = 'camellabs_iot_gateway_mock_sensor_consumer')
 class MockSensorConsumerVerticle extends GroovyCamelVerticle {

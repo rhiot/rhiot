@@ -20,7 +20,7 @@ import com.github.camellabs.iot.gateway.GatewayVerticle
 import io.vertx.lang.groovy.GroovyVerticle
 
 import static com.github.camellabs.iot.gateway.Gateway.JSON
-import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
+import static io.rhiot.utils.Properties.intProperty
 
 @GatewayVerticle
 class HeartbeatVerticle extends GroovyVerticle {

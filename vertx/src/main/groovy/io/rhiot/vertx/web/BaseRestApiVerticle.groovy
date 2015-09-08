@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.device.vertx
+package io.rhiot.vertx.web
 
+import io.rhiot.utils.Properties
 import io.vertx.core.AsyncResult
 import io.vertx.core.Future
 import io.vertx.core.http.HttpMethod
@@ -27,7 +28,7 @@ import io.vertx.groovy.ext.web.RoutingContext
 import io.vertx.groovy.ext.web.handler.CorsHandler
 import io.vertx.lang.groovy.GroovyVerticle
 
-import static com.github.camellabs.iot.vertx.PropertyResolver.intProperty
+import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.vertx.jackson.Jacksons.json
 import static io.vertx.core.http.HttpMethod.DELETE
 import static io.vertx.core.http.HttpMethod.GET
@@ -37,11 +38,15 @@ import static io.vertx.groovy.ext.web.Router.router
 
 abstract class BaseRestApiVerticle extends GroovyVerticle {
 
+    static def PROPERTY_REST_API_PORT = 'api_rest_port'
+
     protected HttpServer http
 
     protected Router router
 
     protected Closure restApi
+
+    // Initialization
 
     @Override
     void start(Future<Void> startFuture) {
@@ -52,9 +57,10 @@ abstract class BaseRestApiVerticle extends GroovyVerticle {
             router.route().handler(new HttpExchangeInterceptorHandler())
 
             router.route().handler(CorsHandler.create('*').
-                    allowedMethod(GET).allowedMethod(OPTIONS).allowedHeader('Authorization'))
+                    allowedMethod(OPTIONS).allowedMethod(GET).allowedMethod(POST).allowedMethod(DELETE).
+                    allowedHeader('Authorization'))
 
-            http.requestHandler(router.&accept).listen(intProperty('api_rest_port', 15000))
+            http.requestHandler(router.&accept).listen(intProperty(PROPERTY_REST_API_PORT, 15000))
 
             restApi(this)
 
@@ -79,6 +85,10 @@ abstract class BaseRestApiVerticle extends GroovyVerticle {
             }
             vertx.eventBus().send(channel, parameter, { result -> jsonResponse(rc, result) })
         }
+    }
+
+    def options(String uri, String channel) {
+        forMethods(uri, channel, OPTIONS)
     }
 
     def get(String uri, String channel) {

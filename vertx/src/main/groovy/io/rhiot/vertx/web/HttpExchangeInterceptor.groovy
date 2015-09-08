@@ -14,31 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.device.vertx
+package io.rhiot.vertx.web
 
-import io.vertx.core.Handler
 import io.vertx.groovy.ext.web.RoutingContext
 
-import static io.rhiot.steroids.Steroids.beans
-import static org.slf4j.LoggerFactory.getLogger
+interface HttpExchangeInterceptor {
 
-class HttpExchangeInterceptorHandler implements Handler<RoutingContext> {
-
-    private static final def LOG = getLogger(HttpExchangeInterceptorHandler.class)
-
-    def interceptors = beans(HttpExchangeInterceptor.class)
-
-    @Override
-    void handle(RoutingContext event) {
-        for(HttpExchangeInterceptor interceptor : interceptors) {
-            try {
-                interceptor.intercept(event)
-            } catch (Exception ex) {
-                LOG.debug('Stopping HTTP interceptor chain. Reason:', ex)
-                break
-            }
-        }
-        event.next()
-    }
+    void intercept(RoutingContext routingContext)
 
 }

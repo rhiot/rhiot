@@ -17,7 +17,7 @@
 package com.github.camellabs.iot.cloudlet.device.verticles
 
 import com.github.camellabs.iot.cloudlet.device.DeviceCloudlet
-import com.github.camellabs.iot.cloudlet.device.vertx.BaseRestApiVerticle
+import io.rhiot.vertx.web.BaseRestApiVerticle
 import io.vertx.core.Handler
 import io.vertx.groovy.core.buffer.Buffer
 

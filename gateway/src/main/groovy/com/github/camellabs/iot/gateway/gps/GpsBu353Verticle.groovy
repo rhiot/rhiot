@@ -21,7 +21,7 @@ import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.builder.RouteBuilder
 
-import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
+import static io.rhiot.utils.Properties.stringProperty
 
 /**
  * Camel route reading current position data from the BU353 GPS device.

@@ -23,7 +23,7 @@ import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
 import org.slf4j.Logger
 
-import static com.github.camellabs.iot.vertx.PropertyResolver.stringProperty
+import static io.rhiot.utils.Properties.stringProperty
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.connect
 import static io.vertx.groovy.core.Vertx.vertx
