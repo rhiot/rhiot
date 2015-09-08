@@ -32,7 +32,7 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
         restApi { verticle ->
             get('/device', 'listDevices')
             get('/device/disconnected', CHANNEL_DEVICES_DISCONNECTED)
-            delete('/client', 'deleteClients')
+            delete('/device', 'deleteClients')
             get('/client/:deviceId', 'getClient')
             delete('/device/:deviceId', CHANNEL_DEVICE_DELETE)
             get('/device/:deviceId/heartbeat', CHANNEL_DEVICE_HEARTBEAT_SEND)

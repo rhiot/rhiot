@@ -66,7 +66,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldReturnNoClients() {
         // Given
-        rest.delete("${apiBase}/client")
+        rest.delete("${apiBase}/device")
 
         // When
         def response = rest.getForObject("${apiBase}/device", Map.class)
@@ -78,7 +78,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldReturnVirtualClient() {
         // Given
-        rest.delete("${apiBase}/client")
+        rest.delete("${apiBase}/device")
 
         // When
         rest.postForLocation("${apiBase}/client", new TestVirtualDevice(clientId: uuid()))
@@ -91,7 +91,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldSendHeartbeatToVirtualDevice() {
         // Given
-        rest.delete("${apiBase}/client")
+        rest.delete("${apiBase}/device")
         def deviceId = uuid()
         rest.postForLocation("${apiBase}/client", new TestVirtualDevice(clientId: deviceId))
         sleep(5000)
@@ -107,7 +107,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldNotRegisterClientTwice() {
         // Given
-        rest.delete("${apiBase}/client")
+        rest.delete("${apiBase}/device")
         def firstClient = 'foo'
         def secondClient = 'bar'
 
@@ -151,7 +151,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldListDisconnectedClient() {
         // Given
-        rest.delete("${apiBase}/client")
+        rest.delete("${apiBase}/device")
         def clientId = uuid()
         createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
 
@@ -166,7 +166,7 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldNotListDisconnectedClient() {
         // Given
-        rest.delete("${apiBase}/client")
+        rest.delete("${apiBase}/device")
         createGenericLeshanClientTemplate(uuid(), lwm2mPort).connect()
 
         // When
