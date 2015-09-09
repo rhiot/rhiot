@@ -39,6 +39,7 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
             get('/client/:deviceId/manufacturer', 'client.manufacturer')
             get('/client/:deviceId/model', 'client.model')
             get('/client/:deviceId/serial', 'client.serial')
+            get('/client/:deviceId/firmwareVersion', 'client.firmwareVersion')
 
             router.route('/client').method(POST).handler { rc ->
                 rc.request().bodyHandler(new Handler<Buffer>() {

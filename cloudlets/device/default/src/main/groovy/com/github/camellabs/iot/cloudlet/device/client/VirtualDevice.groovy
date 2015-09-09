@@ -17,11 +17,10 @@
 package com.github.camellabs.iot.cloudlet.device.client
 
 import org.eclipse.leshan.ResponseCode
-import org.eclipse.leshan.client.resource.BaseInstanceEnabler
 import org.eclipse.leshan.core.node.LwM2mResource
 import org.eclipse.leshan.core.response.LwM2mResponse
 
-import java.text.SimpleDateFormat
+import static io.rhiot.utils.Uuids.uuid
 
 class VirtualDevice extends GenericDevice {
 
@@ -44,50 +43,24 @@ class VirtualDevice extends GenericDevice {
         }
     }
 
-    private String getFirmwareVersion() {
-        return "1.0.0";
+    @Override
+    String manufacturer() {
+        'Rhiot'
     }
 
-    private int getErrorCode() {
-        return 0;
+    @Override
+    String modelNumber() {
+        'Virtual device'
     }
 
-    private int getBatteryLevel() {
-        final Random rand = new Random();
-        return rand.nextInt(100);
+    @Override
+    String serialNumber() {
+        "Serial-${uuid()}"
     }
 
-    private int getMemoryFree() {
-        final Random rand = new Random();
-        return rand.nextInt(50) + 114;
+    @Override
+    String firmwareVersion() {
+        '1.0.0'
     }
 
-    private Date getCurrentTime() {
-        return new Date();
-    }
-
-    private String utcOffset = new SimpleDateFormat("X").format(Calendar.getInstance().getTime());;
-
-    private String getUtcOffset() {
-        return utcOffset;
-    }
-
-    private void setUtcOffset(String t) {
-        utcOffset = t;
-    }
-
-    private String timeZone = TimeZone.getDefault().getID();
-
-    private String getTimezone() {
-        return timeZone;
-    }
-
-    private void setTimezone(String t) {
-        timeZone = t;
-    }
-
-    private String getSupportedBinding() {
-        return "U";
-    }
 }
-

@@ -28,6 +28,9 @@ import java.text.SimpleDateFormat
 import static org.eclipse.leshan.ResponseCode.CONTENT
 import static org.eclipse.leshan.core.node.Value.newStringValue
 
+/**
+ * Generic device object returning fixed values. Can be used as a base for the implementation of the  particular devices.
+ */
 class GenericDevice extends BaseInstanceEnabler {
 
     @Override
@@ -36,9 +39,7 @@ class GenericDevice extends BaseInstanceEnabler {
             case 0: return generateValueResponse(resourceid, manufacturer())
             case 1: return generateValueResponse(resourceid, modelNumber())
             case 2: return generateValueResponse(resourceid, serialNumber())
-            case 3:
-                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
-                        newStringValue(getFirmwareVersion())));
+            case 3: return generateValueResponse(resourceid, firmwareVersion())
             case 9:
                 return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
                         Value.newIntegerValue(getBatteryLevel())));
@@ -72,7 +73,6 @@ class GenericDevice extends BaseInstanceEnabler {
 
     @Override
     public LwM2mResponse write(int resourceid, LwM2mResource value) {
-        System.out.println("Write on Device Resource " + resourceid + " value " + value);
         switch (resourceid) {
             case 13:
                 return new LwM2mResponse(ResponseCode.NOT_FOUND);
@@ -98,20 +98,20 @@ class GenericDevice extends BaseInstanceEnabler {
 
     // Device parameters callbacks
 
-    protected String manufacturer() {
+    String manufacturer() {
         'Generic manufacturer'
     }
 
-    protected String modelNumber() {
+    String modelNumber() {
         'Generic model number'
     }
 
-    private String serialNumber() {
+    String serialNumber() {
         'Generic serial number'
     }
 
-    private String getFirmwareVersion() {
-        return "1.0.0";
+    String firmwareVersion() {
+        '1.0.0'
     }
 
     private int getErrorCode() {
@@ -155,5 +155,6 @@ class GenericDevice extends BaseInstanceEnabler {
     private String getSupportedBinding() {
         return "U";
     }
+
 }
 

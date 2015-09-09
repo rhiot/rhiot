@@ -14,13 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.device.client
+package io.rhiot.cloudlets.device.analytics
 
-class RaspbianDevice extends GenericDevice {
+interface DeviceMetricsStore {
 
-    @Override
-    String manufacturer() {
-        'Raspberry Pi Foundation'
-    }
+    void saveDeviceMetric(String deviceId, String metric, Object value)
+
+    def <T> T readDeviceMetric(String deviceId, String metric, Class<T> type)
 
 }

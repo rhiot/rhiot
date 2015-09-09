@@ -17,10 +17,12 @@
 package com.github.camellabs.iot.cloudlet.device.verticles
 
 import com.github.camellabs.iot.cloudlet.device.DeviceCloudlet
+import com.github.camellabs.iot.cloudlet.device.client.VirtualDevice
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
 import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
 import com.mongodb.Mongo
+import io.rhiot.cloudlets.device.analytics.DeviceMetricsStore
 import io.vertx.core.Future
 import io.vertx.groovy.core.eventbus.Message
 import io.vertx.lang.groovy.GroovyVerticle
@@ -30,6 +32,7 @@ import org.eclipse.leshan.core.response.LwM2mResponse
 import org.eclipse.leshan.core.response.ValueResponse
 import org.eclipse.leshan.server.californium.LeshanServerBuilder
 import org.eclipse.leshan.server.californium.impl.LeshanServer
+import org.eclipse.leshan.server.client.Client
 import org.eclipse.leshan.server.client.ClientUpdate
 import org.infinispan.configuration.cache.Configuration
 import org.infinispan.configuration.cache.ConfigurationBuilder
@@ -41,6 +44,7 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
+import static io.rhiot.steroids.Steroids.bean
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.longProperty
 import static io.rhiot.utils.Properties.stringProperty
@@ -69,6 +73,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
     // Collaborators
 
     final def LeshanServer leshanServer
+
+    final def deviceMetricsStore = bean(DeviceMetricsStore.class).get()
 
     // Configuration
 
@@ -105,6 +111,11 @@ class LeshanServerVeritcle extends GroovyVerticle {
             vertx.eventBus().consumer('clients.create.virtual') { msg ->
                 def device = jsonMessageToMap(msg.body())
                 createVirtualLeshanClientTemplate(device.clientId, lwm2mPort).connect().disconnect()
+                def devicePrototype = new VirtualDevice()
+                deviceMetricsStore.saveDeviceMetric(device.clientId, 'manufacturer', devicePrototype.manufacturer())
+                deviceMetricsStore.saveDeviceMetric(device.clientId, 'modelNumber', devicePrototype.modelNumber())
+                deviceMetricsStore.saveDeviceMetric(device.clientId, 'serialNumber', devicePrototype.serialNumber())
+                deviceMetricsStore.saveDeviceMetric(device.clientId, 'firmwareVersion', devicePrototype.firmwareVersion())
                 def client = leshanServer.clientRegistry.get(device.clientId)
                 leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, DAYS.toSeconds(365), client.smsNumber,
                         client.bindingMode, client.objectLinks))
@@ -162,7 +173,9 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 if (client == null) {
                     msg.fail(0, "No client with ID ${clientId}.")
                 } else {
-                    wrapIntoJsonResponse(msg, 'manufacturer', stringResponse(leshanServer.send(client, new ReadRequest('/3/0/0'))))
+                    String metric = 'manufacturer'
+                    def value = readFromAnalytics(client, '/3/0/0', metric)
+                    wrapIntoJsonResponse(msg, metric, value)
                 }
             }
 
@@ -172,7 +185,9 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 if (client == null) {
                     msg.fail(0, "No client with ID ${clientId}.")
                 } else {
-                    wrapIntoJsonResponse(msg, 'model', stringResponse(leshanServer.send(client, new ReadRequest('/3/0/1'))))
+                    String metric = 'model'
+                    def value = readFromAnalytics(client, '/3/0/1', metric)
+                    wrapIntoJsonResponse(msg, metric, value)
                 }
             }
 
@@ -182,7 +197,21 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 if (client == null) {
                     msg.fail(0, "No client with ID ${clientId}.")
                 } else {
-                    wrapIntoJsonResponse(msg, 'serial', stringResponse(leshanServer.send(client, new ReadRequest('/3/0/2'))))
+                    String metric = 'serial'
+                    def value = readFromAnalytics(client, '/3/0/2', metric)
+                    wrapIntoJsonResponse(msg, metric, value)
+                }
+            }
+
+            vertx.eventBus().consumer('client.firmwareVersion') { msg ->
+                def clientId = msg.body().toString()
+                def client = leshanServer.clientRegistry.get(clientId)
+                if (client == null) {
+                    msg.fail(0, "No client with ID ${clientId}.")
+                } else {
+                    String metric = 'firmwareVersion'
+                    def value = readFromAnalytics(client, '/3/0/3', metric)
+                    wrapIntoJsonResponse(msg, metric, value)
                 }
             }
 
@@ -193,7 +222,23 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     // Helpers
 
+    String readFromAnalytics(Client client, String resource, String metric) {
+        def value = stringResponse(leshanServer.send(client, new ReadRequest(resource), 1000))
+        if (value == null) {
+            value = deviceMetricsStore.readDeviceMetric(client.endpoint, metric, String.class)
+            if (value == null) {
+                value = 'Unknown - device disconnected.'
+            }
+        } else {
+            deviceMetricsStore.saveDeviceMetric(client.endpoint, metric, value)
+        }
+        value
+    }
+
     private String stringResponse(LwM2mResponse response) {
+        if(response == null) {
+            return null
+        }
         if (response.code != CONTENT || !(response instanceof ValueResponse)) {
             return null
         }

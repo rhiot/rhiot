@@ -190,6 +190,19 @@ class DeviceCloudletTest extends Assert {
     }
 
     @Test
+    void shouldReadVirtualDeviceManufacturer() {
+        // Given
+        def clientId = uuid()
+        rest.postForLocation("${apiBase}/client", new TestVirtualDevice(clientId: clientId))
+
+        // When
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/manufacturer"), Map.class)
+
+        // Then
+        assertThat(manufacturer.manufacturer).isEqualTo('Rhiot')
+    }
+
+    @Test
     void shouldReturnManufacturerFailureForNonExistingClient() {
         // Given
         createGenericLeshanClientTemplate(randomUUID().toString(), lwm2mPort).connect()
@@ -225,6 +238,19 @@ class DeviceCloudletTest extends Assert {
 
         // Then
         assertEquals('Generic serial number', manufacturer['serial'])
+    }
+
+    @Test
+    void shouldReadDeviceFirmwareVersion() {
+        // Given
+        def clientId = randomUUID().toString()
+        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
+
+        // When
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/firmwareVersion"), Map.class)
+
+        // Then
+        assertEquals('1.0.0', manufacturer['firmwareVersion'])
     }
 
 }
