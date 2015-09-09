@@ -36,12 +36,12 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
             get('/device/:deviceId', 'getClient')
             delete('/device/:deviceId', CHANNEL_DEVICE_DELETE)
             get('/device/:deviceId/heartbeat', CHANNEL_DEVICE_HEARTBEAT_SEND)
-            get('/client/:deviceId/manufacturer', 'client.manufacturer')
-            get('/client/:deviceId/model', 'client.model')
-            get('/client/:deviceId/serial', 'client.serial')
-            get('/client/:deviceId/firmwareVersion', 'client.firmwareVersion')
+            get('/device/:deviceId/manufacturer', 'client.manufacturer')
+            get('/device/:deviceId/model', 'client.model')
+            get('/device/:deviceId/serial', 'client.serial')
+            get('/device/:deviceId/firmwareVersion', 'client.firmwareVersion')
 
-            router.route('/client').method(POST).handler { rc ->
+            router.route('/device').method(POST).handler { rc ->
                 rc.request().bodyHandler(new Handler<Buffer>() {
                     @Override
                     void handle(Buffer event) {

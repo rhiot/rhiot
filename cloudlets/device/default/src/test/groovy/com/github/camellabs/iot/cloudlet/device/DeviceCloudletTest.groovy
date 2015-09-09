@@ -85,7 +85,7 @@ class DeviceCloudletTest extends Assert {
         rest.delete("${apiBase}/device")
 
         // When
-        rest.postForLocation("${apiBase}/client", new TestVirtualDevice(clientId: uuid()))
+        rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: uuid()))
         def response = rest.getForObject(apiBase + '/device', Map.class)
 
         // Then
@@ -97,7 +97,7 @@ class DeviceCloudletTest extends Assert {
         // Given
         rest.delete("${apiBase}/device")
         def deviceId = uuid()
-        rest.postForLocation("${apiBase}/client", new TestVirtualDevice(clientId: deviceId))
+        rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: deviceId))
         sleep(5000)
 
         // When
@@ -187,7 +187,7 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
 
         // When
-        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/manufacturer"), Map.class)
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/${clientId}/manufacturer"), Map.class)
 
         // Then
         assertThat(manufacturer.manufacturer).isEqualTo('Generic manufacturer')
@@ -197,10 +197,10 @@ class DeviceCloudletTest extends Assert {
     void shouldReadVirtualDeviceManufacturer() {
         // Given
         def clientId = uuid()
-        rest.postForLocation("${apiBase}/client", new TestVirtualDevice(clientId: clientId))
+        rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: clientId))
 
         // When
-        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/manufacturer"), Map.class)
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/${clientId}/manufacturer"), Map.class)
 
         // Then
         assertThat(manufacturer.manufacturer).isEqualTo('Rhiot')
@@ -212,7 +212,7 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(randomUUID().toString(), lwm2mPort).connect()
 
         // When
-        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/invalidEndpoint/manufacturer"), Map.class)
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/invalidEndpoint/manufacturer"), Map.class)
 
         // Then
         assertThat(manufacturer.failure).isNotNull()
@@ -224,7 +224,7 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def modelResponse = rest.getForObject("${apiBase}/client/${deviceId}/model", Map.class)
+        def modelResponse = rest.getForObject("${apiBase}/device/${deviceId}/model", Map.class)
 
         // Then
         assertEquals('Generic model number', modelResponse.model)
@@ -236,7 +236,7 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def serialNumberResponse = rest.getForObject("${apiBase}/client/${deviceId}/serial", Map.class)
+        def serialNumberResponse = rest.getForObject("${apiBase}/device/${deviceId}/serial", Map.class)
 
         // Then
         assertThat(serialNumberResponse.serial).isEqualTo('Generic serial number')
@@ -248,7 +248,7 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def firmwareResponse = rest.getForObject("${apiBase}/client/${deviceId}/firmwareVersion", Map.class)
+        def firmwareResponse = rest.getForObject("${apiBase}/device/${deviceId}/firmwareVersion", Map.class)
 
         // Then
         assertThat(firmwareResponse.firmwareVersion).isEqualTo('1.0.0')
