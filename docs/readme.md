@@ -141,7 +141,7 @@ between the sensors and the data center. Under the hood, Camel IoT gateway is th
 ### Installing gateway on the Raspbian
 
 In order to install Camel IoT gateway on the Raspberry Pi running Raspbian, connect the device to your local network
-(using WiFi or the ethernet cable) and execute the following command:
+(using WiFi or the ethernet cable) and execute the following command on the laptop connected to the same network as your Pi:
 
     docker run --net=host camellabs/deploy-gateway
 
