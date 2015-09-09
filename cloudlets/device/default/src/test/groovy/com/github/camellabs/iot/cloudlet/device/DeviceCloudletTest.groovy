@@ -45,6 +45,8 @@ class DeviceCloudletTest extends Assert {
 
     def rest = new RestTemplate()
 
+    def deviceId = uuid()
+
     @BeforeClass
     static void beforeClass() {
         System.setProperty('mongodb_port', "${mongodbPort}")
@@ -224,33 +226,31 @@ class DeviceCloudletTest extends Assert {
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/model"), Map.class)
 
         // Then
-        assertEquals('Generic model number', manufacturer['model'])
+        assertEquals('Generic model number', manufacturer.model)
     }
 
     @Test
-    void shouldReadClientSerial() {
+    void shouldReadDeviceSerialNumber() {
         // Given
-        def clientId = randomUUID().toString()
-        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
+        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/serial"), Map.class)
+        def manufacturer = rest.getForObject("${apiBase}/client/${deviceId}/serial", Map.class)
 
         // Then
-        assertEquals('Generic serial number', manufacturer['serial'])
+        assertThat(manufacturer.serial).isEqualTo('Generic serial number')
     }
 
     @Test
     void shouldReadDeviceFirmwareVersion() {
         // Given
-        def clientId = randomUUID().toString()
-        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
+        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/firmwareVersion"), Map.class)
+        def manufacturer = rest.getForObject("${apiBase}/client/${deviceId}/firmwareVersion", Map.class)
 
         // Then
-        assertEquals('1.0.0', manufacturer['firmwareVersion'])
+        assertThat(manufacturer.firmwareVersion).isEqualTo('1.0.0')
     }
 
 }
@@ -258,13 +258,5 @@ class DeviceCloudletTest extends Assert {
 class TestVirtualDevice {
 
     String clientId
-
-    String getClientId() {
-        return clientId
-    }
-
-    void setClientId(String clientId) {
-        this.clientId = clientId
-    }
 
 }
