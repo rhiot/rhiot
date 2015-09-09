@@ -47,6 +47,8 @@ class DeviceCloudletTest extends Assert {
 
     def deviceId = uuid()
 
+    // Collaborators setup
+
     @BeforeClass
     static void beforeClass() {
         System.setProperty('mongodb_port', "${mongodbPort}")
@@ -219,14 +221,13 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldReadClientModel() {
         // Given
-        def clientId = randomUUID().toString()
-        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
+        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/client/${clientId}/model"), Map.class)
+        def modelResponse = rest.getForObject("${apiBase}/client/${deviceId}/model", Map.class)
 
         // Then
-        assertEquals('Generic model number', manufacturer.model)
+        assertEquals('Generic model number', modelResponse.model)
     }
 
     @Test
@@ -235,10 +236,10 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def manufacturer = rest.getForObject("${apiBase}/client/${deviceId}/serial", Map.class)
+        def serialNumberResponse = rest.getForObject("${apiBase}/client/${deviceId}/serial", Map.class)
 
         // Then
-        assertThat(manufacturer.serial).isEqualTo('Generic serial number')
+        assertThat(serialNumberResponse.serial).isEqualTo('Generic serial number')
     }
 
     @Test
@@ -247,10 +248,10 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def manufacturer = rest.getForObject("${apiBase}/client/${deviceId}/firmwareVersion", Map.class)
+        def firmwareResponse = rest.getForObject("${apiBase}/client/${deviceId}/firmwareVersion", Map.class)
 
         // Then
-        assertThat(manufacturer.firmwareVersion).isEqualTo('1.0.0')
+        assertThat(firmwareResponse.firmwareVersion).isEqualTo('1.0.0')
     }
 
 }
