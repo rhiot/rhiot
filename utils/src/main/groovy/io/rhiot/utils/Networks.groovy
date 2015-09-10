@@ -97,7 +97,7 @@ final class Networks {
             return host
         }
         if (isReachable(service)) {
-            return host
+            return service
         }
         return 'localhost'
     }
