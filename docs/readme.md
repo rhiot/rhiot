@@ -19,7 +19,6 @@ Rhiot comes with the following features:
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Camel IoT Labs stack](#camel-iot-labs-stack)
 - [Camel IoT gateway](#camel-iot-gateway)
   - [Installing gateway on the Raspbian](#installing-gateway-on-the-raspbian)
   - [Configuration of the gateway](#configuration-of-the-gateway)
@@ -77,6 +76,8 @@ Rhiot comes with the following features:
     - [Device management REST API](#device-management-rest-api)
       - [Listing devices](#listing-devices)
       - [Disconnected devices](#disconnected-devices)
+      - [Deregistering devices](#deregistering-devices)
+      - [Creating virtual devices](#creating-virtual-devices)
       - [Intercepting REST API requests](#intercepting-rest-api-requests)
     - [Device management web UI](#device-management-web-ui)
       - [Listing devices](#listing-devices-1)
@@ -97,40 +98,6 @@ Rhiot comes with the following features:
 - [Articles, presentations & videos](#articles-presentations-&-videos)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-## Camel IoT Labs stack
-
-The Camel IoT Labs stack is based on the following libraries and frameworks:
-
-<br>
-
-**IoT Gateway stack**
-
-| Scope             | Libraries/Frameworks                      | 
-|-------------------|-------------------------------------------|
-| Device management | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan) |
-| Message routing   | - [Apache Camel](http://camel.apache.org) |
-| Application framework | - [Vert.x](http://vertx.io)           |
-
-<br>
-
-**Cloudlet API stack**
-
-| Scope                 | Libraries/Frameworks                      |
-|-----------------------|-------------------------------------------|
-| Device management     | - [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan) |
-| Message routing       | - [Apache Camel](http://camel.apache.org) |
-| Application framework | - [Vert.x](http://vertx.io)           |
-
-<br>
-
-**Cloudlet Console stack**
-
-| Scope                 | Libraries/Frameworks                      |
-|-----------------------|-------------------------------------------|
-| Application framework       | - [Hawt.io](http://hawt.io) |
-| Application server       | - [Gulp](http://gulpjs.com) |
-
 
 ## Camel IoT gateway
 
@@ -869,6 +836,20 @@ Sometimes you would like to explictly remove the registered device from the clou
 following response will be returned by the server:
 
         {"status": "success"}
+
+##### Creating virtual devices
+
+Device Cloudlet offers you the option to create the *virtual devices*. Virtual devices can be used to represent the clients whom
+can't use LWM2M API. For example the Android phone can use REST calls only to create and maintain the projection of
+itself as the virtual device even if you can't install LWM2M client on that device.
+
+To create the virtual device, send the `POST` request to the `/client` URI. For example:
+
+    curl -X POST -d '{ "clientId": "myVirtualDeviceId"}' http://rhiot.net:15000/client
+    {"Status":"Success"}%
+
+Starting from this point your the virtual device identified as `myVirtualDeviceId` will be registered in the device
+cloudlet LWM2M server.
 
 ##### Intercepting REST API requests
 
