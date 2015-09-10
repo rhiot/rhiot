@@ -16,12 +16,12 @@
  */
 package com.github.camellabs.iot.cloudlet.device.verticles
 
-import com.github.camellabs.iot.cloudlet.device.DeviceCloudlet
 import com.github.camellabs.iot.cloudlet.device.client.VirtualDevice
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
 import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
 import com.mongodb.Mongo
+import io.rhiot.cloudlets.device.DeviceCloudlet
 import io.rhiot.cloudlets.device.analytics.DeviceMetricsStore
 import io.vertx.core.Future
 import io.vertx.groovy.core.eventbus.Message

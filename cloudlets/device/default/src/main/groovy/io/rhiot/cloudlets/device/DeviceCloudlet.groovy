@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.device
+package io.rhiot.cloudlets.device
 
 import com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle
 import com.github.camellabs.iot.cloudlet.device.verticles.DeviceRestApiVerticle

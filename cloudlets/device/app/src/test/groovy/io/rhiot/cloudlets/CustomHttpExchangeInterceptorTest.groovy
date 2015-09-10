@@ -17,12 +17,12 @@
 package io.rhiot.cloudlets
 
 import com.example.MockHttpExchangeInterceptor
-import com.github.camellabs.iot.cloudlet.device.DeviceCloudlet
 import de.flapdoodle.embed.mongo.MongodStarter
 import de.flapdoodle.embed.mongo.config.IMongodConfig
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
 import de.flapdoodle.embed.mongo.config.Net
 import de.flapdoodle.embed.mongo.distribution.Version
+import io.rhiot.cloudlets.device.DeviceCloudlet
 import org.apache.commons.io.IOUtils
 import org.junit.Assert
 import org.junit.BeforeClass

@@ -20,7 +20,7 @@
     </licenses>
 
     <properties>
-        <fatjar.mainClass>com.github.camellabs.iot.cloudlet.device.DeviceCloudlet</fatjar.mainClass>
+        <fatjar.mainClass>io.rhiot.cloudlets.device.DeviceCloudlet</fatjar.mainClass>
         <docker.image.target>cloudlet-device</docker.image.target>
     </properties>
 
