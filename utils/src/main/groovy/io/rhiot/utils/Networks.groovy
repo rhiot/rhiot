@@ -96,10 +96,14 @@ final class Networks {
         if(host != null) {
             return host
         }
-        if (isReachable(service)) {
+        LOG.debug('Trying to connect to the service host {}.', service)
+        if (isReachable(service, 5000)) {
+            LOG.debug('Successfully connected to the service host {}.', service)
             return service
+        } else {
+            LOG.debug('Cannot connect to the service host {}.', service)
         }
-        return 'localhost'
+        'localhost'
     }
 
     static int servicePort(String service, Integer defaultPort) {
