@@ -16,10 +16,7 @@
  */
 package io.rhiot.cloudlets.device
 
-import de.flapdoodle.embed.mongo.MongodStarter
-import de.flapdoodle.embed.mongo.config.IMongodConfig
-import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
-import de.flapdoodle.embed.mongo.config.Net
+import io.rhiot.mongodb.EmbeddedMongo
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
@@ -27,8 +24,6 @@ import org.springframework.web.client.RestTemplate
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createGenericLeshanClientTemplate
 import static com.google.common.truth.Truth.assertThat
-import static de.flapdoodle.embed.mongo.distribution.Version.V3_1_0
-import static de.flapdoodle.embed.process.runtime.Network.localhostIsIPv6
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Uuids.uuid
 import static java.util.UUID.randomUUID
@@ -36,8 +31,6 @@ import static java.util.UUID.randomUUID
 class DeviceCloudletTest extends Assert {
 
     static def int restApiPort = findAvailableTcpPort()
-
-    static def int mongodbPort = findAvailableTcpPort()
 
     static def int lwm2mPort = findAvailableTcpPort()
 
@@ -51,12 +44,7 @@ class DeviceCloudletTest extends Assert {
 
     @BeforeClass
     static void beforeClass() {
-        System.setProperty('MONGODB_SERVICE_PORT', "${mongodbPort}")
-        IMongodConfig mongodConfig = new MongodConfigBuilder()
-                .version(V3_1_0)
-                .net(new Net(mongodbPort, localhostIsIPv6()))
-                .build();
-        MongodStarter.getDefaultInstance().prepare(mongodConfig).start()
+        new EmbeddedMongo().start()
 
         System.setProperty('api_rest_port', "${restApiPort}")
         System.setProperty('disconnectionPeriod', "${5000}")

@@ -29,6 +29,13 @@
             <artifactId>mongo-java-driver</artifactId>
         </dependency>
 
+        <!-- Optional dependencies -->
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>ch.qos.logback</groupId>

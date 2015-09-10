@@ -17,42 +17,28 @@
 package io.rhiot.cloudlets
 
 import com.example.MockHttpExchangeInterceptor
-import de.flapdoodle.embed.mongo.MongodStarter
-import de.flapdoodle.embed.mongo.config.IMongodConfig
-import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
-import de.flapdoodle.embed.mongo.config.Net
-import de.flapdoodle.embed.mongo.distribution.Version
 import io.rhiot.cloudlets.device.DeviceCloudlet
+import io.rhiot.mongodb.EmbeddedMongo
 import org.apache.commons.io.IOUtils
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
-import static de.flapdoodle.embed.process.runtime.Network.localhostIsIPv6
 import static io.rhiot.steroids.Steroids.APPLICATION_PACKAGE_PROPERTY
-import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setStringProperty
 
 class CustomHttpExchangeInterceptorTest extends Assert {
 
-    static def int mongodbPort = findAvailableTcpPort()
-
     @BeforeClass
     static void beforeClass() {
-        System.setProperty('MONGODB_SERVICE_PORT', "${mongodbPort}")
-        IMongodConfig mongodConfig = new MongodConfigBuilder()
-                .version(Version.V3_1_0)
-                .net(new Net(mongodbPort, localhostIsIPv6()))
-                .build();
-        MongodStarter.getDefaultInstance().prepare(mongodConfig).start()
-
+        new EmbeddedMongo().start()
         setStringProperty(APPLICATION_PACKAGE_PROPERTY, 'com.example')
         new DeviceCloudlet().start().waitFor()
     }
 
     @Test
-    void should() {
+    void shouldCallInterceptor() {
         IOUtils.toString(new URI("http://localhost:15000/device"))
         assertThat(MockHttpExchangeInterceptor.hasBeenCalled).isTrue()
     }
