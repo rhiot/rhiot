@@ -24,11 +24,20 @@ import java.util.concurrent.CountDownLatch
 
 import static java.util.concurrent.TimeUnit.SECONDS
 
+/**
+ * Bootstrap class for the Device Cloudlet microservice.
+ */
 class DeviceCloudlet {
+
+    // Members
+
+    private static final def isStarted = new CountDownLatch(2)
+
+    // Collaborators
 
     private final def vertx = Vertx.vertx()
 
-    private static final def isStarted = new CountDownLatch(2)
+    // Lifecycle operations
 
     DeviceCloudlet start() {
         vertx.deployVerticle("groovy:${LeshanServerVeritcle.class.name}")
@@ -36,13 +45,13 @@ class DeviceCloudlet {
         return this
     }
 
-    DeviceCloudlet waitFor() {
-        isStarted.await(15, SECONDS)
-        this
+    static void main(String... args) {
+        new DeviceCloudlet().start()
     }
 
-    public static void main(String[] args) {
-        new DeviceCloudlet().start()
+    DeviceCloudlet waitFor() {
+        isStarted.await(30, SECONDS)
+        this
     }
 
 }
