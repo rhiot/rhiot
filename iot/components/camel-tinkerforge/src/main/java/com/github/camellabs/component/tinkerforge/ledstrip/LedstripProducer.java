@@ -100,20 +100,28 @@ public class LedstripProducer extends TinkerforgeProducer<LedstripEndpoint, Bric
         if (endpoint.getThrowExceptions() && bricklet == null) {
             throw new IllegalStateException("The ledstrip is currently unreachable");
         }
+        
+        switch (endpoint.getModus()) {
+            case LedStripModus.LedStrip : {
+                Message message = exchange.getIn();
+                LedData data = new LedData();
+                data.red = message.getHeader("red", 0, Short.class);
+                data.green = message.getHeader("green", 0, Short.class);
+                data.blue = message.getHeader("blue", 0, Short.class);
+                data.duration = message.getHeader("duration", 0, Integer.class);
+                final Integer position = message.getHeader("position", Integer.class);
 
-        Message message = exchange.getIn();
-        LedData data = new LedData();
-        data.red = message.getHeader("red", 0, Short.class);
-        data.green = message.getHeader("green", 0, Short.class);
-        data.blue = message.getHeader("blue", 0, Short.class);
-        data.duration = message.getHeader("duration", 0, Integer.class);
-        final Integer position = message.getHeader("position", Integer.class);
-
-        if (position != null) {
-            scheduleLedData(position, data);
-        } else {
-            for (int i=0; i<endpoint.getAmountOfLeds(); i++) {
-                scheduleLedData(i, data);
+                if (position != null) {
+                    scheduleLedData(position, data);
+                } else {
+                    for (int i=0; i<endpoint.getAmountOfLeds(); i++) {
+                        scheduleLedData(i, data);
+                    }
+                }
+                break;
+            }
+            case LedStripModus.CharacterMatrix : {
+                //TODO Implement handling
             }
         }
     }

@@ -35,6 +35,7 @@ public class LedstripEndpoint extends TinkerforgeEndpoint {
     @UriParam private int amountOfLeds = 50;
     @UriParam private boolean throwExceptions = true;
     @UriParam private String rgbPattern = "rgb";
+    @UriParam private String modus = LedStripModus.LedStrip;
 
     private Producer producer;
 
@@ -90,5 +91,13 @@ public class LedstripEndpoint extends TinkerforgeEndpoint {
 
     public void setRgbPattern(String rgbPattern) {
         this.rgbPattern = rgbPattern;
+    }
+
+    public String getModus() {
+        return modus;
+    }
+
+    public void setModus(String modus) {
+        this.modus = modus;
     }
 }
