@@ -18,16 +18,15 @@ package io.rhiot.cloudlets.device.analytics
 
 import com.mongodb.BasicDBObject
 import com.mongodb.Mongo
+import io.rhiot.utils.Networks
 
 import static io.rhiot.utils.Networks.isReachable
+import static io.rhiot.utils.Networks.serviceHost
+import static io.rhiot.utils.Networks.servicePort
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.stringProperty
 
 class MongoDbDeviceMetricsStore implements DeviceMetricsStore {
-
-    final def registryMongoDbHost = stringProperty('mongodb_host')
-
-    final def registryMongoDbPort = intProperty('mongodb_port', 27017)
 
     Mongo mongo
 
@@ -36,11 +35,7 @@ class MongoDbDeviceMetricsStore implements DeviceMetricsStore {
     String collection = 'DeviceMetrics'
 
     MongoDbDeviceMetricsStore() {
-        def mongoHost = registryMongoDbHost == null ? 'localhost' : registryMongoDbHost
-        if (isReachable('mongodb')) {
-            mongoHost = 'mongodb'
-        }
-        mongo = new Mongo(mongoHost, registryMongoDbPort)
+        mongo = new Mongo(serviceHost('mongodb'), servicePort('mongodb', 27017))
     }
 
     @Override

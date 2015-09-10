@@ -51,7 +51,7 @@ class DeviceCloudletTest extends Assert {
 
     @BeforeClass
     static void beforeClass() {
-        System.setProperty('mongodb_port', "${mongodbPort}")
+        System.setProperty('MONGODB_SERVICE_PORT', "${mongodbPort}")
         IMongodConfig mongodConfig = new MongodConfigBuilder()
                 .version(V3_1_0)
                 .net(new Net(mongodbPort, localhostIsIPv6()))

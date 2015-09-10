@@ -914,9 +914,9 @@ management cloudlet (or Rhiot Cloud). For example:
 #### Device registry
 
 Device registry is used by Leshan to store the information about the managed devices. By default the device cloudlet uses
-the MongoDB registry. If environment variables `mongodb_host` are no specified, the cloudlet will try to
+the MongoDB registry. If environment variables `MONGODB_SERVICE_HOST` are no specified, the cloudlet will try to
 connect to the `mongodb` and `localhost` hosts respectively, using default MongoDB port (`27017`) or the one specified by
-the `mongodb_port` environment variable.
+the `MONGODB_SERVICE_HOST` environment variable.
 
 ##### Registry cache
 

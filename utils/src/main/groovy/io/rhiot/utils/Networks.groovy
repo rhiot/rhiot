@@ -18,6 +18,7 @@ package io.rhiot.utils
 
 import java.util.concurrent.atomic.AtomicInteger
 
+import static io.rhiot.utils.Properties.intProperty
 import static java.net.NetworkInterface.getNetworkInterfaces;
 import static java.util.Optional.empty
 import static org.slf4j.LoggerFactory.getLogger;
@@ -26,6 +27,17 @@ import static org.slf4j.LoggerFactory.getLogger;
  * IP networking related utilities.
  */
 final class Networks {
+
+    /**
+     * The minimum server currentMinPort number for IPv4.
+     * Set at 1100 to avoid returning privileged currentMinPort numbers.
+     */
+    static final def MIN_PORT_NUMBER = 1100
+
+    /**
+     * The maximum server currentMinPort number for IPv4.
+     */
+    static final def MAX_PORT_NUMBER = 65535
 
     // Logger
 
@@ -79,16 +91,20 @@ final class Networks {
         isReachable(host, 2000)
     }
 
-    /**
-     * The minimum server currentMinPort number for IPv4.
-     * Set at 1100 to avoid returning privileged currentMinPort numbers.
-     */
-    static final int MIN_PORT_NUMBER = 1100
+    static String serviceHost(String service) {
+        def host = Properties.stringProperty("${service.toUpperCase()}_SERVICE_HOST")
+        if(host != null) {
+            return host
+        }
+        if (isReachable(service)) {
+            return host
+        }
+        return 'localhost'
+    }
 
-    /**
-     * The maximum server currentMinPort number for IPv4.
-     */
-    static final int MAX_PORT_NUMBER = 65535
+    static int servicePort(String service, Integer defaultPort) {
+        intProperty("${service.toUpperCase()}_SERVICE_PORT") ?: defaultPort
+    }
 
     /**
      * We'll hold open the lowest port in this process

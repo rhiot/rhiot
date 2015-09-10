@@ -45,12 +45,12 @@ import java.time.temporal.ChronoUnit
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 import static io.rhiot.steroids.Steroids.bean
+import static io.rhiot.utils.Networks.serviceHost
+import static io.rhiot.utils.Networks.servicePort
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.longProperty
-import static io.rhiot.utils.Properties.stringProperty
 import static io.rhiot.vertx.jackson.Jacksons.json
 import static io.rhiot.vertx.jackson.Jacksons.jsonMessageToMap
-import static io.rhiot.utils.Networks.isReachable
 import static java.time.Instant.ofEpochMilli
 import static java.time.LocalDateTime.ofInstant
 import static java.util.concurrent.TimeUnit.DAYS
@@ -78,20 +78,12 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     // Configuration
 
-    final def registryMongoDbHost = stringProperty('mongodb_host')
-
-    final def registryMongoDbPort = intProperty('mongodb_port', 27017)
-
     final def lwm2mPort = intProperty('lwm2m_port', LeshanServerBuilder.PORT)
 
     final def disconnectionPeriod = longProperty('disconnectionPeriod', DEFAULT_DISCONNECTION_PERIOD)
 
     LeshanServerVeritcle() {
-        def mongoHost = registryMongoDbHost == null ? 'localhost' : registryMongoDbHost
-            if (isReachable('mongodb')) {
-                mongoHost = 'mongodb'
-            }
-        def mongo = new Mongo(mongoHost, registryMongoDbPort)
+        def mongo = new Mongo(serviceHost('mongodb'), servicePort('mongodb', 27017))
 
         def cacheManager = new DefaultCacheManager(new GlobalConfigurationBuilder().transport().defaultTransport().build())
         Configuration builder = new ConfigurationBuilder().clustering().cacheMode(INVALIDATION_ASYNC).build();
