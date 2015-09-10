@@ -97,7 +97,7 @@ final class Networks {
             return host
         }
         LOG.debug('Trying to connect to the service host {}.', service)
-        if (isReachable(service, 5000)) {
+        if (isReachable(service)) {
             LOG.debug('Successfully connected to the service host {}.', service)
             return service
         } else {
