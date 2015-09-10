@@ -68,4 +68,4 @@ The Rhiot project is distributed under the [Apache 2.0 Software License](https:/
 |------|---------|-----|----------|-------------|
 | Henryk K. | [@hekonsek](https://twitter.com/hekonsek) | https://about.me/hekonsek | Red Hat | PL (native), EN |
 | Greg A. | [@gautric_io](https://twitter.com/gautric_io) | http://gautric.github.io/ | Red Hat | FR (native), EN, JP (beginner) |
-| Geert S. | [@geertschuring](https://twitter.com/geertschuring) | https://geertschuring.wordpress.com/ | Geert Schuring | NL (native), EN |
+| Geert S. | [@geertschuring](https://twitter.com/geertschuring) | https://geertschuring.wordpress.com/ | Luminis | NL (native), EN |
