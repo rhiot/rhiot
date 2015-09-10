@@ -29,6 +29,7 @@ import org.eclipse.leshan.server.client.ClientUpdate
 import java.util.concurrent.CopyOnWriteArrayList
 
 import static com.github.camellabs.iot.cloudlet.device.leshan.ClientWrapper.clientWrapperFromMap
+import static io.rhiot.mongodb.Mongos.discoverMongo
 
 class MongoDbClientRegistry implements ClientRegistry {
 
@@ -45,6 +46,10 @@ class MongoDbClientRegistry implements ClientRegistry {
 
     MongoDbClientRegistry(Mongo mongo) {
         this(mongo, defaultObjectMapper())
+    }
+
+    MongoDbClientRegistry() {
+        this(discoverMongo())
     }
 
     @Override

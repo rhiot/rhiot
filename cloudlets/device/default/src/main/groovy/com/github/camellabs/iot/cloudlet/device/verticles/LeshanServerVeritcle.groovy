@@ -83,13 +83,11 @@ class LeshanServerVeritcle extends GroovyVerticle {
     final def disconnectionPeriod = longProperty('disconnectionPeriod', DEFAULT_DISCONNECTION_PERIOD)
 
     LeshanServerVeritcle() {
-        def mongo = new Mongo(serviceHost('mongodb'), servicePort('mongodb', 27017))
-
         def cacheManager = new DefaultCacheManager(new GlobalConfigurationBuilder().transport().defaultTransport().build())
         Configuration builder = new ConfigurationBuilder().clustering().cacheMode(INVALIDATION_ASYNC).build();
         cacheManager.defineConfiguration("clients", builder);
 
-        def clientRegistry = new CachingClientRegistry(new MongoDbClientRegistry(mongo), new InfinispanCacheProvider(cacheManager))
+        def clientRegistry = new CachingClientRegistry(new MongoDbClientRegistry(), new InfinispanCacheProvider(cacheManager))
         def leshanServerBuilder = new LeshanServerBuilder()
         leshanServerBuilder.setLocalAddress('0.0.0.0', lwm2mPort)
         leshanServer = leshanServerBuilder.setClientRegistry(clientRegistry).build()

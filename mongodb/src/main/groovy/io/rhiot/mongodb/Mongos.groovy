@@ -14,32 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudlets.device.analytics
+package io.rhiot.mongodb
 
-import com.mongodb.BasicDBObject
 import com.mongodb.Mongo
 
-import static io.rhiot.mongodb.Mongos.discoverMongo
 import static io.rhiot.utils.Networks.serviceHost
 import static io.rhiot.utils.Networks.servicePort
 
-class MongoDbDeviceMetricsStore implements DeviceMetricsStore {
+final class Mongos {
 
-    private final def mongo = discoverMongo()
+    static final def MONGODB_SERVICE = 'mongodb'
 
-    String db = 'DeviceCloudlet'
-
-    String collection = 'DeviceMetrics'
-
-    @Override
-    void saveDeviceMetric(String deviceId, String metric, Object value) {
-        mongo.getDB(db).getCollection(collection).save(new BasicDBObject([deviceId: deviceId, metric: metric, value: value, timestamp: new Date()]))
+    private Mongos() {
     }
 
-    @Override
-    def <T> T readDeviceMetric(String deviceId, String metric, Class<T> type) {
-        def cursor = mongo.getDB(db).getCollection(collection).find(new BasicDBObject([deviceId: deviceId, metric: metric])).sort(new BasicDBObject("_id",-1)).limit(1)
-        cursor.hasNext() ? cursor.next().value : null
+    static Mongo discoverMongo() {
+        new Mongo(serviceHost(MONGODB_SERVICE), servicePort(MONGODB_SERVICE, 27017))
     }
 
 }
