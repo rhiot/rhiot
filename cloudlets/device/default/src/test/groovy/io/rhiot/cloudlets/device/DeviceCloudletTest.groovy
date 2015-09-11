@@ -116,14 +116,13 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldListRegisteredDevices() {
         // Given
-        def deviceId = uuid()
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
         def device = rest.getForObject("${apiBase}/device/${deviceId}", Map.class)
 
         // Then
-        assertThat(deviceId).isEqualTo(device['client']['endpoint'])
+        assertThat(deviceId).isEqualTo(device['device']['endpoint'])
     }
 
     @Test

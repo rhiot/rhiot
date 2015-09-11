@@ -785,8 +785,8 @@ REST API using the `api_rest_port` environment variable. For example the snippet
 
 ##### Listing devices
 
-To list the devices send the `GET` request to the following URL `http:localhost:15000/device`. You should receive
-response similar to the following JSON:
+To list the devices registered to the cloud (together with their metadata) send the `GET` request to the following URL
+`http:localhost:15000/device`. You should receive response similar to the following JSON:
 
     {"devices":
       [{"registrationDate":1439822565254,
@@ -803,6 +803,16 @@ response similar to the following JSON:
         "path":"/"},
         ...],
       "alive":true}]}
+
+##### Getting device metadata
+
+In order to read the metadata of the particular device identified with the given ID, send the `GET` request to the `/device/ID`
+URI. For example to read the metadata of the device with the ID equal to `myDevice001`, execute the following command:
+
+    $ curl http://rhiot.net:15000/device/myDevice001
+    {"device":{"registrationDate":1441959646566,"address":"127.0.0.1","port":1111,"registrationEndpointAddress":"0.0.0.0:5683",
+    "lifeTimeInSec":31536000,"lwM2mVersion":"1.0","bindingMode":"U","endpoint":"myDevice001","registrationId":"2OMPXtg6lX",
+    "objectLinks": ... ,"alive":true}}%
 
 ##### Disconnected devices
 
@@ -829,13 +839,21 @@ you will receive the HTTP response similar to the following one:
 
     {"status": "success"}
 
+##### Deregistering all devices
+
+In order to deregister all the devices from the cloud, send the `DELETE` request to the `/device` URI. For example:
+
+    $ curl -XDELETE http://rhiot.net:15000/device
+    {"status":"success"}
+
 ##### Deregistering devices
 
-Sometimes you would like to explictly remove the registered device from the cloudlet database. In such case execute the
-`DELETE` request against the `http:localhost:15000/device/DEVICE_ID`. If the device has been successfully removed, the
-following response will be returned by the server:
+Sometimes you would like to explicitly remove the particular registered device from the cloudlet database. In such case execute the
+`DELETE` request against the `/device/DEVICE_ID` URI. For example to remove the device with the ID equal to `foo`, execute
+the following command:
 
-        {"status": "success"}
+    $ curl -XDELETE http://rhiot.net:15000/device/foo
+    {"status":"success"}
 
 ##### Creating virtual devices
 

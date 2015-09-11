@@ -22,9 +22,11 @@ import io.vertx.core.Handler
 import io.vertx.groovy.core.buffer.Buffer
 
 import static com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail.allDeviceDetails
+import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_DEREGISTER
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_DISCONNECTED
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_LIST
-import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_DELETE
+import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_DEREGISTER
+import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_GET
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_HEARTBEAT_SEND
 import static io.vertx.core.http.HttpMethod.POST
 
@@ -34,9 +36,9 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
         restApi { verticle ->
             get('/device', CHANNEL_DEVICES_LIST)
             get('/device/disconnected', CHANNEL_DEVICES_DISCONNECTED)
-            delete('/device', 'deleteClients')
-            get('/device/:deviceId', 'getClient')
-            delete('/device/:deviceId', CHANNEL_DEVICE_DELETE)
+            delete('/device', CHANNEL_DEVICES_DEREGISTER)
+            get('/device/:deviceId', CHANNEL_DEVICE_GET)
+            delete('/device/:deviceId', CHANNEL_DEVICE_DEREGISTER)
             get('/device/:deviceId/heartbeat', CHANNEL_DEVICE_HEARTBEAT_SEND)
             get('/device/:deviceId/details', 'device.details')
             allDeviceDetails().parallelStream().each { details ->

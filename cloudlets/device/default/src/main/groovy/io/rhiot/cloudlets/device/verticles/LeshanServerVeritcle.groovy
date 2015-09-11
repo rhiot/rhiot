@@ -18,10 +18,8 @@ package io.rhiot.cloudlets.device.verticles
 
 import com.github.camellabs.iot.cloudlet.device.client.VirtualDevice
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
-import com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail
 import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
-import com.mongodb.Mongo
 import io.rhiot.cloudlets.device.DeviceCloudlet
 import io.rhiot.cloudlets.device.analytics.DeviceMetricsStore
 import io.vertx.core.Future
@@ -44,13 +42,10 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.ConcurrentHashMap
-import java.util.stream.Collectors
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 import static com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail.allDeviceDetails
 import static io.rhiot.steroids.Steroids.bean
-import static io.rhiot.utils.Networks.serviceHost
-import static io.rhiot.utils.Networks.servicePort
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.longProperty
 import static io.rhiot.vertx.jackson.Jacksons.json
@@ -70,9 +65,13 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     static final def CHANNEL_DEVICES_LIST = 'devices.list'
 
+    static final def CHANNEL_DEVICE_GET = 'device.get'
+
     static final def CHANNEL_DEVICES_DISCONNECTED = 'devices.disconnected'
 
-    static final def CHANNEL_DEVICE_DELETE = 'device.delete'
+    static final def CHANNEL_DEVICES_DEREGISTER = 'devices.delete'
+
+    static final def CHANNEL_DEVICE_DEREGISTER = 'device.delete'
 
     static final def CHANNEL_DEVICE_HEARTBEAT_SEND = 'device.heartbeat.update'
 
@@ -104,47 +103,33 @@ class LeshanServerVeritcle extends GroovyVerticle {
         vertx.runOnContext {
             leshanServer.start()
 
-            vertx.eventBus().consumer('clients.create.virtual') { msg ->
-                def device = jsonMessageToMap(msg.body())
-                createVirtualLeshanClientTemplate(device.clientId, lwm2mPort).connect().disconnect()
-                def devicePrototype = new VirtualDevice()
-                deviceMetricsStore.saveDeviceMetric(device.clientId, 'manufacturer', devicePrototype.manufacturer())
-                deviceMetricsStore.saveDeviceMetric(device.clientId, 'modelNumber', devicePrototype.modelNumber())
-                deviceMetricsStore.saveDeviceMetric(device.clientId, 'serialNumber', devicePrototype.serialNumber())
-                deviceMetricsStore.saveDeviceMetric(device.clientId, 'firmwareVersion', devicePrototype.firmwareVersion())
-                def client = leshanServer.clientRegistry.get(device.clientId)
-                leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, DAYS.toSeconds(365), client.smsNumber,
-                        client.bindingMode, client.objectLinks))
-                wrapIntoJsonResponse(msg, 'Status', 'Success')
-            }
-
             vertx.eventBus().consumer(CHANNEL_DEVICES_LIST) { msg ->
                 wrapIntoJsonResponse(msg, 'devices', leshanServer.clientRegistry.allClients())
+            }
+
+            vertx.eventBus().consumer(CHANNEL_DEVICE_GET) { msg ->
+                wrapIntoJsonResponse(msg, 'device', leshanServer.clientRegistry.get(msg.body().toString()))
             }
 
             vertx.eventBus().consumer(CHANNEL_DEVICES_DISCONNECTED) { msg ->
                 wrapIntoJsonResponse(msg, 'disconnectedDevices', disconnectedClients())
             }
 
-            vertx.eventBus().consumer('deleteClients') { msg ->
+            vertx.eventBus().consumer(CHANNEL_DEVICES_DEREGISTER) { msg ->
                 leshanServer.clientRegistry.allClients().each {
                     client -> leshanServer.clientRegistry.deregisterClient(client.registrationId)
                 }
-                wrapIntoJsonResponse(msg, 'Status', 'Success')
+                wrapIntoJsonResponse(msg, 'status', 'success')
             }
 
-            vertx.eventBus().consumer('getClient') { msg ->
-                wrapIntoJsonResponse(msg, 'client', leshanServer.clientRegistry.get(msg.body().toString()))
-            }
-
-            vertx.eventBus().consumer(CHANNEL_DEVICE_DELETE) { msg ->
-                if(msg == null) {
+            vertx.eventBus().consumer(CHANNEL_DEVICE_DEREGISTER) { msg ->
+                if(msg == null || msg.body() == null) {
                     msg.fail(-1, 'Device ID cannot be null.')
                     return
                 }
                 def client = leshanServer.clientRegistry.get(msg.body().toString())
                 leshanServer.clientRegistry.deregisterClient(client.registrationId)
-                wrapIntoJsonResponse(msg, 'Status', 'Success')
+                wrapIntoJsonResponse(msg, 'status', 'success')
             }
 
             vertx.eventBus().consumer(CHANNEL_DEVICE_HEARTBEAT_SEND) { msg ->
@@ -188,6 +173,20 @@ class LeshanServerVeritcle extends GroovyVerticle {
                         wrapIntoJsonResponse(msg, details.metric(), value)
                     }
                 }
+            }
+
+            vertx.eventBus().consumer('clients.create.virtual') { msg ->
+                def device = jsonMessageToMap(msg.body())
+                createVirtualLeshanClientTemplate(device.clientId, lwm2mPort).connect().disconnect()
+                def devicePrototype = new VirtualDevice()
+                deviceMetricsStore.saveDeviceMetric(device.clientId, 'manufacturer', devicePrototype.manufacturer())
+                deviceMetricsStore.saveDeviceMetric(device.clientId, 'modelNumber', devicePrototype.modelNumber())
+                deviceMetricsStore.saveDeviceMetric(device.clientId, 'serialNumber', devicePrototype.serialNumber())
+                deviceMetricsStore.saveDeviceMetric(device.clientId, 'firmwareVersion', devicePrototype.firmwareVersion())
+                def client = leshanServer.clientRegistry.get(device.clientId)
+                leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, DAYS.toSeconds(365), client.smsNumber,
+                        client.bindingMode, client.objectLinks))
+                wrapIntoJsonResponse(msg, 'status', 'success')
             }
 
             DeviceCloudlet.@isStarted.countDown()
