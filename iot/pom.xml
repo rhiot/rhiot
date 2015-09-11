@@ -23,7 +23,7 @@
     <modules>
         <module>components</module>
         <module>cloudlet</module>
-        <module>feature</module>
+        <!--<module>feature</module>-->
         <module>deployer</module>
         <module>deployer-app</module>
         <module>performance</module>
