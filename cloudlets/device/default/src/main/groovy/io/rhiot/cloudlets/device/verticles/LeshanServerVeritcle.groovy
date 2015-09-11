@@ -42,6 +42,8 @@ import org.infinispan.manager.DefaultCacheManager
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
+import java.util.concurrent.ConcurrentHashMap
+import java.util.stream.Collectors
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 import static io.rhiot.steroids.Steroids.bean
@@ -154,6 +156,20 @@ class LeshanServerVeritcle extends GroovyVerticle {
                     leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, client.lifeTimeInSec, client.smsNumber,
                             client.bindingMode, client.objectLinks))
                     wrapIntoJsonResponse(msg, 'status', 'success')
+                }
+            }
+
+            vertx.eventBus().consumer('device.details') { msg ->
+                def clientId = msg.body().toString()
+                def client = leshanServer.clientRegistry.get(clientId)
+                if (client == null) {
+                    msg.fail(0, "No client with ID ${clientId}.")
+                } else {
+                    def results = new ConcurrentHashMap()
+                    [[metric: 'manufacturer', resource: '/3/0/0'], [metric: 'modelNumber', resource: '/3/0/1'],
+                     [metric: 'serialNumber', resource: '/3/0/2'], [metric: 'firmwareVersion', resource: '/3/0/3']].parallelStream().
+                            each { request -> results[request.metric] = readFromAnalytics(client, request.resource, request.metric)}
+                    wrapIntoJsonResponse(msg, 'deviceDetails', results)
                 }
             }
 

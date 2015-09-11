@@ -33,6 +33,7 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
             get('/device/:deviceId', 'getClient')
             delete('/device/:deviceId', LeshanServerVeritcle.CHANNEL_DEVICE_DELETE)
             get('/device/:deviceId/heartbeat', LeshanServerVeritcle.CHANNEL_DEVICE_HEARTBEAT_SEND)
+            get('/device/:deviceId/details', 'device.details')
             get('/device/:deviceId/manufacturer', 'client.manufacturer')
             get('/device/:deviceId/modelNumber', 'client.model')
             get('/device/:deviceId/serialNumber', 'client.serial')

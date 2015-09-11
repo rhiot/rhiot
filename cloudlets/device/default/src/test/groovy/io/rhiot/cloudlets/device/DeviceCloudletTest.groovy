@@ -239,6 +239,18 @@ class DeviceCloudletTest extends Assert {
         assertThat(firmwareResponse.firmwareVersion).isEqualTo('1.0.0')
     }
 
+    @Test
+    void shouldReadVirtualDeviceDetails() {
+        // Given
+        rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: deviceId))
+
+        // When
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/${deviceId}/details"), Map.class)
+
+        // Then
+        assertThat(manufacturer.deviceDetails.size()).isEqualTo(4)
+    }
+
 }
 
 class TestVirtualDevice {
