@@ -181,9 +181,9 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 if (client == null) {
                     msg.fail(0, "No client with ID ${clientId}.")
                 } else {
-                    String metric = 'manufacturer'
-                    def value = readFromAnalytics(client, '/3/0/0', metric)
-                    wrapIntoJsonResponse(msg, metric, value)
+                    def detail = DeviceDetail.manufacturer()
+                    def value = readFromAnalytics(client, detail.resource(), detail.metric())
+                    wrapIntoJsonResponse(msg, detail.metric(), value)
                 }
             }
 

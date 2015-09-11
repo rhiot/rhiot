@@ -19,9 +19,7 @@ package com.github.camellabs.iot.cloudlet.device.leshan
 class DeviceDetail {
 
     private static def detailsMatrix = [
-            ['manufacturer', '/3/0/0'], ['modelNumber', '/3/0/1'],
-            ['serialNumber', '/3/0/2'], ['firmwareVersion', '/3/0/3']
-    ]
+            manufacturer: '/3/0/0', modelNumber: '/3/0/1', serialNumber: '/3/0/2', firmwareVersion: '/3/0/3']
 
     private final String metric
 
@@ -33,7 +31,23 @@ class DeviceDetail {
     }
 
     static def allDeviceDetails() {
-        detailsMatrix.collect{ new DeviceDetail(it[0], it[1]) }
+        detailsMatrix.collect{ new DeviceDetail(it.key, it.value) }
+    }
+
+    static def manufacturer() {
+        new DeviceDetail('manufacturer', detailsMatrix.manufacturer)
+    }
+
+    static def modelNumber() {
+        new DeviceDetail('modelNumber', detailsMatrix.modelNumber)
+    }
+
+    static def serialNumber() {
+        new DeviceDetail('serialNumber', detailsMatrix.serialNumber)
+    }
+
+    static def firmwareVersion() {
+        new DeviceDetail('firmwareVersion', detailsMatrix.firmwareVersion)
     }
 
     def metric() {
