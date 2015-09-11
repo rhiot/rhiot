@@ -34,7 +34,7 @@ class CustomCamelVerticleTest {
     @BeforeClass
     static void beforeClass() {
         new Gateway().start()
-        SECONDS.sleep(15) // Attempt to fix the unstable build
+        SECONDS.sleep(60) // Attempt to fix the unstable build
     }
 
     // Tests
