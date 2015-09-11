@@ -175,51 +175,16 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 }
             }
 
-            vertx.eventBus().consumer('client.manufacturer') { msg ->
-                def clientId = msg.body().toString()
-                def client = leshanServer.clientRegistry.get(clientId)
-                if (client == null) {
-                    msg.fail(0, "No client with ID ${clientId}.")
-                } else {
-                    def detail = DeviceDetail.manufacturer()
-                    def value = readFromAnalytics(client, detail.resource(), detail.metric())
-                    wrapIntoJsonResponse(msg, detail.metric(), value)
-                }
-            }
-
-            vertx.eventBus().consumer('client.model') { msg ->
-                def clientId = msg.body().toString()
-                def client = leshanServer.clientRegistry.get(clientId)
-                if (client == null) {
-                    msg.fail(0, "No client with ID ${clientId}.")
-                } else {
-                    String metric = 'modelNumber'
-                    def value = readFromAnalytics(client, '/3/0/1', metric)
-                    wrapIntoJsonResponse(msg, metric, value)
-                }
-            }
-
-            vertx.eventBus().consumer('client.serial') { msg ->
-                def clientId = msg.body().toString()
-                def client = leshanServer.clientRegistry.get(clientId)
-                if (client == null) {
-                    msg.fail(0, "No client with ID ${clientId}.")
-                } else {
-                    String metric = 'serialNumber'
-                    def value = readFromAnalytics(client, '/3/0/2', metric)
-                    wrapIntoJsonResponse(msg, metric, value)
-                }
-            }
-
-            vertx.eventBus().consumer('client.firmwareVersion') { msg ->
-                def clientId = msg.body().toString()
-                def client = leshanServer.clientRegistry.get(clientId)
-                if (client == null) {
-                    msg.fail(0, "No client with ID ${clientId}.")
-                } else {
-                    String metric = 'firmwareVersion'
-                    def value = readFromAnalytics(client, '/3/0/3', metric)
-                    wrapIntoJsonResponse(msg, metric, value)
+            allDeviceDetails().parallelStream().each { details ->
+                vertx.eventBus().consumer("client.${details.metric()}") { msg ->
+                    def clientId = msg.body().toString()
+                    def client = leshanServer.clientRegistry.get(clientId)
+                    if (client == null) {
+                        msg.fail(0, "No client with ID ${clientId}.")
+                    } else {
+                        def value = readFromAnalytics(client, details.resource(), details.metric())
+                        wrapIntoJsonResponse(msg, details.metric(), value)
+                    }
                 }
             }
 

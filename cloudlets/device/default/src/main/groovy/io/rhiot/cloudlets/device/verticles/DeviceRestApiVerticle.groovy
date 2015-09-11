@@ -21,6 +21,7 @@ import io.rhiot.vertx.web.BaseRestApiVerticle
 import io.vertx.core.Handler
 import io.vertx.groovy.core.buffer.Buffer
 
+import static com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail.allDeviceDetails
 import static io.vertx.core.http.HttpMethod.POST
 
 class DeviceRestApiVerticle extends BaseRestApiVerticle {
@@ -34,10 +35,9 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
             delete('/device/:deviceId', LeshanServerVeritcle.CHANNEL_DEVICE_DELETE)
             get('/device/:deviceId/heartbeat', LeshanServerVeritcle.CHANNEL_DEVICE_HEARTBEAT_SEND)
             get('/device/:deviceId/details', 'device.details')
-            get('/device/:deviceId/manufacturer', 'client.manufacturer')
-            get('/device/:deviceId/modelNumber', 'client.model')
-            get('/device/:deviceId/serialNumber', 'client.serial')
-            get('/device/:deviceId/firmwareVersion', 'client.firmwareVersion')
+            allDeviceDetails().parallelStream().each { details ->
+                get("/device/:deviceId/${details.metric()}", "client.${details.metric()}")
+            }
 
             router.route('/device').method(POST).handler { rc ->
                 rc.request().bodyHandler(new Handler<Buffer>() {
