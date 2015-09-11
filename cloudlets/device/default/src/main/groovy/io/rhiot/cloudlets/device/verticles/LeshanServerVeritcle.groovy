@@ -68,6 +68,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     private static final def DEFAULT_DISCONNECTION_PERIOD = MINUTES.toMillis(1)
 
+    static final def CHANNEL_DEVICES_LIST = 'devices.list'
+
     static final def CHANNEL_DEVICES_DISCONNECTED = 'devices.disconnected'
 
     static final def CHANNEL_DEVICE_DELETE = 'device.delete'
@@ -116,7 +118,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 wrapIntoJsonResponse(msg, 'Status', 'Success')
             }
 
-            vertx.eventBus().consumer('listDevices') { msg ->
+            vertx.eventBus().consumer(CHANNEL_DEVICES_LIST) { msg ->
                 wrapIntoJsonResponse(msg, 'devices', leshanServer.clientRegistry.allClients())
             }
 
