@@ -18,6 +18,7 @@ package io.rhiot.cloudlets.device.verticles
 
 import com.github.camellabs.iot.cloudlet.device.client.VirtualDevice
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
+import com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail
 import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
 import com.mongodb.Mongo
@@ -46,6 +47,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
+import static com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail.allDeviceDetails
 import static io.rhiot.steroids.Steroids.bean
 import static io.rhiot.utils.Networks.serviceHost
 import static io.rhiot.utils.Networks.servicePort
@@ -166,9 +168,9 @@ class LeshanServerVeritcle extends GroovyVerticle {
                     msg.fail(0, "No client with ID ${clientId}.")
                 } else {
                     def results = new ConcurrentHashMap()
-                    [[metric: 'manufacturer', resource: '/3/0/0'], [metric: 'modelNumber', resource: '/3/0/1'],
-                     [metric: 'serialNumber', resource: '/3/0/2'], [metric: 'firmwareVersion', resource: '/3/0/3']].parallelStream().
-                            each { request -> results[request.metric] = readFromAnalytics(client, request.resource, request.metric)}
+                    allDeviceDetails().parallelStream().each { detail ->
+                        results[detail.metric()] = readFromAnalytics(client, detail.resource(), detail.metric())
+                    }
                     wrapIntoJsonResponse(msg, 'deviceDetails', results)
                 }
             }
