@@ -141,18 +141,17 @@ class DeviceCloudletTest extends Assert {
     }
 
     @Test
-    void shouldListDisconnectedClient() {
+    void shouldListDisconnectedDevices() {
         // Given
         rest.delete("${apiBase}/device")
-        def clientId = uuid()
-        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
+        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
         sleep(5000)
         def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/device/disconnected"), Map.class)
 
         // Then
-        assertEquals([clientId], clients['disconnectedDevices'].asType(List.class))
+        assertEquals([deviceId], clients['disconnectedDevices'].asType(List.class))
     }
 
     @Test
@@ -171,11 +170,10 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldReadClientManufacturer() {
         // Given
-        def clientId = uuid()
-        createGenericLeshanClientTemplate(clientId, lwm2mPort).connect()
+        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/${clientId}/manufacturer"), Map.class)
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/${deviceId}/manufacturer"), Map.class)
 
         // Then
         assertThat(manufacturer.manufacturer).isEqualTo('Generic manufacturer')
@@ -184,11 +182,10 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldReadVirtualDeviceManufacturer() {
         // Given
-        def clientId = uuid()
-        rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: clientId))
+        rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: deviceId))
 
         // When
-        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/${clientId}/manufacturer"), Map.class)
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/${deviceId}/manufacturer"), Map.class)
 
         // Then
         assertThat(manufacturer.manufacturer).isEqualTo('Rhiot')
@@ -212,10 +209,10 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def modelResponse = rest.getForObject("${apiBase}/device/${deviceId}/model", Map.class)
+        def modelResponse = rest.getForObject("${apiBase}/device/${deviceId}/modelNumber", Map.class)
 
         // Then
-        assertEquals('Generic model number', modelResponse.model)
+        assertEquals('Generic model number', modelResponse.modelNumber)
     }
 
     @Test
@@ -224,10 +221,10 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def serialNumberResponse = rest.getForObject("${apiBase}/device/${deviceId}/serial", Map.class)
+        def serialNumberResponse = rest.getForObject("${apiBase}/device/${deviceId}/serialNumber", Map.class)
 
         // Then
-        assertThat(serialNumberResponse.serial).isEqualTo('Generic serial number')
+        assertThat(serialNumberResponse.serialNumber).isEqualTo('Generic serial number')
     }
 
     @Test

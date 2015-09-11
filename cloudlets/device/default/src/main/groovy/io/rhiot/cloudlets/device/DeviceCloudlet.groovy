@@ -16,8 +16,8 @@
  */
 package io.rhiot.cloudlets.device
 
-import com.github.camellabs.iot.cloudlet.device.verticles.LeshanServerVeritcle
-import com.github.camellabs.iot.cloudlet.device.verticles.DeviceRestApiVerticle
+import io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle
+import io.rhiot.cloudlets.device.verticles.DeviceRestApiVerticle
 import io.vertx.groovy.core.Vertx
 
 import java.util.concurrent.CountDownLatch

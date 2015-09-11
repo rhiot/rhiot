@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.device.verticles
+package io.rhiot.cloudlets.device.verticles
 
 import com.github.camellabs.iot.cloudlet.device.client.VirtualDevice
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
@@ -175,7 +175,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 if (client == null) {
                     msg.fail(0, "No client with ID ${clientId}.")
                 } else {
-                    String metric = 'model'
+                    String metric = 'modelNumber'
                     def value = readFromAnalytics(client, '/3/0/1', metric)
                     wrapIntoJsonResponse(msg, metric, value)
                 }
@@ -187,7 +187,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 if (client == null) {
                     msg.fail(0, "No client with ID ${clientId}.")
                 } else {
-                    String metric = 'serial'
+                    String metric = 'serialNumber'
                     def value = readFromAnalytics(client, '/3/0/2', metric)
                     wrapIntoJsonResponse(msg, metric, value)
                 }
