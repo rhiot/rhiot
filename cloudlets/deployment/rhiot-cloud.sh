@@ -24,11 +24,13 @@ if ! type "docker" > /dev/null; then
   wget -qO- https://get.docker.com/ | sh
 fi
 
-REQUIRED_DOCKER_VERSION=1.7.1
-DOCKER_VERSION=`docker version | grep 'Server version' | cut -d ' ' -f 3`
+REQUIRED_DOCKER_VERSION=1.8.2
+DOCKER_VERSION=`docker version --format '{{.Server.Version}}'`
 if [ "$DOCKER_VERSION" \< "$REQUIRED_DOCKER_VERSION" ]; then
   echo "Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot Cloud. Version ${DOCKER_VERSION} found - upgrading..."
   wget -qO- https://get.docker.com/ | sh
+else
+  echo "Docker v${DOCKER_VERSION} found. No need to upgrade."
 fi
 
 echo Docker has been properly installed.
