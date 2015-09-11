@@ -33,7 +33,7 @@ else
   echo "Docker v${DOCKER_VERSION} found. No need to upgrade."
 fi
 
-echo Docker has been properly installed.
+echo Docker is properly installed.
 
 ### Docker server setup ends
 
