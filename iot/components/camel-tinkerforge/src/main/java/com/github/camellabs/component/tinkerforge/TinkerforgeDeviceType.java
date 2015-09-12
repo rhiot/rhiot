@@ -54,6 +54,6 @@ public enum TinkerforgeDeviceType {
 	//temperatureIR,
 	//tilt,
 	//voltage,
-	//voltage_current
+	voltagecurrent
 	;
 }
