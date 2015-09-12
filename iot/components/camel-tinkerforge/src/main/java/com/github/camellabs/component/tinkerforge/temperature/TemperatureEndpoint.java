@@ -24,9 +24,8 @@ import org.apache.camel.spi.UriParam;
 
 import com.github.camellabs.component.tinkerforge.TinkerforgeComponent;
 import com.github.camellabs.component.tinkerforge.TinkerforgeEndpoint;
-import com.github.camellabs.component.tinkerforge.distance.DistanceIRConsumer;
 
-@UriEndpoint(scheme = "tinkerforge", syntax = "tinkerforge:/temperature/<uid>", consumerClass = DistanceIRConsumer.class, label = "iot", title = "Tinkerforge")
+@UriEndpoint(scheme = "tinkerforge", syntax = "tinkerforge:/temperature/<uid>", consumerClass = TemperatureConsumer.class, label = "iot", title = "Tinkerforge")
 public class TemperatureEndpoint extends TinkerforgeEndpoint {
     
     @UriParam private int interval = 1000;
