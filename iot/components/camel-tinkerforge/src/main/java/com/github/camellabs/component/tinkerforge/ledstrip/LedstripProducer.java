@@ -19,10 +19,16 @@ package com.github.camellabs.component.tinkerforge.ledstrip;
 import com.tinkerforge.*;
 import com.tinkerforge.TimeoutException;
 import com.github.camellabs.component.tinkerforge.TinkerforgeProducer;
+import com.github.camellabs.component.tinkerforge.ledstrip.matrix.LedCharacter;
+import com.github.camellabs.component.tinkerforge.ledstrip.matrix.LedCharacterFactory;
+import com.github.camellabs.component.tinkerforge.ledstrip.matrix.LedLayout;
+import com.github.camellabs.component.tinkerforge.ledstrip.matrix.LedLayoutFactory;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.*;
 
 public class LedstripProducer extends TinkerforgeProducer<LedstripEndpoint, BrickletLEDStrip> {
@@ -81,6 +87,10 @@ public class LedstripProducer extends TinkerforgeProducer<LedstripEndpoint, Bric
                         r[j] = data.blue;
                         g[j] = data.green;
                         b[j] = data.red;
+                    } else if (endpoint.getRgbPattern().equals("brg")) {
+                        r[j] = data.blue;
+                        g[j] = data.red;
+                        b[j] = data.green;
                     } else {
                         throw new IllegalArgumentException("Unsupported RGB Pattern: "+endpoint.getRgbPattern());
                     }
@@ -121,7 +131,25 @@ public class LedstripProducer extends TinkerforgeProducer<LedstripEndpoint, Bric
                 break;
             }
             case LedStripModus.CharacterMatrix : {
-                //TODO Implement handling
+                Message message = exchange.getIn();
+                String body = message.getBody(String.class);
+                LedLayout layout = LedLayoutFactory.createLayout(endpoint.getLayout());
+                List<LedCharacter> ledCharacters = LedCharacterFactory.getCharacters(body);
+                List<Integer> resolvedLedNumbers = layout.mapCharacters(ledCharacters);
+                
+                for (int i=0; i<endpoint.getAmountOfLeds(); i++) {
+                    if (resolvedLedNumbers.contains(i)) {
+                        LedData data = new LedData();
+                        data.red = message.getHeader("red", 0, Short.class);
+                        data.green = message.getHeader("green", 0, Short.class);
+                        data.blue = message.getHeader("blue", 0, Short.class);
+                        data.duration = message.getHeader("duration", 0, Integer.class);
+                        
+                        scheduleLedData(i, data);
+                    } else {
+                        scheduleLedData(i, new LedData());
+                    }
+                }
             }
         }
     }

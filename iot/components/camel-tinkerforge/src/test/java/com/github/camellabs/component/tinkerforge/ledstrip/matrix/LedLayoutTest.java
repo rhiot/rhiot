@@ -1,4 +1,4 @@
-package com.github.camellabs.component.tinkerforge.ledstrip;
+package com.github.camellabs.component.tinkerforge.ledstrip.matrix;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+
+import com.github.camellabs.component.tinkerforge.ledstrip.matrix.LedCharacter;
+import com.github.camellabs.component.tinkerforge.ledstrip.matrix.LedCharacterFactory;
+import com.github.camellabs.component.tinkerforge.ledstrip.matrix.LedLayout;
 
 public class LedLayoutTest {
     

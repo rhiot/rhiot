@@ -1,4 +1,4 @@
-package com.github.camellabs.component.tinkerforge.ledstrip;
+package com.github.camellabs.component.tinkerforge.ledstrip.matrix;
 
 import java.util.Arrays;
 

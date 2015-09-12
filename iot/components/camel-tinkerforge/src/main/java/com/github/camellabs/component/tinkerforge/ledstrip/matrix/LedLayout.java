@@ -1,10 +1,10 @@
-package com.github.camellabs.component.tinkerforge.ledstrip;
+package com.github.camellabs.component.tinkerforge.ledstrip.matrix;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LedLayout {
-    private int[][] layout;
+    private final int[][] layout;
     
     public LedLayout(int[][] layout) {
         validateRectangularShape(layout);

@@ -1,8 +1,11 @@
-package com.github.camellabs.component.tinkerforge.ledstrip;
+package com.github.camellabs.component.tinkerforge.ledstrip.matrix;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import com.github.camellabs.component.tinkerforge.ledstrip.matrix.LedCharacter;
+import com.github.camellabs.component.tinkerforge.ledstrip.matrix.LedCharacterFactory;
 
 public class LedCharacterFactoryTest {
     private boolean O = false, X = true;

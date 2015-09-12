@@ -1,0 +1,138 @@
+package com.github.camellabs.component.tinkerforge.ledstrip.matrix;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class LedCharacterFactory {
+    
+    private static Map<Character, LedCharacter> characters = new HashMap<>();
+    private static boolean O = false, X = true;
+    
+    static {
+       characters.put('1', new LedCharacter(new boolean[][] {
+            {O,X,O},
+            {X,X,O},
+            {O,X,O},
+            {O,X,O},
+            {X,X,X}
+       }));
+        
+       characters.put('2', new LedCharacter(new boolean[][] {
+           {X,X,X},
+           {O,O,X},
+           {X,X,X},
+           {X,O,O},
+           {X,X,X}
+       }));
+       
+       characters.put('3', new LedCharacter(new boolean[][] {
+           {X,X,X},
+           {O,O,X},
+           {X,X,X},
+           {O,O,X},
+           {X,X,X}
+       }));
+       
+       characters.put('4', new LedCharacter(new boolean[][] {
+           {X,O,X},
+           {X,O,X},
+           {X,X,X},
+           {O,O,X},
+           {O,O,X}
+       }));
+       
+       characters.put('5', new LedCharacter(new boolean[][] {
+           {X,X,X},
+           {X,O,O},
+           {X,X,X},
+           {O,O,X},
+           {X,X,X}
+       }));
+       
+       characters.put('6', new LedCharacter(new boolean[][] {
+           {X,X,X},
+           {X,O,O},
+           {X,X,X},
+           {X,O,X},
+           {X,X,X}
+       }));
+       
+       characters.put('7', new LedCharacter(new boolean[][] {
+           {X,X,X},
+           {O,O,X},
+           {O,X,X},
+           {O,O,X},
+           {O,O,X}
+       }));
+       
+       characters.put('8', new LedCharacter(new boolean[][] {
+           {X,X,X},
+           {X,O,X},
+           {X,X,X},
+           {X,O,X},
+           {X,X,X}
+       }));
+       
+       characters.put('9', new LedCharacter(new boolean[][] {
+           {X,X,X},
+           {X,O,X},
+           {X,X,X},
+           {O,O,X},
+           {X,X,X}
+       }));
+       
+       characters.put('0', new LedCharacter(new boolean[][] {
+           {X,X,X},
+           {X,O,X},
+           {X,O,X},
+           {X,O,X},
+           {X,X,X}
+       }));
+       
+       
+        
+       characters.put('A', new LedCharacter(new boolean[][] {
+             {O,X,O},
+             {X,O,X},
+             {X,X,X},
+             {X,O,X},
+             {X,O,X}
+       }));
+        
+       characters.put('B', new LedCharacter(new boolean[][] {
+            {X,X,O},
+            {X,O,X},
+            {X,X,O},
+            {X,O,X},
+            {X,X,O}
+        }));
+        
+        characters.put('C', new LedCharacter(new boolean[][] {
+            {X,X,X},
+            {X,O,O},
+            {X,O,O},
+            {X,O,O},
+            {X,X,X}
+        }));
+    }
+    
+    public static LedCharacter getCharacter(char character) {
+        return characters.get(character);
+    }
+
+    public static List<LedCharacter> getCharacters(String message) {
+        List<LedCharacter> ledCharacters = new ArrayList<>();
+        
+        char[] messageCharacters = message.toUpperCase().toCharArray();
+        
+        for (char character : messageCharacters) {
+            if (characters.containsKey(character)) {
+                ledCharacters.add(characters.get(character));
+            }
+        }
+        
+        return ledCharacters;
+    }
+}
