@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.github.camel-labs</groupId>
+		<groupId>io.rhiot</groupId>
 		<version>0.1.1-SNAPSHOT</version>
-		<artifactId>camel-labs-iot</artifactId>
+		<artifactId>rhiot-iot</artifactId>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>camel-labs-iot-components</artifactId>
+	<artifactId>rhiot-iot-components</artifactId>
 	<packaging>pom</packaging>
 
 	<licenses>
@@ -25,7 +25,9 @@
 		<module>camel-kura</module>
 		<module>camel-pi4j</module>
 		<module>camel-pubnub</module>
+		<module>camel-pubnub-feature</module>
 		<module>camel-tinkerforge</module>
+		<module>camel-tinkerforge-feature</module>
 		<module>camel-coap</module>
 	</modules>
 

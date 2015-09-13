@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.camel-labs</groupId>
+        <groupId>io.rhiot</groupId>
         <version>0.1.1-SNAPSHOT</version>
-        <artifactId>camel-labs-iot</artifactId>
+        <artifactId>rhiot-iot</artifactId>
         <relativePath>..</relativePath>
     </parent>
-    <artifactId>camel-labs-iot-performance</artifactId>
+    <artifactId>rhiot-iot-performance</artifactId>
 
     <licenses>
         <license>
@@ -25,8 +25,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-deployer</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-iot-deployer</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>

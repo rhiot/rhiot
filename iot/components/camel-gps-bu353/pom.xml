@@ -13,14 +13,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.camel-labs</groupId>
-        <artifactId>camel-labs-iot-components</artifactId>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-iot-components</artifactId>
         <version>0.1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>camel-gps-bu353</artifactId>
     <packaging>bundle</packaging>
-    <name>camel-labs-iot-components-gps-bu353</name>
+    <name>rhiot-iot-components-gps-bu353</name>
     <description>Camel GPS BU353 Component</description>
 
     <properties>

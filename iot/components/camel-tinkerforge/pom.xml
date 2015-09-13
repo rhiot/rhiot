@@ -12,14 +12,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>  <!-- should be removed -->
-        <groupId>com.github.camel-labs</groupId>
-        <artifactId>camel-labs-iot-components</artifactId>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-iot-components</artifactId>
         <version>0.1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>camel-tinkerforge</artifactId>
     <packaging>bundle</packaging>
-    <name>camel-labs-iot-components-tinkerforge</name>
+    <name>rhiot-iot-components-tinkerforge</name>
     <description>Camel Tinkerforge Component</description>
 
     <properties>

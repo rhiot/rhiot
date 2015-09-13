@@ -314,7 +314,7 @@ instances received by your Camel routes.
 Maven users should add the following dependency to their POM file:
 
     <dependency>
-      <groupId>com.github.camel-labs</groupId>
+      <groupId>io.rhiot</groupId>
       <artifactId>camel-gps-bu353</artifactId>
       <version>0.1.1</version>
     </dependency>
@@ -391,7 +391,7 @@ supports both the consumer and producer endpoints.
 Maven users should add the following dependency to their POM file:
 
     <dependency>
-      <groupId>com.github.camel-labs</groupId>
+      <groupId>io.rhiot</groupId>
       <artifactId>camel-kura</artifactId>
       <version>0.0.0</version>
     </dependency>
@@ -446,7 +446,7 @@ The Camel Tinkerforge component can be used to connect to the TinkerForge brick 
 Maven users should add the following dependency to their POM file:
 
     <dependency>
-      <groupId>com.github.camel-labs</groupId>
+      <groupId>io.rhiot</groupId>
       <artifactId>camel-tinkerforge</artifactId>
       <version>0.0.0</version>
     </dependency>
@@ -543,7 +543,7 @@ This component uses [pi4j](http://pi4j.com) library
 Maven users should add the following dependency to their POM file:
 
     <dependency>
-      <groupId>com.github.camel-labs</groupId>
+      <groupId>io.rhiot</groupId>
       <artifactId>camel-pi4j</artifactId>
       <version>0.0.0</version>
     </dependency>
@@ -636,7 +636,7 @@ This component uses [pubnub](https://www.pubnub.com/docs/java/javase/javase-sdk.
 Maven users should add the following dependency to their POM file:
 
     <dependency>
-      <groupId>com.github.camel-labs</groupId>
+      <groupId>io.rhiot</groupId>
       <artifactId>camel-pubnub</artifactId>
       <version>0.0.0</version>
     </dependency>

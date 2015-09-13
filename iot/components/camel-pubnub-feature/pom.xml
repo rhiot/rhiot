@@ -5,13 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>  <!-- should be removed -->
-		<groupId>com.github.camel-labs</groupId>
-		<artifactId>camel-labs-iot-components</artifactId>
+		<groupId>io.rhiot</groupId>
+		<artifactId>rhiot-iot-components</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>camel-pubnub-feature</artifactId>
-	<name>camel-labs-iot-components-pubnub-feature</name>
+	<name>rhiot-iot-components-pubnub-feature</name>
 	<packaging>feature</packaging>
 	<description>This feature contains all dependencies needed to install the camel-pubnub component on Karaf 2</description>
 
@@ -24,7 +24,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.github.camel-labs</groupId>
+			<groupId>io.rhiot</groupId>
 			<artifactId>camel-pubnub</artifactId>
 			<version>${project.version}</version>
 			<exclusions>

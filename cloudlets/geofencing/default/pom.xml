@@ -25,8 +25,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-cloudlet-document-default</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-iot-cloudlet-document-default</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.maps</groupId>
@@ -39,8 +39,8 @@
 
         <!-- Testing -->
         <dependency>
-            <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-cloudlet-document-sdk</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-iot-cloudlet-document-sdk</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

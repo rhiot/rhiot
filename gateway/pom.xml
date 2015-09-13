@@ -21,11 +21,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.camel-labs</groupId>
+            <groupId>io.rhiot</groupId>
             <artifactId>camel-gps-bu353</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.camel-labs</groupId>
+            <groupId>io.rhiot</groupId>
             <artifactId>camel-pi4j</artifactId>
         </dependency>
         <dependency>

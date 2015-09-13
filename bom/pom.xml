@@ -25,7 +25,7 @@
         <apache-poi.version>3.13-beta1</apache-poi.version>
         <californium-core.version>1.0.0-M3</californium-core.version>
         <camel.version>2.15.2</camel.version>
-        <camel-labs.version>0.1.1-SNAPSHOT</camel-labs.version>
+        <rhiot.version>0.1.1-SNAPSHOT</rhiot.version>
         <embedmongo.version>1.48.2</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
         <google-truth.version>0.27</google-truth.version>
@@ -74,69 +74,69 @@
                 <version>${mockito-groovy-support.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.camel-labs</groupId>
-                <artifactId>camel-labs-iot-cloudlet-document-default</artifactId>
-                <version>${camel-labs.version}</version>
+                <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-iot-cloudlet-document-default</artifactId>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.camel-labs</groupId>
-                <artifactId>camel-labs-iot-cloudlet-document-sdk</artifactId>
-                <version>${camel-labs.version}</version>
+                <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-iot-cloudlet-document-sdk</artifactId>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-cloudlet-device</artifactId>
-                <version>${camel-labs.version}</version>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-cloudlet-geofencing</artifactId>
-                <version>${camel-labs.version}</version>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.camel-labs</groupId>
-                <artifactId>camel-labs-iot-deployer</artifactId>
-                <version>${camel-labs.version}</version>
+                <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-iot-deployer</artifactId>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-gateway</artifactId>
-                <version>${camel-labs.version}</version>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-mongodb</artifactId>
-                <version>${camel-labs.version}</version>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-steroids</artifactId>
-                <version>${camel-labs.version}</version>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-utils</artifactId>
-                <version>${camel-labs.version}</version>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-utils-ssh</artifactId>
-                <version>${camel-labs.version}</version>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-vertx</artifactId>
-                <version>${camel-labs.version}</version>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.camel-labs</groupId>
+                <groupId>io.rhiot</groupId>
                 <artifactId>camel-pi4j</artifactId>
-                <version>${camel-labs.version}</version>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.camel-labs</groupId>
+                <groupId>io.rhiot</groupId>
                 <artifactId>camel-gps-bu353</artifactId>
-                <version>${camel-labs.version}</version>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.maps</groupId>

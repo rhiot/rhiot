@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.camel-labs</groupId>
-        <artifactId>camel-labs-iot-cloudlet</artifactId>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-iot-cloudlet</artifactId>
         <version>0.1.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>camel-labs-iot-cloudlet-sdk</artifactId>
+    <artifactId>rhiot-iot-cloudlet-sdk</artifactId>
 
     <licenses>
         <license>

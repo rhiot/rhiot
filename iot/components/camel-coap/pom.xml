@@ -13,14 +13,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>camel-labs-iot-components</artifactId>
-		<groupId>com.github.camel-labs</groupId>
+		<artifactId>rhiot-iot-components</artifactId>
+		<groupId>io.rhiot</groupId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>camel-coap</artifactId>
 	<packaging>bundle</packaging>
-	<name>camel-labs-iot-components-coap</name>
+	<name>rhiot-iot-components-coap</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

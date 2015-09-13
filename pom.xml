@@ -83,7 +83,6 @@
         <connection>scm:git:git@github.com:rhiot/rhiot.git</connection>
         <developerConnection>scm:git:git@github.com:rhiot/rhiot.git</developerConnection>
         <url>git@github.com:rhiot/rhiot.git</url>
-        <tag>camel-labs-0.1.0</tag>
     </scm>
 
     <distributionManagement>
@@ -254,7 +253,7 @@
                         <licenses>
                             <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
                                 <licenseFamilyCategory>AL</licenseFamilyCategory>
-                                <licenseFamilyName>camel-labs</licenseFamilyName>
+                                <licenseFamilyName>rhiot</licenseFamilyName>
                                 <patterns>
                                     <pattern>http://www.apache.org/licenses/LICENSE-2.0</pattern>
                                 </patterns>
@@ -262,7 +261,7 @@
                         </licenses>
                         <licenseFamilies>
                             <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-                                <familyName>camel-labs</familyName>
+                                <familyName>rhiot</familyName>
                             </licenseFamily>
                         </licenseFamilies>
                         <excludes>

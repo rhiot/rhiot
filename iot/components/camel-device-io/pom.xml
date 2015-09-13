@@ -12,14 +12,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>  <!-- should be removed -->
-		<groupId>com.github.camel-labs</groupId>
-		<artifactId>camel-labs-iot-components</artifactId>
+		<groupId>io.rhiot</groupId>
+		<artifactId>rhiot-iot-components</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>camel-device-io</artifactId>
 	<packaging>bundle</packaging>
-	<name>camel-labs-iot-components-device-io</name>
+	<name>rhiot-iot-components-device-io</name>
 	<description>Camel Device IO Component</description>
 
 	<properties>

@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>camel-labs-iot-cloudlet-document-parent</artifactId>
-        <groupId>com.github.camel-labs</groupId>
+        <artifactId>rhiot-iot-cloudlet-document-parent</artifactId>
+        <groupId>io.rhiot</groupId>
         <version>0.1.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>camel-labs-iot-cloudlet-document-default</artifactId>
+    <artifactId>rhiot-iot-cloudlet-document-default</artifactId>
 
     <licenses>
         <license>
@@ -74,8 +74,8 @@
 
         <!-- Testing -->
         <dependency>
-            <groupId>com.github.camel-labs</groupId>
-            <artifactId>camel-labs-iot-cloudlet-document-sdk</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-iot-cloudlet-document-sdk</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

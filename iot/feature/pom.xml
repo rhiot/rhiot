@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.github.camel-labs</groupId>
+		<groupId>io.rhiot</groupId>
 		<version>0.1.1-SNAPSHOT</version>
-		<artifactId>camel-labs-iot</artifactId>
+		<artifactId>rhiot-iot</artifactId>
 	</parent>
 	
-	<artifactId>camel-labs-iot-feature</artifactId>
+	<artifactId>rhiot-iot-feature</artifactId>
 	<packaging>feature</packaging>
-	<description>This feature repo contains all camel-labs camel components</description>
+	<description>This feature repo contains all Rhiot camel components</description>
 
 	<licenses>
 		<license>
@@ -21,30 +20,15 @@
 	</licenses>
 
 	<dependencies>
-		<!-- <dependency>
-			<groupId>com.github.camel-labs</groupId>
-			<artifactId>camel-device-io</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
-			<groupId>com.github.camel-labs</groupId>
-			<artifactId>camel-kura</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.camel-labs</groupId>
-			<artifactId>camel-pi4j</artifactId>
-			<version>${project.version}</version>
-		</dependency>-->
-		<dependency>
-			<groupId>com.github.camel-labs</groupId>
+			<groupId>io.rhiot</groupId>
 			<artifactId>camel-pubnub-feature</artifactId>
 			<version>${project.version}</version>
 			<type>feature</type>
             <classifier>features</classifier>
 		</dependency> 
 		<dependency>
-			<groupId>com.github.camel-labs</groupId>
+			<groupId>io.rhiot</groupId>
 			<artifactId>camel-tinkerforge-feature</artifactId>
 			<version>${project.version}</version>
 			<type>feature</type>
