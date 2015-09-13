@@ -732,7 +732,7 @@ following command:
       bash <(curl -s https://raw.githubusercontent.com/rhiot/rhiot/master/cloudlets/deployment/rhiot-cloud.sh)
 
 The script above installs the proper version of Docker server. Keep in mind that the minimal Docker version required by
-Rhiot Cloud is 1.7.1 - if the older version of the Docker is installed, our script will upgrade your Docker server. After
+Rhiot Cloud is 1.8.2 - if the older version of the Docker is installed, our script will upgrade your Docker server. After
 Docker server is properly installed, our script downloads and starts the Cloudlet Console, device management cloudlet,
 geofencing cloudlet and MongoDB server containers.
 
