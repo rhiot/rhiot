@@ -696,21 +696,25 @@ Route the collect data and sendt it to pubnub channel mychannel:
 
 ## Rhiot Cloud
 
-Rhiot Cloud is the set of the backend (micro)services and UI application used to managed these.
-
-*Cloudlets* are server-side microservices that come with some common functionalities required by the IoT systems. *Cloudlets
-UI plugins* are [Hawt.io](http://hawt.io)-based plugins which provides nice web UI for the cloudlets back-end services. *Cloudlet
-Console* is the web application assembling all the Cloudlets UI plugins. The *Rhiot Cloud* then is the
-complete cloud-based installation setup including Cloudlet Console, Cloudlets backend services and all the other necessary
-services (like database servers) installed.
+The Internet of Things is all about the communication and messaging. The devices connected to the IoT system have to
+connect to the kind of centralized hub that allows them to exchange their data with the other devices and backend
+services. Device that can't be properly connected to rest of the application ecosystem, is useless from the IoT point
+ of view. Rhiot project provides such central hub as the *Rhiot Cloud*. Rhiot Cloud is the set of the backend
+ (micro)services and UI application used to managed these.
 
 ### Architecture
 
 The high-level architecture diagram of the Rhiot Cloud is presented on the image below:
 
-<img src="images/cloudlet-arch.png" align="center" height="600">
+ <img src="images/cloudlet-arch.png" align="center" height="600">
 
-Notice that we assume that cloudlets dockerized and deployed as the Docker containers. The HTTP REST API as been listed
+*Cloudlets* are server-side microservices that come with some common functionalities required by the IoT systems. *Cloudlets
+UI plugins* are [Hawt.io](http://hawt.io)-based plugins which provides spiffy web UI for the cloudlets back-end services. *Cloudlet
+Console* is the web application assembling all the Cloudlets UI plugins. The *Rhiot Cloud* then is the
+complete cloud-based installation setup including Cloudlet Console, Cloudlets backend services and all the other necessary
+services (like database servers) deployed to the server of your choice.
+
+Notice that we assume that cloudlets are dockerized and deployed as the Docker containers. The HTTP REST API as been listed
 at the top of the diagram not without the reason - we think of the REST API as the first-class citizen considering the
 access to the Rhiot Cloud.
 
