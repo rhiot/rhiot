@@ -706,7 +706,7 @@ services. Device that can't be properly connected to rest of the application eco
 
 The high-level architecture diagram of the Rhiot Cloud is presented on the image below:
 
- <img src="images/cloudlet-arch.png" align="center" height="600">
+ <img src="images/rhiot-cloud-arch.png" align="center" height="600">
 
 *Cloudlets* are server-side microservices that come with some common functionalities required by the IoT systems. *Cloudlets
 UI plugins* are [Hawt.io](http://hawt.io)-based plugins which provides spiffy web UI for the cloudlets back-end services. *Cloudlet
