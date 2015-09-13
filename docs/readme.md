@@ -699,8 +699,10 @@ Route the collect data and sendt it to pubnub channel mychannel:
 The Internet of Things is all about the communication and messaging. The devices connected to the IoT system have to
 connect to the kind of centralized hub that allows them to exchange their data with the other devices and backend
 services. The device that can't be properly connected to the rest of the application ecosystem, is useless from the IoT point
- of view. Rhiot project provides such central hub as the *Rhiot Cloud*. Rhiot Cloud is the set of the backend
- (micro)services and UI application used to managed these.
+ of view.
+
+If you are looking for such centralized event hub, Rhiot project provides such central bus in the form of the
+*Rhiot Cloud*. Rhiot Cloud is the set of the backend (micro)services and UI application used to managed these.
 
 ### Architecture
 
