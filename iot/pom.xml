@@ -26,7 +26,6 @@
         <module>feature</module>
         <module>deployer</module>
         <module>deployer-app</module>
-        <module>performance</module>
     </modules>
 
 </project>

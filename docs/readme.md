@@ -1041,7 +1041,7 @@ The easiest way to run the performance benchmark is to connect the target device
 local network (for example via the WiFi or the Ethernet cable) and start the tester as a Docker container, using the
 following command:
 
-    docker run -v=/tmp/gateway-performance:/tmp/gateway-performance --net=host camellabs/performance-of RPI2
+    docker run -v=/tmp/gateway-performance:/tmp/gateway-performance --net=host rhiot/performance-of RPI2
 
 Keep in mind that `RPI2` can be replaced with the other supported hardware profile (like `RPI2_BU353`). The performance
 tester detects the tests that can be executed for the given hardware profile, deploy the gateway software to the target

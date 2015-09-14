@@ -19,6 +19,7 @@
         <module>gateway-app</module>
         <module>cloudlets</module>
         <module>iot</module>
+        <module>performance</module>
     </modules>
 
     <properties>

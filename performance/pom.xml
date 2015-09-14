@@ -5,11 +5,11 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-bom</artifactId>
         <version>0.1.1-SNAPSHOT</version>
-        <artifactId>rhiot-iot</artifactId>
-        <relativePath>..</relativePath>
+        <relativePath>../bom</relativePath>
     </parent>
-    <artifactId>rhiot-iot-performance</artifactId>
+    <artifactId>rhiot-performance</artifactId>
 
     <licenses>
         <license>
