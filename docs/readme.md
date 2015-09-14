@@ -816,9 +816,12 @@ In order to read the metadata of the particular device identified with the given
 URI. For example to read the metadata of the device with the ID equal to `myDevice001`, execute the following command:
 
     $ curl http://rhiot.net:15000/device/myDevice001
-    {"device":{"registrationDate":1441959646566,"address":"127.0.0.1","port":1111,"registrationEndpointAddress":"0.0.0.0:5683",
-    "lifeTimeInSec":31536000,"lwM2mVersion":"1.0","bindingMode":"U","endpoint":"myDevice001","registrationId":"2OMPXtg6lX",
-    "objectLinks": ... ,"alive":true}}%
+    {"device":
+      {"registrationDate":1441959646566,"address":"127.0.0.1","port":1111,
+      "registrationEndpointAddress":"0.0.0.0:5683", "lifeTimeInSec":31536000,
+      "lwM2mVersion":"1.0","bindingMode":"U","endpoint":"myDevice001",
+      "registrationId":"2OMPXtg6lX", "objectLinks": ... ,"alive":true}
+    }
 
 ##### Disconnected devices
 
