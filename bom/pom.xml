@@ -110,8 +110,31 @@
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
+                <artifactId>camel-pubnub</artifactId>
+                <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>camel-pubnub-feature</artifactId>
+                <version>${rhiot.version}</version>
+                <type>feature</type>
+                <classifier>features</classifier>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-steroids</artifactId>
                 <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>camel-tinkerforge</artifactId>
+                <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>camel-tinkerforge-feature</artifactId>
+                <type>feature</type>
+                <classifier>features</classifier>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>

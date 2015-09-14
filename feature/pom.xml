@@ -23,14 +23,12 @@
 		<dependency>
 			<groupId>io.rhiot</groupId>
 			<artifactId>camel-pubnub-feature</artifactId>
-			<version>${project.version}</version>
 			<type>feature</type>
             <classifier>features</classifier>
-		</dependency> 
+		</dependency>
 		<dependency>
 			<groupId>io.rhiot</groupId>
 			<artifactId>camel-tinkerforge-feature</artifactId>
-			<version>${project.version}</version>
 			<type>feature</type>
 			<classifier>features</classifier>
 		</dependency>
