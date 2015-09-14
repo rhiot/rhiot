@@ -133,6 +133,7 @@
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>camel-tinkerforge-feature</artifactId>
+                <version>${rhiot.version}</version>
                 <type>feature</type>
                 <classifier>features</classifier>
             </dependency>
