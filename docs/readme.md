@@ -791,9 +791,11 @@ REST API using the `api_rest_port` environment variable. For example the snippet
 
 ##### Listing devices
 
-To list the devices registered to the cloud (together with their metadata) send the `GET` request to the following URL
-`http:localhost:15000/device`. You should receive response similar to the following JSON:
+To list the devices registered to the cloud (together with their metadata) send the `GET` request to the
+`/device` URI. For example executing the following command returns the list of the devices in the form of list
+serialized to the JSOn format:
 
+    $ curl http://rhiot.net:15000/device
     {"devices":
       [{"registrationDate":1439822565254,
       "address":"127.0.0.1",
