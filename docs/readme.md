@@ -857,7 +857,7 @@ In order to deregister all the devices from the cloud, send the `DELETE` request
     $ curl -XDELETE http://rhiot.net:15000/device
     {"status":"success"}
 
-##### Deregistering devices
+##### Deregistering single device
 
 Sometimes you would like to explicitly remove the particular registered device from the cloudlet database. In such case execute the
 `DELETE` request against the `/device/DEVICE_ID` URI. For example to remove the device with the ID equal to `foo`, execute
@@ -965,6 +965,28 @@ multicast enabled for your local network, so the JGroups cluster can be establis
 
 Keep in mind that each clustered instance of the Device Management Cloudlet exposes both REST and LWM2M API, so you can
 take advantage of load balancing over all the APIs available.
+
+#### Devices data analytics
+
+LWM2M protocol provides you the way to read the metrics' values from the devices. However in order to perform the search
+queries against those values, you have to store those in the centralized store. For example if you would like to find all the
+devices with the firmware version smaller than `x.y.z`, you have to store all the firmware version of your devices in
+the centralized database, then execute a query against that database. Otherwise you will be forced to connect to all
+your devices using the LWM2M protocol and ask each device to provide its firmware version number. Asking millions of
+the devices connected to your system to provide you their firmware version is far from the ideal in the terms of the
+efficiency.
+
+The device cloudlet stores each device metric value read from the LWM2M server via the REST API in the dedicated analytics
+store. It basically means that whenever you call the REST API to read the device metric, the value read from the
+device is stored in the database. For example the following API call will not only return the firmware version of the
+device identified by `myDevice`, but also will remember this value in the analytics database:
+
+    $ curl http://rhiot.net/device/myDevice/firmwareVersion
+    {"firmwareVersion": "1.0.0"}
+
+By default the historical metrics data is saved in the [MongoDB](https://www.mongodb.org) database. The default database name is
+`DeviceCloudlet`, while the historical values of the read metrics are saved to the `DeviceMetrics` collection. Device
+Cloudlet reuses the MongoDB connection settings used by the MongoDB LWM2M device registry store.
 
 ### Geofencing cloudlet
 
