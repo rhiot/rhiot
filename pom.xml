@@ -382,6 +382,30 @@
                         </executions>
                     </plugin>
                 </plugins>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.jolokia</groupId>
+                            <artifactId>docker-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>build</id>
+                                    <phase>install</phase>
+                                    <goals>
+                                        <goal>build</goal>
+                                    </goals>
+                                </execution>
+                                <execution>
+                                    <id>push</id>
+                                    <phase>deploy</phase>
+                                    <goals>
+                                        <goal>push</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
             </build>
         </profile>
         <profile>
