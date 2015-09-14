@@ -15,7 +15,7 @@
 	<parent>
 		<artifactId>rhiot-iot-components</artifactId>
 		<groupId>io.rhiot</groupId>
-		<version>0.1.1-SNAPSHOT</version>
+		<version>0.1.1</version>
 	</parent>
 
 	<artifactId>camel-coap</artifactId>

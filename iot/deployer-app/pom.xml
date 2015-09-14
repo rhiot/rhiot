@@ -6,7 +6,7 @@
     <parent>
         <artifactId>rhiot-iot</artifactId>
         <groupId>io.rhiot</groupId>
-        <version>0.1.1-SNAPSHOT</version>
+        <version>0.1.1</version>
         <relativePath>..</relativePath>
     </parent>
 
