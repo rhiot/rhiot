@@ -6,7 +6,7 @@
     <parent>
         <artifactId>rhiot-iot-cloudlet-document-parent</artifactId>
         <groupId>io.rhiot</groupId>
-        <version>0.1.1</version>
+        <version>0.1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>rhiot-iot-cloudlet-document-sdk</artifactId>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-iot-cloudlet-sdk</artifactId>
-            <version>0.1.1</version>
+            <version>0.1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
