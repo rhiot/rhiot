@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.component.kura.wifi;
+package io.rhiot.component.kura.wifi;
 
+import io.rhiot.component.kura.wifi.MockAccessPointProvider;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;

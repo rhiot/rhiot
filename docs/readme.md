@@ -432,7 +432,7 @@ Or using the producer template directly:
 
 #### Detecting Kura NetworkService
 
-In the first place `com.github.camellabs.iot.component.kura.wifi.KuraAccessPointsProvider` tries to locate `org.eclipse.kura.net.NetworkService`
+In the first place `io.rhiot.component.kura.wifi.KuraAccessPointsProvider` tries to locate `org.eclipse.kura.net.NetworkService`
 in the Camel registry. If exactly one instance of the `NetworkService`  is found (this is usually the case when
 if you deploy the route into the Kura container), that instance will be used by the Kura component. Otherwise new instance of the
 `org.eclipse.kura.linux.net.NetworkServiceImpl` will be created and cached by the `KuraAccessPointsProvider`.

@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class=com.github.camellabs.iot.component.kura.wifi.KuraWifiComponent
+class=io.rhiot.component.kura.wifi.KuraWifiComponent
