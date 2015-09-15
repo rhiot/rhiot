@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-iot-components</artifactId>
-        <version>0.1.2-SNAPSHOT</version>
+        <version>0.1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>camel-gps-bu353</artifactId>
