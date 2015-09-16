@@ -48,6 +48,7 @@ import static com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail.allDe
 import static io.rhiot.steroids.Steroids.bean
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.longProperty
+import static io.rhiot.vertx.Vertxes.assertStringBody
 import static io.rhiot.vertx.jackson.Jacksons.json
 import static io.rhiot.vertx.jackson.Jacksons.jsonMessageToMap
 import static java.time.Instant.ofEpochMilli
@@ -112,7 +113,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
             }
 
             vertx.eventBus().consumer(CHANNEL_DEVICE_GET) { msg ->
-                wrapIntoJsonResponse(msg, 'device', leshanServer.clientRegistry.get(msg.body().toString()))
+                def deviceId = assertStringBody(msg, 'Expected device identifier.')
+                deviceId.isPresent() && wrapIntoJsonResponse(msg, 'device', leshanServer.clientRegistry.get(deviceId.get()))
             }
 
             vertx.eventBus().consumer(CHANNEL_DEVICES_DISCONNECTED) { msg ->
@@ -127,42 +129,41 @@ class LeshanServerVeritcle extends GroovyVerticle {
             }
 
             vertx.eventBus().consumer(CHANNEL_DEVICE_DEREGISTER) { msg ->
-                if(msg == null || msg.body() == null) {
-                    msg.fail(-1, 'Device ID cannot be null.')
-                    return
-                }
-                def client = leshanServer.clientRegistry.get(msg.body().toString())
-                leshanServer.clientRegistry.deregisterClient(client.registrationId)
-                wrapIntoJsonResponse(msg, 'status', 'success')
-            }
-
-            vertx.eventBus().consumer(CHANNEL_DEVICE_HEARTBEAT_SEND) { msg ->
-                if(msg == null) {
-                    msg.fail(-1, 'Device ID cannot be null.')
-                    return
-                }
-                def deviceId = msg.body().toString()
-                def client = leshanServer.clientRegistry.get(deviceId)
-                if(client == null) {
-                    msg.fail(-1, "No device with id ${deviceId}.")
-                } else {
-                    leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, client.lifeTimeInSec, client.smsNumber,
-                            client.bindingMode, client.objectLinks))
+                def deviceId = assertStringBody(msg, 'Expected device identifier.')
+                if(deviceId.isPresent()) {
+                    def client = leshanServer.clientRegistry.get(deviceId.get())
+                    leshanServer.clientRegistry.deregisterClient(client.registrationId)
                     wrapIntoJsonResponse(msg, 'status', 'success')
                 }
             }
 
-            vertx.eventBus().consumer(CHANNEL_DEVICE_DETAILS) { msg ->
-                def clientId = msg.body().toString()
-                def client = leshanServer.clientRegistry.get(clientId)
-                if (client == null) {
-                    msg.fail(0, "No client with ID ${clientId}.")
-                } else {
-                    def results = new ConcurrentHashMap()
-                    allDeviceDetails().parallelStream().each { detail ->
-                        results[detail.metric()] = readFromAnalytics(client, detail.resource(), detail.metric())
+            vertx.eventBus().consumer(CHANNEL_DEVICE_HEARTBEAT_SEND) { msg ->
+                def deviceId = assertStringBody(msg, 'Expected device identifier.')
+                if(deviceId.isPresent()) {
+                    def client = leshanServer.clientRegistry.get(deviceId.get())
+                    if (client == null) {
+                        msg.fail(-1, "No device with id ${deviceId}.")
+                    } else {
+                        leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, client.lifeTimeInSec, client.smsNumber,
+                                client.bindingMode, client.objectLinks))
+                        wrapIntoJsonResponse(msg, 'status', 'success')
                     }
-                    wrapIntoJsonResponse(msg, 'deviceDetails', results)
+                }
+            }
+
+            vertx.eventBus().consumer(CHANNEL_DEVICE_DETAILS) { msg ->
+                def deviceId = assertStringBody(msg, 'Expected device identifier.')
+                if(deviceId.isPresent()) {
+                    def client = leshanServer.clientRegistry.get(deviceId.get())
+                    if (client == null) {
+                        msg.fail(0, "No client with ID ${deviceId.get()}.")
+                    } else {
+                        def results = new ConcurrentHashMap()
+                        allDeviceDetails().parallelStream().each { detail ->
+                            results[detail.metric()] = readFromAnalytics(client, detail.resource(), detail.metric())
+                        }
+                        wrapIntoJsonResponse(msg, 'deviceDetails', results)
+                    }
                 }
             }
 

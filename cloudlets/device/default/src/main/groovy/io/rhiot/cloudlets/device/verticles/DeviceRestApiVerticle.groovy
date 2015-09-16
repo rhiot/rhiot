@@ -37,6 +37,7 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
         restApi { verticle ->
             get('/device', CHANNEL_DEVICES_LIST)
             get('/device/disconnected', CHANNEL_DEVICES_DISCONNECTED)
+            get('/device/:deviceId/heartbeat', CHANNEL_DEVICE_HEARTBEAT_SEND)
             get('/device/:deviceId', CHANNEL_DEVICE_GET)
             delete('/device', CHANNEL_DEVICES_DEREGISTER)
             delete('/device/:deviceId', CHANNEL_DEVICE_DEREGISTER)
@@ -44,7 +45,6 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
             allDeviceDetails().parallelStream().each { details ->
                 get("/device/:deviceId/${details.metric()}", "client.${details.metric()}")
             }
-            get('/device/:deviceId/heartbeat', CHANNEL_DEVICE_HEARTBEAT_SEND)
             router.route('/device').method(POST).handler { rc ->
                 rc.request().bodyHandler(new Handler<Buffer>() {
                     @Override
