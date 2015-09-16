@@ -1020,25 +1020,26 @@ management cloudlet (or Rhiot Cloud). For example:
 #### Device registry
 
 Device registry is used by Leshan to store the information about the managed devices. By default the device cloudlet uses
-the MongoDB registry. If environment variables `MONGODB_SERVICE_HOST` are no specified, the cloudlet will try to
+the MongoDB registry. If environment variable `MONGODB_SERVICE_HOST` is not specified, the cloudlet will try to
 connect to the `mongodb` and `localhost` hosts respectively, using default MongoDB port (`27017`) or the one specified by
 the `MONGODB_SERVICE_HOST` environment variable.
 
 ##### Registry cache
 
 As the access to the device information is crucial for all the IoT systems, it should have be implemented as efficiently
-as possible. As devices information doesn't change very often, it is a good candidate for being cached. Device
+as possible. As devices information doesn't change very often, it should be cached in the memory whenever possible. Device
 Management Cloudlet uses the [Infinispan](http://infinispan.org) cache cluster under to hood, to provide the faster access
 to the device information. The Infinispan cache used is clustered (using JGroups under the hood), so the cached information
 remains up-to-date even when many Device Manager Cloudlets instances are executed in the cluster.
 
 #### Clustering Device Management Cloudlet
 
-Device Management Cloudlet has been designed with the scalablity in mind. Default configuration of the cloudlet allows
+Device Management Cloudlet has been designed with the scalability in mind. Default configuration of the cloudlet allows
 you to run it in the cluster, behind the load balancer of your choice. The default MongoDB device registry will be
 shared by all the cloudlet instances in the cluster. Also the device registry cache used internally by Device Management Cloudlet
 will be automatically synchronized between the deployed cloudlet instances. All you need to do, is to be sure that you have
-multicast enabled for your local network, so the JGroups cluster can be established between the cloudlets instances.
+the [IP multicast](https://en.wikipedia.org/wiki/IP_multicast) enabled for your local network, so the JGroups cluster can
+be established between the cloudlets instances.
 
 Keep in mind that each clustered instance of the Device Management Cloudlet exposes both REST and LWM2M API, so you can
 take advantage of load balancing over all the APIs available.
@@ -1048,7 +1049,7 @@ take advantage of load balancing over all the APIs available.
 LWM2M protocol provides you the way to read the metrics' values from the devices. However in order to perform the search
 queries against those values, you have to store those in the centralized store. For example if you would like to find all the
 devices with the firmware version smaller than `x.y.z`, you have to store all the firmware version of your devices in
-the centralized database, then execute a query against that database. Otherwise you will be forced to connect to all
+the centralized database, then execute a query against that database. Otherwise you will be forced to connect to the all of
 your devices using the LWM2M protocol and ask each device to provide its firmware version number. Asking millions of
 the devices connected to your system to provide you their firmware version is far from the ideal in the terms of the
 efficiency.
