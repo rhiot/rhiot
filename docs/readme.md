@@ -936,7 +936,7 @@ device is still connected to the Rhiot Cloud.
 
 If you would like to intercept the HTTP communication between the HTTP client and the REST API (for example in order to add the
 security checks), just add your custom implementation of the
-[`HttpExchangeInterceptor`](https://github.com/rhiot/rhiot/blob/c6946a891083a34bb35c123326baa744e070d9d5/cloudlets/device/default/src/main/groovy/com/github/camellabs/iot/cloudlet/device/vertx/HttpExchangeInterceptor.groovy)
+[`HttpExchangeInterceptor`](https://github.com/rhiot/rhiot/blob/master/vertx/src/main/groovy/io/rhiot/vertx/web/HttpExchangeInterceptor.groovy)
 interface to your classpath...
 
     package com.example
