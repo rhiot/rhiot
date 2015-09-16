@@ -16,6 +16,7 @@
  */
 package io.rhiot.cloudlets.device
 
+import io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle
 import io.rhiot.mongodb.EmbeddedMongo
 import org.junit.Assert
 import org.junit.BeforeClass
@@ -24,15 +25,22 @@ import org.springframework.web.client.RestTemplate
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createGenericLeshanClientTemplate
 import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.UNKNOWN_DISCONNECTED
 import static io.rhiot.utils.Networks.findAvailableTcpPort
+import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 import static java.util.UUID.randomUUID
 
 class DeviceCloudletTest extends Assert {
 
+    // Collaborators fixtures
+
     static def int restApiPort = findAvailableTcpPort()
 
     static def int lwm2mPort = findAvailableTcpPort()
+
+
+    // Fixtures
 
     def apiBase = "http://localhost:${restApiPort}"
 
@@ -46,9 +54,9 @@ class DeviceCloudletTest extends Assert {
     static void beforeClass() {
         new EmbeddedMongo().start()
 
-        System.setProperty('api_rest_port', "${restApiPort}")
-        System.setProperty('disconnectionPeriod', "${5000}")
-        System.setProperty('lwm2m_port', "${lwm2mPort}")
+        setIntProperty('api_rest_port', restApiPort)
+        setIntProperty('disconnectionPeriod', 5000)
+        setIntProperty('lwm2m_port', lwm2mPort)
 
         new DeviceCloudlet().start().waitFor()
     }
@@ -64,7 +72,7 @@ class DeviceCloudletTest extends Assert {
         def response = rest.getForObject("${apiBase}/device", Map.class)
 
         // Then
-        assertThat(response.devices.asType(List.class).size()).isEqualTo(0)
+        assertThat(response.devices.asType(List.class)).isEmpty()
     }
 
     @Test
@@ -73,18 +81,17 @@ class DeviceCloudletTest extends Assert {
         rest.delete("${apiBase}/device")
 
         // When
-        rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: uuid()))
+        rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: deviceId))
         def response = rest.getForObject(apiBase + '/device', Map.class)
 
         // Then
-        assertEquals(1, response['devices'].asType(List.class).size())
+        assertThat(response.devices.asType(List.class)).hasSize(1)
     }
 
     @Test
     void shouldSendHeartbeatToVirtualDevice() {
         // Given
         rest.delete("${apiBase}/device")
-        def deviceId = uuid()
         rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: deviceId))
         sleep(5000)
 
@@ -128,7 +135,6 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldListDeregisteredDevice() {
         // Given
-        def deviceId = uuid()
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
@@ -193,13 +199,25 @@ class DeviceCloudletTest extends Assert {
     @Test
     void shouldReturnManufacturerFailureForNonExistingClient() {
         // Given
-        createGenericLeshanClientTemplate(randomUUID().toString(), lwm2mPort).connect()
+        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
         def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/invalidEndpoint/manufacturer"), Map.class)
 
         // Then
         assertThat(manufacturer.failure).isNotNull()
+    }
+
+    @Test
+    void shouldReturnUnknownManufacturer() {
+        // Given
+        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect().disconnect()
+
+        // When
+        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/${deviceId}/manufacturer"), Map.class)
+
+        // Then
+        assertThat(manufacturer.manufacturer).isEqualTo(UNKNOWN_DISCONNECTED)
     }
 
     @Test
