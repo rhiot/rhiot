@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.coap;
+package io.rhiot.component.coap;
 
 public final class CoAPConstants {
     public static final String CAMEL_COAP_URL_PATTERN = "(?<host>[^:]+)(:(?<port>[0-9]+))";

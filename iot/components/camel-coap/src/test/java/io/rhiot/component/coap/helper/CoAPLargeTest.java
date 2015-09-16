@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs;
+package io.rhiot.component.coap.helper;
 
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
@@ -23,7 +23,7 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
-public class CoAPGetTest extends CamelTestSupport {
+public class CoAPLargeTest extends CamelTestSupport {
 
     @Produce(uri = "direct:start")
     protected ProducerTemplate sender;
@@ -43,7 +43,7 @@ public class CoAPGetTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:start").to("coap://iot.eclipse.org:5683").to("mock:result");
+                from("direct:start").to("coap://iot.eclipse.org:5683/large?coapTimeOut=10000").to("mock:result");
             }
         };
     }

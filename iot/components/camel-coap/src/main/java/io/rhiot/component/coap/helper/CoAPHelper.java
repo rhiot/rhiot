@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.coap.helper;
+package io.rhiot.component.coap.helper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
