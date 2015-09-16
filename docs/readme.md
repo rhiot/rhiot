@@ -977,7 +977,7 @@ device management cloudlet. Devices with the icon representing white (empty) hea
 ##### Sending heartbeat to the device
 
 In order to send heartbeat message to the given device and make it visible as connected again, you can use the
-`Send heartbeat` button near the device's' icon.
+`Send heartbeat` button near the device's icon.
 
 <img src="images/console-device-heartbeat.png" align="center" height="400" hspace="30" >
 
