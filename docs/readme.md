@@ -972,14 +972,14 @@ To list the devices
 using the cloudlet console navigate to the `Devices` tab. You will see the list of the devices registered to the
 device management cloudlet. Devices with the icon representing white (empty) heart are the disconnected ones.
 
-<img src="images/console-device-list.png" align="center" height="400" hspace="30" style="border:1px solid black">
+<img src="images/console-device-list.png" align="center" height="400" hspace="30" border="1">
 
 ##### Sending heartbeat to the device
 
 In order to send heartbeat message to the given device and make it visible as connected again, you can use the
 `Send heartbeat` button near the device's' icon.
 
-<img src="images/console-device-heartbeat.png" align="center" height="400" hspace="30" style="border:1px solid black">
+<img src="images/console-device-heartbeat.png" align="center" height="400" hspace="30" border="1">
 
 ##### Deregistering devices
 
@@ -989,22 +989,22 @@ If you would like deregister the device from the cloud, click the `Deregister` b
 
 If you click on the device name, the web UI will fetch and display the device details metrics:
 
-<img src="images/console-device-details.png" align="center" height="400" hspace="30" style="border:1px solid black">
+<img src="images/console-device-details.png" align="center" height="400" hspace="30" border="1">
 
 ##### Creating virtual devices
 
 If you don't have any devices nearby at the moment and still want to play with the Device management Cloudlet, dont't
 worry. You can still create the new virtual device using the web UI.
 
-<img src="images/console-device-prompt.png" align="center" height="400" hspace="30" style="border:1px solid black">
+<img src="images/console-device-prompt.png" align="center" height="400" hspace="30" border="1">
 
 All you need to do is to enter the unique identifier of the device:
 
-<img src="images/console-device-create.png" align="center" height="400" hspace="30" style="border:1px solid black">
+<img src="images/console-device-create.png" align="center" height="400" hspace="30" border="1">
 
 The device will be registered in the Rhiot Cloud and visibile as soon as you click the `Create virtual device` button.
 
-<img src="images/console-device-created.png" align="center" height="400" hspace="30" style="border:1px solid black">
+<img src="images/console-device-created.png" align="center" height="400" hspace="30" border="1">
 
 #### Accessing LWM2M server directly
 
