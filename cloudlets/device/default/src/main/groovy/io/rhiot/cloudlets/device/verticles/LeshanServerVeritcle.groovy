@@ -73,7 +73,11 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     static final def CHANNEL_DEVICE_DEREGISTER = 'device.delete'
 
+    static final def CHANNEL_DEVICE_DETAILS = 'device.details'
+
     static final def CHANNEL_DEVICE_HEARTBEAT_SEND = 'device.heartbeat.update'
+
+    static final def UNKNOWN_DISCONNECTED = 'unknown - device disconnected'
 
     // Collaborators
 
@@ -148,7 +152,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 }
             }
 
-            vertx.eventBus().consumer('device.details') { msg ->
+            vertx.eventBus().consumer(CHANNEL_DEVICE_DETAILS) { msg ->
                 def clientId = msg.body().toString()
                 def client = leshanServer.clientRegistry.get(clientId)
                 if (client == null) {
@@ -201,7 +205,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
         if (value == null) {
             value = deviceMetricsStore.readDeviceMetric(client.endpoint, metric, String.class)
             if (value == null) {
-                value = 'Unknown - device disconnected.'
+                value = UNKNOWN_DISCONNECTED
             }
         } else {
             deviceMetricsStore.saveDeviceMetric(client.endpoint, metric, value)

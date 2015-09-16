@@ -75,8 +75,11 @@ Rhiot comes with the following features:
     - [Running the device management cloudlet](#running-the-device-management-cloudlet)
     - [Device management REST API](#device-management-rest-api)
       - [Listing devices](#listing-devices)
+      - [Reading the device's metadata](#reading-the-devices-metadata)
       - [Disconnected devices](#disconnected-devices)
-      - [Deregistering devices](#deregistering-devices)
+      - [Deregistering all the devices](#deregistering-all-the-devices)
+      - [Deregistering single device](#deregistering-single-device)
+      - [Reading device's details](#reading-devices-details)
       - [Creating virtual devices](#creating-virtual-devices)
       - [Intercepting REST API requests](#intercepting-rest-api-requests)
     - [Device management web UI](#device-management-web-ui)
@@ -86,6 +89,7 @@ Rhiot comes with the following features:
     - [Device registry](#device-registry)
       - [Registry cache](#registry-cache)
     - [Clustering Device Management Cloudlet](#clustering-device-management-cloudlet)
+    - [Devices data analytics](#devices-data-analytics)
   - [Geofencing cloudlet](#geofencing-cloudlet)
 - [Performance Testing Framework](#performance-testing-framework)
   - [Hardware profiles](#hardware-profiles)
@@ -812,7 +816,7 @@ serialized to the JSOn format:
         ...],
       "alive":true}]}
 
-##### Getting device metadata
+##### Reading the device's metadata
 
 In order to read the metadata of the particular device identified with the given ID, send the `GET` request to the `/device/ID`
 URI. For example to read the metadata of the device with the ID equal to `myDevice001`, execute the following command:
@@ -850,7 +854,7 @@ you will receive the HTTP response similar to the following one:
 
     {"status": "success"}
 
-##### Deregistering all devices
+##### Deregistering all the devices
 
 In order to deregister all the devices from the cloud, send the `DELETE` request to the `/device` URI. For example:
 
@@ -865,6 +869,44 @@ the following command:
 
     $ curl -XDELETE http://rhiot.net:15000/device/foo
     {"status":"success"}
+
+##### Reading device's details
+
+LWM2M protocol allows you to read the values of the various metrics from the managed device. The basic metrics includes
+device's manufacturer name, model, serial number, firmware version and so forth. In order to read the device details,
+send `GET` request to the `/device/myDeviceID/details` URI. For example:
+
+    $ curl http://rhiot.net:15000/device/myDeviceID/details
+    {"deviceDetails":
+      {"serialNumber":"Serial-0cc28150-3a09-4acc-b12d-d9101b8a29d2",
+      "modelNumber":"Virtual device",
+      "firmwareVersion":"1.0.0",
+      "manufacturer":"Rhiot"}
+    }
+
+The `/device/ID/details` call performs connects to the given device, collects the metrics and returns those wrapped into
+the JSON response. You can also collect individual metrics using the following URIs:
+
+| Metric                   | URI                      | Description   |
+|:-------------------------|:-------------------------       |:------------- |
+| Manufacturer | `/device/deviceId/manufacturer`                | Device's manufacturer. For example `Raspberry Pi`. |
+| Model number         | `/device/deviceId/modelNumber` | Device's model. For example `2 B+`. |
+| Serial number | `/device/deviceId/serialNumber` | Unique string identifying the particular piece of the hardware. |
+| Firmware number   | `/device/deviceId/firmwareVersion`  | The text identifying the version of the software that device is running. Can include both operating system and applications' versions. |
+
+For example to read the version of the software used by your device, execute the following `GET` request:
+
+     $ curl http://rhiot.net:15000/device/foo/firmwareVersion
+    {"firmwareVersion":"1.0.0"}
+
+Keep in mind that the metric values read by these operations are saved to the metrics database and can be accessed later on
+(see [Devices Data Analytics](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#devices-data-analytics)). Also if
+the device is disconnected at the moment when the REST API is called, the value will be read from the metrics history,
+instead of the real device. If there is no historical value available for the given device and metric, the
+`unknown - device disconnected` value will be returned for it. For example:
+
+     $ curl http://rhiot.net:15000/device/foo/firmwareVersion
+    {"firmwareVersion":"Unknown - device disconnected"}
 
 ##### Creating virtual devices
 

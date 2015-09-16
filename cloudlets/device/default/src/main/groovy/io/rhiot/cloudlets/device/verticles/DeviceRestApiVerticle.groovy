@@ -26,6 +26,7 @@ import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_D
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_DISCONNECTED
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_LIST
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_DEREGISTER
+import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_DETAILS
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_GET
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_HEARTBEAT_SEND
 import static io.vertx.core.http.HttpMethod.POST
@@ -36,15 +37,14 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
         restApi { verticle ->
             get('/device', CHANNEL_DEVICES_LIST)
             get('/device/disconnected', CHANNEL_DEVICES_DISCONNECTED)
-            delete('/device', CHANNEL_DEVICES_DEREGISTER)
             get('/device/:deviceId', CHANNEL_DEVICE_GET)
+            delete('/device', CHANNEL_DEVICES_DEREGISTER)
             delete('/device/:deviceId', CHANNEL_DEVICE_DEREGISTER)
-            get('/device/:deviceId/heartbeat', CHANNEL_DEVICE_HEARTBEAT_SEND)
-            get('/device/:deviceId/details', 'device.details')
+            get('/device/:deviceId/details', CHANNEL_DEVICE_DETAILS)
             allDeviceDetails().parallelStream().each { details ->
                 get("/device/:deviceId/${details.metric()}", "client.${details.metric()}")
             }
-
+            get('/device/:deviceId/heartbeat', CHANNEL_DEVICE_HEARTBEAT_SEND)
             router.route('/device').method(POST).handler { rc ->
                 rc.request().bodyHandler(new Handler<Buffer>() {
                     @Override
