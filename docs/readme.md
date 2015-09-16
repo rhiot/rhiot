@@ -75,7 +75,7 @@ Rhiot comes with the following features:
     - [Running the device management cloudlet](#running-the-device-management-cloudlet)
     - [Device management REST API](#device-management-rest-api)
       - [Listing devices](#listing-devices)
-      - [Reading the device's metadata](#reading-the-devices-metadata)
+      - [Reading particular device's metadata](#reading-particular-devices-metadata)
       - [Disconnected devices](#disconnected-devices)
       - [Deregistering all the devices](#deregistering-all-the-devices)
       - [Deregistering single device](#deregistering-single-device)
@@ -720,7 +720,7 @@ Console* is the web application assembling all the Cloudlets UI plugins. The *Rh
 complete cloud-based installation setup including Cloudlet Console, Cloudlets backend services and all the other necessary
 services (like database servers) deployed to the server of your choice.
 
-Notice that we assume that cloudlets are dockerized and deployed as the Docker containers. The HTTP REST API has been listed
+Notice that we assume that cloudlets are dockerized and deployed as the Docker containers. Also the HTTP REST API has been listed
 at the top of the diagram not without the reason - we think of the REST API as the first-class citizen considering the
 access to the Rhiot Cloud.
 
@@ -762,10 +762,10 @@ The foundation of the every IoT solution is the device management system. Withou
 *things*, you can't properly orchestrate how your devices communicates with each other. Also the effective monitoring of
 the IoT system, without the devices registered in the centralized cloud, becomes almost impossible.
 
-Device management cloudlet provides backend service for registering and tracking devices connected to the Rhiot Cloud.
-Under the hood device management cloudlet uses [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan), the
+Device Management Cloudlet provides backend service for registering and tracking devices connected to the Rhiot Cloud.
+Under the hood Device Management Cloudlet uses [Eclipse Leshan](https://projects.eclipse.org/projects/iot.leshan), the
 open source implementation of the [LWM2M](https://en.wikipedia.org/wiki/OMA_LWM2M) protocol. LWM2M becomes the standard
-for the IoT devices management so we decided to make it a heart of the Rhiot device management service.
+for the IoT devices management so we decided to make it a heart of the Rhiot device service.
 
 The diagram below presents the high-level overview of the device cloudlet architecture.
 
@@ -778,11 +778,11 @@ The device management cloudlet is distributed as a fat jar. Its Maven coordinate
 [rhiot/cloudlet-device:0.1.1](https://hub.docker.com/r/rhiot/cloudlet-device). In order to start the device management
 microservice, just run it as a fat jar...
 
-    java -jar cloudlet-device:0.1.1.jar
+    java -jar rhiot-cloudlet-device:0.1.1.jar
 
 ...or as the Docker container...
 
-    docker run -d io.rhiot/rhiot-cloudlet-device/0.1.1
+    docker run -d io.rhiot/cloudlet-device/0.1.1
 
 #### Device management REST API
 
@@ -791,13 +791,13 @@ management REST API is exposed using the following base URI - `http:0.0.0.0:1500
 REST API using the `api_rest_port` environment variable. For example the snippet below exposes the REST API on the port
 16000:
 
-    docker run -d -e api_rest_port=16000 -p 16000:16000 io.rhiot/rhiot-cloudlet-device/0.1.1
+    docker run -d -e api_rest_port=16000 -p 16000:16000 io.rhiot/cloudlet-device/0.1.1
 
 ##### Listing devices
 
 To list the devices registered to the cloud (together with their metadata) send the `GET` request to the
-`/device` URI. For example executing the following command returns the list of the devices in the form of list
-serialized to the JSOn format:
+`/device` URI. For example executing the following command returns the list of the devices in the form of the list
+serialized to the JSON format:
 
     $ curl http://rhiot.net:15000/device
     {"devices":
@@ -816,7 +816,7 @@ serialized to the JSOn format:
         ...],
       "alive":true}]}
 
-##### Reading the device's metadata
+##### Reading particular device's metadata
 
 In order to read the metadata of the particular device identified with the given ID, send the `GET` request to the `/device/ID`
 URI. For example to read the metadata of the device with the ID equal to `myDevice001`, execute the following command:
@@ -836,23 +836,28 @@ messages with the cloud, while disconnected can't. Disconnection usually occurs 
 connectivity.
 
 To return the list of identifiers of the disconnected devices send the `GET` request to the following URL -
-`http:localhost:15000/device/disconnected`. In the response you will receive the list of the identifiers of the devices
+`/device/disconnected`. In the response you will receive the list of the identifiers of the devices
 that have not send the heartbeat signal to the device management cloudlet for the given *disconnection period* (one minute by
 default). The list will be formatted as the JSON document similar to the following one:
 
+    $ curl http://rhiot.net:15000/device/disconnected
     {"disconnectedDevices": ["device1", "device2", ...]}
 
 The disconnection period can be changed globally using the `disconnectionPeriod` environment variable indicating the
 disconnection period value in miliseconds. For example the snippet below sets the disconnection period to 20 seconds:
 
-    docker run -d -e disconnectionPeriod=20000 io.rhiot/rhiot-cloudlet-device/0.1.1
+    docker run -d -e disconnectionPeriod=20000 io.rhiot/cloudlet-device/0.1.1
 
 The device which is running and operational should periodically send the hearbeat signal to the device cloudlet in order to avoid
-being marked as disconnected. You can do it be sending the GET request to the
-`http:localhost:15000/device/DEVICE_ID/heartbeat` URI. If the heartbeat has been successfully send to the cloud,
+being marked as disconnected. You can do it be sending the `GET` request to the
+`/device/DEVICE_ID/heartbeat` URI. If the heartbeat has been successfully send to the cloud,
 you will receive the HTTP response similar to the following one:
 
+    $ curl http://rhiot.net:15000/device/myDeviceID/heartbeat
     {"status": "success"}
+
+Keep also in mind that sending the regular LWM2M update by the client device to the LWM2M server works the same as sending
+the heartbeat update via the REST API.
 
 ##### Deregistering all the devices
 
@@ -874,7 +879,8 @@ the following command:
 
 LWM2M protocol allows you to read the values of the various metrics from the managed device. The basic metrics includes
 device's manufacturer name, model, serial number, firmware version and so forth. In order to read the device details,
-send `GET` request to the `/device/myDeviceID/details` URI. For example:
+send `GET` request to the `/device/myDeviceID/details` URI. For example to read the details of the device
+identified by the `myDeviceID`, execute the following command:
 
     $ curl http://rhiot.net:15000/device/myDeviceID/details
     {"deviceDetails":
@@ -884,7 +890,7 @@ send `GET` request to the `/device/myDeviceID/details` URI. For example:
       "manufacturer":"Rhiot"}
     }
 
-The `/device/ID/details` call performs connects to the given device, collects the metrics and returns those wrapped into
+The `/device/ID/details` call connects to the given device, collects the metrics and returns those metrics wrapped into
 the JSON response. You can also collect individual metrics using the following URIs:
 
 | Metric                   | URI                      | Description   |
@@ -901,17 +907,17 @@ For example to read the version of the software used by your device, execute the
 
 Keep in mind that the metric values read by these operations are saved to the metrics database and can be accessed later on
 (see [Devices Data Analytics](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#devices-data-analytics)). Also if
-the device is disconnected at the moment when the REST API is called, the value will be read from the metrics history,
+the device is disconnected at the moment when the REST API is called, the value will be read from the metrics history database,
 instead of the real device. If there is no historical value available for the given device and metric, the
 `unknown - device disconnected` value will be returned for it. For example:
 
      $ curl http://rhiot.net:15000/device/foo/firmwareVersion
-    {"firmwareVersion":"Unknown - device disconnected"}
+    {"firmwareVersion":"unknown - device disconnected"}
 
 ##### Creating virtual devices
 
 Device Cloudlet offers you the option to create the *virtual devices*. Virtual devices can be used to represent the clients whom
-can't use LWM2M API. For example the Android phone can use REST calls only to create and maintain the projection of
+can't use LWM2M API. For example the Android phone could use REST calls only to create and maintain the projection of
 itself as the virtual device even if you can't install LWM2M client on that device.
 
 To create the virtual device, send the `POST` request to the `/client` URI. For example:
@@ -920,7 +926,11 @@ To create the virtual device, send the `POST` request to the `/client` URI. For 
     {"Status":"Success"}%
 
 Starting from this point your the virtual device identified as `myVirtualDeviceId` will be registered in the device
-cloudlet LWM2M server.
+cloudlet LWM2M server. And of course you can send the heartbeats signals to the virtual device to indicate that the
+device is still connected to the Rhiot Cloud.
+
+    $ curl http://rhiot.net:15000/device/myDeviceID/heartbeat
+    {"status": "success"}
 
 ##### Intercepting REST API requests
 
@@ -973,14 +983,14 @@ In order to send heartbeat message to the given device and make it visible as co
 
 #### Accessing LWM2M server directly
 
-While we suggest to use the universal REST API whenever possible, you can also consider using the LWM2M server directly.
-By default the LWM2M server is exposed using the default IANA port i.e. 5683. The embedded LWM2M server is started
+While we suggest to use the universal REST API whenever possible, you can definitely use the LWM2M server directly.
+By default the LWM2M server API is exposed using the default IANA port i.e. 5683. The embedded LWM2M server is started
 together with the cloudlet.
 
 In order to use custom LWM2M server port, set the `lwm2m_port` environment variable when starting the device
 management cloudlet (or Rhiot Cloud). For example:
 
-    docker run -d -e lwm2m_port=16000 io.rhiot/rhiot-cloudlet-device/0.1.1
+    docker run -d -e lwm2m_port=16000 -p 16000:16000 io.rhiot/cloudlet-device/0.1.1
 
 #### Device registry
 
