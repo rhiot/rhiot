@@ -78,6 +78,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     static final def CHANNEL_DEVICE_HEARTBEAT_SEND = 'device.heartbeat.update'
 
+    static final def CHANNEL_DEVICE_CREATE_VIRTUAL = 'device.create.virtual'
+
     static final def UNKNOWN_DISCONNECTED = 'unknown - device disconnected'
 
     // Collaborators
@@ -180,8 +182,8 @@ class LeshanServerVeritcle extends GroovyVerticle {
                 }
             }
 
-            vertx.eventBus().consumer('clients.create.virtual') { msg ->
-                def device = jsonMessageToMap(msg.body())
+            vertx.eventBus().consumer(CHANNEL_DEVICE_CREATE_VIRTUAL) { msg ->
+                def device = msg.body().asType(Map.class)
                 createVirtualLeshanClientTemplate(device.clientId, lwm2mPort).connect().disconnect()
                 def devicePrototype = new VirtualDevice()
                 deviceMetricsStore.saveDeviceMetric(device.clientId, 'manufacturer', devicePrototype.manufacturer())

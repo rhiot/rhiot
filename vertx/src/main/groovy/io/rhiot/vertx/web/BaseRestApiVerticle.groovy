@@ -25,8 +25,10 @@ import io.vertx.groovy.core.http.HttpServer
 import io.vertx.groovy.core.http.HttpServerResponse
 import io.vertx.groovy.ext.web.Router
 import io.vertx.groovy.ext.web.RoutingContext
+import io.vertx.groovy.ext.web.handler.BodyHandler
 import io.vertx.groovy.ext.web.handler.CorsHandler
 import io.vertx.lang.groovy.GroovyVerticle
+import org.apache.commons.lang3.StringUtils
 
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.vertx.jackson.Jacksons.json
@@ -35,6 +37,7 @@ import static io.vertx.core.http.HttpMethod.GET
 import static io.vertx.core.http.HttpMethod.OPTIONS
 import static io.vertx.core.http.HttpMethod.POST
 import static io.vertx.groovy.ext.web.Router.router
+import static org.apache.commons.lang3.StringUtils.isNotBlank
 
 abstract class BaseRestApiVerticle extends GroovyVerticle {
 
@@ -55,10 +58,11 @@ abstract class BaseRestApiVerticle extends GroovyVerticle {
             router = router(vertx)
 
             router.route().handler(new HttpExchangeInterceptorHandler())
-
             router.route().handler(CorsHandler.create('*').
                     allowedMethod(OPTIONS).allowedMethod(GET).allowedMethod(POST).allowedMethod(DELETE).
                     allowedHeaders(['Origin', 'Accept', 'X-Requested-With', 'Content-Type', 'Access-Control-Request-Method', 'Access-Control-Request-Headers', 'Authorization'].toSet()))
+
+            router.route().handler(BodyHandler.create())
 
             http.requestHandler(router.&accept).listen(intProperty(PROPERTY_REST_API_PORT, 15000))
 
@@ -78,12 +82,17 @@ abstract class BaseRestApiVerticle extends GroovyVerticle {
         def route = router.route(uri)
         method.each { route.method(it) }
         route.handler { rc ->
-            String parameter = null
+            def message = null
             if(rc.request().params().size() == 1) {
                 def parameterName = rc.request().params().names().first()
-                parameter = rc.request().getParam(parameterName)
+                message = rc.request().getParam(parameterName)
+            } else if(isNotBlank(rc.bodyAsString)) {
+                def jsonBody = rc.bodyAsJson
+                if(jsonBody != null) {
+                    message = jsonBody
+                }
             }
-            vertx.eventBus().send(channel, parameter, { result -> jsonResponse(rc, result) })
+            vertx.eventBus().send(channel, message, { result -> jsonResponse(rc, result) })
         }
     }
 

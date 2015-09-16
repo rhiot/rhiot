@@ -18,18 +18,16 @@ package io.rhiot.cloudlets.device.verticles
 
 import io.rhiot.cloudlets.device.DeviceCloudlet
 import io.rhiot.vertx.web.BaseRestApiVerticle
-import io.vertx.core.Handler
-import io.vertx.groovy.core.buffer.Buffer
 
 import static com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail.allDeviceDetails
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_DEREGISTER
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_DISCONNECTED
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICES_LIST
+import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_CREATE_VIRTUAL
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_DEREGISTER
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_DETAILS
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_GET
 import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.CHANNEL_DEVICE_HEARTBEAT_SEND
-import static io.vertx.core.http.HttpMethod.POST
 
 class DeviceRestApiVerticle extends BaseRestApiVerticle {
 
@@ -45,14 +43,7 @@ class DeviceRestApiVerticle extends BaseRestApiVerticle {
             allDeviceDetails().parallelStream().each { details ->
                 get("/device/:deviceId/${details.metric()}", "client.${details.metric()}")
             }
-            router.route('/device').method(POST).handler { rc ->
-                rc.request().bodyHandler(new Handler<Buffer>() {
-                    @Override
-                    void handle(Buffer event) {
-                        vertx.eventBus().send('clients.create.virtual', event.toString('utf-8'), { status -> jsonResponse(rc, status) })
-                    }
-                })
-            }
+            post('/device', CHANNEL_DEVICE_CREATE_VIRTUAL)
 
             DeviceCloudlet.@isStarted.countDown()
         }
