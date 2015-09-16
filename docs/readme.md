@@ -944,7 +944,7 @@ interface to your classpath...
     import io.rhiot.vertx.web.HttpExchangeInterceptor
     import io.vertx.groovy.ext.web.RoutingContext
 
-    class MockHttpExchangeInterceptor implements HttpExchangeInterceptor {
+    public class MockHttpExchangeInterceptor implements HttpExchangeInterceptor {
 
         @Override
         public void intercept(RoutingContext routingContext) {
@@ -963,7 +963,7 @@ above the base package could be set as follows:
 
 #### Device management web UI
 
-Rhiot Cloudlet Console comes with the web interface on the top of the device management REST API. The web UI makes it easier
+Rhiot Cloudlet Console is the web user interface on the top of the device management REST API. The web UI makes it easier
 to monitor and manage your devices using the web brower, the mobile phone or the tablet.
 
 ##### Listing devices
@@ -980,6 +980,31 @@ In order to send heartbeat message to the given device and make it visible as co
 `Send heartbeat` button near the device's' icon.
 
 <img src="images/console-device-heartbeat.png" align="center" height="400" hspace="30">
+
+##### Deregistering devices
+
+If you would like deregister the device from the cloud, click the `Deregister` button near the device icon.
+
+##### Listing device details
+
+If you click on the device name, the web UI will fetch and display the device details metrics:
+
+<img src="images/console-device-details.png" align="center" height="400" hspace="30">
+
+##### Creating virtual devices
+
+If you don't have any devices nearby at the moment and still want to play with the Device management Cloudlet, dont't
+worry. You can still create the new virtual device using the web UI.
+
+<img src="images/console-device-prompt.png" align="center" height="400" hspace="30">
+
+All you need to do is to enter the unique identifier of the device:
+
+<img src="images/console-device-create.png" align="center" height="400" hspace="30">
+
+The device will be registered in the Rhiot Cloud and visibile as soon as you click the `Create virtual device` button.
+
+<img src="images/console-device-created.png" align="center" height="400" hspace="30">
 
 #### Accessing LWM2M server directly
 
