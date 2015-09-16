@@ -16,7 +16,6 @@
  */
 package io.rhiot.cloudlets.device
 
-import io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle
 import io.rhiot.mongodb.EmbeddedMongo
 import org.junit.Assert
 import org.junit.BeforeClass
@@ -29,7 +28,6 @@ import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.UNKNOWN_D
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
-import static java.util.UUID.randomUUID
 
 class DeviceCloudletTest extends Assert {
 
@@ -57,7 +55,6 @@ class DeviceCloudletTest extends Assert {
         setIntProperty('api_rest_port', restApiPort)
         setIntProperty('disconnectionPeriod', 5000)
         setIntProperty('lwm2m_port', lwm2mPort)
-
         new DeviceCloudlet().start().waitFor()
     }
 
@@ -178,7 +175,7 @@ class DeviceCloudletTest extends Assert {
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
 
         // When
-        def manufacturer = rest.getForObject(new URI("http://localhost:${restApiPort}/device/${deviceId}/manufacturer"), Map.class)
+        def manufacturer = rest.getForObject("${apiBase}/device/${deviceId}/manufacturer", Map.class)
 
         // Then
         assertThat(manufacturer.manufacturer).isEqualTo('Generic manufacturer')
