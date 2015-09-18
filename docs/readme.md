@@ -993,7 +993,7 @@ If you click on the device name, the web UI will fetch and display the device de
 
 ##### Creating virtual devices
 
-If you don't have any devices nearby at the moment and still want to play with the Device management Cloudlet, dont't
+If you don't have any devices nearby at the moment and still want to play with the Device management Cloudlet, don't
 worry - you can still create the new virtual device using the web UI.
 
 <img src="images/console-device-prompt.png" align="center" height="400" hspace="30" >
