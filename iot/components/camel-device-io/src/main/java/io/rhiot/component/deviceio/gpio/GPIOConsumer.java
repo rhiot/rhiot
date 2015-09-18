@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.camellabs.component.deviceio.gpio;
+package io.rhiot.component.deviceio.gpio;
 
 import jdk.dio.gpio.GPIOPin;
 import jdk.dio.gpio.PinEvent;
@@ -23,7 +23,7 @@ import jdk.dio.gpio.PinListener;
 import jdk.dio.gpio.PortEvent;
 import jdk.dio.gpio.PortListener;
 
-import com.github.camellabs.component.deviceio.DeviceIOConstants;
+import io.rhiot.component.deviceio.DeviceIOConstants;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.camellabs.component.deviceio.gpio;
+package io.rhiot.component.deviceio.gpio;
 
 public enum GPIOAction {
     TOGGLE, HIGH, LOW

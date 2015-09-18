@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.camellabs.component.deviceio.gpio;
+package io.rhiot.component.deviceio.gpio;
 
 import java.lang.reflect.Field;
 import java.util.regex.Matcher;
@@ -26,7 +26,7 @@ import jdk.dio.DeviceManager;
 import jdk.dio.gpio.GPIOPin;
 import jdk.dio.gpio.GPIOPinConfig;
 
-import com.github.camellabs.component.deviceio.DeviceIOConstants;
+import io.rhiot.component.deviceio.DeviceIOConstants;
 
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;

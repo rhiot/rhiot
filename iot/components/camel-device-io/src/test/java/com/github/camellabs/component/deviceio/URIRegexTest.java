@@ -19,6 +19,7 @@ package com.github.camellabs.component.deviceio;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.rhiot.component.deviceio.DeviceIOConstants;
 import org.junit.Assert;
 import org.junit.Test;
 

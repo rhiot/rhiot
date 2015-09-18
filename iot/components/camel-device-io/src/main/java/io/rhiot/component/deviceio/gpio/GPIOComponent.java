@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package com.github.camellabs.component.deviceio.gpio;
+package io.rhiot.component.deviceio.gpio;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.github.camellabs.component.deviceio.DeviceIOConstants;
+import io.rhiot.component.deviceio.DeviceIOConstants;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
