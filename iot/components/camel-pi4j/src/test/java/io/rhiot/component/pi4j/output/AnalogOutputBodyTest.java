@@ -14,48 +14,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub;
+package io.rhiot.component.pi4j.output;
+
+import io.rhiot.component.pi4j.mock.RaspiGpioProviderMock;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.RaspiPin;
 
 import org.apache.camel.EndpointInject;
+import org.apache.camel.Produce;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Test;
 
-public class PubNubComponentTest extends CamelTestSupport {
-    private String endpoint = "pubnub:pubsub:someChannel?pubnub=#pubnub";
+public class AnalogOutputBodyTest extends CamelTestSupport {
+
+    public static final RaspiGpioProviderMock MOCK_RASPI = new RaspiGpioProviderMock();
+    public static final int INT_RESULT = 121;
+    public static final double DOUBLE_RESULT = 64.3;
 
     @EndpointInject(uri = "mock:result")
-    private MockEndpoint mockResult;
+    protected MockEndpoint resultEndpoint;
 
-    @Override
-    protected JndiRegistry createRegistry() throws Exception {
-        JndiRegistry registry = super.createRegistry();
-        registry.bind("pubnub", new PubNubMock("dummy", "dummy"));
-        return registry;
+    @Produce(uri = "direct:start")
+    protected ProducerTemplate template;
+
+    static {
+        // Mandatory we are not inside a Real Raspberry PI
+        GpioFactory.setDefaultProvider(MOCK_RASPI);
     }
 
     @Test
-    public void testPubNub() throws Exception {
-        mockResult.expectedMessageCount(1);
-        mockResult.expectedHeaderReceived("CamelPubNubChannel", "someChannel");
-        mockResult.expectedBodiesReceived("{\"hi\":\"there\"}");
-        JSONObject jo = new JSONObject();
-        jo.put("hi", "there");
-        template.sendBody("direct:publish", jo);
+    public void produceAnalogOutputBodyTest() throws Exception {
+
+        resultEndpoint.expectedMessageCount(1);
+
+        template.sendBody(INT_RESULT);
+
         assertMockEndpointsSatisfied();
+
+        Assert.assertEquals(INT_RESULT, MOCK_RASPI.getPwm(RaspiPin.GPIO_01), 0);
+        Assert.assertEquals(DOUBLE_RESULT, MOCK_RASPI.getValue(RaspiPin.GPIO_07), 0);
     }
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from(endpoint).to("mock:result");
-                from("direct:publish").to(endpoint);
+                from("direct:start").id("rbpi-route").to("pi4j-gpio://1?mode=PWM_OUTPUT").transform().simple("64.3").to("pi4j-gpio://7?mode=ANALOG_OUTPUT")
+                    .to("mock:result");
             }
         };
     }
-
 }
