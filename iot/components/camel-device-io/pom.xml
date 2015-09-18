@@ -27,8 +27,7 @@
 		<commons-cli-version>1.2</commons-cli-version>
 
 		<camel.osgi.export.pkg>
-			com.github.camellabs.component.deviceio.*,
-			com.github.camellabs.component.deviceio.converter.*
+			io.rhiot.component.deviceio.*
 		</camel.osgi.export.pkg>
 		<camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=deviceio</camel.osgi.export.service>
 	</properties>
@@ -56,18 +55,18 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- testing -->
+
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
     <repositories>
