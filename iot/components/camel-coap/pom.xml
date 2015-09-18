@@ -24,10 +24,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<camel.osgi.export.pkg>
-			com.github.camellabs.component.coap.component.coap.*,
-			com.github.camellabs.component.coap.component.coap.converter.*
+			io.rhiot.component.coap.component.coap.*
 		</camel.osgi.export.pkg>
-		<camel.osgi.export.service>org.apache.camel.coap.ComponentResolver;component=coap</camel.osgi.export.service>
+		<camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=coap</camel.osgi.export.service>
 
 	</properties>
 
