@@ -28,8 +28,8 @@ import java.util.List;
 
 import static com.github.camellabs.iot.cloudlet.sdk.Discoveries.discoverServiceUrl;
 import static com.github.camellabs.iot.cloudlet.sdk.RestTemplates.defaultRestTemplate;
-import static com.github.camellabs.iot.utils.Reflections.classOfArrayOfClass;
-import static com.github.camellabs.iot.utils.Reflections.writeField;
+import static io.rhiot.utils.Reflections.classOfArrayOfClass;
+import static io.rhiot.utils.Reflections.writeField;
 import static java.lang.String.format;
 import static com.github.camellabs.iot.cloudlet.document.sdk.Pojos.pojoClassToCollection;
 

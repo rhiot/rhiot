@@ -13,8 +13,8 @@
  # See the License for the specific language governing permissions and
  # limitations under the License.
 
-camel.labs.iot.cloudlet.document.driver.mongodb.db: cloudlet_geofencing
+cloudlet.document.driver.mongodb.db: cloudlet_geofencing
 server.port: 15099
 spring:
-  data.mongodb.database: ${camel.labs.iot.cloudlet.document.driver.mongodb.db}
+  data.mongodb.database: ${cloudlet.document.driver.mongodb.db}
   main.sources: com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet

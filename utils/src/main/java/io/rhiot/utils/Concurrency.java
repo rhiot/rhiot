@@ -16,7 +16,7 @@
  */
 package io.rhiot.utils;
 
-import static com.github.camellabs.iot.utils.Reflections.runMain;
+import static io.rhiot.utils.Reflections.runMain;
 
 public final class Concurrency {
 

@@ -355,7 +355,7 @@ not on the server side of the IoT solution.
 
 Process manager is used by the BU353 component to execute Linux commands responsible for starting GPSD daemon or
 configuring the GPS receive to provide GPS coordinates in the NMEA mode. If for some reason you would like to change
-the default implementation of the process manager used by Camel (i.e. `com.github.camellabs.iot.utils.process.DefaultProcessManager`),
+the default implementation of the process manager used by Camel (i.e. `io.rhiot.utils.process.DefaultProcessManager`),
 you can set it on the component level:
 
     GpsBu353Component bu353 = new GpsBu353Component();

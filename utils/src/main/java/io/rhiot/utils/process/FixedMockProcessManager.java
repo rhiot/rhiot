@@ -14,15 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.utils.process;
+package io.rhiot.utils.process;
 
 import java.util.List;
 
-/**
- * Executes and manages system processes.
- */
-public interface ProcessManager {
+import static java.util.Arrays.asList;
 
-    List<String> executeAndJoinOutput(String... command);
+public class FixedMockProcessManager implements ProcessManager {
+
+    private final List<String> result;
+
+    public FixedMockProcessManager(String... result) {
+        this.result = asList(result);
+    }
+
+    @Override
+    public List<String> executeAndJoinOutput(String... command) {
+        return result;
+    }
 
 }

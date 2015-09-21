@@ -67,7 +67,7 @@ public class GpsCloudletSyncTest extends Assert {
 
         // Geofencing cloudlet fixtures
         dbName = "test";
-        setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.db", dbName);
+        setProperty("cloudlet.document.driver.mongodb.db", dbName);
         setBooleanProperty("camel.labs.iot.cloudlet.document.driver.mongodb.embedded", true);
         setIntProperty("camel.labs.iot.cloudlet.rest.port", geofencingApiPort);
 

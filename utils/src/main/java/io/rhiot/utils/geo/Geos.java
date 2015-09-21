@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.utils.geo;
+package io.rhiot.utils.geo;
 
 import org.slf4j.Logger;
 

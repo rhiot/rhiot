@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-import static com.github.camellabs.iot.utils.geo.Geos.convertDdmCoordinatesToDecimal;
+import static io.rhiot.utils.geo.Geos.convertDdmCoordinatesToDecimal;
 import static java.lang.Double.parseDouble;
 import static java.lang.Long.parseLong;
 import static java.lang.String.format;

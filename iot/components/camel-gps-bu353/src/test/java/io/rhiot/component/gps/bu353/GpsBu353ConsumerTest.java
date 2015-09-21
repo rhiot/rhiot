@@ -16,9 +16,7 @@
  */
 package io.rhiot.component.gps.bu353;
 
-import com.github.camellabs.iot.utils.process.FixedMockProcessManager;
-import io.rhiot.component.gps.bu353.ClientGpsCoordinates;
-import io.rhiot.component.gps.bu353.MockGpsCoordinatesSource;
+import io.rhiot.utils.process.FixedMockProcessManager;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;

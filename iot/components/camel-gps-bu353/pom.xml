@@ -22,7 +22,7 @@
     </licenses>
 
     <properties>
-        <camel.osgi.export.pkg>com.github.camellabs.iot.component.gps.bu353</camel.osgi.export.pkg>
+        <camel.osgi.export.pkg>io.rhiot.component.gps.bu353</camel.osgi.export.pkg>
         <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=gps-bu353</camel.osgi.export.service>
     </properties>
 

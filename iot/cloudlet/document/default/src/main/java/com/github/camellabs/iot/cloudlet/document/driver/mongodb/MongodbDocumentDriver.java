@@ -52,7 +52,7 @@ public class MongodbDocumentDriver implements DocumentDriver {
     private final BsonMapper bsonMapper;
 
     @Autowired
-    public MongodbDocumentDriver(@Value("${camel.labs.iot.cloudlet.document.driver.mongodb.db}") String documentsDbName,
+    public MongodbDocumentDriver(@Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName,
                                  ProducerTemplate producerTemplate,
                                  BsonMapper bsonMapper) {
         this.documentsDbName = documentsDbName;

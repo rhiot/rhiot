@@ -13,9 +13,9 @@
  # See the License for the specific language governing permissions and
  # limitations under the License.
 
-camel.labs.iot.cloudlet.document.driver.mongodb.db: cloudlet_document
+cloudlet.document.driver.mongodb.db: cloudlet_document
 server.port: 15000
 spring:
-  data.mongodb.database: ${camel.labs.iot.cloudlet.document.driver.mongodb.db}
+  data.mongodb.database: ${cloudlet.document.driver.mongodb.db}
   groovy.template.check-template-location: false
   main.sources: com.github.camellabs.iot.cloudlet.document.driver.DriverDocumentCloudlet

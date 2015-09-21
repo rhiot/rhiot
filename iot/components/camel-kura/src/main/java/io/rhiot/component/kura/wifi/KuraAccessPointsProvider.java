@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.github.camellabs.iot.utils.Reflections.writeField;
+import static io.rhiot.utils.Reflections.writeField;
 
 /**
  * Access point provider using the Kura NetworkService to scan the WiFi networks.

@@ -16,8 +16,8 @@
  */
 package io.rhiot.component.gps.bu353;
 
-import com.github.camellabs.iot.utils.process.DefaultProcessManager;
-import com.github.camellabs.iot.utils.process.ProcessManager;
+import io.rhiot.utils.process.DefaultProcessManager;
+import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
 import org.slf4j.Logger;
