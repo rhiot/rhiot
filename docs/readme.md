@@ -171,12 +171,12 @@ number of the rate miliseconds. The snippet below demonstrates how to change the
     export camellabs_iot_gateway_heartbeat_rate=10000
     
 The heartbeat events are broadcasted to the Vert.x event bus address `heartbeat` (
-`com.github.camellabs.iot.gateway.CamelIotGatewayConstants.BUS_HEARTBEAT` constant).
+`io.rhiot.gateway.CamelIotGatewayConstants.BUS_HEARTBEAT` constant).
 
 #### Logging heartbeat
 
 By default Camel gateway sends the heartbeat event to the application log (at the `INFO` level). Logging heartbeats are
-useful when verifying that gateway is still running - you can just take a look into the application log files. The name of the logger is `com.github.camellabs.iot.gateway.heartbeat.LoggingHeartbeatVerticle`
+useful when verifying that gateway is still running - you can just take a look into the application log files. The name of the logger is `io.rhiot.gateway.heartbeat.LoggingHeartbeatVerticle`
 and the message is `Ping!`.
 
 #### MQTT heartbeat
@@ -274,7 +274,7 @@ within the given JVM, extend the `com.github.camellabs.iot.vertx.camel.GroovyCam
 
     }
 
-Rhiot gateway scans the classpath for the verticle classes marked with the `com.github.camellabs.iot.gateway.GatewayVerticle`
+Rhiot gateway scans the classpath for the verticle classes marked with the `io.rhiot.gateway.GatewayVerticle`
 annotation. All those verticles are automatically loaded into the Vert.x backbone.
 
 As you can see in the example above you can read the messages from the event bus and forward these to your Camel

@@ -20,7 +20,7 @@
     </licenses>
 
     <properties>
-        <fatjar.mainClass>com.github.camellabs.iot.gateway.Gateway</fatjar.mainClass>
+        <fatjar.mainClass>io.rhiot.gateway.Gateway</fatjar.mainClass>
     </properties>
 
     <dependencies>

@@ -17,6 +17,7 @@
 package com.github.camellabs.iot.gateway;
 
 import com.github.camellabs.iot.vertx.camel.CamelContextFactories;
+import io.rhiot.gateway.Gateway;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.ConsumerTemplate;
 import org.junit.Assert;
