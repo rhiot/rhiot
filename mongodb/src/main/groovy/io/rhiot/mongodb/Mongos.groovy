@@ -16,20 +16,35 @@
  */
 package io.rhiot.mongodb
 
-import com.mongodb.Mongo
+import com.mongodb.MongoClient
+import com.mongodb.MongoClientOptions
+import com.mongodb.ServerAddress
 
 import static io.rhiot.utils.Networks.serviceHost
 import static io.rhiot.utils.Networks.servicePort
+import static io.rhiot.utils.Properties.intProperty
+import static java.util.concurrent.TimeUnit.SECONDS
+import static org.slf4j.LoggerFactory.getLogger
 
 final class Mongos {
+
+    private static final def LOG = getLogger(Mongos.class)
 
     static final def MONGODB_SERVICE = 'mongodb'
 
     private Mongos() {
     }
 
-    static Mongo discoverMongo() {
-        new Mongo(serviceHost(MONGODB_SERVICE), servicePort(MONGODB_SERVICE, 27017))
+    static MongoClient discoverMongo() {
+        LOG.info('Started to discover MongoDB client.')
+        def server = new ServerAddress(serviceHost(MONGODB_SERVICE), servicePort(MONGODB_SERVICE, 27017))
+        LOG.info('Detected the following MongoDB client connection settings - {}:{}.', server.host, server.port)
+
+        def clientOptions = new MongoClientOptions.Builder()
+        def connectTimeout = intProperty("${MONGODB_SERVICE.toUpperCase()}_CONNECT_TIMEOUT", (int) SECONDS.toMillis(1))
+        clientOptions.connectTimeout(connectTimeout)
+
+        new MongoClient(server, clientOptions.build())
     }
 
 }
