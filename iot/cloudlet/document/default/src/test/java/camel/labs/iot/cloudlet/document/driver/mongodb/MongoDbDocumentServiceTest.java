@@ -20,6 +20,7 @@ import com.github.camellabs.iot.cloudlet.document.driver.DriverDocumentCloudlet;
 import com.github.camellabs.iot.cloudlet.document.sdk.DocumentService;
 import com.github.camellabs.iot.cloudlet.document.sdk.QueryBuilder;
 import com.github.camellabs.iot.cloudlet.document.sdk.RestDocumentService;
+import io.rhiot.mongodb.EmbeddedMongo;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.netty4.http.NettyHttpEndpoint;
@@ -37,7 +38,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import spring.boot.EmbedMongoConfiguration;
 import camel.labs.iot.cloudlet.document.driver.mongodb.Invoice.Address;
 
 import java.net.UnknownHostException;
@@ -51,9 +51,11 @@ import static org.joda.time.DateTime.now;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {EmbedMongoConfiguration.class, DriverDocumentCloudlet.class, MongoDocumentServiceTestConfiguration.class})
+@SpringApplicationConfiguration(classes = {DriverDocumentCloudlet.class, MongoDocumentServiceTestConfiguration.class})
 @IntegrationTest("camel.labs.iot.cloudlet.rest.endpoint.options=connectTimeout=20000:requestTimeout=1000")
 public class MongoDbDocumentServiceTest extends Assert {
+
+    static EmbeddedMongo embeddedMongo = new EmbeddedMongo();
 
     @Autowired
     CamelContext camelContext;
@@ -72,7 +74,7 @@ public class MongoDbDocumentServiceTest extends Assert {
         System.setProperty("camel.labs.iot.cloudlet.rest.port", findAvailableTcpPort() + "");
 
         System.setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.springbootconfig", TRUE.toString());
-        System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
+        System.setProperty("spring.data.mongodb.port", embeddedMongo.port() + "");
     }
 
     @Before
