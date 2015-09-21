@@ -27,6 +27,22 @@ public class LedCharacterFactory {
     private static boolean O = false, X = true;
     
     static {
+        characters.put(' ', new LedCharacter(new boolean[][] {
+            {O,O,O},
+            {O,O,O},
+            {O,O,O},
+            {O,O,O},
+            {O,O,O}
+        }));
+        
+        characters.put('0', new LedCharacter(new boolean[][] {
+            {X,X,X},
+            {X,O,X},
+            {X,O,X},
+            {X,O,X},
+            {X,X,X}
+        }));
+       
        characters.put('1', new LedCharacter(new boolean[][] {
             {O,X,O},
             {X,X,O},
@@ -78,9 +94,9 @@ public class LedCharacterFactory {
        characters.put('7', new LedCharacter(new boolean[][] {
            {X,X,X},
            {O,O,X},
-           {O,X,X},
-           {O,O,X},
-           {O,O,X}
+           {O,X,O},
+           {X,O,O},
+           {X,O,O}
        }));
        
        characters.put('8', new LedCharacter(new boolean[][] {
@@ -99,13 +115,7 @@ public class LedCharacterFactory {
            {X,X,X}
        }));
        
-       characters.put('0', new LedCharacter(new boolean[][] {
-           {X,X,X},
-           {X,O,X},
-           {X,O,X},
-           {X,O,X},
-           {X,X,X}
-       }));
+       
        
        
         
@@ -132,6 +142,216 @@ public class LedCharacterFactory {
             {X,O,O},
             {X,X,X}
         }));
+        
+        characters.put('D', new LedCharacter(new boolean[][] {
+            {X,X,O},
+            {X,O,X},
+            {X,O,X},
+            {X,O,X},
+            {X,X,O}
+        }));
+        
+        characters.put('E', new LedCharacter(new boolean[][] {
+            {X,X,O},
+            {X,O,X},
+            {X,O,X},
+            {X,O,X},
+            {X,X,O}
+        }));
+        
+        characters.put('F', new LedCharacter(new boolean[][] {
+            {X,X,X},
+            {X,O,O},
+            {X,X,X},
+            {X,O,O},
+            {X,O,O}
+        }));
+        
+        characters.put('G', new LedCharacter(new boolean[][] {
+            {X,X,X},
+            {X,O,X},
+            {X,X,X},
+            {O,O,X},
+            {X,X,X}
+        }));
+        
+        characters.put('H', new LedCharacter(new boolean[][] {
+            {X,O,X},
+            {X,O,X},
+            {X,X,X},
+            {X,O,X},
+            {X,O,X}
+        }));
+        
+        characters.put('I', new LedCharacter(new boolean[][] {
+            {O,X,O},
+            {O,X,O},
+            {O,X,O},
+            {O,X,O},
+            {O,X,O}
+        }));
+        
+        characters.put('J', new LedCharacter(new boolean[][] {
+            {X,X,X},
+            {O,O,X},
+            {O,O,X},
+            {X,O,X},
+            {O,X,O}
+        }));
+        
+        characters.put('K', new LedCharacter(new boolean[][] {
+            {X,O,X},
+            {X,O,X},
+            {X,X,O},
+            {X,O,X},
+            {X,O,X}
+        }));
+        
+        characters.put('L', new LedCharacter(new boolean[][] {
+            {X,O,O},
+            {X,O,O},
+            {X,O,O},
+            {X,O,O},
+            {X,X,X}
+        }));
+        
+        characters.put('M', new LedCharacter(new boolean[][] {
+            {X,O,X},
+            {X,X,X},
+            {X,X,X},
+            {X,O,X},
+            {X,O,X}
+        }));
+        
+        characters.put('N', new LedCharacter(new boolean[][] {
+            {X,X,X},
+            {X,O,X},
+            {X,O,X},
+            {X,O,X},
+            {X,O,X}
+        }));
+        
+        characters.put('O', new LedCharacter(new boolean[][] {
+            {O,X,O},
+            {X,O,X},
+            {X,O,X},
+            {X,O,X},
+            {O,X,O}
+        }));
+        
+        characters.put('P', new LedCharacter(new boolean[][] {
+            {X,X,O},
+            {X,O,X},
+            {X,X,O},
+            {X,O,O},
+            {X,O,O}
+        }));
+        
+        characters.put('Q', new LedCharacter(new boolean[][] {
+            {O,X,X},
+            {X,O,X},
+            {O,X,X},
+            {O,O,X},
+            {O,O,X}
+        }));
+        
+        characters.put('R', new LedCharacter(new boolean[][] {
+            {X,X,O},
+            {X,O,X},
+            {X,X,O},
+            {X,X,O},
+            {X,O,X}
+        }));
+        
+        characters.put('S', new LedCharacter(new boolean[][] {
+            {X,X,X},
+            {X,O,O},
+            {O,X,O},
+            {O,O,X},
+            {X,X,X}
+        }));
+        
+        characters.put('T', new LedCharacter(new boolean[][] {
+            {X,X,X},
+            {O,X,O},
+            {O,X,O},
+            {O,X,O},
+            {O,X,O}
+        }));
+        
+        characters.put('U', new LedCharacter(new boolean[][] {
+            {X,O,X},
+            {X,O,X},
+            {X,O,X},
+            {X,O,X},
+            {X,X,X}
+        }));
+        
+        characters.put('V', new LedCharacter(new boolean[][] {
+            {X,O,X},
+            {X,O,X},
+            {X,O,X},
+            {X,O,X},
+            {O,X,O}
+        }));
+        
+        characters.put('W', new LedCharacter(new boolean[][] {
+            {X,O,X},
+            {X,O,X},
+            {X,O,X},
+            {X,X,X},
+            {X,O,X}
+        }));
+        
+        characters.put('X', new LedCharacter(new boolean[][] {
+            {X,O,X},
+            {X,O,X},
+            {O,X,O},
+            {X,O,X},
+            {X,O,X}
+        }));
+        
+        characters.put('Y', new LedCharacter(new boolean[][] {
+            {X,O,X},
+            {X,O,X},
+            {X,X,X},
+            {O,X,O},
+            {O,X,O}
+        }));
+        
+        characters.put('Z', new LedCharacter(new boolean[][] {
+            {X,X,X},
+            {O,O,X},
+            {O,X,O},
+            {X,O,O},
+            {X,X,X}
+        }));
+        
+        
+        characters.put('.', new LedCharacter(new boolean[][] {
+            {O,O,O},
+            {O,O,O},
+            {O,O,O},
+            {O,O,O},
+            {X,O,O}
+        }));
+        
+        characters.put('?', new LedCharacter(new boolean[][] {
+            {X,X,X},
+            {O,O,X},
+            {O,X,O},
+            {O,O,O},
+            {O,X,O}
+        }));
+        
+        characters.put('!', new LedCharacter(new boolean[][] {
+            {O,X,O},
+            {O,X,O},
+            {O,X,O},
+            {O,O,O},
+            {O,X,O}
+        }));
+        
     }
     
     public static LedCharacter getCharacter(char character) {
