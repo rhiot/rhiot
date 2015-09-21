@@ -25,6 +25,7 @@ import java.net.Inet4Address;
 import java.util.List;
 
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 public class RpiDetectorTest extends Assert {
 
@@ -34,7 +35,7 @@ public class RpiDetectorTest extends Assert {
     public void shouldReachDevice() throws IOException {
         // Given
         List<Inet4Address> addresses = detector.detectReachableAddresses();
-        assumeFalse("The test should be executed only when the proper network interfaces are available.",
+        assumeFalse("This test should be executed only when the proper network interfaces are available.",
                 addresses.isEmpty());
 
         // When
@@ -47,6 +48,9 @@ public class RpiDetectorTest extends Assert {
     @Test
     public void shouldNotReachPiDevice() {
         List addresses = detector.detectDevices();
+        assumeTrue("This test should be executed only when there is not Raspberry Pi device connected to the network.",
+                addresses.isEmpty());
+
         assertEquals(0, addresses.size());
     }
 
