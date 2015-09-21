@@ -24,6 +24,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext;
 import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.mockEndpoint;
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -34,8 +36,9 @@ public class CustomJavaCamelVerticleTest {
     static Gateway gateway = new Gateway();
 
     @BeforeClass
-    public static void beforeClass() {
+    public static void beforeClass() throws InterruptedException {
         gateway.start();
+        TimeUnit.SECONDS.sleep(30);
     }
 
     @AfterClass
