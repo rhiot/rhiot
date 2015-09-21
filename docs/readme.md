@@ -19,7 +19,7 @@ Rhiot comes with the following features:
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Camel IoT gateway](#camel-iot-gateway)
+- [Rhiot IoT gateway](#rhiot-iot-gateway)
   - [Installing gateway on the Raspbian](#installing-gateway-on-the-raspbian)
   - [Configuration of the gateway](#configuration-of-the-gateway)
   - [Gateway logger configuration](#gateway-logger-configuration)
@@ -85,6 +85,9 @@ Rhiot comes with the following features:
     - [Device management web UI](#device-management-web-ui)
       - [Listing devices](#listing-devices-1)
       - [Sending heartbeat to the device](#sending-heartbeat-to-the-device)
+      - [Deregistering devices](#deregistering-devices)
+      - [Listing device details](#listing-device-details)
+      - [Creating virtual devices](#creating-virtual-devices-1)
     - [Accessing LWM2M server directly](#accessing-lwm2m-server-directly)
     - [Device registry](#device-registry)
       - [Registry cache](#registry-cache)
@@ -103,7 +106,7 @@ Rhiot comes with the following features:
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Camel IoT gateway
+## Rhiot IoT gateway
 
 Camel IoT gateway is the small fat jar application that can be installed into the field device. Gateway acts as a bridge
 between the sensors and the data center. Under the hood, Camel IoT gateway is the fat jat running
