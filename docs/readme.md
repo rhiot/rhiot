@@ -102,6 +102,8 @@ Rhiot comes with the following features:
   - [Analysis of the selected tests results](#analysis-of-the-selected-tests-results)
     - [Mock sensor to the external MQTT broker](#mock-sensor-to-the-external-mqtt-broker)
     - [Sample results for the RPI2 hardware kit](#sample-results-for-the-rpi2-hardware-kit)
+- [Steroids configuration framework](#steroids-configuration-framework)
+  - [Injecting MongoDB client](#injecting-mongodb-client)
 - [Articles, presentations & videos](#articles-presentations-&-videos)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -1164,6 +1166,45 @@ MQTT client is really great. As the majority of the gateway solutions can safely
 from the field to the data center (as losing the single message from the stream of the sensors data, is definitely acceptable).
 Almost 1800 messages per second for QOS 0 and around 500 messages per second for the highest QOS 2 is really good result
 considering the class of the Raspberry Pi 2 hardware.
+
+## Steroids configuration framework
+
+Under the hood Rhiot uses the *steroids* configuration framework. Steroids is the small framework developed as the part
+of the Rhiot in order to provide the simple, yet extensible base for the dependency injection and configuration.
+
+The key principles behind the steroids are:
+* promote singleton usage
+* promote configuration via environment variables and system properties
+* promote [Kubernetes-like service discovery](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/services.md)
+* promote loading reloadable resources from the external sources (like files and databases)
+
+### Injecting MongoDB client
+
+Steroids come with the MongoDB module that can be used to simplify access to the MongoDB database. In order to take the
+advantage from it, import the `rhiot-mongodb` module into your project:
+
+    <dependency>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-mongodb</artifactId>
+        <version>0.1.1</version>
+    </dependency>
+
+In order to inject the MongoDb client into your code, use the `Mongos.discoverMongo()` method:
+
+    import io.rhiot.mongodb.Mongos;
+    ...
+    MongoClient mongo = Mongos.discoverMongo();
+
+If `MONGODB_SERVICE_HOST` environment variable (or system property) is not specified, the `Mongos` will try to connect to
+the `mongodb` and `localhost` hosts respectively, using default MongoDB port (`27017`) or the one specified by the `MONGODB_SERVICE_HOST`
+environment variable (or system property).
+
+By default MongoDB client will be configured to timeout the connection attempt after 1 second (yes, we like to fail fast).
+You can change timeout value by setting `MONGODB_CONNECT_TIMEOUT` the environment variable (or system property) to the desired number
+of timeout miliseconds. For example to set the connection timeout to 30 seconds you can use the following code:
+
+    System.setProperty("MONGODB_CONNECT_TIMEOUT", TimeUnit.SECONDS.toMillis(30) + "");
+    MongoClient mongo = Mongos.discoverMongo();
 
 ## Articles, presentations & videos
 
