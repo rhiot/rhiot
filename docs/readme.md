@@ -171,7 +171,7 @@ number of the rate miliseconds. The snippet below demonstrates how to change the
     export camellabs_iot_gateway_heartbeat_rate=10000
     
 The heartbeat events are broadcasted to the Vert.x event bus address `heartbeat` (
-`io.rhiot.gateway.CamelIotGatewayConstants.BUS_HEARTBEAT` constant).
+`io.rhiot.gateway.GatewayConstants.BUS_HEARTBEAT` constant).
 
 #### Logging heartbeat
 

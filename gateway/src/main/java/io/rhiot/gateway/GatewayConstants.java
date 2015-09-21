@@ -16,9 +16,11 @@
  */
 package io.rhiot.gateway;
 
-public final class CamelIotGatewayConstants {
+public final class GatewayConstants {
 
-    private CamelIotGatewayConstants() {
+    public static final String BUS_HEARTBEAT = "heartbeat";
+
+    private GatewayConstants() {
     }
 
 }
