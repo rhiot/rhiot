@@ -55,7 +55,7 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 @IntegrationTest("camel.labs.iot.cloudlet.rest.endpoint.options=connectTimeout=20000:requestTimeout=1000")
 public class MongoDbDocumentServiceTest extends Assert {
 
-    static EmbeddedMongo embeddedMongo = new EmbeddedMongo();
+    static EmbeddedMongo embeddedMongo = new EmbeddedMongo().start();
 
     @Autowired
     CamelContext camelContext;
