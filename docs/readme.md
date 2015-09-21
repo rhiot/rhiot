@@ -310,7 +310,7 @@ Camel GPS BU353 component can be used to read current GPS information from that 
 just connect the receiver to your computer's USB port and read the GPS data - the component
 will make sure that GPS daemon is up, running and
 switched to the [NMEA mode](http://www.gpsinformation.org/dale/nmea.htm). The component also takes care of parsing the
-NMEA data read from the serial port, so you can enjoy the `com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates`
+NMEA data read from the serial port, so you can enjoy the `io.rhiot.component.gps.bu353.ClientGpsCoordinates`
 instances received by your Camel routes.
 
 #### Maven dependency
@@ -335,7 +335,7 @@ Where `label` can be replaced with any text label:
     from("gps-bu353:current-position").
       to("file:///var/gps-coordinates");
       
-BU353 consumer receives the `com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates` instances:
+BU353 consumer receives the `io.rhiot.component.gps.bu353.ClientGpsCoordinates` instances:
 
     ClientGpsCoordinates currentPosition = consumerTemplate.receiveBody("gps-bu353:current-position", ClientGpsCoordinates.class);
 
@@ -349,7 +349,7 @@ not on the server side of the IoT solution.
 | `consumer.initialDelay`  | 1000                                                                          | Milliseconds before the polling starts. |
 | `consumer.delay`         | 5000 | Delay between each GPS scan. |
 | `consumer.useFixedDelay` | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
-| `coordinatesSource`   | `new SerialGpsCoordinatesSource()`                                               | reference to the`com.github.camellabs.iot.component.gps.bu353.GpsCoordinatesSource` instance used to read the current GPS coordinates. |
+| `coordinatesSource`   | `new SerialGpsCoordinatesSource()`                                               | reference to the`io.rhiot.component.gps.bu353.GpsCoordinatesSource` instance used to read the current GPS coordinates. |
 
 #### Process manager
 

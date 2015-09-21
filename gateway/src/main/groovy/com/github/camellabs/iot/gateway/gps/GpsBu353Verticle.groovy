@@ -16,7 +16,7 @@
  */
 package com.github.camellabs.iot.gateway.gps
 
-import com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates
+import io.rhiot.component.gps.bu353.ClientGpsCoordinates
 import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.builder.RouteBuilder

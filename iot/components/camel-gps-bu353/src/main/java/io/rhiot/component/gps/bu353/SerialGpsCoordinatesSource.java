@@ -14,15 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.component.gps.bu353;
+package io.rhiot.component.gps.bu353;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class MockGpsCoordinatesSource implements GpsCoordinatesSource {
+public class SerialGpsCoordinatesSource implements GpsCoordinatesSource {
 
     @Override
     public InputStream source() {
-        return getClass().getResourceAsStream("/coordinates.txt");
+        try {
+            return new FileInputStream("/dev/ttyUSB0");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

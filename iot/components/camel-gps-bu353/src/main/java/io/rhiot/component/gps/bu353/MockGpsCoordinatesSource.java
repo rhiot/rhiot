@@ -14,12 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.component.gps.bu353;
+package io.rhiot.component.gps.bu353;
 
 import java.io.InputStream;
 
-public interface GpsCoordinatesSource {
+public class MockGpsCoordinatesSource implements GpsCoordinatesSource {
 
-    InputStream source();
+    @Override
+    public InputStream source() {
+        return getClass().getResourceAsStream("/coordinates.txt");
+    }
 
 }

@@ -16,12 +16,12 @@
  */
 package com.github.camellabs.iot.gateway.gps
 
-import com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates
+import io.rhiot.component.gps.bu353.ClientGpsCoordinates
 import com.github.camellabs.iot.gateway.GatewayVerticle
 import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle;
 import org.apache.camel.builder.RouteBuilder;
 
-import static com.github.camellabs.iot.component.gps.bu353.ClientGpsCoordinates.deserialize
+import static ClientGpsCoordinates.deserialize
 import static io.rhiot.utils.Properties.stringProperty;
 import static org.apache.camel.Exchange.HTTP_METHOD;
 import static org.apache.camel.model.dataformat.JsonLibrary.Jackson;

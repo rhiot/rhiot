@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.component.gps.bu353;
+package io.rhiot.component.gps.bu353;
 
 public class SatelliteOutOfReachException extends RuntimeException {
 }

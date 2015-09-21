@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class=com.github.camellabs.iot.component.gps.bu353.GpsBu353Component
+class=io.rhiot.component.gps.bu353.GpsBu353Component

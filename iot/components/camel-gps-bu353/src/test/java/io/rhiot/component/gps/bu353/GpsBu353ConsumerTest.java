@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.component.gps.bu353;
+package io.rhiot.component.gps.bu353;
 
 import com.github.camellabs.iot.utils.process.FixedMockProcessManager;
+import io.rhiot.component.gps.bu353.ClientGpsCoordinates;
+import io.rhiot.component.gps.bu353.MockGpsCoordinatesSource;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
