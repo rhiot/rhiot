@@ -14,27 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer
+package io.rhiot.deployer
 
-public class Device {
+import io.rhiot.deployer.ConsoleInformation
+import io.rhiot.deployer.Deployer
+import io.rhiot.deployer.DeviceDetector
+import org.junit.Assert
+import org.junit.Test
 
-    public static final String DEVICE_RASPBERRY_PI_2 = "RaspberryPi2";
+import static org.mockito.Mockito.mock
 
-    private final InetAddress address;
+class DeployerTest extends Assert {
 
-    private final String type;
+    def deviceDetector = mock(DeviceDetector.class)
 
-    public Device(InetAddress address, String type) {
-        this.address = address;
-        this.type = type;
-    }
+    def deployer = new Deployer(deviceDetector, true)
 
-    public InetAddress address() {
-        return address;
-    }
-
-    public String type() {
-        return type;
+    @Test
+    void shouldDetectNoSupportedDevices() {
+        try {
+            deployer.deploy()
+        } catch (ConsoleInformation info) {
+            assertTrue(info.message.contains('No supported devices detected'))
+            return
+        }
+        fail()
     }
 
 }

@@ -20,7 +20,7 @@
     </licenses>
 
     <properties>
-        <fatjar.mainClass>com.github.camellabs.iot.deployer.Deployer</fatjar.mainClass>
+        <fatjar.mainClass>io.rhiot.deployer.Deployer</fatjar.mainClass>
         <docker.image.target>deploy-gateway</docker.image.target>
     </properties>
 

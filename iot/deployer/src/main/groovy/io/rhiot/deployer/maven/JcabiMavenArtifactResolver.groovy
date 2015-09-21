@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer.maven
+package io.rhiot.deployer.maven
 
 import com.jcabi.aether.Aether
 import org.sonatype.aether.repository.RemoteRepository

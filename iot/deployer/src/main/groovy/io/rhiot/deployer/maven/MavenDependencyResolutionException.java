@@ -14,31 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer.maven
+package io.rhiot.deployer.maven;
 
-import org.junit.Assert
-import org.junit.Test
+import org.sonatype.aether.resolution.DependencyResolutionException;
 
-class JcabiMavenArtifactResolverTest extends Assert {
+public class MavenDependencyResolutionException extends RuntimeException {
 
-    def resolver = new JcabiMavenArtifactResolver()
-
-    @Test
-    void shouldDownloadGuava() {
-        // When
-        def artifact = resolver.artifactStream('com.google.guava', 'guava', '18.0')
-
-        // Then
-        assertTrue(artifact.get().available() > 0)
+    public MavenDependencyResolutionException(DependencyResolutionException cause) {
+        super(cause);
     }
 
-    @Test
-    void shouldShutdownExecutor() {
-        // When
-        resolver.close()
-
-        // Then
-        assertTrue(resolver.@executor.isShutdown())
+    @Override
+    public synchronized DependencyResolutionException getCause() {
+        return (DependencyResolutionException) super.getCause();
     }
 
 }

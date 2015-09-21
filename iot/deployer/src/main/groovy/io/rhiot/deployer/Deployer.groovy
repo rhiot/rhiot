@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer
+package io.rhiot.deployer
 
-import com.github.camellabs.iot.deployer.maven.JcabiMavenArtifactResolver
+import io.rhiot.deployer.maven.JcabiMavenArtifactResolver
 import com.github.camellabs.iot.utils.ssh.client.SshClient
 
 class Deployer {

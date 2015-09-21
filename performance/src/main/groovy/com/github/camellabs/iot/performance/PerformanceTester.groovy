@@ -17,8 +17,8 @@
 package com.github.camellabs.iot.performance
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.camellabs.iot.deployer.ConsoleInformation
-import com.github.camellabs.iot.deployer.Deployer
+import io.rhiot.deployer.ConsoleInformation
+import io.rhiot.deployer.Deployer
 
 import static HardwareKit.RPI2
 import static java.util.concurrent.TimeUnit.MINUTES

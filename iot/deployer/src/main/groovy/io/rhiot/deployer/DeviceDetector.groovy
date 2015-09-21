@@ -14,16 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer
+package io.rhiot.deployer
 
-class ConsoleInformation extends RuntimeException {
+interface DeviceDetector {
 
-    ConsoleInformation(Throwable exception) {
-        super(exception)
-    }
+    List<Inet4Address> detectReachableAddresses();
 
-    ConsoleInformation(String message) {
-        super(message)
-    }
+    List<Device> detectDevices();
 
 }

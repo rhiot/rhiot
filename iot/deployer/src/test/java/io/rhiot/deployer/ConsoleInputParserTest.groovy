@@ -14,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer
+package io.rhiot.deployer
 
+import io.rhiot.deployer.ConsoleInformation
+import io.rhiot.deployer.ConsoleInputParser
 import org.junit.Assert
 import org.junit.Test
 

@@ -14,28 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer
+package io.rhiot.deployer.maven
 
 import org.junit.Assert
 import org.junit.Test
 
-import static org.mockito.Mockito.mock
+class JcabiMavenArtifactResolverTest extends Assert {
 
-class DeployerTest extends Assert {
-
-    def deviceDetector = mock(DeviceDetector.class)
-
-    def deployer = new Deployer(deviceDetector, true)
+    def resolver = new JcabiMavenArtifactResolver()
 
     @Test
-    void shouldDetectNoSupportedDevices() {
-        try {
-            deployer.deploy()
-        } catch (ConsoleInformation info) {
-            assertTrue(info.message.contains('No supported devices detected'))
-            return
-        }
-        fail()
+    void shouldDownloadGuava() {
+        // When
+        def artifact = resolver.artifactStream('com.google.guava', 'guava', '18.0')
+
+        // Then
+        assertTrue(artifact.get().available() > 0)
+    }
+
+    @Test
+    void shouldShutdownExecutor() {
+        // When
+        resolver.close()
+
+        // Then
+        assertTrue(resolver.@executor.isShutdown())
     }
 
 }

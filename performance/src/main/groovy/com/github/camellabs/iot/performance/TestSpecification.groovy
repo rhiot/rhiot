@@ -16,7 +16,7 @@
  */
 package com.github.camellabs.iot.performance
 
-import com.github.camellabs.iot.deployer.Device;
+import io.rhiot.deployer.Device;
 
 interface TestSpecification {
 

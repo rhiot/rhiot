@@ -16,7 +16,7 @@
  */
 package com.github.camellabs.iot.performance
 
-import com.github.camellabs.iot.deployer.ConsoleInformation
+import io.rhiot.deployer.ConsoleInformation
 import org.junit.Assert
 import org.junit.Test
 

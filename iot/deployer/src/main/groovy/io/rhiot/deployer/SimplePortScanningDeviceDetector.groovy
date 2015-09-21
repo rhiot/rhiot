@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer
+package io.rhiot.deployer
 
 import com.github.camellabs.iot.utils.ssh.client.SshClient
 import org.slf4j.Logger
 
-import static com.github.camellabs.iot.deployer.Device.DEVICE_RASPBERRY_PI_2
+import static Device.DEVICE_RASPBERRY_PI_2
 import static com.google.common.collect.Lists.newLinkedList
 import static java.lang.Integer.parseInt
 import static java.net.NetworkInterface.getNetworkInterfaces

@@ -14,19 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.deployer.maven;
+package io.rhiot.deployer
 
-import org.sonatype.aether.resolution.DependencyResolutionException;
+public class Device {
 
-public class MavenDependencyResolutionException extends RuntimeException {
+    public static final String DEVICE_RASPBERRY_PI_2 = "RaspberryPi2";
 
-    public MavenDependencyResolutionException(DependencyResolutionException cause) {
-        super(cause);
+    private final InetAddress address;
+
+    private final String type;
+
+    public Device(InetAddress address, String type) {
+        this.address = address;
+        this.type = type;
     }
 
-    @Override
-    public synchronized DependencyResolutionException getCause() {
-        return (DependencyResolutionException) super.getCause();
+    public InetAddress address() {
+        return address;
+    }
+
+    public String type() {
+        return type;
     }
 
 }
