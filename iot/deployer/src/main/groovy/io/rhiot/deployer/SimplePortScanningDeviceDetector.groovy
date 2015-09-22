@@ -56,7 +56,8 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
 
     List<Inet4Address> detectReachableAddresses() {
         List<NetworkInterface> networkInterfaces = list(getNetworkInterfaces()).parallelStream().
-                filter { iface -> iface.getDisplayName().startsWith("wlan") || iface.getDisplayName().startsWith("eth") }.
+                filter { iface -> iface.getDisplayName().startsWith("wlan") || iface.getDisplayName().startsWith("eth") ||
+                         iface.getDisplayName().startsWith("en")}.
                 collect(toList());
 
         if (networkInterfaces.isEmpty()) {
