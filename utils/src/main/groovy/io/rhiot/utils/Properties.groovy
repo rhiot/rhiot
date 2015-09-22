@@ -91,6 +91,16 @@ final class Properties {
 
     // Boolean properties
 
+    static Boolean booleanProperty(String key) {
+        def property = stringProperty(key)
+        property == null ? null : property.toBoolean()
+    }
+
+    static boolean booleanProperty(String key, boolean defaultValue) {
+        def property = stringProperty(key)
+        property == null ? defaultValue : property.toBoolean()
+    }
+
     static void setBooleanProperty(String key, boolean value) {
         System.setProperty(key, "${value}")
     }
