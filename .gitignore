@@ -26,3 +26,6 @@ soapui-errors.log
 # Californium
 **/data/security.data
 Californium.properties
+
+# ActiveMQ
+activemq-data/
