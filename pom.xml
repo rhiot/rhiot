@@ -288,6 +288,9 @@
                             <!-- Excluded documentation from the RAT check. -->
                             <exclude>**/*.md</exclude>
 
+                            <!-- ActiveMQ test data -->
+                            <exclude>**/activemq-data/**/KahaDB/*.*</exclude>
+
                             <exclude>**/Californium.properties</exclude>
                             <exclude>build.out</exclude>
                             <exclude>global-groovy.log</exclude>
@@ -296,11 +299,6 @@
                             <exclude>.travis.yml</exclude>
                             <exclude>travis.sh</exclude>
                             <!-- Hawt.io plugins -->
-                            <exclude>**/dist/**</exclude>
-                            <exclude>**/node/**</exclude>
-                            <exclude>**/node_modules/**</exclude>
-                            <exclude>**/libs/**</exclude>
-                            <exclude>**/.bowerrc</exclude>
                             <exclude>**/bower.json</exclude>
                             <exclude>**/package.json</exclude>
                             <exclude>**/plugins/includes.js</exclude>
