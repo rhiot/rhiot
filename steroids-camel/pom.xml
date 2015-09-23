@@ -10,7 +10,7 @@
         <relativePath>../bom</relativePath>
     </parent>
 
-    <artifactId>rhiot-steroids-activemq</artifactId>
+    <artifactId>rhiot-steroids-camel</artifactId>
 
     <licenses>
         <license>
@@ -25,25 +25,8 @@
             <artifactId>rhiot-steroids</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-steroids-camel</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-broker</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-kahadb-store</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-mqtt</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jms</artifactId>
+            <artifactId>camel-vertx</artifactId>
         </dependency>
 
         <!-- Testing -->
@@ -60,11 +43,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-paho</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

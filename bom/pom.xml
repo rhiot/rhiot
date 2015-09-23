@@ -126,6 +126,16 @@
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-steroids-activemq</artifactId>
+                <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-steroids-camel</artifactId>
+                <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
                 <artifactId>camel-tinkerforge</artifactId>
                 <version>${rhiot.version}</version>
             </dependency>

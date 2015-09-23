@@ -24,11 +24,14 @@ import static io.rhiot.utils.Properties.booleanProperty;
 
 public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
 
+    final static def DEFAULT_BROKER_NAME = 'embedded-rhiot-broker'
+
     private BrokerService brokerService
 
     @Override
     void start() {
         brokerService = new BrokerService()
+        brokerService.brokerName = DEFAULT_BROKER_NAME
         boolean isMqttEnabled = booleanProperty('MQTT_ENABLED', true)
         if(isMqttEnabled) {
             int mqttPort = Properties.intProperty('MQTT_PORT', 1883)

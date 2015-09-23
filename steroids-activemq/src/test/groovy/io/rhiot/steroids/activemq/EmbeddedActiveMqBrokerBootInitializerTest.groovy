@@ -17,11 +17,15 @@
 package io.rhiot.steroids.activemq
 
 import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.steroids.camel.CamelBootInitializer
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.impl.DefaultCamelContext
 import org.junit.AfterClass
 import org.junit.Test
+
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqCamelRoutes.mqttEventBus
+import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
 
 class EmbeddedActiveMqBrokerBootInitializerTest {
 
@@ -50,6 +54,25 @@ class EmbeddedActiveMqBrokerBootInitializerTest {
 
         // When
         camel.createProducerTemplate().sendBody('paho:test?brokerUrl=tcp://localhost:1883', 'foo')
+
+        // Then
+        mock.assertIsSatisfied()
+    }
+
+    @Test
+    void shouldReadMqttMessagesFromVertxEventBus() {
+        // Given
+        camelContext().addRoutes(new RouteBuilder() {
+            @Override
+            void configure() throws Exception {
+                from(mqttEventBus()).to('mock:test')
+            }
+        })
+        def mock = camelContext().getEndpoint('mock:test', MockEndpoint.class)
+        mock.expectedBodiesReceived('foo')
+
+        // When
+        camelContext().createProducerTemplate().sendBody('paho:test?brokerUrl=tcp://localhost:1883', 'foo')
 
         // Then
         mock.assertIsSatisfied()

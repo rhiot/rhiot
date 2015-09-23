@@ -28,7 +28,7 @@ final class Steroids {
 
     static def APPLICATION_PACKAGE_PROPERTY = 'application_package'
 
-    final static def classpath
+    final private static Reflections classpath
     static {
         def classpathConfiguration = new ConfigurationBuilder().forPackages('io.rhiot')
         if(Properties.hasProperty(APPLICATION_PACKAGE_PROPERTY)) {
@@ -53,6 +53,11 @@ final class Steroids {
     static <T> List<T> beans(Class<T> type) {
         checkNotNull(type, 'Type of the beans cannot be null.')
         classpath.getSubTypesOf(type).toList().collect{ it.newInstance() }
+    }
+
+    static <T> List<T> beans(Class<T> type, Class<?> annotation) {
+        checkNotNull(type, 'Type of the beans cannot be null.')
+        classpath.getTypesAnnotatedWith(annotation).toList().collect{ it.newInstance() }
     }
 
 }
