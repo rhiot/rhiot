@@ -20,8 +20,7 @@ import static io.rhiot.steroids.Steroids.beans;
 
 class Bootstrap {
 
-    private final def initializers = beans(BootInitializer.class).
-            sort(false, {first, second -> first.order() - second.order()}).asImmutable()
+    private final def initializers = beans(BootInitializer.class).sort{ first, second -> first.order() - second.order() }.asImmutable()
 
     Bootstrap start() {
         initializers.each { it.start() }
@@ -31,6 +30,13 @@ class Bootstrap {
     Bootstrap stop() {
         initializers.reverse().each { it.stop() }
         this
+    }
+
+    private static final def BEANS_ORDER = new Comparator<BootInitializer>(){
+        @Override
+        int compare(BootInitializer first, BootInitializer second) {
+            first.order() - second.order()
+        }
     }
 
 }

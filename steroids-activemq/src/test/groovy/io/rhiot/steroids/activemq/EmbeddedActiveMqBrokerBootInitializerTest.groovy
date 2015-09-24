@@ -17,62 +17,103 @@
 package io.rhiot.steroids.activemq
 
 import io.rhiot.steroids.bootstrap.Bootstrap
-import io.rhiot.steroids.camel.CamelBootInitializer
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.mock.MockEndpoint
-import org.apache.camel.impl.DefaultCamelContext
 import org.junit.AfterClass
 import org.junit.Test
 
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqCamelRoutes.mqttEventBus
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.mqtt
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.mqttJmsBridge
 import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
+import static io.rhiot.utils.Uuids.uuid
 
 class EmbeddedActiveMqBrokerBootInitializerTest {
 
-    static def bootstrap = new Bootstrap().start()
+    def queue = uuid()
 
-    static def camel = new DefaultCamelContext()
+    static def bootstrap = new Bootstrap().start()
 
     @AfterClass
     static void AfterClass() {
         bootstrap.stop()
-        camel.stop()
     }
 
     @Test
-    void shouldStartEmdeddedMqttBroker() {
+    void shouldReadMessagesFromMqttTopic() {
         // Given
-        camel.addRoutes(new RouteBuilder() {
+        camelContext().addRoutes(new RouteBuilder() {
             @Override
             void configure() {
-                from('paho:test?brokerUrl=tcp://localhost:1883').to('mock:test')
+                from(mqtt(queue)).to("mock:${queue}")
             }
         })
-        camel.start()
-        def mock = camel.getEndpoint('mock:test', MockEndpoint.class)
-        mock.setMinimumExpectedMessageCount(1)
+        def mock = camelContext().getEndpoint("mock:${queue}", MockEndpoint.class)
+        mock.expectedBodiesReceived('foo')
 
         // When
-        camel.createProducerTemplate().sendBody('paho:test?brokerUrl=tcp://localhost:1883', 'foo')
+        camelContext().createProducerTemplate().sendBody(mqtt(queue), 'foo')
 
         // Then
         mock.assertIsSatisfied()
     }
 
     @Test
-    void shouldReadMqttMessagesFromVertxEventBus() {
+    void shouldWriteMessagesToMqttTopic() {
         // Given
         camelContext().addRoutes(new RouteBuilder() {
             @Override
-            void configure() throws Exception {
-                from(mqttEventBus()).to('mock:test')
+            void configure() {
+                from('seda:test').to(mqtt(queue))
+
+                from(mqtt(queue)).to("mock:${queue}")
             }
         })
-        def mock = camelContext().getEndpoint('mock:test', MockEndpoint.class)
+        def mock = camelContext().getEndpoint("mock:${queue}", MockEndpoint.class)
         mock.expectedBodiesReceived('foo')
 
         // When
-        camelContext().createProducerTemplate().sendBody('paho:test?brokerUrl=tcp://localhost:1883', 'foo')
+        camelContext().createProducerTemplate().sendBody('seda:test', 'foo')
+
+        // Then
+        mock.assertIsSatisfied()
+    }
+
+    @Test
+    void shouldReadMessageFromMqttJmsBridgeTopic() {
+        // Given
+        camelContext().addRoutes(new RouteBuilder() {
+            @Override
+            void configure() {
+                from(mqttJmsBridge(queue)).to("mock:${queue}")
+            }
+        })
+        sleep(2000)
+        def mock = camelContext().getEndpoint("mock:${queue}", MockEndpoint.class)
+        mock.expectedBodiesReceived('foo')
+
+        // When
+        camelContext().createProducerTemplate().sendBody(mqtt(queue), 'foo')
+
+        // Then
+        mock.assertIsSatisfied()
+    }
+
+    @Test
+    void shouldWriteMessageToMqttJmsBridgeTopic() {
+        // Given
+        camelContext().addRoutes(new RouteBuilder() {
+            @Override
+            void configure() {
+                from('seda:test2').to(mqttJmsBridge(queue))
+
+                from(mqtt(queue)).to("mock:${queue}")
+            }
+        })
+        def mock = camelContext().getEndpoint("mock:${queue}", MockEndpoint.class)
+        mock.expectedBodiesReceived('foo')
+
+        // When
+        camelContext().createProducerTemplate().sendBody('seda:test2', 'foo')
 
         // Then
         mock.assertIsSatisfied()

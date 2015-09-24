@@ -59,11 +59,11 @@ class CamelBootInitializer implements BootInitializer {
         return 1100;
     }
 
-    static camelContext() {
+    static CamelContext camelContext() {
         camelContext
     }
 
-    static vertx() {
+    static Vertx vertx() {
         vertx
     }
 
@@ -71,7 +71,7 @@ class CamelBootInitializer implements BootInitializer {
         registry
     }
 
-    static eventBus(String channel) {
+    static String eventBus(String channel) {
         "event-bus:${channel}"
     }
 

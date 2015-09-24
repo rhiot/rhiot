@@ -18,8 +18,12 @@ package io.rhiot.steroids.activemq
 
 import io.rhiot.steroids.bootstrap.BootInitializer
 import io.rhiot.utils.Properties
+import org.apache.activemq.ActiveMQConnectionFactory
 import org.apache.activemq.broker.BrokerService
+import org.springframework.jms.connection.CachingConnectionFactory
 
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.getDEFAULT_BROKER_NAME
+import static io.rhiot.steroids.camel.CamelBootInitializer.registry
 import static io.rhiot.utils.Properties.booleanProperty;
 
 public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
@@ -49,5 +53,19 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
     int order() {
         1000
     }
+
+    static String mqtt(String topic) {
+        int port = Properties.intProperty('MQTT_PORT', 1883)
+        "paho:${topic}?brokerUrl=tcp://localhost:${port}"
+    }
+
+    static String mqttJmsBridge(String topic) {
+        if(!registry().containsKey('jmsConnectionFactory')) {
+            def jmsConnectionFactory = new CachingConnectionFactory(new ActiveMQConnectionFactory("vm:${DEFAULT_BROKER_NAME}"))
+            registry().put('jmsConnectionFactory', jmsConnectionFactory)
+        }
+        "jms:topic:${topic}?connectionFactory=#jmsConnectionFactory"
+    }
+
 
 }
