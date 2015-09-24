@@ -16,11 +16,19 @@
  */
 package io.rhiot.steroids.bootstrap
 
-import static io.rhiot.steroids.Steroids.beans;
+import static io.rhiot.steroids.Steroids.beans
+import static java.lang.Runtime.runtime;
 
+/**
+ * Starts up Steroids framework, scans the classpath for the initializers and run the latter.
+ */
 class Bootstrap {
 
+    // Members
+
     private final def initializers = beans(BootInitializer.class).sort(false, BEANS_ORDER).asImmutable()
+
+    // Lifecycle
 
     Bootstrap start() {
         initializers.each { it.start() }
@@ -37,6 +45,18 @@ class Bootstrap {
         int compare(BootInitializer first, BootInitializer second) {
             first.order() - second.order()
         }
+    }
+
+    // Main entry point
+
+    public static void main(String[] args) {
+        def bootstrap = new Bootstrap().start()
+        runtime.addShutdownHook(new Thread(){
+            @Override
+            void run() {
+                bootstrap.stop()
+            }
+        })
     }
 
 }
