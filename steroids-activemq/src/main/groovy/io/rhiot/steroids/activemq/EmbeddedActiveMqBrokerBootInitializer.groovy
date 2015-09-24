@@ -24,7 +24,8 @@ import org.springframework.jms.connection.CachingConnectionFactory
 
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.getDEFAULT_BROKER_NAME
 import static io.rhiot.steroids.camel.CamelBootInitializer.registry
-import static io.rhiot.utils.Properties.booleanProperty;
+import static io.rhiot.utils.Properties.booleanProperty
+import static io.rhiot.utils.Properties.stringProperty;
 
 public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
 
@@ -34,19 +35,24 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
 
     @Override
     void start() {
-        brokerService = new BrokerService()
-        brokerService.brokerName = DEFAULT_BROKER_NAME
-        boolean isMqttEnabled = booleanProperty('MQTT_ENABLED', true)
-        if(isMqttEnabled) {
-            int mqttPort = Properties.intProperty('MQTT_PORT', 1883)
-            brokerService.addConnector("mqtt://0.0.0.0:${mqttPort}")
+        def brokerUrl = externalBrokerUrl()
+        if(brokerUrl == null) {
+            brokerService = new BrokerService()
+            brokerService.brokerName = DEFAULT_BROKER_NAME
+            boolean isMqttEnabled = booleanProperty('MQTT_ENABLED', true)
+            if (isMqttEnabled) {
+                int mqttPort = Properties.intProperty('MQTT_PORT', 1883)
+                brokerService.addConnector("mqtt://0.0.0.0:${mqttPort}")
+            }
+            brokerService.start()
         }
-        brokerService.start()
     }
 
     @Override
     void stop() {
-        brokerService.stop()
+        if(brokerService != null) {
+            brokerService.stop()
+        }
     }
 
     @Override
@@ -61,11 +67,15 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
 
     static String mqttJmsBridge(String topic) {
         if(!registry().containsKey('jmsConnectionFactory')) {
-            def jmsConnectionFactory = new CachingConnectionFactory(new ActiveMQConnectionFactory("vm:${DEFAULT_BROKER_NAME}"))
+            def brokerUrl = externalBrokerUrl() ?: "vm:${DEFAULT_BROKER_NAME}"
+            def jmsConnectionFactory = new CachingConnectionFactory(new ActiveMQConnectionFactory(brokerUrl))
             registry().put('jmsConnectionFactory', jmsConnectionFactory)
         }
         "jms:topic:${topic}?connectionFactory=#jmsConnectionFactory"
     }
 
+    private static def externalBrokerUrl() {
+        stringProperty('BROKER_URL')
+    }
 
 }
