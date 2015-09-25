@@ -28,6 +28,7 @@
         <embedmongo.version>1.48.2</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
         <google-truth.version>0.27</google-truth.version>
+        <groovy.version>2.4.3</groovy.version>
         <infinispan.version>8.0.0.Beta2</infinispan.version>
         <ivy.version>2.4.0</ivy.version>
         <jcabi-aether.version>0.10.1</jcabi-aether.version>
@@ -305,6 +306,16 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
                 <version>${apache-poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>${groovy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.californium</groupId>

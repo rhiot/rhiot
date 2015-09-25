@@ -16,21 +16,25 @@
  */
 package io.rhiot.steroids.bootstrap
 
+import io.rhiot.utils.WithLogger
+
 import static io.rhiot.steroids.Steroids.beans
 import static java.lang.Runtime.runtime;
 
 /**
  * Starts up Steroids framework, scans the classpath for the initializers and run the latter.
  */
-class Bootstrap {
+class Bootstrap implements WithLogger {
 
     // Members
 
-    private final def initializers = beans(BootInitializer.class).sort(false, BEANS_ORDER).asImmutable()
+    private final def initializers = beans(BootInitializer.class).
+            sort{ first, second -> first.order() - second.order()}.asImmutable()
 
     // Lifecycle
 
     Bootstrap start() {
+        log().debug('Starting Steroids Bootstrap: {}', getClass().name)
         initializers.each { it.start() }
         this
     }
@@ -38,13 +42,6 @@ class Bootstrap {
     Bootstrap stop() {
         initializers.reverse().each { it.stop() }
         this
-    }
-
-    private static final def BEANS_ORDER = new Comparator<BootInitializer>(){
-        @Override
-        int compare(BootInitializer first, BootInitializer second) {
-            first.order() - second.order()
-        }
     }
 
     // Main entry point

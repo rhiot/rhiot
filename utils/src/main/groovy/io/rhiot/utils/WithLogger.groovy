@@ -14,32 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.camel
+package io.rhiot.utils
 
-import io.rhiot.steroids.bootstrap.Bootstrap
-import org.apache.camel.builder.RouteBuilder
+import org.slf4j.Logger
 
-@Route
-class CamelBootstrap extends RouteBuilder {
+import static org.slf4j.LoggerFactory.getLogger
 
-    private final def bootstrap = new Bootstrap()
+trait WithLogger {
 
-    CamelBootstrap start() {
-        bootstrap.start()
-        this
-    }
+    private def log = getLogger(getClass())
 
-    CamelBootstrap stop() {
-        bootstrap.stop()
-        this
-    }
-
-    @Override
-    void configure() {
-    }
-
-    public static void main(String[] args) {
-        Bootstrap.main(args)
+    Logger log() {
+        log
     }
 
 }
