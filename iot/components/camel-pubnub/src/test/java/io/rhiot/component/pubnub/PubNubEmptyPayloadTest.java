@@ -14,40 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub;
+package io.rhiot.component.pubnub;
 
-import com.pubnub.api.Callback;
-
+import org.apache.camel.CamelExecutionException;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.json.JSONObject;
 import org.junit.Test;
 
-public class PubNubPresensTest extends CamelTestSupport {
-    private PubNubMock pubnubMock = new PubNubMock("foo", "bar");
-    boolean connected = false;
+public class PubNubEmptyPayloadTest extends CamelTestSupport {
+    private final String endpoint = "pubnub:pubsub:someChannel?pubnub=#pubnub";
 
     @EndpointInject(uri = "mock:result")
     private MockEndpoint mockResult;
-
-    @Test
-    public void testPresens() throws Exception {
-        mockResult.expectedMessageCount(1);
-        mockResult.expectedHeaderReceived(PubNubConstants.CHANNEL, "mychannel");
-        pubnubMock.subscribe("mychannel", new Callback() {
-            @Override
-            public void connectCallback(String channel, Object message) {
-                connected = true;
-            }
-        });
-        assertMockEndpointsSatisfied();
-        assertTrue(connected);
-        JSONObject presenceResponse = mockResult.getReceivedExchanges().get(0).getIn().getBody(JSONObject.class);
-        assertEquals("join", presenceResponse.getString("action"));
-    }
 
     @Override
     protected JndiRegistry createRegistry() throws Exception {
@@ -56,15 +37,17 @@ public class PubNubPresensTest extends CamelTestSupport {
         return registry;
     }
 
+    @Test(expected = CamelExecutionException.class)
+    public void testPubNub() throws Exception {
+        template.sendBody("direct:publish", null);
+    }
+
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
+            @Override
             public void configure() {
-                //@formatter:off
-                from("pubnub://presence:mychannel?pubnub=#pubnub")
-                .to("log:com.github.camellabs.component.pubnub?showAll=true&multiline=true")
-                .to("mock:result");
-                //@formatter:on
+                from("direct:publish").to(endpoint);
             }
         };
     }

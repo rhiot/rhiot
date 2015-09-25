@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub.example;
+package io.rhiot.component.pubnub.example;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.github.camellabs.component.pubnub.PubNubConstants;
+import io.rhiot.component.pubnub.PubNubConstants;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;

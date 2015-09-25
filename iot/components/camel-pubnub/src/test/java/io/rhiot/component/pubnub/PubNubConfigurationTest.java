@@ -14,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub;
+package io.rhiot.component.pubnub;
 
+import io.rhiot.component.pubnub.PubNubComponent;
+import io.rhiot.component.pubnub.PubNubEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 

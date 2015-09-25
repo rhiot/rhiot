@@ -14,25 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub.example;
+package io.rhiot.component.pubnub;
 
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.main.Main;
+public enum PubNubEndpointType {
+    pubsub("pubsub"), presence("presence");
 
-public class PubNubSensorExample {
+    private final String text;
 
-    public static void main(String[] args) throws Exception {
-        Main main = new Main();
-        main.enableHangupSupport();
-        main.addRouteBuilder(new SensorRoute());
-        main.run();
+    private PubNubEndpointType(final String text) {
+        this.text = text;
     }
 
-    static private class SensorRoute extends RouteBuilder {
-        @Override
-        public void configure() throws Exception {
-            from("pubnub://pubsub:pubnub-sensor-network?subscriberKey=sub-c-5f1b7c8e-fbee-11e3-aa40-02ee2ddab7fe").log("${body}").to("mock:result");
-        }
+    @Override
+    public String toString() {
+        return text;
     }
-
 }

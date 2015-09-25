@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub.example;
+package io.rhiot.component.pubnub.example;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.main.Main;

@@ -14,29 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub.example;
+package io.rhiot.component.pubnub;
 
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.main.Main;
+import org.apache.camel.Converter;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class PubNubPresenseExample {
-
-    public static void main(String[] args) throws Exception {
-        Main main = new Main();
-        main.enableHangupSupport();
-        main.addRouteBuilder(new PresensRoute());
-        main.run();
-    }
-
-    static private class PresensRoute extends RouteBuilder {
-        @Override
-        public void configure() throws Exception {
-            //@formatter:off
-            from("pubnub://presence:iot?subscriberKey="+PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY)
-            .log("${body}")
-            .to("mock:result");
-            //@formatter:on
+@Converter
+public class JsonConverter {
+    @Converter
+    public static JSONObject toJsonObject(String json) {
+        try {
+            return new JSONObject(json);
+        } catch (JSONException e) {
+            return null;
         }
     }
 
+    @Converter
+    public static JSONArray toJsonArray(String json) {
+        try {
+            return new JSONArray(json);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
 }

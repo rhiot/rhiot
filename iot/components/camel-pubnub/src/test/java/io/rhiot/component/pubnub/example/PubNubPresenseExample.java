@@ -14,19 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub;
+package io.rhiot.component.pubnub.example;
 
-public enum PubNubEndpointType {
-    pubsub("pubsub"), presence("presence");
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.main.Main;
 
-    private final String text;
+public class PubNubPresenseExample {
 
-    private PubNubEndpointType(final String text) {
-        this.text = text;
+    public static void main(String[] args) throws Exception {
+        Main main = new Main();
+        main.enableHangupSupport();
+        main.addRouteBuilder(new PresensRoute());
+        main.run();
     }
 
-    @Override
-    public String toString() {
-        return text;
+    static private class PresensRoute extends RouteBuilder {
+        @Override
+        public void configure() throws Exception {
+            //@formatter:off
+            from("pubnub://presence:iot?subscriberKey="+PubNubExampleConstants.PUBNUB_SUBSCRIBER_KEY)
+            .log("${body}")
+            .to("mock:result");
+            //@formatter:on
+        }
     }
+
 }

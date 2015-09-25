@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub.example;
+package io.rhiot.component.pubnub;
 
-public interface PubNubExampleConstants {
-    // replace subscriber+publisher key with one obtained from PubNub.
-    // http://www.pubnub.com
-    String PUBNUB_SUBSCRIBER_KEY = "replace";
-    String PUBNUB_PUBLISHER_KEY = "replace";
+public interface PubNubConstants {
+    String OPERATION = "CamelPubNubOperation";
+    String TIMETOKEN = "CamelPubNubTimeToken";
+    String CHANNEL = "CamelPubNubChannel";
+    String UUID = "CamelPubNubUUID";
 }

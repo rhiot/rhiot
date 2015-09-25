@@ -14,30 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub;
+package io.rhiot.component.pubnub.example;
 
-import org.apache.camel.Converter;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-@Converter
-public class JsonConverter {
-    @Converter
-    public static JSONObject toJsonObject(String json) {
-        try {
-            return new JSONObject(json);
-        } catch (JSONException e) {
-            return null;
-        }
-    }
-
-    @Converter
-    public static JSONArray toJsonArray(String json) {
-        try {
-            return new JSONArray(json);
-        } catch (JSONException e) {
-            return null;
-        }
-    }
+public interface PubNubExampleConstants {
+    // replace subscriber+publisher key with one obtained from PubNub.
+    // http://www.pubnub.com
+    String PUBNUB_SUBSCRIBER_KEY = "replace";
+    String PUBNUB_PUBLISHER_KEY = "replace";
 }

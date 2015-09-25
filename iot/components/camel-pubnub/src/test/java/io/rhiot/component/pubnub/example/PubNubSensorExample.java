@@ -14,11 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.component.pubnub;
+package io.rhiot.component.pubnub.example;
 
-public interface PubNubConstants {
-    String OPERATION = "CamelPubNubOperation";
-    String TIMETOKEN = "CamelPubNubTimeToken";
-    String CHANNEL = "CamelPubNubChannel";
-    String UUID = "CamelPubNubUUID";
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.main.Main;
+
+public class PubNubSensorExample {
+
+    public static void main(String[] args) throws Exception {
+        Main main = new Main();
+        main.enableHangupSupport();
+        main.addRouteBuilder(new SensorRoute());
+        main.run();
+    }
+
+    static private class SensorRoute extends RouteBuilder {
+        @Override
+        public void configure() throws Exception {
+            from("pubnub://pubsub:pubnub-sensor-network?subscriberKey=sub-c-5f1b7c8e-fbee-11e3-aa40-02ee2ddab7fe").log("${body}").to("mock:result");
+        }
+    }
+
 }
