@@ -104,6 +104,10 @@ Rhiot comes with the following features:
     - [Sample results for the RPI2 hardware kit](#sample-results-for-the-rpi2-hardware-kit)
 - [Steroids configuration framework](#steroids-configuration-framework)
   - [Injecting MongoDB client](#injecting-mongodb-client)
+- [Quickstarts](#quickstarts)
+  - [MQTT cloudlet quickstart](#mqtt-cloudlet-quickstart)
+    - [Creating and running the MQTT cloudlet project](#creating-and-running-the-mqtt-cloudlet-project)
+    - [MQTT broker](#mqtt-broker)
 - [Articles, presentations & videos](#articles-presentations-&-videos)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
