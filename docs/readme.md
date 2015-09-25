@@ -1204,6 +1204,48 @@ of timeout miliseconds. For example to set the connection timeout to 30 seconds 
     System.setProperty("MONGODB_CONNECT_TIMEOUT", TimeUnit.SECONDS.toMillis(30) + "");
     MongoClient mongo = Mongos.discoverMongo();
 
+## Quickstarts
+
+Rhiot comes with the set of quickstarts - the sample projects that can be used as the building blocks of your IoT
+solution. Quickstarts are hosted at GitHub ([rhiot/quickstarts](https://github.com/rhiot/quickstarts)) and can be
+downloaded using the following shell command:
+
+    git clone git@github.com:rhiot/quickstarts.git
+
+### MQTT cloudlet quickstart
+
+The MQTT cloudlet quickstart can be used as a base for the fat-jar MQTT microservice.
+
+#### Creating and running the MQTT cloudlet project
+
+In order to create the MQTT cloudlet project execute the following commands:
+
+    git clone git@github.com:rhiot/quickstarts.git
+    cp -r quickstarts/cloudlets/mqtt mqtt
+    cd mqtt
+    mvn install
+
+To start the MQTT cloudlet execute the following command:
+
+    java -jar target/rhiot-cloudlets-mqtt-1.0.0-SNAPSHOT.jar
+
+You can also build and run it as a Docker image:
+
+    mvn install docker:build docker:push -Ddocker.image.target=yourUsername/rhiot-cloudlets-mqtt
+    docker run -it yourUsername/rhiot-cloudlets-mqtt
+
+#### MQTT broker
+
+By default MQTT cloudlet quickstart starts embedded [ActiveMQ](http://activemq.apache.org) MQTT broker (on
+1883 port). If you would like to connect your cloudlet application to the external ActiveMQ broker (instead of starting
+the embedded one), run the cloudlet with the `BROKER_URL` environment variable or system property, for example:
+
+    java -DBROKER_URL=tcp://amqbroker.example.com:61616 -jar target/rhiot-cloudlets-mqtt-1.0.0-SNAPSHOT.jar
+
+...or...
+
+    docker run -e BROKER_URL=tcp://amqbroker.example.com:61616 -it yourUsername/rhiot-cloudlets-mqtt
+
 ## Articles, presentations & videos
 
 Here is the bunch of useful resources regarding Camel IoT project:
