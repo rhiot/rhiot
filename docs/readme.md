@@ -1250,6 +1250,20 @@ the embedded one), run the cloudlet with the `BROKER_URL` environment variable o
 
     docker run -e BROKER_URL=tcp://amqbroker.example.com:61616 -it yourUsername/rhiot-cloudlets-mqtt
 
+#### Sample chat application
+
+The MQTT cloudlet quickstart is in fact a simple chat application. Clients can send the messages to the chat channel
+by subscribing to the broker and sending the messages to the `chat` MQTT topic. The clients can subscribe to the chat updates
+by listening on the `chat-updates` MQTT topic - whenever the new message has been sent to the chat, the clients registered
+to the `chat-updates` will receive the updated chat history.
+
+The quickstart also exposed the simple REST API that can be used to read the chat history using the HTTP `GET` request:
+
+    $ curl http://localhost:8181/chat
+    Hello, this is the IoT device!
+    I just wanted to say hello!
+    Hello, IoT device. Nice to meet you!
+
 ## Articles, presentations & videos
 
 Here is the bunch of useful resources regarding Camel IoT project:
