@@ -17,7 +17,7 @@
 package io.rhiot.gateway.heartbeat
 
 import io.rhiot.gateway.Gateway
-import com.github.camellabs.iot.vertx.camel.CamelContextFactories
+import io.rhiot.vertx.camel.CamelContextFactories
 import org.apache.camel.component.mock.MockEndpoint
 import org.junit.Assert
 import org.junit.Test

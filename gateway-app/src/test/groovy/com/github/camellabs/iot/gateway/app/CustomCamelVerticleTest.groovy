@@ -18,12 +18,12 @@ package com.github.camellabs.iot.gateway.app
 
 import io.rhiot.gateway.GatewayVerticle
 import io.rhiot.gateway.Gateway
-import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
+import io.rhiot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.component.mock.MockEndpoint
 import org.junit.BeforeClass
 import org.junit.Test
 
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
+import static io.rhiot.vertx.camel.CamelContextFactories.camelContext
 import static java.util.concurrent.TimeUnit.MINUTES
 import static java.util.concurrent.TimeUnit.SECONDS
 

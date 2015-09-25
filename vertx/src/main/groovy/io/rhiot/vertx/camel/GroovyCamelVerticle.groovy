@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.vertx.camel
+package io.rhiot.vertx.camel
 
 import io.vertx.lang.groovy.GroovyVerticle
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import org.slf4j.LoggerFactory
 
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
+import static io.rhiot.vertx.camel.CamelContextFactories.camelContext
 
 /**
  * Base Groovy class for the verticles that are supposed to access CamelContext and bridge Camel with the event bus.

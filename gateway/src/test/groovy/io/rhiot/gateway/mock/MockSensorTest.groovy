@@ -24,9 +24,9 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test
 
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.mockEndpoint
+import static io.rhiot.vertx.camel.CamelContextFactories.camelContext
+import static io.rhiot.vertx.camel.CamelContextFactories.closeCamelContext
+import static io.rhiot.vertx.camel.CamelContextFactories.mockEndpoint
 import static io.rhiot.utils.Properties.setBooleanProperty;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;

@@ -14,12 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.vertx.camel
+package io.rhiot.vertx.camel
 
 import org.apache.camel.CamelContext
+import org.apache.camel.impl.DefaultCamelContext
 
-interface CamelContextFactory {
+class DefaultCamelContextFactory implements CamelContextFactory {
 
-    CamelContext createCamelContext()
+    @Override
+    CamelContext createCamelContext() {
+        def context = new DefaultCamelContext()
+        context.name = 'SingletonVertxCamelContext'
+        context
+    }
 
 }

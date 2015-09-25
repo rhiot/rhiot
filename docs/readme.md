@@ -267,7 +267,7 @@ following jar:
     </dependencies>
 
 In order to create Vert.x verticle that can access single `CamelContex` instance shared between all the verticles
-within the given JVM, extend the `com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle` class:
+within the given JVM, extend the `io.rhiot.vertx.camel.GroovyCamelVerticle` class:
 
     @GatewayVerticle
     class HeartbeatConsumerVerticle extends GroovyCamelVerticle {

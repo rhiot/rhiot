@@ -18,7 +18,7 @@ package io.rhiot.gateway.gps
 
 import io.rhiot.component.gps.bu353.ClientGpsCoordinates
 import io.rhiot.gateway.GatewayVerticle
-import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle;
+import io.rhiot.vertx.camel.GroovyCamelVerticle;
 import org.apache.camel.builder.RouteBuilder;
 
 import static ClientGpsCoordinates.deserialize

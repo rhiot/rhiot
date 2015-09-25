@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.vertx.camel
+package io.rhiot.vertx.camel
 
 import io.vertx.core.AbstractVerticle
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.camelContext
+import static io.rhiot.vertx.camel.CamelContextFactories.camelContext
 
 /**
  * Base Java class for the verticles that are supposed to access CamelContext and bridge Camel with the event bus.

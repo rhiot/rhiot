@@ -17,7 +17,7 @@
 package io.rhiot.gateway.heartbeat
 
 import io.rhiot.gateway.GatewayVerticle
-import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
+import io.rhiot.vertx.camel.GroovyCamelVerticle
 
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.stringProperty
