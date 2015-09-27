@@ -1268,12 +1268,12 @@ The quickstart also exposed the simple REST API that can be used to read the cha
 
 When MQTT cloudlet is started with the embedded ActiveMQ broker, the architecture of the example is the following:
 
-<img src="images/quickstarts_cloudlet_mqtt_embedded.png" align="center" height="500" hspace="30" >
+<img src="images/quickstarts_cloudlet_mqtt_embedded.png" align="center" height="400" hspace="30" >
 
 When you connect to the external ActiveMQ broker (using `BROKER_URL` option), the architecture of the example becomes
 more like the following diagram:
 
-<img src="images/quickstarts_cloudlet_mqtt_external.png" align="center" height="500" hspace="30" >
+<img src="images/quickstarts_cloudlet_mqtt_external.png" align="center" height="800" hspace="30" >
 
 ## Articles, presentations & videos
 
