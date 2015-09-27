@@ -1218,7 +1218,7 @@ downloaded using the following shell command:
 
 ### MQTT cloudlet quickstart
 
-The MQTT cloudlet quickstart can be used as a base for the fat-jar MQTT microservice.
+The MQTT cloudlet quickstart can be used as a base for the fat-jar MQTT microservices.
 
 #### Creating and running the MQTT cloudlet project
 
@@ -1233,7 +1233,7 @@ To start the MQTT cloudlet execute the following command:
 
     java -jar target/rhiot-cloudlets-mqtt-1.0.0-SNAPSHOT.jar
 
-You can also build and run it as a Docker image:
+You can also build and run it as a Docker image (we love Docker and recommend this approach):
 
     TARGET_IMAGE=yourUsername/rhiot-cloudlets-mqtt
     mvn install docker:build docker:push -Ddocker.image.target=${TARGET_IMAGE}
