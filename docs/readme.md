@@ -1235,8 +1235,9 @@ To start the MQTT cloudlet execute the following command:
 
 You can also build and run it as a Docker image:
 
-    mvn install docker:build docker:push -Ddocker.image.target=yourUsername/rhiot-cloudlets-mqtt
-    docker run -it yourUsername/rhiot-cloudlets-mqtt
+    TARGET_IMAGE=yourUsername/rhiot-cloudlets-mqtt
+    mvn install docker:build docker:push -Ddocker.image.target=${TARGET_IMAGE}
+    docker run -it ${TARGET_IMAGE}
 
 #### MQTT broker
 
