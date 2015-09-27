@@ -16,29 +16,35 @@
  */
 package io.rhiot.deployer
 
-import io.rhiot.deployer.ConsoleInformation
-import io.rhiot.deployer.Deployer
-import io.rhiot.deployer.DeviceDetector
 import org.junit.Assert
 import org.junit.Test
 
-import static org.mockito.Mockito.mock
-
-class DeployerTest extends Assert {
-
-    def deviceDetector = mock(DeviceDetector.class)
-
-    def deployer = new Deployer(deviceDetector, true)
+class ConsoleInputParserTest extends Assert {
 
     @Test
-    void shouldDetectNoSupportedDevices() {
+    void shouldValidateUsernameWithoutPassword() {
         try {
-            deployer.deploy()
+            new ConsoleInputParser('--username=foo').hasCredentials()
         } catch (ConsoleInformation info) {
-            assertTrue(info.message.contains('No supported devices detected'))
+            assertTrue(info.message.contains('Both username and password must be specified'))
             return
         }
         fail()
+    }
+
+    @Test
+    void shouldValidateUsernameAndPassword() {
+        assertTrue(new ConsoleInputParser('--username=foo', '--password=bar').hasCredentials())
+    }
+
+    @Test
+    void shouldValidateNoUsernameAndPassword() {
+        assertFalse(new ConsoleInputParser().hasCredentials())
+    }
+
+    @Test
+    void shouldParseUsername() {
+        assertEquals('foo', new ConsoleInputParser('--username=foo').username())
     }
 
 }

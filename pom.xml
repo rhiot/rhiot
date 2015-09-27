@@ -21,6 +21,8 @@
         <module>gateway-app</module>
         <module>cloudlets</module>
         <module>iot</module>
+        <module>deployer</module>
+        <module>deployer-app</module>
         <module>performance</module>
         <module>feature</module>
     </modules>
