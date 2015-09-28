@@ -33,6 +33,10 @@
             <artifactId>rhiot-vertx</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-steroids-camel</artifactId>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
