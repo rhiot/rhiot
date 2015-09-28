@@ -14,20 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.performance
+package io.rhiot.deployer.detector
 
-import io.rhiot.deployer.detector.Device;
+interface DeviceDetector {
 
-interface TestSpecification {
+    List<Inet4Address> detectReachableAddresses();
 
-    boolean supportsHardwareKit(String kit)
-
-    String variationLabel()
-
-    String testGroup()
-
-    Map<String, Object> additionalProperties()
-
-    long processingTime(Device device)
+    List<Device> detectDevices();
 
 }

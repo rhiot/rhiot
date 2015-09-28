@@ -14,20 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.performance
+package io.rhiot.deployer.detector
 
-import io.rhiot.deployer.detector.Device;
+import org.junit.Test
 
-interface TestSpecification {
+import static com.google.common.truth.Truth.assertThat
 
-    boolean supportsHardwareKit(String kit)
+class SimplePortScanningDeviceDetectorTest {
 
-    String variationLabel()
+    def deviceDetector = new SimplePortScanningDeviceDetector(new StubInterfacesProvider())
 
-    String testGroup()
+    @Test
+    void shouldNotDetectAnyReachableAddress() {
+        def addresses = deviceDetector.detectReachableAddresses()
+        assertThat(addresses).hasSize(0)
+    }
 
-    Map<String, Object> additionalProperties()
+}
 
-    long processingTime(Device device)
+class StubInterfacesProvider implements InterfacesProvider {
+
+    @Override
+    List<NetworkInterface> interfaces() {
+        [new NetworkInterface(ipv4Address: '192.169.1.1', broadcast: '192.169.1.1'),
+         new NetworkInterface(ipv4Address: '192.169.0.1', broadcast: '192.169.0.1')]
+    }
 
 }

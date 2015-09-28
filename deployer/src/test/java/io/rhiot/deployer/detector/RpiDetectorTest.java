@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.deployer;
+package io.rhiot.deployer.detector;
 
-import io.rhiot.deployer.SimplePortScanningDeviceDetector;
+import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector;
 import org.junit.Assert;
 import org.junit.Test;
 

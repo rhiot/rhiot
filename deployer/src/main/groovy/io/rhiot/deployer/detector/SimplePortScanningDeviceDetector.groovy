@@ -14,17 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.deployer
+package io.rhiot.deployer.detector
 
 import com.github.camellabs.iot.utils.ssh.client.SshClient
 import org.slf4j.Logger
 
-import static Device.DEVICE_RASPBERRY_PI_2
 import static com.google.common.collect.Lists.newLinkedList
 import static java.lang.Integer.parseInt
-import static java.net.NetworkInterface.getNetworkInterfaces
 import static java.util.Collections.emptyList
-import static java.util.Collections.list
 import static java.util.stream.Collectors.toList
 import static org.slf4j.LoggerFactory.getLogger
 
@@ -32,7 +29,7 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
 
     // Constants
 
-    private static final int DEFAULT_PING_TIMEOUT = 500;
+    private static final DEFAULT_PING_TIMEOUT = 500
 
     // Logger
 
@@ -42,38 +39,46 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
 
     private final int timeout;
 
+    // Collaborators
+
+    private final InterfacesProvider interfacesProvider
+
     // Constructors
 
-    public SimplePortScanningDeviceDetector(int timeout) {
-        this.timeout = timeout;
+    SimplePortScanningDeviceDetector(InterfacesProvider interfacesProvider, int timeout) {
+        this.interfacesProvider = interfacesProvider
+        this.timeout = timeout
     }
 
-    public SimplePortScanningDeviceDetector() {
+    SimplePortScanningDeviceDetector(int timeout) {
+        this(new JavaNetInterfaceProvider(), timeout)
+    }
+
+    SimplePortScanningDeviceDetector() {
         this(DEFAULT_PING_TIMEOUT);
+    }
+
+    SimplePortScanningDeviceDetector(InterfacesProvider interfacesProvider) {
+        this(interfacesProvider, DEFAULT_PING_TIMEOUT)
     }
 
     // Operations
 
     List<Inet4Address> detectReachableAddresses() {
-        List<NetworkInterface> networkInterfaces = list(getNetworkInterfaces()).parallelStream().
-                filter { iface -> iface.getDisplayName().startsWith("wlan") || iface.getDisplayName().startsWith("eth") ||
-                         iface.getDisplayName().startsWith("en")}.
-                collect(toList());
-
+        def networkInterfaces = interfacesProvider.interfaces()
         if (networkInterfaces.isEmpty()) {
             return emptyList();
         }
 
-        InterfaceAddress interfaceAddress = networkInterfaces.get(0).getInterfaceAddresses().parallelStream().
-                filter { ifaceAddress -> ifaceAddress.getAddress().getHostAddress().length() < 15 }.
-                collect(toList()).get(0);
-        String address = interfaceAddress.getBroadcast().getHostAddress();
-        int lastDot = address.lastIndexOf('.') + 1;
-        String addressBase = address.substring(0, lastDot);
-        int addressesNumber = parseInt(address.substring(lastDot));
-        List<Inet4Address> addressesToScan = newLinkedList();
-        for (int i = 0; i < addressesNumber; i++) {
-            addressesToScan.add((Inet4Address) Inet4Address.getByName(addressBase + (i + 1)));
+        List<Inet4Address> addressesToScan = newLinkedList()
+        networkInterfaces.each {
+                def address = it.broadcast
+                int lastDot = address.lastIndexOf('.') + 1;
+                def addressBase = address.substring(0, lastDot);
+                int addressesNumber = parseInt(address.substring(lastDot));
+                for (int i = 0; i < addressesNumber; i++) {
+                    addressesToScan.add((Inet4Address) Inet4Address.getByName(addressBase + (i + 1)));
+                }
         }
         return addressesToScan.parallelStream().filter {
             addressToScan ->
@@ -90,7 +95,7 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
                     throw new RuntimeException(e);
                 }
 
-        }.collect(toList());
+        }.collect(toList())
     }
 
     public List<Device> detectDevices() {
@@ -98,7 +103,7 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
         detectReachableAddresses().parallelStream().forEach { device ->
             try {
                 new SshClient(device.getHostAddress(), 22, "pi", "raspberry").command("echo ping");
-                devices.add(new Device(device, DEVICE_RASPBERRY_PI_2));
+                devices.add(new Device(device, Device.DEVICE_RASPBERRY_PI_2));
             } catch (Exception ex) {
                 LOG.debug("Can't connect to the Raspberry Pi device: " + device.getHostAddress(), ex);
             }

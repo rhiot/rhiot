@@ -14,12 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.deployer
+package io.rhiot.deployer.detector
 
-interface DeviceDetector {
+import groovy.transform.ToString
 
-    List<Inet4Address> detectReachableAddresses();
+@ToString
+public class Device {
 
-    List<Device> detectDevices();
+    static final String DEVICE_RASPBERRY_PI_2 = "RaspberryPi2"
+
+    private final InetAddress address
+
+    private final String type
+
+    public Device(InetAddress address, String type) {
+        this.address = address;
+        this.type = type;
+    }
+
+    public InetAddress address() {
+        return address;
+    }
+
+    public String type() {
+        return type;
+    }
 
 }
