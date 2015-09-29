@@ -34,11 +34,12 @@ class ConsoleInputParser {
 Usage: docker run -t camellabs/deployer
 
 Options:
- -h --help                      Prints this help page.
- -d --debug                     Debug (verbose) mode.
- -Pfoo=bar                      Adds foo=bar configuration property to the deployed gateway. Can be used multiple times.
- -u=user --username=user        SSH username of the target device.
- -p=secret --password=secret    SSH password of the target device."""
+ -h --help                                                      Prints this help page.
+ -d --debug                                                     Debug (verbose) mode.
+ -a=group:artifact:version --artifact=group:artifact:version    Overrides default gateway artifact coordinates (io.rhiot:rhiot-gateway-app).
+ -Pfoo=bar                                                      Adds foo=bar configuration property to the deployed gateway. Can be used multiple times.
+ -u=user --username=user                                        SSH username of the target device.
+ -p=secret --password=secret                                    SSH password of the target device."""
     }
 
     boolean isDebug() {
@@ -72,6 +73,11 @@ Options:
 
     String password() {
         def argument = args.find{it.startsWith('--password=') || it.startsWith('-p=')}
+        argument.substring(argument.indexOf('=') + 1)
+    }
+
+    String artifact() {
+        def argument = args.find{it.startsWith('--artifact=') || it.startsWith('-a=')}
         argument.substring(argument.indexOf('=') + 1)
     }
 

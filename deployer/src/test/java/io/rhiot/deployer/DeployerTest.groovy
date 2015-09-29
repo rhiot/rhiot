@@ -16,10 +16,12 @@
  */
 package io.rhiot.deployer
 
+import com.google.common.truth.Truth
 import io.rhiot.deployer.detector.DeviceDetector
 import org.junit.Assert
 import org.junit.Test
 
+import static com.google.common.truth.Truth.assertThat
 import static org.mockito.Mockito.mock
 
 class DeployerTest extends Assert {
@@ -37,6 +39,12 @@ class DeployerTest extends Assert {
             return
         }
         fail()
+    }
+
+    @Test
+    void shouldDownloadGivenGatewayArtifact() {
+        def artifact =  deployer.gatewayArtifact(Optional.of('io.rhiot:rhiot-gateway-app:0.1.2-SNAPSHOT')).get()
+        assertThat(artifact.available()).isGreaterThan(0)
     }
 
 }

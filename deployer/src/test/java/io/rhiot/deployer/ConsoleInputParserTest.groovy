@@ -19,6 +19,8 @@ package io.rhiot.deployer
 import org.junit.Assert
 import org.junit.Test
 
+import static com.google.common.truth.Truth.assertThat
+
 class ConsoleInputParserTest extends Assert {
 
     @Test
@@ -44,7 +46,18 @@ class ConsoleInputParserTest extends Assert {
 
     @Test
     void shouldParseUsername() {
-        assertEquals('foo', new ConsoleInputParser('--username=foo').username())
+        assertThat(new ConsoleInputParser('--username=foo').username()).isEqualTo('foo')
     }
+
+    @Test
+    void shouldParseGatewayArtifact() {
+        assertThat(new ConsoleInputParser('--artifact=foo:bar:1').artifact()).isEqualTo('foo:bar:1')
+    }
+
+    @Test
+    void shouldParseGatewayArtifactShort() {
+        assertThat(new ConsoleInputParser('-a=foo:bar:1').artifact()).isEqualTo('foo:bar:1')
+    }
+
 
 }

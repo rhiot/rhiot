@@ -16,13 +16,19 @@
  */
 package io.rhiot.deployer
 
+import groovy.transform.PackageScope
 import io.rhiot.deployer.detector.Device
 import io.rhiot.deployer.detector.DeviceDetector
 import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector
 import io.rhiot.deployer.maven.JcabiMavenArtifactResolver
 import com.github.camellabs.iot.utils.ssh.client.SshClient
 
-import static com.github.camellabs.iot.utils.Mavens.artifactVersionFromDependenciesProperties
+import java.util.concurrent.Future
+
+import static io.rhiot.utils.Mavens.MavenCoordinates.parseMavenCoordinates
+import static io.rhiot.utils.Mavens.artifactVersionFromDependenciesProperties
+import static java.util.Optional.empty
+import static java.util.Optional.ofNullable
 
 class Deployer {
 
@@ -63,8 +69,8 @@ class Deployer {
         artifactResolver.close()
     }
 
-    Device deploy(Map<String, String> additionalProperties) {
-        def gatewayJar = artifactResolver.artifactStream('io.rhiot', 'rhiot-gateway-app', artifactVersionFromDependenciesProperties('io.rhiot', 'rhiot-gateway-app'))
+    Device deploy(Optional<String> gatewayArtifactCoordinates, Map<String, String> additionalProperties) {
+        def gatewayJar = gatewayArtifact(gatewayArtifactCoordinates)
 
         println('Detecting devices...')
         def supportedDevices = deviceDetector.detectDevices()
@@ -113,7 +119,16 @@ class Deployer {
     }
 
     Device deploy() {
-        deploy([:])
+        deploy(empty(), [:])
+    }
+
+    // Helpers
+
+    @PackageScope
+    Future<InputStream> gatewayArtifact(Optional<String> gatewayArtifactCoordinates) {
+        def coordinatesString = gatewayArtifactCoordinates.orElseGet{ "io.rhiot:rhiot-gateway-app:${artifactVersionFromDependenciesProperties('io.rhiot', 'rhiot-gateway-app')}"}
+        def coordinates = parseMavenCoordinates(coordinatesString)
+        artifactResolver.artifactStream(coordinates.groupId, coordinates.artifactId, coordinates.version)
     }
 
     // Main runner
@@ -127,7 +142,7 @@ class Deployer {
 
         try {
             def deployer = parser.hasCredentials() ? new Deployer(parser.username(), parser.password(), parser.debug) : new Deployer(parser.debug)
-            deployer.deploy(parser.properties())
+            deployer.deploy(ofNullable(parser.artifact()), parser.properties())
         } catch (Exception e) {
             if (!(e instanceof ConsoleInformation)) {
                 print 'Error: '
