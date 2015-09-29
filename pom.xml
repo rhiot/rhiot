@@ -41,7 +41,7 @@
 
         <spring-boot.version>1.2.5.RELEASE</spring-boot.version>
 
-        <docker-maven-plugin.version>0.12.0</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.13.5</docker-maven-plugin.version>
         <groovydoc-maven-plugin.version>1.3</groovydoc-maven-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.5</nexus-staging-maven-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
@@ -54,6 +54,7 @@
         <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
+        <depends-maven-plugin.version>1.2</depends-maven-plugin.version>
     </properties>
 
     <name>${project.artifactId}</name>
@@ -300,19 +301,23 @@
                             <exclude>soapui-errors.log</exclude>
                             <exclude>.travis.yml</exclude>
                             <exclude>travis.sh</exclude>
-                            <!-- Hawt.io plugins -->
-                            <exclude>**/bower.json</exclude>
-                            <exclude>**/package.json</exclude>
-                            <exclude>**/plugins/includes.js</exclude>
-                            <exclude>**/plugins/includes.js.map</exclude>
-                            <exclude>**/ts/*.js</exclude>
-                            <exclude>**/ts/*.js.map</exclude>
-                            <exclude>**/test-plugins/**/*.js</exclude>
-                            <exclude>**/test-plugins/**/*.js.map</exclude>
                             <exclude>**/coordinates.txt</exclude>
                             <exclude>**/security.data</exclude>
                         </excludes>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.servicemix.tooling</groupId>
+                    <artifactId>depends-maven-plugin</artifactId>
+                    <version>${depends-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>generate-depends-file</id>
+                            <goals>
+                                <goal>generate-depends-file</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.jolokia</groupId>

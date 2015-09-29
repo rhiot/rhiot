@@ -22,6 +22,8 @@ import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector
 import io.rhiot.deployer.maven.JcabiMavenArtifactResolver
 import com.github.camellabs.iot.utils.ssh.client.SshClient
 
+import static com.github.camellabs.iot.utils.Mavens.artifactVersionFromDependenciesProperties
+
 class Deployer {
 
     private final DeviceDetector deviceDetector
@@ -62,7 +64,7 @@ class Deployer {
     }
 
     Device deploy(Map<String, String> additionalProperties) {
-        def gatewayJar = artifactResolver.artifactStream('io.rhiot', 'rhiot-gateway-app', '0.1.1-SNAPSHOT')
+        def gatewayJar = artifactResolver.artifactStream('io.rhiot', 'rhiot-gateway-app', artifactVersionFromDependenciesProperties('io.rhiot', 'rhiot-gateway-app'))
 
         println('Detecting devices...')
         def supportedDevices = deviceDetector.detectDevices()
