@@ -69,6 +69,11 @@
 
             <!-- Dependencies -->
             <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.cyrusinnovation</groupId>
                 <artifactId>mockito-groovy-support</artifactId>
                 <version>${mockito-groovy-support.version}</version>
