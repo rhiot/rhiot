@@ -16,7 +16,6 @@
  */
 package io.rhiot.utils
 
-import com.github.camellabs.iot.utils.Mavens
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
@@ -35,9 +34,9 @@ class MavensTest {
         def coordinates = Mavens.MavenCoordinates.parseMavenCoordinates(coordinatesString)
 
         // Then
-        assertThat(coordinates.artifactId()).isEqualTo(artifact)
-        assertThat(coordinates.groupId()).isEqualTo(group)
-        assertThat(coordinates.version()).isEqualTo(version)
+        assertThat(coordinates.artifactId).isEqualTo(artifact)
+        assertThat(coordinates.groupId).isEqualTo(group)
+        assertThat(coordinates.version).isEqualTo(version)
     }
 
 }

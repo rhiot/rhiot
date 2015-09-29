@@ -14,25 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.utils;
+package io.rhiot.utils
 
+import groovy.transform.Immutable
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.Enumeration;
-import java.util.Properties;
+import java.nio.file.Paths
 
-import static java.lang.String.format;
-import static org.apache.commons.lang3.SystemUtils.USER_HOME;
+import static java.lang.String.format
+import static org.apache.commons.lang3.SystemUtils.USER_HOME
 
 public final class Mavens {
 
-    private static final Properties VERSIONS = new Properties();
+    private static final Properties VERSIONS = new java.util.Properties();
 
     private static final Logger LOG = LoggerFactory.getLogger(Mavens.class);
 
@@ -70,35 +65,18 @@ public final class Mavens {
         return VERSIONS.getProperty(format("%s/%s/version", groupId, artifactId));
     }
 
+    @Immutable
     public static class MavenCoordinates {
 
-        private final String groupId;
+        String groupId
 
-        private final String artifactId;
+        String artifactId
 
-        private final String version;
+        String version
 
-        public MavenCoordinates(String groupId, String artifactId, String version) {
-            this.groupId = groupId;
-            this.artifactId = artifactId;
-            this.version = version;
-        }
-
-        public static MavenCoordinates parseMavenCoordinates(String coordinates) {
-            String[] parsedCoordinates = coordinates.split(":");
-            return new MavenCoordinates(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
-        }
-
-        public String groupId() {
-            return groupId;
-        }
-
-        public String artifactId() {
-            return artifactId;
-        }
-
-        public String version() {
-            return version;
+        static MavenCoordinates parseMavenCoordinates(String coordinates) {
+            def parsedCoordinates = coordinates.split(':')
+            new MavenCoordinates(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
         }
 
     }
