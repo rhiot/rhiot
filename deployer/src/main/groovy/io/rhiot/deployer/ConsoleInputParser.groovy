@@ -18,9 +18,17 @@ package io.rhiot.deployer
 
 class ConsoleInputParser {
 
-    String[] args
+    // Constants
 
-    ConsoleInputParser(String[] args) {
+    static final def DEFAULT_COMMAND = 'deploy-gateway'
+
+    // Members
+
+    private final String[] args
+
+    // Constructors
+
+    ConsoleInputParser(String... args) {
         this.args = args
     }
 
@@ -31,7 +39,11 @@ class ConsoleInputParser {
     String helpText() {
         """Welcome to the Camel IoT Labs Deployer application.
 
-Usage: docker run -t camellabs/deployer
+Usage: docker run -t camellabs/deployer [deploy-gateway|scan]
+
+Commands:
+deploy-gateway (default)    Deploys gateway to the device.
+scan                        Lists possible target devices.
 
 Options:
  -h --help                                                      Prints this help page.
@@ -44,6 +56,14 @@ Options:
 
     boolean isDebug() {
         args.contains('--debug') || args.contains('-d')
+    }
+
+    String command() {
+        def command = args.find{!it.startsWith('-')} ?: DEFAULT_COMMAND
+        if(![DEFAULT_COMMAND, 'scan'].contains(command)) {
+            throw new IllegalArgumentException("No such command - ${command} .")
+        }
+        command
     }
 
     Map<String, String> properties() {

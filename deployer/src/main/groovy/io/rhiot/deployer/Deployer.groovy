@@ -141,8 +141,19 @@ class Deployer {
         }
 
         try {
-            def deployer = parser.hasCredentials() ? new Deployer(parser.username(), parser.password(), parser.debug) : new Deployer(parser.debug)
-            deployer.deploy(ofNullable(parser.artifact()), parser.properties())
+            switch(parser.command()) {
+                case 'scan':
+                    println 'Scanning local networks for devices...'
+                    println "Device type\t\tIPv4 address"
+                    new SimplePortScanningDeviceDetector().detectDevices().each {
+                        println "${it.type()}\t\t${it.type()}"
+                    }
+                    break;
+                case 'deploy-gateway':
+                    def deployer = parser.hasCredentials() ? new Deployer(parser.username(), parser.password(), parser.debug) : new Deployer(parser.debug)
+                    deployer.deploy(ofNullable(parser.artifact()), parser.properties())
+                    break;
+            }
         } catch (Exception e) {
             if (!(e instanceof ConsoleInformation)) {
                 print 'Error: '

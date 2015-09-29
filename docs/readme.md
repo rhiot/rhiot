@@ -155,6 +155,10 @@ If you would like to deploy your customized gateway fat jar, you can specify its
 
     docker run --net=host rhiot/deploy-gateway --artifact=com.example:custom-gateway:1.0
 
+To find out what supported devices are available in your local network, execute the following command:
+
+    docker run --net=host rhiot/deploy-gateway scan
+
 ### Configuration of the gateway
 
 The gateway configuration file is `/etc/default/camel-labs-iot-gateway`. The latter file is loaded by the gateway 

@@ -23,6 +23,26 @@ import static com.google.common.truth.Truth.assertThat
 
 class ConsoleInputParserTest extends Assert {
 
+    @Test(expected = IllegalArgumentException.class)
+    void shouldValidateInvalidCommand() {
+        new ConsoleInputParser('someCommand').command()
+    }
+
+    @Test
+    void shouldReturnDefaultCommand() {
+        assertThat(new ConsoleInputParser('-someOption=foo').command()).isEqualTo('deploy-gateway')
+    }
+
+    @Test
+    void shouldReturnScanCommandFromBeginning() {
+        assertThat(new ConsoleInputParser('scan', '-a=foo:bar:1').command()).isEqualTo('scan')
+    }
+
+    @Test
+    void shouldReturnScanCommandFromEnd() {
+        assertThat(new ConsoleInputParser('-a=foo:bar:1', 'scan').command()).isEqualTo('scan')
+    }
+
     @Test
     void shouldValidateUsernameWithoutPassword() {
         try {
@@ -58,6 +78,5 @@ class ConsoleInputParserTest extends Assert {
     void shouldParseGatewayArtifactShort() {
         assertThat(new ConsoleInputParser('-a=foo:bar:1').artifact()).isEqualTo('foo:bar:1')
     }
-
 
 }
