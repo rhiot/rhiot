@@ -19,7 +19,7 @@
     </licenses>
 
     <properties>
-        <activemq.version>5.11.1</activemq.version>
+        <activemq.version>5.12.0</activemq.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
         <apache-poi.version>3.13-beta1</apache-poi.version>
         <californium-core.version>1.0.0-M3</californium-core.version>
