@@ -110,16 +110,20 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
     }
 
     List<Device> detectDevices() {
-        List<Device> devices = newLinkedList();
-        detectReachableAddresses().parallelStream().forEach { device ->
-            try {
-                new SshClient(device.getHostAddress(), 22, "pi", "raspberry").command("echo ping");
-                devices.add(new Device(device, Device.DEVICE_RASPBERRY_PI_2));
-            } catch (Exception ex) {
-                LOG.debug("Can't connect to the Raspberry Pi device: " + device.getHostAddress(), ex);
-            }
-        }
-        devices
+        detectReachableAddresses().collect { device ->
+            executor.submit(new Callable<Device>() {
+                @Override
+                Device call() throws Exception {
+                    try {
+                        new SshClient(device.getHostAddress(), 22, "pi", "raspberry").command("echo ping");
+                        new Device(device, Device.DEVICE_RASPBERRY_PI_2)
+                    } catch (Exception ex) {
+                        LOG.debug("Can't connect to the Raspberry Pi device: " + device.getHostAddress(), ex);
+                        return null
+                    }
+                }
+            })
+        }.collect{it.get()}.findAll{it != null}
     }
 
     private static class ScanResult {
