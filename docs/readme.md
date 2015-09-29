@@ -123,7 +123,7 @@ between the sensors and the data center. Under the hood, Camel IoT gateway is th
 In order to install Camel IoT gateway on the Raspberry Pi running Raspbian, connect the device to your local network
 (using WiFi or the ethernet cable) and execute the following command on the laptop connected to the same network as your Pi:
 
-    docker run --net=host camellabs/deploy-gateway
+    docker run --net=host rhiot/deploy-gateway
 
 From this point forward Camel IoT gateway will be installed on your device as `camel-iot-gateway` service and started
 whenever the device boots up. Under the hood, gateway deployer performs the simple port scanning in the local network
@@ -131,25 +131,29 @@ and attempts to connect to the Raspian devices using the default SSH credentials
 
 To see all the options available for the gateway deployer, execute the following command:
 
-    docker run --net=host camellabs/deploy-gateway --help
+    docker run --net=host rhiot/deploy-gateway --help
 
 In case of problems with the gateway, you can try to run it in verbose mode (called *debug mode*):
 
-    docker run --net=host camellabs/deploy-gateway --debug
+    docker run --net=host rhiot/deploy-gateway --debug
 
 You can also configure the gateway during the deployment process using the `-P` option. For example to set the configuration property
 responsible for gateway heartbeats interval, execute the following command:
 
-    docker run --net=host camellabs/deploy-gateway -Pcamellabs_iot_gateway_heartbeat_rate=10000
+    docker run --net=host rhiot/deploy-gateway -Pcamellabs_iot_gateway_heartbeat_rate=10000
 
 You can use the `-P` option multiple times:
 
-    docker run --net=host camellabs/deploy-gateway -Pfoo=bar -Pbar=qux
+    docker run --net=host rhiot/deploy-gateway -Pfoo=bar -Pbar=qux
 
 If you would like to use different SSH credentials then default (username `pi`, password `raspberry`), then pass the
 `--username` and `--password` options to the deployer:
 
-    docker run --net=host camellabs/deploy-gateway --username=john --password=secret
+    docker run --net=host rhiot/deploy-gateway --username=john --password=secret
+
+If you would like to deploy your customized gateway fat jar, you can specify its Maven coordinates when running the deployer:
+
+    docker run --net=host rhiot/deploy-gateway --artifact=com.example:custom-gateway:1.0
 
 ### Configuration of the gateway
 
