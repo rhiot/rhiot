@@ -20,6 +20,8 @@ interface DeviceDetector {
 
     List<Inet4Address> detectReachableAddresses();
 
-    List<Device> detectDevices();
+    List<Device> detectDevices()
+
+    void close()
 
 }

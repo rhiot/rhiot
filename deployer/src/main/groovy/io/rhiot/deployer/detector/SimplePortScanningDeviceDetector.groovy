@@ -19,10 +19,12 @@ package io.rhiot.deployer.detector
 import com.github.camellabs.iot.utils.ssh.client.SshClient
 import org.slf4j.Logger
 
+import java.util.concurrent.Callable
+
 import static com.google.common.collect.Lists.newLinkedList
 import static java.lang.Integer.parseInt
 import static java.util.Collections.emptyList
-import static java.util.stream.Collectors.toList
+import static java.util.concurrent.Executors.newCachedThreadPool
 import static org.slf4j.LoggerFactory.getLogger
 
 class SimplePortScanningDeviceDetector implements DeviceDetector {
@@ -43,6 +45,8 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
 
     private final InterfacesProvider interfacesProvider
 
+    private final executor = newCachedThreadPool()
+
     // Constructors
 
     SimplePortScanningDeviceDetector(InterfacesProvider interfacesProvider, int timeout) {
@@ -60,6 +64,12 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
 
     SimplePortScanningDeviceDetector(InterfacesProvider interfacesProvider) {
         this(interfacesProvider, DEFAULT_PING_TIMEOUT)
+    }
+
+    // Lifecycle
+
+    void close() {
+        executor.shutdown()
     }
 
     // Operations
@@ -80,25 +90,26 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
                     addressesToScan.add((Inet4Address) Inet4Address.getByName(addressBase + (i + 1)));
                 }
         }
-        return addressesToScan.parallelStream().filter {
-            addressToScan ->
-                try {
-                    return addressToScan.isReachable(timeout);
-                } catch (SocketException e) {
-                    if (e.message.contains('Permission denied')) {
-                        LOG.debug('Cannot scan {} - permission denied.', addressesToScan)
-                        return false
-                    } else {
-                        throw new RuntimeException(e);
+        addressesToScan.collect {
+            executor.submit(new Callable<ScanResult>() {
+                @Override
+                ScanResult call() throws Exception {
+                    try {
+                        return new ScanResult(it, it.isReachable(timeout));
+                    } catch (SocketException e) {
+                        if (e.message.contains('Permission denied')) {
+                            LOG.debug('Cannot scan {} - permission denied.', it)
+                            return new ScanResult(it, false)
+                        } else {
+                            throw new RuntimeException(e);
+                        }
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
-
-        }.collect(toList())
+            })
+        }.findAll {it.get().isReachable()}.collect{it.get().address()}
     }
 
-    public List<Device> detectDevices() {
+    List<Device> detectDevices() {
         List<Device> devices = newLinkedList();
         detectReachableAddresses().parallelStream().forEach { device ->
             try {
@@ -107,8 +118,29 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
             } catch (Exception ex) {
                 LOG.debug("Can't connect to the Raspberry Pi device: " + device.getHostAddress(), ex);
             }
-        };
-        return devices;
+        }
+        devices
+    }
+
+    private static class ScanResult {
+
+        private final Inet4Address address
+
+        private final boolean reachable
+
+        ScanResult(Inet4Address address, boolean reachable) {
+            this.address = address
+            this.reachable = reachable
+        }
+
+        Inet4Address address() {
+            return address
+        }
+
+        boolean isReachable() {
+            return reachable
+        }
+
     }
 
 }

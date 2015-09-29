@@ -66,6 +66,7 @@ class Deployer {
     }
 
     def close() {
+        deviceDetector.close()
         artifactResolver.close()
     }
 
