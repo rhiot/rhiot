@@ -70,4 +70,37 @@ public final class Mavens {
         return VERSIONS.getProperty(format("%s/%s/version", groupId, artifactId));
     }
 
+    public static class MavenCoordinates {
+
+        private final String groupId;
+
+        private final String artifactId;
+
+        private final String version;
+
+        public MavenCoordinates(String groupId, String artifactId, String version) {
+            this.groupId = groupId;
+            this.artifactId = artifactId;
+            this.version = version;
+        }
+
+        public static MavenCoordinates parseMavenCoordinates(String coordinates) {
+            String[] parsedCoordinates = coordinates.split(":");
+            return new MavenCoordinates(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
+        }
+
+        public String groupId() {
+            return groupId;
+        }
+
+        public String artifactId() {
+            return artifactId;
+        }
+
+        public String version() {
+            return version;
+        }
+
+    }
+
 }
