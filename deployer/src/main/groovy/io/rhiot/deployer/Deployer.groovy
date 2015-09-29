@@ -126,7 +126,7 @@ class Deployer {
 
     @PackageScope
     Future<InputStream> gatewayArtifact(Optional<String> gatewayArtifactCoordinates) {
-        def coordinatesString = gatewayArtifactCoordinates.orElseGet{ "io.rhiot:rhiot-gateway-app:${artifactVersionFromDependenciesProperties('io.rhiot', 'rhiot-gateway-app')}"}
+        def coordinatesString = gatewayArtifactCoordinates.orElseGet{ "io.rhiot:rhiot-gateway-app:${artifactVersionFromDependenciesProperties('io.rhiot', 'deployer')}"}
         def coordinates = parseMavenCoordinates(coordinatesString)
         artifactResolver.artifactStream(coordinates.groupId, coordinates.artifactId, coordinates.version)
     }
