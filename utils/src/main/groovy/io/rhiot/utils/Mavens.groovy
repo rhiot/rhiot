@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.SystemUtils.USER_HOME
 
 public final class Mavens {
 
-    private static final Properties VERSIONS = new java.util.Properties();
+    private static final java.util.Properties VERSIONS = new java.util.Properties();
 
     private static final Logger LOG = LoggerFactory.getLogger(Mavens.class);
 
