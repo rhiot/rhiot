@@ -148,7 +148,7 @@ class Deployer {
                     println "Device type\t\tIPv4 address"
                     def detector = new SimplePortScanningDeviceDetector()
                     detector.detectDevices().each {
-                        println "${it.type()}\t\t${it.type()}"
+                        println "${it.type()}\t\t${it.address()}"
                     }
                     detector.close()
                     break;

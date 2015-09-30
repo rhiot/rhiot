@@ -22,11 +22,11 @@ import org.slf4j.Logger
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeoutException
 
+import static com.google.common.base.MoreObjects.firstNonNull
 import static com.google.common.collect.Lists.newLinkedList
 import static java.lang.Integer.parseInt
 import static java.util.Collections.emptyList
 import static java.util.concurrent.Executors.newCachedThreadPool
-import static java.util.concurrent.TimeUnit.MILLISECONDS
 import static java.util.concurrent.TimeUnit.SECONDS
 import static org.slf4j.LoggerFactory.getLogger
 
@@ -46,7 +46,7 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
 
     private final String password
 
-    private final int timeout;
+    private final int timeout
 
     // Collaborators
 
@@ -58,8 +58,8 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
 
     SimplePortScanningDeviceDetector(InterfacesProvider interfacesProvider, String username, String password, int timeout) {
         this.interfacesProvider = interfacesProvider
-        this.username = username
-        this.password = password
+        this.username = firstNonNull(username, 'pi')
+        this.password = firstNonNull(password, 'raspberry')
         this.timeout = timeout
     }
 
@@ -94,7 +94,7 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
                 def address = it.broadcast
                 int lastDot = address.lastIndexOf('.') + 1;
                 def addressBase = address.substring(0, lastDot);
-                int addressesNumber = parseInt(address.substring(lastDot));
+                def addressesNumber = address.substring(lastDot).toInteger()
                 for (int i = 0; i < addressesNumber; i++) {
                     addressesToScan.add((Inet4Address) Inet4Address.getByName(addressBase + (i + 1)));
                 }
