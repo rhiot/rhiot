@@ -391,6 +391,12 @@ the manager as the bean:
 Custom process manager may be useful if for some reasons your Linux distribution requires executing some unusual commands
 in order to make the GPSD up and running.
 
+#### BU353 type converters
+
+BU353 component comes with the two type converters:
+- `String` => `io.rhiot.component.gps.bu353.ClientGpsCoordinates`
+- `io.rhiot.component.gps.bu353.ClientGpsCoordinates` => `String`
+
 ### Camel Kura Wifi component
 
 The common scenario for the mobile IoT Gateways, for example those mounted on the trucks or other vehicles, is to cache
