@@ -26,7 +26,7 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-iot-deployer</artifactId>
+            <artifactId>rhiot-deployer</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
