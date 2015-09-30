@@ -27,6 +27,7 @@ import static java.lang.Integer.parseInt
 import static java.util.Collections.emptyList
 import static java.util.concurrent.Executors.newCachedThreadPool
 import static java.util.concurrent.TimeUnit.MILLISECONDS
+import static java.util.concurrent.TimeUnit.SECONDS
 import static org.slf4j.LoggerFactory.getLogger
 
 class SimplePortScanningDeviceDetector implements DeviceDetector {
@@ -131,7 +132,7 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
                     }
                 }
             })
-        }.collect{try{it.get(timeout, MILLISECONDS)}catch(TimeoutException ex){return null}}.findAll{it != null}
+        }.collect{try{it.get(5, SECONDS)}catch(TimeoutException ex){return null}}.findAll{it != null}
     }
 
     private static class ScanResult {
