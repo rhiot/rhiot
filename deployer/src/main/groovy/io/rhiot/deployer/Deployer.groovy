@@ -146,9 +146,9 @@ class Deployer {
                 case 'scan':
                     println 'Scanning local networks for devices...'
                     println()
-                    println '==========================='
+                    println '======================================'
                     println "Device type\t\tIPv4 address"
-                    println '---------------------------'
+                    println '--------------------------------------'
                     def detector = new SimplePortScanningDeviceDetector()
                     detector.detectDevices().each {
                         println "${it.type()}\t\t${it.address()}"
