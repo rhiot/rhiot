@@ -1,3 +1,5 @@
+#!/bin/sh
+
 #  Licensed to the Rhiot under one or more
 #  contributor license agreements.  See the NOTICE file distributed with
 #  this work for additional information regarding copyright ownership.
@@ -13,12 +15,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#!/bin/sh
-
 # Allows to set -Xmx Java option.
 if [ ! -z ${XMX} ]; then
     XMX="-Xmx${XMX}"
 fi
 
-echo "Executing command: java ${XMX} -jar /jars/* $@"
+if [ ! -z ${VERBOSE} ]; then
+    echo "Executing command: java ${XMX} -jar /jars/* $@"
+fi
 java ${XMX} -jar /jars/* "$@"

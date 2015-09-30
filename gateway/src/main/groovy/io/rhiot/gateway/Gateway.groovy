@@ -17,6 +17,7 @@
 package io.rhiot.gateway
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.rhiot.steroids.bootstrap.Bootstrap
 import io.vertx.core.Vertx
 import org.jolokia.jvmagent.JvmAgent
 import org.reflections.Reflections
@@ -24,8 +25,8 @@ import org.reflections.util.ConfigurationBuilder
 import org.slf4j.Logger
 
 import static io.rhiot.utils.Properties.stringProperty
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.connect
+import static io.rhiot.vertx.camel.CamelContextFactories.closeCamelContext
+import static io.rhiot.vertx.camel.CamelContextFactories.connect
 import static io.vertx.groovy.core.Vertx.vertx
 import static java.lang.Boolean.parseBoolean
 import static org.reflections.util.ClasspathHelper.forJavaClassPath
@@ -34,7 +35,7 @@ import static org.slf4j.LoggerFactory.getLogger
 /**
  * IoT gateway boostrap. Starts Vert.x event bus, detects verticles and starts these.
  */
-class Gateway {
+class Gateway extends Bootstrap {
 
     private static final Logger LOG = getLogger(Gateway.class)
 
@@ -54,19 +55,21 @@ class Gateway {
                 vertx.deployVerticle("groovy:${it.name}")
             }
         }
-        this
+        super.start() as Gateway
     }
 
-    void stop() {
+    @Override
+    Gateway stop() {
         closeCamelContext();
         vertx.close()
+        super.stop() as Gateway
     }
 
     // Main method handler
 
     public static void main(String[] args) {
         JvmAgent.agentmain('host=0.0.0.0')
-        new Gateway().start()
+        new Gateway()
     }
 
 }

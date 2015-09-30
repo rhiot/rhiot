@@ -17,7 +17,7 @@
 package io.rhiot.gateway.mock
 
 import io.rhiot.gateway.GatewayVerticle
-import com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle
+import io.rhiot.vertx.camel.GroovyCamelVerticle
 
 import static io.rhiot.utils.Uuids.uuid
 import static io.rhiot.utils.Properties.intProperty

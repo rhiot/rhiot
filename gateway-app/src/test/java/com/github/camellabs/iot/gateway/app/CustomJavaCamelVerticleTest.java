@@ -18,7 +18,7 @@ package com.github.camellabs.iot.gateway.app;
 
 import io.rhiot.gateway.GatewayVerticle;
 import io.rhiot.gateway.Gateway;
-import com.github.camellabs.iot.vertx.camel.JavaCamelVerticle;
+import io.rhiot.vertx.camel.JavaCamelVerticle;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.mockEndpoint;
+import static io.rhiot.vertx.camel.CamelContextFactories.mockEndpoint;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.apache.camel.component.mock.MockEndpoint.assertIsSatisfied;
 

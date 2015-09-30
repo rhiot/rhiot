@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import static com.github.camellabs.iot.vertx.camel.CamelContextFactories.closeCamelContext;
+import static io.rhiot.vertx.camel.CamelContextFactories.closeCamelContext;
 import static com.google.common.io.Files.createTempDir;
 import static com.jayway.awaitility.Awaitility.await;
 import static io.rhiot.utils.Properties.setBooleanProperty;

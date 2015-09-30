@@ -19,7 +19,7 @@
     </licenses>
 
     <properties>
-        <activemq.version>5.11.1</activemq.version>
+        <activemq.version>5.12.0</activemq.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
         <apache-poi.version>3.13-beta1</apache-poi.version>
         <californium-core.version>1.0.0-M3</californium-core.version>
@@ -28,6 +28,7 @@
         <embedmongo.version>1.48.2</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
         <google-truth.version>0.27</google-truth.version>
+        <groovy.version>2.4.5</groovy.version>
         <infinispan.version>8.0.0.Beta2</infinispan.version>
         <ivy.version>2.4.0</ivy.version>
         <jcabi-aether.version>0.10.1</jcabi-aether.version>
@@ -68,9 +69,31 @@
 
             <!-- Dependencies -->
             <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.cyrusinnovation</groupId>
                 <artifactId>mockito-groovy-support</artifactId>
                 <version>${mockito-groovy-support.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>camel-kura</artifactId>
+                <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>camel-pubnub</artifactId>
+                <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>camel-pubnub-feature</artifactId>
+                <version>${rhiot.version}</version>
+                <type>feature</type>
+                <classifier>features</classifier>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
@@ -109,19 +132,17 @@
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
-                <artifactId>camel-pubnub</artifactId>
-                <version>${rhiot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.rhiot</groupId>
-                <artifactId>camel-pubnub-feature</artifactId>
-                <version>${rhiot.version}</version>
-                <type>feature</type>
-                <classifier>features</classifier>
-            </dependency>
-            <dependency>
-                <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-steroids</artifactId>
+                <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-steroids-activemq</artifactId>
+                <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-steroids-camel</artifactId>
                 <version>${rhiot.version}</version>
             </dependency>
             <dependency>
@@ -295,6 +316,16 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
                 <version>${apache-poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>${groovy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.californium</groupId>

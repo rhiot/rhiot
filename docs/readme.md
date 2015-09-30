@@ -104,6 +104,10 @@ Rhiot comes with the following features:
     - [Sample results for the RPI2 hardware kit](#sample-results-for-the-rpi2-hardware-kit)
 - [Steroids configuration framework](#steroids-configuration-framework)
   - [Injecting MongoDB client](#injecting-mongodb-client)
+- [Quickstarts](#quickstarts)
+  - [MQTT cloudlet quickstart](#mqtt-cloudlet-quickstart)
+    - [Creating and running the MQTT cloudlet project](#creating-and-running-the-mqtt-cloudlet-project)
+    - [MQTT broker](#mqtt-broker)
 - [Articles, presentations & videos](#articles-presentations-&-videos)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -119,7 +123,7 @@ between the sensors and the data center. Under the hood, Camel IoT gateway is th
 In order to install Camel IoT gateway on the Raspberry Pi running Raspbian, connect the device to your local network
 (using WiFi or the ethernet cable) and execute the following command on the laptop connected to the same network as your Pi:
 
-    docker run --net=host camellabs/deploy-gateway
+    docker run --net=host rhiot/deploy-gateway
 
 From this point forward Camel IoT gateway will be installed on your device as `camel-iot-gateway` service and started
 whenever the device boots up. Under the hood, gateway deployer performs the simple port scanning in the local network
@@ -127,25 +131,33 @@ and attempts to connect to the Raspian devices using the default SSH credentials
 
 To see all the options available for the gateway deployer, execute the following command:
 
-    docker run --net=host camellabs/deploy-gateway --help
+    docker run --net=host rhiot/deploy-gateway --help
 
 In case of problems with the gateway, you can try to run it in verbose mode (called *debug mode*):
 
-    docker run --net=host camellabs/deploy-gateway --debug
+    docker run --net=host rhiot/deploy-gateway --debug
 
 You can also configure the gateway during the deployment process using the `-P` option. For example to set the configuration property
 responsible for gateway heartbeats interval, execute the following command:
 
-    docker run --net=host camellabs/deploy-gateway -Pcamellabs_iot_gateway_heartbeat_rate=10000
+    docker run --net=host rhiot/deploy-gateway -Pcamellabs_iot_gateway_heartbeat_rate=10000
 
 You can use the `-P` option multiple times:
 
-    docker run --net=host camellabs/deploy-gateway -Pfoo=bar -Pbar=qux
+    docker run --net=host rhiot/deploy-gateway -Pfoo=bar -Pbar=qux
 
 If you would like to use different SSH credentials then default (username `pi`, password `raspberry`), then pass the
 `--username` and `--password` options to the deployer:
 
-    docker run --net=host camellabs/deploy-gateway --username=john --password=secret
+    docker run --net=host rhiot/deploy-gateway --username=john --password=secret
+
+If you would like to deploy your customized gateway fat jar, you can specify its Maven coordinates when running the deployer:
+
+    docker run --net=host rhiot/deploy-gateway --artifact=com.example:custom-gateway:1.0
+
+To find out what supported devices are available in your local network, execute the following command:
+
+    docker run --net=host rhiot/deploy-gateway scan
 
 ### Configuration of the gateway
 
@@ -267,7 +279,7 @@ following jar:
     </dependencies>
 
 In order to create Vert.x verticle that can access single `CamelContex` instance shared between all the verticles
-within the given JVM, extend the `com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle` class:
+within the given JVM, extend the `io.rhiot.vertx.camel.GroovyCamelVerticle` class:
 
     @GatewayVerticle
     class HeartbeatConsumerVerticle extends GroovyCamelVerticle {
@@ -1203,6 +1215,74 @@ of timeout miliseconds. For example to set the connection timeout to 30 seconds 
 
     System.setProperty("MONGODB_CONNECT_TIMEOUT", TimeUnit.SECONDS.toMillis(30) + "");
     MongoClient mongo = Mongos.discoverMongo();
+
+## Quickstarts
+
+Rhiot comes with the set of quickstarts - the sample projects that can be used as the building blocks of your IoT
+solution. Quickstarts are hosted at GitHub ([rhiot/quickstarts](https://github.com/rhiot/quickstarts)) and can be
+downloaded using the following shell command:
+
+    git clone git@github.com:rhiot/quickstarts.git
+
+### MQTT cloudlet quickstart
+
+The MQTT cloudlet quickstart can be used as a base for the fat-jar MQTT microservices.
+
+#### Creating and running the MQTT cloudlet project
+
+In order to create the MQTT cloudlet project execute the following commands:
+
+    git clone git@github.com:rhiot/quickstarts.git
+    cp -r quickstarts/cloudlets/mqtt mqtt
+    cd mqtt
+    mvn install
+
+To start the MQTT cloudlet execute the following command:
+
+    java -jar target/rhiot-cloudlets-mqtt-1.0.0-SNAPSHOT.jar
+
+You can also build and run it as a Docker image (we love Docker and recommend this approach):
+
+    TARGET_IMAGE=yourUsername/rhiot-cloudlets-mqtt
+    mvn install docker:build docker:push -Ddocker.image.target=${TARGET_IMAGE}
+    docker run -it ${TARGET_IMAGE}
+
+#### MQTT broker
+
+By default MQTT cloudlet quickstart starts embedded [ActiveMQ](http://activemq.apache.org) MQTT broker (on
+1883 port). If you would like to connect your cloudlet application to the external ActiveMQ broker (instead of starting
+the embedded one), run the cloudlet with the `BROKER_URL` environment variable or system property, for example:
+
+    java -DBROKER_URL=tcp://amqbroker.example.com:61616 -jar target/rhiot-cloudlets-mqtt-1.0.0-SNAPSHOT.jar
+
+...or...
+
+    docker run -e BROKER_URL=tcp://amqbroker.example.com:61616 -it yourUsername/rhiot-cloudlets-mqtt
+
+#### Sample chat application
+
+The MQTT cloudlet quickstart is in fact a simple chat application. Clients can send the messages to the chat channel
+by subscribing to the broker and sending the messages to the `chat` MQTT topic. The clients can subscribe to the chat updates
+by listening on the `chat-updates` MQTT topic - whenever the new message has been sent to the chat, the clients registered
+to the `chat-updates` will receive the updated chat history.
+
+The quickstart also exposed the simple REST API that can be used to read the chat history using the HTTP `GET` request:
+
+    $ curl http://localhost:8181/chat
+    Hello, this is the IoT device!
+    I just wanted to say hello!
+    Hello, IoT device. Nice to meet you!
+
+#### Architectural overview
+
+When MQTT cloudlet is started with the embedded ActiveMQ broker, the architecture of the example is the following:
+
+<img src="images/quickstarts_cloudlet_mqtt_embedded.png" height="400" hspace="30">
+
+When you connect to the external ActiveMQ broker (using `BROKER_URL` option), the architecture of the example becomes
+more like the following diagram:
+
+<img src="images/quickstarts_cloudlet_mqtt_external.png" height="800" hspace="30">
 
 ## Articles, presentations & videos
 
