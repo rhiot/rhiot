@@ -25,6 +25,7 @@ MAINTAINER Greg Autric <gautric@redhat.com> (@gautric_io)
 #
 # # Mount your source in an interactive container for quick testing:
 # docker run -v `pwd`:/rhiot --privileged -i -t rhiot
+# docker run -v `pwd`:/rhiot --privileged -t rhiot /bin/bash -c "cd /rhiot; mvn clean package -Dmaven.test.skip=true"
 
 RUN yum -y install java-1.8.0-openjdk-devel git maven
 
