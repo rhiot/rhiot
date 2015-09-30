@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>rhiot-iot</artifactId>
         <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-bom</artifactId>
         <version>0.1.2-SNAPSHOT</version>
         <relativePath>../bom</relativePath>
     </parent>
