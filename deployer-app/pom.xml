@@ -7,7 +7,7 @@
         <artifactId>rhiot-iot</artifactId>
         <groupId>io.rhiot</groupId>
         <version>0.1.2-SNAPSHOT</version>
-        <relativePath>..</relativePath>
+        <relativePath>../iot</relativePath>
     </parent>
 
     <artifactId>rhiot-iot-deployer-app</artifactId>
