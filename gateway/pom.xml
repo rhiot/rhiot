@@ -21,6 +21,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>camel-gps-bu353</artifactId>
         </dependency>
@@ -71,13 +75,13 @@
 
         <!-- Testing -->
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudlet-geofencing</artifactId>
+            <groupId>com.jayway.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.jayway.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-cloudlet-geofencing</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
