@@ -37,13 +37,15 @@ import static org.slf4j.LoggerFactory.getLogger
  */
 class Gateway extends Bootstrap {
 
-    private static final Logger LOG = getLogger(Gateway.class)
+    private static final LOG = getLogger(Gateway.class)
 
     final def vertx = vertx()
 
     final def classpath = new Reflections(new ConfigurationBuilder().setUrls(forJavaClassPath()))
 
     static final def JSON = new ObjectMapper()
+
+    // Life-cycle
 
     Gateway start() {
         connect(vertx.delegate.asType(Vertx.class))
@@ -69,7 +71,7 @@ class Gateway extends Bootstrap {
 
     public static void main(String[] args) {
         JvmAgent.agentmain('host=0.0.0.0')
-        new Gateway()
+        new Gateway().start()
     }
 
 }
