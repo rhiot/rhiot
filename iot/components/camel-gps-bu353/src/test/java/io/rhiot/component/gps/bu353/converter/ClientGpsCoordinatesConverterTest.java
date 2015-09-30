@@ -29,8 +29,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
+import static java.time.ZoneOffset.UTC;
 
 public class ClientGpsCoordinatesConverterTest extends CamelTestSupport {
 
@@ -39,7 +39,7 @@ public class ClientGpsCoordinatesConverterTest extends CamelTestSupport {
     private LocalDateTime expectedDate = LocalDateTime.of(2015, 9, 1, 12, 00);
     private double lat = 23.23;
     private double lng = 12.12;
-    private String expectedBody = "1441101600000" + "," + lat + "," + lng;
+    private String expectedBody = "1441108800000" + "," + lat + "," + lng;
 
 
     @Before
@@ -51,12 +51,12 @@ public class ClientGpsCoordinatesConverterTest extends CamelTestSupport {
     @Test
     public void testSerialization() throws Exception {
         assertEquals(expectedBody, converter.mandatoryConvertTo(String.class, new ClientGpsCoordinates(
-                Date.from(expectedDate.atZone(ZoneId.systemDefault()).toInstant()), lat, lng)));
+                Date.from(expectedDate.toInstant(UTC)), lat, lng)));
     }
 
     @Test
     public void testDeserialization() throws Exception {
-        ClientGpsCoordinates expected = new ClientGpsCoordinates(Date.from(expectedDate.atZone(ZoneId.systemDefault()).toInstant()), lat, lng);
+        ClientGpsCoordinates expected = new ClientGpsCoordinates(Date.from(expectedDate.toInstant(UTC)), lat, lng);
         ClientGpsCoordinates actual = converter.mandatoryConvertTo(ClientGpsCoordinates.class, expectedBody);
         assertTrue(expected.lat() == actual.lat());
         assertTrue(expected.lng() == actual.lng());

@@ -319,9 +319,8 @@ development easier.
 
 ### Camel GPS BU353 component
 
-[BU353](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg) is one of the most popular and the 
-cheapest GPS units on the market. It is connected to the device via the USB port. If you are looking for good and cheap
-GPS receiver for your IoT solution, definitely consider purchsing this unit.
+[BU353](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg) is one of the most popular and cheapest GPS units on the market. 
+It is connected to the device via the USB port. If you are looking for good and cheap GPS receiver for your IoT solution, definitely consider purchasing this unit.
 
 Camel GPS BU353 component can be used to read current GPS information from that device. With Camel GPS BU353 you can
 just connect the receiver to your computer's USB port and read the GPS data - the component
@@ -343,13 +342,14 @@ Maven users should add the following dependency to their POM file:
 #### URI format
 
 BU353 component supports only consumer endpoints. The BU353 consumer is the polling one, i.e. it periodically asks the GPS device for the
-current coordinates. The Camel endpoint URI format for the B3353 consumer is as follows:
+current coordinates. The Camel endpoint URI format for the BU353 consumer is as follows:
 
     gps-bu353:label
     
 Where `label` can be replaced with any text label:
 
     from("gps-bu353:current-position").
+      convertBodyTo(String.class).
       to("file:///var/gps-coordinates");
       
 BU353 consumer receives the `io.rhiot.component.gps.bu353.ClientGpsCoordinates` instances:
