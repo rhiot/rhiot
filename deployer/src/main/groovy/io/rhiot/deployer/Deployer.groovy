@@ -145,7 +145,10 @@ class Deployer {
             switch(parser.command()) {
                 case 'scan':
                     println 'Scanning local networks for devices...'
+                    println()
+                    println '==========================='
                     println "Device type\t\tIPv4 address"
+                    println '---------------------------'
                     def detector = new SimplePortScanningDeviceDetector()
                     detector.detectDevices().each {
                         println "${it.type()}\t\t${it.address()}"
