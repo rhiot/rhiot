@@ -66,7 +66,7 @@ public class TinkerforgeComponent extends DefaultComponent {
             case rotarypoti :       endpoint = new RotaryPotentiometerEndpoint(uri, this); break;
             case dualrelay :        endpoint = new DualRelayEndpoint(uri, this); break;
             case solidstaterelay :  endpoint = new SolidStateRelayEndpoint(uri, this); break;
-            case voltagecurrent:   endpoint = new VoltageCurrentEndpoint(uri, this); break;
+            case voltagecurrent:    endpoint = new VoltageCurrentEndpoint(uri, this); break;
         }
         
         setProperties(endpoint, tinkerforgeUri, parameters);

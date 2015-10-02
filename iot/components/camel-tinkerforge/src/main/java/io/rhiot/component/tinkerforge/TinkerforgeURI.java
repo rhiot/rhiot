@@ -24,8 +24,8 @@ public class TinkerforgeURI {
 	
 	private String username;
 	private String password;
-	private String host;
-	private Integer port;
+	private String host = "localhost";
+	private Integer port = 4223;
 	private TinkerforgeDeviceType deviceType;
 	private String uid;
 	private String[] pathSections;

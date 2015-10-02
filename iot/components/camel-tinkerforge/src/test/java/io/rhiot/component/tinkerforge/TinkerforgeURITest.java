@@ -47,10 +47,22 @@ public class TinkerforgeURITest {
     }
     
     @Test
+    public void usesLocalhostAsDefaultHost() throws URISyntaxException {
+        TinkerforgeURI uri = new TinkerforgeURI("tinkerforge:/temperature/t1");
+        assertEquals("Host", "localhost", uri.getHost());
+    }
+    
+    @Test
+    public void usesCorrectPortAsDefaultPort() throws URISyntaxException {
+        TinkerforgeURI uri = new TinkerforgeURI("tinkerforge://localhost/temperature/t1");
+        assertEquals("Port", Integer.valueOf(4223), uri.getPort());
+    }
+    
+    @Test
     public void extractsHostAndPort() throws URISyntaxException {
         TinkerforgeURI uri = new TinkerforgeURI("tinkerforge://localhost:4223/temperature/t1");
         assertEquals("Host", "localhost", uri.getHost());
-        assertEquals("Port", new Integer(4223), uri.getPort());
+        assertEquals("Port", Integer.valueOf(4223), uri.getPort());
     }
     
     @Test
