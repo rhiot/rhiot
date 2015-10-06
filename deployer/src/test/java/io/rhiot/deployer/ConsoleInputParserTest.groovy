@@ -79,4 +79,9 @@ class ConsoleInputParserTest extends Assert {
         assertThat(new ConsoleInputParser('-a=foo:bar:1').artifact()).isEqualTo('foo:bar:1')
     }
 
+    @Test
+    void shouldParseEmptyGatewayArtifact() {
+        assertThat(new ConsoleInputParser('--someRandomOption').artifact()).isNull()
+    }
+
 }

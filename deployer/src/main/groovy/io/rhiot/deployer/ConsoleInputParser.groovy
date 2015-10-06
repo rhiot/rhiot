@@ -98,7 +98,7 @@ Options:
 
     String artifact() {
         def argument = args.find{it.startsWith('--artifact=') || it.startsWith('-a=')}
-        argument.substring(argument.indexOf('=') + 1)
+        argument != null ? argument.substring(argument.indexOf('=') + 1) : null
     }
 
 }
