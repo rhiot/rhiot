@@ -16,6 +16,9 @@
  */
 package io.rhiot.deployer
 
+import static java.util.Optional.empty
+import static java.util.Optional.of
+
 class ConsoleInputParser {
 
     // Constants
@@ -96,9 +99,15 @@ Options:
         argument.substring(argument.indexOf('=') + 1)
     }
 
-    String artifact() {
-        def argument = args.find{it.startsWith('--artifact=') || it.startsWith('-a=')}
-        argument != null ? argument.substring(argument.indexOf('=') + 1) : null
+    Optional<String> artifact() {
+        option('artifact', 'a')
+    }
+
+    // Helpers
+
+    private Optional<String> option(String longOption, String shortOption) {
+        def option = args.find{ it.startsWith("--${longOption}=") || it.startsWith("-${shortOption}=") }
+        option != null ? of(option.substring(option.indexOf('=') + 1)) : empty()
     }
 
 }

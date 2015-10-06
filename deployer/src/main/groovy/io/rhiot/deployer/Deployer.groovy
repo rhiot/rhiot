@@ -157,7 +157,7 @@ class Deployer {
                     break;
                 case 'deploy-gateway':
                     def deployer = parser.hasCredentials() ? new Deployer(parser.username(), parser.password(), parser.debug) : new Deployer(parser.debug)
-                    deployer.deploy(ofNullable(parser.artifact()), parser.properties())
+                    deployer.deploy(parser.artifact(), parser.properties())
                     break;
             }
         } catch (Exception e) {

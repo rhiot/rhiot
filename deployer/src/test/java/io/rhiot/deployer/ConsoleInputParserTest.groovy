@@ -56,12 +56,12 @@ class ConsoleInputParserTest extends Assert {
 
     @Test
     void shouldValidateUsernameAndPassword() {
-        assertTrue(new ConsoleInputParser('--username=foo', '--password=bar').hasCredentials())
+        assertThat(new ConsoleInputParser('--username=foo', '--password=bar').hasCredentials()).isTrue()
     }
 
     @Test
     void shouldValidateNoUsernameAndPassword() {
-        assertFalse(new ConsoleInputParser().hasCredentials())
+        assertThat(new ConsoleInputParser().hasCredentials()).isFalse()
     }
 
     @Test
@@ -71,17 +71,17 @@ class ConsoleInputParserTest extends Assert {
 
     @Test
     void shouldParseGatewayArtifact() {
-        assertThat(new ConsoleInputParser('--artifact=foo:bar:1').artifact()).isEqualTo('foo:bar:1')
+        assertThat(new ConsoleInputParser('--artifact=foo:bar:1').artifact().get()).isEqualTo('foo:bar:1')
     }
 
     @Test
     void shouldParseGatewayArtifactShort() {
-        assertThat(new ConsoleInputParser('-a=foo:bar:1').artifact()).isEqualTo('foo:bar:1')
+        assertThat(new ConsoleInputParser('-a=foo:bar:1').artifact().get()).isEqualTo('foo:bar:1')
     }
 
     @Test
     void shouldParseEmptyGatewayArtifact() {
-        assertThat(new ConsoleInputParser('--someRandomOption').artifact()).isNull()
+        assertThat(new ConsoleInputParser('--someRandomOption').artifact().isPresent()).isFalse()
     }
 
 }
