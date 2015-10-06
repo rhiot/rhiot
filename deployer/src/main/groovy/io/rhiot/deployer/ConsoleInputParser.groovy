@@ -89,14 +89,12 @@ Options:
         hasUsername && hasPassword
     }
 
-    String username() {
-        def argument = args.find{it.startsWith('--username=') || it.startsWith('-u=')}
-        argument.substring(argument.indexOf('=') + 1)
+    Optional<String> username() {
+        option('username', 'u')
     }
 
-    String password() {
-        def argument = args.find{it.startsWith('--password=') || it.startsWith('-p=')}
-        argument.substring(argument.indexOf('=') + 1)
+    Optional<String> password() {
+        option('password', 'p')
     }
 
     Optional<String> artifact() {

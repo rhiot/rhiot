@@ -19,6 +19,7 @@ package com.github.camellabs.iot.performance
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.deployer.ConsoleInformation
 import io.rhiot.deployer.Deployer
+import io.rhiot.deployer.DeployerBuilder
 
 import static HardwareKit.RPI2
 import static java.util.concurrent.TimeUnit.MINUTES
@@ -47,7 +48,7 @@ class PerformanceTester {
     }
 
     PerformanceTester() {
-        this(new DefaultTestResolver(), new Deployer(), new MqttServer().start(), [new StdoutResultsProcessor(), new ChartResultsProcessor()])
+        this(new DefaultTestResolver(), new DeployerBuilder().build(), new MqttServer().start(), [new StdoutResultsProcessor(), new ChartResultsProcessor()])
     }
 
     // Running tests

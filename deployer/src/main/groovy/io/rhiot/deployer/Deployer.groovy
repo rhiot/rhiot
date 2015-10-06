@@ -28,7 +28,6 @@ import java.util.concurrent.Future
 import static io.rhiot.utils.Mavens.MavenCoordinates.parseMavenCoordinates
 import static io.rhiot.utils.Mavens.artifactVersionFromDependenciesProperties
 import static java.util.Optional.empty
-import static java.util.Optional.ofNullable
 
 class Deployer {
 
@@ -47,22 +46,6 @@ class Deployer {
         this.username = username
         this.password = password
         this.debug = debug
-    }
-
-    Deployer(String username, String password, boolean debug) {
-        this(new SimplePortScanningDeviceDetector(), username, password, debug)
-    }
-
-    Deployer(DeviceDetector deviceDetector, boolean debug) {
-        this(deviceDetector, 'pi', 'raspberry', debug)
-    }
-
-    Deployer(boolean debug) {
-        this('pi', 'raspberry', debug)
-    }
-
-    Deployer() {
-        this(false)
     }
 
     def close() {
@@ -156,8 +139,7 @@ class Deployer {
                     detector.close()
                     break;
                 case 'deploy-gateway':
-                    def deployer = parser.hasCredentials() ? new Deployer(parser.username(), parser.password(), parser.debug) : new Deployer(parser.debug)
-                    deployer.deploy(parser.artifact(), parser.properties())
+                    deployGateway(parser)
                     break;
             }
         } catch (Exception e) {
@@ -170,6 +152,26 @@ class Deployer {
             }
         } finally {
             Runtime.getRuntime().exit(0)
+        }
+    }
+
+    // Helpers
+
+    @PackageScope
+    static deployGateway(ConsoleInputParser parser) {
+        def Deployer deployer = null
+        try {
+            def deployerBuilder = new DeployerBuilder()
+            if (parser.hasCredentials()) {
+                deployerBuilder.username(parser.username().get()).password(parser.password().get())
+            }
+            deployerBuilder.debug(parser.debug)
+            deployer = deployerBuilder.build()
+            deployer.deploy(parser.artifact(), parser.properties())
+        } finally {
+            if(deployer != null) {
+                deployer.close()
+            }
         }
     }
 

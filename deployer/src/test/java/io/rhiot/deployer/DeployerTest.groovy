@@ -16,7 +16,6 @@
  */
 package io.rhiot.deployer
 
-import com.google.common.truth.Truth
 import io.rhiot.deployer.detector.DeviceDetector
 import org.junit.Assert
 import org.junit.Test
@@ -28,14 +27,38 @@ class DeployerTest extends Assert {
 
     def deviceDetector = mock(DeviceDetector.class)
 
-    def deployer = new Deployer(deviceDetector, true)
+    def deployer = new DeployerBuilder().deviceDetector(deviceDetector).debug(true).build()
 
     @Test
     void shouldDetectNoSupportedDevices() {
         try {
             deployer.deploy()
         } catch (ConsoleInformation info) {
+            assertThat(info.message).contains('No supported devices detected')
+            return
+        }
+        fail()
+    }
+
+    @Test
+    void shouldUseUsernameAndPassword() {
+        try {
+            def parser = new ConsoleInputParser('--username=foo', '--password=bar')
+            Deployer.deployGateway(parser)
+        } catch (ConsoleInformation info) {
             assertTrue(info.message.contains('No supported devices detected'))
+            return
+        }
+        fail()
+    }
+
+    @Test
+    void shouldDetectUsernameWithoutPassword() {
+        try {
+            def parser = new ConsoleInputParser('--username=foo')
+            Deployer.deployGateway(parser)
+        } catch (ConsoleInformation info) {
+            assertThat(info.message).contains('Both username and password must be specified')
             return
         }
         fail()
