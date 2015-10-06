@@ -66,7 +66,7 @@ class ConsoleInputParserTest extends Assert {
 
     @Test
     void shouldParseUsername() {
-        assertThat(new ConsoleInputParser('--username=foo').username()).isEqualTo('foo')
+        assertThat(new ConsoleInputParser('--username=foo').username().get()).isEqualTo('foo')
     }
 
     @Test
