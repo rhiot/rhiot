@@ -30,7 +30,7 @@
 		<module>camel-tinkerforge-feature</module>
 		<module>camel-coap</module>
 		<module>camel-gpsd</module>
-  </modules>
+    </modules>
 
 	<build>
 		<plugins>
