@@ -410,7 +410,7 @@ BU353 component comes with the two type converters:
 > making all data on the location/course/velocity of the sensors available to be queried on TCP port 2947 of the host computer.
 > GPSD is everywhere in mobile embedded systems. It underlies the map service on Android phones. 
 > It's ubiquitous in drones, robot submarines, and driverless cars. It's increasingly common in recent generations of manned aircraft, 
-> marine navigation systems, and military vehicles." 
+> marine navigation systems, and military vehicles. 
 
 #### Maven dependency
 
@@ -455,9 +455,9 @@ not on the server side of the IoT solution.
 
 | Option                   | Default value                                                                 | Description   |
 |:-------------------------|:-----------------------------------------------------------------------       |:------------- |
-| `consumer.host`          | localhost                                                                     | Milliseconds before the polling starts.                 |
-| `consumer.port`          | 2947                                                                          | Milliseconds before the polling starts.                 |
-| `consumer.distance`      | 0                                                                             | Distance threshold to in km before consuming a message. |
+| `consumer.host`          | localhost                                                                     | Milliseconds before the polling starts.                                |
+| `consumer.port`          | 2947                                                                          | Milliseconds before the polling starts.                                |
+| `consumer.distance`      | 0                                                                             | Distance threshold in km before consuming a message, eg 0.1 for 100m.  |
 
 
 ### Camel Kura Wifi component
