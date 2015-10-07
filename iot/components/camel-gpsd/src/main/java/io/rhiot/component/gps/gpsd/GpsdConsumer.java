@@ -102,12 +102,9 @@ public class GpsdConsumer extends DefaultConsumer {
         super.doStop();
     }
 
-    //todo Taariq: 1. discuss whether to use the header, or set as body or property. 
-    //todo 2. If we only handle TPVObject then use that as param instead of this marker interface IGPSObject, but if we register listeners it can be any impl
     private Exchange createOutOnlyExchangeWithBodyAndHeaders(org.apache.camel.Endpoint endpoint, ClientGpsCoordinates messageBody, IGPSObject gpsObject) {
         Exchange exchange = endpoint.createExchange(ExchangePattern.OutOnly);
         Message message = exchange.getIn();
-        //todo 3. also consider whether adding host and port as options to help identify the origin is the best or necessary approach, mind that it's lost when writing to file and back
         message.setHeader("io.rhiot.gpsd.host", getEndpoint().getHost());
         message.setHeader("io.rhiot.gpsd.port", getEndpoint().getPort());
         message.setHeader("io.rhiot.gpsd.gpsObject", gpsObject); 

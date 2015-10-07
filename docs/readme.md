@@ -403,7 +403,6 @@ BU353 component comes with the two type converters:
 - `io.rhiot.component.gps.bu353.ClientGpsCoordinates` => `String`
 
 ### Camel GPSD component
-#TODO Polish camel-gpsd docs, possibly quoting the below snippet with the link back to credit the folks at gpsd 
 [gpsd](http://www.catb.org/gpsd/)
 > About gpsd
 > gpsd is a service daemon that monitors one or more GPSes or AIS receivers attached to a host computer through serial or USB ports, 
@@ -437,10 +436,8 @@ Where `label` can be replaced with any text label:
       
 To subscribe to events on another host you have to do 2 things, start GPSD on that host with the param -G to listen on all addresses, 
 eg gpsd -G /dev/ttyUSB0, and pass the host and optionally port to the gpsd endpoint as follows;
-# TODO Taariq: consider adding an endpoint param to the gpsd endpoint on the host to listen on all interfaces, then another device can get that data
-whenever it's on the network.
     
-    from("gpsd:current-position?host=10.0.0.1?port=2947").
+    from("gpsd:current-position?host=localhost?port=2947").
       to("file:///var/gps-coordinates");
       
       

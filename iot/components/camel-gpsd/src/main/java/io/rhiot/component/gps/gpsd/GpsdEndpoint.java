@@ -50,7 +50,7 @@ public class GpsdEndpoint extends DefaultEndpoint {
     private int port = 2947;
     @UriParam(defaultValue = "localhost")
     private String host = "localhost";
-    @UriParam(defaultValue = "0", description = "Distance in km, eg 0.1 for 100m") //todo add default for metric type and provide conversion from miles/yards etc?
+    @UriParam(defaultValue = "0", description = "Distance in km, eg 0.1 for 100m")
     private double distance = 0;
 
     private GPSdEndpoint gpsd4javaEndpoint;
