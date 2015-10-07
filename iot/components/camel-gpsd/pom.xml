@@ -56,11 +56,6 @@
             <artifactId>camel-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-deployer</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>

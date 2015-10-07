@@ -18,36 +18,22 @@
 package io.rhiot.io.rhiot.component.gps.gpsd;
 
 import de.taimos.gpsd4java.types.TPVObject;
-import io.rhiot.deployer.detector.Device;
-import io.rhiot.deployer.detector.DeviceDetector;
-import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static io.rhiot.deployer.detector.Device.DEVICE_RASPBERRY_PI_2;
+import static io.rhiot.utils.Properties.booleanProperty;
 import static org.junit.Assume.assumeTrue;
 
 public class GpsdComponentIntegrationTest extends CamelTestSupport {
 
-    static DeviceDetector deviceDetector = new SimplePortScanningDeviceDetector();
-
     @BeforeClass
     public static void beforeClass() {
-        List<Device> devices = deviceDetector.detectDevices();
-        boolean isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(DEVICE_RASPBERRY_PI_2);
-        assumeTrue(isRpiAvailable);
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        deviceDetector.close();
+        assumeTrue(booleanProperty("RUN_GPS_INTEGRATION_TESTS", false));
     }
 
     @Test
