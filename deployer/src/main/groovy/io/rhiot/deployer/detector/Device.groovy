@@ -21,7 +21,7 @@ import groovy.transform.ToString
 @ToString
 public class Device {
 
-    static final String DEVICE_RASPBERRY_PI_2 = "RaspberryPi2"
+    public static final String DEVICE_RASPBERRY_PI_2 = "RaspberryPi2"
 
     private final InetAddress address
 

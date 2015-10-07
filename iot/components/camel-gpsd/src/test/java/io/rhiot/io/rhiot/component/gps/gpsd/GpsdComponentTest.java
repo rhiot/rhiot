@@ -18,23 +18,44 @@
 package io.rhiot.io.rhiot.component.gps.gpsd;
 
 import de.taimos.gpsd4java.types.TPVObject;
+import io.rhiot.deployer.detector.Device;
+import io.rhiot.deployer.detector.DeviceDetector;
+import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.Ignore;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static io.rhiot.deployer.detector.Device.DEVICE_RASPBERRY_PI_2;
+import static org.junit.Assume.assumeTrue;
+
 public class GpsdComponentTest extends CamelTestSupport {
-    
+
+    static DeviceDetector deviceDetector = new SimplePortScanningDeviceDetector();
+
+    @BeforeClass
+    public static void beforeClass() {
+        List<Device> devices = deviceDetector.detectDevices();
+        boolean isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(DEVICE_RASPBERRY_PI_2);
+        assumeTrue(isRpiAvailable);
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        deviceDetector.close();
+    }
 
     @Test
-    @Ignore("Ignoring for now, should detect if pi is available and listening on 2947")
     public void testGpsd() throws Exception {
         MockEndpoint mock = getMockEndpoint("mock:foo");
         mock.expectedMinimumMessageCount(9);
-        
+
+
         //Should get at least 9 messages within 10 seconds
         assertMockEndpointsSatisfied(10, TimeUnit.SECONDS);
     }
