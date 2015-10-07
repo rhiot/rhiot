@@ -1,61 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>io.rhiot</groupId>
-    <artifactId>rhiot-iot-components</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-iot-components</artifactId>
+        <version>0.1.2-SNAPSHOT</version>
+    </parent>
 
-  <artifactId>camel-gpsd</artifactId>
-  <packaging>bundle</packaging>
-  <name>rhiot-iot-components-gpsd</name>
-  <description>Camel GPSD Component</description>
+    <artifactId>camel-gpsd</artifactId>
+    <packaging>bundle</packaging>
+    <name>rhiot-iot-components-gpsd</name>
+    <description>Camel GPSD Component</description>
 
-  <licenses>
-    <license>
-      <name>The Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
-  <properties>
-    <camel.osgi.export.pkg>io.rhiot.component.gps.gpsd</camel.osgi.export.pkg>
-    <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=gpsd</camel.osgi.export.service>
-  </properties>
+    <properties>
+        <camel.osgi.export.pkg>io.rhiot.component.gps.gpsd</camel.osgi.export.pkg>
+        <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=gpsd</camel.osgi.export.service>
+    </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>io.rhiot</groupId>
-      <artifactId>rhiot-utils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
 
-    <!-- testing -->
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>de.taimos</groupId>
-      <artifactId>gpsd4java</artifactId>
-      <version>1.3</version>
-    </dependency>
-  </dependencies>
+        <!-- testing -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.taimos</groupId>
+            <artifactId>gpsd4java</artifactId>
+            <version>1.3</version>
+        </dependency>
+    </dependencies>
 
 </project>
