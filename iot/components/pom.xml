@@ -29,7 +29,8 @@
 		<module>camel-tinkerforge</module>
 		<module>camel-tinkerforge-feature</module>
 		<module>camel-coap</module>
-	</modules>
+		<module>camel-gpsd</module>
+  </modules>
 
 	<build>
 		<plugins>

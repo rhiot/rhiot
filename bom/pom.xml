@@ -183,6 +183,11 @@
                 <version>${rhiot.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>camel-gpsd</artifactId>
+                <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.google.maps</groupId>
                 <artifactId>google-maps-services</artifactId>
                 <version>${google-maps-services.version}</version>
