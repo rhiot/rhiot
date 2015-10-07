@@ -18,6 +18,7 @@
 package io.rhiot.io.rhiot.component.gps.gpsd;
 
 import de.taimos.gpsd4java.types.TPVObject;
+import io.rhiot.component.gps.gpsd.GpsdConstants;
 import io.rhiot.deployer.detector.Device;
 import io.rhiot.deployer.detector.DeviceDetector;
 import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector;
@@ -66,7 +67,7 @@ public class GpsdComponentIntegrationTest extends CamelTestSupport {
             public void configure() {
                 from("gpsd://gpsSpeedTest?host=rhiot-pi&port=2947").routeId("gpsdSpeed")
                     .process(exchange -> {
-                        TPVObject tpvObject = exchange.getIn().getHeader("io.rhiot.gpsd.tpvObject", TPVObject.class);
+                        TPVObject tpvObject = exchange.getIn().getHeader(GpsdConstants.TPV_HEADER, TPVObject.class);
                         if (tpvObject.getSpeed() > 0) {
                             log.warn("Moving at [{}] meters/second, course [{}]", tpvObject.getSpeed(), tpvObject.getCourse());
                         } else {
