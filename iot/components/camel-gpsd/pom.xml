@@ -29,20 +29,20 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
             <groupId>de.taimos</groupId>
             <artifactId>gpsd4java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
         </dependency>
 
         <!-- testing -->
@@ -52,13 +52,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-test</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-deployer</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-deployer</artifactId>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
