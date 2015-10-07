@@ -21,7 +21,7 @@ package io.rhiot.component.gps.gpsd;
  * Constants Class
  */
 public class GpsdConstants {
-    public static final boolean TPV_HEADER = "io.rhiot.gpsd.tpvObject";
+    public static final String TPV_HEADER = "io.rhiot.gpsd.tpvObject";
 
     private GpsdConstants() {
         // Constants class
