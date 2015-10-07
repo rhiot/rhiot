@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 import static io.rhiot.deployer.detector.Device.DEVICE_RASPBERRY_PI_2;
 import static org.junit.Assume.assumeTrue;
 
-public class GpsdComponentTest extends CamelTestSupport {
+public class GpsdComponentIntegrationTest extends CamelTestSupport {
 
     static DeviceDetector deviceDetector = new SimplePortScanningDeviceDetector();
 
