@@ -64,9 +64,9 @@ public class GpsdComponentIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("gpsd://gpsSpeedTest?host=localhost&port=2947").routeId("gpsdSpeed")
+                from("gpsd://gpsSpeedTest?host=rhiot-pi&port=2947").routeId("gpsdSpeed")
                     .process(exchange -> {
-                        TPVObject tpvObject = exchange.getIn().getHeader("io.rhiot.gpsd.gpsObject", TPVObject.class);
+                        TPVObject tpvObject = exchange.getIn().getHeader("io.rhiot.gpsd.tpvObject", TPVObject.class);
                         if (tpvObject.getSpeed() > 0) {
                             log.warn("Moving at [{}] meters/second, course [{}]", tpvObject.getSpeed(), tpvObject.getCourse());
                         } else {

@@ -424,7 +424,7 @@ Maven users should add the following dependency to their POM file:
 #### URI format
 
 GPSD component supports only consumer endpoints. The GPSD consumer is event driven, subscribing to Time-Position-Velocity reports and converting them to ClientGpsCoordinates. 
-The original TPVObject from gpsd4java is available in the header io.rhiot.gpsd.gpsObject
+The original TPVObject from gpsd4java is available in the header io.rhiot.gpsd.tpvObject
 The Camel endpoint URI format for the GPSD consumer is as follows:
 
     gpsd:label

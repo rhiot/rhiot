@@ -102,12 +102,10 @@ public class GpsdConsumer extends DefaultConsumer {
         super.doStop();
     }
 
-    private Exchange createOutOnlyExchangeWithBodyAndHeaders(org.apache.camel.Endpoint endpoint, ClientGpsCoordinates messageBody, IGPSObject gpsObject) {
+    private Exchange createOutOnlyExchangeWithBodyAndHeaders(org.apache.camel.Endpoint endpoint, ClientGpsCoordinates messageBody, TPVObject tpvObject) {
         Exchange exchange = endpoint.createExchange(ExchangePattern.OutOnly);
         Message message = exchange.getIn();
-        message.setHeader("io.rhiot.gpsd.host", getEndpoint().getHost());
-        message.setHeader("io.rhiot.gpsd.port", getEndpoint().getPort());
-        message.setHeader("io.rhiot.gpsd.gpsObject", gpsObject); 
+        message.setHeader("io.rhiot.gpsd.tpvObject", tpvObject); 
         message.setBody(messageBody);
         return exchange;
     }
