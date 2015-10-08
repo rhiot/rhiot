@@ -34,14 +34,22 @@ import java.util.concurrent.TimeUnit;
 
 import static io.rhiot.deployer.detector.Device.DEVICE_RASPBERRY_PI_2;
 import static org.junit.Assume.assumeTrue;
+import static io.rhiot.utils.Properties.booleanProperty;
 
+/**
+ * This test detects the Raspberry Pi on the network and consumes GPSD from the socket.
+ * NB GPSD on the Raspberry Pi must be listening on all interfaces, ie gpsd -G /dev/ttyUSB0 , the default is private.
+ */
 public class GpsdComponentIntegrationTest extends CamelTestSupport {
 
     static DeviceDetector deviceDetector = new SimplePortScanningDeviceDetector();
-
+    static List<Device> devices;
+    
     @BeforeClass
     public static void beforeClass() {
-        List<Device> devices = deviceDetector.detectDevices();
+        assumeTrue(booleanProperty("RUN_GPS_INTEGRATION_TESTS", false));
+        
+        devices = deviceDetector.detectDevices();
         boolean isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(DEVICE_RASPBERRY_PI_2);
         assumeTrue(isRpiAvailable);
     }
@@ -65,7 +73,8 @@ public class GpsdComponentIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("gpsd://gpsSpeedTest?host=rhiot-pi&port=2947").routeId("gpsdSpeed")
+                String piAddress = devices.get(0).address().getHostAddress();
+                from("gpsd://gpsSpeedTest?host=" + piAddress).routeId("gpsdSpeed")
                     .process(exchange -> {
                         TPVObject tpvObject = exchange.getIn().getHeader(GpsdConstants.TPV_HEADER, TPVObject.class);
                         if (tpvObject.getSpeed() > 0) {
