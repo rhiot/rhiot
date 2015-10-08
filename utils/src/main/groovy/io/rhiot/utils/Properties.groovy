@@ -17,14 +17,18 @@
 package io.rhiot.utils
 
 import groovy.transform.CompileStatic
-
-import javax.swing.text.html.Option
+import java.util.Properties as JProperties
 
 import static java.lang.System.getenv
-import static java.lang.System.setProperty
 
 @CompileStatic
 final class Properties {
+
+    private static final JProperties applicationPropertiesFile = new JProperties()
+
+    static {
+        applicationPropertiesFile.load(Properties.class.getResourceAsStream('/application.properties'))
+    }
 
     private Properties() {
     }
@@ -46,7 +50,7 @@ final class Properties {
             return property
         }
 
-        return defaultValue
+        applicationPropertiesFile.getProperty(key, defaultValue)
     }
 
     static String stringProperty(String key) {
