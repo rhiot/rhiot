@@ -22,6 +22,8 @@ import org.apache.camel.component.mock.MockEndpoint
 import org.junit.AfterClass
 import org.junit.Test
 
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpJmsBridge
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.mqtt
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.mqttJmsBridge
 import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
@@ -31,12 +33,18 @@ class EmbeddedActiveMqBrokerBootInitializerTest {
 
     def queue = uuid()
 
+    def topic = uuid()
+
+    def seda = "seda:${uuid()}"
+
     static def bootstrap = new Bootstrap().start()
 
     @AfterClass
     static void AfterClass() {
         bootstrap.stop()
     }
+
+    // Tests
 
     @Test
     void shouldReadMessagesFromMqttTopic() {
@@ -114,6 +122,129 @@ class EmbeddedActiveMqBrokerBootInitializerTest {
 
         // When
         camelContext().createProducerTemplate().sendBody('seda:test2', 'foo')
+
+        // Then
+        mock.assertIsSatisfied()
+    }
+
+    @Test
+    void shouldReadMessagesFromAmqpQueue() {
+        // Given
+        def message = uuid()
+        camelContext().addRoutes(new RouteBuilder() {
+            @Override
+            void configure() {
+                from(amqp("queue:${queue}")).to("mock:${queue}")
+            }
+        })
+        def mock = camelContext().getEndpoint("mock:${queue}", MockEndpoint.class)
+        mock.expectedBodiesReceived(message)
+
+        // When
+        camelContext().createProducerTemplate().sendBody(amqp("queue:${queue}"), message)
+
+        // Then
+        mock.assertIsSatisfied()
+    }
+
+    @Test
+    void shouldReadMessagesFromAmqpTopic() {
+        // Given
+        def message = uuid()
+        camelContext().addRoutes(new RouteBuilder() {
+            @Override
+            void configure() {
+                from(amqp("topic:${topic}")).to("mock:${topic}")
+            }
+        })
+        def mock = camelContext().getEndpoint("mock:${topic}", MockEndpoint.class)
+        mock.expectedBodiesReceived(message)
+
+        // When
+        camelContext().createProducerTemplate().sendBody(amqp("topic:${topic}"), message)
+
+        // Then
+        mock.assertIsSatisfied()
+    }
+
+    @Test
+    void shouldWriteMessagesToAmqpQueue() {
+        // Given
+        camelContext().addRoutes(new RouteBuilder() {
+            @Override
+            void configure() {
+                from("seda:${queue}").to(amqp("queue:${queue}"))
+
+                from(amqp("queue:${queue}")).to("mock:${queue}")
+            }
+        })
+        def mock = camelContext().getEndpoint("mock:${queue}", MockEndpoint.class)
+        mock.expectedBodiesReceived('foo')
+
+        // When
+        camelContext().createProducerTemplate().sendBody("seda:${queue}", 'foo')
+
+        // Then
+        mock.assertIsSatisfied()
+    }
+
+    @Test
+    void shouldWriteMessagesToAmqpTopic() {
+        // Given
+        camelContext().addRoutes(new RouteBuilder() {
+            @Override
+            void configure() {
+                from("seda:${topic}").to(amqp("topic:${topic}"))
+
+                from(amqp("topic:${topic}")).to("mock:${topic}")
+            }
+        })
+        def mock = camelContext().getEndpoint("mock:${topic}", MockEndpoint.class)
+        mock.expectedBodiesReceived('foo')
+
+        // When
+        camelContext().createProducerTemplate().sendBody("seda:${topic}", 'foo')
+
+        // Then
+        mock.assertIsSatisfied()
+    }
+
+    @Test
+    void shouldReadMessageFromAmqpJmsBridgeTopic() {
+        // Given
+        camelContext().addRoutes(new RouteBuilder() {
+            @Override
+            void configure() {
+                from(amqpJmsBridge(queue)).to("mock:${queue}")
+            }
+        })
+        sleep(2000)
+        def mock = camelContext().getEndpoint("mock:${queue}", MockEndpoint.class)
+        mock.expectedBodiesReceived('foo')
+
+        // When
+        camelContext().createProducerTemplate().sendBody(amqp(queue), 'foo')
+
+        // Then
+        mock.assertIsSatisfied()
+    }
+
+    @Test
+    void shouldWriteMessageToAmqpJmsBridgeTopic() {
+        // Given
+        camelContext().addRoutes(new RouteBuilder() {
+            @Override
+            void configure() {
+                from(seda).to(amqpJmsBridge(queue))
+
+                from(amqp(queue)).to("mock:${queue}")
+            }
+        })
+        def mock = camelContext().getEndpoint("mock:${queue}", MockEndpoint.class)
+        mock.expectedBodiesReceived('foo')
+
+        // When
+        camelContext().createProducerTemplate().sendBody(seda, 'foo')
 
         // Then
         mock.assertIsSatisfied()
