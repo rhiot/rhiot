@@ -22,7 +22,7 @@ import static io.rhiot.steroids.Steroids.beans
 import static java.lang.Runtime.runtime;
 
 /**
- * Starts up Steroids framework, scans the classpath for the initializers and run the latter.
+ * Starts up Steroids framework, scans the classpath for the initializers and runs the latter.
  */
 class Bootstrap implements WithLogger {
 
@@ -40,6 +40,7 @@ class Bootstrap implements WithLogger {
     }
 
     Bootstrap stop() {
+        log().debug('Stopping Steroids Bootstrap: {}', getClass().name)
         initializers.reverse().each { it.stop() }
         this
     }

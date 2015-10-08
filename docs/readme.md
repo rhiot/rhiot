@@ -1254,6 +1254,34 @@ The key principles behind the steroids are:
 * promote [Kubernetes-like service discovery](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/services.md)
 * promote loading reloadable resources from the external sources (like files and databases)
 
+### Steroids bootstrap
+
+Steroids Bootstrap is a small engine that can be used to scan the classpath and automatically load steroids modules.
+Bootstrap provides opinionated *convention over configuration* runtime simplifying the wiring between common components
+used in Rhiot-based applications.
+
+In order to start using bootstrap, add the following Maven dependency to your project:
+
+    <dependency>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-steroids</artifactId>
+        <version>0.1.2</version>
+    </dependency>
+
+And then add the following code to your project:
+
+    import io.rhiot.steroids.bootstrap.Bootstrap;
+    ...
+    Bootstrap bootstrap = new Bootstrap().start();
+    ... // Do your stuff
+    bootstrap.stop();
+
+You can also use our main class (which is particularly useful when working with the fat jars):
+
+    import io.rhiot.steroids.bootstrap.Bootstrap;
+    ...
+    Bootstrap.main();
+
 ### Injecting MongoDB client
 
 Steroids come with the MongoDB module that can be used to simplify access to the MongoDB database. In order to take the
