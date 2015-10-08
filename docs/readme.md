@@ -1375,7 +1375,14 @@ the embedded one), run the cloudlet with the `BROKER_URL` environment variable o
 #### Sample chat application
 
 The MQTT cloudlet quickstart is in fact a simple chat application. Clients can send the messages to the chat channel
-by subscribing to the broker and sending the messages to the `chat` MQTT topic. The clients can subscribe to the chat updates
+by subscribing to the broker and sending the messages to the `chat` MQTT topic. To send some messages to the chat you
+can use the standalone [MQTT.js](https://www.npmjs.com/package/mqtt) client:
+
+    mqtt pub -t 'chat' -h 'localhost' -m 'Hello, this is the IoT device!'
+    mqtt pub -t 'chat' -h 'localhost' -m 'I just wanted to say hello!'
+    mqtt pub -t 'chat' -h 'localhost' -m 'Hello, IoT device. Nice to meet you!'
+
+The clients can subscribe to the chat updates
 by listening on the `chat-updates` MQTT topic - whenever the new message has been sent to the chat, the clients registered
 to the `chat-updates` will receive the updated chat history.
 
