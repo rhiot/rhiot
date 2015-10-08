@@ -1254,6 +1254,25 @@ The key principles behind the steroids are:
 * promote [Kubernetes-like service discovery](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/services.md)
 * promote loading reloadable resources from the external sources (like files and databases)
 
+### Reading application properties
+
+Almost all components of Rhiot uses the `io.rhiot.utils.Properties` class to read the application properties. That
+properties utility can be used to resolve the value of the given application property. For example:
+
+    String property = Properties.stringProperty("myProperty");
+    String property = Properties.stringProperty("myProperty", "defaultValue");
+
+`Properties` provides methods not only for the String properties, but also for the primitive data types. For example:
+
+    Integer timeout = Properties.intProperty("timeout");
+    int timeout = Properties.intProperty("timeout", 1000);
+
+The `Properties` tries to resolve the property value from the following locations (and in this order):
+* JVM system properties
+* environment variables
+* `application.properties` file located in the classpath
+
+
 ### Steroids bootstrap
 
 Steroids Bootstrap is a small engine that can be used to scan the classpath and automatically load steroids modules.

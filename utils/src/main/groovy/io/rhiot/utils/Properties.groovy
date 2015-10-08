@@ -27,7 +27,10 @@ final class Properties {
     private static final JProperties applicationPropertiesFile = new JProperties()
 
     static {
-        applicationPropertiesFile.load(Properties.class.getResourceAsStream('/application.properties'))
+        def propertiesStream = Properties.class.getResourceAsStream('/application.properties')
+        if(propertiesStream != null) {
+            applicationPropertiesFile.load(propertiesStream)
+        }
     }
 
     private Properties() {
