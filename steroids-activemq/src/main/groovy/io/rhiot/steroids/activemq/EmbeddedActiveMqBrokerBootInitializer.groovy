@@ -22,16 +22,21 @@ import org.apache.activemq.ActiveMQConnectionFactory
 import org.apache.activemq.broker.BrokerService
 import org.springframework.jms.connection.CachingConnectionFactory
 
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.getDEFAULT_BROKER_NAME
 import static io.rhiot.steroids.camel.CamelBootInitializer.registry
 import static io.rhiot.utils.Properties.booleanProperty
 import static io.rhiot.utils.Properties.stringProperty;
 
 public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
 
-    final static def DEFAULT_BROKER_NAME = 'embedded-rhiot-broker'
+    // Constants
+
+    public static final String DEFAULT_BROKER_NAME = 'embedded-rhiot-broker'
+
+    // Collaborators
 
     private BrokerService brokerService
+
+    // Life-cycle
 
     @Override
     void start() {
@@ -59,6 +64,8 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
     int order() {
         1000
     }
+
+    // Camel DSL
 
     static String mqtt(String topic) {
         int port = Properties.intProperty('MQTT_PORT', 1883)
