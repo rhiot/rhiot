@@ -1356,7 +1356,7 @@ In order to create the AMQP cloudlet project execute the following commands:
 
     git clone git@github.com:rhiot/quickstarts.git
     cp -r quickstarts/cloudlets/amqp amqp
-    cd mqtt
+    cd amqp
     mvn install
 
 To start the AMQP cloudlet execute the following command:
