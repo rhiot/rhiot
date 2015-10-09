@@ -36,18 +36,18 @@ Rhiot comes with the following features:
     - [URI format](#uri-format)
     - [Options](#options)
     - [Process manager](#process-manager)
+    - [BU353 type converters](#bu353-type-converters)
   - [Camel GPSD component](#camel-gpsd-component)
-    - [Maven dependency](#maven-dependency)
-    - [URI format](#uri-format)
-    - [Options](#options)
-    - [Process manager](#process-manager)
-  - [Camel Kura Wifi component](#camel-kura-wifi-component)
     - [Maven dependency](#maven-dependency-1)
     - [URI format](#uri-format-1)
     - [Options](#options-1)
+  - [Camel Kura Wifi component](#camel-kura-wifi-component)
+    - [Maven dependency](#maven-dependency-2)
+    - [URI format](#uri-format-2)
+    - [Options](#options-2)
     - [Detecting Kura NetworkService](#detecting-kura-networkservice)
   - [Camel TinkerForge component](#camel-tinkerforge-component)
-    - [Maven dependency](#maven-dependency-2)
+    - [Maven dependency](#maven-dependency-3)
     - [General URI format](#general-uri-format)
       - [Ambientlight](#ambientlight)
       - [Temperature](#temperature)
@@ -58,7 +58,7 @@ Rhiot comes with the following features:
       - [Consuming:](#consuming)
       - [Producing](#producing)
   - [Camel Pi4j component](#camel-pi4j-component)
-    - [Maven dependency](#maven-dependency-3)
+    - [Maven dependency](#maven-dependency-4)
     - [URI format for GPIO](#uri-format-for-gpio)
         - [Optional URI Parameters](#optional-uri-parameters-1)
       - [Consuming:](#consuming-1)
@@ -68,7 +68,7 @@ Rhiot comes with the following features:
         - [Optional URI Parameters](#optional-uri-parameters-2)
         - [i2c driver](#i2c-driver)
   - [Camel PubNub component](#camel-pubnub-component)
-    - [Maven dependency](#maven-dependency-4)
+    - [Maven dependency](#maven-dependency-5)
     - [General URI format](#general-uri-format-1)
         - [URI Parameters](#uri-parameters)
       - [Consuming:](#consuming-2)
@@ -108,11 +108,20 @@ Rhiot comes with the following features:
     - [Mock sensor to the external MQTT broker](#mock-sensor-to-the-external-mqtt-broker)
     - [Sample results for the RPI2 hardware kit](#sample-results-for-the-rpi2-hardware-kit)
 - [Steroids configuration framework](#steroids-configuration-framework)
+  - [Reading application properties](#reading-application-properties)
+  - [Steroids bootstrap](#steroids-bootstrap)
   - [Injecting MongoDB client](#injecting-mongodb-client)
 - [Quickstarts](#quickstarts)
+  - [AMQP cloudlet quickstart](#amqp-cloudlet-quickstart)
+    - [Creating and running the AMQP cloudlet project](#creating-and-running-the-amqp-cloudlet-project)
+    - [AMQP broker](#amqp-broker)
+    - [Sample chat application](#sample-chat-application)
+    - [Architectural overview](#architectural-overview)
   - [MQTT cloudlet quickstart](#mqtt-cloudlet-quickstart)
     - [Creating and running the MQTT cloudlet project](#creating-and-running-the-mqtt-cloudlet-project)
     - [MQTT broker](#mqtt-broker)
+    - [Sample chat application](#sample-chat-application-1)
+    - [Architectural overview](#architectural-overview-1)
 - [Articles, presentations & videos](#articles-presentations-&-videos)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -1336,6 +1345,69 @@ solution. Quickstarts are hosted at GitHub ([rhiot/quickstarts](https://github.c
 downloaded using the following shell command:
 
     git clone git@github.com:rhiot/quickstarts.git
+
+### AMQP cloudlet quickstart
+
+The AMQP cloudlet quickstart can be used as a base for the fat-jar AMQP microservices.
+
+#### Creating and running the AMQP cloudlet project
+
+In order to create the AMQP cloudlet project execute the following commands:
+
+    git clone git@github.com:rhiot/quickstarts.git
+    cp -r quickstarts/cloudlets/amqp amqp
+    cd mqtt
+    mvn install
+
+To start the AMQP cloudlet execute the following command:
+
+    java -jar target/rhiot-cloudlets-amqp-1.0.0-SNAPSHOT.jar
+
+You can also build and run it as a Docker image (we love Docker and recommend this approach):
+
+    TARGET_IMAGE=yourUsername/rhiot-cloudlets-amqp
+    mvn install docker:build docker:push -Ddocker.image.target=${TARGET_IMAGE}
+    docker run -it ${TARGET_IMAGE}
+
+#### AMQP broker
+
+By default AMQP cloudlet quickstart starts embedded [ActiveMQ](http://activemq.apache.org) AMQP broker (on
+5672 port). If you would like to connect your cloudlet application to the external ActiveMQ broker (instead of starting
+the embedded one), run the cloudlet with the `BROKER_URL` environment variable or system property, for example:
+
+    java -DBROKER_URL=tcp://amqbroker.example.com:61616 -jar target/rhiot-cloudlets-amqp-1.0.0-SNAPSHOT.jar
+
+...or...
+
+    docker run -e BROKER_URL=tcp://amqbroker.example.com:61616 -it yourUsername/rhiot-cloudlets-amqp
+
+#### Sample chat application
+
+The AMQP cloudlet quickstart is in fact a simple chat application. Clients can send the messages to the chat channel
+by subscribing to the broker and sending the messages to the `chat` AMQP queue.
+
+The clients can subscribe to the chat updates
+by listening on the `chat-updates` AMQP topic - whenever the new message has been sent to the chat, the clients registered
+to the `chat-updates` will receive the updated chat history.
+
+The quickstart also exposed the simple REST API that can be used to read the chat history using the HTTP `GET` request:
+
+    $ curl http://localhost:8181/chat
+    Hello, this is the IoT device!
+    I just wanted to say hello!
+    Hello, IoT device. Nice to meet you!
+
+#### Architectural overview
+
+When AMQP cloudlet is started with the embedded ActiveMQ broker, the architecture of the example is the following:
+
+<img src="images/quickstarts_cloudlet_mqtt_embedded.png" height="400" hspace="30">
+
+When you connect to the external ActiveMQ broker (using `BROKER_URL` option), the architecture of the example becomes
+more like the following diagram:
+
+<img src="images/quickstarts_cloudlet_mqtt_external.png" height="800" hspace="30">
+
 
 ### MQTT cloudlet quickstart
 
