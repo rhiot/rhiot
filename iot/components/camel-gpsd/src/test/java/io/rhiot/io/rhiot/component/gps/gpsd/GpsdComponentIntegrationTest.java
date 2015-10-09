@@ -22,12 +22,15 @@ import io.rhiot.component.gps.gpsd.GpsdConstants;
 import io.rhiot.deployer.detector.Device;
 import io.rhiot.deployer.detector.DeviceDetector;
 import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector;
+import io.rhiot.utils.Networks;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -37,21 +40,31 @@ import static org.junit.Assume.assumeTrue;
 import static io.rhiot.utils.Properties.booleanProperty;
 
 /**
- * This test detects the Raspberry Pi on the network and consumes GPSD from the socket.
+ * This test detects the Raspberry Pi on the network and consumes GPSD messages from the socket.
  * NB GPSD on the Raspberry Pi must be listening on all interfaces, ie gpsd -G /dev/ttyUSB0 , the default is private.
  */
 public class GpsdComponentIntegrationTest extends CamelTestSupport {
 
+    private static final Logger LOG = LoggerFactory.getLogger(GpsdComponentIntegrationTest.class);
+    
     static DeviceDetector deviceDetector = new SimplePortScanningDeviceDetector();
     static List<Device> devices;
+    static boolean isRpiAvailable;
     
     @BeforeClass
     public static void beforeClass() {
-        assumeTrue(booleanProperty("RUN_GPS_INTEGRATION_TESTS", false));
         
         devices = deviceDetector.detectDevices();
-        boolean isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(DEVICE_RASPBERRY_PI_2);
-        assumeTrue(isRpiAvailable);
+        isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(DEVICE_RASPBERRY_PI_2) &&
+                Networks.available(devices.get(0).address().getHostAddress(), GpsdConstants.DEFAULT_PORT);
+        
+        //If Pi is available and the default GPSD port is open then test that 
+        if (isRpiAvailable && Networks.available(devices.get(0).address().getHostAddress(), GpsdConstants.DEFAULT_PORT)) {
+            LOG.debug("Pi is available to test");
+        } else {
+            //Otherwise assume the test is explicitly set to run
+            assumeTrue(booleanProperty("RUN_GPS_INTEGRATION_TESTS", false));
+        }
     }
 
     @AfterClass
@@ -64,7 +77,6 @@ public class GpsdComponentIntegrationTest extends CamelTestSupport {
         MockEndpoint mock = getMockEndpoint("mock:foo");
         mock.expectedMinimumMessageCount(9);
 
-
         //Should get at least 9 messages within 10 seconds
         assertMockEndpointsSatisfied(10, TimeUnit.SECONDS);
     }
@@ -73,7 +85,7 @@ public class GpsdComponentIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                String piAddress = devices.get(0).address().getHostAddress();
+                String piAddress = isRpiAvailable ? devices.get(0).address().getHostAddress() : "localhost";
                 from("gpsd://gpsSpeedTest?host=" + piAddress).routeId("gpsdSpeed")
                     .process(exchange -> {
                         TPVObject tpvObject = exchange.getIn().getHeader(GpsdConstants.TPV_HEADER, TPVObject.class);

@@ -186,6 +186,34 @@ final class Networks {
     }
 
     /**
+     * Checks to see if a specific port is available on the specified host.
+     *
+     * @param port the port number to check for availability
+     * @return <tt>true</tt> if the port is available, or <tt>false</tt> if not
+     * @throws IllegalArgumentException is thrown if the port number is out of range
+     */
+    public static boolean available(String host, int port) throws IllegalArgumentException {
+        
+        if (port < MIN_PORT_NUMBER || port > MAX_PORT_NUMBER) {
+            throw new IllegalArgumentException("Invalid port");
+        }
+        
+        def available
+        if (isReachable(host)) {
+            def socket
+            try {
+                socket = new Socket(host, port)
+                available = socket.isConnected()
+            } finally {
+                if (socket != null) {
+                    socket.close()
+                }
+            }
+        }
+        return available
+    }
+
+    /**
      * Checks to see if a specific port is available.
      *
      * @param port the port number to check for availability

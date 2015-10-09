@@ -21,8 +21,9 @@ package io.rhiot.component.gps.gpsd;
  * Constants Class
  */
 public class GpsdConstants {
+    public static final int DEFAULT_PORT = 2947;
     public static final String TPV_HEADER = "io.rhiot.gpsd.tpvObject";
-
+    
     private GpsdConstants() {
         // Constants class
     }
