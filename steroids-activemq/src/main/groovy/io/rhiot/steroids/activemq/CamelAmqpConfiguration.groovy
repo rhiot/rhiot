@@ -30,9 +30,13 @@ class CamelAmqpConfiguration extends RouteBuilder {
     @Override
     void configure() {
         def brokerUrl = externalBrokerUrl() ?: 'localhost'
+
+        // Starting from Camel 2.16.1 (due to the CAMEL-9204) replace the code below with:
+        // AMQPComponent.amqp10Component(uri)
         def connectionFactory = ConnectionFactoryImpl.createFromURL("amqp://guest:guest@${brokerUrl}:${amqpPort()}")
         connectionFactory.topicPrefix = 'topic://'
         def amqpComponent = new AMQPComponent(connectionFactory)
+
         context.addComponent('amqp', amqpComponent)
     }
 

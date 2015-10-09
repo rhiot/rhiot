@@ -53,12 +53,12 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-paho</artifactId>
         </dependency>
-        <!-- Can be removed from Camel 2.17 due to CAMEL-9203: camel-amqp should provide qpid dependencies -->
+        <!-- Can be removed from Camel 2.16.1 due to CAMEL-9203: camel-amqp should provide qpid dependencies -->
         <dependency>
             <groupId>org.apache.qpid</groupId>
             <artifactId>qpid-amqp-1-0-client-jms</artifactId>
         </dependency>
-        <!-- Can be removed from Camel 2.17 due to CAMEL-9203: camel-amqp should provide qpid dependencies -->
+        <!-- Can be removed from Camel 2.16.1 due to CAMEL-9203: camel-amqp should provide qpid dependencies -->
         <dependency>
             <groupId>org.apache.qpid</groupId>
             <artifactId>qpid-client</artifactId>
