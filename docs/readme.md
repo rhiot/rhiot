@@ -1254,6 +1254,53 @@ The key principles behind the steroids are:
 * promote [Kubernetes-like service discovery](https://github.com/kubernetes/kubernetes/blob/master/docs/user-guide/services.md)
 * promote loading reloadable resources from the external sources (like files and databases)
 
+### Reading application properties
+
+Almost all components of Rhiot uses the `io.rhiot.utils.Properties` class to read the application properties. That
+properties utility can be used to resolve the value of the given application property. For example:
+
+    String property = Properties.stringProperty("myProperty");
+    String property = Properties.stringProperty("myProperty", "defaultValue");
+
+`Properties` provides methods not only for the String properties, but also for the primitive data types. For example:
+
+    Integer timeout = Properties.intProperty("timeout");
+    int timeout = Properties.intProperty("timeout", 1000);
+
+The `Properties` tries to resolve the property value from the following locations (and in this order):
+* JVM system properties
+* environment variables
+* `application.properties` file located in the classpath
+
+
+### Steroids bootstrap
+
+Steroids Bootstrap is a small engine that can be used to scan the classpath and automatically load steroids modules.
+Bootstrap provides opinionated *convention over configuration* runtime simplifying the wiring between common components
+used in Rhiot-based applications.
+
+In order to start using bootstrap, add the following Maven dependency to your project:
+
+    <dependency>
+        <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-steroids</artifactId>
+        <version>0.1.2</version>
+    </dependency>
+
+And then add the following code to your project:
+
+    import io.rhiot.steroids.bootstrap.Bootstrap;
+    ...
+    Bootstrap bootstrap = new Bootstrap().start();
+    ... // Do your stuff
+    bootstrap.stop();
+
+You can also use our main class (which is particularly useful when working with the fat jars):
+
+    import io.rhiot.steroids.bootstrap.Bootstrap;
+    ...
+    Bootstrap.main();
+
 ### Injecting MongoDB client
 
 Steroids come with the MongoDB module that can be used to simplify access to the MongoDB database. In order to take the
@@ -1328,7 +1375,14 @@ the embedded one), run the cloudlet with the `BROKER_URL` environment variable o
 #### Sample chat application
 
 The MQTT cloudlet quickstart is in fact a simple chat application. Clients can send the messages to the chat channel
-by subscribing to the broker and sending the messages to the `chat` MQTT topic. The clients can subscribe to the chat updates
+by subscribing to the broker and sending the messages to the `chat` MQTT topic. To send some messages to the chat you
+can use the standalone [MQTT.js](https://www.npmjs.com/package/mqtt) client:
+
+    mqtt pub -t 'chat' -h 'localhost' -m 'Hello, this is the IoT device!'
+    mqtt pub -t 'chat' -h 'localhost' -m 'I just wanted to say hello!'
+    mqtt pub -t 'chat' -h 'localhost' -m 'Hello, IoT device. Nice to meet you!'
+
+The clients can subscribe to the chat updates
 by listening on the `chat-updates` MQTT topic - whenever the new message has been sent to the chat, the clients registered
 to the `chat-updates` will receive the updated chat history.
 

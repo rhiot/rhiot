@@ -17,21 +17,26 @@
 package io.rhiot.steroids.activemq
 
 import io.rhiot.steroids.bootstrap.BootInitializer
-import io.rhiot.utils.Properties
 import org.apache.activemq.ActiveMQConnectionFactory
 import org.apache.activemq.broker.BrokerService
 import org.springframework.jms.connection.CachingConnectionFactory
 
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.getDEFAULT_BROKER_NAME
 import static io.rhiot.steroids.camel.CamelBootInitializer.registry
 import static io.rhiot.utils.Properties.booleanProperty
-import static io.rhiot.utils.Properties.stringProperty;
+import static io.rhiot.utils.Properties.intProperty
+import static io.rhiot.utils.Properties.stringProperty
 
 public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
 
-    final static def DEFAULT_BROKER_NAME = 'embedded-rhiot-broker'
+    // Constants
+
+    public static final String DEFAULT_BROKER_NAME = 'embedded-rhiot-broker'
+
+    // Collaborators
 
     private BrokerService brokerService
+
+    // Life-cycle
 
     @Override
     void start() {
@@ -39,11 +44,17 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
         if(brokerUrl == null) {
             brokerService = new BrokerService()
             brokerService.brokerName = DEFAULT_BROKER_NAME
+
             boolean isMqttEnabled = booleanProperty('MQTT_ENABLED', true)
             if (isMqttEnabled) {
-                int mqttPort = Properties.intProperty('MQTT_PORT', 1883)
-                brokerService.addConnector("mqtt://0.0.0.0:${mqttPort}")
+                brokerService.addConnector("mqtt://0.0.0.0:${mqttPort()}")
             }
+
+            boolean isAmqpEnabled = booleanProperty('AMQP_ENABLED', true)
+            if (isAmqpEnabled) {
+                brokerService.addConnector("amqp://0.0.0.0:${amqpPort()}?transport.transformer=jms")
+            }
+
             brokerService.start()
         }
     }
@@ -60,9 +71,10 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
         1000
     }
 
+    // Camel DSL
+
     static String mqtt(String topic) {
-        int port = Properties.intProperty('MQTT_PORT', 1883)
-        "paho:${topic}?brokerUrl=tcp://localhost:${port}"
+        "paho:${topic}?brokerUrl=tcp://localhost:${mqttPort()}"
     }
 
     static String mqttJmsBridge(String topic) {
@@ -74,8 +86,31 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
         "jms:topic:${topic}?connectionFactory=#jmsConnectionFactory"
     }
 
-    private static def externalBrokerUrl() {
+    static String amqp(String channel) {
+        "amqp:${channel}"
+    }
+
+    static String amqpJmsBridge(String channel) {
+        if(!registry().containsKey('jmsConnectionFactory')) {
+            def brokerUrl = externalBrokerUrl() ?: "vm:${DEFAULT_BROKER_NAME}"
+            def jmsConnectionFactory = new CachingConnectionFactory(new ActiveMQConnectionFactory(brokerUrl))
+            registry().put('jmsConnectionFactory', jmsConnectionFactory)
+        }
+        "jms:${channel}?connectionFactory=#jmsConnectionFactory"
+    }
+
+    // Helpers
+
+    static String externalBrokerUrl() {
         stringProperty('BROKER_URL')
+    }
+
+    static int mqttPort() {
+        intProperty('MQTT_PORT', 1883)
+    }
+
+    static int amqpPort() {
+        intProperty('AMQP_PORT', 5672)
     }
 
 }
