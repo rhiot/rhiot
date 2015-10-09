@@ -18,10 +18,11 @@ package io.rhiot.steroids.activemq
 
 import io.rhiot.steroids.camel.Route
 import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.component.amqp.AMQPComponent
+import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl
 
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpPort
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.externalBrokerUrl
-import static org.apache.camel.component.amqp.AMQPComponent.amqpComponent
 
 @Route
 class CamelAmqpConfiguration extends RouteBuilder {
@@ -29,7 +30,9 @@ class CamelAmqpConfiguration extends RouteBuilder {
     @Override
     void configure() {
         def brokerUrl = externalBrokerUrl() ?: 'localhost'
-        def amqpComponent = amqpComponent("amqp://guest:guest@${brokerUrl}:${amqpPort()}")
+        def connectionFactory = ConnectionFactoryImpl.createFromURL("amqp://guest:guest@${brokerUrl}:${amqpPort()}")
+        connectionFactory.topicPrefix = 'topic://'
+        def amqpComponent = new AMQPComponent(connectionFactory)
         context.addComponent('amqp', amqpComponent)
     }
 
