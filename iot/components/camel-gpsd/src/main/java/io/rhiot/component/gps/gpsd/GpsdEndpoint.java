@@ -46,6 +46,10 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     private ProcessManager processManager;
 
+    @UriParam(defaultValue = "false", description = "Whether consumer is scheduled or not")
+    private boolean scheduled = false;
+    @UriParam(defaultValue = "5", description = "Delay in seconds")
+    private int delay = 5;
     @UriParam(defaultValue = "2947")
     private int port = 2947;
     @UriParam(defaultValue = "localhost")
@@ -64,6 +68,7 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     public GpsdEndpoint(String endpointUri) {
         super(endpointUri);
+        createEndpointConfiguration(endpointUri);
     }
 
     // Producer/consumer factories
@@ -75,7 +80,11 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        GpsdConsumer consumer = new GpsdConsumer(this, processor);
+        Consumer consumer = isScheduled() ? new GpsdScheduledConsumer(this, processor) : new GpsdConsumer(this, processor);
+
+        if(!getConsumerProperties().containsKey("delay") && consumer instanceof  GpsdScheduledConsumer) {
+            ((GpsdScheduledConsumer) consumer).setDelay(5000);
+        }
         configureConsumer(consumer);
         return consumer;
     }
@@ -90,6 +99,12 @@ public class GpsdEndpoint extends DefaultEndpoint {
             restartGpsDaemon();
         }
         gpsd4javaEndpoint = new GPSdEndpoint(host, port, new ResultParser());
+        gpsd4javaEndpoint.start();
+
+        LOG.info("GPSD Version: {}", gpsd4javaEndpoint.version());
+
+        gpsd4javaEndpoint.watch(true, true);
+        
         super.doStart();
     }
 
@@ -97,6 +112,7 @@ public class GpsdEndpoint extends DefaultEndpoint {
     protected void doStop() throws Exception {
         if (gpsd4javaEndpoint != null) {
             gpsd4javaEndpoint.stop();
+            gpsd4javaEndpoint = null;
         }
         super.doStop();
     }
@@ -190,4 +206,19 @@ public class GpsdEndpoint extends DefaultEndpoint {
         this.processManager = processManager;
     }
 
+    public boolean isScheduled() {
+        return scheduled;
+    }
+
+    public void setScheduled(boolean scheduled) {
+        this.scheduled = scheduled;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
 }

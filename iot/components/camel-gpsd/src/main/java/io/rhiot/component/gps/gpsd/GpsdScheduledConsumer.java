@@ -17,54 +17,46 @@
 
 package io.rhiot.component.gps.gpsd;
 
-import java.util.Date;
-
-import de.taimos.gpsd4java.api.DistanceListener;
-import de.taimos.gpsd4java.api.ObjectListener;
 import de.taimos.gpsd4java.backend.GPSdEndpoint;
+import de.taimos.gpsd4java.types.PollObject;
 import de.taimos.gpsd4java.types.TPVObject;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
-import org.apache.camel.impl.DefaultConsumer;
+import org.apache.camel.impl.DefaultScheduledPollConsumer;
+
+import java.util.Date;
 
 /**
- * The Gpsd consumer.
+ * The scheduled Gpsd consumer.
  */
-public class GpsdConsumer extends DefaultConsumer {
+public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
+
     
-    public GpsdConsumer(GpsdEndpoint endpoint, Processor processor) {
+    public GpsdScheduledConsumer(GpsdEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
     }
     
     
     @Override
-    protected void doStart() throws Exception {
-        log.debug("Starting GPSD consumer.");
-            
-        try {
+    protected int poll() throws Exception {
+        log.debug("Starting scheduled GPSD consumer poll.");
 
-            GPSdEndpoint gpsd4javaEndpoint = getEndpoint().getGpsd4javaEndpoint();
-            if (getEndpoint().getDistance() > 0) {
-                gpsd4javaEndpoint.addListener(new DistanceListener(getEndpoint().getDistance()) {
-                    @Override
-                    protected void handleLocation(TPVObject tpv) {
-                        consumeTPVObject(tpv);
-                    }
-                });
-            } else {
-                gpsd4javaEndpoint.addListener(new ObjectListener() {
-                    @Override
-                    public void handleTPV(final TPVObject tpv) {
-                        consumeTPVObject(tpv);
-                    }
-                });
+        GPSdEndpoint gpsd4javaEndpoint = getEndpoint().getGpsd4javaEndpoint();
+        while (true && gpsd4javaEndpoint != null) {
+            try {
+                PollObject pollObject = gpsd4javaEndpoint.poll();
+                if (pollObject != null && gpsd4javaEndpoint.poll().getFixes().size() > 0 && gpsd4javaEndpoint.poll().getFixes().get(0) instanceof TPVObject) {
+                    consumeTPVObject(gpsd4javaEndpoint.poll().getFixes().get(0));
+                    return 1;
+                }
+
+            } catch (Exception e) {
+                getExceptionHandler().handleException(e);
             }
-            
-        } catch (Exception e) {
-            getExceptionHandler().handleException(e);
         }
+        return 0;
     }
 
     private void consumeTPVObject(TPVObject tpv) {
@@ -82,6 +74,7 @@ public class GpsdConsumer extends DefaultConsumer {
     public GpsdEndpoint getEndpoint() {
         return (GpsdEndpoint) super.getEndpoint();
     }
+
 
     @Override
     protected void doStop() throws Exception {
