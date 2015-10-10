@@ -129,7 +129,7 @@ Rhiot comes with the following features:
 ## Rhiot IoT gateway
 
 Camel IoT gateway is the small fat jar application that can be installed into the field device. Gateway acts as a bridge
-between the sensors and the data center. Under the hood, Camel IoT gateway is the fat jat running
+between the sensors and the data center. Under the hood, Camel IoT gateway is the fat jar running
 [Vert.x](http://vertx.io) and Apache Camel.
 
 ### Installing gateway on the Raspbian
@@ -160,7 +160,7 @@ You can use the `-P` option multiple times:
 
     docker run --net=host rhiot/deploy-gateway -Pfoo=bar -Pbar=qux
 
-If you would like to use different SSH credentials then default (username `pi`, password `raspberry`), then pass the
+If you would like to use different SSH credentials than default (username `pi`, password `raspberry`), then pass the
 `--username` and `--password` options to the deployer:
 
     docker run --net=host rhiot/deploy-gateway --username=john --password=secret
@@ -175,8 +175,8 @@ To find out what supported devices are available in your local network, execute 
 
 ### Configuration of the gateway
 
-The gateway configuration file is `/etc/default/camel-labs-iot-gateway`. The latter file is loaded by the gateway 
-starting script. It means that all the configuration environment variables can be added there. For example to set the
+The gateway configuration file is `/etc/default/camel-labs-iot-gateway`. This file is loaded by the gateway 
+starting script. It means that all the configuration environment variables can be added here. For example to set the
 `foo_bar_baz` configuration property to value `qux`, the following environment variable should be added to the
 `/etc/default/camel-labs-iot-gateway` file:
 
@@ -402,7 +402,7 @@ the manager as the bean:
         new CustomProcessManager();
     }
 
-Custom process manager may be useful if for some reasons your Linux distribution requires executing some unusual commands
+Custom process manager may be useful if your Linux distribution requires executing some unusual commands
 in order to make the GPSD up and running.
 
 #### BU353 type converters
@@ -871,7 +871,7 @@ volume container. If such volume doesn't exist, Rhiot Cloud script will create i
 ### Device management cloudlet
 
 The foundation of the every IoT solution is the device management system. Without the centralized coordination of your
-*things*, you can't properly orchestrate how your devices communicates with each other. Also the effective monitoring of
+*things*, you can't properly orchestrate how your devices communicate with each other. Also the effective monitoring of
 the IoT system, without the devices registered in the centralized cloud, becomes almost impossible.
 
 Device Management Cloudlet provides backend service for registering and tracking devices connected to the Rhiot Cloud.
@@ -1028,7 +1028,7 @@ instead of the real device. If there is no historical value available for the gi
 
 ##### Creating virtual devices
 
-Device Cloudlet offers you the option to create the *virtual devices*. Virtual devices can be used to represent the clients whom
+Device Cloudlet offers you the option to create the *virtual devices*. Virtual devices can be used to represent the clients which
 can't use LWM2M API. For example the Android phone could use REST calls only to create and maintain the projection of
 itself as the virtual device even if you can't install LWM2M client on that device.
 
@@ -1114,7 +1114,7 @@ All you need to do is to enter the unique identifier of the device:
 
 <img src="images/console-device-create.png" align="center" height="400" hspace="30" >
 
-The device will be registered in the Rhiot Cloud and visibile as soon as you click the `Create virtual device` button.
+The device will be registered in the Rhiot Cloud and visible as soon as you click the `Create virtual device` button.
 
 <img src="images/console-device-created.png" align="center" height="400" hspace="30" >
 
@@ -1136,11 +1136,11 @@ the MongoDB registry. The MongoDB client can be configured using the [Steroids M
 
 ##### Registry cache
 
-As the access to the device information is crucial for all the IoT systems, it should have be implemented as efficiently
+As the access to the device information is crucial for all the IoT systems, it should have been implemented as efficiently
 as possible. As devices information doesn't change very often, it should be cached in the memory whenever possible. Device
-Management Cloudlet uses the [Infinispan](http://infinispan.org) cache cluster under to hood, to provide the faster access
-to the device information. The Infinispan cache used is clustered (using JGroups under the hood), so the cached information
-remains up-to-date even when many Device Manager Cloudlets instances are executed in the cluster.
+Management Cloudlet uses the [Infinispan](http://infinispan.org) cache cluster under the hood, to provide the faster access
+to the device information. The Infinispan cache used is clustered using JGroups, so the cached information
+remains up-to-date even when many Device Manager Cloudlet instances are executed in the cluster.
 
 #### Clustering Device Management Cloudlet
 
@@ -1149,7 +1149,7 @@ you to run it in the cluster, behind the load balancer of your choice. The defau
 shared by all the cloudlet instances in the cluster. Also the device registry cache used internally by Device Management Cloudlet
 will be automatically synchronized between the deployed cloudlet instances. All you need to do, is to be sure that you have
 the [IP multicast](https://en.wikipedia.org/wiki/IP_multicast) enabled for your local network, so the JGroups cluster can
-be established between the cloudlets instances.
+be established between the cloudlet instances.
 
 Keep in mind that each clustered instance of the Device Management Cloudlet exposes both REST and LWM2M API, so you can
 take advantage of load balancing over all the APIs available.
@@ -1157,7 +1157,7 @@ take advantage of load balancing over all the APIs available.
 #### Devices data analytics
 
 LWM2M protocol provides you the way to read the metrics' values from the devices. However in order to perform the search
-queries against those values, you have to store those in the centralized store. For example if you would like to find all the
+queries against those values, you have to store those in a centralized storage. For example if you would like to find all the
 devices with the firmware version smaller than `x.y.z`, you have to store all the firmware version of your devices in
 the centralized database, then execute a query against that database. Otherwise you will be forced to connect to the all of
 your devices using the LWM2M protocol and ask each device to provide its firmware version number. Asking millions of
