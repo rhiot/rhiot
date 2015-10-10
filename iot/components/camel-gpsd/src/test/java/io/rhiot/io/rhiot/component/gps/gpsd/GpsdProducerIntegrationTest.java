@@ -17,7 +17,7 @@
 
 package io.rhiot.io.rhiot.component.gps.gpsd;
 
-import de.taimos.gpsd4java.types.TPVObject;
+import io.rhiot.component.gps.gpsd.ClientGpsCoordinates;
 import io.rhiot.component.gps.gpsd.GpsdConstants;
 import io.rhiot.deployer.detector.Device;
 import io.rhiot.deployer.detector.DeviceDetector;
@@ -37,36 +37,24 @@ import java.util.concurrent.TimeUnit;
 
 import static io.rhiot.deployer.detector.Device.DEVICE_RASPBERRY_PI_2;
 import static org.junit.Assume.assumeTrue;
-import static io.rhiot.utils.Properties.booleanProperty;
 
-/**
- * This test detects the Raspberry Pi on the network and consumes GPSD messages from the socket.
- * NB GPSD on the Raspberry Pi must be listening on all interfaces, ie gpsd -G /dev/ttyUSB0 , the default is private.
- */
-public class GpsdComponentIntegrationTest extends CamelTestSupport {
+public class GpsdProducerIntegrationTest extends CamelTestSupport {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GpsdComponentIntegrationTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GpsdProducerIntegrationTest.class);
+    static boolean isRpiAvailable;
     static DeviceDetector deviceDetector = new SimplePortScanningDeviceDetector();
     static String piAddress;
     static List<Device> devices;
-    static boolean isRpiAvailable;
-    
+
     @BeforeClass
     public static void beforeClass() {
-        
+
         devices = deviceDetector.detectDevices();
-        piAddress = devices.size() == 1 ? devices.get(0).address().getHostAddress() : "localhost";
+        piAddress = devices.size() == 1 ? devices.get(0).address().getHostAddress() : null;
         isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(DEVICE_RASPBERRY_PI_2) &&
                 Networks.available(piAddress, GpsdConstants.DEFAULT_PORT);
-        
-        //If Pi is available and the default GPSD port is open then test that 
-        if (isRpiAvailable) {
-            LOG.debug("Pi is available to test");
-        } else {
-            //Otherwise assume the test is explicitly set to run if the port is available
-            assumeTrue(booleanProperty("RUN_GPS_INTEGRATION_TESTS", false));
-            assumeTrue("GPSD port is expected to be available", Networks.available(GpsdConstants.DEFAULT_PORT));
-        }
+
+        assumeTrue(isRpiAvailable);
     }
 
     @AfterClass
@@ -74,29 +62,23 @@ public class GpsdComponentIntegrationTest extends CamelTestSupport {
         deviceDetector.close();
     }
 
+    
     @Test
-    public void testGpsd() throws Exception {
+    public void testGpsdProducer() throws Exception {
         MockEndpoint mock = getMockEndpoint("mock:foo");
-        mock.expectedMinimumMessageCount(9);
+        mock.expectedMessageCount(1);
 
-        //Should get at least 9 messages within 10 seconds
-        assertMockEndpointsSatisfied(10, TimeUnit.SECONDS);
+        ClientGpsCoordinates coordinates = template.requestBody("gpsd:gps?host=" + piAddress, "", ClientGpsCoordinates.class);
+
+        //Should get only 1 message within 5 seconds
+        assertMockEndpointsSatisfied(5, TimeUnit.SECONDS);
     }
-
+    
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("gpsd://gpsSpeedTest?host=" + piAddress).routeId("gpsdSpeed")
-                    .process(exchange -> {
-                        TPVObject tpvObject = exchange.getIn().getHeader(GpsdConstants.TPV_HEADER, TPVObject.class);
-                        if (tpvObject.getSpeed() > 0) {
-                            log.warn("Moving at [{}] meters/second, course [{}]", tpvObject.getSpeed(), tpvObject.getCourse());
-                        } else {
-                            log.info("GPS is stationary");
-                        }
-                    }).to("mock:foo")
-                ;
+                from("timer:gps").to("gpsd://gpsSpeedTest?host=" + piAddress).to("mock:foo");
             }
         };
     }

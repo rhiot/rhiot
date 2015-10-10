@@ -70,7 +70,7 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     @Override
     public Producer createProducer() throws Exception {
-        throw new UnsupportedOperationException("GPSD component supports only consumer endpoints.");
+        return new GpsdProducer(this);
     }
 
     @Override
