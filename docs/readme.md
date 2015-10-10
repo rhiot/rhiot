@@ -432,8 +432,9 @@ Maven users should add the following dependency to their POM file:
 
 #### URI format
 
-GPSD component supports only consumer endpoints. The GPSD consumer is event driven, subscribing to Time-Position-Velocity reports and converting them to ClientGpsCoordinates. 
-The original TPVObject from gpsd4java is available in the header io.rhiot.gpsd.tpvObject
+The default GPSD consumer is event driven, subscribing to Time-Position-Velocity reports and converting them to ClientGpsCoordinates for immediate consumption.
+This option offers up to date information but requires more resources than the scheduled consumer or the producer.
+
 The Camel endpoint URI format for the GPSD consumer is as follows:
 
     gpsd:label
@@ -443,19 +444,36 @@ Where `label` can be replaced with any text label:
     from("gpsd:current-position").
       to("file:///var/gps-coordinates");
       
-To subscribe to events on another host you have to do 2 things, start GPSD on that host with the param -G to listen on all addresses, 
+      
+A scheduled consumer is also supported and polls every 5 seconds by default, to use it enable the 'scheduled' param on the endpoint;
+
+    from("gpsd:current-position?scheduled=true").
+      to("file:///var/gps-coordinates");
+      
+Finally, the producer polls the device for the current location, for example;
+
+    from("jms:current-position").
+      to("gpsd:gps");
+      
+To subscribe to events or poll a device on another host you have to do 2 things, start GPSD on that host with the param -G to listen on all addresses, 
 eg gpsd -G /dev/ttyUSB0, and pass the host and optionally port to the gpsd endpoint as follows;
     
     from("gpsd:current-position?host=localhost?port=2947").
       to("file:///var/gps-coordinates");
       
-      
-GPSD consumer receives the `io.rhiot.component.gps.gpsd.ClientGpsCoordinates` instances:
+The message body is a `io.rhiot.component.gps.gpsd.ClientGpsCoordinates` instance:
 
     ClientGpsCoordinates currentPosition = consumerTemplate.receiveBody("gpsd:current-position", ClientGpsCoordinates.class);     
 
 `ClientGpsCoordinates` class name is prefixed with the `Client` to indicate that these coordinates have been created on the device,
 not on the server side of the IoT solution.
+
+The TPVObject (Time-Position-Velocity report) from gpsd4java is available in the header GpsdConstants.TPV_HEADER (io.rhiot.gpsd.tpvObject), useful to enrich the payload or do content based routing, eg
+    
+    TPVObject tpvObject = exchange.getIn().getHeader(GpsdConstants.TPV_HEADER, TPVObject.class);
+    if (tpvObject.getSpeed() > 343) {
+        log.info("Broke the sound barrier. Current speed is {} meters second", tpvObject.getSpeed());
+    }
 
 #### Options
 
@@ -464,6 +482,8 @@ not on the server side of the IoT solution.
 | `consumer.host`          | localhost                                                                     | Milliseconds before the polling starts.                                |
 | `consumer.port`          | 2947                                                                          | Milliseconds before the polling starts.                                |
 | `consumer.distance`      | 0                                                                             | Distance threshold in km before consuming a message, eg 0.1 for 100m.  |
+| `consumer.scheduled`     | false                                                                         | Whether the consumer is scheduled or not.  |
+| `consumer.delay`         | 5000                                                                          | Delay in milliseconds. Applies only to scheduled consumers.  |
 
 
 ### Camel Kura Wifi component

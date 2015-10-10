@@ -46,10 +46,10 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     private ProcessManager processManager;
 
-    @UriParam(defaultValue = "false", description = "Whether consumer is scheduled or not")
+    @UriParam(defaultValue = "false", description = "Whether the consumer is scheduled or not")
     private boolean scheduled = false;
-    @UriParam(defaultValue = "5", description = "Delay in seconds")
-    private int delay = 5;
+    @UriParam(defaultValue = "5000", description = "Delay in milliseconds, applies to scheduled consumer")
+    private long delay = 5000;
     @UriParam(defaultValue = "2947")
     private int port = 2947;
     @UriParam(defaultValue = "localhost")
@@ -82,8 +82,8 @@ public class GpsdEndpoint extends DefaultEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         Consumer consumer = isScheduled() ? new GpsdScheduledConsumer(this, processor) : new DefaultGpsdConsumer(this, processor);
 
-        if(!getConsumerProperties().containsKey("delay") && consumer instanceof  GpsdScheduledConsumer) {
-            ((GpsdScheduledConsumer) consumer).setDelay(5000);
+        if(isScheduled()) {
+            ((GpsdScheduledConsumer) consumer).setDelay(getDelay());
         }
         configureConsumer(consumer);
         return consumer;
@@ -214,11 +214,11 @@ public class GpsdEndpoint extends DefaultEndpoint {
         this.scheduled = scheduled;
     }
 
-    public int getDelay() {
+    public long getDelay() {
         return delay;
     }
 
-    public void setDelay(int delay) {
+    public void setDelay(long delay) {
         this.delay = delay;
     }
 }
