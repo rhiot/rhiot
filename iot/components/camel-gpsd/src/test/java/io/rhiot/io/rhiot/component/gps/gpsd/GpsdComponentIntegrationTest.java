@@ -62,8 +62,8 @@ public class GpsdComponentIntegrationTest extends CamelTestSupport {
         if (isRpiAvailable && Networks.available(devices.get(0).address().getHostAddress(), GpsdConstants.DEFAULT_PORT)) {
             LOG.debug("Pi is available to test");
         } else {
-            //Otherwise assume the test is explicitly set to run
-            assumeTrue(booleanProperty("RUN_GPS_INTEGRATION_TESTS", false));
+            //Otherwise assume the test is explicitly set to run if the port is available
+            assumeTrue(booleanProperty("RUN_GPS_INTEGRATION_TESTS", false) && Networks.available(GpsdConstants.DEFAULT_PORT));
         }
     }
 
