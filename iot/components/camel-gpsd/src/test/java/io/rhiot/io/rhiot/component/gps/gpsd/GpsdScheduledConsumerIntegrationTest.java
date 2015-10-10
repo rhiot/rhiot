@@ -63,9 +63,9 @@ public class GpsdScheduledConsumerIntegrationTest extends CamelTestSupport {
     public void testGpsdScheduledConsumer() throws Exception {
         
         MockEndpoint mock = getMockEndpoint("mock:foo");
-        mock.expectedMessageCount(5);
+        mock.expectedMinimumMessageCount(5);
         
-        //Should get only 5 messages within 30 seconds
+        //Should get at least 5 messages within 30 seconds
         assertMockEndpointsSatisfied(30, TimeUnit.SECONDS);
     }
     

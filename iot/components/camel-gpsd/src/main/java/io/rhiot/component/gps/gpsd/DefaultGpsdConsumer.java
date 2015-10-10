@@ -48,14 +48,14 @@ public class DefaultGpsdConsumer extends DefaultConsumer {
                 gpsd4javaEndpoint.addListener(new DistanceListener(getEndpoint().getDistance()) {
                     @Override
                     protected void handleLocation(TPVObject tpv) {
-                        consumeTPVObject(tpv);
+                        GpsdHelper.consumeTPVObject(tpv, getProcessor(), getEndpoint());
                     }
                 });
             } else {
                 gpsd4javaEndpoint.addListener(new ObjectListener() {
                     @Override
                     public void handleTPV(final TPVObject tpv) {
-                        consumeTPVObject(tpv);
+                        GpsdHelper.consumeTPVObject(tpv, getProcessor(), getEndpoint());
                     }
                 });
             }
@@ -65,16 +65,7 @@ public class DefaultGpsdConsumer extends DefaultConsumer {
         }
     }
 
-    private void consumeTPVObject(TPVObject tpv) {
-        Exchange exchange = GpsdHelper.createOutOnlyExchangeWithBodyAndHeaders(getEndpoint(),
-                new ClientGpsCoordinates(new Date(new Double(tpv.getTimestamp()).longValue()), tpv.getLatitude(), tpv.getLongitude()), tpv);
-        try {
-
-            getProcessor().process(exchange);
-        } catch (Exception e) {
-            exchange.setException(e);
-        }
-    }
+    
 
     @Override
     public GpsdEndpoint getEndpoint() {

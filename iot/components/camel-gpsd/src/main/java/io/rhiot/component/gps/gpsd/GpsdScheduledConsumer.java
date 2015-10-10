@@ -20,11 +20,8 @@ package io.rhiot.component.gps.gpsd;
 import de.taimos.gpsd4java.backend.GPSdEndpoint;
 import de.taimos.gpsd4java.types.PollObject;
 import de.taimos.gpsd4java.types.TPVObject;
-import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultScheduledPollConsumer;
-
-import java.util.Date;
 
 /**
  * The scheduled Gpsd consumer.
@@ -46,7 +43,7 @@ public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
             try {
                 PollObject pollObject = gpsd4javaEndpoint.poll();
                 if (pollObject != null && pollObject.getFixes().size() > 0 && pollObject.getFixes().get(0) instanceof TPVObject) {
-                    consumeTPVObject(pollObject.getFixes().get(0));
+                    GpsdHelper.consumeTPVObject(pollObject.getFixes().get(0), getProcessor(), getEndpoint());
                     return 1;
                 }
 
@@ -55,17 +52,6 @@ public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
             }
         }
         return 0;
-    }
-
-    private void consumeTPVObject(TPVObject tpv) {
-        Exchange exchange = GpsdHelper.createOutOnlyExchangeWithBodyAndHeaders(getEndpoint(),
-                new ClientGpsCoordinates(new Date(new Double(tpv.getTimestamp()).longValue()), tpv.getLatitude(), tpv.getLongitude()), tpv);
-        try {
-
-            getProcessor().process(exchange);
-        } catch (Exception e) {
-            exchange.setException(e);
-        }
     }
 
     @Override

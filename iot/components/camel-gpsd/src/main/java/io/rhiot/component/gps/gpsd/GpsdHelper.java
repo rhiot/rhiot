@@ -18,9 +18,10 @@
 package io.rhiot.component.gps.gpsd;
 
 import de.taimos.gpsd4java.types.TPVObject;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Message;
+import org.apache.camel.*;
+import org.apache.commons.lang3.Validate;
+
+import java.util.Date;
 
 /**
  * Commonly used Gpsd utilities.
@@ -30,11 +31,33 @@ public class GpsdHelper {
     /**
      * Creates an OutOnly exchange with the ClientGpsCoordinates as message body and TPVObject as header.
      */
-    public static Exchange createOutOnlyExchangeWithBodyAndHeaders(org.apache.camel.Endpoint endpoint, ClientGpsCoordinates messageBody, TPVObject tpvObject) {
+    static Exchange createOutOnlyExchangeWithBodyAndHeaders(org.apache.camel.Endpoint endpoint, ClientGpsCoordinates messageBody, TPVObject tpvObject) {
         Exchange exchange = endpoint.createExchange(ExchangePattern.OutOnly);
         Message message = exchange.getIn();
         message.setHeader(GpsdConstants.TPV_HEADER, tpvObject);
         message.setBody(messageBody);
         return exchange;
+    }
+
+    /**
+     * Process the TPVObject, all params required.
+     * 
+     * @param tpv The time-position-velocity object to process
+     * @param processor Processor that handles the exchange.
+     * @param endpoint GpsdEndpoint receiving the exchange.
+     */
+    public static void consumeTPVObject(TPVObject tpv, Processor processor, GpsdEndpoint endpoint) {
+        Validate.notNull(tpv);
+        Validate.notNull(processor);
+        Validate.notNull(endpoint);
+        
+        Exchange exchange = createOutOnlyExchangeWithBodyAndHeaders(endpoint,
+                new ClientGpsCoordinates(new Date(new Double(tpv.getTimestamp()).longValue()), tpv.getLatitude(), tpv.getLongitude()), tpv);
+        try {
+
+            processor.process(exchange);
+        } catch (Exception e) {
+            exchange.setException(e);
+        }
     }
 }
