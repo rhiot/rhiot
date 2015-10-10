@@ -204,6 +204,8 @@ final class Networks {
             try {
                 socket = new Socket(host, port)
                 available = socket.isConnected()
+            } catch (ConnectException e) {
+                //noop, port is unavailable
             } finally {
                 if (socket != null) {
                     socket.close()
