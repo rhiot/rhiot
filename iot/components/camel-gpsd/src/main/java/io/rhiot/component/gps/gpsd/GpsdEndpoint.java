@@ -37,7 +37,7 @@ import static java.lang.Thread.sleep;
 /**
  * Represents a Gpsd endpoint.
  */
-@UriEndpoint(scheme = "gpsd", title = "Gpsd", syntax="gpsd:name", consumerClass = GpsdConsumer.class, label = "Gpsd")
+@UriEndpoint(scheme = "gpsd", title = "Gpsd", syntax="gpsd:name", consumerClass = DefaultGpsdConsumer.class, label = "Gpsd")
 public class GpsdEndpoint extends DefaultEndpoint {
 
     private static final Logger LOG = LoggerFactory.getLogger(GpsdEndpoint.class);
@@ -80,7 +80,7 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        Consumer consumer = isScheduled() ? new GpsdScheduledConsumer(this, processor) : new GpsdConsumer(this, processor);
+        Consumer consumer = isScheduled() ? new GpsdScheduledConsumer(this, processor) : new DefaultGpsdConsumer(this, processor);
 
         if(!getConsumerProperties().containsKey("delay") && consumer instanceof  GpsdScheduledConsumer) {
             ((GpsdScheduledConsumer) consumer).setDelay(5000);

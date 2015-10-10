@@ -21,8 +21,6 @@ import de.taimos.gpsd4java.backend.GPSdEndpoint;
 import de.taimos.gpsd4java.types.PollObject;
 import de.taimos.gpsd4java.types.TPVObject;
 import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultScheduledPollConsumer;
 
@@ -60,7 +58,7 @@ public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
     }
 
     private void consumeTPVObject(TPVObject tpv) {
-        Exchange exchange = createOutOnlyExchangeWithBodyAndHeaders(getEndpoint(),
+        Exchange exchange = GpsdHelper.createOutOnlyExchangeWithBodyAndHeaders(getEndpoint(),
                 new ClientGpsCoordinates(new Date(new Double(tpv.getTimestamp()).longValue()), tpv.getLatitude(), tpv.getLongitude()), tpv);
         try {
 
@@ -82,13 +80,4 @@ public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
 
         super.doStop();
     }
-
-    private Exchange createOutOnlyExchangeWithBodyAndHeaders(org.apache.camel.Endpoint endpoint, ClientGpsCoordinates messageBody, TPVObject tpvObject) {
-        Exchange exchange = endpoint.createExchange(ExchangePattern.OutOnly);
-        Message message = exchange.getIn();
-        message.setHeader(GpsdConstants.TPV_HEADER, tpvObject); 
-        message.setBody(messageBody);
-        return exchange;
-    }
-    
 }
