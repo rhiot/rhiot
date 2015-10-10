@@ -17,7 +17,6 @@
 
 package io.rhiot.io.rhiot.component.gps.gpsd;
 
-import io.rhiot.component.gps.gpsd.ClientGpsCoordinates;
 import io.rhiot.component.gps.gpsd.GpsdConstants;
 import io.rhiot.deployer.detector.Device;
 import io.rhiot.deployer.detector.DeviceDetector;
@@ -29,8 +28,6 @@ import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +37,6 @@ import static org.junit.Assume.assumeTrue;
 
 public class GpsdProducerIntegrationTest extends CamelTestSupport {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GpsdProducerIntegrationTest.class);
     static boolean isRpiAvailable;
     static DeviceDetector deviceDetector = new SimplePortScanningDeviceDetector();
     static String piAddress;
@@ -67,9 +63,7 @@ public class GpsdProducerIntegrationTest extends CamelTestSupport {
     public void testGpsdProducer() throws Exception {
         MockEndpoint mock = getMockEndpoint("mock:foo");
         mock.expectedMessageCount(1);
-
-        ClientGpsCoordinates coordinates = template.requestBody("gpsd:gps?host=" + piAddress, "", ClientGpsCoordinates.class);
-
+        
         //Should get only 1 message within 5 seconds
         assertMockEndpointsSatisfied(5, TimeUnit.SECONDS);
     }
@@ -78,7 +72,7 @@ public class GpsdProducerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("timer:gps").to("gpsd://gpsSpeedTest?host=" + piAddress).to("mock:foo");
+                from("timer:gps").to("gpsd://gps?host=" + piAddress).to("mock:foo");
             }
         };
     }
