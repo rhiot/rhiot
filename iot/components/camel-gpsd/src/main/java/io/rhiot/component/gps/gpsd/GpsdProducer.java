@@ -16,12 +16,15 @@
  */
 package io.rhiot.component.gps.gpsd;
 
+import de.taimos.gpsd4java.backend.GPSdEndpoint;
+import de.taimos.gpsd4java.types.PollObject;
+import de.taimos.gpsd4java.types.TPVObject;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 
 import java.util.Date;
 
-public class GpsdProducer  extends DefaultProducer {
+public class GpsdProducer extends DefaultProducer {
 
     public GpsdProducer(GpsdEndpoint endpoint) {
         super(endpoint);
@@ -29,7 +32,15 @@ public class GpsdProducer  extends DefaultProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        exchange.getIn().setBody(new ClientGpsCoordinates(new Date(), 1, 1));
+        GPSdEndpoint gpsd4javaEndpoint = getEndpoint().getGpsd4javaEndpoint();
+        
+        PollObject pollObject = gpsd4javaEndpoint.poll();
+        
+        if (pollObject != null && pollObject.getFixes().size() > 0 && pollObject.getFixes().get(0) instanceof TPVObject) {
+            TPVObject tpv = pollObject.getFixes().get(0);
+            exchange.getIn().setBody(new ClientGpsCoordinates(new Date(new Double(tpv.getTimestamp()).longValue()), tpv.getLatitude(), tpv.getLongitude()));
+            exchange.getIn().setHeader(GpsdConstants.TPV_HEADER, tpv);
+        }
     }
 
     @Override
