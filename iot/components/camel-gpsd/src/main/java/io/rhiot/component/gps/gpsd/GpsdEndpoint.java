@@ -48,8 +48,6 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     @UriParam(defaultValue = "false", description = "Whether the consumer is scheduled or not")
     private boolean scheduled = false;
-    @UriParam(defaultValue = "5000", description = "Delay in milliseconds, applies to scheduled consumer")
-    private long delay = 5000;
     @UriParam(defaultValue = "2947")
     private int port = 2947;
     @UriParam(defaultValue = "localhost")
@@ -83,7 +81,9 @@ public class GpsdEndpoint extends DefaultEndpoint {
         Consumer consumer = isScheduled() ? new GpsdScheduledConsumer(this, processor) : new DefaultGpsdConsumer(this, processor);
 
         if(isScheduled()) {
-            ((GpsdScheduledConsumer) consumer).setDelay(getDelay());
+            if(!getConsumerProperties().containsKey("delay")) {
+                ((GpsdScheduledConsumer) consumer).setDelay(5000);
+            }
         }
         configureConsumer(consumer);
         return consumer;
@@ -214,11 +214,4 @@ public class GpsdEndpoint extends DefaultEndpoint {
         this.scheduled = scheduled;
     }
 
-    public long getDelay() {
-        return delay;
-    }
-
-    public void setDelay(long delay) {
-        this.delay = delay;
-    }
 }
