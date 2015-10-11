@@ -468,7 +468,8 @@ The message body is a `io.rhiot.component.gps.gpsd.ClientGpsCoordinates` instanc
 `ClientGpsCoordinates` class name is prefixed with the `Client` to indicate that these coordinates have been created on the device,
 not on the server side of the IoT solution.
 
-The TPVObject (Time-Position-Velocity report) from gpsd4java is available in the header GpsdConstants.TPV_HEADER (io.rhiot.gpsd.tpvObject), useful to enrich the payload or do content based routing, eg
+The TPVObject (Time-Position-Velocity report) instance created by a gpsd4java engine is available in the header
+`GpsdConstants.TPV_HEADER` (`io.rhiot.gpsd.tpvObject`), useful to enrich the payload or do content based routing, eg
     
     TPVObject tpvObject = exchange.getIn().getHeader(GpsdConstants.TPV_HEADER, TPVObject.class);
     if (tpvObject.getSpeed() > 343) {
