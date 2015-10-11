@@ -484,7 +484,9 @@ The TPVObject (Time-Position-Velocity report) instance created by a gpsd4java en
 | `consumer.port`          | 2947                                                                          | Milliseconds before the polling starts.                                |
 | `consumer.distance`      | 0                                                                             | Distance threshold in km before consuming a message, eg 0.1 for 100m.  |
 | `consumer.scheduled`     | false                                                                         | Whether the consumer is scheduled or not.  |
+| `consumer.initialDelay`  | 1000                                                                          | Milliseconds before the polling starts. Applies only to scheduled consumers. |
 | `consumer.delay`         | 5000                                                                          | Delay in milliseconds. Applies only to scheduled consumers.  |
+| `consumer.useFixedDelay` | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
 
 
 ### Camel Kura Wifi component
