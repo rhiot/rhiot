@@ -18,6 +18,9 @@ package io.rhiot.utils;
 
 import com.google.common.collect.ImmutableMap;
 
+/**
+ * Utilities for working with maps.
+ */
 public final class Maps {
 
     private Maps() {
