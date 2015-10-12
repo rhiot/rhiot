@@ -16,7 +16,7 @@
  */
 package io.rhiot.gateway.gps
 
-import io.rhiot.component.gps.gpsd.ClientGpsCoordinates
+import io.rhiot.component.gpsd.ClientGpsCoordinates
 import io.rhiot.gateway.GatewayVerticle
 import io.rhiot.utils.Properties
 import io.rhiot.vertx.camel.GroovyCamelVerticle

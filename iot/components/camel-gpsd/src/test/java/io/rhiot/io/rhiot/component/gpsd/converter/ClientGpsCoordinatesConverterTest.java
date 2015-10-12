@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.io.rhiot.component.gps.gpsd.converter;
+package io.rhiot.io.rhiot.component.gpsd.converter;
 
-import io.rhiot.component.gps.gpsd.ClientGpsCoordinates;
+import io.rhiot.component.gpsd.ClientGpsCoordinates;
 import org.apache.camel.TypeConverter;
 import org.apache.camel.impl.DefaultClassResolver;
 import org.apache.camel.impl.DefaultFactoryFinderResolver;

@@ -15,15 +15,12 @@
 * limitations under the License.
  */
 
-package io.rhiot.component.gps.gpsd;
-
-import java.util.Date;
+package io.rhiot.component.gpsd;
 
 import de.taimos.gpsd4java.api.DistanceListener;
 import de.taimos.gpsd4java.api.ObjectListener;
 import de.taimos.gpsd4java.backend.GPSdEndpoint;
 import de.taimos.gpsd4java.types.TPVObject;
-import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 

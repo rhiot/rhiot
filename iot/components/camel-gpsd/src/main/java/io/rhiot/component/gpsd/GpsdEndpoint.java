@@ -14,12 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.component.gps.gpsd;
+package io.rhiot.component.gpsd;
 
 import de.taimos.gpsd4java.backend.GPSdEndpoint;
 import de.taimos.gpsd4java.backend.ResultParser;
-import io.rhiot.utils.process.DefaultProcessManager;
-import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -28,11 +26,6 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Set;
-
-import static java.lang.Thread.sleep;
 
 /**
  * Represents a Gpsd endpoint.

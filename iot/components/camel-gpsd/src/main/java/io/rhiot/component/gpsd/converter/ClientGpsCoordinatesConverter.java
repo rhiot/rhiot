@@ -14,17 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.rhiot.component.gpsd.converter;
 
-package io.rhiot.component.gps.gpsd;
+import io.rhiot.component.gpsd.ClientGpsCoordinates;
+import org.apache.camel.Converter;
 
-/**
- * Constants Class
- */
-public class GpsdConstants {
-    public static final int DEFAULT_PORT = 2947;
-    public static final String TPV_HEADER = "io.rhiot.gpsd.tpvObject";
+@Converter
+public class ClientGpsCoordinatesConverter {
+
+    @Converter
+    public static String toString(ClientGpsCoordinates clientGpsCoordinates) {
+        return clientGpsCoordinates.serialize();
+    }
     
-    private GpsdConstants() {
-        // Constants class
+    @Converter
+    public static ClientGpsCoordinates toClientGpsCoordinates(String serializedCoordinates) {
+        return ClientGpsCoordinates.deserialize(serializedCoordinates);
     }
 }

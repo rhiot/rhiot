@@ -23,7 +23,7 @@
     </licenses>
 
     <properties>
-        <camel.osgi.export.pkg>io.rhiot.component.gps.gpsd</camel.osgi.export.pkg>
+        <camel.osgi.export.pkg>io.rhiot.component.gpsd</camel.osgi.export.pkg>
         <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=gpsd</camel.osgi.export.service>
     </properties>
 

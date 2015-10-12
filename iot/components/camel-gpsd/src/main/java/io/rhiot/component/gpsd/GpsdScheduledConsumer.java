@@ -15,7 +15,7 @@
 * limitations under the License.
  */
 
-package io.rhiot.component.gps.gpsd;
+package io.rhiot.component.gpsd;
 
 import de.taimos.gpsd4java.backend.GPSdEndpoint;
 import de.taimos.gpsd4java.types.PollObject;

@@ -461,7 +461,7 @@ eg gpsd -G /dev/ttyUSB0, and pass the host and optionally port to the gpsd endpo
     from("gpsd:current-position?host=localhost?port=2947").
       to("file:///var/gps-coordinates");
       
-The message body is a `io.rhiot.component.gps.gpsd.ClientGpsCoordinates` instance:
+The message body is a `io.rhiot.component.gpsd.ClientGpsCoordinates` instance:
 
     ClientGpsCoordinates currentPosition = consumerTemplate.receiveBody("gpsd:current-position", ClientGpsCoordinates.class);     
 

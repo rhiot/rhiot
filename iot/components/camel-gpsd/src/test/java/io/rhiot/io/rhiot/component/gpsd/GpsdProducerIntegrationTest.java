@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package io.rhiot.io.rhiot.component.gps.gpsd;
+package io.rhiot.io.rhiot.component.gpsd;
 
-import io.rhiot.component.gps.gpsd.GpsdConstants;
+import io.rhiot.component.gpsd.GpsdConstants;
 import io.rhiot.deployer.detector.Device;
 import io.rhiot.deployer.detector.DeviceDetector;
 import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector;
