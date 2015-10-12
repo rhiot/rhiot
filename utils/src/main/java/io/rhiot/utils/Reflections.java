@@ -18,7 +18,6 @@ package io.rhiot.utils;
 
 import com.github.camellabs.iot.utils.Maps;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -30,6 +29,9 @@ import static java.lang.Character.toLowerCase;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.reflect.FieldUtils.getField;
 
+/**
+ * Utilities related to the Java Reflection API.
+ */
 public final class Reflections {
 
     private Reflections() {
