@@ -333,6 +333,9 @@ development easier.
 
 ### Camel GPS BU353 component
 
+**Deprecated:** BU353 component is deprecated and will be removed soon on the behalf of the
+[GPSD component](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#camel-gpsd-component).
+
 [BU353](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg) is one of the most popular and cheapest GPS units on the market. 
 It is connected to the device via the USB port. If you are looking for good and cheap GPS receiver for your IoT solution, definitely consider purchasing this unit.
 
