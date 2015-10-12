@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.camellabs.iot.utils.Maps.immutableMapOf;
+import static io.rhiot.utils.Maps.immutableMapOf;
 import static java.lang.Boolean.parseBoolean;
 import static java.util.stream.Collectors.toList;
 

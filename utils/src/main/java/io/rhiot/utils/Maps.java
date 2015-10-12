@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.utils;
+package io.rhiot.utils;
 
 import com.google.common.collect.ImmutableMap;
 

@@ -16,7 +16,6 @@
  */
 package io.rhiot.utils;
 
-import com.github.camellabs.iot.utils.Maps;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Array;
