@@ -1447,7 +1447,7 @@ to the `chat-updates` will receive the updated chat history.
 
 The quickstart also exposes the simple REST API that can be used to read the chat history using the HTTP `GET` request:
 
-    $ curl http://localhost:8181/chat
+    $ curl http://localhost:8180/chat
     Hello, this is the IoT device!
     I just wanted to say hello!
     Hello, IoT device. Nice to meet you!
