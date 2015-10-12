@@ -416,7 +416,7 @@ BU353 component comes with the two type converters:
 
 ### Camel GPSD component
 
-Camel [GPSD](http://www.catb.org/gpsd) component can be used to read current GPS information from that device. With Camel GPS GPSD you can
+Camel [GPSD](http://www.catb.org/gpsd) component can be used to read current GPS information from that device. With Camel GPSD you can
 just connect a GPS receiver to your computer's USB port and read the GPS data - the component
 will make sure that GPS daemon is up, running and
 switched to the [NMEA mode](http://www.gpsinformation.org/dale/nmea.htm). The component also takes care of parsing the
@@ -480,7 +480,7 @@ The TPVObject (Time-Position-Velocity report) instance created by a gpsd4java en
     
     TPVObject tpvObject = exchange.getIn().getHeader(GpsdConstants.TPV_HEADER, TPVObject.class);
     if (tpvObject.getSpeed() > 343) {
-        log.info("Broke the sound barrier. Current speed is {} meters second", tpvObject.getSpeed());
+        log.info("Camel broke the sound barrier");
     }
 
 #### Options
