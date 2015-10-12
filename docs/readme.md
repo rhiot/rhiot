@@ -333,6 +333,9 @@ development easier.
 
 ### Camel GPS BU353 component
 
+**Deprecated:** BU353 component is deprecated and will be removed soon on the behalf of the
+[GPSD component](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#camel-gpsd-component).
+
 [BU353](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg) is one of the most popular and cheapest GPS units on the market. 
 It is connected to the device via the USB port. If you are looking for good and cheap GPS receiver for your IoT solution, definitely consider purchasing this unit.
 
@@ -412,13 +415,17 @@ BU353 component comes with the two type converters:
 - `io.rhiot.component.gps.bu353.ClientGpsCoordinates` => `String`
 
 ### Camel GPSD component
-[gpsd](http://www.catb.org/gpsd/)
-> About gpsd
-> gpsd is a service daemon that monitors one or more GPSes or AIS receivers attached to a host computer through serial or USB ports, 
-> making all data on the location/course/velocity of the sensors available to be queried on TCP port 2947 of the host computer.
-> GPSD is everywhere in mobile embedded systems. It underlies the map service on Android phones. 
-> It's ubiquitous in drones, robot submarines, and driverless cars. It's increasingly common in recent generations of manned aircraft, 
-> marine navigation systems, and military vehicles. 
+
+Camel [GPSD](http://www.catb.org/gpsd) component can be used to read current GPS information from that device. With Camel GPS GPSD you can
+just connect a GPS receiver to your computer's USB port and read the GPS data - the component
+will make sure that GPS daemon is up, running and
+switched to the [NMEA mode](http://www.gpsinformation.org/dale/nmea.htm). The component also takes care of parsing the
+GPSD data read from the server, so you can enjoy the `io.rhiot.component.gps.gpsd.ClientGpsCoordinates`
+instances received by your Camel routes.
+
+The GPSD component has been particularly tested against the BU353 GPS unit.
+[BU353](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg) is one of the most popular and cheapest GPS units on the market.
+It is connected to the device via the USB port. If you are looking for good and cheap GPS receiver for your IoT solution, definitely consider purchasing this unit.
 
 #### Maven dependency
 
@@ -487,6 +494,29 @@ The TPVObject (Time-Position-Velocity report) instance created by a gpsd4java en
 | `consumer.initialDelay`  | 1000                                                                          | Milliseconds before the polling starts. Applies only to scheduled consumers. |
 | `consumer.delay`         | 5000                                                                          | Delay in milliseconds. Applies only to scheduled consumers.  |
 | `consumer.useFixedDelay` | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
+
+#### Process manager
+
+Process manager is used by the BU353 component to execute Linux commands responsible for starting GPSD daemon or
+configuring the GPS receive to provide GPS coordinates in the NMEA mode. If for some reason you would like to change
+the default implementation of the process manager used by Camel (i.e. `io.rhiot.utils.process.DefaultProcessManager`),
+you can set it on the component level:
+
+    GpsdComponent gpsd = new GpsdComponent();
+    gpsd.setProcessManager(new CustomProcessManager());
+    camelContext.addComponent("gpsd", gpsd);
+
+If custom process manager is not set on the component, Camel will try to find the manager instance in the
+[registry](http://camel.apache.org/registry.html). So for example for Spring application, you can just configure
+the manager as the bean:
+
+    @Bean
+    ProcessManager myProcessManager() {
+        new CustomProcessManager();
+    }
+
+Custom process manager may be useful if your Linux distribution requires executing some unusual commands
+in order to make the GPSD up and running.
 
 
 ### Camel Kura Wifi component
