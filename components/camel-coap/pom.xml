@@ -4,14 +4,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>rhiot-iot-components</artifactId>
+		<artifactId>rhiot-components</artifactId>
 		<groupId>io.rhiot</groupId>
 		<version>0.1.2-SNAPSHOT</version>
+        <relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>camel-coap</artifactId>
 	<packaging>bundle</packaging>
-	<name>rhiot-iot-components-coap</name>
+	<name>rhiot-components-coap</name>
 
 	<licenses>
 		<license>

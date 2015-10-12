@@ -6,10 +6,10 @@
 	<parent>
 		<groupId>io.rhiot</groupId>
 		<version>0.1.2-SNAPSHOT</version>
-		<artifactId>rhiot-iot</artifactId>
-		<relativePath>..</relativePath>
+		<artifactId>rhiot-bom</artifactId>
+		<relativePath>../bom</relativePath>
 	</parent>
-	<artifactId>rhiot-iot-components</artifactId>
+	<artifactId>rhiot-components</artifactId>
 	<packaging>pom</packaging>
 
 	<licenses>
@@ -20,15 +20,7 @@
 	</licenses>
 
 	<modules>
-		<module>camel-device-io</module>
-		<module>camel-gps-bu353</module>
-		<module>camel-kura</module>
-		<module>camel-pi4j</module>
-		<module>camel-pubnub</module>
-		<module>camel-pubnub-feature</module>
-		<module>camel-tinkerforge</module>
-		<module>camel-tinkerforge-feature</module>
-		<module>camel-gpsd</module>
+		<module>camel-coap</module>
     </modules>
 
 	<build>
