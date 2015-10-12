@@ -1401,7 +1401,9 @@ downloaded using the following shell command:
 
 ### AMQP cloudlet quickstart
 
-The AMQP cloudlet quickstart can be used as a base for the fat-jar AMQP microservices.
+The AMQP cloudlet quickstart can be used as a base for the fat-jar AMQP microservices. If you wanna create a simple
+backend application capable of exposing AMQP-endpoint and handling the AMQP-based communication, the AMQT cloudlet
+quickstart is the best way to start your development efforts.
 
 #### Creating and running the AMQP cloudlet project
 
@@ -1416,7 +1418,7 @@ To start the AMQP cloudlet execute the following command:
 
     java -jar target/rhiot-cloudlets-amqp-1.0.0-SNAPSHOT.jar
 
-You can also build and run it as a Docker image (we love Docker and recommend this approach):
+You can also build and run it as a Docker image (we love Docker and highly recommend this approach):
 
     TARGET_IMAGE=yourUsername/rhiot-cloudlets-amqp
     mvn install docker:build docker:push -Ddocker.image.target=${TARGET_IMAGE}
@@ -1440,10 +1442,10 @@ The AMQP cloudlet quickstart is in fact a simple chat application. Clients can s
 by subscribing to the broker and sending the messages to the `chat` AMQP queue.
 
 The clients can subscribe to the chat updates
-by listening on the `chat-updates` AMQP topic - whenever the new message has been sent to the chat, the clients registered
+by listening on the `chat-updates` AMQP topic - whenever the new message has been sent to the chat channel, the clients registered
 to the `chat-updates` will receive the updated chat history.
 
-The quickstart also exposed the simple REST API that can be used to read the chat history using the HTTP `GET` request:
+The quickstart also exposes the simple REST API that can be used to read the chat history using the HTTP `GET` request:
 
     $ curl http://localhost:8181/chat
     Hello, this is the IoT device!
