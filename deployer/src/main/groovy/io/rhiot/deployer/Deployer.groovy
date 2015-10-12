@@ -21,7 +21,7 @@ import io.rhiot.deployer.detector.Device
 import io.rhiot.deployer.detector.DeviceDetector
 import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector
 import io.rhiot.deployer.maven.JcabiMavenArtifactResolver
-import com.github.camellabs.iot.utils.ssh.client.SshClient
+import io.rhiot.utils.ssh.client.SshClient
 
 import java.util.concurrent.Future
 

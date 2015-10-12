@@ -16,7 +16,7 @@
  */
 package io.rhiot.deployer.detector
 
-import com.github.camellabs.iot.utils.ssh.client.SshClient
+import io.rhiot.utils.ssh.client.SshClient
 import org.slf4j.Logger
 
 import java.util.concurrent.Callable
@@ -24,7 +24,6 @@ import java.util.concurrent.TimeoutException
 
 import static com.google.common.base.MoreObjects.firstNonNull
 import static com.google.common.collect.Lists.newLinkedList
-import static java.lang.Integer.parseInt
 import static java.util.Collections.emptyList
 import static java.util.concurrent.Executors.newCachedThreadPool
 import static java.util.concurrent.TimeUnit.SECONDS

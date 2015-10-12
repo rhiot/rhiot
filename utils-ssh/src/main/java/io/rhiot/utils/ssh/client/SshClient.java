@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.utils.ssh.client;
+package io.rhiot.utils.ssh.client;
 
 import com.jcraft.jsch.*;
 
