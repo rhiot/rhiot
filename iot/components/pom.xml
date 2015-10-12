@@ -20,7 +20,6 @@
 	</licenses>
 
 	<modules>
-		<module>camel-device-io</module>
 		<module>camel-gps-bu353</module>
 		<module>camel-kura</module>
 		<module>camel-pi4j</module>

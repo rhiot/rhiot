@@ -21,6 +21,7 @@
 
 	<modules>
 		<module>camel-coap</module>
+        <module>camel-device-io</module>
     </modules>
 
 	<build>

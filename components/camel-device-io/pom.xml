@@ -13,13 +13,14 @@
 
 	<parent>  <!-- should be removed -->
 		<groupId>io.rhiot</groupId>
-		<artifactId>rhiot-iot-components</artifactId>
+		<artifactId>rhiot-components</artifactId>
 		<version>0.1.2-SNAPSHOT</version>
+        <relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>camel-device-io</artifactId>
 	<packaging>bundle</packaging>
-	<name>rhiot-iot-components-device-io</name>
+	<name>rhiot-components-device-io</name>
 	<description>Camel Device IO Component</description>
 
 	<properties>
