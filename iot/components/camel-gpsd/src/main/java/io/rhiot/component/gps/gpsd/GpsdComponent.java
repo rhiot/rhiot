@@ -16,17 +16,36 @@
  */
 package io.rhiot.component.gps.gpsd;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
+import io.rhiot.utils.process.DefaultProcessManager;
+import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 
 import org.apache.camel.impl.UriEndpointComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Represents the component that manages {@link GpsdEndpoint}.
  */
 public class GpsdComponent extends UriEndpointComponent {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(GpsdComponent.class);
+
+    private int gpsdRestartInterval = 5000;
+
+    private ProcessManager processManager;
+    
+    private CountDownLatch isLocalGpsdStarting = new CountDownLatch(1);
+    private CountDownLatch isLocalGpsdStarted = new CountDownLatch(1);
+    private boolean gpsdStarted;
     
     public GpsdComponent() {
         super(GpsdEndpoint.class);
@@ -47,5 +66,68 @@ public class GpsdComponent extends UriEndpointComponent {
     @Override
     protected void doStart() throws Exception {
         super.doStart();
+    }
+
+    protected ProcessManager resolveProcessManager() {
+        LOG.debug("Started resolving ProcessManager...");
+        if(processManager != null) {
+            LOG.debug("ProcessManager has been set on the component level. Camel will use it: {}", processManager);
+            return processManager;
+        }
+        Set<ProcessManager> processManagers = getCamelContext().getRegistry().findByType(ProcessManager.class);
+        if(processManagers.isEmpty()) {
+            LOG.debug("No ProcessManager found in the registry - creating new DefaultProcessManager.");
+            return new DefaultProcessManager();
+        } else if(processManagers.size() == 1) {
+            return processManagers.iterator().next();
+        } else {
+            return new DefaultProcessManager();
+        }
+    }
+
+    protected void restartGpsDaemon() {
+
+        try {
+            if (gpsdStarted){
+                return;
+            }
+            
+            if (isLocalGpsdStarting.getCount() == 0) {
+                isLocalGpsdStarted.await();
+            } else {
+                isLocalGpsdStarting.countDown();
+            }
+            
+            //Recheck if GPSD is started
+            if (gpsdStarted) {
+                return;
+            }
+            
+            ProcessManager processManager = resolveProcessManager();
+            List<String> gpsctlResult;
+            do {
+                LOG.info("(Re)starting GPS daemon.");
+                processManager.executeAndJoinOutput("killall", "gpsd");
+                processManager.executeAndJoinOutput("gpsd", "/dev/ttyUSB0");
+                sleep(gpsdRestartInterval);
+                gpsctlResult = processManager.executeAndJoinOutput("gpsctl", "-n", "/dev/ttyUSB0");
+                LOG.info("gpsctl result: {}", gpsctlResult);
+                if (gpsctlResult.contains("gpsctl:ERROR: /dev/ttyUSB0 mode change to NMEA failed")) {
+                    gpsdStarted = true;
+                    isLocalGpsdStarted.countDown();
+                }
+            } while (!gpsdStarted);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public ProcessManager getProcessManager() {
+        return processManager;
+    }
+
+    public void setProcessManager(ProcessManager processManager) {
+        this.processManager = processManager;
     }
 }

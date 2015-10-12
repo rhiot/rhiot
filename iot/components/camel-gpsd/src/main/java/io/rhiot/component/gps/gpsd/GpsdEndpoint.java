@@ -44,8 +44,6 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     private int gpsdRestartInterval = 5000;
 
-    private ProcessManager processManager;
-
     @UriParam(defaultValue = "false", description = "Whether the consumer is scheduled or not")
     private boolean scheduled = false;
     @UriParam(defaultValue = "2947")
@@ -93,10 +91,11 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     @Override
     protected void doStart() throws Exception {
-        // localhost endpoint should also start the component
         
+        // localhost endpoint should also start the component
+
         if ("localhost".equals(getHost())) {
-            restartGpsDaemon();
+            ((GpsdComponent)getComponent()).restartGpsDaemon();
         }
         gpsd4javaEndpoint = new GPSdEndpoint(host, port, new ResultParser());
         gpsd4javaEndpoint.start();
@@ -115,40 +114,6 @@ public class GpsdEndpoint extends DefaultEndpoint {
             gpsd4javaEndpoint = null;
         }
         super.doStop();
-    }
-
-    protected ProcessManager resolveProcessManager() {
-        LOG.debug("Started resolving ProcessManager...");
-        if(processManager != null) {
-            LOG.debug("ProcessManager has been set on the component level. Camel will use it: {}", processManager);
-            return processManager;
-        }
-        Set<ProcessManager> processManagers = getCamelContext().getRegistry().findByType(ProcessManager.class);
-        if(processManagers.isEmpty()) {
-            LOG.debug("No ProcessManager found in the registry - creating new DefaultProcessManager.");
-            return new DefaultProcessManager();
-        } else if(processManagers.size() == 1) {
-            return processManagers.iterator().next();
-        } else {
-            return new DefaultProcessManager();
-        }
-    }
-
-    protected void restartGpsDaemon() {
-        try {
-            ProcessManager processManager = resolveProcessManager();
-            List<String> gpsctlResult;
-            do {
-                LOG.info("(Re)starting GPS daemon.");
-                processManager.executeAndJoinOutput("killall", "gpsd");
-                processManager.executeAndJoinOutput("gpsd", "/dev/ttyUSB0");
-                sleep(gpsdRestartInterval);
-                gpsctlResult = processManager.executeAndJoinOutput("gpsctl", "-n", "/dev/ttyUSB0");
-                LOG.info("gpsctl result: {}", gpsctlResult);
-            } while (!gpsctlResult.contains("gpsctl:ERROR: /dev/ttyUSB0 mode change to NMEA failed"));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     // Configuration
@@ -196,14 +161,6 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     public void setGpsdRestartInterval(int gpsdRestartInterval) {
         this.gpsdRestartInterval = gpsdRestartInterval;
-    }
-
-    public ProcessManager getProcessManager() {
-        return processManager;
-    }
-
-    public void setProcessManager(ProcessManager processManager) {
-        this.processManager = processManager;
     }
 
     public boolean isScheduled() {

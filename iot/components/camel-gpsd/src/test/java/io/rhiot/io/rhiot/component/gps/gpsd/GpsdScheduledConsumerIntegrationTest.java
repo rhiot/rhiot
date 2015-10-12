@@ -73,7 +73,7 @@ public class GpsdScheduledConsumerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("gpsd://gps?scheduled=true&delay=5&host=" + piAddress).to("mock:foo");
+                from("gpsd://gps?scheduled=true&consumer.delay=5000&host=" + piAddress).to("mock:foo");
             }
         };
     }
