@@ -59,11 +59,4 @@ public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
         return (GpsdEndpoint) super.getEndpoint();
     }
 
-
-    @Override
-    protected void doStop() throws Exception {
-        getEndpoint().getGpsd4javaEndpoint().stop();
-
-        super.doStop();
-    }
 }

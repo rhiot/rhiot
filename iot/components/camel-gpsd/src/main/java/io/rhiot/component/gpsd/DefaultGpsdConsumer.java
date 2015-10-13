@@ -69,12 +69,4 @@ public class DefaultGpsdConsumer extends DefaultConsumer {
         return (GpsdEndpoint) super.getEndpoint();
     }
 
-    @Override
-    protected void doStop() throws Exception {
-        getEndpoint().getGpsd4javaEndpoint().stop();
-
-        super.doStop();
-    }
-
-    
 }
