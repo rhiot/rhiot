@@ -25,21 +25,24 @@ import static io.rhiot.utils.Properties.stringProperty
 
 /**
  * Camel route reading current position data from the BU353 GPS device.
+ *
+ * @deprecated Use @GpsdVericle instead.
  */
+@Deprecated
 @GatewayVerticle(conditionProperty = 'camellabs_iot_gateway_gps_bu353')
 public class GpsBu353Verticle extends GroovyCamelVerticle {
 
     def storeDirectory = stringProperty('camellabs_iot_gateway_gps_store_directory', '/var/camel-labs-iot-gateway/gps')
 
     @Override
-    void start() throws Exception {
+    void start() {
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             void configure() {
                 from('gps-bu353://gps').routeId("gps-bu353").process { exchange ->
-                    def coordinates = exchange.getIn().getBody(ClientGpsCoordinates.class);
+                    def coordinates = exchange.in.getBody(ClientGpsCoordinates.class)
                     exchange.getIn().setBody(coordinates.serialize());
-                }.to("file://${storeDirectory}");
+                }.to("file://${storeDirectory}")
             }
         })
     }

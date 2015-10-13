@@ -16,29 +16,26 @@
  */
 package io.rhiot.gateway.gps
 
-import io.rhiot.component.gpsd.ClientGpsCoordinates
 import io.rhiot.gateway.GatewayVerticle
-import io.rhiot.utils.Properties
 import io.rhiot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.builder.RouteBuilder
+
+import static io.rhiot.utils.Properties.stringProperty
 
 /**
  * Camel route reading current position data from the GPSD socket.
  */
-@GatewayVerticle(conditionProperty = 'camellabs_iot_gateway_gpsd')
+@GatewayVerticle(conditionProperty = 'gps')
 public class GpsdVerticle extends GroovyCamelVerticle {
 
-    def storeDirectory = Properties.stringProperty('camellabs_iot_gateway_gps_store_directory', '/var/camel-labs-iot-gateway/gps')
+    def storeDirectory = stringProperty('camellabs_iot_gateway_gps_store_directory', '/var/camel-labs-iot-gateway/gps')
 
     @Override
-    void start() throws Exception {
+    void start() {
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             void configure() {
-                from('gpsd://gps').routeId("gpsd").process { exchange ->
-                    def coordinates = exchange.getIn().getBody(ClientGpsCoordinates.class);
-                    exchange.getIn().setBody(coordinates.serialize());
-                }.to("file://${storeDirectory}");
+                from('gpsd://gps').routeId("gpsd").convertBodyTo(String.class).to("file://${storeDirectory}")
             }
         })
     }
