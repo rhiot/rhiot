@@ -43,8 +43,12 @@ public class GpsdEndpoint extends DefaultEndpoint {
     private int port = 2947;
     @UriParam(defaultValue = "localhost")
     private String host = "localhost";
+
     @UriParam(defaultValue = "0", description = "Distance in km, eg 0.1 for 100m")
     private double distance = 0;
+
+    @UriParam(defaultValue = "true", description = "Indicates if the endpoint should try (re)start the local GPSD daemon on start.")
+    private boolean restartGpsd = true;
 
     private GPSdEndpoint gpsd4javaEndpoint;
     
@@ -87,10 +91,12 @@ public class GpsdEndpoint extends DefaultEndpoint {
         
         // localhost endpoint should also start the component
 
-        if ("localhost".equals(getHost())) {
+        if (restartGpsd && "localhost".equals(getHost())) {
             ((GpsdComponent)getComponent()).restartGpsDaemon();
         }
-        gpsd4javaEndpoint = new GPSdEndpoint(host, port, new ResultParser());
+        if(gpsd4javaEndpoint == null) {
+            gpsd4javaEndpoint = new GPSdEndpoint(host, port, new ResultParser());
+        }
         gpsd4javaEndpoint.start();
 
         LOG.info("GPSD Version: {}", gpsd4javaEndpoint.version());
@@ -121,6 +127,10 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     public GPSdEndpoint getGpsd4javaEndpoint() {
         return gpsd4javaEndpoint;
+    }
+
+    public void setGpsd4javaEndpoint(GPSdEndpoint gpsd4javaEndpoint) {
+        this.gpsd4javaEndpoint = gpsd4javaEndpoint;
     }
 
     public int getPort() {
@@ -162,6 +172,10 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     public void setScheduled(boolean scheduled) {
         this.scheduled = scheduled;
+    }
+
+    public void setRestartGpsd(boolean restartGpsd) {
+        this.restartGpsd = restartGpsd;
     }
 
 }
