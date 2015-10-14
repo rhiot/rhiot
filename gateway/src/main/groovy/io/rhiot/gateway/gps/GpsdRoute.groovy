@@ -45,6 +45,7 @@ public class GpsdRoute extends RouteBuilder {
 
     @Override
     void configure() {
+        new File(storeDirectory).mkdirs()
         def route = from(gpsEndpoint).routeId('gps')
         if(enrich != null) {
             route = route.enrich(enrich, new AggregationStrategy() {
