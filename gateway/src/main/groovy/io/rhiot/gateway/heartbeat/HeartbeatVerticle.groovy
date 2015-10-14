@@ -17,6 +17,7 @@
 package io.rhiot.gateway.heartbeat
 
 import io.rhiot.gateway.GatewayVerticle
+import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.lang.groovy.GroovyVerticle
 
 import static io.rhiot.gateway.GatewayConstants.BUS_HEARTBEAT

@@ -16,28 +16,42 @@
  */
 package io.rhiot.gateway.gps
 
-import io.rhiot.gateway.GatewayVerticle
-import io.rhiot.vertx.camel.GroovyCamelVerticle
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.rhiot.steroids.PropertyCondition
+import io.rhiot.steroids.camel.Route
+import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.processor.aggregate.AggregationStrategy
 
 import static io.rhiot.utils.Properties.stringProperty
+import static org.apache.camel.model.dataformat.JsonLibrary.Jackson
 
 /**
  * Camel route reading current position data from the GPSD socket.
  */
-@GatewayVerticle(conditionProperty = 'gps')
-public class GpsdVerticle extends GroovyCamelVerticle {
+@Route
+@PropertyCondition(property = 'gps')
+public class GpsdVerticle extends RouteBuilder {
 
     def storeDirectory = stringProperty('camellabs_iot_gateway_gps_store_directory', '/var/camel-labs-iot-gateway/gps')
 
+    def enrich = stringProperty('gps_enrich')
+
     @Override
-    void start() {
-        camelContext.addRoutes(new RouteBuilder() {
-            @Override
-            void configure() {
-                from('gpsd://gps').routeId("gpsd").convertBodyTo(String.class).to("file://${storeDirectory}")
-            }
-        })
+    void configure() throws Exception {
+        def route = from('gpsd://gps').routeId("gpsd")
+        if(enrich != null) {
+            route = route.enrich(enrich, new AggregationStrategy() {
+                @Override
+                Exchange aggregate(Exchange original, Exchange polled) {
+                    def body = new ObjectMapper().convertValue(original.in.body, Map.class)
+                    original.in.body = body
+                    body.put('enriched', new ObjectMapper().convertValue(polled.in.body, Map.class))
+                    original
+                }
+            })
+        }
+        route.marshal().json(Jackson).to("file://${storeDirectory}")
     }
 
 }

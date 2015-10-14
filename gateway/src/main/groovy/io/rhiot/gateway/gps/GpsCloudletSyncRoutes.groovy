@@ -16,12 +16,12 @@
  */
 package io.rhiot.gateway.gps
 
-import io.rhiot.component.gps.bu353.ClientGpsCoordinates
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.gateway.GatewayVerticle
+import io.rhiot.utils.Uuids
 import io.rhiot.vertx.camel.GroovyCamelVerticle;
 import org.apache.camel.builder.RouteBuilder;
 
-import static ClientGpsCoordinates.deserialize
 import static io.rhiot.utils.Properties.stringProperty;
 import static org.apache.camel.Exchange.HTTP_METHOD;
 import static org.apache.camel.model.dataformat.JsonLibrary.Jackson;
@@ -44,59 +44,23 @@ class GpsCloudletSyncRoutes extends GroovyCamelVerticle {
                 from("file://${storeDirectory}?sortBy=file:modified").
                         onException(Exception.class).maximumRedeliveries(100000).useExponentialBackOff().end().
                         process { exc ->
-                            ClientGpsCoordinates clientCoordinates = deserialize(exc.getIn().getBody(String.class));
-                            ServerCoordinates serverCoordinates = new ServerCoordinates(InetAddress.getLocalHost().getHostName(), UUID.randomUUID().toString(), clientCoordinates.timestamp(), clientCoordinates.lat(), clientCoordinates.lng());
-                            exc.getIn().setBody(serverCoordinates);
+                            def clientCoordinates = new ObjectMapper().readValue(exc.in.getBody(String.class), Map.class)
+                            def serverCoordinates = [:]
+                            serverCoordinates.client = InetAddress.getLocalHost().getHostName()
+                            serverCoordinates.clientId = Uuids.uuid()
+                            serverCoordinates.timestamp = clientCoordinates.timestamp
+                            serverCoordinates.latitude = clientCoordinates.lat
+                            serverCoordinates.longitude = clientCoordinates.lng
+                            if(serverCoordinates.enrich != null) {
+                                serverCoordinates.enrich = clientCoordinates.enrich
+                            }
+                            exc.in.setBody(serverCoordinates);
                         }.
                         marshal().json(Jackson).
                         setHeader(HTTP_METHOD, constant("POST")).
                         to("netty4-http:http://${cloudletAddress}/api/document/save/GpsCoordinates");
             }
         })
-    }
-
-}
-
-class ServerCoordinates {
-
-    private final String client;
-
-    private final String clientId;
-
-    private final Date timestamp;
-
-    private final double latitude;
-
-    private final double longitude;
-
-    public ServerCoordinates(String client, String clientId, Date timestamp, double latitude, double longitude) {
-        this.client = client;
-        this.clientId = clientId;
-        this.timestamp = timestamp;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-
-    public String getClient() {
-        return client;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-
-    public double getLongitude() {
-        return longitude;
     }
 
 }

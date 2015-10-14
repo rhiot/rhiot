@@ -94,7 +94,8 @@ public class GpsCloudletSyncTest extends Assert {
                 return false;
             }
         });
-        IOUtils.write(System.currentTimeMillis() + ",10,20", new FileOutputStream(new File(gpsCoordinatesStore, "foo")));
+        String gpsCoordinates = "{\"timestamp\": 123456789, \"lat\": 10.0, \"lng\": 20.0}";
+        IOUtils.write(gpsCoordinates, new FileOutputStream(new File(gpsCoordinatesStore, "foo")));
         await().atMost(5, MINUTES).until(() -> {
             try {
                 String countString = IOUtils.toString(countOperationUri);
