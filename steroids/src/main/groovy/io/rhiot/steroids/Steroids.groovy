@@ -20,10 +20,16 @@ import io.rhiot.utils.Properties
 import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
 
+import java.lang.annotation.Annotation
+
+import static io.rhiot.utils.Properties.booleanProperty
 import static io.rhiot.utils.Properties.stringProperty
 import static com.google.common.base.Preconditions.checkNotNull
 import static java.util.Optional.empty
 
+/**
+ * Central point of accessing the steroids beans.
+ */
 final class Steroids {
 
     static def APPLICATION_PACKAGE_PROPERTY = 'application_package'
@@ -43,21 +49,46 @@ final class Steroids {
     static <T> Optional<T> bean(Class<T> type) {
         checkNotNull(type, 'Type of the bean cannot be null.')
 
-        def beans = classpath.getSubTypesOf(type).toList()
+        def beans = inclusiveSubTypesOf(type)
+        beans = classesMatchingConditions(beans)
         if(beans.isEmpty()) {
             return empty()
         }
-        Optional.of(beans.first().newInstance())
+        instantiate(beans.first())
     }
 
     static <T> List<T> beans(Class<T> type) {
         checkNotNull(type, 'Type of the beans cannot be null.')
-        classpath.getSubTypesOf(type).toList().collect{ it.newInstance() }
+        def classes = inclusiveSubTypesOf(type)
+        classesMatchingConditions(classes).collect{ instantiate(it) }.findAll{it.isPresent()}.collect{it.get()}
     }
 
-    static <T> List<T> beans(Class<T> type, Class<?> annotation) {
+    static <T> List<T> beans(Class<T> type, Class<? extends Annotation> annotation) {
         checkNotNull(type, 'Type of the beans cannot be null.')
-        classpath.getTypesAnnotatedWith(annotation).toList().collect{ it.newInstance() }
+        def annotatedClasses = classpath.getTypesAnnotatedWith(annotation).toList()
+        classesMatchingConditions(annotatedClasses).collect{ instantiate(it) }.findAll{it.isPresent()}.collect{it.get()}
+    }
+
+    // Helpers
+
+    private static List<Class<?>> classesMatchingConditions(List<Class<?>> classes) {
+        classes.findAll{ cls ->
+            !cls.isAnnotationPresent(PropertyCondition.class) ||
+                    booleanProperty(cls.getAnnotation(PropertyCondition.class).property()) }
+    }
+
+    private static List<Class<?>> inclusiveSubTypesOf(Class<?> type) {
+        def subtypes = classpath.getSubTypesOf(type).toList()
+        subtypes.add(type)
+        subtypes
+    }
+
+    private static Optional<?> instantiate(Class<?> type) {
+        try {
+            Optional.of(type.newInstance())
+        } catch (GroovyRuntimeException e) {
+            empty()
+        }
     }
 
 }
