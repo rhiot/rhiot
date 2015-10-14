@@ -128,8 +128,8 @@ Rhiot comes with the following features:
 
 ## Rhiot IoT gateway
 
-Camel IoT gateway is the small fat jar application that can be installed into the field device. Gateway acts as a bridge
-between the sensors and the data center. Under the hood, Camel IoT gateway is the fat jar running
+*Rhiot gateway* is the small fat jar application that can be installed into the field device. Gateway acts as a bridge
+between the sensors and the data center. Under the hood, Rhiot gateway is the fat jar running
 [Vert.x](http://vertx.io) and Apache Camel.
 
 ### Installing gateway on the Raspbian
@@ -250,6 +250,28 @@ Change LED output port like this:
     export camellabs.iot.gateway.heartbeat.led.gpioId=11
 
 Please add resistor (220 Ohms) between LED and Mass (0v) to avoid excessive current through it.
+
+### Using GPS receivers with gateway
+
+Rhiot gateway comes with a dedicated GPS support. It makes it easier to collect, store and forward the GPS data to a
+data center (to the [Rhiot Cloud](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#rhiot-cloud) in particular).
+Under the hood gateway GPS support uses the [GPSD component](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#camel-gpsd-component).
+
+#### Enabling GPS receiver
+
+In order to start collecting GPS data on the gateway device, just add `gps=true` property to the gateway configuration.
+Gateway with the GPS support enabled will poll the GPS receiver every 5 seconds and store the GPS coordinates in the
+`/var/rhiot/gps` directory (or the other directory indicated using `gps_store_directory` configuration property). The data
+collected from the GPS receiver will be serialized to the JSON format. Each GPS read is saved to in a dedicated file.
+
+#### Enriching GPS data
+
+Sometimes you would like to collect not only the GPS coordinates, but some other sensor data associated with the given
+location. For example to track the temperature or WiFi networks available in various locations. If you would like to
+enrich collected GPS data with value read from some other endpoint, set the `gps_enrich` property to the Camel endpoint
+URI value. For example setting `gps_enrich=kura-wifi:*/*` can be used to poll for available WiFi networks using
+[Camel Kura WiFi component](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#camel-kura-wifi-component) and adding
+the results to collected GPS payloads.
 
 ### Monitoring gateway with Jolokia
 

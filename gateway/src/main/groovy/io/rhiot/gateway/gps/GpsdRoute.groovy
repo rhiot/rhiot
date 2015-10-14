@@ -31,15 +31,21 @@ import static org.apache.camel.model.dataformat.JsonLibrary.Jackson
  */
 @Route
 @PropertyCondition(property = 'gps')
-public class GpsdVerticle extends RouteBuilder {
+public class GpsdRoute extends RouteBuilder {
 
-    def storeDirectory = stringProperty('camellabs_iot_gateway_gps_store_directory', '/var/camel-labs-iot-gateway/gps')
+    // Configuration
+
+    def gpsEndpoint = stringProperty('gps_endpoint', 'gpsd://gps')
+
+    def storeDirectory = stringProperty('gps_store_directory', '/var/rhiot/gps')
 
     def enrich = stringProperty('gps_enrich')
 
+    // Routing
+
     @Override
-    void configure() throws Exception {
-        def route = from('gpsd://gps').routeId("gpsd")
+    void configure() {
+        def route = from(gpsEndpoint).routeId('gps')
         if(enrich != null) {
             route = route.enrich(enrich, new AggregationStrategy() {
                 @Override
