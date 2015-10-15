@@ -52,16 +52,8 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     private GPSdEndpoint gpsd4javaEndpoint;
     
-    public GpsdEndpoint() {
-    }
-
     public GpsdEndpoint(String uri, GpsdComponent component) {
         super(uri, component);
-    }
-
-    public GpsdEndpoint(String endpointUri) {
-        super(endpointUri);
-        createEndpointConfiguration(endpointUri);
     }
 
     // Producer/consumer factories
@@ -73,6 +65,7 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
+        LOG.debug("Creating GPSD consumer.");
         Consumer consumer = isScheduled() ? new GpsdScheduledConsumer(this, processor) : new DefaultGpsdConsumer(this, processor);
 
         if(isScheduled()) {
@@ -101,8 +94,10 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
         LOG.info("GPSD Version: {}", gpsd4javaEndpoint.version());
 
+        LOG.debug("Starting GPSD WATCH...");
         gpsd4javaEndpoint.watch(true, true);
-        
+        LOG.debug("Started GPSD WATCH.");
+
         super.doStart();
     }
 

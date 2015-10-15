@@ -51,14 +51,10 @@ public class GpsdComponent extends UriEndpointComponent {
         super(GpsdEndpoint.class);
     }
 
-    public GpsdComponent(CamelContext context) {
-        super(context, GpsdEndpoint.class);
-    }
-
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+        LOG.debug("Creating GPSD endpoint for URI {} .", uri);
         Endpoint endpoint = new GpsdEndpoint(uri, this);
         setProperties(endpoint, parameters);
-
         return endpoint;
     }
     // Life-cycle
