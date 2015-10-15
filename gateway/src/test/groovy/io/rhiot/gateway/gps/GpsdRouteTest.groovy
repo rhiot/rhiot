@@ -37,17 +37,17 @@ public class GpsdRouteTest extends Assert {
 
     static def gateway = new Gateway()
 
-    static File gpsCoordinatesStore = createTempDir();
+    static def gpsCoordinatesStore = createTempDir()
 
     @BeforeClass
-    public static void beforeClass() throws UnknownHostException {
+    static void beforeClass() {
         // Gateway GPS store fixtures
         setBooleanProperty('gps', true)
         setStringProperty('gps_endpoint', 'seda:gps')
         setStringProperty('gps_enrich', 'seda:enrich')
         setStringProperty("gps_store_directory", gpsCoordinatesStore.getAbsolutePath());
 
-        gateway.start();
+        gateway.start()
     }
 
     @AfterClass
