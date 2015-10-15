@@ -19,6 +19,8 @@ package io.rhiot.utils
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.utils.Mavens.MavenCoordinates.parseMavenCoordinates
+import static io.rhiot.utils.Mavens.artifactVersionFromDependenciesProperties
 
 class MavensTest {
 
@@ -31,12 +33,18 @@ class MavensTest {
         def coordinatesString = "${group}:${artifact}:${version}"
 
         // When
-        def coordinates = Mavens.MavenCoordinates.parseMavenCoordinates(coordinatesString)
+        def coordinates = parseMavenCoordinates(coordinatesString)
 
         // Then
         assertThat(coordinates.artifactId).isEqualTo(artifact)
         assertThat(coordinates.groupId).isEqualTo(group)
         assertThat(coordinates.version).isEqualTo(version)
+    }
+
+    @Test
+    void shouldLoadDependencyVersion() {
+        def version = artifactVersionFromDependenciesProperties('com.test', 'test')
+        assertThat(version).isEqualTo('6.6.6')
     }
 
 }
