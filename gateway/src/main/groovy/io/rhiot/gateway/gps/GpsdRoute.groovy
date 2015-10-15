@@ -16,6 +16,7 @@
  */
 package io.rhiot.gateway.gps
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.steroids.PropertyCondition
 import io.rhiot.steroids.camel.Route
 import org.apache.camel.Exchange
@@ -41,31 +42,47 @@ public class GpsdRoute extends RouteBuilder {
 
     def enrich = stringProperty('gps_enrich')
 
+    // Collaborators
+
     def jackson = new JacksonDataFormat()
+
+    // Constructors
 
     GpsdRoute() {
         def  visibilityChecker = jackson.objectMapper.visibilityChecker.withFieldVisibility(ANY)
-        jackson.objectMapper.setVisibilityChecker(visibilityChecker)
+        jackson.objectMapper.visibilityChecker = visibilityChecker
     }
 
-// Routing
+    // Routing
 
     @Override
     void configure() {
         new File(storeDirectory).mkdirs()
         def route = from(gpsEndpoint).routeId('gps')
         if(enrich != null) {
-            route = route.pollEnrich(enrich, new AggregationStrategy() {
-                @Override
-                Exchange aggregate(Exchange original, Exchange polled) {
-                    def body = jackson.objectMapper.convertValue(original.in.body, Map.class)
-                    original.in.body = body
-                    body.put('enriched', jackson.objectMapper.convertValue(polled.in.body, Map.class))
-                    original
-                }
-            })
+            route = route.pollEnrich(enrich, new MapEnrichingAggregationStrategy(jackson.objectMapper))
         }
         route.marshal(jackson).to("file://${storeDirectory}")
+    }
+
+    // Helpers
+
+    private static class MapEnrichingAggregationStrategy implements AggregationStrategy {
+
+        private final ObjectMapper jackson
+
+        MapEnrichingAggregationStrategy(ObjectMapper jackson) {
+            this.jackson = jackson
+        }
+
+        @Override
+        Exchange aggregate(Exchange original, Exchange polled) {
+            def body = jackson.convertValue(original.in.body, Map.class)
+            original.in.body = body
+            body.put('enriched', jackson.convertValue(polled.in.body, Map.class))
+            original
+        }
+
     }
 
 }

@@ -56,7 +56,7 @@ public class GpsdRouteTest extends Assert {
     }
 
     @Test
-    public void shouldSendGpsCoordinatesToTheGeofencingCloudlet() {
+    public void shouldSaveEnrichedGpsData() {
         def coordinates = new ClientGpsCoordinates(new Date(), 10.0, 20.0)
         camelContext().createProducerTemplate().sendBody('seda:gps', coordinates)
         camelContext().createProducerTemplate().sendBody('seda:enrich', new EnrichingData(extraData: 'foo'))
