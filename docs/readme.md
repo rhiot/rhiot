@@ -572,14 +572,14 @@ Maven users should add the following dependency to their POM file:
     
 #### URI format
 
-    kura:networkInterface/ssid
+    kura-wifi:networkInterface/ssid
     
 Where both `networkInterface` and `ssid` can be replaced with the `*` wildcard matching respectively all the network 
 interfaces and SSIDs.
 
 For example to read all the SSID available near the device, the following route can be used:
 
-    from("kura:*/*").to("mock:SSIDs");
+    from("kura-wifi:*/*").to("mock:SSIDs");
 
 The Kura WiFi consumer returns the list of the `org.eclipse.kura.net.wifi.WifiAccessPoint` classes returned as a result
 of the WiFi scan:
