@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.rhiot.io.rhiot.component.gpsd;
+package io.rhiot.component.gpsd;
 
 import io.rhiot.component.gpsd.GpsdConstants;
 import io.rhiot.deployer.detector.Device;

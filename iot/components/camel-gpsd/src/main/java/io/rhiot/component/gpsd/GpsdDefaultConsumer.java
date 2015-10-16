@@ -27,9 +27,9 @@ import org.apache.camel.impl.DefaultConsumer;
 /**
  * The default Gpsd consumer listens for events from the device and consumes it immediately.
  */
-public class DefaultGpsdConsumer extends DefaultConsumer {
+public class GpsdDefaultConsumer extends DefaultConsumer {
     
-    public DefaultGpsdConsumer(GpsdEndpoint endpoint, Processor processor) {
+    public GpsdDefaultConsumer(GpsdEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
     }
     
@@ -38,30 +38,23 @@ public class DefaultGpsdConsumer extends DefaultConsumer {
     protected void doStart() throws Exception {
         log.debug("Starting GPSD consumer.");
             
-        try {
-
-            GPSdEndpoint gpsd4javaEndpoint = getEndpoint().getGpsd4javaEndpoint();
-            if (getEndpoint().getDistance() > 0) {
-                gpsd4javaEndpoint.addListener(new DistanceListener(getEndpoint().getDistance()) {
-                    @Override
-                    protected void handleLocation(TPVObject tpv) {
-                        GpsdHelper.consumeTPVObject(tpv, getProcessor(), getEndpoint());
-                    }
-                });
-            } else {
-                gpsd4javaEndpoint.addListener(new ObjectListener() {
-                    @Override
-                    public void handleTPV(final TPVObject tpv) {
-                        GpsdHelper.consumeTPVObject(tpv, getProcessor(), getEndpoint());
-                    }
-                });
-            }
-            
-        } catch (Exception e) {
-            getExceptionHandler().handleException(e);
+        GPSdEndpoint gpsd4javaEndpoint = getEndpoint().getGpsd4javaEndpoint();
+        if (getEndpoint().getDistance() > 0) {
+            gpsd4javaEndpoint.addListener(new DistanceListener(getEndpoint().getDistance()) {
+                @Override
+                protected void handleLocation(TPVObject tpv) {
+                    GpsdHelper.consumeTPVObject(tpv, getProcessor(), getEndpoint(), getExceptionHandler());
+                }
+            });
+        } else {
+            gpsd4javaEndpoint.addListener(new ObjectListener() {
+                @Override
+                public void handleTPV(final TPVObject tpv) {
+                    GpsdHelper.consumeTPVObject(tpv, getProcessor(), getEndpoint(), getExceptionHandler());
+                }
+            });
         }
     }
-
     
 
     @Override

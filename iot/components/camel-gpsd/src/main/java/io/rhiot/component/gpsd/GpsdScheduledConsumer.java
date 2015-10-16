@@ -40,15 +40,11 @@ public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
 
         GPSdEndpoint gpsd4javaEndpoint = getEndpoint().getGpsd4javaEndpoint();
         while (true && gpsd4javaEndpoint != null) {
-            try {
-                PollObject pollObject = gpsd4javaEndpoint.poll();
-                if (pollObject != null && pollObject.getFixes().size() > 0 && pollObject.getFixes().get(0) instanceof TPVObject) {
-                    GpsdHelper.consumeTPVObject(pollObject.getFixes().get(0), getProcessor(), getEndpoint());
-                    return 1;
-                }
-
-            } catch (Exception e) {
-                getExceptionHandler().handleException(e);
+            PollObject pollObject = gpsd4javaEndpoint.poll();
+            
+            if (pollObject != null && pollObject.getFixes().size() > 0 && pollObject.getFixes().get(0) instanceof TPVObject) {
+                GpsdHelper.consumeTPVObject(pollObject.getFixes().get(0), getProcessor(), getEndpoint(), getExceptionHandler());
+                return 1;
             }
         }
         return 0;
@@ -58,5 +54,4 @@ public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
     public GpsdEndpoint getEndpoint() {
         return (GpsdEndpoint) super.getEndpoint();
     }
-
 }

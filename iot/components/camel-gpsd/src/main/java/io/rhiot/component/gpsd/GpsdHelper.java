@@ -19,6 +19,7 @@ package io.rhiot.component.gpsd;
 
 import de.taimos.gpsd4java.types.TPVObject;
 import org.apache.camel.*;
+import org.apache.camel.spi.ExceptionHandler;
 import org.apache.commons.lang3.Validate;
 
 import java.util.Date;
@@ -46,7 +47,7 @@ public class GpsdHelper {
      * @param processor Processor that handles the exchange.
      * @param endpoint GpsdEndpoint receiving the exchange.
      */
-    public static void consumeTPVObject(TPVObject tpv, Processor processor, GpsdEndpoint endpoint) {
+    public static void consumeTPVObject(TPVObject tpv, Processor processor, GpsdEndpoint endpoint, ExceptionHandler exceptionHandler) {
         Validate.notNull(tpv);
         Validate.notNull(processor);
         Validate.notNull(endpoint);
@@ -54,10 +55,9 @@ public class GpsdHelper {
         Exchange exchange = createOutOnlyExchangeWithBodyAndHeaders(endpoint,
                 new ClientGpsCoordinates(new Date(new Double(tpv.getTimestamp()).longValue()), tpv.getLatitude(), tpv.getLongitude()), tpv);
         try {
-
             processor.process(exchange);
         } catch (Exception e) {
-            exchange.setException(e);
+            exceptionHandler.handleException(e);
         }
     }
 }
