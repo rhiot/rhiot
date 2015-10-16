@@ -82,8 +82,8 @@ public class GpsdComponentTest extends CamelTestSupport {
                 from("gpsd://gps?scheduled=true&restartGpsd=false&gpsd4javaEndpoint=#gpsd4javaEndpoint").to("seda:mock");
 
                 //Set router up for failure
-                from("gpsd:failingGps?scheduled=true&restartGpsd=false&gpsd4javaEndpoint=#failingGpsdEndpoint&consumer.exceptionHandler=#myHandler").routeId("gps").
-                        throwException(new IllegalArgumentException("Forced")).to("mock:result");
+                from("gpsd:failingGps?scheduled=true&restartGpsd=false&gpsd4javaEndpoint=#failingGpsdEndpoint&consumer.exceptionHandler=#myHandler").
+                        routeId("gps").to("mock:result");
             }
         };
     }
