@@ -375,7 +375,7 @@ Maven users should add the following dependency to their POM file:
     <dependency>
       <groupId>io.rhiot</groupId>
       <artifactId>camel-gps-bu353</artifactId>
-      <version>0.1.1</version>
+      <version>${rhiot.version}</version>
     </dependency>
 
 #### URI format
@@ -456,7 +456,7 @@ Maven users should add the following dependency to their POM file:
     <dependency>
       <groupId>io.rhiot</groupId>
       <artifactId>camel-gpsd</artifactId>
-      <version>0.1.2</version>
+      <version>${rhiot.version}</version>
     </dependency>
 
 #### URI format
@@ -567,7 +567,7 @@ Maven users should add the following dependency to their POM file:
     <dependency>
       <groupId>io.rhiot</groupId>
       <artifactId>camel-kura</artifactId>
-      <version>0.0.0</version>
+      <version>${rhiot.version}</version>
     </dependency>
     
 #### URI format
@@ -622,7 +622,7 @@ Maven users should add the following dependency to their POM file:
     <dependency>
       <groupId>io.rhiot</groupId>
       <artifactId>camel-tinkerforge</artifactId>
-      <version>0.0.0</version>
+      <version>${rhiot.version}</version>
     </dependency>
 
 #### General URI format
@@ -719,7 +719,7 @@ Maven users should add the following dependency to their POM file:
     <dependency>
       <groupId>io.rhiot</groupId>
       <artifactId>camel-pi4j</artifactId>
-      <version>0.0.0</version>
+      <version>${rhiot.version}</version>
     </dependency>
 
 #### URI format for GPIO
@@ -812,7 +812,7 @@ Maven users should add the following dependency to their POM file:
     <dependency>
       <groupId>io.rhiot</groupId>
       <artifactId>camel-pubnub</artifactId>
-      <version>0.0.0</version>
+      <version>${rhiot.version}</version>
     </dependency>
 
 #### General URI format
