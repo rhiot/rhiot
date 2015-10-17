@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Represents a Webcam endpoint.
  */
-@UriEndpoint(scheme = "webcam", title = "webcam", syntax="webcam:name", consumerClass = WebcamDefaultConsumer.class, label = "Webcam")
+@UriEndpoint(scheme = "webcam", title = "webcam", syntax="webcam:name", consumerClass = WebcamMotionConsumer.class, label = "Webcam")
 public class WebcamEndpoint extends DefaultEndpoint {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebcamEndpoint.class);
@@ -67,7 +67,7 @@ public class WebcamEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        Consumer consumer = isScheduled() ? new WebcamScheduledConsumer(this, processor) : new WebcamDefaultConsumer(this, processor);
+        Consumer consumer = isScheduled() ? new WebcamScheduledConsumer(this, processor) : new WebcamMotionConsumer(this, processor);
 
         if(isScheduled()) {
             if(!getConsumerProperties().containsKey("delay")) {
@@ -87,17 +87,17 @@ public class WebcamEndpoint extends DefaultEndpoint {
             try {
                 Webcam.setDriver(new V4l4jDriver()); // this is important for Raspberry Pi
             } catch (UnsatisfiedLinkError e) {
-                //todo noop for now
+                //default is Pi but allow the webcam to fallback, aim to support specifying driver
             }
             
-            webcam = Webcam.getDefault(); //todo configure size etc 
+            webcam = Webcam.getDefault();
             if (webcam.open()) {
                 LOG.info("Opened webcam device : {}", webcam.getDevice().getName());
+            } else {
+                throw new IllegalStateException("Failed to open webcam");
             }
         }
-        if (webcam != null && webcam.getDevice() != null) {
-            LOG.info("Webcam device : {}", webcam.getDevice().getName());
-        }
+        LOG.info("Webcam device : {}", webcam.getDevice().getName());
         
         super.doStart();
     }

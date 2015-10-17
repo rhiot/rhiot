@@ -49,6 +49,7 @@
         <slfj4.version>1.7.12</slfj4.version>
         <tinkerforge.version>2.1.5</tinkerforge.version>
         <vertx.version>3.0.0</vertx.version>
+        <webcam-capture.version>0.3.11</webcam-capture.version>
     </properties>
 
     <dependencyManagement>
@@ -101,6 +102,11 @@
                 <version>${rhiot.version}</version>
                 <type>feature</type>
                 <classifier>features</classifier>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>camel-webcam</artifactId>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>

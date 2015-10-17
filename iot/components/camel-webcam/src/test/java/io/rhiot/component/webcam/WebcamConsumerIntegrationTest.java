@@ -70,23 +70,13 @@ public class WebcamConsumerIntegrationTest extends CamelTestSupport {
         
         assertMockEndpointsSatisfied(20, TimeUnit.SECONDS);
     }
-
-    @Test
-    public void testWebcamConsumer() throws Exception {
-        
-        MockEndpoint mock = getMockEndpoint("mock:poll");
-        mock.expectedMinimumMessageCount(1);
-        
-        assertMockEndpointsSatisfied(15, TimeUnit.SECONDS);
-    }
     
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("webcam://cam?openWebcam=false&webcam=#webcam").to("mock:poll");
                 from("webcam://cam?openWebcam=false&webcam=#webcam&scheduled=true&consumer.delay=5000").to("mock:scheduled");
-                from("webcam://motion?openWebcam=false&webcam=#webcam&detectMotion=true").to("mock:motion");
+                from("webcam://motion?openWebcam=false&webcam=#webcam").to("mock:motion");
             }
         };
     }

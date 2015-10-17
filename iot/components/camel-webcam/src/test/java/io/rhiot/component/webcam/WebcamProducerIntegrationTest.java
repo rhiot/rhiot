@@ -51,30 +51,14 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
         registry.bind("webcam", webcam);
         return registry;
     }
-    
-    @Test
-    @Ignore("Disabled so I don't have to wave my hand to build :)")
-    public void testMotion() throws InterruptedException {
-        MockEndpoint mock = getMockEndpoint("mock:motion");
-        mock.expectedMinimumMessageCount(1);
-
-        assertMockEndpointsSatisfied(10, TimeUnit.SECONDS);
-    }
-
-    @Test
-    public void testWebcamScheduledConsumer() throws Exception {
-        
-        MockEndpoint mock = getMockEndpoint("mock:scheduled");
-        mock.expectedMinimumMessageCount(3);
-        
-        assertMockEndpointsSatisfied(20, TimeUnit.SECONDS);
-    }
 
     @Test
     public void testWebcamProducer() throws Exception {
         
-        MockEndpoint mock = getMockEndpoint("mock:poll");
+        MockEndpoint mock = getMockEndpoint("mock:foo");
         mock.expectedMinimumMessageCount(1);
+        
+        template.requestBody("direct:cam", "");
         
         assertMockEndpointsSatisfied(15, TimeUnit.SECONDS);
     }
@@ -83,9 +67,7 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:cam").to("webcam://cam?openWebcam=false&webcam=#webcam").to("mock:poll");
-//                from("webcam://cam?openWebcam=false&webcam=#webcam&scheduled=true&consumer.delay=5000").to("mock:scheduled");
-//                from("webcam://motion?openWebcam=false&webcam=#webcam&detectMotion=true").to("mock:motion");
+                from("direct:cam").to("webcam://cam?openWebcam=false&webcam=#webcam").to("mock:foo");
             }
         };
     }

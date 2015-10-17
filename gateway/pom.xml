@@ -38,11 +38,15 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-vertx</artifactId>
+            <artifactId>camel-webcam</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-steroids-camel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-vertx</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

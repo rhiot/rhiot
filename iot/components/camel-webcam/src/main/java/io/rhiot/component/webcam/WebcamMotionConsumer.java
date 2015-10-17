@@ -22,7 +22,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 
 /**
- * The default Webcam consumer listens for events from the device and consumes it immediately.
+ * Detects motion.
  */
 public class WebcamMotionConsumer extends DefaultConsumer {
     
@@ -30,23 +30,16 @@ public class WebcamMotionConsumer extends DefaultConsumer {
         super(endpoint, processor);
     }
     
-    
     @Override
     protected void doStart() throws Exception {
         log.debug("Starting Webcam consumer.");
             
         try {
-            if(getEndpoint().isDetectMotion()) {
-                WebcamMotionDetector detector = new WebcamMotionDetector(getEndpoint().getWebcam());
-                detector.setInterval(getEndpoint().getMotionInterval());
-                detector.addMotionListener(wme -> WebcamHelper.consumeBufferedImage(wme.getCurrentImage(), getProcessor(), getEndpoint()));
-                detector.start();
-                log.debug("Started motion detection.");
-            } else {
-                //todo what to do when the user hasn't selected a 
-                log.debug("Started webcam consumer.");
-            }
-            
+            WebcamMotionDetector detector = new WebcamMotionDetector(getEndpoint().getWebcam());
+            detector.setInterval(getEndpoint().getMotionInterval());
+            detector.addMotionListener(wme -> WebcamHelper.consumeBufferedImage(wme.getCurrentImage(), getProcessor(), getEndpoint()));
+            detector.start();
+            log.debug("Started motion detection.");            
         } catch (Exception e) {
             getExceptionHandler().handleException(e);
         }
