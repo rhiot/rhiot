@@ -18,6 +18,7 @@
 package io.rhiot.component.webcam;
 
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.ds.dummy.WebcamDummyDevice;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -39,6 +40,9 @@ public class WebcamComponentTest extends CamelTestSupport {
         BufferedImage image = ImageIO.read(WebcamComponentTest.class.getResourceAsStream("rhiot.png"));
         given(webcam.getImage()).willReturn(image);
         given(webcam.open()).willReturn(true);
+        given(webcam.getDevice()).willReturn(new WebcamDummyDevice(1));
+        given(webcam.getDevice().getName()).willReturn("dummy");
+        
     }
 
     @Test
