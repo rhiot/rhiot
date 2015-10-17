@@ -39,12 +39,12 @@ public class WebcamEndpoint extends DefaultEndpoint {
     private boolean scheduled = false;
 
     private Webcam webcam;
-    @UriParam(defaultValue = "true", description = "Indicates if the endpoint should try open the webcam on start.")
-    private boolean openWebcam = true;
     @UriParam(defaultValue = "true", description = "Indicates if the endpoint should detect motion.")
     private boolean detectMotion = true;
     @UriParam(defaultValue = "500", description = "Interval in milliseconds to detect motion.")
     private int motionInterval = 500;
+    @UriParam(defaultValue = "png", description = "Capture format")
+    private String format = "png";    
     
     public WebcamEndpoint() {
     }
@@ -83,20 +83,30 @@ public class WebcamEndpoint extends DefaultEndpoint {
     @Override
     protected void doStart() throws Exception {
         
-        if(openWebcam && webcam == null) {
+        if(webcam == null) {
             try {
+                LOG.debug("Loading V4l4j driver");
                 Webcam.setDriver(new V4l4jDriver()); // this is important for Raspberry Pi
+                webcam = Webcam.getDefault();
+                LOG.debug("Loaded V4l4j driver");
             } catch (UnsatisfiedLinkError e) {
                 //default is Pi but allow the webcam to fallback, aim to support specifying driver
                 try {
+                    LOG.debug("Falling back on default driver");
                     webcam = Webcam.getDefault();
                 } catch (Exception ex) {
-                    LOG.error("Failed to load the webcam driver", ex);
+                    throw new IllegalStateException("Failed to open webcam");
                 }
             }
         }
-        if (webcam != null && webcam.open()) {
-            LOG.info("Opened webcam device : {}", webcam.getDevice().getName());
+        if (webcam != null && webcam.isOpen()) {
+            LOG.debug("Webcam device [{}] already open", webcam.getDevice().getName());
+        } else if (webcam != null && !webcam.isOpen()){
+            if (webcam.open()) {
+                LOG.debug("Webcam device [{}] opened", webcam.getDevice().getName());
+            } else {
+                throw new IllegalStateException("Failed to open webcam");
+            }
         } else {
             throw new IllegalStateException("Failed to open webcam");
         }
@@ -139,14 +149,6 @@ public class WebcamEndpoint extends DefaultEndpoint {
         this.webcam = webcam;
     }
 
-    public boolean isOpenWebcam() {
-        return openWebcam;
-    }
-
-    public void setOpenWebcam(boolean openWebcam) {
-        this.openWebcam = openWebcam;
-    }
-
     public boolean isDetectMotion() {
         return detectMotion;
     }
@@ -161,5 +163,13 @@ public class WebcamEndpoint extends DefaultEndpoint {
 
     public void setMotionInterval(int motionInterval) {
         this.motionInterval = motionInterval;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 }

@@ -36,7 +36,7 @@ public class WebcamVerticle extends GroovyCamelVerticle {
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             void configure() {
-                from('webcam://cam?detectMotion=true').routeId("motion").to("file://${storeDirectory}?fileName=${date:now:yyyyMMdd}.png")
+                from('webcam://cam?detectMotion=true').routeId("motion").to("file://${storeDirectory}")
             }
         })
     }

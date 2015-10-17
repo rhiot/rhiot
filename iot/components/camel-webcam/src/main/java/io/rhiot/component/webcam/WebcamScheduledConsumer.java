@@ -40,15 +40,10 @@ public class WebcamScheduledConsumer extends DefaultScheduledPollConsumer {
 
         while (true && getEndpoint().getWebcam() != null) {
             Webcam webcam = getEndpoint().getWebcam();
-            try {
-                BufferedImage image = webcam.getImage();
-                if (image != null) {
-                    WebcamHelper.consumeBufferedImage(image, getProcessor(), getEndpoint());
-                    return 1;
-                }
-
-            } catch (Exception e) {
-                getExceptionHandler().handleException(e);
+            BufferedImage image = webcam.getImage();
+            if (image != null) {
+                WebcamHelper.consumeBufferedImage(image, getProcessor(), getEndpoint(), getExceptionHandler());
+                return 1;
             }
         }
         return 0;

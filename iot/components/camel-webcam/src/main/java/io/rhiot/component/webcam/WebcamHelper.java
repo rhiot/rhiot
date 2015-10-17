@@ -18,6 +18,7 @@
 package io.rhiot.component.webcam;
 
 import org.apache.camel.*;
+import org.apache.camel.spi.ExceptionHandler;
 import org.apache.commons.lang3.Validate;
 
 import javax.imageio.ImageIO;
@@ -33,38 +34,35 @@ public class WebcamHelper {
     /**
      * Creates an OutOnly exchange with the BufferedImage.
      */
-    static Exchange createOutOnlyExchangeWithBodyAndHeaders(org.apache.camel.Endpoint endpoint, BufferedImage image) {
+    static Exchange createOutOnlyExchangeWithBodyAndHeaders(WebcamEndpoint endpoint, BufferedImage image) throws IOException {
         Exchange exchange = endpoint.createExchange(ExchangePattern.OutOnly);
         Message message = exchange.getIn();
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            ImageIO.write(image, "PNG", output); //todo format should be set on endpoint
+            ImageIO.write(image, endpoint.getFormat(), output);
             message.setBody(output.toByteArray());
-        } catch (IOException e) {
-            exchange.setException(e);
-        }
+            message.setHeader(Exchange.FILE_NAME, message.getMessageId() + "." + endpoint.getFormat());
+        } 
 
         return exchange;
     }
 
     /**
-     * Process the TPVObject, all params required.
+     * Consume the java.awt.BufferedImage from the webcam, all params required.
      * 
      * @param image The image to process.
      * @param processor Processor that handles the exchange.
      * @param endpoint WebcamEndpoint receiving the exchange.
      */
-    public static void consumeBufferedImage(BufferedImage image, Processor processor, WebcamEndpoint endpoint) {
+    public static void consumeBufferedImage(BufferedImage image, Processor processor, WebcamEndpoint endpoint, ExceptionHandler exceptionHandler) {
         Validate.notNull(image);
         Validate.notNull(processor);
         Validate.notNull(endpoint);
         
-        Exchange exchange = createOutOnlyExchangeWithBodyAndHeaders(endpoint,
-                image);
         try {
-
+            Exchange exchange = createOutOnlyExchangeWithBodyAndHeaders(endpoint, image);
             processor.process(exchange);
         } catch (Exception e) {
-            exchange.setException(e);
+            exceptionHandler.handleException(e);
         }
     }
 }
