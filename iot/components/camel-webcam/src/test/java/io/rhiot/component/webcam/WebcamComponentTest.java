@@ -21,7 +21,7 @@ import com.github.sarxos.webcam.Webcam;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -32,12 +32,13 @@ import static org.mockito.Mockito.mock;
 
 public class WebcamComponentTest extends CamelTestSupport {
 
-    Webcam webcam = mock(Webcam.class);
+    private static Webcam webcam = mock(Webcam.class);
 
-    @Before
-    public void before() throws IOException {
-        BufferedImage image = ImageIO.read(WebcamComponentTest.class.getResourceAsStream("/images/rhiot.png"));
+    @BeforeClass
+    public static void before() throws IOException {
+        BufferedImage image = ImageIO.read(WebcamComponentTest.class.getResourceAsStream("rhiot.png"));
         given(webcam.getImage()).willReturn(image);
+        given(webcam.open()).willReturn(true);
     }
 
     @Test

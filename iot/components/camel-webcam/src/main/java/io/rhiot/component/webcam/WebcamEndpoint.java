@@ -88,16 +88,18 @@ public class WebcamEndpoint extends DefaultEndpoint {
                 Webcam.setDriver(new V4l4jDriver()); // this is important for Raspberry Pi
             } catch (UnsatisfiedLinkError e) {
                 //default is Pi but allow the webcam to fallback, aim to support specifying driver
-            }
-            
-            webcam = Webcam.getDefault();
-            if (webcam.open()) {
-                LOG.info("Opened webcam device : {}", webcam.getDevice().getName());
-            } else {
-                throw new IllegalStateException("Failed to open webcam");
+                try {
+                    webcam = Webcam.getDefault();
+                } catch (Exception ex) {
+                    LOG.error("Failed to load the webcam driver", ex);
+                }
             }
         }
-        LOG.info("Webcam device : {}", webcam.getDevice().getName());
+        if (webcam != null && webcam.open()) {
+            LOG.info("Opened webcam device : {}", webcam.getDevice().getName());
+        } else {
+            throw new IllegalStateException("Failed to open webcam");
+        }
         
         super.doStart();
     }
