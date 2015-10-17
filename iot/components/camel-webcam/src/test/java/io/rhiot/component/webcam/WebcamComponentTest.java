@@ -41,7 +41,6 @@ public class WebcamComponentTest extends CamelTestSupport {
         given(webcam.getImage()).willReturn(image);
         given(webcam.open()).willReturn(true);
         given(webcam.getDevice()).willReturn(new WebcamDummyDevice(1));
-        given(webcam.getDevice().getName()).willReturn("dummy");
         
     }
 
