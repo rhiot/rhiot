@@ -40,7 +40,7 @@ public class WebcamConsumerIntegrationTest extends CamelTestSupport {
     public static void before(){
         try {
             webcam = Webcam.getDefault(15000L);
-        } catch (TimeoutException e) {
+        } catch (Exception e) {
             // webcam is unavailable
         }
         assumeTrue(webcam != null && webcam.open());
