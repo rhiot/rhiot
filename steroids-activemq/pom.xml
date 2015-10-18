@@ -10,6 +10,7 @@
         <relativePath>../bom</relativePath>
     </parent>
 
+    <name>RHIOT :: Steroids :: ActiveMQ</name>
     <artifactId>rhiot-steroids-activemq</artifactId>
 
     <licenses>

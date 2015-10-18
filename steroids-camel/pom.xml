@@ -10,6 +10,7 @@
         <relativePath>../bom</relativePath>
     </parent>
 
+    <name>RHIOT :: Steroids :: Camel</name>
     <artifactId>rhiot-steroids-camel</artifactId>
 
     <licenses>
