@@ -17,10 +17,9 @@
 		<version>0.1.2-SNAPSHOT</version>
 	</parent>
 
+	<name>RHIOT :: IoT :: Components :: Kura</name>
 	<packaging>bundle</packaging>
 	<artifactId>camel-kura</artifactId>
-
-	<name>rhiot-iot-components-kura</name>
 	<description>Camel Kura Components (WiFi)</description>
 
 	<properties>

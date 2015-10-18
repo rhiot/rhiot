@@ -9,7 +9,7 @@
         <artifactId>rhiot-bom</artifactId>
         <relativePath>../bom</relativePath>
     </parent>
-    
+    <name>RHIOT :: IoT</name>
     <artifactId>rhiot-iot</artifactId>
     <packaging>pom</packaging>
 

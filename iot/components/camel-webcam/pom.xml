@@ -9,10 +9,9 @@
         <artifactId>rhiot-iot-components</artifactId>
         <version>0.1.2-SNAPSHOT</version>
     </parent>
-
+    <name>RHIOT :: IoT :: Components :: Webcam</name>
     <artifactId>camel-webcam</artifactId>
     <packaging>bundle</packaging>
-    <name>rhiot-iot-components-webcam</name>
     <description>Camel Webcam Component</description>
 
     <licenses>
@@ -67,7 +66,7 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
         </dependency>
-        
+
         <!-- testing -->
         <dependency>
             <groupId>ch.qos.logback</groupId>

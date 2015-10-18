@@ -10,9 +10,9 @@
         <version>0.1.2-SNAPSHOT</version>
     </parent>
 
+    <name>RHIOT :: IoT :: Components :: GPSd</name>
     <artifactId>camel-gpsd</artifactId>
     <packaging>bundle</packaging>
-    <name>rhiot-iot-components-gpsd</name>
     <description>Camel GPSD Component</description>
 
     <licenses>

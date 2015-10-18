@@ -8,9 +8,8 @@
 		<artifactId>rhiot-iot-components</artifactId>
 		<version>0.1.2-SNAPSHOT</version>
 	</parent>
-
+	<name>RHIOT :: IoT :: Components :: Tinkerforge :: Feature</name>
 	<artifactId>camel-tinkerforge-feature</artifactId>
-	<name>rhiot-iot-components-tinkerforge-feature</name>
 	<packaging>feature</packaging>
 	<description>This feature contains all dependencies needed to install the camel-tinkerforge component on Karaf 2</description>
 

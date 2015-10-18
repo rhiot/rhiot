@@ -16,10 +16,9 @@
         <artifactId>rhiot-iot-components</artifactId>
         <version>0.1.2-SNAPSHOT</version>
     </parent>
-
+    <name>RHIOT :: IoT :: Components :: Tinkerforge</name>
     <artifactId>camel-tinkerforge</artifactId>
     <packaging>bundle</packaging>
-    <name>rhiot-iot-components-tinkerforge</name>
     <description>Camel Tinkerforge Component</description>
 
     <properties>
@@ -40,7 +39,7 @@
             <groupId>com.tinkerforge</groupId>
             <artifactId>tinkerforge</artifactId>
         </dependency>
-        
+
         <!-- testing -->
         <dependency>
             <groupId>org.apache.camel</groupId>

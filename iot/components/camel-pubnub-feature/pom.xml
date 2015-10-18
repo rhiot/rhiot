@@ -9,8 +9,8 @@
 		<version>0.1.2-SNAPSHOT</version>
 	</parent>
 
+	<name>RHIOT :: IoT :: Components :: Pubnub :: Feature</name>
 	<artifactId>camel-pubnub-feature</artifactId>
-	<name>rhiot-iot-components-pubnub-feature</name>
 	<packaging>feature</packaging>
 	<description>This feature contains all dependencies needed to install the camel-pubnub component on Karaf 2</description>
 

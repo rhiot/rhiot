@@ -9,6 +9,7 @@
 		<artifactId>rhiot-iot</artifactId>
 		<relativePath>..</relativePath>
 	</parent>
+	<name>RHIOT :: IoT :: Components</name>
 	<artifactId>rhiot-iot-components</artifactId>
 	<packaging>pom</packaging>
 

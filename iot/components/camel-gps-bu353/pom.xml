@@ -9,9 +9,9 @@
         <version>0.1.2-SNAPSHOT</version>
     </parent>
 
+    <name>RHIOT :: IoT :: Components :: GPS bu353</name>
     <artifactId>camel-gps-bu353</artifactId>
     <packaging>bundle</packaging>
-    <name>rhiot-iot-components-gps-bu353</name>
     <description>Camel GPS BU353 Component</description>
 
     <licenses>
