@@ -9,6 +9,7 @@
         <artifactId>rhiot-bom</artifactId>
         <relativePath>../bom</relativePath>
     </parent>
+    <name>RHIOT :: Cloudlets</name>
     <artifactId>rhiot-cloudlets</artifactId>
     <packaging>pom</packaging>
 

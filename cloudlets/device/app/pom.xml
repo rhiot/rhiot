@@ -9,7 +9,7 @@
         <version>0.1.2-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-
+    <name>RHIOT :: Cloudlets :: Device :: App</name>
     <artifactId>rhiot-cloudlet-device-app</artifactId>
 
     <licenses>
