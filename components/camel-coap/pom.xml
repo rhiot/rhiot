@@ -10,9 +10,9 @@
         <relativePath>..</relativePath>
 	</parent>
 
+	<name>RHIOT :: Components :: CAoP</name>
 	<artifactId>camel-coap</artifactId>
 	<packaging>bundle</packaging>
-	<name>rhiot-components-coap</name>
 
 	<licenses>
 		<license>
@@ -64,7 +64,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<repositories>
     <repository>
       <id>repo.eclipse.org</id>

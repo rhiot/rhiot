@@ -9,6 +9,7 @@
 		<artifactId>rhiot-bom</artifactId>
 		<relativePath>../bom</relativePath>
 	</parent>
+	<name>RHIOT :: Components</name>
 	<artifactId>rhiot-components</artifactId>
 	<packaging>pom</packaging>
 
