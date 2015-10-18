@@ -9,7 +9,7 @@
         <version>0.1.2-SNAPSHOT</version>
         <relativePath>../bom</relativePath>
     </parent>
-
+    <name>RHIOT :: MongoDB</name>
     <artifactId>rhiot-mongodb</artifactId>
 
     <licenses>

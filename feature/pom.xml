@@ -8,7 +8,7 @@
         <version>0.1.2-SNAPSHOT</version>
         <relativePath>../bom</relativePath>
 	</parent>
-	
+	<name>RHIOT :: Feature</name>
 	<artifactId>rhiot-feature</artifactId>
 	<packaging>feature</packaging>
 	<description>This feature repo contains all Rhiot camel components</description>

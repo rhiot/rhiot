@@ -8,6 +8,7 @@
         <artifactId>rhiot</artifactId>
         <version>0.1.2-SNAPSHOT</version>
     </parent>
+    <name>RHIOT :: Bill of Materials</name>
     <artifactId>rhiot-bom</artifactId>
     <packaging>pom</packaging>
 

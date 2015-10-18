@@ -9,6 +9,8 @@
         <version>0.1.2-SNAPSHOT</version>
         <relativePath>../bom</relativePath>
     </parent>
+
+    <name>RHIOT :: Performance</name>
     <artifactId>rhiot-performance</artifactId>
 
     <licenses>
