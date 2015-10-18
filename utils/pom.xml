@@ -9,7 +9,7 @@
         <version>0.1.2-SNAPSHOT</version>
         <relativePath>../bom</relativePath>
     </parent>
-
+    <name>RHIOT :: Utils</name>
     <artifactId>rhiot-utils</artifactId>
 
     <licenses>
