@@ -22,6 +22,8 @@ package io.rhiot.component.webcam;
  */
 public class WebcamConstants {
     
+    public static final String MOTION_EVENT_HEADER = "io.rhiot.webcam.webcamMotionEvent";
+    
     private WebcamConstants() {
         // Constants class
     }

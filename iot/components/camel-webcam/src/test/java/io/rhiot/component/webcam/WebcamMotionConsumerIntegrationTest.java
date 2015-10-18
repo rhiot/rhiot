@@ -18,35 +18,33 @@
 package io.rhiot.component.webcam;
 
 import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.ds.dummy.WebcamDummyDevice;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
+import java.util.concurrent.TimeUnit;
 
-public class WebcamComponentTest extends CamelTestSupport {
+import static org.junit.Assume.assumeTrue;
 
-    private static Webcam webcam = mock(Webcam.class);
+public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
 
+    private static Webcam webcam;
+    
     @BeforeClass
-    public static void before() throws IOException {
-        BufferedImage image = ImageIO.read(WebcamComponentTest.class.getResourceAsStream("rhiot.png"));
-        given(webcam.getImage()).willReturn(image);
-        given(webcam.open()).willReturn(true);
-        given(webcam.getDevice()).willReturn(new WebcamDummyDevice(1));
+    public static void before(){
         
-    }
-
-    @Test
-    public void smokeTest() throws Exception {
-        Thread.sleep(2000);
+        //Assume we can open and close the webcam
+        
+        try {
+            webcam = Webcam.getDefault(15000L);
+        } catch (Exception e) {
+            // webcam is unavailable
+        }
+        assumeTrue(webcam != null && webcam.open());
+        webcam.close();
     }
 
     @Override
@@ -55,14 +53,32 @@ public class WebcamComponentTest extends CamelTestSupport {
         registry.bind("webcam", webcam);
         return registry;
     }
+    
+    @Test
+    public void testMotion() throws InterruptedException {
+        MockEndpoint mock = getMockEndpoint("mock:detected");
+        mock.setMinimumExpectedMessageCount(1);
 
+        assertMockEndpointsSatisfied(10, TimeUnit.SECONDS);
+        
+        assertNotNull(mock.getExchanges().get(0).getIn().getHeader(WebcamConstants.MOTION_EVENT_HEADER));
+    }
+    
+    @Test
+    public void testMotionUndetected() throws InterruptedException {
+        MockEndpoint mock = getMockEndpoint("mock:undetected");
+        mock.setExpectedMessageCount(0);
+
+        assertMockEndpointsSatisfied(10, TimeUnit.SECONDS);
+    }
+    
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("webcam://cam?webcam=#webcam").to("seda:mock");
+                from("webcam://motion?webcam=#webcam").to("mock:undetected");
+                from("webcam://motion?webcam=#webcam&pixelThreshold=0").to("mock:detected");
             }
         };
     }
-
 }

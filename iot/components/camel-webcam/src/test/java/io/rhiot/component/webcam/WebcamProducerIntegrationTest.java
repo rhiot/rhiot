@@ -26,8 +26,10 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assume.assumeTrue;
 
@@ -43,6 +45,7 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
             // webcam is unavailable
         }
         assumeTrue(webcam != null && webcam.open());
+        webcam.close();
     }
 
     @Override
@@ -62,12 +65,30 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
         
         assertMockEndpointsSatisfied(15, TimeUnit.SECONDS);
     }
+
+    @Test
+    public void testWebcamResolution() throws Exception {
+
+        MockEndpoint mock = getMockEndpoint("mock:resolution");
+        mock.expectedMinimumMessageCount(1);
+        
+        template.requestBody("direct:resolution", "");
+        
+        assertMockEndpointsSatisfied(15, TimeUnit.SECONDS);
+        byte[] body = mock.getExchanges().get(0).getIn().getBody(byte[].class);
+        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(body));
+        assertNotNull(bufferedImage);
+        assertEquals(640, bufferedImage.getWidth());
+        assertEquals(480, bufferedImage.getHeight());
+    }
     
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:cam").to("webcam://cam?webcam=#webcam").to("mock:foo");
+                from("direct:cam").to("webcam://cam?webcam=#webcam&width=640&height=480").to("mock:foo");
+                
+                from("direct:resolution").to("webcam://cam?webcam=#webcam&width=640&height=480").to("mock:resolution");
             }
         };
     }

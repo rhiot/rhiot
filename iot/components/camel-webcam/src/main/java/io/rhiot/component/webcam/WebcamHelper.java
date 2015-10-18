@@ -17,6 +17,7 @@
 
 package io.rhiot.component.webcam;
 
+import com.github.sarxos.webcam.WebcamMotionEvent;
 import org.apache.camel.*;
 import org.apache.camel.spi.ExceptionHandler;
 import org.apache.commons.lang3.Validate;
@@ -60,6 +61,28 @@ public class WebcamHelper {
         
         try {
             Exchange exchange = createOutOnlyExchangeWithBodyAndHeaders(endpoint, image);
+            processor.process(exchange);
+        } catch (Exception e) {
+            exceptionHandler.handleException(e);
+        }
+    }
+
+    /**
+     * Consume the motion event from the webcam, all params required.
+     * The event is stored in the header while the latest image is available as the body.
+     *
+     * @param motionEvent The motion event that triggered.
+     * @param processor Processor that handles the exchange.
+     * @param endpoint WebcamEndpoint receiving the exchange.
+     */
+    public static void consumeWebcamMotionEvent(WebcamMotionEvent motionEvent, Processor processor, WebcamEndpoint endpoint, ExceptionHandler exceptionHandler){
+        Validate.notNull(motionEvent);
+        Validate.notNull(processor);
+        Validate.notNull(endpoint);
+
+        try {
+            Exchange exchange = createOutOnlyExchangeWithBodyAndHeaders(endpoint, motionEvent.getCurrentImage());
+            exchange.getIn().setHeader(WebcamConstants.MOTION_EVENT_HEADER, motionEvent);
             processor.process(exchange);
         } catch (Exception e) {
             exceptionHandler.handleException(e);

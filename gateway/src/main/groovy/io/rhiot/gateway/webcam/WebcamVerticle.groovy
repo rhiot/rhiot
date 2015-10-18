@@ -23,7 +23,7 @@ import org.apache.camel.builder.RouteBuilder
 import static io.rhiot.utils.Properties.stringProperty
 
 /**
- * Camel route detecting motion from the webcam
+ * Camel route to take an image every minute
  *
  */
 @GatewayVerticle(conditionProperty = 'camellabs_iot_gateway_webcam')
@@ -36,7 +36,7 @@ public class WebcamVerticle extends GroovyCamelVerticle {
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             void configure() {
-                from('webcam://cam?detectMotion=true').routeId("motion").to("file://${storeDirectory}")
+                from('webcam://cam?delay=60000').routeId("webcam").to("file://${storeDirectory}")
             }
         })
     }

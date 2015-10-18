@@ -16,12 +16,11 @@
  */
 package io.rhiot.component.webcam;
 
+import com.github.sarxos.webcam.util.ImageUtils;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 
 public class WebcamProducer extends DefaultProducer {
     
@@ -32,13 +31,13 @@ public class WebcamProducer extends DefaultProducer {
     @Override
     public void process(Exchange exchange) throws Exception {
 
-        BufferedImage image = getEndpoint().getWebcam().getImage();
+        if (!getEndpoint().getWebcam().isOpen()) {
+            throw new IllegalStateException("Webcam is closed");
+        } 
         
-        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            if (image != null) {
-                ImageIO.write(image, "PNG", output); //todo format should be set on endpoint
-                exchange.getIn().setBody(output.toByteArray());
-            }
+        BufferedImage image = getEndpoint().getWebcam().getImage();
+        if (image != null) {
+            exchange.getIn().setBody(ImageUtils.toByteArray(image, getEndpoint().getFormat()));
         }
     }
 

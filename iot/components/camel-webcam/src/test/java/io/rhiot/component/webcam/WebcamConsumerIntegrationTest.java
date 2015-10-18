@@ -44,6 +44,7 @@ public class WebcamConsumerIntegrationTest extends CamelTestSupport {
             // webcam is unavailable
         }
         assumeTrue(webcam != null && webcam.open());
+        webcam.close();
     }
 
     @Override
@@ -51,15 +52,6 @@ public class WebcamConsumerIntegrationTest extends CamelTestSupport {
         JndiRegistry registry = super.createRegistry();
         registry.bind("webcam", webcam);
         return registry;
-    }
-    
-    @Test
-    @Ignore("Disabled so I don't have to wave my hand to build :)")
-    public void testMotion() throws InterruptedException {
-        MockEndpoint mock = getMockEndpoint("mock:motion");
-        mock.expectedMinimumMessageCount(1);
-
-        assertMockEndpointsSatisfied(10, TimeUnit.SECONDS);
     }
 
     @Test
@@ -75,8 +67,7 @@ public class WebcamConsumerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("webcam://cam?webcam=#webcam&scheduled=true&consumer.delay=5000").to("mock:scheduled");
-                from("webcam://motion?webcam=#webcam").to("mock:motion");
+                from("webcam://cam?webcam=#webcam&consumer.delay=5000").to("mock:scheduled");
             }
         };
     }

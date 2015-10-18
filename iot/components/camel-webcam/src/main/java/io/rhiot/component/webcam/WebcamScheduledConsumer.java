@@ -38,7 +38,7 @@ public class WebcamScheduledConsumer extends DefaultScheduledPollConsumer {
     protected int poll() throws Exception {
         log.debug("Starting scheduled Webcam consumer poll.");
 
-        while (true && getEndpoint().getWebcam() != null) {
+        while (true && getEndpoint().getWebcam() != null && getEndpoint().getWebcam().isOpen()) {
             Webcam webcam = getEndpoint().getWebcam();
             BufferedImage image = webcam.getImage();
             if (image != null) {
