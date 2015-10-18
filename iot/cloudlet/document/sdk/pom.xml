@@ -9,6 +9,7 @@
         <version>0.1.2-SNAPSHOT</version>
     </parent>
 
+    <name>RHIOT :: IoT :: Cloudlet :: Document :: SDK</name>
     <artifactId>rhiot-iot-cloudlet-document-sdk</artifactId>
 
     <licenses>

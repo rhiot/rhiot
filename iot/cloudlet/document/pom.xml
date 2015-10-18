@@ -9,6 +9,7 @@
         <version>0.1.2-SNAPSHOT</version>
     </parent>
 
+    <name>RHIOT :: IoT :: Cloudlet :: Document</name>
     <artifactId>rhiot-iot-cloudlet-document-parent</artifactId>
     <packaging>pom</packaging>
 

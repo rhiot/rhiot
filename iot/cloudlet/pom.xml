@@ -9,6 +9,8 @@
         <artifactId>rhiot-iot</artifactId>
         <relativePath>..</relativePath>
     </parent>
+
+    <name>RHIOT :: IoT :: Cloudlet</name>
     <artifactId>rhiot-iot-cloudlet</artifactId>
     <packaging>pom</packaging>
 
