@@ -21,13 +21,14 @@
 
 	<modules>
 		<module>camel-gps-bu353</module>
+		<module>camel-gpsd</module>
 		<module>camel-kura</module>
 		<module>camel-pi4j</module>
 		<module>camel-pubnub</module>
 		<module>camel-pubnub-feature</module>
 		<module>camel-tinkerforge</module>
 		<module>camel-tinkerforge-feature</module>
-		<module>camel-gpsd</module>
+		<module>camel-webcam</module>
     </modules>
 
 	<build>

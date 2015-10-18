@@ -73,6 +73,10 @@ Rhiot comes with the following features:
         - [URI Parameters](#uri-parameters)
       - [Consuming:](#consuming-2)
       - [Producing](#producing-2)
+  - [Camel Webcam component](#camel-webcam-component)
+    - [Maven dependency](#maven-dependency-6)
+    - [URI format](#uri-format-1)
+    - [Options](#options-1)
 - [Rhiot Cloud](#rhiot-cloud)
   - [Architecture](#architecture)
   - [Dockerized Rhiot Cloud](#dockerized-rhiot-cloud)
@@ -867,6 +871,78 @@ Route the collect data and sendt it to pubnub channel mychannel:
     .bean(EventGeneratorBean.class, "getEvent()")
     .convertBodyTo(JSONObject.class)
     .to("pubnub://pubsub:mychannel?uuid=deviceuuid&publisherKey=mypubkey");
+    
+
+### Camel Webcam component
+
+Camel [Webcam](http://webcam-capture.sarxos.pl/) component can be used to capture still images and detect motion.
+With Camel Webcam you can connect a camera to your device's USB port, or install the camera mod on the Raspberry Pi board for example, 
+and poll for an image periodically and respond to motion events. 
+The body of the message is the current image as an array of bytes, while motion events are stored in the header 'io.rhiot.webcam.webcamMotionEvent'. 
+This event may be useful for getting the image captured prior to the motion event, as well the Points where the motion occurred and the center of motion gravity. 
+
+
+#### Maven dependency
+
+Maven users should add the following dependency to their POM file:
+
+    <dependency>
+      <groupId>io.rhiot</groupId>
+      <artifactId>camel-webcam</artifactId>
+      <version>0.1.2</version>
+    </dependency>
+
+#### URI format
+
+
+The Camel endpoint URI format for the Webcam consumer is as follows:
+
+    webcam:label
+    
+Where `label` can be replaced with any text label:
+
+    from("webcam:spycam").
+      to("file:///var/spycam");
+      
+This route creates a scheduled consumer taking 1 frame per second and writes it to file in the PNG format.
+
+Alternatively, respond to motion events by setting the endpoint parameter 'motion' to true.
+
+    from("webcam:spycam?motion=true").
+      to("file:///var/spycam");
+      
+You can also poll the webcam for a single image, for example;
+
+    from("jms:webcam").
+      to("webcam:spycam");
+      
+Or use it to enrich the gps payload;
+    
+    from("gpsd:gps?gps_enrich=webcam:spycam").
+      to("seda:cam")
+      
+You can specify the resolution with custom width and height, or the resolution name;
+
+    from("webcam:spycam?resolution=HD720").
+      to("seda:cam")
+      
+#### Options
+
+| Option                   | Default value                                                                 | Description   |
+|:-------------------------|:-----------------------------------------------------------------------       |:------------- |
+| `consumer.format`        | PNG                                                                           | Capture format, one of 'PNG,GIF,JPG'  |
+| `consumer.initialDelay`  | 1000                                                                          | Milliseconds before the polling starts. Applies only to scheduled consumers. |
+| `consumer.motion`        | false                                                                         | Whether to listen for motion events.                                |
+| `consumer.motionInterval`| 500                                                                           | Interval in milliseconds to detect motion.                               |
+| `consumer.pixelThreshold`| 25                                                                            | Intensity threshold when motion is detected (0 - 255)  |
+| `consumer.areaThreshold` | 0.2                                                                           | Percentage threshold of image covered by motion (0 - 100)  |
+| `consumer.motionInertia` | -1 (2 * motionInterval)                                                       | Motion inertia (time when motion is valid)  |
+| `consumer.resolution`    | QVGA                                                                          | Resolution to use (PAL, HD720, VGA etc)     |
+| `consumer.width`         | 320                                                                           | Resolution width, note that resolution takes precendence.  |
+| `consumer.height`        | 240                                                                           | Resolution height, note that resolution takes precendence.  |
+| `consumer.delay`         | 5000                                                                          | Delay in milliseconds. Applies only to scheduled consumers.  |
+| `consumer.useFixedDelay` | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
+    
 
 ## Rhiot Cloud
 
