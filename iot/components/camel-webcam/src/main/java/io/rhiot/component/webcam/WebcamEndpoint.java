@@ -100,8 +100,8 @@ public class WebcamEndpoint extends DefaultEndpoint {
         
         if(webcam == null) {
             try {
-                LOG.info("Loading driver");
-                Webcam.setDriver(new V4l4jDriver()); //This is important for best performance on Raspberry Pi/Linux
+                LOG.debug("Loading driver");
+                Webcam.setDriver(new V4l4jDriver()); //This is important for Raspberry Pi/Linux
             } catch (UnsatisfiedLinkError e) {
                 LOG.warn("Driver not supported");
             }
@@ -111,7 +111,7 @@ public class WebcamEndpoint extends DefaultEndpoint {
         if (!webcam.isOpen()){
             webcam.setViewSize(getDefaultResolution());
             if (webcam.open()) {
-                LOG.info("Webcam device [{}] opened", webcam.getDevice().getName());
+                LOG.debug("Webcam device [{}] opened", webcam.getDevice().getName());
             } else {
                 throw new IllegalStateException("Failed to open webcam");
             }

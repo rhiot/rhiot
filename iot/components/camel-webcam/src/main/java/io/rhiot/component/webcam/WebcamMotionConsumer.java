@@ -32,7 +32,7 @@ public class WebcamMotionConsumer extends DefaultConsumer {
     
     @Override
     protected void doStart() throws Exception {
-        log.info("Starting motion detection consumer.");
+        log.debug("Starting motion detection consumer.");
         
         WebcamMotionDetector detector = new WebcamMotionDetector(getEndpoint().getWebcam(), getEndpoint().getPixelThreshold(),
                 getEndpoint().getAreaThreshold(), getEndpoint().getMotionInterval());
@@ -42,7 +42,7 @@ public class WebcamMotionConsumer extends DefaultConsumer {
 
         detector.addMotionListener(wme -> WebcamHelper.consumeWebcamMotionEvent(wme, getProcessor(), getEndpoint(), getExceptionHandler()));
         detector.start();
-        log.info("Started motion detection.");            
+        log.debug("Started motion detection.");            
     }
 
     
