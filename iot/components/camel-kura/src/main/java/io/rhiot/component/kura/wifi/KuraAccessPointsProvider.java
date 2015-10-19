@@ -29,19 +29,28 @@ import java.util.List;
 import java.util.Set;
 
 import static io.rhiot.utils.Reflections.writeField;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Access point provider using the Kura NetworkService to scan the WiFi networks.
  */
 public class KuraAccessPointsProvider implements AccessPointsProvider {
 
-    private static final Logger LOG = LoggerFactory.getLogger(KuraAccessPointsProvider.class);
+    // Logger
+
+    private static final Logger LOG = getLogger(KuraAccessPointsProvider.class);
+
+    // Collaborators
 
     private final NetworkService networkService;
+
+    // Constructors
 
     public KuraAccessPointsProvider(Registry registry) {
         networkService = resolveNetworkService(registry);
     }
+
+    // Overridden
 
     @Override
     public List<WifiAccessPoint> accessPoints(String forInterface) {
@@ -56,14 +65,18 @@ public class KuraAccessPointsProvider implements AccessPointsProvider {
         }
     }
 
+    // Helpers
+
     private NetworkService resolveNetworkService(Registry registry) {
         Set<NetworkService> servicesFromRegistry = registry.findByType(NetworkService.class);
         if(servicesFromRegistry.size() != 1) {
-            LOG.info("Found Kura NetworkService in the registry. Kura component will use that instance.");
+            LOG.info("Found {} Kura NetworkService instances in the registry. Creating and using custom instance then.",
+                    servicesFromRegistry.size());
             NetworkService networkService = new NetworkServiceImpl();
             initializeNetworkService(networkService);
             return networkService;
         }
+        LOG.info("Found Kura NetworkService in the registry. Kura component will use that instance.");
         return servicesFromRegistry.iterator().next();
     }
 
