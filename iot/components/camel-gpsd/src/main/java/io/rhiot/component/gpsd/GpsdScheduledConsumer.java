@@ -40,9 +40,7 @@ public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
     protected int poll() throws Exception {
         log.debug("Starting scheduled GPSD consumer poll.");
 
-        GPSdEndpoint gpsd4javaEndpoint = getEndpoint().getGpsd4javaEndpoint();
-        PollObject pollObject = gpsd4javaEndpoint.poll();
-            
+        PollObject pollObject = getEndpoint().getGpsd4javaEndpoint().poll();
         if (pollObject != null && pollObject.getFixes().size() > 0 && pollObject.getFixes().get(0) instanceof TPVObject) {
             GpsdHelper.consumeTPVObject(pollObject.getFixes().get(0), getProcessor(), getEndpoint(), getExceptionHandler());
             return 1;
