@@ -5,9 +5,9 @@
  * The licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * <p>
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,29 +24,30 @@ import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultScheduledPollConsumer;
 
 /**
- * The scheduled Gpsd consumer.
+ * The scheduled GPSD consumer.
  */
 public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
 
-    
+    // Constructors
+
     public GpsdScheduledConsumer(GpsdEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
     }
-    
-    
+
+    // Overridden
+
     @Override
     protected int poll() throws Exception {
         log.debug("Starting scheduled GPSD consumer poll.");
 
         GPSdEndpoint gpsd4javaEndpoint = getEndpoint().getGpsd4javaEndpoint();
-        while (true && gpsd4javaEndpoint != null) {
-            PollObject pollObject = gpsd4javaEndpoint.poll();
+        PollObject pollObject = gpsd4javaEndpoint.poll();
             
-            if (pollObject != null && pollObject.getFixes().size() > 0 && pollObject.getFixes().get(0) instanceof TPVObject) {
-                GpsdHelper.consumeTPVObject(pollObject.getFixes().get(0), getProcessor(), getEndpoint(), getExceptionHandler());
-                return 1;
-            }
+        if (pollObject != null && pollObject.getFixes().size() > 0 && pollObject.getFixes().get(0) instanceof TPVObject) {
+            GpsdHelper.consumeTPVObject(pollObject.getFixes().get(0), getProcessor(), getEndpoint(), getExceptionHandler());
+            return 1;
         }
+        log.debug("No results returned from the GPSD poll.");
         return 0;
     }
 
@@ -54,4 +55,5 @@ public class GpsdScheduledConsumer extends DefaultScheduledPollConsumer {
     public GpsdEndpoint getEndpoint() {
         return (GpsdEndpoint) super.getEndpoint();
     }
+
 }
