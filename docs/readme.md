@@ -297,7 +297,7 @@ project including the gateway core dependency:
       <dependency>
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-gateway</artifactId>
-        <version>0.1.1</version>
+        <version>${rhiot.version}</version>
       </dependency>
     </dependencies>
 
@@ -314,7 +314,7 @@ following jar:
       <dependency>
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-vertx</artifactId>
-        <version>0.1.1</version>
+        <version>${rhiot.version}</version>
       </dependency>
     </dependencies>
 
@@ -895,7 +895,7 @@ Maven users should add the following dependency to their POM file:
     <dependency>
       <groupId>io.rhiot</groupId>
       <artifactId>camel-webcam</artifactId>
-      <version>0.1.2</version>
+      <version>${rhiot.version}</version>
     </dependency>
 
 #### URI format
@@ -1448,7 +1448,7 @@ In order to start using bootstrap, add the following Maven dependency to your pr
     <dependency>
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-steroids</artifactId>
-        <version>0.1.2</version>
+        <version>${rhiot.version}</version>
     </dependency>
 
 And then add the following code to your project:
@@ -1473,7 +1473,7 @@ advantage from it, import the `rhiot-mongodb` module into your project:
     <dependency>
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-mongodb</artifactId>
-        <version>0.1.1</version>
+        <version>${rhiot.version}</version>
     </dependency>
 
 In order to inject the MongoDb client into your code, use the `Mongos.discoverMongo()` method:
