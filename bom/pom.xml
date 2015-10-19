@@ -24,7 +24,7 @@
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
         <apache-poi.version>3.13-beta1</apache-poi.version>
         <californium-core.version>1.0.0-M3</californium-core.version>
-        <camel.version>2.15.2</camel.version>
+        <camel.version>2.16.0</camel.version>
         <rhiot.version>0.1.2-SNAPSHOT</rhiot.version>
         <embedmongo.version>1.48.2</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
@@ -33,6 +33,7 @@
         <groovy.version>2.4.5</groovy.version>
         <infinispan.version>8.0.0.Beta2</infinispan.version>
         <ivy.version>2.4.0</ivy.version>
+        <jackson.version>2.6.3</jackson.version>
         <jcabi-aether.version>0.10.1</jcabi-aether.version>
         <jfreechart.version>1.0.19</jfreechart.version>
         <jolokia.version>1.3.1</jolokia.version>
@@ -81,6 +82,21 @@
                 <groupId>com.cyrusinnovation</groupId>
                 <artifactId>mockito-groovy-support</artifactId>
                 <version>${mockito-groovy-support.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.taimos</groupId>
@@ -313,18 +329,6 @@
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>activemq-mqtt</artifactId>
                 <version>${activemq.version}</version>
-            </dependency>
-            <!-- TODO: Paho is available starting from Camel 2.16. Remove as soon as 2.16 is out. -->
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-paho</artifactId>
-                <version>2.16-SNAPSHOT</version>
-            </dependency>
-            <!-- TODO: Vert.x 3 is supported starting from Camel 2.16. Remove as soon as 2.16 is out. -->
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-vertx</artifactId>
-                <version>2.16-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
