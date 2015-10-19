@@ -28,6 +28,7 @@ public class WebcamMotionConsumer extends DefaultConsumer {
     
     public WebcamMotionConsumer(WebcamEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
+        endpoint.setScheduled(false);
     }
     
     @Override

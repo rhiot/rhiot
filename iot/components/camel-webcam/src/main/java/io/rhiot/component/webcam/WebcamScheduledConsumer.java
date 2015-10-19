@@ -44,6 +44,8 @@ public class WebcamScheduledConsumer extends DefaultScheduledPollConsumer {
             if (image != null) {
                 WebcamHelper.consumeBufferedImage(image, getProcessor(), getEndpoint(), getExceptionHandler());
                 return 1;
+            } else {
+                return 0;
             }
         }
         return 0;

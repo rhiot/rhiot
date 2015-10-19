@@ -38,8 +38,8 @@ public class WebcamEndpoint extends DefaultEndpoint {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebcamEndpoint.class);
     
-    @UriParam(defaultValue = "false", description = "Whether the consumer is scheduled or not")
-    private boolean scheduled = false;
+    @UriParam(defaultValue = "true", description = "Whether the consumer is scheduled or not")
+    private boolean scheduled = true;
 
     private Webcam webcam;
     @UriParam(defaultValue = "false", description = "Indicates if the endpoint should detect motion.")
@@ -82,7 +82,7 @@ public class WebcamEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        Consumer consumer = isScheduled() ? new WebcamScheduledConsumer(this, processor) : new WebcamMotionConsumer(this, processor);
+        Consumer consumer = isMotion() ? new WebcamMotionConsumer(this, processor) : new WebcamScheduledConsumer(this, processor);
 
         if(isScheduled()) {
             if(!getConsumerProperties().containsKey("delay")) {

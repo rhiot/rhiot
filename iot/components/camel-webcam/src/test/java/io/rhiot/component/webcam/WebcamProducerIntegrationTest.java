@@ -86,9 +86,9 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:cam").to("webcam://cam?webcam=#webcam&width=640&height=480").to("mock:foo");
+                from("direct:cam").to("webcam:cam?webcam=#webcam&width=640&height=480").to("mock:foo");
                 
-                from("direct:resolution").to("webcam://cam?webcam=#webcam&width=640&height=480").to("mock:resolution");
+                from("direct:resolution").to("webcam:cam?webcam=#webcam&width=640&height=480").to("mock:resolution");
             }
         };
     }

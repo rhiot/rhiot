@@ -916,12 +916,7 @@ You can also poll the webcam for a single image, for example;
     from("jms:webcam").
       to("webcam:spycam");
       
-Or use it to enrich the gps payload;
-    
-    from("gpsd:gps?gps_enrich=webcam:spycam").
-      to("seda:cam")
-      
-You can specify the resolution with custom width and height, or the resolution name;
+Specify the resolution with custom width and height, or the resolution name;
 
     from("webcam:spycam?resolution=HD720").
       to("seda:cam")

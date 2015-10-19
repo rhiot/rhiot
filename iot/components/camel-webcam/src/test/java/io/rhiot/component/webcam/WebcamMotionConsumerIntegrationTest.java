@@ -76,8 +76,8 @@ public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("webcam://motion?webcam=#webcam").to("mock:undetected");
-                from("webcam://motion?webcam=#webcam&pixelThreshold=0").to("mock:detected");
+                from("webcam:spycam?motion=true&webcam=#webcam").to("mock:undetected");
+                from("webcam:spycam?motion=true&webcam=#webcam&pixelThreshold=0").to("mock:detected");
             }
         };
     }

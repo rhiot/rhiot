@@ -60,7 +60,7 @@ public class WebcamComponentTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("webcam://cam?webcam=#webcam").to("seda:mock");
+                from("webcam:cam?webcam=#webcam").to("seda:mock");
             }
         };
     }

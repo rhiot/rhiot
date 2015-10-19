@@ -67,7 +67,7 @@ public class WebcamConsumerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("webcam://cam?webcam=#webcam&consumer.delay=5000").to("mock:scheduled");
+                from("webcam:cam?webcam=#webcam&consumer.delay=5000").to("mock:scheduled");
             }
         };
     }
