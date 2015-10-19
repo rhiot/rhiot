@@ -442,7 +442,7 @@ BU353 component comes with the two type converters:
 
 ### Camel GPSD component
 
-Camel [GPSD](http://www.catb.org/gpsd) component can be used to read current GPS information from that device. With Camel GPSD you can
+Camel [GPSD](http://www.catb.org/gpsd) component can be used to read current GPS information from GPS devices. With Camel GPSD you can
 just connect a GPS receiver to your computer's USB port and read the GPS data - the component
 will make sure that GPS daemon is up, running and
 switched to the [NMEA mode](http://www.gpsinformation.org/dale/nmea.htm). The component also takes care of parsing the
@@ -465,8 +465,8 @@ Maven users should add the following dependency to their POM file:
 
 #### URI format
 
-The default GPSD consumer is event driven, subscribing to Time-Position-Velocity reports and converting them to ClientGpsCoordinates for immediate consumption.
-This option offers up to date information but requires more resources than the scheduled consumer or the producer.
+The default GPSD consumer is event driven, subscribing to *Time-Position-Velocity* reports and converting them to ClientGpsCoordinates for immediate consumption.
+This option offers up to date information, but requires more resources than the scheduled consumer or the producer.
 
 The Camel endpoint URI format for the GPSD consumer is as follows:
 
@@ -475,23 +475,28 @@ The Camel endpoint URI format for the GPSD consumer is as follows:
 Where `label` can be replaced with any text label:
 
     from("gpsd:current-position").
+      convertBodyTo(String.class).
       to("file:///var/gps-coordinates");
       
       
-A scheduled consumer is also supported and polls every 5 seconds by default, to use it enable the 'scheduled' param on the endpoint;
+A scheduled consumer is also supported. This kind of consumer polls GPS receiver every 5 seconds by default. In order to 
+use it enable the `scheduled` param on the endpoint, just as demonstarted on the snippet below:
 
     from("gpsd:current-position?scheduled=true").
+      convertBodyTo(String.class).
       to("file:///var/gps-coordinates");
       
-Finally, the producer polls the device for the current location, for example;
+Also the GPSD producer can be used to poll a GPS unit "on demand" and return the current location, for example;
 
     from("jms:current-position").
       to("gpsd:gps");
       
-To subscribe to events or poll a device on another host you have to do 2 things, start GPSD on that host with the param -G to listen on all addresses, 
-eg gpsd -G /dev/ttyUSB0, and pass the host and optionally port to the gpsd endpoint as follows;
+To subscribe to events or poll a device on another host you have to do two things:
+* start GPSD on that host with the param -G to listen on all addresses (eg `gpsd -G /dev/ttyUSB0`)
+* pass the host and optionally port to the GPSD endpoint, just as demonstrated on the snippet below:
     
     from("gpsd:current-position?host=localhost?port=2947").
+      convertBodyTo(String.class).
       to("file:///var/gps-coordinates");
       
 The message body is a `io.rhiot.component.gpsd.ClientGpsCoordinates` instance:
@@ -501,8 +506,9 @@ The message body is a `io.rhiot.component.gpsd.ClientGpsCoordinates` instance:
 `ClientGpsCoordinates` class name is prefixed with the `Client` to indicate that these coordinates have been created on the device,
 not on the server side of the IoT solution.
 
-The TPVObject (Time-Position-Velocity report) instance created by a gpsd4java engine is available in the header
-`GpsdConstants.TPV_HEADER` (`io.rhiot.gpsd.tpvObject`), useful to enrich the payload or do content based routing, eg
+The TPVObject (Time-Position-Velocity report) instance created by a gpsd4java engine is available in exchange under the header
+`io.rhiot.gpsd.tpvObject` (constant `io.rhiot.component.gpsd.GpsdConstants.TPV_HEADER`). The original `TPVObject` can be 
+useful to enrich the payload or do content based routing, eg
     
     TPVObject tpvObject = exchange.getIn().getHeader(GpsdConstants.TPV_HEADER, TPVObject.class);
     if (tpvObject.getSpeed() > 343) {
@@ -513,10 +519,10 @@ The TPVObject (Time-Position-Velocity report) instance created by a gpsd4java en
 
 | Option                   | Default value                                                                 | Description   |
 |:-------------------------|:-----------------------------------------------------------------------       |:------------- |
-| `consumer.host`          | localhost                                                                     | Milliseconds before the polling starts.                                |
-| `consumer.port`          | 2947                                                                          | Milliseconds before the polling starts.                                |
-| `consumer.distance`      | 0                                                                             | Distance threshold in km before consuming a message, eg 0.1 for 100m.  |
-| `consumer.scheduled`     | false                                                                         | Whether the consumer is scheduled or not.  |
+| `host`          | localhost                                                                     | Milliseconds before the polling starts.                                |
+| `port`          | 2947                                                                          | Milliseconds before the polling starts.                                |
+| `distance`      | 0                                                                             | Distance threshold in km before consuming a message, eg 0.1 for 100m.  |
+| `scheduled`     | false                                                                         | Whether the consumer is scheduled or not.  |
 | `consumer.initialDelay`  | 1000                                                                          | Milliseconds before the polling starts. Applies only to scheduled consumers. |
 | `consumer.delay`         | 5000                                                                          | Delay in milliseconds. Applies only to scheduled consumers.  |
 | `consumer.useFixedDelay` | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
@@ -526,7 +532,7 @@ The TPVObject (Time-Position-Velocity report) instance created by a gpsd4java en
 
 #### Process manager
 
-Process manager is used by the BU353 component to execute Linux commands responsible for starting GPSD daemon or
+Process manager is used by the GPSD component to execute Linux commands responsible for starting GPSD daemon or
 configuring the GPS receive to provide GPS coordinates in the NMEA mode. If for some reason you would like to change
 the default implementation of the process manager used by Camel (i.e. `io.rhiot.utils.process.DefaultProcessManager`),
 you can set it on the component level:
