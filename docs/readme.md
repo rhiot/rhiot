@@ -301,6 +301,8 @@ project including the gateway core dependency:
       </dependency>
     </dependencies>
 
+Avaliable for rhiot.version >= 0.1.1
+
 Now all your custom code can just be added to the project. The resulting fat jar will contain both gateway core logic
 and your custom code.
 
@@ -317,6 +319,8 @@ following jar:
         <version>${rhiot.version}</version>
       </dependency>
     </dependencies>
+    
+ Avaliable for rhiot.version >= 0.1.1
 
 In order to create Vert.x verticle that can access single `CamelContex` instance shared between all the verticles
 within the given JVM, extend the `io.rhiot.vertx.camel.GroovyCamelVerticle` class:
@@ -381,6 +385,9 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-gps-bu353</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
+
+Avaliable for rhiot.version >= 0.1.2
+
 
 #### URI format
 
@@ -580,6 +587,8 @@ Maven users should add the following dependency to their POM file:
       <version>${rhiot.version}</version>
     </dependency>
     
+ Avaliable for rhiot.version >= 0.1.1
+
 #### URI format
 
     kura-wifi:networkInterface/ssid
@@ -634,6 +643,8 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-tinkerforge</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
+ 
+ Avaliable for rhiot.version >= 0.1.1
 
 #### General URI format
 
@@ -731,6 +742,9 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-pi4j</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
+    
+ Avaliable for rhiot.version >= 0.1.1
+
 
 #### URI format for GPIO
 
@@ -824,6 +838,9 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-pubnub</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
+    
+ Avaliable for rhiot.version >= 0.1.1
+
 
 #### General URI format
 
@@ -897,6 +914,8 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-webcam</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
+    
+Avaliable for rhiot.version >= 0.1.2
 
 #### URI format
 
@@ -1451,6 +1470,9 @@ In order to start using bootstrap, add the following Maven dependency to your pr
         <version>${rhiot.version}</version>
     </dependency>
 
+Avaliable for rhiot.version >= 0.1.2
+
+
 And then add the following code to your project:
 
     import io.rhiot.steroids.bootstrap.Bootstrap;
@@ -1475,6 +1497,8 @@ advantage from it, import the `rhiot-mongodb` module into your project:
         <artifactId>rhiot-mongodb</artifactId>
         <version>${rhiot.version}</version>
     </dependency>
+
+Avaliable for rhiot.version >= 0.1.1
 
 In order to inject the MongoDb client into your code, use the `Mongos.discoverMongo()` method:
 
