@@ -36,6 +36,7 @@ public class KuraWifiComponent extends UriEndpointComponent {
         kuraWifiEndpoint.setNetworkInterface(networkInterface);
         kuraWifiEndpoint.setSsid(ssid);
         setProperties(kuraWifiEndpoint, parameters);
-        return kuraWifiEndpoint;    }
+        return kuraWifiEndpoint;
+    }
 
 }
