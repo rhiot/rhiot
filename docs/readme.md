@@ -404,9 +404,9 @@ route using the `fromEventBus(channel, closure(route))` method. You can also acc
 
     }
 
-## Camel IoT components
+## Rhiot IoT components
 
-Camel IoT Labs brings some extra components for the Apache Camel intended to make both device- and server-side IoT
+Rhiot project brings some extra components for the Apache Camel intended to make both device- and server-side IoT
 development easier.
 
 ### Camel GPS BU353 component
