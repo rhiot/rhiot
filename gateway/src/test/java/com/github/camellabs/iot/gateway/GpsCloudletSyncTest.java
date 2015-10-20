@@ -58,11 +58,11 @@ public class GpsCloudletSyncTest extends Assert {
     public static void beforeClass() throws UnknownHostException {
         closeCamelContext();
 
-        setProperty("camellabs_iot_gateway_gps_cloudlet_sync", "true");
+        setProperty("gps_cloudlet_sync", "true");
 
         // Gateway GPS store fixtures
-        setProperty("camellabs_iot_gateway_gps_store_directory", gpsCoordinatesStore.getAbsolutePath());
-        setProperty("camellabs_iot_gateway_gps_cloudlet_address", "localhost:" + geofencingApiPort);
+        setProperty("gps_store_directory", gpsCoordinatesStore.getAbsolutePath());
+        setProperty("gps_cloudlet_address", "localhost:" + geofencingApiPort);
 
         // Geofencing cloudlet fixtures
         dbName = "test";

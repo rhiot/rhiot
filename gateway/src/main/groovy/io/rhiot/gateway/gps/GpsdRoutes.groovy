@@ -32,7 +32,7 @@ import static io.rhiot.utils.Properties.stringProperty
  */
 @Route
 @PropertyCondition(property = 'gps')
-public class GpsdRoute extends RouteBuilder {
+public class GpsdRoutes extends RouteBuilder {
 
     // Configuration
 
@@ -48,7 +48,7 @@ public class GpsdRoute extends RouteBuilder {
 
     // Constructors
 
-    GpsdRoute() {
+    GpsdRoutes() {
         def  visibilityChecker = jackson.objectMapper.visibilityChecker.withFieldVisibility(ANY)
         jackson.objectMapper.visibilityChecker = visibilityChecker
     }
