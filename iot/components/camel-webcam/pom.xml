@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-iot-components</artifactId>
-        <version>0.1.3-SNAPSHOT</version>
+        <version>0.1.2-SNAPSHOT</version>
     </parent>
     <name>RHIOT :: IoT :: Components :: Webcam</name>
     <artifactId>camel-webcam</artifactId>
