@@ -44,4 +44,5 @@ Execute the following command in the project main directory:
 
 ### After the release
 
-* update the version on the main page of the project
+* update the version on the main page of the project (`readme.md`)
+* update release guide (`docs/release-notes.md`) using GitHub tickets marked as done in the given version

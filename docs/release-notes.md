@@ -1,6 +1,22 @@
 # Rhiot release notes
 
-## 0.1.2 (currently in progress)
+## 0.1.3 (currently in progress)
+
+## 0.1.2
+
+- Deprecated BU353 component on the behalf of the GPSD component (#232)
+- Added GPS client coordinates type converter (#213)
+- Fixed: BU353 returns "FileNotFoundException: /dev/ttyUSB0 (Device or resource busy)" (#210)
+- Rhiot now supports reading Spring Boot application.properties file (#226)
+- Renamed com.github.camellabs.iot.vertx.camel.GroovyCamelVerticle to io.rhiot.vertx.camel.GroovyCamelVerticle (#207)
+- Moved camel-kura component from com.github.camellabs to io.rhiot package (#195)
+- Device detection is performed in parallel (#218)
+- Added "scan" command to the deployer (#217)
+- Deployer now allows to specify customized fat jar (#216)
+- Deployer now downloads the same gateway version as deployer version (#215)
+- Deployer now detects devices from multiple interfaces (#214)
+- Deployer now scans OSX network interfaces (#202)
+- Device Cloudlet MongoDB connection now timeouts faster (#191)
 
 ## 0.1.1
 
