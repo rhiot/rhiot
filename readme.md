@@ -19,7 +19,7 @@ Rhiot comes with the following features:
 
 ## Current release
 
-The latest and the greatest version of the Rhiot is 0.1.0. Wondering what's new there? Here are the [release notes](https://github.com/rhiot/rhiot/blob/master/docs/release-notes.md).
+The latest and the greatest version of the Rhiot is 0.1.2. Wondering what's new there? Here are the [release notes](https://github.com/rhiot/rhiot/blob/master/docs/release-notes.md).
 
 ## Mailing list
 
