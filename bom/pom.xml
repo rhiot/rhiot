@@ -20,12 +20,13 @@
     </licenses>
 
     <properties>
+        <rhiot.version>0.1.2-SNAPSHOT</rhiot.version>
+
         <activemq.version>5.12.1</activemq.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
         <apache-poi.version>3.13-beta1</apache-poi.version>
         <californium-core.version>1.0.0-M3</californium-core.version>
         <camel.version>2.16.0</camel.version>
-        <rhiot.version>0.1.2-SNAPSHOT</rhiot.version>
         <embedmongo.version>1.48.2</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
         <google-truth.version>0.27</google-truth.version>
