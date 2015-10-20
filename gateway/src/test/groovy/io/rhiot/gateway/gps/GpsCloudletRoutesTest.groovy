@@ -16,7 +16,6 @@
  */
 package io.rhiot.gateway.gps
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.component.gpsd.ClientGpsCoordinates
 import io.rhiot.gateway.Gateway
 import org.apache.camel.component.mock.MockEndpoint

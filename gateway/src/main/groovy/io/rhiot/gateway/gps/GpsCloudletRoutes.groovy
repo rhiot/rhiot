@@ -25,7 +25,6 @@ import org.apache.camel.builder.RouteBuilder;
 import static io.rhiot.utils.Properties.stringProperty
 import static io.rhiot.utils.Uuids.uuid
 import static java.net.InetAddress.localHost;
-import static org.apache.camel.Exchange.HTTP_METHOD;
 import static org.apache.camel.model.dataformat.JsonLibrary.Jackson;
 
 /**
@@ -58,7 +57,6 @@ class GpsCloudletRoutes extends RouteBuilder {
                     serverCoordinates
                 }.
                 marshal().json(Jackson).
-                setHeader(HTTP_METHOD, constant("POST")).
                 to(cloudletEndpoint);
     }
 
