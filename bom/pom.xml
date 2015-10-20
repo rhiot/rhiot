@@ -20,7 +20,7 @@
     </licenses>
 
     <properties>
-        <rhiot.version>0.1.3-SNAPSHOT</rhiot.version>
+        <rhiot.version>0.1.2-SNAPSHOT</rhiot.version>
 
         <activemq.version>5.12.1</activemq.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
