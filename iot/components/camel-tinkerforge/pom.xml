@@ -22,7 +22,7 @@
     <description>Camel Tinkerforge Component</description>
 
     <properties>
-        <camel.osgi.export.pkg>com.github.camellabs.component.tinkerforge*</camel.osgi.export.pkg>
+        <camel.osgi.export.pkg>io.rhiot.component.tinkerforge*</camel.osgi.export.pkg>
         <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=tinkerforge</camel.osgi.export.service>
     </properties>
 

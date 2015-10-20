@@ -14,4 +14,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-class=io.rhiot.component.tinkerforge.TinkerforgeComponent
+package io.rhiot.component.tinkerforge;
+
+public enum TinkerforgeDeviceType {
+    ambientlight,
+    //analogout,
+    //barometer,
+    //color,
+    //current12,
+    //current25,
+	distanceIR,
+	//distanceUS,
+	//dualbutton,
+	dualrelay,
+	//gps,
+	//halleffect,
+	humidity,
+	io4,
+	io16,
+	//lcd16x2,
+	lcd20x4,
+	ledstrip,
+	//line,
+	linearpoti,
+	//moisture,
+	motion,
+	//multitouch,
+	//nfc_rfid,
+	//piezobuzzer,
+	piezospeaker,
+	//ptc,
+	//remoteswitch,
+	//rotaryencoder,
+	rotarypoti,
+	//segmentdisplay4x7,
+	solidstaterelay,
+	soundintensity,
+	temperature,
+	//temperatureIR,
+	//tilt,
+	//voltage,
+	voltagecurrent
+	;
+}

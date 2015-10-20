@@ -14,4 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-class=io.rhiot.component.tinkerforge.TinkerforgeComponent
+package io.rhiot.component.tinkerforge.ledstrip;
+
+public class LedStripModus {
+    
+    public static final String LedStrip = "ledstrip";
+    public static final String CharacterMatrix = "charactermatrix";
+    public static final String BarGraph = "bargraph";
+    public static final String LineGraph = "linegraph";
+
+}
