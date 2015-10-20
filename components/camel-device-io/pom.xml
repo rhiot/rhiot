@@ -14,7 +14,7 @@
 	<parent>  <!-- should be removed -->
 		<groupId>io.rhiot</groupId>
 		<artifactId>rhiot-components</artifactId>
-		<version>0.1.2-SNAPSHOT</version>
+		<version>0.1.2</version>
         <relativePath>..</relativePath>
 	</parent>
 
