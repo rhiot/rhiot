@@ -22,6 +22,7 @@ import org.apache.camel.component.mock.MockEndpoint
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 
 import static com.google.common.io.Files.createTempDir
@@ -29,6 +30,7 @@ import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setStringProperty
 
+@Ignore
 public class GpsCloudletRoutesTest extends Assert {
 
     static def gateway = new Gateway()
