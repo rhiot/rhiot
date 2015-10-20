@@ -106,6 +106,74 @@
                 <version>${gpsd4java.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.google.maps</groupId>
+                <artifactId>google-maps-services</artifactId>
+                <version>${google-maps-services.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.truth</groupId>
+                <artifactId>truth</artifactId>
+                <version>${google-truth.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jcabi</groupId>
+                <artifactId>jcabi-aether</artifactId>
+                <version>${jcabi-aether.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- Fat jar optimization. We don't need 9 MB of AWS-related code. -->
+                        <artifactId>aws-java-sdk</artifactId>
+                        <groupId>com.amazonaws</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <!-- Optional dependency. Excluding as it writes to STDERR and pollutes the application output. -->
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-validator</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>${jsch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pi4j</groupId>
+                <artifactId>pi4j-core</artifactId>
+                <version>${pi4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pi4j</groupId>
+                <artifactId>pi4j-device</artifactId>
+                <version>${pi4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pi4j</groupId>
+                <artifactId>pi4j-gpio-extension</artifactId>
+                <version>${pi4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pi4j</groupId>
+                <artifactId>pi4j-service</artifactId>
+                <version>${pi4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.tinkerforge</groupId>
+                <artifactId>tinkerforge</artifactId>
+                <version>${tinkerforge.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pubnub</groupId>
+                <artifactId>pubnub</artifactId>
+                <version>${pubnub.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.flapdoodle.embed</groupId>
+                <artifactId>de.flapdoodle.embed.mongo</artifactId>
+                <version>${embedmongo.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>camel-kura</artifactId>
                 <version>${rhiot.version}</version>
@@ -218,74 +286,6 @@
                 <groupId>io.rhiot</groupId>
                 <artifactId>camel-gpsd</artifactId>
                 <version>${rhiot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.maps</groupId>
-                <artifactId>google-maps-services</artifactId>
-                <version>${google-maps-services.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.truth</groupId>
-                <artifactId>truth</artifactId>
-                <version>${google-truth.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jcabi</groupId>
-                <artifactId>jcabi-aether</artifactId>
-                <version>${jcabi-aether.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <!-- Fat jar optimization. We don't need 9 MB of AWS-related code. -->
-                        <artifactId>aws-java-sdk</artifactId>
-                        <groupId>com.amazonaws</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <!-- Optional dependency. Excluding as it writes to STDERR and pollutes the application output. -->
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-validator</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.jcraft</groupId>
-                <artifactId>jsch</artifactId>
-                <version>${jsch.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.pi4j</groupId>
-                <artifactId>pi4j-core</artifactId>
-                <version>${pi4j-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.pi4j</groupId>
-                <artifactId>pi4j-device</artifactId>
-                <version>${pi4j-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.pi4j</groupId>
-                <artifactId>pi4j-gpio-extension</artifactId>
-                <version>${pi4j-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.pi4j</groupId>
-                <artifactId>pi4j-service</artifactId>
-                <version>${pi4j-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.tinkerforge</groupId>
-                <artifactId>tinkerforge</artifactId>
-                <version>${tinkerforge.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.pubnub</groupId>
-                <artifactId>pubnub</artifactId>
-                <version>${pubnub.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.flapdoodle.embed</groupId>
-                <artifactId>de.flapdoodle.embed.mongo</artifactId>
-                <version>${embedmongo.version}</version>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>io.vertx</groupId>
