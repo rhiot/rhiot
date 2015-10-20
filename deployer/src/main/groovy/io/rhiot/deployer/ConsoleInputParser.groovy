@@ -40,9 +40,9 @@ class ConsoleInputParser {
     }
 
     String helpText() {
-        """Welcome to the Camel IoT Labs Deployer application.
+        """Welcome to the Rhiot Project Deployer application.
 
-Usage: docker run -t camellabs/deployer [deploy-gateway|scan]
+Usage: docker run -t rhiot/deployer [deploy-gateway|scan]
 
 Commands:
 deploy-gateway (default)    Deploys gateway to the device.
