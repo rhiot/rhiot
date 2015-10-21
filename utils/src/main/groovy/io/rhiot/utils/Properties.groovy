@@ -54,16 +54,22 @@ final class Properties {
     // String properties
 
     static String stringProperty(String key, String defaultValue) {
-        def property = System.getProperty(key)
+		// lookup the thread local
+		def property = threadStringProperty(key)
+		if (property != null) {
+			return property
+		}
+		// lookup the java system properties
+        property = System.getProperty(key)
         if (property != null) {
             return property
         }
-
+		// lookup the OS system variables
         property = getenv(key)
         if (property != null) {
             return property
         }
-
+		// lookup the file properties
         applicationPropertiesFile.getProperty(key, defaultValue)
     }
 
@@ -136,7 +142,6 @@ final class Properties {
 
 	// ThreadLocal properties
 	
-	
 	static JProperties getThreadLocalJProperties() {
 		def prop = threadLocalProperties.get();
 		
@@ -157,43 +162,13 @@ final class Properties {
 	static int setThreadIntProperty(String key, int value) {
 		setThreadStringProperty(key,"${value}").toInteger();
 	}
-	
-	static Integer threadIntProperty(String key) {
-		def property = threadStringProperty(key)
-		property == null ? null : property.toInteger()
-	}
-	
-	static int threadIntProperty(String key, int defaultValue) {
-		def property = threadIntProperty(key)
-		property == null ? defaultValue : property
-	}
-	
+		
 	static boolean setThreadBooleanProperty(String key, boolean value) {
 		setThreadStringProperty(key,"${value}").toBoolean();
 	}
 	
-	static Boolean threadBooleanProperty(String key) {
-		def property = threadStringProperty(key)
-		property == null ? null : property.toBoolean()
-	}
-	
-	static boolean threadBooleanProperty(String key, boolean defaultValue) {
-		def property = threadBooleanProperty(key)
-		property == null ? defaultValue : property
-	}
-	
-	static boolean setThreadLongProperty(String key, long value) {
+	static long setThreadLongProperty(String key, long value) {
 		setThreadStringProperty(key,"${value}").toLong();
 	}
-	
-	static Long threadLongProperty(String key) {
-		def property = threadStringProperty(key)
-		property == null ? null : property.toLong()
-	}
-	
-	static long threadLongProperty(String key, long defaultValue) {
-		def property = threadLongProperty(key)
-		property == null ? defaultValue : property
-	}
-	
+
 }
