@@ -23,7 +23,7 @@ The latest and the greatest version of the Rhiot is 0.1.2. Wondering what's new 
 
 ## Mailing list
 
-You're more than welcome to join out [ Rhiot Labs mailing list](https://groups.google.com/forum/#!forum/camel-iot-labs).
+You're more than welcome to join out [ Rhiot mailing list](https://groups.google.com/forum/#!forum/camel-iot-labs).
 
 ## Issues
 
