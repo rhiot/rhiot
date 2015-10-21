@@ -18,6 +18,7 @@ package com.github.camellabs.iot.gateway.app;
 
 import io.rhiot.gateway.GatewayVerticle;
 import io.rhiot.gateway.Gateway;
+import io.rhiot.gateway.test.GatewayTest;
 import io.rhiot.steroids.camel.CamelBootInitializer;
 import io.rhiot.vertx.camel.JavaCamelVerticle;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -30,20 +31,7 @@ import java.util.concurrent.TimeUnit;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.apache.camel.component.mock.MockEndpoint.assertIsSatisfied;
 
-public class CustomJavaCamelVerticleTest {
-
-    static Gateway gateway = new Gateway();
-
-    @BeforeClass
-    public static void beforeClass() throws InterruptedException {
-        gateway.start();
-        TimeUnit.SECONDS.sleep(30);
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        gateway.stop();
-    }
+public class CustomJavaCamelVerticleTest extends GatewayTest {
 
     @Test
     public void shouldReceiveHeartbeat() throws InterruptedException {
@@ -52,7 +40,7 @@ public class CustomJavaCamelVerticleTest {
         mockEndpoint.setMinimumExpectedMessageCount(1);
 
         // Then
-        assertIsSatisfied(5, MINUTES, mockEndpoint);
+        mockEndpoint.assertIsSatisfied();
     }
 
 }

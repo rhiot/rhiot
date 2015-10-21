@@ -30,7 +30,7 @@ class JavaCamelVerticle extends AbstractVerticle {
         CamelBootInitializer.camelContext().addRoutes(new RouteBuilder() {
             @Override
             void configure() {
-                routeDefinitionCallback.route(from("vertx:${address}"))
+                routeDefinitionCallback.route(from("event-bus:${address}"))
             }
         })
     }
