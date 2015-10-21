@@ -16,26 +16,22 @@
  */
 package io.rhiot.gateway.heartbeat
 
-import io.rhiot.gateway.Gateway
-import io.rhiot.steroids.camel.CamelBootInitializer
+import io.rhiot.gateway.test.GatewayTest
 import org.apache.camel.component.mock.MockEndpoint
-import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
 
-class LedHeartbeatVerticleTest extends Assert {
+class LedHeartbeatVerticleTest extends GatewayTest {
 
-    static {
+    @Override
+    protected void doBefore() {
         System.setProperty('camellabs.iot.gateway.heartbeat.led', 'true')
         System.setProperty('camellabs.iot.gateway.heartbeat.led.component', 'mock')
-        new Gateway().start()
-        Thread.sleep(5000)
     }
 
     @Test
     void shouldReceiveHeartbeatFromEventBus() {
         // Given
-        def mockLedEndpoint = CamelBootInitializer.camelContext().getEndpoint('mock:0?mode=DIGITAL_OUTPUT&state=LOW&action=BLINK', MockEndpoint.class)
+        def mockLedEndpoint = camelContext.getEndpoint('mock:0?mode=DIGITAL_OUTPUT&state=LOW&action=BLINK', MockEndpoint.class)
         mockLedEndpoint.setMinimumExpectedMessageCount(1)
 
         // When

@@ -17,21 +17,26 @@
 package io.rhiot.gateway.test;
 
 import io.rhiot.gateway.Gateway;
+import org.apache.camel.CamelContext;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 
+import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext;
 import static io.rhiot.utils.Properties.restoreSystemProperties;
 
 public abstract class GatewayTest extends Assert {
 
     protected static Gateway gateway;
 
+    protected static CamelContext camelContext;
+
     @Before
     public void before() {
         doBefore();
         if(gateway == null) {
             gateway = new Gateway().start();
+            camelContext = camelContext();
         }
     }
 
