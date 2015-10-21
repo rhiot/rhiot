@@ -21,9 +21,10 @@ Rhiot comes with the following features:
 
 The latest and the greatest version of the Rhiot is 0.1.2. Wondering what's new there? Here are the [release notes](https://github.com/rhiot/rhiot/blob/master/docs/release-notes.md).
 
-## Mailing list
+## Community
 
-You're more than welcome to join out [ Rhiot mailing list](https://groups.google.com/forum/#!forum/camel-iot-labs).
+You're more than welcome to join our [ Rhiot mailing list](https://groups.google.com/forum/#!forum/rhiot). We are also
+present on the **#rhiot** IRC channel at Freenode.
 
 ## Issues
 
