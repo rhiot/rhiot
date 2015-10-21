@@ -18,10 +18,7 @@ package io.rhiot.gateway.gps
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.component.gpsd.ClientGpsCoordinates;
-import io.rhiot.gateway.Gateway
-import org.junit.AfterClass
-import org.junit.Assert;
-import org.junit.BeforeClass;
+import io.rhiot.gateway.test.GatewayTest
 import org.junit.Test
 
 import java.util.concurrent.Callable
@@ -29,35 +26,21 @@ import java.util.concurrent.Callable
 import static com.google.common.truth.Truth.assertThat
 import static com.jayway.awaitility.Awaitility.await
 import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
-import static io.rhiot.utils.Properties.restoreSystemProperties;
 import static io.rhiot.utils.Properties.setStringProperty;
 import static com.google.common.io.Files.createTempDir;
 import static io.rhiot.utils.Properties.setBooleanProperty;
 
-public class GpsdRouteTest extends Assert {
-
-    static def gateway = new Gateway()
+public class GpsRoutesTest extends GatewayTest {
 
     static def gpsCoordinatesStore = createTempDir()
 
-    @BeforeClass
-    static void beforeClass() {
-        restoreSystemProperties()
-
+    @Override
+    protected void doBefore() {
         // Gateway GPS store fixtures
         setBooleanProperty('gps', true)
         setStringProperty('gps_endpoint', 'seda:gps')
         setStringProperty('gps_enrich', 'seda:enrich')
         setStringProperty("gps_store_directory", gpsCoordinatesStore.getAbsolutePath());
-
-        gateway.start()
-
-        camelContext().getShutdownStrategy().setTimeout(5)
-    }
-
-    @AfterClass
-    static void afterClass() {
-        gateway.stop()
     }
 
     @Test
