@@ -1499,10 +1499,10 @@ properties utility can be used to resolve the value of the given application pro
     int timeout = Properties.intProperty("timeout", 1000);
 
 The `Properties` tries to resolve the property value from the following locations (and in this order):
-1. ThreadLocal map 
-2. JVM system properties
-3. environment variables
-4. `application.properties` file located in the classpath
+* ThreadLocal map 
+* JVM system properties
+* environment variables
+* `application.properties` file located in the classpath
 
 
 ### Steroids bootstrap
