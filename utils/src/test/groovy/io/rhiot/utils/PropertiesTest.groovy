@@ -19,6 +19,9 @@ package io.rhiot.utils
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.utils.Properties.booleanProperty
+import static io.rhiot.utils.Properties.restoreSystemProperties
+import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.stringProperty
 import static io.rhiot.utils.Uuids.uuid
 
@@ -41,6 +44,19 @@ class PropertiesTest {
     @Test
     void shouldReadPropertyFromFile() {
         assertThat(stringProperty('fromApp')).isEqualTo('I am from app!')
+    }
+
+    @Test
+    void shouldRestoreProperties() {
+        // Given
+        def property = 'property'
+        setBooleanProperty(property, true)
+
+        // When
+        restoreSystemProperties()
+
+        // Then
+        assertThat(booleanProperty(property, false)).isFalse()
     }
 
 }

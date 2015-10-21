@@ -24,7 +24,14 @@ import static java.lang.System.getenv
 @CompileStatic
 final class Properties {
 
+    // Members
+
     private static final JProperties applicationPropertiesFile = new JProperties()
+
+    private static JProperties propertiesSnapshot
+    static {
+        saveSystemProperties()
+    }
 
     static {
         def propertiesStream = Properties.class.getResourceAsStream('/application.properties')
@@ -32,6 +39,8 @@ final class Properties {
             applicationPropertiesFile.load(propertiesStream)
         }
     }
+
+    // Constructors
 
     private Properties() {
     }
@@ -110,6 +119,17 @@ final class Properties {
 
     static void setBooleanProperty(String key, boolean value) {
         System.setProperty(key, "${value}")
+    }
+
+    // Import/export
+
+    static void saveSystemProperties() {
+        propertiesSnapshot = new JProperties()
+        propertiesSnapshot.putAll(System.getProperties())
+    }
+
+    static void restoreSystemProperties() {
+        System.setProperties(propertiesSnapshot)
     }
 
 }
