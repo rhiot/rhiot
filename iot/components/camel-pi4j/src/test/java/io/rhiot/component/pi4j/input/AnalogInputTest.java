@@ -61,7 +61,7 @@ public class AnalogInputTest extends CamelTestSupport {
 
                 GpioFactory.setDefaultProvider(factory);
 
-                from("pi4j-gpio://0?mode=ANALOG_INPUT").id("test-route").to("log:com.github.camellabs.component.pi4j?showAll=true&multiline=true").to("mock:result");
+                from("pi4j-gpio://0?mode=ANALOG_INPUT").id("test-route").to("log:io.rhiot.component.pi4j?showAll=true&multiline=true").to("mock:result");
 
             }
         };

@@ -55,7 +55,7 @@ public class DigitalInputHigh2Test extends CamelTestSupport {
                 GpioProvider factory = Mockito.mock(RaspiGpioProvider.class);
 
                 GpioFactory.setDefaultProvider(factory);
-                from("pi4j-gpio://16?mode=DIGITAL_INPUT&state=HIGH").id("test-route").to("log:com.github.camellabs.component.pi4j?showAll=true&multiline=true")
+                from("pi4j-gpio://16?mode=DIGITAL_INPUT&state=HIGH").id("test-route").to("log:io.rhiot.component.pi4j?showAll=true&multiline=true")
                     .to("mock:result");
 
             }
