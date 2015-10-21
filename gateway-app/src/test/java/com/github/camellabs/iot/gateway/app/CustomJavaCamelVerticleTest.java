@@ -18,6 +18,7 @@ package com.github.camellabs.iot.gateway.app;
 
 import io.rhiot.gateway.GatewayVerticle;
 import io.rhiot.gateway.Gateway;
+import io.rhiot.steroids.camel.CamelBootInitializer;
 import io.rhiot.vertx.camel.JavaCamelVerticle;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.AfterClass;
@@ -26,7 +27,6 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import static io.rhiot.vertx.camel.CamelContextFactories.mockEndpoint;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.apache.camel.component.mock.MockEndpoint.assertIsSatisfied;
 
@@ -48,7 +48,7 @@ public class CustomJavaCamelVerticleTest {
     @Test
     public void shouldReceiveHeartbeat() throws InterruptedException {
         // Given
-        MockEndpoint mockEndpoint = mockEndpoint("mock:customJava");
+        MockEndpoint mockEndpoint = CamelBootInitializer.camelContext().getEndpoint("mock:customJava", MockEndpoint.class);
         mockEndpoint.setMinimumExpectedMessageCount(1);
 
         // Then
