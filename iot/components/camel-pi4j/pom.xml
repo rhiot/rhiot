@@ -26,7 +26,9 @@
     <commons-cli-version>1.2</commons-cli-version>
 
     <camel.osgi.export.pkg>
-          com.github.camellabs.component.pi4j.*,
+          io.rhiot.component.pi4j.*,
+          io.rhiot.component.pi4j.i2c.*,
+          io.rhiot.component.pi4j.gpio.*,
           io.rhiot.component.pi4j.converter.*
     </camel.osgi.export.pkg>
     <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=pi4j</camel.osgi.export.service>
