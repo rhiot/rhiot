@@ -62,7 +62,7 @@ public class PubNubPresensTest extends CamelTestSupport {
             public void configure() {
                 //@formatter:off
                 from("pubnub://presence:mychannel?pubnub=#pubnub")
-                .to("log:com.github.camellabs.component.pubnub?showAll=true&multiline=true")
+                .to("log:io.rhiot.component.pubnub?showAll=true&multiline=true")
                 .to("mock:result");
                 //@formatter:on
             }

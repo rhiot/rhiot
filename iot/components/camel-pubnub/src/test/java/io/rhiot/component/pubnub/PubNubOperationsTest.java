@@ -82,7 +82,7 @@ public class PubNubOperationsTest extends CamelTestSupport {
             public void configure() {
                 //@formatter:off
                 from("direct:publish").to("pubnub://pubsub:mychannel?uuid=myuuid&pubnub=#pubnub")
-                .to("log:com.github.camellabs.component.pubnub?showAll=true&multiline=true")
+                .to("log:io.rhiot.component.pubnub?showAll=true&multiline=true")
                 .to("mock:result");
                 //@formatter:on
             }

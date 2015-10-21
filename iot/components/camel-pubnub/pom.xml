@@ -23,7 +23,7 @@
 	<description>Camel PubNub Component</description>
 
 	<properties>
-		<camel.osgi.export.pkg>com.github.camellabs.component.pubnub*</camel.osgi.export.pkg>
+		<camel.osgi.export.pkg>io.rhiot.component.pubnub*</camel.osgi.export.pkg>
 		<camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=pubnub</camel.osgi.export.service>
 	</properties>
 
