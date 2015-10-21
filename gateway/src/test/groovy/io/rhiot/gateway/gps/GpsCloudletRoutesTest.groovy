@@ -27,6 +27,7 @@ import org.junit.Test
 
 import static com.google.common.io.Files.createTempDir
 import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
+import static io.rhiot.utils.Properties.restoreSystemProperties
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setStringProperty
 
@@ -39,6 +40,8 @@ public class GpsCloudletRoutesTest extends Assert {
 
     @BeforeClass
     static void beforeClass() {
+        restoreSystemProperties()
+
         // Gateway GPS store fixtures
         setBooleanProperty('gps', true)
         setStringProperty('gps_endpoint', 'seda:gps')
@@ -61,7 +64,7 @@ public class GpsCloudletRoutesTest extends Assert {
         // Given
         def coordinates = new ClientGpsCoordinates(new Date(), 10.0, 20.0)
         def cloudletMock = camelContext().getEndpoint('mock:gps', MockEndpoint.class)
-        cloudletMock.setExpectedCount(1)
+        cloudletMock.setExpectedMessageCount(1)
 
         // When
         camelContext().createProducerTemplate().sendBody('seda:gps', coordinates)

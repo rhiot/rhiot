@@ -26,6 +26,10 @@
             <artifactId>rhiot-steroids</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-steroids-camel</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-lang-groovy</artifactId>
         </dependency>

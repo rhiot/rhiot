@@ -14,16 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.gateway;
+package io.rhiot.gateway.heartbeat;
 
-import io.rhiot.vertx.camel.CamelContextFactories;
 import io.rhiot.gateway.Gateway;
+import io.rhiot.steroids.camel.CamelBootInitializer
+import io.rhiot.utils.Properties;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.ConsumerTemplate;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static io.rhiot.utils.Properties.restoreSystemProperties
+import static io.rhiot.utils.Properties.setBooleanProperty;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
@@ -31,12 +35,14 @@ public class CamelIotGatewayTest extends Assert {
 
     static int mqttPort = findAvailableTcpPort();
 
-    static {
-        System.setProperty("camellabs.iot.gateway.heartbeat.mqtt", true + "");
-    }
+    static Gateway gateway = new Gateway();
 
     @BeforeClass
     public static void beforeClass() throws Exception {
+        restoreSystemProperties();
+
+        setBooleanProperty('camellabs.iot.gateway.heartbeat.mqtt', true )
+
         BrokerService broker = new BrokerService();
         broker.setBrokerName(CamelIotGatewayTest.class.getName());
         broker.setPersistent(false);
@@ -45,14 +51,19 @@ public class CamelIotGatewayTest extends Assert {
 
         setProperty("camellabs.iot.gateway.heartbeat.mqtt.broker.url", "tcp://localhost:" + mqttPort);
 
-        new Gateway().start();
+        gateway.start();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        gateway.stop();
     }
 
     // Tests
 
     @Test
     public void shouldReceiveHeartbeatMqttMessage() {
-        ConsumerTemplate consumerTemplate = CamelContextFactories.camelContext().createConsumerTemplate();
+        ConsumerTemplate consumerTemplate = CamelBootInitializer.camelContext().createConsumerTemplate();
         String heartbeat = consumerTemplate.receiveBody("paho:heartbeat?brokerUrl=tcp://localhost:" + mqttPort, String.class);
         assertNotNull(heartbeat);
     }

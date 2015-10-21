@@ -16,12 +16,11 @@
  */
 package io.rhiot.vertx.camel
 
+import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.lang.groovy.GroovyVerticle
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import org.slf4j.LoggerFactory
-
-import static io.rhiot.vertx.camel.CamelContextFactories.camelContext
 
 /**
  * Base Groovy class for the verticles that are supposed to access CamelContext and bridge Camel with the event bus.
@@ -30,16 +29,14 @@ class GroovyCamelVerticle extends GroovyVerticle {
 
     private static def LOG = LoggerFactory.getLogger(GroovyCamelVerticle.class)
 
-    protected def camelContext = camelContext()
-
     // Helper methods
 
     def fromEventBus(String address, Closure<RouteDefinition> routeCallback) {
         LOG.debug('Registering Camel route consuming from Vert.x event bus address {}.', address)
-        camelContext.addRoutes(new RouteBuilder() {
+        CamelBootInitializer.camelContext().addRoutes(new RouteBuilder() {
             @Override
             void configure() {
-                routeCallback(from("vertx:${address}"))
+                routeCallback(from("event-bus:${address}"))
             }
         })
     }

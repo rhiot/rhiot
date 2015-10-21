@@ -17,9 +17,10 @@
 package io.rhiot.gateway.heartbeat
 
 import io.rhiot.gateway.Gateway
-import io.rhiot.vertx.camel.CamelContextFactories
+import io.rhiot.steroids.camel.CamelBootInitializer
 import org.apache.camel.component.mock.MockEndpoint
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 
 class LedHeartbeatVerticleTest extends Assert {
@@ -34,7 +35,7 @@ class LedHeartbeatVerticleTest extends Assert {
     @Test
     void shouldReceiveHeartbeatFromEventBus() {
         // Given
-        def mockLedEndpoint = CamelContextFactories.camelContext().getEndpoint('mock:0?mode=DIGITAL_OUTPUT&state=LOW&action=BLINK', MockEndpoint.class)
+        def mockLedEndpoint = CamelBootInitializer.camelContext().getEndpoint('mock:0?mode=DIGITAL_OUTPUT&state=LOW&action=BLINK', MockEndpoint.class)
         mockLedEndpoint.setMinimumExpectedMessageCount(1)
 
         // When

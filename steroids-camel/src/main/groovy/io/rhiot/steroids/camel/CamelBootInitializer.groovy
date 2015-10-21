@@ -51,6 +51,7 @@ class CamelBootInitializer implements BootInitializer {
 
     @Override
     void stop() {
+        vertx.close()
         camelContext.stop()
     }
 

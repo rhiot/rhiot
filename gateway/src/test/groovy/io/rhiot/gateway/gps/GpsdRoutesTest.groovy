@@ -28,7 +28,8 @@ import java.util.concurrent.Callable
 
 import static com.google.common.truth.Truth.assertThat
 import static com.jayway.awaitility.Awaitility.await
-import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext;
+import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
+import static io.rhiot.utils.Properties.restoreSystemProperties;
 import static io.rhiot.utils.Properties.setStringProperty;
 import static com.google.common.io.Files.createTempDir;
 import static io.rhiot.utils.Properties.setBooleanProperty;
@@ -41,6 +42,8 @@ public class GpsdRouteTest extends Assert {
 
     @BeforeClass
     static void beforeClass() {
+        restoreSystemProperties()
+
         // Gateway GPS store fixtures
         setBooleanProperty('gps', true)
         setStringProperty('gps_endpoint', 'seda:gps')
@@ -48,6 +51,8 @@ public class GpsdRouteTest extends Assert {
         setStringProperty("gps_store_directory", gpsCoordinatesStore.getAbsolutePath());
 
         gateway.start()
+
+        camelContext().getShutdownStrategy().setTimeout(5)
     }
 
     @AfterClass

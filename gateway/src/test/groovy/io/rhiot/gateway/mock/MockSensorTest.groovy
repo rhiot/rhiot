@@ -17,16 +17,15 @@
 package io.rhiot.gateway.mock
 
 import io.rhiot.gateway.Gateway
+import io.rhiot.steroids.camel.CamelBootInitializer
 import org.apache.activemq.broker.BrokerService;
-import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test
 
-import static io.rhiot.vertx.camel.CamelContextFactories.camelContext
-import static io.rhiot.vertx.camel.CamelContextFactories.closeCamelContext
-import static io.rhiot.vertx.camel.CamelContextFactories.mockEndpoint
 import static io.rhiot.utils.Properties.setBooleanProperty;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
@@ -37,42 +36,43 @@ class MockSensorTest extends Assert {
 
     static int mqttPort = findAvailableTcpPort();
 
+    static def gateway = new Gateway()
+
     @BeforeClass
     static void beforeClass() {
+        setBooleanProperty('camellabs_iot_gateway_mock_sensor', true)
+        setBooleanProperty('camellabs_iot_gateway_mock_sensor_consumer', true)
+        setProperty('camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url', "tcp://localhost:${mqttPort}")
+
         def broker = new BrokerService()
         broker.setBrokerName(MockSensorTest.class.getName());
         broker.setPersistent(false);
         broker.addConnector("mqtt://localhost:${mqttPort}");
         broker.start()
 
-        camelContext().addRoutes(new RouteBuilder() {
+        gateway.start()
+
+        CamelBootInitializer.camelContext().addRoutes(new RouteBuilder() {
             @Override
             public void configure() throws Exception {
                 from("paho:mock?brokerUrl=tcp://localhost:" + mqttPort).
                         to("mock:test");
             }
         })
-
-        setBooleanProperty('camellabs_iot_gateway_mock_sensor', true)
-        setBooleanProperty('camellabs_iot_gateway_mock_sensor_consumer', true)
-        setProperty('camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url', "tcp://localhost:${mqttPort}")
-
-        new Gateway().start()
     }
 
     @AfterClass
     static void afterClass() {
         setBooleanProperty('camellabs_iot_gateway_mock_sensor', false)
         setBooleanProperty('camellabs_iot_gateway_mock_sensor_consumer', false)
-
-        closeCamelContext()
+        gateway.stop()
     }
 
     // Tests
 
     @Test
     void shouldSendMockEventsToTheMqttServer() {
-        def mock = mockEndpoint('mock:test')
+        def mock = CamelBootInitializer.camelContext().getEndpoint('mock:test', MockEndpoint.class)
         mock.setMinimumExpectedMessageCount(1000)
         mock.assertIsSatisfied()
     }

@@ -16,21 +16,18 @@
  */
 package io.rhiot.vertx.camel
 
+import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.core.AbstractVerticle
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
-
-import static io.rhiot.vertx.camel.CamelContextFactories.camelContext
 
 /**
  * Base Java class for the verticles that are supposed to access CamelContext and bridge Camel with the event bus.
  */
 class JavaCamelVerticle extends AbstractVerticle {
 
-    protected def camelContext = camelContext()
-
     def fromEventBus(String address, RouteDefinitionCallback routeDefinitionCallback) {
-        camelContext.addRoutes(new RouteBuilder() {
+        CamelBootInitializer.camelContext().addRoutes(new RouteBuilder() {
             @Override
             void configure() {
                 routeDefinitionCallback.route(from("vertx:${address}"))
