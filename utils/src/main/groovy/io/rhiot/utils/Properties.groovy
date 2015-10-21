@@ -17,6 +17,7 @@
 package io.rhiot.utils
 
 import groovy.transform.CompileStatic
+import java.lang.ThreadLocal as JThreadLocal
 import java.util.Properties as JProperties
 
 import static java.lang.System.getenv
@@ -27,7 +28,8 @@ final class Properties {
     // Members
 
     private static final JProperties applicationPropertiesFile = new JProperties()
-
+	private static final JThreadLocal threadLocalProperties = new ThreadLocal<JProperties>()
+	
     private static JProperties propertiesSnapshot
     static {
         saveSystemProperties()
@@ -120,8 +122,8 @@ final class Properties {
     static void setBooleanProperty(String key, boolean value) {
         System.setProperty(key, "${value}")
     }
-
-    // Import/export
+	
+	// Import/export
 
     static void saveSystemProperties() {
         propertiesSnapshot = new JProperties()
@@ -132,4 +134,66 @@ final class Properties {
         System.setProperties(propertiesSnapshot)
     }
 
+	// ThreadLocal properties
+	
+	
+	static JProperties getThreadLocalJProperties() {
+		def prop = threadLocalProperties.get();
+		
+		prop == null ? threadLocalProperties.set(new JProperties()) : void ;
+		
+		threadLocalProperties.get();
+	}
+	
+	static String setThreadStringProperty(String key, String value) {
+		getThreadLocalJProperties().put(key,value);
+		threadStringProperty(key)
+	}
+	
+	static String threadStringProperty(String key) {
+		getThreadLocalJProperties().get(key);
+	}
+	
+	static int setThreadIntProperty(String key, int value) {
+		setThreadStringProperty(key,"${value}").toInteger();
+	}
+	
+	static Integer threadIntProperty(String key) {
+		def property = threadStringProperty(key)
+		property == null ? null : property.toInteger()
+	}
+	
+	static int threadIntProperty(String key, int defaultValue) {
+		def property = threadIntProperty(key)
+		property == null ? defaultValue : property
+	}
+	
+	static boolean setThreadBooleanProperty(String key, boolean value) {
+		setThreadStringProperty(key,"${value}").toBoolean();
+	}
+	
+	static Boolean threadBooleanProperty(String key) {
+		def property = threadStringProperty(key)
+		property == null ? null : property.toBoolean()
+	}
+	
+	static boolean threadBooleanProperty(String key, boolean defaultValue) {
+		def property = threadBooleanProperty(key)
+		property == null ? defaultValue : property
+	}
+	
+	static boolean setThreadLongProperty(String key, long value) {
+		setThreadStringProperty(key,"${value}").toLong();
+	}
+	
+	static Long threadLongProperty(String key) {
+		def property = threadStringProperty(key)
+		property == null ? null : property.toLong()
+	}
+	
+	static long threadLongProperty(String key, long defaultValue) {
+		def property = threadLongProperty(key)
+		property == null ? defaultValue : property
+	}
+	
 }
