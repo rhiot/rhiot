@@ -24,7 +24,7 @@ The latest and the greatest version of the Rhiot is 0.1.2. Wondering what's new 
 ## Community
 
 You're more than welcome to join our [ Rhiot mailing list](https://groups.google.com/forum/#!forum/rhiot). We are also
-present on the **#rhiot** IRC channel at Freenode.
+present on the **#rhiot** IRC channel at Freenode and twitter [@rhiot_io](http://twitter.com/rhiot_io)
 
 ## Issues
 
