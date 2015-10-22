@@ -17,7 +17,7 @@
 - Deployer now detects devices from multiple interfaces (#214)
 - Deployer now scans OSX network interfaces (#202)
 - Device Cloudlet MongoDB connection now timeouts faster (#191)
-- Add Webcam camel component, thx @levackt (#239)
+- Add [Webcam camel component](https://github.com/rhiot/rhiot/issues/239), thx [@levackt](https://github.com/levackt) (#239)
 
 
 ## 0.1.1  (2015-09-15)
