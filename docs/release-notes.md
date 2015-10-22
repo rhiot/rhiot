@@ -2,7 +2,7 @@
 
 ## 0.1.3 (currently in progress)
 
-## 0.1.2
+## 0.1.2  (2015-10-22)
 
 - Deprecated BU353 component on the behalf of the GPSD component (#232)
 - Added GPS client coordinates type converter (#213)
@@ -17,8 +17,10 @@
 - Deployer now detects devices from multiple interfaces (#214)
 - Deployer now scans OSX network interfaces (#202)
 - Device Cloudlet MongoDB connection now timeouts faster (#191)
+- Add Webcam camel component, thx @levackt (#239)
 
-## 0.1.1
+
+## 0.1.1  (2015-09-15)
 
 - Changed project name from *Camel Labs* to *Rhiot*
 - Added [Dockerized Rhiot Cloud](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#dockerized-rhiot-cloud) (#160).
@@ -33,7 +35,7 @@
 - Gateway [deletes logs after N megabytes limit is exceeded](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#gateway-logger-configuration) (#104, #95).
 - Gateway [reads properties from the `/etc/default/camel-labs-iot-gateway`](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#configuration-of-the-gateway) (#98).
 
-## 0.1.0
+## 0.1.0  (2015-06-02)
 
 - Initial version of the Camel based [IoT field gateway](https://github.com/rhiot/rhiot/tree/master/iot#camel-iot-gateway)
 - Raspbian [installation scripts](https://github.com/rhiot/rhiot/tree/master/iot#installing-gateway-on-the-raspbian) for the Camel IoT Gateway
