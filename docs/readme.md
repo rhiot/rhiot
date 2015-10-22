@@ -389,12 +389,14 @@ annotation. All those verticles are automatically loaded into the Vert.x backbon
 As you can see in the example above you can read the messages from the event bus and forward these to your Camel
 route using the `fromEventBus(channel, closure(route))` method. You can also access the Camel context directly:
 
+    import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
+
     @GatewayVerticle
     class HeartbeatConsumerVerticle extends GroovyCamelVerticle {
 
         @Override
         void start() {
-            camelContext.addRoutes(new RouteBuilder(){
+            camelContext().addRoutes(new RouteBuilder(){
                 @Override
                 void configure() {
                     from('timer:test').to('seda:test')

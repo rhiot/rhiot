@@ -17,16 +17,12 @@
 package com.github.camellabs.iot.gateway.app
 
 import io.rhiot.gateway.GatewayVerticle
-import io.rhiot.gateway.Gateway
 import io.rhiot.gateway.test.GatewayTest
-import io.rhiot.steroids.camel.CamelBootInitializer
 import io.rhiot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.component.mock.MockEndpoint
-import org.junit.BeforeClass
 import org.junit.Test
 
-import static java.util.concurrent.TimeUnit.MINUTES
-import static java.util.concurrent.TimeUnit.SECONDS
+import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
 
 class CustomCamelVerticleTest extends GatewayTest {
 
@@ -35,7 +31,7 @@ class CustomCamelVerticleTest extends GatewayTest {
     @Test
     void shouldReceiveHeartbeat() {
         // Given
-        def mockEndpoint = CamelBootInitializer.camelContext().getEndpoint('mock:camelHeartbeatConsumer', MockEndpoint.class)
+        def mockEndpoint = camelContext().getEndpoint('mock:camelHeartbeatConsumer', MockEndpoint.class)
         mockEndpoint.setMinimumExpectedMessageCount(1)
 
         // Then
