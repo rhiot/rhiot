@@ -22,15 +22,10 @@ import io.rhiot.gateway.test.GatewayTest;
 import io.rhiot.steroids.camel.CamelBootInitializer;
 import io.rhiot.vertx.camel.JavaCamelVerticle;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
-import static java.util.concurrent.TimeUnit.MINUTES;
-import static org.apache.camel.component.mock.MockEndpoint.assertIsSatisfied;
-
+@Ignore
 public class CustomJavaCamelVerticleTest extends GatewayTest {
 
     @Test
