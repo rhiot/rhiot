@@ -52,6 +52,7 @@
         <servlet-api.version>3.1.0</servlet-api.version>
         <slfj4.version>1.7.12</slfj4.version>
         <tinkerforge.version>2.1.5</tinkerforge.version>
+        <v4l4j.version>0.9.1-r507</v4l4j.version>
         <vertx.version>3.1.0</vertx.version>
         <webcam-capture.version>0.3.11</webcam-capture.version>
     </properties>
@@ -75,6 +76,21 @@
             </dependency>
 
             <!-- Dependencies -->
+            <dependency>
+                <groupId>com.github.sarxos</groupId>
+                <artifactId>webcam-capture</artifactId>
+                <version>${webcam-capture.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sarxos</groupId>
+                <artifactId>webcam-capture-driver-v4l4j</artifactId>
+                <version>${webcam-capture.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sarxos</groupId>
+                <artifactId>v4l4j</artifactId>
+                <version>${v4l4j.version}</version>
+            </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
@@ -213,6 +229,11 @@
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>rhiot-cloudlet-geofencing</artifactId>
+                <version>${rhiot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-cloudlet-webcam</artifactId>
                 <version>${rhiot.version}</version>
             </dependency>
             <dependency>

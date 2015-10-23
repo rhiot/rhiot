@@ -61,7 +61,7 @@ public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
 
         assertMockEndpointsSatisfied(10, TimeUnit.SECONDS);
         
-        assertNotNull(mock.getExchanges().get(0).getIn().getHeader(WebcamConstants.MOTION_EVENT_HEADER));
+        assertNotNull(mock.getExchanges().get(0).getIn().getHeader(WebcamConstants.WEBCAM_MOTION_EVENT_HEADER));
     }
     
     @Test

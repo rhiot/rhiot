@@ -65,6 +65,11 @@ docker rm cloudlet-geofencing
 docker pull rhiot/cloudlet-geofencing
 docker run -d --name cloudlet-geofencing --link mongodb:mongodb -p 15001:15001 rhiot/cloudlet-geofencing
 
+### Webcam Cloudlet
+docker rm cloudlet-webcam
+docker pull rhiot/cloudlet-webcam
+docker run -d --name cloudlet-webcam --link mongodb:mongodb -p 15002:15002 rhiot/cloudlet-webcam
+
 if [ -z "$HTTP_PORT" ]; then
     echo 'HTTP port not set, running Cloudlet Console using the default development port 9000.'
     HTTP_PORT=9000

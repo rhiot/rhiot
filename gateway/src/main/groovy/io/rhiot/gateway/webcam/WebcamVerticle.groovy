@@ -17,6 +17,7 @@
 package io.rhiot.gateway.webcam
 
 import io.rhiot.gateway.GatewayVerticle
+import io.rhiot.steroids.camel.CamelBootInitializer
 import io.rhiot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.builder.RouteBuilder
 
@@ -31,12 +32,13 @@ public class WebcamVerticle extends GroovyCamelVerticle {
 
     def storeDirectory = stringProperty('camellabs_iot_gateway_webcam_store_directory', '/var/camel-labs-iot-gateway/webcam')
 
+
     @Override
     void start() {
-        camelContext.addRoutes(new RouteBuilder() {
+        CamelBootInitializer.camelContext().addRoutes(new RouteBuilder() {
             @Override
             void configure() {
-                from('webcam:cam').routeId("webcam").to("file://${storeDirectory}")
+                from("webcam:cam").routeId("webcam").to("file://${storeDirectory}");
             }
         })
     }

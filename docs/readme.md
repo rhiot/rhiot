@@ -951,6 +951,7 @@ Route the collect data and sendt it to pubnub channel mychannel:
 Camel [Webcam](http://webcam-capture.sarxos.pl/) component can be used to capture still images and detect motion.
 With Camel Webcam you can connect a camera to your device's USB port, or install the camera mod on the Raspberry Pi board for example, 
 and poll for an image periodically and respond to motion events. 
+* The Raspberry Pi camera mod is supported from Rhiot 0.1.3,  please note the Troubleshooting section below *
 The body of the message is the current image as an array of bytes, while motion events are stored in the header 'io.rhiot.webcam.webcamMotionEvent'. 
 This event may be useful for getting the image captured prior to the motion event, as well the Points where the motion occurred and the center of motion gravity. 
 
@@ -1013,6 +1014,15 @@ Specify the resolution with custom width and height, or the resolution name;
 | `consumer.delay`         | 5000                                                                          | Delay in milliseconds. Applies only to scheduled consumers.  |
 | `consumer.useFixedDelay` | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
     
+    
+#### Configuring / Toubleshooting Raspberry Pi Camera Module
+If the component fails to detect any webcams, or specifically the camera mod, check if the device is found in the shell. 
+The video for Linux driver (v4l2) should already be installed, confirm by executing;
+v4l2-ctl --list-devices
+
+If the output is the following error; "Failed to open /dev/video0: No such file or directory", you can either temporarily fix it with modprobe;
+sudo modprobe bcm2835-v4l2
+Or permanently fix it by editing /etc/rc.local to include the above line.
 
 ## Rhiot Cloud
 

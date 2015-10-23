@@ -18,7 +18,6 @@ package io.rhiot.component.webcam;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
-import com.github.sarxos.webcam.ds.v4l4j.V4l4jDriver;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -60,6 +59,8 @@ public class WebcamEndpoint extends DefaultEndpoint {
     private int width = 320;
     @UriParam(defaultValue = "240", description = "Height in pixels, must be supported by the webcam")
     private int height = 240;
+    @UriParam(description = "Webcam name")
+    private String name;
     
     public WebcamEndpoint() {
     }
@@ -93,33 +94,6 @@ public class WebcamEndpoint extends DefaultEndpoint {
         return consumer;
     }
 
-    // Life cycle
-
-    @Override
-    protected void doStart() throws Exception {
-        
-        if(webcam == null) {
-            try {
-                LOG.debug("Loading driver");
-                Webcam.setDriver(new V4l4jDriver()); //This is important for Raspberry Pi/Linux
-            } catch (UnsatisfiedLinkError e) {
-                LOG.warn("Driver not supported");
-            }
-            webcam = Webcam.getDefault();
-        }
-        
-        if (!webcam.isOpen()){
-            webcam.setViewSize(getDefaultResolution());
-            if (webcam.open()) {
-                LOG.debug("Webcam device [{}] opened", webcam.getDevice().getName());
-            } else {
-                throw new IllegalStateException("Failed to open webcam");
-            }
-        }
-        
-        super.doStart();
-    }
-
     /**
      * Returns the default resolution by name if provided, eg HD720, otherwise the width and height.
      */
@@ -132,14 +106,6 @@ public class WebcamEndpoint extends DefaultEndpoint {
         }
     }
 
-    @Override
-    protected void doStop() throws Exception {
-        if (webcam != null) {
-            webcam.close();
-            webcam = null;
-        }
-        super.doStop();
-    }
 
     // Configuration
 
@@ -160,7 +126,8 @@ public class WebcamEndpoint extends DefaultEndpoint {
     }
 
     public Webcam getWebcam() {
-        return webcam;
+        //Allow tests to inject a webcam, but fallback to the component that takes care of the management of webcams as they come and go
+        return this.webcam != null ? this.webcam : ((WebcamComponent)getComponent()).getWebcam(getName(), getDefaultResolution());
     }
 
     public void setWebcam(Webcam webcam) {
@@ -237,5 +204,13 @@ public class WebcamEndpoint extends DefaultEndpoint {
 
     public void setResolution(String resolution) {
         this.resolution = resolution;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

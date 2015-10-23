@@ -28,8 +28,11 @@ import org.junit.Test;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+
+import static org.junit.Assume.assumeTrue;
 
 public class WebcamComponentTest extends CamelTestSupport {
 
@@ -42,6 +45,63 @@ public class WebcamComponentTest extends CamelTestSupport {
         given(webcam.open()).willReturn(true);
         given(webcam.getDevice()).willReturn(new WebcamDummyDevice(1));
         
+    }
+    
+    @Test 
+    public void testWebcamNames() throws Exception {
+        
+        //If we can find a webcam, we must have webcam names too
+        assumeTrue(Webcam.getDefault() != null);
+        
+        WebcamComponent component = new WebcamComponent(context);
+        component.doStart();
+        
+        assertFalse(component.getWebcamNames().isEmpty());
+        assertEquals(Webcam.getDefault(), component.getWebcam(Webcam.getDefault().getName(), null));
+        component.stop();
+    }
+    
+    @Test 
+    public void testWebcamFindByName() throws Exception {
+        
+        //If we can find a webcam, we must have webcam names too
+        assumeTrue(Webcam.getDefault() != null);
+        
+        WebcamComponent component = new WebcamComponent(context);
+        component.doStart();
+        
+        assertEquals(Webcam.getDefault(), component.getWebcam(Webcam.getDefault().getName(), null));
+        component.stop();
+    }
+    
+    @Test(expected = ClassNotFoundException.class)
+    public void testDriverInstance() throws Exception {
+        
+        WebcamComponent component = new WebcamComponent(context);
+        component.setDriver("invalid.driver");
+        component.start();
+    }
+    
+    @Test 
+    public void testDriver() throws Exception {
+        
+        WebcamComponent component = new WebcamComponent(context);
+        component.setDriver(CustomDriver.class.getName());
+        component.start();
+        
+        assumeTrue(component.isStarted());
+        component.stop();
+    }
+    
+    @Test 
+    public void testCompositeDriver() throws Exception {
+        
+        WebcamComponent component = new WebcamComponent(context);
+        component.setDriver(CustomCompositeDriver.class.getName());
+        component.start();
+        
+        assumeTrue(component.isStarted());
+        component.stop();
     }
 
     @Test

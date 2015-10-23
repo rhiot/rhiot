@@ -16,6 +16,7 @@
  */
 package io.rhiot.component.webcam;
 
+import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.util.ImageUtils;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
@@ -31,11 +32,14 @@ public class WebcamProducer extends DefaultProducer {
     @Override
     public void process(Exchange exchange) throws Exception {
 
-        if (!getEndpoint().getWebcam().isOpen()) {
-            throw new IllegalStateException("Webcam is closed");
+        Webcam webcam = getEndpoint().getWebcam();
+        if (webcam == null) {
+            throw new WebcamNotFoundException("No webcams found");
+        } else if (!webcam.isOpen() && !webcam.open()) {
+            throw new IllegalStateException("Unable to open webcam");
         } 
         
-        BufferedImage image = getEndpoint().getWebcam().getImage();
+        BufferedImage image = webcam.getImage();
         if (image != null) {
             exchange.getIn().setBody(ImageUtils.toByteArray(image, getEndpoint().getFormat()));
         }

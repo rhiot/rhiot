@@ -24,6 +24,8 @@ import org.apache.commons.lang3.Validate;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -40,7 +42,7 @@ public class WebcamHelper {
         Message message = exchange.getIn();
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             ImageIO.write(image, endpoint.getFormat(), output);
-            message.setBody(output.toByteArray());
+            message.setBody(new BufferedInputStream(new ByteArrayInputStream(output.toByteArray())));
             message.setHeader(Exchange.FILE_NAME, message.getMessageId() + "." + endpoint.getFormat());
         } 
 
@@ -82,7 +84,7 @@ public class WebcamHelper {
 
         try {
             Exchange exchange = createOutOnlyExchangeWithBodyAndHeaders(endpoint, motionEvent.getCurrentImage());
-            exchange.getIn().setHeader(WebcamConstants.MOTION_EVENT_HEADER, motionEvent);
+            exchange.getIn().setHeader(WebcamConstants.WEBCAM_MOTION_EVENT_HEADER, motionEvent);
             processor.process(exchange);
         } catch (Exception e) {
             exceptionHandler.handleException(e);

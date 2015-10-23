@@ -22,13 +22,10 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assume.assumeTrue;
 
@@ -44,7 +41,6 @@ public class WebcamConsumerIntegrationTest extends CamelTestSupport {
             // webcam is unavailable
         }
         assumeTrue(webcam != null && webcam.open());
-        webcam.close();
     }
 
     @Override

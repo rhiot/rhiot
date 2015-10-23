@@ -14,17 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.rhiot.component.webcam;
 
-/**
- * Constants Class
- */
-public class WebcamConstants {
+public class WebcamNotFoundException extends RuntimeException {
     
-    public static final String WEBCAM_MOTION_EVENT_HEADER = "io.rhiot.webcam.webcamMotionEvent";
-    
-    private WebcamConstants() {
-        // Constants class
+    public WebcamNotFoundException(String message) {
+        super(message);
     }
 }

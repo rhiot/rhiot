@@ -22,11 +22,10 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.util.concurrent.TimeUnit;
@@ -36,16 +35,18 @@ import static org.junit.Assume.assumeTrue;
 public class WebcamProducerIntegrationTest extends CamelTestSupport {
 
     private static Webcam webcam;
+    private static int width = 640;
+    private static int height = 480;
     
     @BeforeClass
     public static void before(){
         try {
             webcam = Webcam.getDefault(15000L);
+            webcam.setViewSize(new Dimension(width, height));
         } catch (Exception e) {
             // webcam is unavailable
         }
         assumeTrue(webcam != null && webcam.open());
-        webcam.close();
     }
 
     @Override
@@ -78,17 +79,17 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
         byte[] body = mock.getExchanges().get(0).getIn().getBody(byte[].class);
         BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(body));
         assertNotNull(bufferedImage);
-        assertEquals(640, bufferedImage.getWidth());
-        assertEquals(480, bufferedImage.getHeight());
+        assertEquals(width, bufferedImage.getWidth());
+        assertEquals(height, bufferedImage.getHeight());
     }
     
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:cam").to("webcam:cam?webcam=#webcam&width=640&height=480").to("mock:foo");
+                from("direct:cam").to("webcam:cam?webcam=#webcam").to("mock:foo");
                 
-                from("direct:resolution").to("webcam:cam?webcam=#webcam&width=640&height=480").to("mock:resolution");
+                from("direct:resolution").to("webcam:cam?webcam=#webcam").to("mock:resolution");
             }
         };
     }
