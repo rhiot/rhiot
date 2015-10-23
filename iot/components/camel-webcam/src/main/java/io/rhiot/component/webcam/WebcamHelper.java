@@ -17,6 +17,7 @@
 
 package io.rhiot.component.webcam;
 
+import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamMotionEvent;
 import org.apache.camel.*;
 import org.apache.camel.spi.ExceptionHandler;
@@ -88,6 +89,18 @@ public class WebcamHelper {
             processor.process(exchange);
         } catch (Exception e) {
             exceptionHandler.handleException(e);
+        }
+    }
+
+    /**
+     * Returns true if there's a webcam available, false otherwise.
+     */
+    public static final boolean isWebcamPresent(){
+        try {
+            Webcam.getDefault(10000);
+            return true;
+        } catch (Throwable e) {
+            return false;
         }
     }
 }

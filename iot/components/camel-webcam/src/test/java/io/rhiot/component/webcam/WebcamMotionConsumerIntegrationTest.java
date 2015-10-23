@@ -31,27 +31,9 @@ import static org.junit.Assume.assumeTrue;
 
 public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
 
-    private static Webcam webcam;
-    
     @BeforeClass
     public static void before(){
-        
-        //Assume we can open and close the webcam
-        
-        try {
-            webcam = Webcam.getDefault(15000L);
-        } catch (Exception e) {
-            // webcam is unavailable
-        }
-        assumeTrue(webcam != null && webcam.open());
-        webcam.close();
-    }
-
-    @Override
-    protected JndiRegistry createRegistry() throws Exception {
-        JndiRegistry registry = super.createRegistry();
-        registry.bind("webcam", webcam);
-        return registry;
+        assumeTrue(WebcamHelper.isWebcamPresent());
     }
     
     @Test
@@ -76,8 +58,8 @@ public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("webcam:spycam?motion=true&webcam=#webcam").to("mock:undetected");
-                from("webcam:spycam?motion=true&webcam=#webcam&pixelThreshold=0").to("mock:detected");
+                from("webcam:spycam?motion=true").to("mock:undetected");
+                from("webcam:spycam?motion=true&pixelThreshold=0").to("mock:detected");
             }
         };
     }

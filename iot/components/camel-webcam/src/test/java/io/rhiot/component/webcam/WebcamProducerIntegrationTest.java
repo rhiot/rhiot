@@ -40,13 +40,9 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
     
     @BeforeClass
     public static void before(){
-        try {
-            webcam = Webcam.getDefault(15000L);
-            webcam.setViewSize(new Dimension(width, height));
-        } catch (Exception e) {
-            // webcam is unavailable
-        }
-        assumeTrue(webcam != null && webcam.open());
+        assumeTrue(WebcamHelper.isWebcamPresent());
+        webcam = Webcam.getDefault();
+        webcam.setViewSize(new Dimension(width, height));
     }
 
     @Override
@@ -87,7 +83,7 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:cam").to("webcam:cam?webcam=#webcam").to("mock:foo");
+                from("direct:cam").to("webcam:cam").to("mock:foo");
                 
                 from("direct:resolution").to("webcam:cam?webcam=#webcam").to("mock:resolution");
             }

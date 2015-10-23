@@ -30,24 +30,10 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assume.assumeTrue;
 
 public class WebcamConsumerIntegrationTest extends CamelTestSupport {
-
-    private static Webcam webcam;
     
     @BeforeClass
     public static void before(){
-        try {
-            webcam = Webcam.getDefault(15000L);
-        } catch (Exception e) {
-            // webcam is unavailable
-        }
-        assumeTrue(webcam != null && webcam.open());
-    }
-
-    @Override
-    protected JndiRegistry createRegistry() throws Exception {
-        JndiRegistry registry = super.createRegistry();
-        registry.bind("webcam", webcam);
-        return registry;
+        assumeTrue(WebcamHelper.isWebcamPresent());
     }
 
     @Test
@@ -63,7 +49,7 @@ public class WebcamConsumerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("webcam:cam?webcam=#webcam&consumer.delay=5000").to("mock:scheduled");
+                from("webcam:cam?consumer.delay=5000").to("mock:scheduled");
             }
         };
     }
