@@ -29,6 +29,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import static org.junit.Assume.assumeNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -51,7 +52,14 @@ public class WebcamComponentTest extends CamelTestSupport {
     public void testWebcamNames() throws Exception {
         
         //If we can find a webcam, we must have webcam names too
-        assumeTrue(Webcam.getDefault() != null);
+        Webcam webcam = null;
+        try {
+            webcam = Webcam.getDefault();
+        } catch (UnsatisfiedLinkError e) {
+            //cannot run this test here, eg build
+        }
+
+        assumeNotNull(webcam);
         
         WebcamComponent component = new WebcamComponent(context);
         component.doStart();
@@ -61,16 +69,23 @@ public class WebcamComponentTest extends CamelTestSupport {
         component.stop();
     }
     
-    @Test 
+    @Test
     public void testWebcamFindByName() throws Exception {
         
         //If we can find a webcam, we must have webcam names too
-        assumeTrue(Webcam.getDefault() != null);
+        Webcam webcam = null;
+        try {
+            webcam = Webcam.getDefault();
+        } catch (UnsatisfiedLinkError e) {
+            //cannot run this test here, eg build
+        }
+
+        assumeNotNull(webcam);
         
         WebcamComponent component = new WebcamComponent(context);
         component.doStart();
         
-        assertEquals(Webcam.getDefault(), component.getWebcam(Webcam.getDefault().getName(), null));
+        assertEquals(webcam, component.getWebcam(webcam.getName(), null));
         component.stop();
     }
     
@@ -100,7 +115,7 @@ public class WebcamComponentTest extends CamelTestSupport {
         component.setDriver(CustomCompositeDriver.class.getName());
         component.start();
         
-        assumeTrue(component.isStarted());
+        assertTrue(component.isStarted());
         component.stop();
     }
 

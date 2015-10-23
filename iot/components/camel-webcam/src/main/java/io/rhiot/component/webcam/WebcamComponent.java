@@ -90,8 +90,10 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
         List<Webcam> webcamList = Webcam.getWebcams(timeout);
         if (webcamList == null || webcamList.size() == 0) {
             throw new IllegalStateException("No webcams found");
-        }
+        } 
         webcamList.forEach(w -> webcams.put(w.getName(), w));
+
+        LOG.info("Detected webcams : {}", webcams.keySet());
         
         super.doStart();
     }
