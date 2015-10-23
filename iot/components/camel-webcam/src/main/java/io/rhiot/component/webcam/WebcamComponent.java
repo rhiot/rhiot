@@ -78,7 +78,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
             if (osName.indexOf("nix") > -1 || osName.indexOf("nux") > -1 || osName.indexOf("aix") > -1 ) {
                 try {
                     Webcam.setDriver(new V4l4jDriver());
-                } catch (Exception e) {
+                } catch (Error e) {
                     LOG.warn("v4l4 driver not supported on [{}]", osName);
                 }
             }

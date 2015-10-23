@@ -55,7 +55,7 @@ public class WebcamComponentTest extends CamelTestSupport {
         Webcam webcam = null;
         try {
             webcam = Webcam.getDefault();
-        } catch (UnsatisfiedLinkError e) {
+        } catch (Error e) {
             //cannot run this test here, eg build
         }
 
@@ -76,7 +76,7 @@ public class WebcamComponentTest extends CamelTestSupport {
         Webcam webcam = null;
         try {
             webcam = Webcam.getDefault();
-        } catch (UnsatisfiedLinkError e) {
+        } catch (Error e) {
             //cannot run this test here, eg build
         }
 
