@@ -950,8 +950,7 @@ Route the collect data and sendt it to pubnub channel mychannel:
 
 Camel [Webcam](http://webcam-capture.sarxos.pl/) component can be used to capture still images and detect motion.
 With Camel Webcam you can connect a camera to your device's USB port, or install the camera mod on the Raspberry Pi board for example, 
-and poll for an image periodically and respond to motion events. 
-* The Raspberry Pi camera mod is supported from Rhiot 0.1.3,  please note the Troubleshooting section below *
+and poll for an image periodically and respond to motion events.
 The body of the message is the current image as an array of bytes, while motion events are stored in the header 'io.rhiot.webcam.webcamMotionEvent'. 
 This event may be useful for getting the image captured prior to the motion event, as well the Points where the motion occurred and the center of motion gravity. 
 
