@@ -67,7 +67,6 @@ public class WebcamComponentTest extends CamelTestSupport {
         assumeNotNull(webcam);
         
         WebcamComponent component = new WebcamComponent(context);
-        component.setWebcams(webcams);
         component.doStart();
         
         assertFalse(component.getWebcamNames().isEmpty());
@@ -89,7 +88,6 @@ public class WebcamComponentTest extends CamelTestSupport {
         assumeNotNull(webcam);
         
         WebcamComponent component = new WebcamComponent(context);
-        component.setWebcams(webcams);
         component.doStart();
         
         assertEquals(webcam, component.getWebcam(webcam.getName(), null));
@@ -109,7 +107,6 @@ public class WebcamComponentTest extends CamelTestSupport {
         
         WebcamComponent component = new WebcamComponent(context);
         component.setDriver(CustomDriver.class.getName());
-        component.setWebcams(webcams);
         component.start();
         
         assumeTrue(component.isStarted());
@@ -121,7 +118,6 @@ public class WebcamComponentTest extends CamelTestSupport {
         
         WebcamComponent component = new WebcamComponent(context);
         component.setDriver(CustomCompositeDriver.class.getName());
-        component.setWebcams(webcams);
         component.start();
         
         assertTrue(component.isStarted());

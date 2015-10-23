@@ -67,12 +67,6 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
         
         LOG.info("Starting webcam component for OS {}", System.getProperty("os.name"));
 
-        //Webcams provided, so drivers are loaded already, ie integration test or customized component
-        if (webcams != null) {
-            super.doStart();
-            return;
-        }
-
         // use specified driver
         if (getDriver() != null) {
             Class<WebcamDriver> clazz = (Class<WebcamDriver>) Class.forName(getDriver());
@@ -170,16 +164,11 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
         }
         return webcam;
     }
-
-    public void setWebcams(Map<String, Webcam> webcams) {
-        this.webcams = webcams;
-    }
-
+    
     /**
      * Returns the list of webcams
      */
     protected List<String> getWebcamNames(){
-        
         return new ArrayList<String>(webcams.keySet());
     }
 
