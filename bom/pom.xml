@@ -71,21 +71,6 @@
 
             <!-- Dependencies -->
             <dependency>
-                <groupId>com.github.sarxos</groupId>
-                <artifactId>webcam-capture</artifactId>
-                <version>${webcam-capture.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sarxos</groupId>
-                <artifactId>webcam-capture-driver-v4l4j</artifactId>
-                <version>${webcam-capture.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sarxos</groupId>
-                <artifactId>v4l4j</artifactId>
-                <version>${v4l4j.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.cyrusinnovation</groupId>
                 <artifactId>mockito-groovy-support</artifactId>
                 <version>${mockito-groovy-support.version}</version>
@@ -104,6 +89,21 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sarxos</groupId>
+                <artifactId>webcam-capture</artifactId>
+                <version>${webcam-capture.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sarxos</groupId>
+                <artifactId>webcam-capture-driver-v4l4j</artifactId>
+                <version>${webcam-capture.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sarxos</groupId>
+                <artifactId>v4l4j</artifactId>
+                <version>${v4l4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.maps</groupId>
