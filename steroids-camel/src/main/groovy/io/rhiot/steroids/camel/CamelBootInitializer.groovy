@@ -40,6 +40,7 @@ class CamelBootInitializer implements BootInitializer {
     @Override
     public void start() {
         camelContext = new DefaultCamelContext(registry)
+        camelContext.streamCaching = true
         vertx = Vertx.vertx()
         def vertxComponent = new VertxComponent(vertx: vertx)
         camelContext.addComponent('event-bus', vertxComponent)
