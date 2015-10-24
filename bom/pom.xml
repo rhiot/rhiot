@@ -93,11 +93,6 @@
                 <version>${v4l4j.version}</version>
             </dependency>
             <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.cyrusinnovation</groupId>
                 <artifactId>mockito-groovy-support</artifactId>
                 <version>${mockito-groovy-support.version}</version>
@@ -116,16 +111,6 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mongodb</groupId>
-                <artifactId>mongo-java-driver</artifactId>
-                <version>${mongo-java-driver.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.taimos</groupId>
-                <artifactId>gpsd4java</artifactId>
-                <version>${gpsd4java.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.maps</groupId>
@@ -190,10 +175,20 @@
                 <version>${pubnub.version}</version>
             </dependency>
             <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>de.flapdoodle.embed</groupId>
                 <artifactId>de.flapdoodle.embed.mongo</artifactId>
                 <version>${embedmongo.version}</version>
                 <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>de.taimos</groupId>
+                <artifactId>gpsd4java</artifactId>
+                <version>${gpsd4java.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
@@ -459,6 +454,11 @@
                 <groupId>org.jolokia</groupId>
                 <artifactId>jolokia-jvm</artifactId>
                 <version>${jolokia.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongo-java-driver</artifactId>
+                <version>${mongo-java-driver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.reflections</groupId>
