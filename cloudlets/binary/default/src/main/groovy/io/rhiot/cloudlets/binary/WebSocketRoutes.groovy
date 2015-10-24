@@ -17,6 +17,7 @@
 package io.rhiot.cloudlets.binary
 
 import io.rhiot.steroids.camel.Route
+import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 
 import static io.rhiot.steroids.camel.CamelBootInitializer.eventBus
@@ -26,8 +27,10 @@ class WebSocketRoutes extends RouteBuilder {
 
     @Override
     void configure() throws Exception {
-        from(eventBus('device.binary'))
-                .to('websocket://localhost:61614/video?sendToAll=true')
+        from(eventBus('device.binary')).process { Exchange exc ->
+            def clientChannel = exc.in.getBody(String.class).split('_')[0]
+            exc.setProperty('destination', "websocket://localhost:61614/${clientChannel}?sendToAll=true")
+        }.recipientList().exchangeProperty('destination')
     }
 
 }
