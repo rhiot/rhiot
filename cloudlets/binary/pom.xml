@@ -5,12 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-cloudlets</artifactId>
         <version>0.1.3-SNAPSHOT</version>
-        <artifactId>rhiot-bom</artifactId>
-        <relativePath>../bom</relativePath>
+        <relativePath>..</relativePath>
     </parent>
-    <name>RHIOT :: Cloudlets</name>
-    <artifactId>rhiot-cloudlets</artifactId>
+    <name>RHIOT :: Cloudlets :: Binary </name>
+    <artifactId>rhiot-cloudlet-binary-parent</artifactId>
     <packaging>pom</packaging>
 
     <licenses>
@@ -21,10 +21,8 @@
     </licenses>
 
     <modules>
-        <module>binary</module>
-        <module>device</module>
-        <module>geofencing</module>
-        <module>webcam</module>
+        <module>default</module>
+        <module>app</module>
     </modules>
 
 </project>
