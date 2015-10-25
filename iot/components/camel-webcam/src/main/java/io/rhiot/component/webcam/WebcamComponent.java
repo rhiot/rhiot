@@ -18,13 +18,13 @@ package io.rhiot.component.webcam;
 
 import java.awt.*;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import com.github.sarxos.webcam.*;
 import com.github.sarxos.webcam.ds.v4l4j.V4l4jDriver;
+import io.rhiot.utils.process.DefaultProcessManager;
+import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 
@@ -42,6 +42,8 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
     private Map<String, Webcam> webcams = new HashMap();
     private int timeout = 60000;
     private String driver;
+
+    private ProcessManager processManager;
     
     public WebcamComponent() {
         super(WebcamEndpoint.class);
@@ -61,44 +63,69 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
 
     @Override
     protected void doStart() throws Exception {
+
+        loadWebcamDriver();
         
-        WebcamDriver driver = null;
-        String osName = System.getProperty("os.name").toLowerCase();
-        
-        LOG.info("Starting webcam component for OS {}", System.getProperty("os.name"));
-
-        // use specified driver
-        if (getDriver() != null) {
-            Class<WebcamDriver> clazz = (Class<WebcamDriver>) Class.forName(getDriver());
-            Constructor<WebcamDriver> constructor = clazz.getConstructor();
-            driver = constructor.newInstance();
-
-        } else {
-            // else try to load the v4l4 driver for Linux 
-            if (osName.indexOf("nix") > -1 || osName.indexOf("nux") > -1 || osName.indexOf("aix") > -1 ) {
-                try {
-                    Webcam.setDriver(new V4l4jDriver());
-                } catch (Error e) {
-                    LOG.warn("v4l4 driver not supported on [{}]", osName);
-                }
-            }
-        } 
-        if (driver != null) {
-            Webcam.setDriver(driver);
-        }
-
         List<Webcam> webcamList = Webcam.getWebcams(timeout);
         if (webcamList == null || webcamList.size() == 0) {
             throw new IllegalStateException("No webcams found");
         }
         webcamList.forEach(w -> webcams.put(w.getName(), w));
 
-        LOG.info("Detected webcams : {}", webcams.keySet());
+        LOG.debug("Detected webcams : {}", webcams.keySet());
 
         super.doStart();
     }
-    
-    
+
+    protected void loadWebcamDriver() {
+        String osName = System.getProperty("os.name").toLowerCase();
+
+        try {
+            
+            ProcessManager processManager = resolveProcessManager();
+            
+            // use specified driver
+            if (getDriver() != null) {
+                Class<WebcamDriver> clazz = (Class<WebcamDriver>) Class.forName(getDriver());
+                Constructor<WebcamDriver> constructor = clazz.getConstructor();
+                WebcamDriver driver = constructor.newInstance();
+                LOG.debug("Using specified driver [{}]", driver);
+                Webcam.setDriver(driver);
+
+            } else if (osName.indexOf("nix") > -1 || osName.indexOf("nux") > -1 || osName.indexOf("aix") > -1 ) {
+                try {
+
+                    LOG.debug("Loading v4l2 module");
+
+                    processManager.executeAndJoinOutput("/bin/sh", "-c", "sudo modprobe bcm2835-v4l2");
+                    LOG.debug("Found devices : {}", processManager.executeAndJoinOutput("/bin/sh", "-c", "v4l2-ctl --list-devices"));
+                    
+                    Webcam.setDriver(new V4l4jDriver());
+                } catch (Error e) {
+                    LOG.warn("v4l4 driver not supported on [{}]", osName);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected ProcessManager resolveProcessManager() {
+        LOG.debug("Started resolving ProcessManager...");
+        if(processManager != null) {
+            LOG.debug("ProcessManager has been set on the component level. Camel will use it: {}", processManager);
+            return processManager;
+        }
+        Set<ProcessManager> processManagers = getCamelContext().getRegistry().findByType(ProcessManager.class);
+        if(processManagers.isEmpty()) {
+            LOG.debug("No ProcessManager found in the registry - creating new DefaultProcessManager.");
+            return new DefaultProcessManager();
+        } else if(processManagers.size() == 1) {
+            return processManagers.iterator().next();
+        } else {
+            return new DefaultProcessManager();
+        }
+    }
     
     @Override
     protected void doStop() throws Exception {
@@ -140,7 +167,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
     }
 
     /**
-     * Returns the default webcam.
+     * Returns the first webcam.
      */
     public Webcam getWebcam(Dimension dimension) {
         if (webcams.size() == 0) {
@@ -182,5 +209,13 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
 
     public void setDriver(String driver) {
         this.driver = driver;
+    }
+    
+    public ProcessManager getProcessManager() {
+        return processManager;
+    }
+
+    public void setProcessManager(ProcessManager processManager) {
+        this.processManager = processManager;
     }
 }

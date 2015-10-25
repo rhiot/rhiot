@@ -1015,14 +1015,6 @@ Specify the resolution with custom width and height, or the resolution name;
     
     
 #### Configuring / Troubleshooting Raspberry Pi Camera Module
-######  Initial setup
-If the component fails to detect any webcams, or specifically the camera mod, check if the device is found in the shell. 
-The video for Linux driver (v4l2) should already be installed, confirm by executing;
-v4l2-ctl --list-devices
-
-If the output is the following error; "Failed to open /dev/video0: No such file or directory", you can either temporarily fix it with modprobe;
-sudo modprobe bcm2835-v4l2
-Or permanently fix it by editing /etc/rc.local to include the above line.
 
 ###### RasPi V4L4J driver does not start for the second time 
 [https://github.com/sarxos/webcam-capture/issues/382] (https://github.com/sarxos/webcam-capture/issues/382)

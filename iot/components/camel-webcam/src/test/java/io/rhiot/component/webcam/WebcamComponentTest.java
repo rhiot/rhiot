@@ -108,8 +108,19 @@ public class WebcamComponentTest extends CamelTestSupport {
         WebcamComponent component = new WebcamComponent(context);
         component.setDriver(CustomDriver.class.getName());
         component.start();
+
+        assertTrue(component.isStarted());
+        component.stop();
+    }
+    
+    @Test 
+    public void testDefaultDriver() throws Exception {
         
-        assumeTrue(component.isStarted());
+        WebcamComponent component = new WebcamComponent(context);
+        component.setDriver(com.github.sarxos.webcam.ds.buildin.WebcamDefaultDriver.class.getName());
+        component.start();
+        
+        assertTrue(component.isStarted());
         component.stop();
     }
     
