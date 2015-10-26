@@ -16,9 +16,6 @@
  */
 package com.github.camellabs.iot.cloudlet.geofencing.service;
 
-import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
-import com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation;
-import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.Route;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteComment;
@@ -27,6 +24,10 @@ import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.maps.model.LatLng;
+import io.rhiot.thingsdata.DocumentDriver;
+import io.rhiot.thingsdata.FindByQueryOperation;
+import io.rhiot.thingsdata.Pojos;
+import io.rhiot.thingsdata.SaveOperation;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -50,10 +51,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.camellabs.iot.cloudlet.document.driver.spi.Pojos.collectionName;
 import static com.github.camellabs.iot.cloudlet.geofencing.domain.Route.createNewRoute;
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
+import static io.rhiot.thingsdata.Pojos.collectionName;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;

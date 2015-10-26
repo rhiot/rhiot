@@ -18,13 +18,13 @@ package camel.labs.iot.cloudlet.document.mongodb;
 
 import com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapper;
 import com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongodbDocumentDriver;
-import com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation;
 import com.google.common.collect.ImmutableMap;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.IMongodConfig;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
+import io.rhiot.thingsdata.FindByQueryOperation;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.TypeConverter;
 import org.junit.Assert;

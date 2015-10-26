@@ -16,13 +16,14 @@
  */
 package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 
-import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
-import com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation;
-import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import io.rhiot.thingsdata.DocumentDriver;
+import io.rhiot.thingsdata.FindByQueryOperation;
+import io.rhiot.thingsdata.SaveOperation;
 import org.apache.camel.ProducerTemplate;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
@@ -95,6 +97,17 @@ public class MongodbDocumentDriver implements DocumentDriver {
     private String baseMongoDbEndpoint() {
         // TODO:CAMEL Collection should not be required for dynamic endpoints
         return format("mongodb:mongo?database=%s&collection=default&dynamicity=true&operation=", documentsDbName);
+    }
+
+    public static DBObject jsonToBson(DBObject json) {
+        checkNotNull(json, "JSON passed to the conversion can't be null.");
+        DBObject bson = new BasicDBObject(json.toMap());
+        Object id = bson.get("id");
+        if (id != null) {
+            bson.removeField("id");
+            bson.put("_id", new ObjectId(id.toString()));
+        }
+        return bson;
     }
 
 }

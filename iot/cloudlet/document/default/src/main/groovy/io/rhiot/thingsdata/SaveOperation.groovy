@@ -14,15 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.document.driver.spi;
+package io.rhiot.thingsdata;
 
-public final class Pojos {
+import static Pojos.collectionName;
 
-    private Pojos() {
+public class SaveOperation {
+
+    private final String collection;
+
+    private final Object pojo;
+
+    public SaveOperation(String collection, Object pojo) {
+        this.collection = collection;
+        this.pojo = pojo;
     }
 
-    public static String collectionName(Class<?> pojoClass) {
-        return pojoClass.getSimpleName();
+    public SaveOperation(Object pojo) {
+        this.collection = collectionName(pojo.getClass());
+        this.pojo = pojo;
+    }
+
+    public String collection() {
+        return collection;
+    }
+
+    public Object pojo() {
+        return pojo;
     }
 
 }

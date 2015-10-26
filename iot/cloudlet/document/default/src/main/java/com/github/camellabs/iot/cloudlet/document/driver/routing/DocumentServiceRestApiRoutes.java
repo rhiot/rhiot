@@ -88,7 +88,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
-                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation(headers['collection'], body)").
+                setBody().groovy("new io.rhiot.thingsdata.SaveOperation(headers['collection'], body)").
                 to("bean:mongodbDocumentDriver?method=save");
 
         rest("/api/document").
@@ -108,7 +108,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/findByQuery/{collection}").route().
-                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.spi.FindByQueryOperation(headers['collection'], body)").
+                setBody().groovy("new io.rhiot.thingsdata.FindByQueryOperation(headers['collection'], body)").
                 to("bean:mongodbDocumentDriver?method=findByQuery");
 
         rest("/api/")

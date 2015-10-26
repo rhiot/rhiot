@@ -16,15 +16,14 @@
  */
 package com.github.camellabs.iot.cloudlet.geofencing.service;
 
-import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
-import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
 import com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
-import com.github.camellabs.iot.cloudlet.geofencing.domain.Route;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteComment;
 import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.LatLng;
+import io.rhiot.thingsdata.DocumentDriver;
+import io.rhiot.thingsdata.SaveOperation;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -42,8 +41,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
