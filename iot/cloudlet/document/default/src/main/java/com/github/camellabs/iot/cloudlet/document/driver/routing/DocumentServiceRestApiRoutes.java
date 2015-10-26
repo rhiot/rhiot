@@ -94,7 +94,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
         rest("/api/document").
                 get("/count/{collection}").route().
                 setBody().groovy("new io.rhiot.thingsdata.CountOperation(headers['collection'])").
-                to("direct:count");
+                to("bean:mongodbDocumentDriver?method=count");
 
         rest("/api/document").
                 get("/findOne/{collection}/{id}").route().
@@ -141,11 +141,6 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
                 setBody().groovy("new com.mongodb.BasicDBObject('_id', new com.mongodb.BasicDBObject('$in', body.ids.collect{new org.bson.types.ObjectId(it)}))").
                 to(baseMongoDbEndpoint() + "findAll").
                 process(mapBsonToJson());
-
-        from("direct:count").
-                setHeader(COLLECTION).groovy("body.collection").
-                setBody().constant(new BasicDBObject()).
-                to(baseMongoDbEndpoint() + "count");
 
         from("direct:countByQuery").
                 setHeader(COLLECTION).groovy("body.collection").

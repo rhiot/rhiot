@@ -19,8 +19,10 @@ package io.rhiot.thingsdata
 
 public interface DocumentDriver {
 
-    String save(SaveOperation saveOperation);
+    String save(SaveOperation saveOperation)
 
-    List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation);
+    List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation)
+
+    long count(CountOperation countOperation)
 
 }

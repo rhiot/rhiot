@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
+import io.rhiot.thingsdata.CountOperation;
 import io.rhiot.thingsdata.DocumentDriver;
 import io.rhiot.thingsdata.FindByQueryOperation;
 import io.rhiot.thingsdata.SaveOperation;
@@ -93,6 +94,11 @@ public class MongodbDocumentDriver implements DocumentDriver {
             documents = singletonList((DBObject) mongoOutput);
         }
         return documents.parallelStream().map(BsonMapper::bsonToJson).map(document -> (Map<String, Object>) document.toMap()).collect(toList());
+    }
+
+    @Override
+    public long count(CountOperation countOperation) {
+        return mongo.getDB(documentsDbName).getCollection(countOperation.collection()).count();
     }
 
     private String baseMongoDbEndpoint() {
