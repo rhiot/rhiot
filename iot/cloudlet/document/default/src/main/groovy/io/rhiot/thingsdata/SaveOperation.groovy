@@ -14,11 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.thingsdata;
+package io.rhiot.thingsdata
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static Pojos.collectionName;
 
 public class SaveOperation {
+
+    private static final def jackson = new ObjectMapper()
 
     private final String collection
 
@@ -27,6 +31,10 @@ public class SaveOperation {
     public SaveOperation(String collection, Map<String, Object> pojo) {
         this.collection = collection;
         this.pojo = pojo;
+    }
+
+    public SaveOperation(Object pojo) {
+        this(jackson.convertValue(pojo, Map.class))
     }
 
     public SaveOperation(Map<String, Object> pojo) {

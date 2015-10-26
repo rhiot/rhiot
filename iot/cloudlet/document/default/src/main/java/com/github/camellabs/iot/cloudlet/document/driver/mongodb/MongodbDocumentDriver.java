@@ -19,6 +19,7 @@ package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import com.mongodb.Mongo;
 import io.rhiot.thingsdata.DocumentDriver;
 import io.rhiot.thingsdata.FindByQueryOperation;
 import io.rhiot.thingsdata.SaveOperation;
@@ -41,7 +42,6 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static org.apache.camel.component.mongodb.MongoDbConstants.LIMIT;
 import static org.apache.camel.component.mongodb.MongoDbConstants.NUM_TO_SKIP;
-import static org.apache.camel.component.mongodb.MongoDbConstants.OID;
 import static org.apache.camel.component.mongodb.MongoDbConstants.SORT_BY;
 
 @Component
@@ -54,6 +54,9 @@ public class MongodbDocumentDriver implements DocumentDriver {
     private final BsonMapper bsonMapper;
 
     @Autowired
+    private Mongo mongo;
+
+    @Autowired
     public MongodbDocumentDriver(@Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName,
                                  ProducerTemplate producerTemplate,
                                  BsonMapper bsonMapper) {
@@ -64,11 +67,9 @@ public class MongodbDocumentDriver implements DocumentDriver {
 
     @Override
     public String save(SaveOperation saveOperation) {
-        return producerTemplate.request(baseMongoDbEndpoint() + "save",
-                exchange -> {
-                    exchange.getIn().setHeader(COLLECTION, saveOperation.collection());
-                    exchange.getIn().setBody(bsonMapper.pojoToBson(saveOperation.pojo()));
-                }).getIn().getHeader(OID, String.class);
+        DBObject mongoObject = canonicalToMongo(new BasicDBObject(saveOperation.pojo()));
+        mongo.getDB(documentsDbName).getCollection(saveOperation.collection()).save(mongoObject);
+        return mongoObject.get("_id").toString();
     }
 
     @Override
@@ -99,7 +100,7 @@ public class MongodbDocumentDriver implements DocumentDriver {
         return format("mongodb:mongo?database=%s&collection=default&dynamicity=true&operation=", documentsDbName);
     }
 
-    public static DBObject jsonToBson(DBObject json) {
+    public static DBObject canonicalToMongo(DBObject json) {
         checkNotNull(json, "JSON passed to the conversion can't be null.");
         DBObject bson = new BasicDBObject(json.toMap());
         Object id = bson.get("id");
