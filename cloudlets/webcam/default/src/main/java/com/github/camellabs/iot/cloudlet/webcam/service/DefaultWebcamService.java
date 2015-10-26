@@ -20,7 +20,6 @@
 
 package com.github.camellabs.iot.cloudlet.webcam.service;
 
-import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
 import com.github.camellabs.iot.cloudlet.webcam.domain.Webcam;
 import com.github.camellabs.iot.cloudlet.webcam.domain.WebcamImage;
 import org.slf4j.Logger;
@@ -40,13 +39,10 @@ public class DefaultWebcamService implements WebcamService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultWebcamService.class);
 
-    private final DocumentDriver documentDriver;
-
     private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public DefaultWebcamService(DocumentDriver documentDriver, MongoTemplate mongoTemplate) {
-        this.documentDriver = documentDriver;
+    public DefaultWebcamService(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
