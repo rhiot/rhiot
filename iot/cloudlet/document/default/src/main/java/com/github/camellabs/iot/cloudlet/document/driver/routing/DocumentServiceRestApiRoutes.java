@@ -93,7 +93,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 get("/count/{collection}").route().
-                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.CountOperation(headers['collection'])").
+                setBody().groovy("new io.rhiot.thingsdata.CountOperation(headers['collection'])").
                 to("direct:count");
 
         rest("/api/document").
