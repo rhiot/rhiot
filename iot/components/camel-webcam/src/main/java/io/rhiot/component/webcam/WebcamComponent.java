@@ -32,6 +32,8 @@ import org.apache.camel.impl.UriEndpointComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Represents the component that manages {@link WebcamEndpoint}.
  */
@@ -40,8 +42,11 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
     private static final Logger LOG = LoggerFactory.getLogger(WebcamComponent.class);
     
     private Map<String, Webcam> webcams = new HashMap();
-    private int timeout = 60000;
+    private int timeout = 30000;
     private String driver;
+
+    private int webcamRestartInterval = 5000;
+    private boolean webcamStarted;
 
     private ProcessManager processManager;
     
@@ -63,26 +68,32 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
 
     @Override
     protected void doStart() throws Exception {
-
-        loadWebcamDriver();
         
-        List<Webcam> webcamList = Webcam.getWebcams(timeout);
-        if (webcamList == null || webcamList.size() == 0) {
-            throw new IllegalStateException("No webcams found");
+        //Use the provided webcam/s
+        if (getWebcams().size() == 0) {
+            loadWebcamDriver();
+
+            List<Webcam> webcamList = Webcam.getWebcams(timeout);
+            if (webcamList == null || webcamList.size() == 0) {
+                throw new IllegalStateException("No webcams found");
+            }
+            webcamList.forEach(w -> webcams.put(w.getName(), w));
+
+            LOG.debug("Detected webcams : {}", webcams.keySet());
         }
-        webcamList.forEach(w -> webcams.put(w.getName(), w));
-
-        LOG.debug("Detected webcams : {}", webcams.keySet());
-
+        
         super.doStart();
     }
 
     protected void loadWebcamDriver() {
+        
+        if (webcamStarted) {
+            return;
+        }
+        
         String osName = System.getProperty("os.name").toLowerCase();
 
         try {
-            
-            ProcessManager processManager = resolveProcessManager();
             
             // use specified driver
             if (getDriver() != null) {
@@ -91,23 +102,37 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
                 WebcamDriver driver = constructor.newInstance();
                 LOG.debug("Using specified driver [{}]", driver);
                 Webcam.setDriver(driver);
+                webcamStarted = true;
 
             } else if (osName.indexOf("nix") > -1 || osName.indexOf("nux") > -1 || osName.indexOf("aix") > -1 ) {
                 try {
+                    ProcessManager processManager = resolveProcessManager();
+                    do {
 
                     LOG.debug("Loading v4l2 module");
 
                     processManager.executeAndJoinOutput("/bin/sh", "-c", "sudo modprobe bcm2835-v4l2");
-                    LOG.debug("Found devices : {}", processManager.executeAndJoinOutput("/bin/sh", "-c", "v4l2-ctl --list-devices"));
-                    
-                    Webcam.setDriver(new V4l4jDriver());
+                        processManager.executeAndJoinOutput("/bin/sh", "-c", getV4l2FormatCommand()); 
+                    List<String> v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", "v4l2-ctl --list-devices");
+                    if (!v4l2Result.contains("Failed to open /dev/video0: No such file or directory")) {
+                        webcamStarted = true;
+                        Webcam.setDriver(new V4l4jDriver());
+                    } else {
+                        LOG.debug("v4l2Result [{}]", v4l2Result);
+                    }
+                    sleep(webcamRestartInterval);
+                    } while (!webcamStarted);
                 } catch (Error e) {
-                    LOG.warn("v4l4 driver not supported on [{}]", osName);
+                    LOG.error("v4l4 driver not supported on [{}]", osName);
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String getV4l2FormatCommand() {
+        return "v4l2-ctl --set-fmt-video=pixelformat=3";
     }
 
     protected ProcessManager resolveProcessManager() {
@@ -185,10 +210,16 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
         //Once started another endpoint may want to change from low res to high res, for example
         if (webcam.isOpen() && isStarted() && !dimension.equals(webcam.getViewSize())) {
             webcam.close();
+        } 
+        
+        if (!webcam.isOpen() && dimension != null) {
+            webcam.setCustomViewSizes(new Dimension[]{dimension});
             webcam.setViewSize(dimension);
+            webcam.open(true);
         } else if (!webcam.isOpen()) {
-            webcam.open();
+            webcam.open(true);
         }
+        
         return webcam;
     }
     
@@ -197,6 +228,14 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
      */
     protected List<String> getWebcamNames(){
         return new ArrayList<String>(webcams.keySet());
+    }
+
+    public Map<String, Webcam> getWebcams() {
+        return webcams;
+    }
+
+    public void setWebcams(Map<String, Webcam> webcams) {
+        this.webcams = webcams;
     }
 
     public void setTimeout(int timeout) {

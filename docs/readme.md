@@ -82,6 +82,7 @@ Rhiot comes with the following features:
     - [Maven dependency](#maven-dependency-6)
     - [URI format](#uri-format-3)
     - [Options](#options-3)
+    - [Process manager](#process-manager-2)
 - [Rhiot Cloud](#rhiot-cloud)
   - [Architecture](#architecture)
   - [Dockerized Rhiot Cloud](#dockerized-rhiot-cloud)
@@ -1010,21 +1011,32 @@ Specify the resolution with custom width and height, or the resolution name;
 | `consumer.resolution`    | QVGA                                                                          | Resolution to use (PAL, HD720, VGA etc)     |
 | `consumer.width`         | 320                                                                           | Resolution width, note that resolution takes precendence.  |
 | `consumer.height`        | 240                                                                           | Resolution height, note that resolution takes precendence.  |
-| `consumer.delay`         | 5000                                                                          | Delay in milliseconds. Applies only to scheduled consumers.  |
+| `consumer.delay`         | 1000                                                                          | Delay in milliseconds. Applies only to scheduled consumers.  |
 | `consumer.useFixedDelay` | false | Set to true to use a fixed delay between polls, otherwise fixed rate is used. See ScheduledExecutorService in JDK for details. |
-    
-    
-#### Configuring / Troubleshooting Raspberry Pi Camera Module
 
-###### RasPi V4L4J driver does not start for the second time 
-[https://github.com/sarxos/webcam-capture/issues/382] (https://github.com/sarxos/webcam-capture/issues/382)
-> The first time the driver works well, but the next run fails with the following stack trace and camera module power turned on.
-> [ v4l2-query.c:486 ] Please let the author know about this error.
-> [ v4l2-query.c:487 ] See the ISSUES section in the libvideo README file.
->  Exception in thread "main" com.github.sarxos.webcam.WebcamException: Cannot execute task
 
-Current workaround is to hard restart the Pi.
+#### Process manager
 
+Process manager is also used by the Webcam component to execute Linux commands responsible for starting the webcam driver and  
+configuring the image format and resolution. If for some reason you would like to change
+the default implementation of the process manager used by Camel (i.e. `io.rhiot.utils.process.DefaultProcessManager`),
+you can set it on the component level:
+
+    WebcamComponent webcam = new WebcamComponent();
+    webcam.setProcessManager(new CustomProcessManager());
+    camelContext.addComponent("webcam", webcam);
+
+If custom process manager is not set on the component, Camel will try to find the manager instance in the
+[registry](http://camel.apache.org/registry.html). So for example for Spring application, you can just configure
+the manager as the bean:
+
+    @Bean
+    ProcessManager myProcessManager() {
+        new CustomProcessManager();
+    }
+
+Custom process manager may be useful if your Linux distribution or camera requires executing some unusual commands
+in order to load the v4l2 (Video for Linux) module.
 
 ## Rhiot Cloud
 

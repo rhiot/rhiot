@@ -34,22 +34,12 @@ import static org.junit.Assume.assumeTrue;
 
 public class WebcamProducerIntegrationTest extends CamelTestSupport {
 
-    private static Webcam webcam;
     private static int width = 640;
     private static int height = 480;
-    
+
     @BeforeClass
     public static void before(){
         assumeTrue(WebcamHelper.isWebcamPresent());
-        webcam = Webcam.getDefault();
-        webcam.setViewSize(new Dimension(width, height));
-    }
-
-    @Override
-    protected JndiRegistry createRegistry() throws Exception {
-        JndiRegistry registry = super.createRegistry();
-        registry.bind("webcam", webcam);
-        return registry;
     }
 
     @Test
@@ -83,9 +73,8 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
+                from("direct:resolution").to("webcam:cam?width=" + width + "&height=" + height).to("mock:resolution");
                 from("direct:cam").to("webcam:cam").to("mock:foo");
-                
-                from("direct:resolution").to("webcam:cam?webcam=#webcam").to("mock:resolution");
             }
         };
     }

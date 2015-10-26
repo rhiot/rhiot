@@ -22,6 +22,7 @@ import com.github.sarxos.webcam.ds.dummy.WebcamDummyDevice;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -32,11 +33,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assume.assumeNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import static org.junit.Assume.assumeTrue;
 
 @Ignore("quickfix for the build which fails due to driver")
 public class WebcamComponentTest extends CamelTestSupport {
@@ -64,13 +63,17 @@ public class WebcamComponentTest extends CamelTestSupport {
             //cannot run this test here, eg build
         }
 
-        assumeNotNull(webcam);
+        Assume.assumeNotNull(webcam);
+        webcam.close();
         
         WebcamComponent component = new WebcamComponent(context);
+        HashMap<String, Webcam> webcams = new HashMap<>();
+        webcams.put(webcam.getName(), webcam);
+        component.setWebcams(webcams);
         component.doStart();
         
         assertFalse(component.getWebcamNames().isEmpty());
-        assertEquals(Webcam.getDefault(), component.getWebcam(Webcam.getDefault().getName(), null));
+        assertEquals(webcam, component.getWebcam(webcam.getName(), null));
         component.stop();
     }
     
@@ -85,16 +88,19 @@ public class WebcamComponentTest extends CamelTestSupport {
             //cannot run this test here, eg build
         }
 
-        assumeNotNull(webcam);
+        Assume.assumeNotNull(webcam);
         
         WebcamComponent component = new WebcamComponent(context);
+        HashMap<String, Webcam> webcams = new HashMap<>();
+        webcams.put(webcam.getName(), webcam);
+        component.setWebcams(webcams);
         component.doStart();
         
         assertEquals(webcam, component.getWebcam(webcam.getName(), null));
         component.stop();
     }
     
-    @Test(expected = ClassNotFoundException.class)
+    @Test(expected = RuntimeException.class)
     public void testDriverInstance() throws Exception {
         
         WebcamComponent component = new WebcamComponent(context);
