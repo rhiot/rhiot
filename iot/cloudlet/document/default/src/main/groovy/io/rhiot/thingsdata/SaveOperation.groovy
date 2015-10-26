@@ -20,16 +20,16 @@ import static Pojos.collectionName;
 
 public class SaveOperation {
 
-    private final String collection;
+    private final String collection
 
-    private final Object pojo;
+    private final Map<String, Object> pojo
 
-    public SaveOperation(String collection, Object pojo) {
+    public SaveOperation(String collection, Map<String, Object> pojo) {
         this.collection = collection;
         this.pojo = pojo;
     }
 
-    public SaveOperation(Object pojo) {
+    public SaveOperation(Map<String, Object> pojo) {
         this.collection = collectionName(pojo.getClass());
         this.pojo = pojo;
     }
@@ -38,7 +38,7 @@ public class SaveOperation {
         return collection;
     }
 
-    public Object pojo() {
+    public Map<String, Object> pojo() {
         return pojo;
     }
 
