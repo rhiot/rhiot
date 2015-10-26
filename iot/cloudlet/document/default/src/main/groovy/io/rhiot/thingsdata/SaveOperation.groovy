@@ -18,7 +18,7 @@ package io.rhiot.thingsdata
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static Pojos.collectionName;
+import static io.rhiot.thingsdata.Pojos.collectionName;
 
 public class SaveOperation {
 
@@ -34,12 +34,7 @@ public class SaveOperation {
     }
 
     public SaveOperation(Object pojo) {
-        this(jackson.convertValue(pojo, Map.class))
-    }
-
-    public SaveOperation(Map<String, Object> pojo) {
-        this.collection = collectionName(pojo.getClass());
-        this.pojo = pojo;
+        this(collectionName(pojo.getClass()), jackson.convertValue(pojo, Map.class))
     }
 
     public String collection() {
