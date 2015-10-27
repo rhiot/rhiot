@@ -104,23 +104,27 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
                 Webcam.setDriver(driver);
                 webcamStarted = true;
 
-            } else if (osName.indexOf("nix") > -1 || osName.indexOf("nux") > -1 || osName.indexOf("aix") > -1 ) {
+            } else if (osName.indexOf("nix") > -1 || osName.indexOf("nux") > -1 || osName.indexOf("aix") > -1) {
                 try {
                     ProcessManager processManager = resolveProcessManager();
                     do {
 
-                    LOG.debug("Loading v4l2 module");
+                        LOG.debug("Loading v4l2 module");
 
-                    processManager.executeAndJoinOutput("modprobe", "bcm2835-v4l2");
-                    processManager.executeAndJoinOutput("/bin/sh", "-c", getV4l2FormatCommand());
-                    List<String> v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", "v4l2-ctl --list-devices");
-                    if (!v4l2Result.contains("Failed to open /dev/video0: No such file or directory")) {
-                        webcamStarted = true;
-                        Webcam.setDriver(new V4l4jDriver());
-                    } else {
-                        LOG.debug("v4l2Result [{}]", v4l2Result);
-                    }
-                    sleep(webcamRestartInterval);
+                        List<String> v4l2Result = processManager.executeAndJoinOutput("modprobe", "bcm2835-v4l2");
+                        if (v4l2Result.contains("FATAL: Module bcm2835-v4l2 not found.")) {
+                            throw new RuntimeException("Video for Linux module (bcm2835-v4l2) is not installed");
+                        }
+                        processManager.executeAndJoinOutput("/bin/sh", "-c", getV4l2FormatCommand());
+                        
+                        v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", "v4l2-ctl --list-devices");
+                        LOG.info("Devices available to v4l2 [{}]", v4l2Result);
+                        
+                        if (!v4l2Result.contains("Failed to open /dev/video0: No such file or directory")) {
+                            webcamStarted = true;
+                            Webcam.setDriver(new V4l4jDriver());
+                        }
+                        sleep(webcamRestartInterval);
                     } while (!webcamStarted);
                 } catch (Error e) {
                     LOG.error("v4l4 driver not supported on [{}]", osName);
