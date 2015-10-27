@@ -16,12 +16,10 @@
  */
 package io.rhiot.datastream.engine
 
-import io.vertx.core.eventbus.Message
+interface StreamService {
 
-interface StreamConsumer extends StreamService {
+   void start()
 
-    String fromChannel()
-
-    void consume(Message message)
+   void stop()
 
 }

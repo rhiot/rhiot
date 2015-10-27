@@ -45,7 +45,11 @@ class Bootstrap implements WithLogger {
         this
     }
 
-    // Main entry point
+    def <T extends BootInitializer> T initializer(Class<T> type) {
+        initializers.find { type.isAssignableFrom(it.class) }
+    }
+
+// Main entry point
 
     public static void main(String[] args) {
         def bootstrap = new Bootstrap().start()
