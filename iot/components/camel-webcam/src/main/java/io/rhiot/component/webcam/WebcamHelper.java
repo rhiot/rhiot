@@ -22,6 +22,8 @@ import com.github.sarxos.webcam.WebcamMotionEvent;
 import org.apache.camel.*;
 import org.apache.camel.spi.ExceptionHandler;
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -30,10 +32,16 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
  * Commonly used Webcam utilities.
  */
 public class WebcamHelper {
+
+    private static final Logger LOG = getLogger(WebcamHelper.class);
+
+    private static final long DEFAULT_WEBCAM_LOOKUP_TIMEOUT = 10000;
 
     /**
      * Creates an OutOnly exchange with the BufferedImage.
@@ -95,12 +103,14 @@ public class WebcamHelper {
     /**
      * Returns true if there's a webcam available, false otherwise.
      */
-    public static final boolean isWebcamPresent(){
+    public static boolean isWebcamPresent(){
         try {
-            Webcam.getDefault(10000);
+            Webcam.getDefault(DEFAULT_WEBCAM_LOOKUP_TIMEOUT);
             return true;
-        } catch (Throwable e) {
+        } catch (Throwable exception) {
+            LOG.debug("Problem occurred when detecting the webcam. Returning false.", exception);
             return false;
         }
     }
+
 }
