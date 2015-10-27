@@ -17,6 +17,7 @@
         <module>steroids</module>
         <module>steroids-activemq</module>
         <module>steroids-camel</module>
+        <module>steroids-spark</module>
         <module>datastream</module>
         <module>vertx</module>
         <module>components</module>

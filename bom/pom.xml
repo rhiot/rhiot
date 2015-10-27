@@ -52,6 +52,7 @@
         <reflections.version>0.9.10</reflections.version>
         <servlet-api.version>3.1.0</servlet-api.version>
         <slfj4.version>1.7.12</slfj4.version>
+        <spark.version>1.5.1</spark.version>
         <tinkerforge.version>2.1.5</tinkerforge.version>
         <v4l4j.version>0.9.1-r507</v4l4j.version>
         <vertx.version>3.1.0</vertx.version>
@@ -70,6 +71,11 @@
             </dependency>
 
             <!-- Dependencies -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.cyrusinnovation</groupId>
                 <artifactId>mockito-groovy-support</artifactId>
@@ -158,19 +164,14 @@
                 <version>${pi4j-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.tinkerforge</groupId>
-                <artifactId>tinkerforge</artifactId>
-                <version>${tinkerforge.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.pubnub</groupId>
                 <artifactId>pubnub</artifactId>
                 <version>${pubnub.version}</version>
             </dependency>
             <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
+                <groupId>com.tinkerforge</groupId>
+                <artifactId>tinkerforge</artifactId>
+                <version>${tinkerforge.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.flapdoodle.embed</groupId>
@@ -182,6 +183,11 @@
                 <groupId>de.taimos</groupId>
                 <artifactId>gpsd4java</artifactId>
                 <version>${gpsd4java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rhiot</groupId>
+                <artifactId>rhiot-iot-cloudlet-document-default</artifactId>
+                <version>${rhiot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
@@ -203,11 +209,6 @@
             <dependency>
                 <groupId>io.rhiot</groupId>
                 <artifactId>camel-webcam</artifactId>
-                <version>${rhiot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.rhiot</groupId>
-                <artifactId>rhiot-iot-cloudlet-document-default</artifactId>
                 <version>${rhiot.version}</version>
             </dependency>
             <dependency>
@@ -381,6 +382,11 @@
                 <groupId>org.apache.qpid</groupId>
                 <artifactId>qpid-client</artifactId>
                 <version>${qpid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-core_2.11</artifactId>
+                <version>${spark.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
