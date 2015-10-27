@@ -21,8 +21,10 @@ public interface DocumentDriver {
 
     String save(SaveOperation saveOperation)
 
-    List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation)
-
     long count(CountOperation countOperation)
+
+    Map<String, Object> findOne(FindOneOperation findOneOperation)
+
+    List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation)
 
 }

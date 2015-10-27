@@ -60,7 +60,7 @@ public class MongoDbDocumentDriverTest extends Assert {
 
     @Bean
     MongodbDocumentDriver documentDriver() {
-        return new MongodbDocumentDriver("testdb", producerTemplate, new BsonMapper(typeConverter));
+        return new MongodbDocumentDriver("testdb", producerTemplate);
     }
 
     @Autowired

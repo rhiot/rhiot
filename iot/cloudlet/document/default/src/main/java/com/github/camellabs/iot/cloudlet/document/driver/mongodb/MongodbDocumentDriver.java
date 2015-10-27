@@ -23,6 +23,7 @@ import com.mongodb.Mongo;
 import io.rhiot.thingsdata.CountOperation;
 import io.rhiot.thingsdata.DocumentDriver;
 import io.rhiot.thingsdata.FindByQueryOperation;
+import io.rhiot.thingsdata.FindOneOperation;
 import io.rhiot.thingsdata.SaveOperation;
 import org.apache.camel.ProducerTemplate;
 import org.bson.types.ObjectId;
@@ -52,18 +53,14 @@ public class MongodbDocumentDriver implements DocumentDriver {
 
     private final ProducerTemplate producerTemplate;
 
-    private final BsonMapper bsonMapper;
-
     @Autowired
     private Mongo mongo;
 
     @Autowired
     public MongodbDocumentDriver(@Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName,
-                                 ProducerTemplate producerTemplate,
-                                 BsonMapper bsonMapper) {
+                                 ProducerTemplate producerTemplate) {
         this.documentsDbName = documentsDbName;
         this.producerTemplate = producerTemplate;
-        this.bsonMapper = bsonMapper;
     }
 
     @Override
@@ -101,6 +98,16 @@ public class MongodbDocumentDriver implements DocumentDriver {
         return mongo.getDB(documentsDbName).getCollection(countOperation.collection()).count();
     }
 
+    @Override
+    public Map<String, Object> findOne(FindOneOperation findOneOperation) {
+        ObjectId id = new ObjectId(findOneOperation.id());
+        DBObject document = mongo.getDB(documentsDbName).getCollection(findOneOperation.collection()).findOne(id);
+        if(document == null) {
+            return null;
+        }
+        return mongoToCanonical(document).toMap();
+    }
+
     private String baseMongoDbEndpoint() {
         // TODO:CAMEL Collection should not be required for dynamic endpoints
         return format("mongodb:mongo?database=%s&collection=default&dynamicity=true&operation=", documentsDbName);
@@ -115,6 +122,18 @@ public class MongodbDocumentDriver implements DocumentDriver {
             bson.put("_id", new ObjectId(id.toString()));
         }
         return bson;
+    }
+
+    public static DBObject mongoToCanonical(DBObject bson) {
+        checkNotNull(bson, "BSON passed to the conversion can't be null.");
+//        LOG.debug("Converting BSON object to JSON: {}", bson);
+        DBObject json = new BasicDBObject(bson.toMap());
+        Object id = json.get("_id");
+        if (id != null) {
+            json.removeField("_id");
+            json.put("id", id.toString());
+        }
+        return json;
     }
 
 }

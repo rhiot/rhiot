@@ -98,8 +98,8 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 get("/findOne/{collection}/{id}").route().
-                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.FindOneOperation(headers['collection'], headers['id'])").
-                to("direct:findOne");
+                setBody().groovy("new io.rhiot.thingsdata.FindOneOperation(headers['collection'], headers['id'])").
+                to("bean:mongodbDocumentDriver?method=findOne");
 
         rest("/api/document").
                 post("/findMany/{collection}").route().
@@ -129,12 +129,6 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
                 to("direct:remove");
 
         // Operations handlers
-
-        from("direct:findOne").
-                setHeader(COLLECTION).groovy("body.collection").
-                setBody().groovy("new org.bson.types.ObjectId(body.id)").
-                to(baseMongoDbEndpoint() + "findById").
-                process(mapBsonToJson());
 
         from("direct:findMany").
                 setHeader(COLLECTION).groovy("body.collection").
