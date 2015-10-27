@@ -111,7 +111,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
 
                     LOG.debug("Loading v4l2 module");
 
-                    processManager.executeAndJoinOutput("/bin/sh", "-c", "sudo modprobe bcm2835-v4l2");
+                    processManager.executeAndJoinOutput("/bin/sh", "-c", "modprobe bcm2835-v4l2");
                         processManager.executeAndJoinOutput("/bin/sh", "-c", getV4l2FormatCommand()); 
                     List<String> v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", "v4l2-ctl --list-devices");
                     if (!v4l2Result.contains("Failed to open /dev/video0: No such file or directory")) {
