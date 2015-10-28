@@ -20,4 +20,13 @@ import io.rhiot.steroids.bootstrap.Bootstrap
 
 class DataStream extends Bootstrap {
 
+    private static DataStream dataStream
+
+    public static DataStream dataStream() {
+        if(dataStream == null) {
+            dataStream = new DataStream()
+        }
+        dataStream
+    }
+
 }

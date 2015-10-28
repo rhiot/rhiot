@@ -14,14 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.engine
+package io.rhiot.steroids.spark
 
-import io.vertx.core.eventbus.Message
+import io.rhiot.steroids.bootstrap.Bootstrap
+import org.junit.AfterClass
+import org.junit.Test
 
-interface StreamConsumer extends StreamService {
+import static com.google.common.truth.Truth.assertThat
 
-    String fromChannel()
+class SparkBootInitializerTest {
 
-    void consume(Message message)
+    static def bootstrap = new Bootstrap().start()
+
+    @AfterClass
+    static void afterClass() {
+        bootstrap.stop()
+    }
+
+    @Test
+    void shouldStartSparkContext() {
+        // Given
+        def sparkContext = bootstrap.initializer(SparkBootInitializer.class).sparkContext()
+
+        // When
+        def aCounter = { line -> line.contains('a') }.dehydrate()
+        def linesCount = sparkContext.textFile('pom.xml').cache().filter(aCounter).count()
+
+        // Then
+        assertThat(linesCount).isGreaterThan(0L)
+    }
 
 }

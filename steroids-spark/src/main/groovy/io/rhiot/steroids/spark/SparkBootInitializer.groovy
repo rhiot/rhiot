@@ -14,14 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.engine
+package io.rhiot.steroids.spark
 
-import io.vertx.core.eventbus.Message
+import io.rhiot.steroids.bootstrap.BootInitializer
+import org.apache.spark.SparkConf
+import org.apache.spark.api.java.JavaSparkContext
 
-interface StreamConsumer extends StreamService {
+class SparkBootInitializer implements BootInitializer {
 
-    String fromChannel()
+    private JavaSparkContext sparkContext
 
-    void consume(Message message)
+    @Override
+    void start() {
+        def conf = new SparkConf().setAppName("Rhiot application").setMaster('local[*]')
+        sparkContext = new JavaSparkContext(conf);
+    }
+
+    @Override
+    void stop() {
+        sparkContext.stop()
+    }
+
+    @Override
+    int order() {
+        2000
+    }
+
+    JavaSparkContext sparkContext() {
+        sparkContext
+    }
 
 }

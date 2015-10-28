@@ -16,12 +16,33 @@
  */
 package io.rhiot.datastream.engine
 
-import io.vertx.core.eventbus.Message
+import io.rhiot.steroids.bootstrap.BootInitializer
 
-interface StreamConsumer extends StreamService {
+import static io.rhiot.steroids.Steroids.beans
 
-    String fromChannel()
+class StreamConsumerBootInitializer implements BootInitializer {
 
-    void consume(Message message)
+    private List<StreamConsumer> consumers;
+
+    @Override
+    void start() {
+        consumers = beans(StreamConsumer.class)
+        consumers.each { it.start() }
+    }
+
+    @Override
+    void stop() {
+        consumers.each { it.stop() }
+        consumers = null
+    }
+
+    @Override
+    int order() {
+        1500
+    }
+
+    List<StreamConsumer> consumers() {
+        consumers
+    }
 
 }
