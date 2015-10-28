@@ -1001,6 +1001,7 @@ Specify the resolution with custom width and height, or the resolution name;
 
 | Option                   | Default value                                                                 | Description   |
 |:-------------------------|:-----------------------------------------------------------------------       |:------------- |
+| `consumer.deviceName`    |                                                                               | Specify the webcam device name, if absent the first device available is used, eg /dev/video0.  |
 | `consumer.format`        | PNG                                                                           | Capture format, one of 'PNG,GIF,JPG'  |
 | `consumer.initialDelay`  | 1000                                                                          | Milliseconds before the polling starts. Applies only to scheduled consumers. |
 | `consumer.motion`        | false                                                                         | Whether to listen for motion events.                                |
