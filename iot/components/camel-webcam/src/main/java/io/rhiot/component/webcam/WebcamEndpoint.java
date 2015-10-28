@@ -59,8 +59,8 @@ public class WebcamEndpoint extends DefaultEndpoint {
     private int width = 320;
     @UriParam(defaultValue = "240", description = "Height in pixels, must be supported by the webcam")
     private int height = 240;
-    @UriParam(description = "Webcam name")
-    private String name;
+    @UriParam(description = "Webcam device name, on Linux this may default to /dev/video0")
+    private String deviceName;
     
     public WebcamEndpoint() {
     }
@@ -127,7 +127,7 @@ public class WebcamEndpoint extends DefaultEndpoint {
 
     public Webcam getWebcam() {
         //Allow tests to inject a webcam, but fallback to the component that takes care of the management of webcams as they come and go
-        return this.webcam != null ? this.webcam : ((WebcamComponent)getComponent()).getWebcam(getName(), getDefaultResolution());
+        return this.webcam != null ? this.webcam : ((WebcamComponent)getComponent()).getWebcam(getDeviceName(), getDefaultResolution());
     }
 
     public void setWebcam(Webcam webcam) {
@@ -206,11 +206,11 @@ public class WebcamEndpoint extends DefaultEndpoint {
         this.resolution = resolution;
     }
 
-    public String getName() {
-        return name;
+    public String getDeviceName() {
+        return deviceName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDeviceName(String name) {
+        this.deviceName = name;
     }
 }

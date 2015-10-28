@@ -68,12 +68,12 @@ public class WebcamComponentTest extends CamelTestSupport {
         
         WebcamComponent component = new WebcamComponent(context);
         HashMap<String, Webcam> webcams = new HashMap<>();
-        webcams.put(webcam.getName(), webcam);
+        webcams.put(webcam.getDevice().getName(), webcam);
         component.setWebcams(webcams);
         component.doStart();
         
         assertFalse(component.getWebcamNames().isEmpty());
-        assertEquals(webcam, component.getWebcam(webcam.getName(), null));
+        assertEquals(webcam, component.getWebcam(webcam.getDevice().getName(), null));
         component.stop();
     }
     
@@ -115,17 +115,6 @@ public class WebcamComponentTest extends CamelTestSupport {
         component.setDriver(CustomDriver.class.getName());
         component.start();
 
-        assertTrue(component.isStarted());
-        component.stop();
-    }
-    
-    @Test 
-    public void testDefaultDriver() throws Exception {
-        
-        WebcamComponent component = new WebcamComponent(context);
-        component.setDriver(com.github.sarxos.webcam.ds.buildin.WebcamDefaultDriver.class.getName());
-        component.start();
-        
         assertTrue(component.isStarted());
         component.stop();
     }

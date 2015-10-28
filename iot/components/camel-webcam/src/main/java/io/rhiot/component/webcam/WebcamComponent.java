@@ -20,6 +20,7 @@ import java.awt.*;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.github.sarxos.webcam.*;
 import com.github.sarxos.webcam.ds.v4l4j.V4l4jDriver;
@@ -77,9 +78,9 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
             if (webcamList == null || webcamList.size() == 0) {
                 throw new IllegalStateException("No webcams found");
             }
-            webcamList.forEach(w -> webcams.put(w.getName(), w));
+            webcamList.forEach(w -> webcams.put(w.getDevice().getName(), w));
 
-            LOG.debug("Detected webcams : {}", webcams.keySet());
+            LOG.info("Detected webcams : {}", webcams.keySet());
         }
         
         super.doStart();
@@ -110,19 +111,27 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
                     do {
 
                         LOG.debug("Loading v4l2 module");
-
-                        List<String> v4l2Result = processManager.executeAndJoinOutput("modprobe", "bcm2835-v4l2");
+                        List<String> v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", "modprobe bcm2835-v4l2");
+                        
                         if (v4l2Result.contains("FATAL: Module bcm2835-v4l2 not found.")) {
                             throw new RuntimeException("Video for Linux module (bcm2835-v4l2) is not installed");
+                            
+                        } else if (v4l2Result.contains("ERROR: could not insert 'bcm2835_v4l2': Operation not permitted")){
+                            throw new RuntimeException("User has insufficient privileges to load bcm2835_v4l2 module");
                         }
+                        
                         processManager.executeAndJoinOutput("/bin/sh", "-c", getV4l2FormatCommand());
                         
                         v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", "v4l2-ctl --list-devices");
-                        LOG.info("Devices available to v4l2 [{}]", v4l2Result);
-                        
-                        if (!v4l2Result.contains("Failed to open /dev/video0: No such file or directory")) {
+                        LOG.info("Result of V4L2 listing devices {}", v4l2Result);
+
+                        List<String> failureToOpen = v4l2Result.stream().filter(e -> e.contains("Failed to open")).collect(Collectors.toList());
+
+                        if (failureToOpen.size() == 0) {
                             webcamStarted = true;
                             Webcam.setDriver(new V4l4jDriver());
+                        } else {
+                            throw new RuntimeException(failureToOpen.get(0));  
                         }
                         sleep(webcamRestartInterval);
                     } while (!webcamStarted);
@@ -169,15 +178,15 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
     @Override
     public void webcamFound(WebcamDiscoveryEvent event) {
         Webcam webcam = event.getWebcam();
-        LOG.info("Discovered webcam : {}", webcam.getName());
+        LOG.debug("Discovered webcam : {}", webcam.getDevice().getName());
 
-        webcams.put(webcam.getName(), webcam);
+        webcams.put(webcam.getDevice().getName(), webcam);
     }
 
     @Override
     public void webcamGone(WebcamDiscoveryEvent event) {
-        LOG.info("Webcam : {} is gone", event.getWebcam().getName());
-        webcams.remove(event.getWebcam().getName());
+        LOG.info("Webcam : {} is gone", event.getWebcam().getDevice().getName());
+        webcams.remove(event.getWebcam().getDevice().getName());
     }
 
     /**
