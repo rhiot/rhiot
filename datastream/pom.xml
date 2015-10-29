@@ -22,6 +22,7 @@
 
     <modules>
         <module>engine</module>
+        <module>document</module>
     </modules>
 
 </project>

@@ -42,6 +42,9 @@ public class MongodbDocumentStore implements DocumentStore {
 
     private final Mongo mongo
 
+    MongodbDocumentStore() {
+    }
+
     MongodbDocumentStore(Mongo mongo, String documentsDbName) {
         this.mongo = mongo
         this.documentsDbName = documentsDbName
