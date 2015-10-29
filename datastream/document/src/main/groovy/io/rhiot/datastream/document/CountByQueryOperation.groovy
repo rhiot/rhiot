@@ -14,25 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.document;
+package io.rhiot.datastream.document
 
-public class CountByQueryOperation {
+import groovy.transform.Immutable;
 
-    private final String collection;
+/**
+ * Command indicating that we want a document store to count documents matching a given query.
+ */
+@Immutable
+class CountByQueryOperation {
 
-    private final Map<String, Object> queryBuilder;
+    String collection
 
-    public CountByQueryOperation(String collection, Map<String, Object> queryBuilder) {
-        this.collection = collection;
-        this.queryBuilder = queryBuilder;
-    }
-
-    public String collection() {
-        return collection;
-    }
-
-    public Map<String, Object> queryBuilder() {
-        return queryBuilder;
-    }
+    Map<String, Object> query
 
 }

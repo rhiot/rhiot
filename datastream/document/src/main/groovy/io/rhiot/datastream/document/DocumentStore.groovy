@@ -16,7 +16,11 @@
  */
 package io.rhiot.datastream.document
 
-public interface DocumentStore {
+/**
+ * Document stores can be used to perform CRUD operations on messages formatted as documents i.e. JSON-like
+ * structures.
+ */
+interface DocumentStore {
 
     String save(SaveOperation saveOperation)
 

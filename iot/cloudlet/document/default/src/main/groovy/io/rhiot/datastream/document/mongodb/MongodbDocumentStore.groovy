@@ -69,11 +69,11 @@ public class MongodbDocumentStore implements DocumentStore {
 
     @Override
     public long countByQuery(CountByQueryOperation findByQueryOperation) {
-        Map<String, Object> universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder().getOrDefault("query", emptyMap());
+        Map<String, Object> universalQuery = (Map<String, Object>) findByQueryOperation.query.getOrDefault("query", emptyMap());
         DBObject mongoQuery = new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(universalQuery));
-        int skip = ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100));
-        DBCursor results = collection(findByQueryOperation.collection()).find(mongoQuery).
-                limit((Integer) findByQueryOperation.queryBuilder().getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder()));
+        int skip = ((int) findByQueryOperation.query.getOrDefault("page", 0)) * ((int) findByQueryOperation.query.getOrDefault("size", 100));
+        DBCursor results = collection(findByQueryOperation.collection).find(mongoQuery).
+                limit((Integer) findByQueryOperation.query.getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.query));
         return results.count();
     }
 
