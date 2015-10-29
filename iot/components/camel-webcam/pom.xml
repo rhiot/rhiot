@@ -21,7 +21,7 @@
     </licenses>
 
     <properties>
-        <camel.osgi.export.pkg>io.rhiot.component.cam.webcam</camel.osgi.export.pkg>
+        <camel.osgi.export.pkg>io.rhiot.component.webcam</camel.osgi.export.pkg>
         <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=webcam</camel.osgi.export.service>
     </properties>
 

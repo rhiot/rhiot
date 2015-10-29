@@ -20,11 +20,11 @@
 
 package com.github.camellabs.iot.cloudlet.webcam.service;
 
-import com.github.camellabs.iot.cloudlet.document.driver.spi.DocumentDriver;
-import com.github.camellabs.iot.cloudlet.document.driver.spi.SaveOperation;
 import com.github.camellabs.iot.cloudlet.webcam.WebcamCloudlet;
 import com.github.camellabs.iot.cloudlet.webcam.domain.Webcam;
 import com.github.camellabs.iot.cloudlet.webcam.domain.WebcamImage;
+import io.rhiot.thingsdata.DocumentDriver;
+import io.rhiot.thingsdata.SaveOperation;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
