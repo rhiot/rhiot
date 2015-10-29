@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.document.driver.routing;
-
-import java.util.Map;
+package io.rhiot.thingsdata;
 
 public class CountByQueryOperation {
 

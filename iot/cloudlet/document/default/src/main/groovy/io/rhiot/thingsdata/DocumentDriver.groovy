@@ -16,7 +16,6 @@
  */
 package io.rhiot.thingsdata
 
-
 public interface DocumentDriver {
 
     String save(SaveOperation saveOperation)
@@ -26,5 +25,7 @@ public interface DocumentDriver {
     Map<String, Object> findOne(FindOneOperation findOneOperation)
 
     List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation)
+
+    long countByQuery(CountByQueryOperation countByQueryOperation)
 
 }

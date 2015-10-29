@@ -120,8 +120,8 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/countByQuery/{collection}").route().
-                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.CountByQueryOperation(headers['collection'], body)").
-                to("direct:countByQuery");
+                setBody().groovy("new io.rhiot.thingsdata.CountByQueryOperation(headers['collection'], body)").
+                to("bean:mongodbDocumentDriver?method=countByQuery");
 
         rest("/api/document").
                 delete("/remove/{collection}/{id}").route().
@@ -135,12 +135,6 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
                 setBody().groovy("new com.mongodb.BasicDBObject('_id', new com.mongodb.BasicDBObject('$in', body.ids.collect{new org.bson.types.ObjectId(it)}))").
                 to(baseMongoDbEndpoint() + "findAll").
                 process(mapBsonToJson());
-
-        from("direct:countByQuery").
-                setHeader(COLLECTION).groovy("body.collection").
-                setBody().groovy("body.queryBuilder.query").
-                process(it -> it.getIn().setBody(new MongoQueryBuilder().jsonToMongoQuery(it.getIn().getBody(DBObject.class)))).
-                to(baseMongoDbEndpoint() + "count");
 
         from("direct:remove").
                 setHeader(COLLECTION).groovy("body.collection").

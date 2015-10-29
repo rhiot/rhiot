@@ -16,7 +16,6 @@
  */
 package camel.labs.iot.cloudlet.document.mongodb;
 
-import com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapper;
 import com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongodbDocumentDriver;
 import com.google.common.collect.ImmutableMap;
 import de.flapdoodle.embed.mongo.MongodExecutable;
@@ -53,14 +52,11 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 public class MongoDbDocumentDriverTest extends Assert {
 
     @Autowired
-    ProducerTemplate producerTemplate;
-
-    @Autowired
     TypeConverter typeConverter;
 
     @Bean
     MongodbDocumentDriver documentDriver() {
-        return new MongodbDocumentDriver("testdb", producerTemplate);
+        return new MongodbDocumentDriver("testdb");
     }
 
     @Autowired

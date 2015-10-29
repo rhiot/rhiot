@@ -16,16 +16,18 @@
  */
 package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 
-import com.google.common.collect.ImmutableMap;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
+import io.rhiot.thingsdata.CountByQueryOperation;
 import io.rhiot.thingsdata.CountOperation;
 import io.rhiot.thingsdata.DocumentDriver;
 import io.rhiot.thingsdata.FindByQueryOperation;
 import io.rhiot.thingsdata.FindOneOperation;
 import io.rhiot.thingsdata.SaveOperation;
 import org.apache.camel.ProducerTemplate;
+import org.bson.BSONObject;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,32 +37,21 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
-import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
-import static org.apache.camel.component.mongodb.MongoDbConstants.LIMIT;
-import static org.apache.camel.component.mongodb.MongoDbConstants.NUM_TO_SKIP;
-import static org.apache.camel.component.mongodb.MongoDbConstants.SORT_BY;
 
 @Component
 public class MongodbDocumentDriver implements DocumentDriver {
 
     private final String documentsDbName;
 
-    private final ProducerTemplate producerTemplate;
-
     @Autowired
     private Mongo mongo;
 
     @Autowired
-    public MongodbDocumentDriver(@Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName,
-                                 ProducerTemplate producerTemplate) {
+    public MongodbDocumentDriver(@Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName) {
         this.documentsDbName = documentsDbName;
-        this.producerTemplate = producerTemplate;
     }
 
     @Override
@@ -71,26 +62,25 @@ public class MongodbDocumentDriver implements DocumentDriver {
     }
 
     @Override
-    public List<Map<String, Object>> findByQuery(FindByQueryOperation findByQueryOperation) {
+    public List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation) {
         Map<String, Object> universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder().getOrDefault("query", emptyMap());
         DBObject mongoQuery = new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(universalQuery));
-        Map<String, Object> headers = ImmutableMap.of(
-                COLLECTION, findByQueryOperation.collection(),
-                LIMIT, findByQueryOperation.queryBuilder().getOrDefault("size", 100),
-                NUM_TO_SKIP, ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100)),
-                SORT_BY, new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder())
-        );
-        Object mongoOutput = producerTemplate.requestBodyAndHeaders(baseMongoDbEndpoint() + "findAll", mongoQuery, headers);
+        int skip = ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100));
+        DBCursor results = mongo.getDB(documentsDbName).getCollection(findByQueryOperation.collection()).find(mongoQuery).
+                limit((Integer) findByQueryOperation.queryBuilder().getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder()));
+        List<Map> mappedResults = results.toArray().parallelStream().map(BsonMapper::bsonToJson).map(BSONObject::toMap).collect(toList());
+        List answer = mappedResults;
+        return answer;
+    }
 
-        List<DBObject> documents;
-        if (mongoOutput == null) {
-            return emptyList();
-        } else if (mongoOutput instanceof Iterable) {
-            documents = newArrayList((Iterable) mongoOutput);
-        } else {
-            documents = singletonList((DBObject) mongoOutput);
-        }
-        return documents.parallelStream().map(BsonMapper::bsonToJson).map(document -> (Map<String, Object>) document.toMap()).collect(toList());
+    @Override
+    public long countByQuery(CountByQueryOperation findByQueryOperation) {
+        Map<String, Object> universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder().getOrDefault("query", emptyMap());
+        DBObject mongoQuery = new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(universalQuery));
+        int skip = ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100));
+        DBCursor results = mongo.getDB(documentsDbName).getCollection(findByQueryOperation.collection()).find(mongoQuery).
+                limit((Integer) findByQueryOperation.queryBuilder().getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder()));
+        return results.count();
     }
 
     @Override
