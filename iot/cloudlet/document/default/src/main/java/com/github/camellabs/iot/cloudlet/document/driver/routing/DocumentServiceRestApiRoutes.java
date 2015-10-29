@@ -122,8 +122,8 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 delete("/remove/{collection}/{id}").route().
-                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.RemoveOperation(headers['collection'], headers['id'])").
-                to("direct:remove");
+                setBody().groovy("new io.rhiot.thingsdata.RemoveOperation(headers['collection'], headers['id'])").
+                to("bean:mongodbDocumentStore?method=remove").setBody().constant("");
 
         // Operations handlers
 
@@ -131,12 +131,6 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
                 setHeader(COLLECTION).groovy("body.collection").
                 setBody().groovy("new com.mongodb.BasicDBObject('_id', new com.mongodb.BasicDBObject('$in', body.ids.collect{new org.bson.types.ObjectId(it)}))").
                 to(baseMongoDbEndpoint() + "findAll").
-                process(mapBsonToJson());
-
-        from("direct:remove").
-                setHeader(COLLECTION).groovy("body.collection").
-                setBody().groovy("new com.mongodb.BasicDBObject('_id', new org.bson.types.ObjectId(body.id))").
-                to(baseMongoDbEndpoint() + "remove").
                 process(mapBsonToJson());
 
     }

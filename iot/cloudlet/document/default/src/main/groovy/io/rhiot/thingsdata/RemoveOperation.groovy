@@ -14,16 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.document.driver;
+package io.rhiot.thingsdata;
 
-import org.apache.camel.spring.boot.FatJarRouter;
-import org.apache.camel.spring.boot.FatWarInitializer;
+public class RemoveOperation {
 
-public class DriverDocumentCloudletWarInitializer extends FatWarInitializer {
+    private final String collection;
 
-    @Override
-    protected Class<? extends FatJarRouter> routerClass() {
-        return DriverDocumentCloudlet.class;
+    private final String id;
+
+    public RemoveOperation(String collection, String id) {
+        this.collection = collection;
+        this.id = id;
+    }
+
+    public String collection() {
+        return collection;
+    }
+
+    public String id() {
+        return id;
     }
 
 }

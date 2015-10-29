@@ -17,7 +17,8 @@
 package io.rhiot.datastream.document.mongodb;
 
 import com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoQueryBuilder;
-import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObject
+import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
@@ -25,42 +26,40 @@ import io.rhiot.thingsdata.CountByQueryOperation;
 import io.rhiot.thingsdata.CountOperation;
 import io.rhiot.datastream.document.DocumentStore;
 import io.rhiot.thingsdata.FindByQueryOperation;
-import io.rhiot.thingsdata.FindOneOperation;
+import io.rhiot.thingsdata.FindOneOperation
+import io.rhiot.thingsdata.RemoveOperation;
 import io.rhiot.thingsdata.SaveOperation;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.lang.String.format;
 import static java.util.Collections.emptyMap;
 
 public class MongodbDocumentStore implements DocumentStore {
+
+    private static final def MONGO_ID = '_id'
 
     private final String documentsDbName
 
     private final Mongo mongo
 
-    @Autowired
-    public MongodbDocumentStore(Mongo mongo, String documentsDbName) {
+    MongodbDocumentStore(Mongo mongo, String documentsDbName) {
         this.mongo = mongo
         this.documentsDbName = documentsDbName
     }
 
     @Override
-    public String save(SaveOperation saveOperation) {
-        DBObject mongoObject = canonicalToMongo(new BasicDBObject(saveOperation.pojo()));
-        mongo.getDB(documentsDbName).getCollection(saveOperation.collection()).save(mongoObject);
-        return mongoObject.get("_id").toString();
+    String save(SaveOperation saveOperation) {
+        def document = canonicalToMongo(new BasicDBObject(saveOperation.pojo()))
+        collection(saveOperation.collection()).save(document)
+        document.get(MONGO_ID).toString()
     }
 
     @Override
-    public List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation) {
-        Map<String, Object> universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder().getOrDefault("query", emptyMap());
+    List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation) {
+        def universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder().getOrDefault("query", emptyMap());
         DBObject mongoQuery = new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(universalQuery));
         int skip = ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100));
-        DBCursor results = mongo.getDB(documentsDbName).getCollection(findByQueryOperation.collection()).find(mongoQuery).
+        DBCursor results = collection(findByQueryOperation.collection()).find(mongoQuery).
                 limit((Integer) findByQueryOperation.queryBuilder().getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder()));
         results.toArray().collect{ mongoToCanonical(it).toMap() }
     }
@@ -70,14 +69,14 @@ public class MongodbDocumentStore implements DocumentStore {
         Map<String, Object> universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder().getOrDefault("query", emptyMap());
         DBObject mongoQuery = new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(universalQuery));
         int skip = ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100));
-        DBCursor results = mongo.getDB(documentsDbName).getCollection(findByQueryOperation.collection()).find(mongoQuery).
+        DBCursor results = collection(findByQueryOperation.collection()).find(mongoQuery).
                 limit((Integer) findByQueryOperation.queryBuilder().getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder()));
         return results.count();
     }
 
     @Override
-    public long count(CountOperation countOperation) {
-        return mongo.getDB(documentsDbName).getCollection(countOperation.collection()).count();
+    long count(CountOperation countOperation) {
+        collection(countOperation.collection()).count()
     }
 
     @Override
@@ -90,9 +89,15 @@ public class MongodbDocumentStore implements DocumentStore {
         return mongoToCanonical(document).toMap();
     }
 
-    private String baseMongoDbEndpoint() {
-        // TODO:CAMEL Collection should not be required for dynamic endpoints
-        return format("mongodb:mongo?database=%s&collection=default&dynamicity=true&operation=", documentsDbName);
+    @Override
+    void remove(RemoveOperation removeOperation) {
+        collection(removeOperation.collection()).remove(new BasicDBObject(MONGO_ID, new ObjectId(removeOperation.id())))
+    }
+
+    // Helpers
+
+    private DBCollection collection(String collection) {
+        mongo.getDB(documentsDbName).getCollection(collection)
     }
 
     public static DBObject canonicalToMongo(DBObject json) {

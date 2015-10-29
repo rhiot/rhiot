@@ -20,6 +20,7 @@ import io.rhiot.thingsdata.CountByQueryOperation
 import io.rhiot.thingsdata.CountOperation
 import io.rhiot.thingsdata.FindByQueryOperation
 import io.rhiot.thingsdata.FindOneOperation
+import io.rhiot.thingsdata.RemoveOperation
 import io.rhiot.thingsdata.SaveOperation
 
 public interface DocumentStore {
@@ -33,5 +34,7 @@ public interface DocumentStore {
     List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation)
 
     long countByQuery(CountByQueryOperation countByQueryOperation)
+
+    void remove(RemoveOperation removeOperation)
 
 }
