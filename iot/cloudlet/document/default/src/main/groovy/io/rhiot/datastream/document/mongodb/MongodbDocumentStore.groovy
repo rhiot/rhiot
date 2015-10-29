@@ -14,44 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
+package io.rhiot.datastream.document.mongodb;
 
+import com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoQueryBuilder;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import io.rhiot.thingsdata.CountByQueryOperation;
 import io.rhiot.thingsdata.CountOperation;
-import io.rhiot.thingsdata.DocumentDriver;
+import io.rhiot.datastream.document.DocumentStore;
 import io.rhiot.thingsdata.FindByQueryOperation;
 import io.rhiot.thingsdata.FindOneOperation;
 import io.rhiot.thingsdata.SaveOperation;
-import org.apache.camel.ProducerTemplate;
-import org.bson.BSONObject;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
 import static java.util.Collections.emptyMap;
-import static java.util.stream.Collectors.toList;
 
-@Component
-public class MongodbDocumentDriver implements DocumentDriver {
+public class MongodbDocumentStore implements DocumentStore {
 
-    private final String documentsDbName;
+    private final String documentsDbName
 
-    @Autowired
-    private Mongo mongo;
+    private final Mongo mongo
 
     @Autowired
-    public MongodbDocumentDriver(@Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName) {
-        this.documentsDbName = documentsDbName;
+    public MongodbDocumentStore(Mongo mongo, String documentsDbName) {
+        this.mongo = mongo
+        this.documentsDbName = documentsDbName
     }
 
     @Override
@@ -68,9 +62,7 @@ public class MongodbDocumentDriver implements DocumentDriver {
         int skip = ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100));
         DBCursor results = mongo.getDB(documentsDbName).getCollection(findByQueryOperation.collection()).find(mongoQuery).
                 limit((Integer) findByQueryOperation.queryBuilder().getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder()));
-        List<Map> mappedResults = results.toArray().parallelStream().map(BsonMapper::bsonToJson).map(BSONObject::toMap).collect(toList());
-        List answer = mappedResults;
-        return answer;
+        results.toArray().collect{ mongoToCanonical(it).toMap() }
     }
 
     @Override

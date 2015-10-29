@@ -16,7 +16,8 @@
  */
 package camel.labs.iot.cloudlet.document.mongodb;
 
-import com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongodbDocumentDriver;
+import com.mongodb.Mongo;
+import io.rhiot.datastream.document.mongodb.MongodbDocumentStore;
 import com.google.common.collect.ImmutableMap;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
@@ -24,7 +25,6 @@ import de.flapdoodle.embed.mongo.config.IMongodConfig;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
 import io.rhiot.thingsdata.FindByQueryOperation;
-import org.apache.camel.ProducerTemplate;
 import org.apache.camel.TypeConverter;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -55,12 +55,12 @@ public class MongoDbDocumentDriverTest extends Assert {
     TypeConverter typeConverter;
 
     @Bean
-    MongodbDocumentDriver documentDriver() {
-        return new MongodbDocumentDriver("testdb");
+    MongodbDocumentStore documentDriver(Mongo mongo) {
+        return new MongodbDocumentStore(mongo, "testdb");
     }
 
     @Autowired
-    MongodbDocumentDriver driver;
+    MongodbDocumentStore driver;
 
     public static final int port = findAvailableTcpPort();
 

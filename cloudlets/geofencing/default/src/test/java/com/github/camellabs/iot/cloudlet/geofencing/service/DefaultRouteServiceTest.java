@@ -22,7 +22,7 @@ import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteComment;
 import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.LatLng;
-import io.rhiot.thingsdata.DocumentDriver;
+import io.rhiot.datastream.document.DocumentStore;
 import io.rhiot.thingsdata.SaveOperation;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -72,7 +72,7 @@ public class DefaultRouteServiceTest extends Assert {
     MongoTemplate mongoTemplate;
 
     @Autowired
-    DocumentDriver documentDriver;
+    DocumentStore documentDriver;
 
     static int restPort = findAvailableTcpPort();
 

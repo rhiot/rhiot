@@ -16,9 +16,6 @@
  */
 package com.github.camellabs.iot.cloudlet.document.driver.routing;
 
-import com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoQueryBuilder;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestPropertyDefinition;
@@ -89,17 +86,17 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
                 setBody().groovy("new io.rhiot.thingsdata.SaveOperation(headers['collection'], body)").
-                to("bean:mongodbDocumentDriver?method=save");
+                to("bean:mongodbDocumentStore?method=save");
 
         rest("/api/document").
                 get("/count/{collection}").route().
                 setBody().groovy("new io.rhiot.thingsdata.CountOperation(headers['collection'])").
-                to("bean:mongodbDocumentDriver?method=count");
+                to("bean:mongodbDocumentStore?method=count");
 
         rest("/api/document").
                 get("/findOne/{collection}/{id}").route().
                 setBody().groovy("new io.rhiot.thingsdata.FindOneOperation(headers['collection'], headers['id'])").
-                to("bean:mongodbDocumentDriver?method=findOne");
+                to("bean:mongodbDocumentStore?method=findOne");
 
         rest("/api/document").
                 post("/findMany/{collection}").route().
@@ -109,7 +106,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
         rest("/api/document").
                 post("/findByQuery/{collection}").route().
                 setBody().groovy("new io.rhiot.thingsdata.FindByQueryOperation(headers['collection'], body)").
-                to("bean:mongodbDocumentDriver?method=findByQuery");
+                to("bean:mongodbDocumentStore?method=findByQuery");
 
         rest("/api/")
                 .verb("OPTIONS", "/").route()
@@ -121,7 +118,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
         rest("/api/document").
                 post("/countByQuery/{collection}").route().
                 setBody().groovy("new io.rhiot.thingsdata.CountByQueryOperation(headers['collection'], body)").
-                to("bean:mongodbDocumentDriver?method=countByQuery");
+                to("bean:mongodbDocumentStore?method=countByQuery");
 
         rest("/api/document").
                 delete("/remove/{collection}/{id}").route().
