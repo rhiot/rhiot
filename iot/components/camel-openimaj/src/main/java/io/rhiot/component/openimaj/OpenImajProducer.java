@@ -45,17 +45,16 @@ public class OpenImajProducer extends DefaultProducer {
 
         InputStream inputStream = exchange.getIn().getBody(InputStream.class);
         if (inputStream != null) {
-            BufferedImage image = ImageIO.read(inputStream);
-            if (image != null) {
-                List<DetectedFace> detectedFaces = faceDetector.detectFaces(ImageUtilities.createFImage(image));
+            FImage fImage = ImageUtilities.readF(inputStream);
+            if (fImage != null) {
+                List<DetectedFace> detectedFaces = faceDetector.detectFaces(fImage);
 
-                if (detectedFaces.size() == 0) {
-                    return;
+                if (detectedFaces.size() > 0) {
+                    List<DetectedFace> filtered = detectedFaces.stream().filter(
+                            face -> face.getConfidence() >= getEndpoint().getConfidence()).collect(Collectors.toList());
+
+                    exchange.getIn().setBody(filtered.size() == 1 ? filtered.get(0) : filtered);
                 }
-                List<DetectedFace> filtered = detectedFaces.stream().filter(
-                        face -> face.getConfidence() >= getEndpoint().getConfidence()).collect(Collectors.toList());
-
-                exchange.getIn().setBody(filtered.size() == 1 ? filtered.get(0) : filtered);
             }
         }
     }
