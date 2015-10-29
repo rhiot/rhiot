@@ -24,6 +24,7 @@
 		<module>camel-gps-bu353</module>
 		<module>camel-gpsd</module>
 		<module>camel-kura</module>
+		<module>camel-openimaj</module>
 		<module>camel-pi4j</module>
 		<module>camel-pubnub</module>
 		<module>camel-pubnub-feature</module>
