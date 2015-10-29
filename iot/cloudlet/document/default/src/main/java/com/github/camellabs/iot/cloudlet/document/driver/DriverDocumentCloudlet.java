@@ -26,6 +26,8 @@ import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.IMongodConfig;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
+import io.rhiot.datastream.document.DocumentStore;
+import io.rhiot.datastream.document.mongodb.MongodbDocumentStore;
 import org.apache.camel.spring.boot.FatJarRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +67,11 @@ public class DriverDocumentCloudlet extends FatJarRouter {
                 .net(new Net(mongodbPort, localhostIsIPv6()))
                 .build();
         return MongodStarter.getDefaultInstance().prepare(mongodConfig);
+    }
+
+    @Bean
+    DocumentStore mongodbDocumentStore(Mongo mongo, @Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName) {
+        return new MongodbDocumentStore(mongo, documentsDbName);
     }
 
     @Bean

@@ -16,7 +16,8 @@
  */
 package camel.labs.iot.cloudlet.document.mongodb;
 
-import com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongodbDocumentStore;
+import com.mongodb.Mongo;
+import io.rhiot.datastream.document.mongodb.MongodbDocumentStore;
 import com.google.common.collect.ImmutableMap;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
@@ -54,8 +55,8 @@ public class MongoDbDocumentDriverTest extends Assert {
     TypeConverter typeConverter;
 
     @Bean
-    MongodbDocumentStore documentDriver() {
-        return new MongodbDocumentStore("testdb");
+    MongodbDocumentStore documentDriver(Mongo mongo) {
+        return new MongodbDocumentStore(mongo, "testdb");
     }
 
     @Autowired
