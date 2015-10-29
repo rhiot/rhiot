@@ -14,9 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.thingsdata
+package io.rhiot.datastream.document
 
-public interface DocumentDriver {
+import io.rhiot.thingsdata.CountByQueryOperation
+import io.rhiot.thingsdata.CountOperation
+import io.rhiot.thingsdata.FindByQueryOperation
+import io.rhiot.thingsdata.FindOneOperation
+import io.rhiot.thingsdata.SaveOperation
+
+public interface DocumentStore {
 
     String save(SaveOperation saveOperation)
 

@@ -22,11 +22,10 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import io.rhiot.thingsdata.CountByQueryOperation;
 import io.rhiot.thingsdata.CountOperation;
-import io.rhiot.thingsdata.DocumentDriver;
+import io.rhiot.datastream.document.DocumentStore;
 import io.rhiot.thingsdata.FindByQueryOperation;
 import io.rhiot.thingsdata.FindOneOperation;
 import io.rhiot.thingsdata.SaveOperation;
-import org.apache.camel.ProducerTemplate;
 import org.bson.BSONObject;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,7 @@ import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class MongodbDocumentDriver implements DocumentDriver {
+public class MongodbDocumentStore implements DocumentStore {
 
     private final String documentsDbName;
 
@@ -50,7 +49,7 @@ public class MongodbDocumentDriver implements DocumentDriver {
     private Mongo mongo;
 
     @Autowired
-    public MongodbDocumentDriver(@Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName) {
+    public MongodbDocumentStore(@Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName) {
         this.documentsDbName = documentsDbName;
     }
 

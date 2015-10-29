@@ -24,7 +24,7 @@ import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.maps.model.LatLng;
-import io.rhiot.thingsdata.DocumentDriver;
+import io.rhiot.datastream.document.DocumentStore;
 import io.rhiot.thingsdata.FindByQueryOperation;
 import io.rhiot.thingsdata.SaveOperation;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -66,14 +66,14 @@ public class DefaultRouteService implements RouteService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRouteService.class);
 
-    private final DocumentDriver documentDriver;
+    private final DocumentStore documentDriver;
 
     private final MongoTemplate mongoTemplate;
 
     private final int routeAnalysisBatchSize;
 
     @Autowired
-    public DefaultRouteService(DocumentDriver documentDriver, MongoTemplate mongoTemplate,
+    public DefaultRouteService(DocumentStore documentDriver, MongoTemplate mongoTemplate,
                                @Value("${camel.labs.iot.cloudlet.geofencing.routeAnalysis.batch.size:20}") int routeAnalysisBatchSize) {
         this.documentDriver = documentDriver;
         this.mongoTemplate = mongoTemplate;
