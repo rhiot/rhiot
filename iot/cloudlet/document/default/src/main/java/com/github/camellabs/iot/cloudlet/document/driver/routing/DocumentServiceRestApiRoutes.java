@@ -85,17 +85,17 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
-                setBody().groovy("new io.rhiot.thingsdata.SaveOperation(headers['collection'], body)").
+                setBody().groovy("new io.rhiot.datastream.document.SaveOperation(headers['collection'], body)").
                 to("bean:mongodbDocumentStore?method=save");
 
         rest("/api/document").
                 get("/count/{collection}").route().
-                setBody().groovy("new io.rhiot.thingsdata.CountOperation(headers['collection'])").
+                setBody().groovy("new io.rhiot.datastream.document.CountOperation(headers['collection'])").
                 to("bean:mongodbDocumentStore?method=count");
 
         rest("/api/document").
                 get("/findOne/{collection}/{id}").route().
-                setBody().groovy("new io.rhiot.thingsdata.FindOneOperation(headers['collection'], headers['id'])").
+                setBody().groovy("new io.rhiot.datastream.document.FindOneOperation(headers['collection'], headers['id'])").
                 to("bean:mongodbDocumentStore?method=findOne");
 
         rest("/api/document").
@@ -105,7 +105,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/findByQuery/{collection}").route().
-                setBody().groovy("new io.rhiot.thingsdata.FindByQueryOperation(headers['collection'], body)").
+                setBody().groovy("new io.rhiot.datastream.document.FindByQueryOperation(headers['collection'], body)").
                 to("bean:mongodbDocumentStore?method=findByQuery");
 
         rest("/api/")
@@ -117,12 +117,12 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/countByQuery/{collection}").route().
-                setBody().groovy("new io.rhiot.thingsdata.CountByQueryOperation(headers['collection'], body)").
+                setBody().groovy("new io.rhiot.datastream.document.CountByQueryOperation(headers['collection'], body)").
                 to("bean:mongodbDocumentStore?method=countByQuery");
 
         rest("/api/document").
                 delete("/remove/{collection}/{id}").route().
-                setBody().groovy("new io.rhiot.thingsdata.RemoveOperation(headers['collection'], headers['id'])").
+                setBody().groovy("new io.rhiot.datastream.document.RemoveOperation(headers['collection'], headers['id'])").
                 to("bean:mongodbDocumentStore?method=remove").setBody().constant("");
 
         // Operations handlers

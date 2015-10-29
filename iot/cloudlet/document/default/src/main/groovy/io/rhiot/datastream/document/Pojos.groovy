@@ -14,32 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.thingsdata;
+package io.rhiot.datastream.document
 
-import static Pojos.collectionName;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class FindByQueryOperation {
+public final class Pojos {
 
-    private final String collection;
+    private static final def jackson = new ObjectMapper()
 
-    private final Map<String, Object> queryBuilder;
-
-    public FindByQueryOperation(String collection, Map<String, Object> queryBuilder) {
-        this.collection = collection;
-        this.queryBuilder = queryBuilder;
+    private Pojos() {
     }
 
-    public FindByQueryOperation(Class<?> pojoClass, Map<String, Object> queryBuilder) {
-        this.collection = collectionName(pojoClass);
-        this.queryBuilder = queryBuilder;
+    public static String collectionName(Class<?> pojoClass) {
+        return pojoClass.getSimpleName();
     }
 
-    public String collection() {
-        return collection;
-    }
-
-    public Map<String, Object> queryBuilder() {
-        return queryBuilder;
+    static Map<String, Object> pojoToMap(Object pojo) {
+        jackson.convertValue(pojo, Map.class)
     }
 
 }

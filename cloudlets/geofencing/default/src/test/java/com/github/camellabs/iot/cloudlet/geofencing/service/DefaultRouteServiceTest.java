@@ -23,7 +23,7 @@ import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.LatLng;
 import io.rhiot.datastream.document.DocumentStore;
-import io.rhiot.thingsdata.SaveOperation;
+import io.rhiot.datastream.document.SaveOperation;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;

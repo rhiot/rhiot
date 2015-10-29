@@ -14,15 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.thingsdata;
+package io.rhiot.datastream.document;
 
-public final class Pojos {
+public class CountByQueryOperation {
 
-    private Pojos() {
+    private final String collection;
+
+    private final Map<String, Object> queryBuilder;
+
+    public CountByQueryOperation(String collection, Map<String, Object> queryBuilder) {
+        this.collection = collection;
+        this.queryBuilder = queryBuilder;
     }
 
-    public static String collectionName(Class<?> pojoClass) {
-        return pojoClass.getSimpleName();
+    public String collection() {
+        return collection;
+    }
+
+    public Map<String, Object> queryBuilder() {
+        return queryBuilder;
     }
 
 }

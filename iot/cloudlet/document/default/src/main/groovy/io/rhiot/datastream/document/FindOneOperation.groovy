@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.thingsdata;
+package io.rhiot.datastream.document;
 
-public class CountByQueryOperation {
+public class FindOneOperation {
 
     private final String collection;
 
-    private final Map<String, Object> queryBuilder;
+    private final String id;
 
-    public CountByQueryOperation(String collection, Map<String, Object> queryBuilder) {
+    public FindOneOperation(String collection, String id) {
         this.collection = collection;
-        this.queryBuilder = queryBuilder;
+        this.id = id;
     }
 
     public String collection() {
         return collection;
     }
 
-    public Map<String, Object> queryBuilder() {
-        return queryBuilder;
+    public String id() {
+        return id;
     }
 
 }

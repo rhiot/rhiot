@@ -16,13 +16,6 @@
  */
 package io.rhiot.datastream.document
 
-import io.rhiot.thingsdata.CountByQueryOperation
-import io.rhiot.thingsdata.CountOperation
-import io.rhiot.thingsdata.FindByQueryOperation
-import io.rhiot.thingsdata.FindOneOperation
-import io.rhiot.thingsdata.RemoveOperation
-import io.rhiot.thingsdata.SaveOperation
-
 public interface DocumentStore {
 
     String save(SaveOperation saveOperation)

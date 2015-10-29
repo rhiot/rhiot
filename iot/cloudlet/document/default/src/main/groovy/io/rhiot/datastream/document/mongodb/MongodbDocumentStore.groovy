@@ -22,13 +22,13 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
-import io.rhiot.thingsdata.CountByQueryOperation;
-import io.rhiot.thingsdata.CountOperation;
+import io.rhiot.datastream.document.CountByQueryOperation;
+import io.rhiot.datastream.document.CountOperation;
 import io.rhiot.datastream.document.DocumentStore;
-import io.rhiot.thingsdata.FindByQueryOperation;
-import io.rhiot.thingsdata.FindOneOperation
-import io.rhiot.thingsdata.RemoveOperation;
-import io.rhiot.thingsdata.SaveOperation;
+import io.rhiot.datastream.document.FindByQueryOperation;
+import io.rhiot.datastream.document.FindOneOperation
+import io.rhiot.datastream.document.RemoveOperation;
+import io.rhiot.datastream.document.SaveOperation;
 import org.bson.types.ObjectId;
 
 import static com.google.common.base.Preconditions.checkNotNull;

@@ -16,7 +16,7 @@
  */
 package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
 
-import io.rhiot.thingsdata.FindByQueryOperation;
+import io.rhiot.datastream.document.FindByQueryOperation;
 import org.apache.camel.Exchange;
 import org.apache.camel.support.ExpressionAdapter;
 

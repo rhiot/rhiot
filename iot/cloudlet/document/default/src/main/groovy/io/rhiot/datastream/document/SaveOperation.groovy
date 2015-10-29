@@ -14,15 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.thingsdata
+package io.rhiot.datastream.document
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static io.rhiot.thingsdata.Pojos.collectionName;
+import static Pojos.collectionName
+import static io.rhiot.datastream.document.Pojos.pojoToMap;
 
 public class SaveOperation {
-
-    private static final def jackson = new ObjectMapper()
 
     private final String collection
 
@@ -34,7 +31,7 @@ public class SaveOperation {
     }
 
     public SaveOperation(Object pojo) {
-        this(collectionName(pojo.getClass()), jackson.convertValue(pojo, Map.class))
+        this(collectionName(pojo.getClass()), pojoToMap(pojo))
     }
 
     public String collection() {
