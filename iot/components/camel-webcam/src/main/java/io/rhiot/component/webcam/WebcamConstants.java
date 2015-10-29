@@ -23,6 +23,8 @@ package io.rhiot.component.webcam;
 public class WebcamConstants {
     
     public static final String WEBCAM_MOTION_EVENT_HEADER = "io.rhiot.webcam.webcamMotionEvent";
+
+    public static final String V4L2_WEBCAM_LOADING_COMMAND = "modprobe bcm2835-v4l2";
     
     private WebcamConstants() {
         // Constants class

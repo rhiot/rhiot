@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.lang.Thread.sleep;
+import static io.rhiot.component.webcam.WebcamConstants.*;
 
 /**
  * Represents the component that manages {@link WebcamEndpoint}.
@@ -48,6 +49,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
 
     private int webcamRestartInterval = 5000;
     private boolean webcamStarted;
+    private String v4l2WebcamLoadingCommand = V4L2_WEBCAM_LOADING_COMMAND;
 
     private ProcessManager processManager;
     
@@ -111,16 +113,14 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
                     do {
 
                         LOG.debug("Loading v4l2 module");
-                        List<String> v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", "modprobe bcm2835-v4l2");
+                        List<String> v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", getV4l2WebcamLoadingCommand());
                         
                         if (v4l2Result.contains("FATAL: Module bcm2835-v4l2 not found.")) {
-                            throw new RuntimeException("Video for Linux module (bcm2835-v4l2) is not installed");
+                            throw new RuntimeException("Video for Linux module is not installed");
                             
                         } else if (v4l2Result.contains("ERROR: could not insert 'bcm2835_v4l2': Operation not permitted")){
-                            throw new RuntimeException("User has insufficient privileges to load bcm2835_v4l2 module");
+                            throw new RuntimeException("User has insufficient privileges to load Video for Linux module");
                         }
-                        
-                        processManager.executeAndJoinOutput("/bin/sh", "-c", getV4l2FormatCommand());
                         
                         v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", "v4l2-ctl --list-devices");
                         LOG.info("Result of V4L2 listing devices {}", v4l2Result);
@@ -142,10 +142,6 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private String getV4l2FormatCommand() {
-        return "v4l2-ctl --set-fmt-video=pixelformat=3";
     }
 
     protected ProcessManager resolveProcessManager() {
@@ -269,5 +265,13 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
 
     public void setProcessManager(ProcessManager processManager) {
         this.processManager = processManager;
+    }
+
+    public String getV4l2WebcamLoadingCommand() {
+        return v4l2WebcamLoadingCommand;
+    }
+
+    public void setV4l2WebcamLoadingCommand(String v4l2WebcamLoadingCommand) {
+        this.v4l2WebcamLoadingCommand = v4l2WebcamLoadingCommand;
     }
 }
