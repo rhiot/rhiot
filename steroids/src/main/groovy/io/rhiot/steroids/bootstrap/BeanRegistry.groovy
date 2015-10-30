@@ -16,10 +16,18 @@
  */
 package io.rhiot.steroids.bootstrap
 
+/**
+ * Allows to access (and optionally register) beans. Provides a layer of abstraction above the IoC frameworks and
+ * servers used by the end client.
+ */
 interface BeanRegistry {
 
     def <T> Optional<T> bean(Class<T> type)
 
     def <T> List<T> beans(Class<T> type)
+
+    // Mutable operations
+
+    void register(Object bean) throws UnsupportedOperationException
 
 }

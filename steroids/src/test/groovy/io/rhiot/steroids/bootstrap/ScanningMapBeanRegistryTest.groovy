@@ -45,6 +45,19 @@ class ScanningMapBeanRegistryTest {
         assertThat(loadedFirstTime[1]).isSameAs(loadedSecondTime[1])
     }
 
+    @Test
+    void shouldRegisterBean() {
+        // Given
+        def bean = 'Register me!'
+        beanRegistry.register(bean)
+
+        // When
+        def loadedBean = beanRegistry.bean(String.class).get()
+
+        // Then
+        assertThat(loadedBean).isEqualTo(bean)
+    }
+
     static class TestSingletonBean {}
 
     static class TestBaseClass {}

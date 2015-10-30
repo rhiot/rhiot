@@ -16,6 +16,8 @@
  */
 package io.rhiot.steroids.bootstrap
 
+import static io.rhiot.utils.Uuids.uuid
+
 class MapBeanRegistry implements BeanRegistry {
 
     protected final registry = [:]
@@ -28,6 +30,11 @@ class MapBeanRegistry implements BeanRegistry {
     @Override
     def <T> List<T> beans(Class<T> type) {
         registry.values().findAll { type.isAssignableFrom(it.class) }
+    }
+
+    @Override
+    void register(Object bean) {
+        registry.put(bean.class.name + uuid(), bean)
     }
 
 }
