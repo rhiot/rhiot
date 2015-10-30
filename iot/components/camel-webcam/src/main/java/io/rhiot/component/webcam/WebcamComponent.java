@@ -122,7 +122,9 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
                             throw new RuntimeException("User has insufficient privileges to load Video for Linux module");
                         }
                         
-                        v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", "v4l2-ctl --list-devices");
+                        processManager.executeAndJoinOutput("/bin/sh", "-c", WebcamConstants.V4L2_SET_FORMAT_JPEG_COMMAND);
+                        
+                        v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", V4L2_LIST_DEVICES_COMMAND);
                         LOG.info("Result of V4L2 listing devices {}", v4l2Result);
 
                         List<String> failureToOpen = v4l2Result.stream().filter(e -> e.contains("Failed to open")).collect(Collectors.toList());

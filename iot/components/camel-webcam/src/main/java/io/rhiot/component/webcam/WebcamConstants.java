@@ -25,6 +25,8 @@ public class WebcamConstants {
     public static final String WEBCAM_MOTION_EVENT_HEADER = "io.rhiot.webcam.webcamMotionEvent";
 
     public static final String V4L2_WEBCAM_LOADING_COMMAND = "modprobe bcm2835-v4l2";
+    public static final String V4L2_SET_FORMAT_JPEG_COMMAND = "v4l2-ctl --set-fmt-video=pixelformat=3";
+    public static final String V4L2_LIST_DEVICES_COMMAND = "v4l2-ctl --list-devices";
     
     private WebcamConstants() {
         // Constants class
