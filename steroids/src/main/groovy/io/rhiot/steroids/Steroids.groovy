@@ -21,10 +21,12 @@ import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
 
 import java.lang.annotation.Annotation
+import java.lang.reflect.Modifier
 
 import static io.rhiot.utils.Properties.booleanProperty
 import static io.rhiot.utils.Properties.stringProperty
 import static com.google.common.base.Preconditions.checkNotNull
+import static java.lang.reflect.Modifier.isAbstract
 import static java.util.Optional.empty
 
 /**
@@ -78,7 +80,7 @@ final class Steroids {
     }
 
     private static List<Class<?>> inclusiveSubTypesOf(Class<?> type) {
-        def subtypes = classpath.getSubTypesOf(type).toList()
+        def subtypes = classpath.getSubTypesOf(type).findAll{ !isAbstract(it.class.getModifiers()) }.toList()
         subtypes.add(type)
         subtypes
     }
@@ -87,6 +89,8 @@ final class Steroids {
         try {
             Optional.of(type.newInstance())
         } catch (GroovyRuntimeException e) {
+            empty()
+        } catch (InstantiationException e) {
             empty()
         }
     }

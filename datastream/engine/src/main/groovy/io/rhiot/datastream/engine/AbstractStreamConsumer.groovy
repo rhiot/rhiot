@@ -16,43 +16,12 @@
  */
 package io.rhiot.datastream.engine
 
-import io.rhiot.steroids.bootstrap.BootInitializer
 import io.rhiot.steroids.bootstrap.Bootstrap
 import io.rhiot.steroids.bootstrap.BootstrapAware
 
-import static io.rhiot.steroids.Steroids.beans
+abstract class AbstractStreamConsumer implements StreamConsumer, BootstrapAware {
 
-class StreamConsumerBootInitializer implements BootInitializer, BootstrapAware {
-
-    private Bootstrap bootstrap
-
-    private List<StreamConsumer> consumers
-
-    @Override
-    void start() {
-        consumers = beans(StreamConsumer.class)
-        consumers.each {
-            if(it instanceof BootstrapAware) {
-                it.bootstrap(bootstrap)
-            }
-        }
-        consumers.each { it.start() }
-    }
-
-    @Override
-    void stop() {
-        consumers.each { it.stop() }
-        consumers = null
-    }
-
-    @Override
-    int order() {
-        1500
-    }
-
-    List<StreamConsumer> consumers() {
-        consumers
-    }
+    protected Bootstrap bootstrap
 
     @Override
     void bootstrap(Bootstrap bootstrap) {

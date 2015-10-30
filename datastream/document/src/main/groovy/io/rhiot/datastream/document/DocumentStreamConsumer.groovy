@@ -16,15 +16,13 @@
  */
 package io.rhiot.datastream.document
 
-import io.rhiot.datastream.engine.StreamConsumer
+import io.rhiot.datastream.engine.AbstractStreamConsumer
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
 
-import static io.rhiot.steroids.Steroids.bean
+class DocumentStreamConsumer extends AbstractStreamConsumer {
 
-class DocumentStreamConsumer implements StreamConsumer {
-
-    def documentStore = bean(DocumentStore.class).get()
+    private DocumentStore documentStore
 
     @Override
     String fromChannel() {
@@ -44,12 +42,12 @@ class DocumentStreamConsumer implements StreamConsumer {
 
     @Override
     void start() {
-
+        documentStore = bootstrap.beanRegistry().bean(DocumentStore.class).get()
     }
 
     @Override
     void stop() {
-
+        documentStore = null
     }
 
 }
