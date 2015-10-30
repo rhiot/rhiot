@@ -27,7 +27,7 @@
         <apache-poi.version>3.13</apache-poi.version>
         <californium-core.version>1.0.0-M3</californium-core.version>
         <camel.version>2.16.0</camel.version>
-        <embedmongo.version>1.48.2</embedmongo.version>
+        <embedmongo.version>1.50.0</embedmongo.version>
         <google-maps-services.version>0.1.7</google-maps-services.version>
         <google-truth.version>0.27</google-truth.version>
         <gpsd4java.version>1.3</gpsd4java.version>
