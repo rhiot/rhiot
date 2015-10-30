@@ -33,11 +33,83 @@
             <artifactId>camel-core</artifactId>
         </dependency>
 
+
+        <!-- Open IMAJ - Fat Jar Optimization - Exclude some dependencies we don't use or already include -->
+        <dependency>
+            <groupId>org.openimaj</groupId>
+            <artifactId>core</artifactId>
+            <version>${openimaj.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>javassist</artifactId>
+                    <groupId>javassist</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+       
+        <dependency>
+            <groupId>org.openimaj</groupId>
+            <artifactId>core-image</artifactId>
+            <version>${openimaj.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>core</artifactId>
+                    <groupId>org.openimaj</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>azure-bing-search-java</artifactId>
+                    <groupId>net.billylieurance.azuresearch</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jeuclid-core</artifactId>
+                    <groupId>net.sourceforge.jeuclid</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>snuggletex-core</artifactId>
+                    <groupId>uk.ac.ed.ph.snuggletex</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>snuggletex-upconversion</artifactId>
+                    <groupId>uk.ac.ed.ph.snuggletex</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>snuggletex-jeuclid</artifactId>
+                    <groupId>uk.ac.ed.ph.snuggletex</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>flickrapi</artifactId>
+                    <groupId>com.aetrion.flickr</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.openimaj</groupId>
+            <artifactId>core-math</artifactId>
+            <version>${openimaj.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>core</artifactId>
+                    <groupId>org.openimaj</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>gov.sandia.foundry</groupId>
+                    <artifactId>gov-sandia-cognition-learning-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>gov-sandia-cognition-common-core</artifactId>
+                    <groupId>gov.sandia.foundry</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xstream</artifactId>
+                    <groupId>com.thoughtworks.xstream</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
         <dependency>
             <groupId>org.openimaj</groupId>
             <artifactId>faces</artifactId>
             <version>${openimaj.version}</version>
-            <!-- Fat Jar Optimization - Exclude some dependencies we don't use-->
             <exclusions>
                 <exclusion>
                     <artifactId>machine-learning</artifactId>
@@ -59,8 +131,34 @@
                     <artifactId>image-local-features</artifactId>
                     <groupId>org.openimaj</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>FaceTracker</artifactId>
+                    <groupId>org.openimaj</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>core-experiment</artifactId>
+                    <groupId>org.openimaj</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>core-image</artifactId>
+                    <groupId>org.openimaj</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>core-math</artifactId>
+                    <groupId>org.openimaj</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>core-video</artifactId>
+                    <groupId>org.openimaj</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>gov-sandia-cognition-common-core</artifactId>
+                    <groupId>gov.sandia.foundry</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
+        <!-- Ends OpenIMAJ -->
+
 
         <!-- testing -->
         <dependency>
