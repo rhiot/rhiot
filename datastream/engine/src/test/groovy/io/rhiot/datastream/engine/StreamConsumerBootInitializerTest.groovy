@@ -16,10 +16,14 @@
  */
 package io.rhiot.datastream.engine
 
+import io.vertx.core.Vertx
 import io.vertx.core.eventbus.Message
 import org.junit.Test
 
+import java.util.concurrent.Callable
+
 import static com.google.common.truth.Truth.assertThat
+import static com.jayway.awaitility.Awaitility.await
 
 class StreamConsumerBootInitializerTest {
 
@@ -43,30 +47,45 @@ class StreamConsumerBootInitializerTest {
         assertThat(loadedConsumers.first()).isInstanceOf(StubStreamConsumer.class)
     }
 
-}
+    @Test
+    void shouldConsumeFromChannel() {
+        // Given
+        def message = 'message'
+        def stream = new DataStream().start()
 
-class StubStreamConsumer implements StreamConsumer {
+        // Then
+        stream.beanRegistry().bean(Vertx.class).get().eventBus().publish('channel', message)
 
-    static boolean started
-
-    @Override
-    String fromChannel() {
-        'channel'
+        // Then
+        await().until((Callable<Boolean>){ StubStreamConsumer.lastMessage != null })
+        assertThat(StubStreamConsumer.lastMessage).isEqualTo(message)
     }
 
-    @Override
-    void consume(Message message) {
+    static class StubStreamConsumer implements StreamConsumer {
 
-    }
+        static boolean started
+        static String lastMessage
 
-    @Override
-    void start() {
-        started = true
-    }
+        @Override
+        String fromChannel() {
+            'channel'
+        }
 
-    @Override
-    void stop() {
-        started = false
+        @Override
+        void consume(Message message) {
+            lastMessage = message.body().toString()
+        }
+
+        @Override
+        void start() {
+            started = true
+        }
+
+        @Override
+        void stop() {
+            started = false
+        }
+
     }
 
 }

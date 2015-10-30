@@ -25,9 +25,8 @@
             <artifactId>rhiot-steroids</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-core</artifactId>
-            <version>3.1.0</version>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-steroids-vertx</artifactId>
         </dependency>
 
         <!-- Testing -->
@@ -39,6 +38,11 @@
         <dependency>
             <groupId>com.google.truth</groupId>
             <artifactId>truth</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

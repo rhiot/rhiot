@@ -16,15 +16,18 @@
  */
 package io.rhiot.datastream.engine
 
+import io.rhiot.steroids.bootstrap.AbstractBootInitializer
 import io.rhiot.steroids.bootstrap.BootInitializer
 import io.rhiot.steroids.bootstrap.Bootstrap
 import io.rhiot.steroids.bootstrap.BootstrapAware
+import io.vertx.core.Handler
+import io.vertx.core.Vertx
+import io.vertx.core.eventbus.EventBus
+import io.vertx.core.eventbus.Message
 
 import static io.rhiot.steroids.Steroids.beans
 
-class StreamConsumerBootInitializer implements BootInitializer, BootstrapAware {
-
-    private Bootstrap bootstrap
+class StreamConsumerBootInitializer extends AbstractBootInitializer {
 
     private List<StreamConsumer> consumers
 
@@ -36,7 +39,13 @@ class StreamConsumerBootInitializer implements BootInitializer, BootstrapAware {
                 it.bootstrap(bootstrap)
             }
         }
-        consumers.each { it.start() }
+        def eventBus = bootstrap.beanRegistry().bean(Vertx.class).get().eventBus()
+        consumers.each { streamConsumer ->
+            eventBus.consumer(streamConsumer.fromChannel()){
+                streamConsumer.consume(it)
+            }
+            streamConsumer.start()
+        }
     }
 
     @Override
@@ -52,11 +61,6 @@ class StreamConsumerBootInitializer implements BootInitializer, BootstrapAware {
 
     List<StreamConsumer> consumers() {
         consumers
-    }
-
-    @Override
-    void bootstrap(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap
     }
 
 }
