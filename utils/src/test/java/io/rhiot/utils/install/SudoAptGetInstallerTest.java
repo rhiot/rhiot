@@ -20,12 +20,14 @@ package io.rhiot.utils.install;
 import io.rhiot.utils.OsUtils;
 import io.rhiot.utils.Uuids;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 import static org.junit.Assume.assumeTrue;
 
+@Ignore("Taariq: will test for sudo privileges before running")
 public class SudoAptGetInstallerTest {
     
     private static Installer installer = new SudoAptGetInstaller();
