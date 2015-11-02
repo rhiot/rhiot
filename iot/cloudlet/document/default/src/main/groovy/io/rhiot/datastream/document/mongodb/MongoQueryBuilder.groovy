@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
+package io.rhiot.datastream.document.mongodb;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -30,17 +30,17 @@ import static java.util.stream.Collectors.toList;
 public class MongoQueryBuilder {
 
     private static final Map<String, String> SIMPLE_SUFFIX_OPERATORS = immutableMapOf(
-            "GreaterThan", "$gt",
-            "GreaterThanEqual", "$gte",
-            "LessThan", "$lt",
-            "LessThanEqual", "$lte",
-            "NotIn", "$nin",
-            "In", "$in");
+            "GreaterThan", '$gt',
+            "GreaterThanEqual", '$gte',
+            "LessThan", '$lt',
+            "LessThanEqual", '$lte',
+            "NotIn", '$nin',
+            "In", '$in');
 
     public DBObject jsonToMongoQuery(DBObject jsonQuery) {
         BasicDBObject mongoQuery = new BasicDBObject();
         for (String originalKey : jsonQuery.keySet()) {
-            String compoundKey = originalKey.replaceAll("(.)_", "$1.");
+            String compoundKey = originalKey.replaceAll('(.)_', '$1.');
 
             String suffixOperator = findFirstMatchOperator(originalKey);
             if (suffixOperator != null) {
@@ -49,9 +49,9 @@ public class MongoQueryBuilder {
             }
 
             if (originalKey.endsWith("Contains")) {
-                addRestriction(mongoQuery, compoundKey, "Contains", "$regex", ".*" + jsonQuery.get(originalKey) + ".*");
+                addRestriction(mongoQuery, compoundKey, "Contains", '$regex', ".*" + jsonQuery.get(originalKey) + ".*");
             } else {
-                mongoQuery.put(compoundKey, new BasicDBObject("$eq", jsonQuery.get(originalKey)));
+                mongoQuery.put(compoundKey, new BasicDBObject('$eq', jsonQuery.get(originalKey)));
             }
         }
         return mongoQuery;
@@ -62,7 +62,7 @@ public class MongoQueryBuilder {
         int order = parseBoolean(queryBuilder.getOrDefault("sortAscending", true).toString()) ? 1 : -1;
         List<String> orderBy = (List<String>) queryBuilder.getOrDefault("orderBy", Collections.emptyList()); // Suggest that it should list here
         if (orderBy.size() == 0) {
-            return new BasicDBObject("$natural", order);
+            return new BasicDBObject('$natural', order);
         } else {
             BasicDBObject sort = new BasicDBObject();
             for (String by : orderBy) {
@@ -75,12 +75,12 @@ public class MongoQueryBuilder {
     // Helpers
 
     private String findFirstMatchOperator(String originalKey) {
-        List<String> matchingSuffixOperators = SIMPLE_SUFFIX_OPERATORS.keySet().parallelStream().filter(originalKey::endsWith).collect(toList());
+        List<String> matchingSuffixOperators = SIMPLE_SUFFIX_OPERATORS.keySet().findAll{originalKey.endsWith(it)}.toList()
         return matchingSuffixOperators.isEmpty() ? null : matchingSuffixOperators.get(0);
     }
 
     private void addRestriction(BasicDBObject query, String propertyWithOperator, String propertyOperator, String operator, Object value) {
-        String property = propertyWithOperator.replaceAll(propertyOperator + "$", "");
+        String property = propertyWithOperator.replaceAll(propertyOperator + '$', "");
         if (query.containsField(property)) {
             BasicDBObject existingRestriction = (BasicDBObject) query.get(property);
             existingRestriction.put(operator, value);

@@ -16,7 +16,6 @@
  */
 package io.rhiot.datastream.document.mongodb;
 
-import com.github.camellabs.iot.cloudlet.document.driver.mongodb.MongoQueryBuilder;
 import com.mongodb.BasicDBObject
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
