@@ -59,11 +59,11 @@ public class MongodbDocumentStore implements DocumentStore {
 
     @Override
     List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation) {
-        def universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder().getOrDefault("query", emptyMap());
+        def universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder.getOrDefault("query", emptyMap());
         DBObject mongoQuery = new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(universalQuery));
-        int skip = ((int) findByQueryOperation.queryBuilder().getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder().getOrDefault("size", 100));
-        DBCursor results = collection(findByQueryOperation.collection()).find(mongoQuery).
-                limit((Integer) findByQueryOperation.queryBuilder().getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder()));
+        int skip = ((int) findByQueryOperation.queryBuilder.getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder.getOrDefault("size", 100));
+        DBCursor results = collection(findByQueryOperation.collection).find(mongoQuery).
+                limit((Integer) findByQueryOperation.queryBuilder.getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder));
         results.toArray().collect{ mongoToCanonical(it).toMap() }
     }
 

@@ -16,28 +16,19 @@
  */
 package io.rhiot.datastream.document
 
+import groovy.transform.Immutable
+
+import static io.rhiot.datastream.document.Pojos.collectionName
+
+@Immutable
 public class FindByQueryOperation {
 
-    private final String collection;
+    String collection
 
-    private final Map<String, Object> queryBuilder;
+    Map<String, Object> queryBuilder
 
-    public FindByQueryOperation(String collection, Map<String, Object> queryBuilder) {
-        this.collection = collection;
-        this.queryBuilder = queryBuilder;
-    }
-
-    public FindByQueryOperation(Class<?> pojoClass, Map<String, Object> queryBuilder) {
-        this.collection = Pojos.collectionName(pojoClass);
-        this.queryBuilder = queryBuilder;
-    }
-
-    public String collection() {
-        return collection;
-    }
-
-    public Map<String, Object> queryBuilder() {
-        return queryBuilder;
+    static FindByQueryOperation findByQueryOperation(Class<?> pojoClass, Map<String, Object> queryBuilder) {
+        new FindByQueryOperation(collectionName(pojoClass), queryBuilder)
     }
 
 }

@@ -29,7 +29,7 @@ public class MongoDbSortConditionExpression extends ExpressionAdapter {
     @Override
     public <T> T evaluate(Exchange exchange, Class<T> type) {
         FindByQueryOperation operation = exchange.getIn().getBody(FindByQueryOperation.class);
-        return (T) new MongoQueryBuilder().queryBuilderToSortConditions(operation.queryBuilder());
+        return (T) new MongoQueryBuilder().queryBuilderToSortConditions(operation.getQueryBuilder());
     }
 
 }

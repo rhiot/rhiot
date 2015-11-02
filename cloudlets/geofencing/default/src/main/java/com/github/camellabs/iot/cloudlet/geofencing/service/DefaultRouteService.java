@@ -52,6 +52,7 @@ import java.util.concurrent.TimeUnit;
 import static com.github.camellabs.iot.cloudlet.geofencing.domain.Route.createNewRoute;
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
+import static io.rhiot.datastream.document.FindByQueryOperation.findByQueryOperation;
 import static io.rhiot.datastream.document.Pojos.collectionName;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -129,7 +130,7 @@ public class DefaultRouteService implements RouteService {
     @Override
     public void deleteRoute(String routeId) {
         Map<String, Object> queryBuilder = ImmutableMap.of("query", ImmutableMap.of("_idIn", singletonList(new ObjectId(routeId))));
-        Map<String,Object> route = documentDriver.findByQuery(new FindByQueryOperation(Route.class, queryBuilder)).get(0);
+        Map<String,Object> route = documentDriver.findByQuery(findByQueryOperation(Route.class, queryBuilder)).get(0);
         route.put("deleted", new Date());
         documentDriver.save(new SaveOperation(collectionName(Route.class), route));
     }

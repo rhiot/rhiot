@@ -84,7 +84,7 @@ public class MongoDbDocumentDriverTest extends Assert {
         Map<String, Object> queryBuilder = ImmutableMap.of("query", query);
 
         // When
-        List<Map<String, Object>> people = driver.findByQuery(new FindByQueryOperation(Person.class, queryBuilder));
+        List<Map<String, Object>> people = driver.findByQuery(FindByQueryOperation.findByQueryOperation(Person.class, queryBuilder));
 
         // Then
         assertEquals(0, people.size());
