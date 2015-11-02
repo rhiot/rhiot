@@ -22,11 +22,13 @@ package io.rhiot.datastream.document
  */
 interface DocumentStore {
 
+    Map<String, Object> findOne(FindOneOperation findOneOperation)
+
+    List<Map<String, Object>> findMany(FindManyOperation findManyOperation)
+
     String save(SaveOperation saveOperation)
 
     long count(CountOperation countOperation)
-
-    Map<String, Object> findOne(FindOneOperation findOneOperation)
 
     List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation)
 

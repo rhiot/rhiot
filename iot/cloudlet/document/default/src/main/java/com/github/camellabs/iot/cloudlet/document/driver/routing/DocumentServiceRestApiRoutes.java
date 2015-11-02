@@ -23,12 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import static java.lang.String.format;
 import static java.util.Collections.singletonList;
-import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static org.apache.camel.model.rest.RestBindingMode.json;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static com.github.camellabs.iot.cloudlet.document.driver.mongodb.BsonMapperProcessor.mapBsonToJson;
 
 @Component
 public class DocumentServiceRestApiRoutes extends RouteBuilder {
@@ -100,8 +97,8 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/findMany/{collection}").route().
-                setBody().groovy("new com.github.camellabs.iot.cloudlet.document.driver.routing.FindManyOperation(headers['collection'], body.ids)").
-                to("direct:findMany");
+                setBody().groovy("new io.rhiot.datastream.document.FindManyOperation(headers['collection'], body.ids)").
+                to("bean:mongodbDocumentStore?method=findMany");
 
         rest("/api/document").
                 post("/findByQuery/{collection}").route().
@@ -125,21 +122,6 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
                 setBody().groovy("new io.rhiot.datastream.document.RemoveOperation(headers['collection'], headers['id'])").
                 to("bean:mongodbDocumentStore?method=remove").setBody().constant("");
 
-        // Operations handlers
-
-        from("direct:findMany").
-                setHeader(COLLECTION).groovy("body.collection").
-                setBody().groovy("new com.mongodb.BasicDBObject('_id', new com.mongodb.BasicDBObject('$in', body.ids.collect{new org.bson.types.ObjectId(it)}))").
-                to(baseMongoDbEndpoint() + "findAll").
-                process(mapBsonToJson());
-
-    }
-
-    // Helpers
-
-    private String baseMongoDbEndpoint() {
-        // TODO:CAMEL Collection should not be required for dynamic endpoints
-        return format("mongodb:mongo?database=%s&collection=default&dynamicity=true&operation=", documentsDbName);
     }
 
 }

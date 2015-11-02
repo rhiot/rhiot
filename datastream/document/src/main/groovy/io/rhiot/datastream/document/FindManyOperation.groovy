@@ -14,22 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.document.driver.mongodb;
+package io.rhiot.datastream.document;
 
-import io.rhiot.datastream.document.FindByQueryOperation;
-import org.apache.camel.Exchange;
-import org.apache.camel.support.ExpressionAdapter;
+import com.google.common.collect.ImmutableList;
 
-public class MongoDbSortConditionExpression extends ExpressionAdapter {
+import java.util.List;
 
-    public static MongoDbSortConditionExpression sortCondition() {
-        return new MongoDbSortConditionExpression();
+public class FindManyOperation {
+
+    private final String collection;
+
+    private final List<String> ids;
+
+    public FindManyOperation(String collection, List<String> ids) {
+        this.collection = collection;
+        this.ids = ImmutableList.copyOf(ids);
     }
 
-    @Override
-    public <T> T evaluate(Exchange exchange, Class<T> type) {
-        FindByQueryOperation operation = exchange.getIn().getBody(FindByQueryOperation.class);
-        return (T) new MongoQueryBuilder().queryBuilderToSortConditions(operation.getQueryBuilder());
+    public String collection() {
+        return collection;
+    }
+
+    public List<String> ids() {
+        return ids;
     }
 
 }
