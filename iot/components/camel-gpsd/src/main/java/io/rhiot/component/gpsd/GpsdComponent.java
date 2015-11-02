@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
+import io.rhiot.utils.install.AptGetInstaller;
 import io.rhiot.utils.install.Installer;
 import io.rhiot.utils.install.SudoAptGetInstaller;
 import io.rhiot.utils.process.DefaultProcessManager;
@@ -48,7 +49,7 @@ public class GpsdComponent extends UriEndpointComponent {
     private CountDownLatch isLocalGpsdStarted = new CountDownLatch(1);
     private boolean gpsdStarted;
     
-    private Installer installer = new SudoAptGetInstaller();
+    private Installer installer = new AptGetInstaller();
     private String requiredPackages = GpsdConstants.GPSD_DEPENDENCIES_LINUX;
     
     public GpsdComponent() {

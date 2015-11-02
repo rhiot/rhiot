@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import com.github.sarxos.webcam.*;
 import com.github.sarxos.webcam.ds.v4l4j.V4l4jDriver;
 import io.rhiot.utils.OsUtils;
+import io.rhiot.utils.install.AptGetInstaller;
 import io.rhiot.utils.install.Installer;
 import io.rhiot.utils.install.SudoAptGetInstaller;
 import io.rhiot.utils.process.DefaultProcessManager;
@@ -54,7 +55,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
     private boolean webcamStarted;
     private String v4l2WebcamLoadingCommand = V4L2_WEBCAM_LOADING_COMMAND;
     
-    private Installer installer = new SudoAptGetInstaller();
+    private Installer installer = new AptGetInstaller();
     private String requiredPackages = WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
 
     private ProcessManager processManager;
