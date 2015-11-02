@@ -17,6 +17,8 @@
 package io.rhiot.steroids.camel
 
 import io.rhiot.steroids.bootstrap.BootInitializer
+import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.steroids.bootstrap.BootstrapAware
 import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;
 import org.apache.camel.RoutesBuilder;
@@ -27,7 +29,7 @@ import org.apache.camel.impl.SimpleRegistry;
 import static io.rhiot.steroids.Steroids.beans
 import static org.slf4j.LoggerFactory.getLogger;
 
-class CamelBootInitializer implements BootInitializer {
+class CamelBootInitializer implements BootInitializer, BootstrapAware {
 
     private static final def LOG = getLogger(CamelBootInitializer.class)
 
@@ -37,6 +39,8 @@ class CamelBootInitializer implements BootInitializer {
 
     private static SimpleRegistry registry = new SimpleRegistry()
 
+    Bootstrap bootstrap
+
     @Override
     public void start() {
         camelContext = new DefaultCamelContext(registry)
@@ -45,7 +49,7 @@ class CamelBootInitializer implements BootInitializer {
         def vertxComponent = new VertxComponent(vertx: vertx)
         camelContext.addComponent('event-bus', vertxComponent)
 
-        beans(RoutesBuilder.class, Route.class).each { camelContext.addRoutes(it) }
+        beans(RoutesBuilder.class, Route.class).each { if(it instanceof BootstrapAware) it.bootstrap(bootstrap) }.each { camelContext.addRoutes(it) }
 
         camelContext.start()
     }
@@ -75,6 +79,11 @@ class CamelBootInitializer implements BootInitializer {
 
     static String eventBus(String channel) {
         "event-bus:${channel}"
+    }
+
+    @Override
+    void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
     }
 
 }

@@ -58,9 +58,6 @@ public class MongoDbDocumentServiceTest extends Assert {
     static EmbeddedMongo embeddedMongo = new EmbeddedMongo().start();
 
     @Autowired
-    CamelContext camelContext;
-
-    @Autowired
     DocumentService<Invoice> documentService;
 
     @Autowired
@@ -470,19 +467,6 @@ public class MongoDbDocumentServiceTest extends Assert {
         // Then
         long count = documentService.count(Invoice.class);
         assertEquals(0, count);
-    }
-
-    @Test
-    public void shouldSetCustomApiEndpointOptions() {
-        for (Endpoint endpoint : camelContext.getEndpoints()) {
-            if (endpoint.getEndpointUri().startsWith("http")) {
-                NettyHttpEndpoint nettyEndpoint = (NettyHttpEndpoint) endpoint;
-                assertEquals(1000, nettyEndpoint.getConfiguration().getRequestTimeout());
-                assertEquals(20000, nettyEndpoint.getConfiguration().getConnectTimeout());
-                return;
-            }
-        }
-        fail("Can't find Netty endpoint with custom options.");
     }
 
 }

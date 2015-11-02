@@ -14,10 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.document.driver.routing;
+package io.rhiot.datastream.document.source.camel.rest.netty
 
 import io.rhiot.datastream.engine.DataStream;
 import io.rhiot.datastream.engine.JsonWithHeaders;
+import io.rhiot.steroids.bootstrap.Bootstrap;
+import io.rhiot.steroids.bootstrap.BootstrapAware
+import io.rhiot.steroids.camel.Route;
+import io.rhiot.utils.Properties;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -30,19 +34,15 @@ import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestPropertyDefinition;
 import org.apache.camel.util.AsyncProcessorHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import static java.util.Collections.singletonList;
 import static org.apache.camel.model.rest.RestBindingMode.json;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-@Component
-public class DocumentServiceRestApiRoutes extends RouteBuilder {
+@Route
+public class DocumentServiceRestApiRoutes extends RouteBuilder implements BootstrapAware {
 
     // Configuration members
-
-    private final String documentsDbName;
 
     private final int restPort;
 
@@ -52,23 +52,29 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
     private final String apiEndpointOptions;
 
-    @Autowired
-    DataStream dataStream;
+    Bootstrap bootstrap;
 
     // Constructors
 
     @Autowired
     public DocumentServiceRestApiRoutes(
-            @Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName,
-            @Value("${camel.labs.iot.cloudlet.rest.port:15001}") int restPort,
-            @Value("${camel.labs.iot.cloudlet.rest.cors:true}") boolean enableCors,
-            @Value("${camel.labs.iot.cloudlet.rest.attachment.size.max:26214400}") int maxAttachmentSize, // Default attachment size = 25 MB
-            @Value("${camel.labs.iot.cloudlet.rest.endpoint.options:}") String apiEndpointOptions) {
-        this.documentsDbName = documentsDbName;
+            int restPort,
+            boolean enableCors,
+            int maxAttachmentSize,
+            String apiEndpointOptions) {
         this.restPort = restPort;
         this.enableCors = enableCors;
         this.maxAttachmentSize = maxAttachmentSize;
         this.apiEndpointOptions = apiEndpointOptions;
+    }
+
+    public DocumentServiceRestApiRoutes() {
+        this(
+                Properties.intProperty("camel.labs.iot.cloudlet.rest.port", 15001),
+                Properties.booleanProperty("camel.labs.iot.cloudlet.rest.cors", true),
+                Properties.intProperty("camel.labs.iot.cloudlet.rest.attachment.size.max", 26214400), // Default attachment size = 25 MB
+                Properties.stringProperty("camel.labs.iot.cloudlet.rest.endpoint.options", "")
+        );
     }
 
     // Routes
@@ -104,7 +110,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
                     @Override
                     public boolean process(Exchange exchange, AsyncCallback callback) {
-                        Vertx vertx = dataStream.beanRegistry().bean(Vertx.class).get();
+                        Vertx vertx = bootstrap.beanRegistry().bean(Vertx.class).get();
                         JsonWithHeaders operation = exchange.getIn().getBody(JsonWithHeaders.class);
                         vertx.eventBus().send("document", operation.getJson(), operation.deliveryOptions(), new Handler<AsyncResult<Message<Object>>>() {
                             @Override
@@ -154,6 +160,11 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
                 setBody().groovy("new io.rhiot.datastream.document.RemoveOperation(headers['collection'], headers['id'])").
                 to("bean:mongodbDocumentStore?method=remove").setBody().constant("");
 
+    }
+
+    @Override
+    public void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
     }
 
 }

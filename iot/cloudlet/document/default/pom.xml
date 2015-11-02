@@ -29,6 +29,10 @@
             <artifactId>rhiot-datastream-document</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-steroids-camel</artifactId>
+        </dependency>
+        <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
         </dependency>

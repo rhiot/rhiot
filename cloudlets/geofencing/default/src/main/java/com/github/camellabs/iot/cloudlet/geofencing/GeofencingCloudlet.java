@@ -16,7 +16,13 @@
  */
 package com.github.camellabs.iot.cloudlet.geofencing;
 
+import com.github.camellabs.iot.cloudlet.geofencing.service.DefaultRouteService;
+import io.rhiot.cloudlets.geofencing.GeofencingRoutes;
+import io.rhiot.datastream.document.mongodb.MongodbDocumentStore;
+import io.rhiot.datastream.engine.DataStream;
+import io.rhiot.steroids.camel.CamelBootInitializer;
 import org.apache.camel.Exchange;
+import org.apache.camel.impl.RouteService;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.spring.boot.FatJarRouter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,40 +41,6 @@ import static org.apache.camel.model.rest.RestBindingMode.off;
 @ComponentScan("com.github.camellabs.iot.cloudlet")
 public class GeofencingCloudlet extends FatJarRouter {
 
-    @Override
-    public void configure() throws Exception {
-        rest("/api/geofencing/routes").
-                get("/clients").route().
-                beanRef("routeService", "clients").transform().groovy("[clients: request.body]");
-
-        rest("/api/geofencing/routes").
-                get("/routes/{client}").route().
-                transform().header("client").
-                beanRef("routeService", "routes").transform().groovy("[routes: request.body]");
-
-        rest("/api/geofencing/routes").
-                delete("/delete/{routeId}").route().
-                transform().header("routeId").
-                beanRef("routeService", "deleteRoute").transform().groovy("[routes: request.body]");
-
-        rest("/api/geofencing/routes").
-                get("/routeUrl/{route}").route().
-                transform().header("route").
-                beanRef("routeService", "renderRouteUrl").transform().groovy("[routeUrl: request.body]");
-
-        rest("/api/geofencing/routes").
-                get("/export/{client}/{format}").bindingMode(off).route().
-                transform().groovy("[request.headers.get('client'), request.headers.get('format')]").
-                beanRef("routeService", "exportRoutes", true).
-                setHeader(Exchange.CONTENT_TYPE, constant("application/octet-stream")).
-                setHeader("Content-Disposition", constant("attachment; filename=routes.xls"));
-
-        from("timer:analyzeRoutes?period=60000&delay={{camellabs.iot.cloudlet.geofencing.routes.analysis.delay:15000}}").
-                beanRef("routeService", "clients").split().body().parallelProcessing().
-                beanRef("routeService", "analyzeRoutes");
-
-    }
-
     @Bean
     public CustomConversions customConversions() throws Exception {
         List<Converter<?, ?>> converterList = new ArrayList<Converter<?, ?>>();
@@ -79,6 +51,18 @@ public class GeofencingCloudlet extends FatJarRouter {
             }
         });
         return new CustomConversions(converterList);
+    }
+
+    @Bean
+    MongodbDocumentStore mongodbDocumentStore(DataStream dataStream) {
+        return dataStream.beanRegistry().bean(MongodbDocumentStore.class).get();
+    }
+
+    @Bean
+    String initalizer(DefaultRouteService routeService) throws Exception {
+        CamelBootInitializer.registry().put("routeService", routeService);
+        CamelBootInitializer.camelContext().addRoutes(new GeofencingRoutes());
+        return "init";
     }
 
 }
