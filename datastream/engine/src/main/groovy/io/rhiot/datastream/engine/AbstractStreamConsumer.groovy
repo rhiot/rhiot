@@ -18,8 +18,12 @@ package io.rhiot.datastream.engine
 
 import io.rhiot.steroids.bootstrap.Bootstrap
 import io.rhiot.steroids.bootstrap.BootstrapAware
+import io.rhiot.utils.WithLogger
 
-abstract class AbstractStreamConsumer implements StreamConsumer, BootstrapAware {
+/**
+ * Base class for StreamConsumer, providing common access to logger, bootstrap and other commonly used collaborators.
+ */
+abstract class AbstractStreamConsumer implements StreamConsumer, BootstrapAware, WithLogger {
 
     protected Bootstrap bootstrap
 
