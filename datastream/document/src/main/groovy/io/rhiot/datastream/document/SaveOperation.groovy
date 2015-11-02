@@ -16,6 +16,10 @@
  */
 package io.rhiot.datastream.document
 
+import io.rhiot.datastream.engine.JsonWithHeaders
+import io.vertx.core.eventbus.Message
+import io.vertx.core.json.Json
+
 import static Pojos.collectionName
 import static io.rhiot.datastream.document.Pojos.pojoToMap;
 
@@ -25,21 +29,31 @@ public class SaveOperation {
 
     private final Map<String, Object> pojo
 
-    public SaveOperation(String collection, Map<String, Object> pojo) {
+    SaveOperation(String collection, Map<String, Object> pojo) {
         this.collection = collection;
         this.pojo = pojo;
     }
 
-    public SaveOperation(Object pojo) {
+    SaveOperation(Object pojo) {
         this(collectionName(pojo.getClass()), pojoToMap(pojo))
     }
 
-    public String collection() {
+    String collection() {
         return collection;
     }
 
-    public Map<String, Object> pojo() {
+    Map<String, Object> pojo() {
         return pojo;
+    }
+
+    static SaveOperation deserialize(Message message) {
+        def collection = (String) message.headers().get('collection')
+        def document = Json.decodeValue((String) message.body(), Map.class)
+        new SaveOperation(collection, document)
+    }
+
+    JsonWithHeaders serialize() {
+        JsonWithHeaders.jsonWithHeaders(pojo, ['collection': collection])
     }
 
 }

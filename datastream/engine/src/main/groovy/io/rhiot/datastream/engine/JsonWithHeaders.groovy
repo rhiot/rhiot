@@ -14,38 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.document
+package io.rhiot.datastream.engine
 
-import io.rhiot.datastream.engine.AbstractStreamConsumer
-import io.vertx.core.eventbus.Message
+import groovy.transform.Immutable
+import io.vertx.core.eventbus.DeliveryOptions
 import io.vertx.core.json.Json
 
-class DocumentStreamConsumer extends AbstractStreamConsumer {
+@Immutable
+class JsonWithHeaders {
 
-    private DocumentStore documentStore
+    String json
 
-    @Override
-    String fromChannel() {
-        'document'
+    Map<String,String> headers
+
+    static jsonWithHeaders(Object body, Map<String,String> headers) {
+        new JsonWithHeaders(Json.encode(body), headers)
     }
 
-    @Override
-    void consume(Message message) {
-        switch (message.headers().get('operation')) {
-            case 'save':
-                documentStore.save(SaveOperation.deserialize(message))
-                break
-        }
-    }
-
-    @Override
-    void start() {
-        documentStore = bootstrap.beanRegistry().bean(DocumentStore.class).get()
-    }
-
-    @Override
-    void stop() {
-        documentStore = null
+    DeliveryOptions deliveryOptions() {
+        def options = new DeliveryOptions()
+        headers.entrySet().forEach { options.addHeader(it.key, it.value) }
+        options
     }
 
 }
