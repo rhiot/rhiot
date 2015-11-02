@@ -21,9 +21,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
+import io.rhiot.utils.install.Installer;
+import io.rhiot.utils.install.SudoAptGetInstaller;
 import io.rhiot.utils.process.DefaultProcessManager;
 import io.rhiot.utils.process.ProcessManager;
-import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 
 import org.apache.camel.impl.UriEndpointComponent;
@@ -46,6 +47,9 @@ public class GpsdComponent extends UriEndpointComponent {
     private CountDownLatch isLocalGpsdStarting = new CountDownLatch(1);
     private CountDownLatch isLocalGpsdStarted = new CountDownLatch(1);
     private boolean gpsdStarted;
+    
+    private Installer installer = new SudoAptGetInstaller();
+    private String requiredPackages = GpsdConstants.GPSD_DEPENDENCIES_LINUX;
     
     public GpsdComponent() {
         super(GpsdEndpoint.class);
@@ -82,6 +86,10 @@ public class GpsdComponent extends UriEndpointComponent {
     }
 
     protected void restartGpsDaemon() {
+
+        if (!installer.install(getRequiredPackages())) {
+            throw new IllegalStateException("Unable to start gpsd, failed to install dependencies");
+        }
 
         try {
             if (gpsdStarted){
@@ -125,5 +133,21 @@ public class GpsdComponent extends UriEndpointComponent {
 
     public void setProcessManager(ProcessManager processManager) {
         this.processManager = processManager;
+    }
+
+    public Installer getInstaller() {
+        return installer;
+    }
+
+    public void setInstaller(Installer installer) {
+        this.installer = installer;
+    }
+
+    public String getRequiredPackages() {
+        return requiredPackages;
+    }
+
+    public void setRequiredPackages(String requiredPackages) {
+        this.requiredPackages = requiredPackages;
     }
 }

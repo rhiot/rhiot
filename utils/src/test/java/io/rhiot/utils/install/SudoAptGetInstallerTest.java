@@ -26,9 +26,9 @@ import static org.junit.Assert.*;
 
 import static org.junit.Assume.assumeTrue;
 
-public class AptGetInstallerTest {
+public class SudoAptGetInstallerTest {
     
-    private static Installer installer = new AptGetInstaller();
+    private static Installer installer = new SudoAptGetInstaller();
 
     @BeforeClass
     public static void assumptions(){
