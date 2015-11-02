@@ -27,10 +27,10 @@ import static org.junit.Assert.*;
 
 import static org.junit.Assume.assumeTrue;
 
-@Ignore("Taariq: will test for sudo privileges before running")
-public class SudoAptGetInstallerTest {
+@Ignore("Taariq: will test for install privileges before running")
+public class DefaultInstallerTest {
     
-    private static Installer installer = new SudoAptGetInstaller();
+    private static DefaultInstaller installer = new DefaultInstaller();
 
     @BeforeClass
     public static void assumptions(){
@@ -39,7 +39,7 @@ public class SudoAptGetInstallerTest {
     }
 
     @Test
-    public void testNoSuchKeg() throws Exception {
+    public void testNoSuchPackage() throws Exception {
         assertFalse(installer.isInstalled(Uuids.uuid()));
     }
 
@@ -66,7 +66,7 @@ public class SudoAptGetInstallerTest {
     @Test(expected = UnsupportedOperationException.class)
     public void testIncorrectPlatform() throws Exception {
         if (!OsUtils.isPlatform("linux")) {
-            new AptGetInstaller().install("foo");
+            new DefaultInstaller().install("foo");
         }
     }
 }

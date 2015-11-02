@@ -33,9 +33,10 @@ public class CollectingLogOutputStream extends LogOutputStream {
     private final List<String> lines = new LinkedList();
     
     @Override protected void processLine(String line, int level) {
-        LOG.info(line);
+        LOG.debug(line);
         lines.add(line);
     }
+    
     public List<String> getLines() {
         return lines;
     }

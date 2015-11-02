@@ -21,15 +21,19 @@ import io.rhiot.utils.OsUtils;
 
 import java.util.List;
 
-public class BrewInstaller extends Installer {
+public class BrewInstaller extends DefaultInstaller {
+
+    private static final String INSTALL_COMMAND = "brew install";
+    private static final String UNINSTALL_COMMAND = "brew remove";
+    private static final String IS_INSTALLED_COMMAND = "brew list";
 
     public BrewInstaller() {
-        super("brew install", "brew remove", "brew list");
+        super(INSTALL_COMMAND, UNINSTALL_COMMAND, IS_INSTALLED_COMMAND);
     }
 
     @Override
     public boolean isPlatformSupported() {
-        return OsUtils.isPlatform("mac") || OsUtils.isPlatform("linux");
+        return OsUtils.isLinux() || OsUtils.isMac();
     }
 
     @Override

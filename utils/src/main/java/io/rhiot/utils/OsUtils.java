@@ -37,6 +37,22 @@ public class OsUtils {
     }
 
     /**
+     * Returns true if the OS is linux.
+     * @return true if the OS is linux.
+     */
+    public static boolean isLinux(){
+        return isPlatform("linux");
+    }
+
+    /**
+     * Returns true if the OS is mac.
+     * @return true if the OS is mac.
+     */
+    public static boolean isMac(){
+        return isPlatform("mac");
+    }
+
+    /**
      * Returns current platform in lowercase English. 
      * @return <tt>os.name</tt> from the system properties in lowercase English.
      */

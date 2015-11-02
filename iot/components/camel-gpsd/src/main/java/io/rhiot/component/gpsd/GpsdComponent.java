@@ -21,9 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
-import io.rhiot.utils.install.AptGetInstaller;
-import io.rhiot.utils.install.Installer;
-import io.rhiot.utils.install.SudoAptGetInstaller;
+import io.rhiot.utils.install.DefaultInstaller;
 import io.rhiot.utils.process.DefaultProcessManager;
 import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.Endpoint;
@@ -49,8 +47,8 @@ public class GpsdComponent extends UriEndpointComponent {
     private CountDownLatch isLocalGpsdStarted = new CountDownLatch(1);
     private boolean gpsdStarted;
     
-    private Installer installer = new AptGetInstaller();
-    private String requiredPackages = GpsdConstants.GPSD_DEPENDENCIES_LINUX;
+    private DefaultInstaller installer;
+    private String requiredPackages;
     
     public GpsdComponent() {
         super(GpsdEndpoint.class);
@@ -88,6 +86,8 @@ public class GpsdComponent extends UriEndpointComponent {
 
     protected void restartGpsDaemon() {
 
+        installer = resolveInstaller();
+        
         if (!installer.install(getRequiredPackages())) {
             throw new IllegalStateException("Unable to start gpsd, failed to install dependencies");
         }
@@ -108,7 +108,7 @@ public class GpsdComponent extends UriEndpointComponent {
                 return;
             }
             
-            ProcessManager processManager = resolveProcessManager();
+            processManager = resolveProcessManager();
             List<String> gpsctlResult;
             do {
                 LOG.info("(Re)starting GPS daemon.");
@@ -128,6 +128,24 @@ public class GpsdComponent extends UriEndpointComponent {
     }
 
 
+    protected DefaultInstaller resolveInstaller() {
+        LOG.debug("Started resolving Installer...");
+        if(installer != null) {
+            LOG.debug("Installer has been set on the component level. Camel will use it: {}", installer);
+            return installer;
+        }
+        Set<DefaultInstaller> installers = getCamelContext().getRegistry().findByType(DefaultInstaller.class);
+        if(installers.isEmpty()) {
+            LOG.debug("No Installer found in the registry - creating new DefaultInstaller.");
+            return new DefaultInstaller();
+        } else if(installers.size() == 1) {
+            return installers.iterator().next();
+        } else {
+            return new DefaultInstaller();
+        }
+    }
+
+
     public ProcessManager getProcessManager() {
         return processManager;
     }
@@ -136,11 +154,11 @@ public class GpsdComponent extends UriEndpointComponent {
         this.processManager = processManager;
     }
 
-    public Installer getInstaller() {
+    public DefaultInstaller getInstaller() {
         return installer;
     }
 
-    public void setInstaller(Installer installer) {
+    public void setInstaller(DefaultInstaller installer) {
         this.installer = installer;
     }
 

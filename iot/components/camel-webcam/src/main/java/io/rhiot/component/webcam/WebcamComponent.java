@@ -25,9 +25,8 @@ import java.util.stream.Collectors;
 import com.github.sarxos.webcam.*;
 import com.github.sarxos.webcam.ds.v4l4j.V4l4jDriver;
 import io.rhiot.utils.OsUtils;
-import io.rhiot.utils.install.AptGetInstaller;
+import io.rhiot.utils.install.DefaultInstaller;
 import io.rhiot.utils.install.Installer;
-import io.rhiot.utils.install.SudoAptGetInstaller;
 import io.rhiot.utils.process.DefaultProcessManager;
 import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.CamelContext;
@@ -55,7 +54,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
     private boolean webcamStarted;
     private String v4l2WebcamLoadingCommand = V4L2_WEBCAM_LOADING_COMMAND;
     
-    private Installer installer = new AptGetInstaller();
+    private Installer installer;
     private String requiredPackages = WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
 
     private ProcessManager processManager;
@@ -80,8 +79,12 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
     @Override
     protected void doStart() throws Exception {
         super.doStart();
+
+        installer = resolveInstaller();
+
+        String requiredPackages = getRequiredPackages();
         
-        if (!installer.install(getRequiredPackages())) {
+        if (!installer.install(requiredPackages)) {
             throw new IllegalStateException("Unable to start webcam, failed to install dependencies");
         }
         
@@ -119,7 +122,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
 
             } else if (OsUtils.isPlatform("linux")) {
                 try {
-                    ProcessManager processManager = resolveProcessManager();
+                    processManager = resolveProcessManager();
                     do {
 
                         LOG.debug("Loading v4l2 module");
@@ -170,6 +173,23 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
             return processManagers.iterator().next();
         } else {
             return new DefaultProcessManager();
+        }
+    }
+
+    protected Installer resolveInstaller() {
+        LOG.debug("Started resolving Installer...");
+        if(installer != null) {
+            LOG.debug("Installer has been set on the component level. Camel will use it: {}", installer);
+            return installer;
+        }
+        Set<Installer> installers = getCamelContext().getRegistry().findByType(Installer.class);
+        if(installers.isEmpty()) {
+            LOG.debug("No Installer found in the registry - creating new DefaultInstaller.");
+            return new DefaultInstaller();
+        } else if(installers.size() == 1) {
+            return installers.iterator().next();
+        } else {
+            return new DefaultInstaller();
         }
     }
     

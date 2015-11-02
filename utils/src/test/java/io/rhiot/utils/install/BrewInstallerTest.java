@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
 
 public class BrewInstallerTest {
-    private static Installer installer = new BrewInstaller();
+    private static DefaultInstaller installer = new BrewInstaller();
     
     @BeforeClass
     public static void assumptions(){
@@ -66,7 +66,7 @@ public class BrewInstallerTest {
     @Test(expected = UnsupportedOperationException.class)
     public void testIncorrectPlatform() throws Exception {
         if (!OsUtils.isPlatform("linux")) {
-            new AptGetInstaller().install("foo");
+            new DefaultInstaller().install("foo");
         }
     }
 }

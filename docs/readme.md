@@ -46,6 +46,7 @@ Rhiot comes with the following features:
     - [URI format](#uri-format-1)
     - [Options](#options-1)
     - [Process manager](#process-manager-1)
+    - [Installer](#installer-1)
   - [Camel Kura Wifi component](#camel-kura-wifi-component)
     - [Maven dependency](#maven-dependency-2)
     - [URI format](#uri-format-2)
@@ -87,6 +88,7 @@ Rhiot comes with the following features:
     - [URI format](#uri-format-3)
     - [Options](#options-3)
     - [Process manager](#process-manager-2)
+    - [Installer](#installer-2)
 - [Rhiot Cloud](#rhiot-cloud)
   - [Architecture](#architecture)
   - [Dockerized Rhiot Cloud](#dockerized-rhiot-cloud)
@@ -616,6 +618,31 @@ Custom process manager may be useful if your Linux distribution requires executi
 in order to make the GPSD up and running.
 
 
+#### Installer
+
+The GPSD component installs it's own dependencies for Linux using apt-get, you can configure the installer
+or set an alternate one on the component:
+    
+    GpsdComponent gpsd = new GpsdComponent();
+    gpsd.setInstaller(new CustomInstaller());
+    camelContext.addComponent("gpsd", gpsd);    
+    
+You can also specify alternate dependencies for your platform, eg on Debian install psmisc to use 'killall' to terminate the gpsd daemon,
+if your platform uses my-custom-proctools for example, you should configure the component as follows:
+
+    GpsdComponent gpsd = new GpsdComponent();
+    gpsd.setRequiredPackages("my-custom-proctools"); //comma-separated list of packages to install
+    camelContext.addComponent("gpsd", gpsd);    
+    
+If an Installer is not set on the component, Camel will try to find an instance in the
+[registry](http://camel.apache.org/registry.html). So for example for Spring application, you can configure the installer as a bean:
+
+    @Bean
+    Installer myInstaller() {
+        new CustomInstaller();
+    }
+         
+
 ### Camel Kura Wifi component
 
 The common scenario for the mobile IoT Gateways, for example those mounted on the trucks or other vehicles, is to cache
@@ -1097,6 +1124,33 @@ the manager as the bean:
 
 Custom process manager may be useful if your Linux distribution or camera requires executing some unusual commands
 in order to load the v4l2 (Video for Linux) module.
+
+
+#### Installer
+
+The Webcam component installs it's own dependencies for Debian based systems using apt-get, you may configure the installer
+or set an alternate one on the component:
+    
+    WebcamComponent webcam = new WebcamComponent();
+    webcam.setInstaller(new BrewInstaller());
+    camelContext.addComponent("webcam", webcam);    
+    
+You can also specify alternate dependencies for your platform, eg on Debian we install v4l-utils but don't do anything for other platforms,
+if your platform uses my-custom-v4l-utils, you should configure the component as follows:
+
+    WebcamComponent webcam = new WebcamComponent();
+    webcam.setRequiredPackages("my-custom-v4l-utils");  //comma-separated list of packages to install
+    camelContext.addComponent("webcam", webcam);    
+    
+If an Installer is not set on the component, Camel will try to find an instance in the
+[registry](http://camel.apache.org/registry.html). So for example for Spring application, you can configure the installer as a bean:
+
+    @Bean
+    Installer myInstaller() {
+        CustomInstaller installer = new CustomInstaller();
+        installer.setTimeout(60000 * 10); //Allow up to 10 minutes to install packages
+    }
+         
 
 ## Rhiot Cloud
 

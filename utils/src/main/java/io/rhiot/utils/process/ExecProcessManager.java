@@ -22,23 +22,33 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class CommonsExecProcessManager implements ProcessManager {
-    private static final Logger LOG = LoggerFactory.getLogger(CommonsExecProcessManager.class);
+/**
+ * Process manager based on commons-exec, optionally waits for timeout or kills the process. Default is to not timeout.
+ */
+public class ExecProcessManager implements ProcessManager {
+    private static final Logger LOG = LoggerFactory.getLogger(ExecProcessManager.class);
     
-    private int timeout = 60000 * 5;
-    
+    private int timeout;
+
+    public ExecProcessManager() {
+    }
+
+    public ExecProcessManager(int timeout) {
+        this.timeout = timeout;
+    }
+
     @Override
     public List<String> executeAndJoinOutput(String... command) {
 
         CommandLine cmdLine = CommandLine.parse(String.join(" ", command));
         DefaultExecutor executor = new DefaultExecutor();
         executor.setExitValue(0);
-        InstallResultHandler resultHandler = null;
+        ExecResultHandler resultHandler = null;
         
         if (getTimeout() > 0) {
             ExecuteWatchdog watchdog = new ExecuteWatchdog(getTimeout());
             executor.setWatchdog(watchdog);
-            resultHandler = new InstallResultHandler(watchdog);
+            resultHandler = new ExecResultHandler(watchdog);
         }
         try {
             CollectingLogOutputStream outAndErr = new CollectingLogOutputStream();
@@ -56,15 +66,15 @@ public class CommonsExecProcessManager implements ProcessManager {
         }
     }
 
-    private class InstallResultHandler extends DefaultExecuteResultHandler {
+    private class ExecResultHandler extends DefaultExecuteResultHandler {
 
         private ExecuteWatchdog watchdog;
 
-        public InstallResultHandler(final ExecuteWatchdog watchdog) {
+        public ExecResultHandler(final ExecuteWatchdog watchdog) {
             this.watchdog = watchdog;
         }
 
-        public InstallResultHandler(final int exitValue) {
+        public ExecResultHandler(final int exitValue) {
             LOG.info("Installation completed with exitValue [{}]", exitValue);
             super.onProcessComplete(exitValue);
         }
