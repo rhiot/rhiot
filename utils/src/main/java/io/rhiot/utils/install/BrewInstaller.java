@@ -15,21 +15,26 @@
  * limitations under the License.
  */
 
-package io.rhiot.component.webcam;
+package io.rhiot.utils.install;
 
-/**
- * Constants Class
- */
-public class WebcamConstants {
-    
-    public static final String WEBCAM_MOTION_EVENT_HEADER = "io.rhiot.webcam.webcamMotionEvent";
+import io.rhiot.utils.OsUtils;
 
-    public static final String V4L2_WEBCAM_LOADING_COMMAND = "modprobe bcm2835-v4l2";
-    public static final String V4L2_SET_FORMAT_JPEG_COMMAND = "v4l2-ctl --set-fmt-video=pixelformat=3";
-    public static final String V4L2_LIST_DEVICES_COMMAND = "v4l2-ctl --list-devices";
-    public static final String WEBCAM_DEPENDENCIES_LINUX = "v4l-utils";
-    
-    private WebcamConstants() {
-        // Constants class
+import java.util.List;
+
+public class BrewInstaller extends Installer {
+
+    public BrewInstaller() {
+        super("brew install", "brew remove", "brew list");
     }
+
+    @Override
+    public boolean isPlatformSupported() {
+        return OsUtils.isPlatform("mac") || OsUtils.isPlatform("linux");
+    }
+
+    @Override
+    public boolean confirmInstalled(String packageName, List<String> output){
+        return output.size() > 0 && !output.get(0).contains("No such keg");
+    }
+
 }

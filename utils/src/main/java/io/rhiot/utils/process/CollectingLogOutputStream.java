@@ -15,21 +15,28 @@
  * limitations under the License.
  */
 
-package io.rhiot.component.webcam;
+package io.rhiot.utils.process;
+
+import java.util.LinkedList;
+import java.util.List;
+import org.apache.commons.exec.LogOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Constants Class
+ * Collect the output and error streams.
  */
-public class WebcamConstants {
-    
-    public static final String WEBCAM_MOTION_EVENT_HEADER = "io.rhiot.webcam.webcamMotionEvent";
+public class CollectingLogOutputStream extends LogOutputStream {
 
-    public static final String V4L2_WEBCAM_LOADING_COMMAND = "modprobe bcm2835-v4l2";
-    public static final String V4L2_SET_FORMAT_JPEG_COMMAND = "v4l2-ctl --set-fmt-video=pixelformat=3";
-    public static final String V4L2_LIST_DEVICES_COMMAND = "v4l2-ctl --list-devices";
-    public static final String WEBCAM_DEPENDENCIES_LINUX = "v4l-utils";
+    private static final Logger LOG = LoggerFactory.getLogger(CollectingLogOutputStream.class);
     
-    private WebcamConstants() {
-        // Constants class
+    private final List<String> lines = new LinkedList();
+    
+    @Override protected void processLine(String line, int level) {
+        LOG.info(line);
+        lines.add(line);
+    }
+    public List<String> getLines() {
+        return lines;
     }
 }

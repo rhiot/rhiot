@@ -15,21 +15,19 @@
  * limitations under the License.
  */
 
-package io.rhiot.component.webcam;
+package io.rhiot.utils.install;
 
 /**
- * Constants Class
+ * Handle apt-get specific commands and output.
  */
-public class WebcamConstants {
-    
-    public static final String WEBCAM_MOTION_EVENT_HEADER = "io.rhiot.webcam.webcamMotionEvent";
+public class AptGetInstaller extends Installer {
 
-    public static final String V4L2_WEBCAM_LOADING_COMMAND = "modprobe bcm2835-v4l2";
-    public static final String V4L2_SET_FORMAT_JPEG_COMMAND = "v4l2-ctl --set-fmt-video=pixelformat=3";
-    public static final String V4L2_LIST_DEVICES_COMMAND = "v4l2-ctl --list-devices";
-    public static final String WEBCAM_DEPENDENCIES_LINUX = "v4l-utils";
-    
-    private WebcamConstants() {
-        // Constants class
+
+    public AptGetInstaller() {
+        super("apt-get -q -y install", "apt-get -q -y remove", "dpkg -s", "Status: install ok installed");
+    }
+
+    public AptGetInstaller(String installCommand, String uninstallCommand, String isInstalledCommand, String installSuccess) {
+        super(installCommand, uninstallCommand, isInstalledCommand, installSuccess);
     }
 }

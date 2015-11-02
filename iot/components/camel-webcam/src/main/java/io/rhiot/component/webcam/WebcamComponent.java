@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
 
 import com.github.sarxos.webcam.*;
 import com.github.sarxos.webcam.ds.v4l4j.V4l4jDriver;
+import io.rhiot.utils.OsUtils;
+import io.rhiot.utils.install.Installer;
+import io.rhiot.utils.install.SudoAptGetInstaller;
 import io.rhiot.utils.process.DefaultProcessManager;
 import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.CamelContext;
@@ -50,6 +53,9 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
     private int webcamRestartInterval = 5000;
     private boolean webcamStarted;
     private String v4l2WebcamLoadingCommand = V4L2_WEBCAM_LOADING_COMMAND;
+    
+    private Installer installer = new SudoAptGetInstaller();
+    private String requiredPackages = WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
 
     private ProcessManager processManager;
     
@@ -67,10 +73,16 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
 
         return endpoint;
     }
+    
     // Life-cycle
 
     @Override
     protected void doStart() throws Exception {
+        super.doStart();
+        
+        if (!installer.install(getRequiredPackages())) {
+            throw new IllegalStateException("Unable to start webcam, failed to install dependencies");
+        }
         
         //Use the provided webcam/s
         if (getWebcams().size() == 0) {
@@ -85,7 +97,6 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
             LOG.info("Detected webcams : {}", webcams.keySet());
         }
         
-        super.doStart();
     }
 
     protected void loadWebcamDriver() {
@@ -93,8 +104,6 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
         if (webcamStarted) {
             return;
         }
-        
-        String osName = System.getProperty("os.name").toLowerCase();
 
         try {
             
@@ -107,7 +116,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
                 Webcam.setDriver(driver);
                 webcamStarted = true;
 
-            } else if (osName.indexOf("nix") > -1 || osName.indexOf("nux") > -1 || osName.indexOf("aix") > -1) {
+            } else if (OsUtils.isPlatform("linux")) {
                 try {
                     ProcessManager processManager = resolveProcessManager();
                     do {
@@ -138,7 +147,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
                         sleep(webcamRestartInterval);
                     } while (!webcamStarted);
                 } catch (Error e) {
-                    LOG.error("v4l4 driver not supported on [{}]", osName);
+                    LOG.error("Failed to install and configure the v4l driver", e);
                 }
             }
         } catch (Exception e) {
@@ -275,5 +284,13 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
 
     public void setV4l2WebcamLoadingCommand(String v4l2WebcamLoadingCommand) {
         this.v4l2WebcamLoadingCommand = v4l2WebcamLoadingCommand;
+    }
+
+    public String getRequiredPackages() {
+        return requiredPackages;
+    }
+
+    public void setRequiredPackages(String requiredPackages) {
+        this.requiredPackages = requiredPackages;
     }
 }
