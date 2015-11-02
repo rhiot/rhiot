@@ -16,22 +16,8 @@
  */
 package io.rhiot.cloudlets.geofencing;
 
-import io.rhiot.datastream.document.mongodb.MongodbDocumentStore;
-import io.rhiot.datastream.engine.DataStream;
-import io.rhiot.steroids.camel.CamelBootInitializer;
-import io.rhiot.steroids.camel.Route;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.spring.boot.FatJarRouter;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.mongodb.core.convert.CustomConversions;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import static org.apache.camel.model.rest.RestBindingMode.off;
 
