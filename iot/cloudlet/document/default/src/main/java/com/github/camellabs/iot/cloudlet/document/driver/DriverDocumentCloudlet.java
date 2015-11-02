@@ -26,8 +26,12 @@ import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.IMongodConfig;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
-import io.rhiot.datastream.document.DocumentStore;
 import io.rhiot.datastream.document.mongodb.MongodbDocumentStore;
+import io.rhiot.datastream.engine.DataStream;
+import io.vertx.core.Vertx;
+import org.apache.camel.CamelContext;
+import org.apache.camel.component.vertx.VertxComponent;
+import org.apache.camel.spring.boot.CamelContextConfiguration;
 import org.apache.camel.spring.boot.FatJarRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,9 +73,30 @@ public class DriverDocumentCloudlet extends FatJarRouter {
         return MongodStarter.getDefaultInstance().prepare(mongodConfig);
     }
 
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    DataStream dataStream() {
+        return new DataStream();
+    }
+
     @Bean
-    DocumentStore mongodbDocumentStore(Mongo mongo, @Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName) {
-        return new MongodbDocumentStore(mongo, documentsDbName);
+    MongodbDocumentStore mongodbDocumentStore(DataStream dataStream) {
+        return dataStream.beanRegistry().bean(MongodbDocumentStore.class).get();
+    }
+
+    @Bean
+    CamelContextConfiguration camelContextConfiguration(DataStream dataStream, Mongo mongo, @Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName) {
+        MongodbDocumentStore mongodbDocumentStore = dataStream.beanRegistry().bean(MongodbDocumentStore.class).get();
+        mongodbDocumentStore.setDocumentsDbName(documentsDbName);
+        mongodbDocumentStore.setMongo(mongo);
+        return new CamelContextConfiguration() {
+            @Override
+            public void beforeApplicationStart(CamelContext camelContext) {
+                Vertx vertx = dataStream.beanRegistry().bean(Vertx.class).get();
+                VertxComponent vertxComponent = new VertxComponent();
+                vertxComponent.setVertx(vertx);
+                camelContext.addComponent("vertx", vertxComponent);
+            }
+        };
     }
 
     @Bean

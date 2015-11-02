@@ -33,7 +33,8 @@ class DocumentStreamConsumer extends AbstractStreamConsumer {
     void consume(Message message) {
         switch (message.headers().get('operation')) {
             case 'save':
-                documentStore.save(SaveOperation.deserialize(message))
+                def id = documentStore.save(SaveOperation.deserialize(message))
+                message.reply(Json.encode([id: id]))
                 break
         }
     }

@@ -16,9 +16,19 @@
  */
 package com.github.camellabs.iot.cloudlet.document.driver.routing;
 
+import io.rhiot.datastream.engine.DataStream;
+import io.rhiot.datastream.engine.JsonWithHeaders;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.Message;
+import org.apache.camel.AsyncCallback;
+import org.apache.camel.AsyncProcessor;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestPropertyDefinition;
+import org.apache.camel.util.AsyncProcessorHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -41,6 +51,9 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
     private final int maxAttachmentSize;
 
     private final String apiEndpointOptions;
+
+    @Autowired
+    DataStream dataStream;
 
     // Constructors
 
@@ -82,8 +95,27 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder {
 
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
-                setBody().groovy("new io.rhiot.datastream.document.SaveOperation(headers['collection'], body)").
-                to("bean:mongodbDocumentStore?method=save");
+                setBody().groovy("new io.rhiot.datastream.document.SaveOperation(headers['collection'], body).serialize()").
+                process(new AsyncProcessor() {
+                    @Override
+                    public void process(Exchange exchange) throws Exception {
+                        AsyncProcessorHelper.process(this, exchange);
+                    }
+
+                    @Override
+                    public boolean process(Exchange exchange, AsyncCallback callback) {
+                        Vertx vertx = dataStream.beanRegistry().bean(Vertx.class).get();
+                        JsonWithHeaders operation = exchange.getIn().getBody(JsonWithHeaders.class);
+                        vertx.eventBus().send("document", operation.getJson(), operation.deliveryOptions(), new Handler<AsyncResult<Message<Object>>>() {
+                            @Override
+                            public void handle(AsyncResult<Message<Object>> event) {
+                                exchange.getOut().setBody(event.result().body());
+                                callback.done(false);
+                            }
+                        });
+                        return false;
+                    }
+                });
 
         rest("/api/document").
                 get("/count/{collection}").route().

@@ -53,7 +53,7 @@ public class SaveOperation {
     }
 
     JsonWithHeaders serialize() {
-        JsonWithHeaders.jsonWithHeaders(pojo, ['collection': collection])
+        JsonWithHeaders.jsonWithHeaders(pojo, ['collection': collection, 'operation': 'save'])
     }
 
 }

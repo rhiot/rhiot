@@ -17,13 +17,8 @@
 package io.rhiot.datastream.engine
 
 import io.rhiot.steroids.bootstrap.AbstractBootInitializer
-import io.rhiot.steroids.bootstrap.BootInitializer
-import io.rhiot.steroids.bootstrap.Bootstrap
 import io.rhiot.steroids.bootstrap.BootstrapAware
-import io.vertx.core.Handler
 import io.vertx.core.Vertx
-import io.vertx.core.eventbus.EventBus
-import io.vertx.core.eventbus.Message
 
 import static io.rhiot.steroids.Steroids.beans
 

@@ -16,6 +16,7 @@
  */
 package com.github.camellabs.iot.cloudlet.document.sdk;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.camellabs.iot.cloudlet.sdk.HealthCheck;
 import com.github.camellabs.iot.cloudlet.sdk.ServiceDiscoveryException;
 import com.google.common.annotations.VisibleForTesting;
@@ -24,7 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestOperations;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static com.github.camellabs.iot.cloudlet.sdk.Discoveries.discoverServiceUrl;
 import static com.github.camellabs.iot.cloudlet.sdk.RestTemplates.defaultRestTemplate;
@@ -92,9 +95,14 @@ public class RestDocumentService<T> implements DocumentService<T> {
 
     @Override
     public T save(T document) {
-        String id = restClient.postForObject(format("%s/save/%s", baseUrl, pojoClassToCollection(document.getClass())), document, String.class);
-        writeField(document, "id", id);
-        return document;
+        try {
+            String response = restClient.postForObject(format("%s/save/%s", baseUrl, pojoClassToCollection(document.getClass())), document, String.class);
+            Map responseMap = new ObjectMapper().readValue(response, Map.class);
+            writeField(document, "id", responseMap.get("id"));
+            return document;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
