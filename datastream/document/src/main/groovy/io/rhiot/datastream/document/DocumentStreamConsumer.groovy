@@ -20,6 +20,9 @@ import io.rhiot.datastream.engine.AbstractStreamConsumer
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
 
+/**
+ * Consumes a stream of document-related messages.
+ */
 class DocumentStreamConsumer extends AbstractStreamConsumer {
 
     private DocumentStore documentStore
@@ -30,6 +33,21 @@ class DocumentStreamConsumer extends AbstractStreamConsumer {
     }
 
     @Override
+    void start() {
+        log().debug('Starting document stream consumer.')
+        def storeFromRegistry = bootstrap.beanRegistry().bean(DocumentStore.class)
+        if(!storeFromRegistry.isPresent()) {
+            throw new IllegalStateException("Can't find ${DocumentStore.class.name} in a Rhiot Bootstrap bean registry.")
+        }
+        documentStore = storeFromRegistry.get()
+    }
+
+    @Override
+    void stop() {
+        documentStore = null
+    }
+
+    @Override
     void consume(Message message) {
         switch (message.headers().get('operation')) {
             case 'save':
@@ -37,16 +55,6 @@ class DocumentStreamConsumer extends AbstractStreamConsumer {
                 message.reply(Json.encode([id: id]))
                 break
         }
-    }
-
-    @Override
-    void start() {
-        documentStore = bootstrap.beanRegistry().bean(DocumentStore.class).get()
-    }
-
-    @Override
-    void stop() {
-        documentStore = null
     }
 
 }
