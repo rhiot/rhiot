@@ -35,19 +35,19 @@ import org.apache.camel.Endpoint;
 
 import org.apache.camel.impl.UriEndpointComponent;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static java.lang.Thread.sleep;
 import static io.rhiot.component.webcam.WebcamConstants.*;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Represents the component that manages {@link WebcamEndpoint}.
  */
 public class WebcamComponent extends UriEndpointComponent implements WebcamDiscoveryListener {
     
-    private static final Logger LOG = LoggerFactory.getLogger(WebcamComponent.class);
+    private static final Logger LOG = getLogger(WebcamComponent.class);
     
-    private Map<String, Webcam> webcams = new HashMap();
+    private Map<String, Webcam> webcams = new HashMap<>();
     private int timeout = 30000;
     private String driver;
 
