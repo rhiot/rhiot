@@ -1128,8 +1128,9 @@ in order to load the v4l2 (Video for Linux) module.
 
 #### Installer
 
-On Linux the webcam component requires v4l-utils and it's dependencies.
-By default the Webcam component installs v4l-utils using apt-get, you can configure the installer or set an alternate one on the component:
+For some Linux+webcam combinations, the webcam component requires `v4l-utils` and its dependencies to be installed on an
+operating system. By default the Webcam component installs `v4l-utils` using apt-get, you can configure the installer or 
+set an alternate one on the component:
     
     WebcamComponent webcam = new WebcamComponent();
     webcam.setInstaller(new BrewInstaller());
