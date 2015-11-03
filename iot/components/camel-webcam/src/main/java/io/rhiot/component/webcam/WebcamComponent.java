@@ -318,6 +318,14 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
         this.v4l2WebcamLoadingCommand = v4l2WebcamLoadingCommand;
     }
 
+    public Installer getInstaller() {
+        return installer;
+    }
+
+    public void setInstaller(Installer installer) {
+        this.installer = installer;
+    }
+
     public String getRequiredPackages() {
         return requiredPackages;
     }
