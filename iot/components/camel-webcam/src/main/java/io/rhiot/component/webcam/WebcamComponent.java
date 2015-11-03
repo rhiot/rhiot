@@ -27,6 +27,7 @@ import com.github.sarxos.webcam.ds.v4l4j.V4l4jDriver;
 import io.rhiot.utils.OsUtils;
 import io.rhiot.utils.install.DefaultInstaller;
 import io.rhiot.utils.install.Installer;
+import io.rhiot.utils.install.exception.PermissionDeniedException;
 import io.rhiot.utils.process.DefaultProcessManager;
 import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.CamelContext;
@@ -58,6 +59,8 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
     private String requiredPackages = WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
 
     private ProcessManager processManager;
+
+    private boolean ignoreInstallerProblems = true;
     
     public WebcamComponent() {
         super(WebcamEndpoint.class);
@@ -83,9 +86,17 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
         installer = resolveInstaller();
 
         String requiredPackages = getRequiredPackages();
-        
-        if (!installer.install(requiredPackages)) {
-            throw new IllegalStateException("Unable to start webcam, failed to install dependencies");
+
+        try {
+            if (!installer.install(requiredPackages)) {
+                throw new IllegalStateException("Unable to start webcam, failed to install dependencies");
+            }
+        } catch (PermissionDeniedException ex) {
+            if(ignoreInstallerProblems) {
+                LOG.warn(ex.getMessage());
+            } else {
+                throw ex;
+            }
         }
         
         //Use the provided webcam/s
@@ -314,4 +325,13 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
     public void setRequiredPackages(String requiredPackages) {
         this.requiredPackages = requiredPackages;
     }
+
+    public boolean isIgnoreInstallerProblems() {
+        return ignoreInstallerProblems;
+    }
+
+    public void setIgnoreInstallerProblems(boolean ignoreInstallerProblems) {
+        this.ignoreInstallerProblems = ignoreInstallerProblems;
+    }
+
 }
