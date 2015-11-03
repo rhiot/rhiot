@@ -17,14 +17,14 @@
 
 package io.rhiot.utils;
 
-import java.util.Locale;
+import static java.util.Locale.ENGLISH;
 
 /**
  * OS Utils, such as determining platform.
  */
 public final class OsUtils {
 
-    private static String platform;
+    private static final String platform = System.getProperty("os.name").toLowerCase(ENGLISH);
 
     private OsUtils() {
     }
@@ -36,7 +36,7 @@ public final class OsUtils {
      * @return <tt>true</tt> if running on given platform.
      */
     public static boolean isPlatform(String platform) {
-        return getPlatform().contains(platform.toLowerCase(Locale.ENGLISH));
+        return getPlatform().contains(platform.toLowerCase(ENGLISH));
     }
 
     /**
@@ -60,9 +60,7 @@ public final class OsUtils {
      * @return <tt>os.name</tt> from the system properties in lowercase English.
      */
     public static String getPlatform(){
-        if(platform == null) {
-            platform = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
-        }
         return platform;
     }
+
 }
