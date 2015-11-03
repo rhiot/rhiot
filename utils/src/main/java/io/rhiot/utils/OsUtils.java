@@ -22,10 +22,13 @@ import java.util.Locale;
 /**
  * OS Utils, such as determining platform.
  */
-public class OsUtils {
-    
+public final class OsUtils {
+
     private static String platform;
-    
+
+    private OsUtils() {
+    }
+
     /**
      * True if running on current platform.
      *
