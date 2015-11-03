@@ -620,18 +620,18 @@ in order to make the GPSD up and running.
 
 #### Installer
 
-The GPSD component installs it's own dependencies for Linux using apt-get, you can configure the installer
-or set an alternate one on the component:
+The GPSD component installs it's own dependencies for Debian-based systems using apt-get, these include psmisc, gpsd and gpsd-clients,
+as well as their dependencies. 
+You can configure the installer or set an alternate one on the component:
     
     GpsdComponent gpsd = new GpsdComponent();
     gpsd.setInstaller(new CustomInstaller());
     camelContext.addComponent("gpsd", gpsd);    
     
-You can also specify alternate dependencies for your platform, eg on Debian install psmisc to use 'killall' to terminate the gpsd daemon,
-if your platform uses my-custom-proctools for example, you should configure the component as follows:
+You can also specify alternate/additional dependencies for your platform, if your platform uses my-custom-tools for example, you should configure the component as follows:
 
     GpsdComponent gpsd = new GpsdComponent();
-    gpsd.setRequiredPackages("my-custom-proctools"); //comma-separated list of packages to install
+    gpsd.setRequiredPackages("my-custom-tools,gpsd,gpsd-clients"); //comma-separated list of packages to install
     camelContext.addComponent("gpsd", gpsd);    
     
 If an Installer is not set on the component, Camel will try to find an instance in the
@@ -1128,15 +1128,14 @@ in order to load the v4l2 (Video for Linux) module.
 
 #### Installer
 
-The Webcam component installs it's own dependencies for Debian based systems using apt-get, you may configure the installer
-or set an alternate one on the component:
+On Linux the webcam component requires v4l-utils and it's dependencies.
+By default the Webcam component installs v4l-utils using apt-get, you can configure the installer or set an alternate one on the component:
     
     WebcamComponent webcam = new WebcamComponent();
     webcam.setInstaller(new BrewInstaller());
     camelContext.addComponent("webcam", webcam);    
     
-You can also specify alternate dependencies for your platform, eg on Debian we install v4l-utils but don't do anything for other platforms,
-if your platform uses my-custom-v4l-utils, you should configure the component as follows:
+You can also specify alternate dependencies for your platform, if your platform uses my-custom-v4l-utils, configure the component as follows:
 
     WebcamComponent webcam = new WebcamComponent();
     webcam.setRequiredPackages("my-custom-v4l-utils");  //comma-separated list of packages to install

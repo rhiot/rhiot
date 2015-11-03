@@ -23,8 +23,7 @@ package io.rhiot.component.gpsd;
 public class GpsdConstants {
     public static final int DEFAULT_PORT = 2947;
     public static final String TPV_HEADER = "io.rhiot.gpsd.tpvObject";
-    public static final String GPSD_DEPENDENCIES_LINUX = "psmisc,gpsd";
-    public static final String GPSD_DEPENDENCIES_MAC = "gpsd";
+    public static final String GPSD_DEPENDENCIES_LINUX = "psmisc,gpsd,gpsd-clients";
     
     private GpsdConstants() {
         // Constants class

@@ -48,7 +48,7 @@ public class GpsdComponent extends UriEndpointComponent {
     private boolean gpsdStarted;
     
     private DefaultInstaller installer;
-    private String requiredPackages;
+    private String requiredPackages = GpsdConstants.GPSD_DEPENDENCIES_LINUX;
     
     public GpsdComponent() {
         super(GpsdEndpoint.class);
