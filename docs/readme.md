@@ -1149,7 +1149,14 @@ If an Installer is not set on the component, Camel will try to find an instance 
         CustomInstaller installer = new CustomInstaller();
         installer.setTimeout(60000 * 10); //Allow up to 10 minutes to install packages
     }
-         
+
+By default an installer ignores problems with the webcam packages installation and only logs the warning using a
+logger WARN message. If you would like the component to thrown an exception instead of logging a message, set 
+`ignoreInstallerProblems` property of the `WebcamComponent` to `true`:
+
+    WebcamComponent webcam = new WebcamComponent();
+    webcam.setIgnoreInstallerProblems(true);
+    camelContext.addComponent("webcam", webcam); 
 
 ## Rhiot Cloud
 
