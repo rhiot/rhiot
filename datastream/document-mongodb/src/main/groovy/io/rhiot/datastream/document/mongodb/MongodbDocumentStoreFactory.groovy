@@ -14,17 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.datastream.document.mongodb
 
+import com.mongodb.Mongo
 import io.rhiot.steroids.Bean
+import io.rhiot.steroids.Steroids
 
-@Bean
-interface BootInitializer {
+import static io.rhiot.utils.Properties.stringProperty
 
-    void start()
+class MongodbDocumentStoreFactory {
 
-    void stop()
-
-    int order()
+    @Bean
+    MongodbDocumentStore mongodbDocumentStore() {
+        new MongodbDocumentStore(
+                Steroids.bean(Mongo.class).get(),
+                stringProperty('cloudlet.document.driver.mongodb.db', 'cloudlet_document')
+        )
+    }
 
 }

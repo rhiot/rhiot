@@ -38,12 +38,9 @@ public class MongodbDocumentStore implements DocumentStore {
 
     private static final def MONGO_ID = '_id'
 
-    String documentsDbName
+    private final String documentsDbName
 
-    Mongo mongo
-
-    MongodbDocumentStore() {
-    }
+    private final Mongo mongo
 
     MongodbDocumentStore(Mongo mongo, String documentsDbName) {
         this.mongo = mongo

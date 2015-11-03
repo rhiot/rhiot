@@ -16,6 +16,9 @@
  */
 package io.rhiot.cloudlets.device.analytics
 
+import io.rhiot.steroids.Bean
+
+@Bean
 interface DeviceMetricsStore {
 
     void saveDeviceMetric(String deviceId, String metric, Object value)

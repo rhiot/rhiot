@@ -18,10 +18,10 @@ package io.rhiot.steroids
 
 import io.rhiot.utils.Properties
 import org.reflections.Reflections
+import org.reflections.scanners.MethodAnnotationsScanner
 import org.reflections.util.ConfigurationBuilder
 
 import java.lang.annotation.Annotation
-import java.lang.reflect.Modifier
 
 import static io.rhiot.utils.Properties.booleanProperty
 import static io.rhiot.utils.Properties.stringProperty
@@ -42,33 +42,33 @@ final class Steroids {
         if(Properties.hasProperty(APPLICATION_PACKAGE_PROPERTY)) {
             classpathConfiguration.forPackages(stringProperty(APPLICATION_PACKAGE_PROPERTY))
         }
+        classpathConfiguration.addScanners(new MethodAnnotationsScanner())
         classpath = new Reflections(classpathConfiguration)
     }
 
     private Steroids() {
     }
 
-    static <T> Optional<T> bean(Class<T> type) {
+    static <T> Optional<T> bean(Class<T> type, Class<? extends Annotation> annotation) {
         checkNotNull(type, 'Type of the bean cannot be null.')
 
-        def beans = inclusiveSubTypesOf(type)
-        beans = classesMatchingConditions(beans)
+        def beans = scanForBeans(type, annotation)
         if(beans.isEmpty()) {
             return empty()
         }
-        instantiate(beans.first())
+        Optional.of(beans.first())
     }
 
-    static <T> List<T> beans(Class<T> type) {
-        checkNotNull(type, 'Type of the beans cannot be null.')
-        def classes = inclusiveSubTypesOf(type)
-        classesMatchingConditions(classes).collect{ instantiate(it) }.findAll{it.isPresent()}.collect{it.get()}
+    static <T> Optional<T> bean(Class<T> type) {
+        bean(type, Bean.class)
     }
 
     static <T> List<T> beans(Class<T> type, Class<? extends Annotation> annotation) {
-        checkNotNull(type, 'Type of the beans cannot be null.')
-        def annotatedClasses = classpath.getTypesAnnotatedWith(annotation).toList()
-        classesMatchingConditions(annotatedClasses).collect{ instantiate(it) }.findAll{it.isPresent()}.collect{it.get()}
+        scanForBeans(type, annotation)
+    }
+
+    static <T> List<T> beans(Class<T> type) {
+        beans(type, Bean.class)
     }
 
     // Helpers
@@ -79,10 +79,31 @@ final class Steroids {
                     booleanProperty(cls.getAnnotation(PropertyCondition.class).property()) }
     }
 
-    private static List<Class<?>> inclusiveSubTypesOf(Class<?> type) {
-        def subtypes = classpath.getSubTypesOf(type).findAll{ !isAbstract(it.class.getModifiers()) }.toList()
-        subtypes.add(type)
+    private static List<Class<?>> inclusiveSubTypesOf(Class<?> type, Class<? extends Annotation> annotation) {
+        def subtypes = classpath.getTypesAnnotatedWith(annotation).findAll{ type.isAssignableFrom(it) }.findAll{ !isAbstract(it.class.getModifiers()) }.toList()
+        if(type.isAnnotationPresent(Bean.class)) {
+            subtypes.add(type)
+        }
         subtypes
+    }
+
+    private static List<Object> createdByFactories(Class<?> type) {
+        def factories = classpath.getMethodsAnnotatedWith(Bean.class).findAll{ type.isAssignableFrom(it.returnType) }.toList()
+        factories.collect {
+            def instance = instantiate(it.declaringClass)
+            if(!instance.isPresent()) {
+                return null
+            }
+            it.invoke(instance.get())
+        }.findAll{ it != null }
+    }
+
+    private static List<Object> scanForBeans(Class<?> type, Class<? extends Annotation> annotation) {
+        def beansClasses = inclusiveSubTypesOf(type, annotation)
+        beansClasses = classesMatchingConditions(beansClasses)
+        def beans = beansClasses.collect{ instantiate(it) }.findAll{ it.isPresent() }.collect{ it.get() }
+
+        beans + createdByFactories(type)
     }
 
     private static Optional<?> instantiate(Class<?> type) {

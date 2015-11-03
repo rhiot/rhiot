@@ -16,8 +16,10 @@
  */
 package io.rhiot.vertx.web
 
+import io.rhiot.steroids.Bean
 import io.vertx.groovy.ext.web.RoutingContext
 
+@Bean
 interface HttpExchangeInterceptor {
 
     void intercept(RoutingContext routingContext)

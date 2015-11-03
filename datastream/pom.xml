@@ -23,6 +23,7 @@
     <modules>
         <module>engine</module>
         <module>document</module>
+        <module>document-mongodb</module>
         <module>node</module>
     </modules>
 

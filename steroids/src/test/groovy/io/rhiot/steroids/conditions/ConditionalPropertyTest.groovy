@@ -16,6 +16,7 @@
  */
 package io.rhiot.steroids.conditions
 
+import io.rhiot.steroids.Bean
 import io.rhiot.steroids.PropertyCondition
 import io.rhiot.steroids.Steroids
 import org.junit.Test
@@ -46,6 +47,7 @@ class ConditionalPropertyTest {
 
 }
 
+@Bean
 @PropertyCondition(property = 'load_that_bean')
 class ConditionalBean {
 }

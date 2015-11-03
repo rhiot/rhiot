@@ -88,8 +88,6 @@ public class DriverDocumentCloudlet extends FatJarRouter {
     @Bean
     CamelContextConfiguration camelContextConfiguration(DataStream dataStream, Mongo mongo, @Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName) {
         MongodbDocumentStore mongodbDocumentStore = dataStream.beanRegistry().bean(MongodbDocumentStore.class).get();
-        mongodbDocumentStore.setDocumentsDbName(documentsDbName);
-        mongodbDocumentStore.setMongo(mongo);
 
         ((SimpleRegistry) CamelBootInitializer.registry()).put("mongodbDocumentStore", mongodbDocumentStore);
 

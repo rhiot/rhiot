@@ -16,6 +16,7 @@
  */
 package io.rhiot.steroids
 
+@Bean
 class MyConfigurationCallback implements ConfigurationCallback {
 
     @Override

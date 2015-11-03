@@ -16,6 +16,9 @@
  */
 package io.rhiot.cloudlets.binary.store
 
+import io.rhiot.steroids.Bean
+
+@Bean
 interface BinaryStore {
 
     InputStream readData(String id)

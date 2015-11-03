@@ -13,7 +13,7 @@
  # See the License for the specific language governing permissions and
  # limitations under the License.
 
-cloudlet.document.driver.mongodb.db: cloudlet_geofencing
+cloudlet.document.driver.mongodb.db: cloudlet_document
 server.port: 15099
 spring:
   data.mongodb.database: ${cloudlet.document.driver.mongodb.db}

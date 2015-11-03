@@ -24,6 +24,7 @@ import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.LatLng;
 import io.rhiot.datastream.document.DocumentStore;
 import io.rhiot.datastream.document.SaveOperation;
+import io.rhiot.mongodb.EmbeddedMongo;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -60,7 +61,6 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {GeofencingCloudlet.class, DefaultRouteServiceTest.class})
-@IntegrationTest({"camel.labs.iot.cloudlet.document.driver.mongodb.embedded=true"})
 public class DefaultRouteServiceTest extends Assert {
 
     RestTemplate restTemplate = new RestTemplate();
@@ -78,13 +78,13 @@ public class DefaultRouteServiceTest extends Assert {
 
     @BeforeClass
     public static void beforeClass() {
+        EmbeddedMongo mongo = new EmbeddedMongo().start();
+
         System.setProperty("server.port", findAvailableTcpPort() + "");
         System.setProperty("camel.labs.iot.cloudlet.rest.port", restPort + "");
 
-        int mongodbPort = findAvailableTcpPort();
-        System.setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.embedded.port", mongodbPort + "");
         System.setProperty("camel.labs.iot.cloudlet.document.driver.mongodb.springbootconfig", TRUE.toString());
-        System.setProperty("spring.data.mongodb.port", mongodbPort + "");
+        System.setProperty("spring.data.mongodb.port", mongo.port() + "");
     }
 
     // Test data fixtures

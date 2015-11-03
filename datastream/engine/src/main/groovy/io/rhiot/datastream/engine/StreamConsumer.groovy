@@ -16,8 +16,10 @@
  */
 package io.rhiot.datastream.engine
 
+import io.rhiot.steroids.Bean
 import io.vertx.core.eventbus.Message
 
+@Bean
 interface StreamConsumer extends StreamService {
 
     String fromChannel()

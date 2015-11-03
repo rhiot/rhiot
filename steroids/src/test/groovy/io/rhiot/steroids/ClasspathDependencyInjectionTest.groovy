@@ -21,7 +21,6 @@ import org.junit.Assert
 import org.junit.Test
 
 import static Steroids.bean
-import static Steroids.beans
 
 class ClasspathDependencyInjectionTest extends Assert {
 
@@ -32,7 +31,7 @@ class ClasspathDependencyInjectionTest extends Assert {
 
     @Test
     void shouldFindAllCallbacks() {
-        Truth.assertThat(beans(ConfigurationCallback.class)).hasSize(1)
+        Truth.assertThat(Steroids.beans(ConfigurationCallback.class)).hasSize(1)
     }
 
     @Test

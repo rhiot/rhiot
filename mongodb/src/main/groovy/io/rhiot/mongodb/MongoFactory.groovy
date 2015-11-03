@@ -14,17 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.mongodb
 
+import com.mongodb.Mongo
 import io.rhiot.steroids.Bean
 
-@Bean
-interface BootInitializer {
+import static io.rhiot.mongodb.Mongos.discoverMongo
 
-    void start()
+class MongoFactory {
 
-    void stop()
-
-    int order()
+    @Bean
+    Mongo mongo() {
+        discoverMongo()
+    }
 
 }
