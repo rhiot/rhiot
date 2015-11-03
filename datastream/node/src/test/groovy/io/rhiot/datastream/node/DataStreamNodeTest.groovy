@@ -20,7 +20,6 @@ import io.rhiot.datastream.document.CountOperation
 import io.rhiot.datastream.document.DocumentStore
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.mongodb.EmbeddedMongo
-import io.rhiot.utils.Properties
 import org.junit.BeforeClass
 import org.junit.Test
 

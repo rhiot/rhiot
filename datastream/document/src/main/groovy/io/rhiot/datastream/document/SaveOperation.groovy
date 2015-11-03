@@ -46,12 +46,6 @@ public class SaveOperation {
         return pojo;
     }
 
-    static SaveOperation deserialize(Message message) {
-        def collection = (String) message.headers().get('collection')
-        def document = Json.decodeValue((String) message.body(), Map.class)
-        new SaveOperation(collection, document)
-    }
-
     JsonWithHeaders serialize() {
         JsonWithHeaders.jsonWithHeaders(pojo, ['collection': collection, 'operation': 'save'])
     }

@@ -51,8 +51,15 @@ class DocumentStreamConsumer extends AbstractStreamConsumer {
     void consume(Message message) {
         switch (message.headers().get('operation')) {
             case 'save':
-                def id = documentStore.save(SaveOperation.deserialize(message))
+                def collection = (String) message.headers().get('collection')
+                def document = Json.decodeValue((String) message.body(), Map.class)
+                def id = documentStore.save(new SaveOperation(collection, document))
                 message.reply(Json.encode([id: id]))
+                break
+            case 'count':
+                def collection = (String) message.headers().get('collection')
+                def count = documentStore.count(new CountOperation(collection))
+                message.reply(Json.encode([count: count]))
                 break
         }
     }
