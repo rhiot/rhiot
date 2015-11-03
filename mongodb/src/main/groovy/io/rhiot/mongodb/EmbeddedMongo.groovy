@@ -16,6 +16,7 @@
  */
 package io.rhiot.mongodb
 
+import de.flapdoodle.embed.mongo.MongodProcess
 import de.flapdoodle.embed.mongo.MongodStarter
 import de.flapdoodle.embed.mongo.config.IMongodConfig
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
@@ -28,19 +29,29 @@ import static io.rhiot.utils.Properties.setIntProperty
 
 class EmbeddedMongo {
 
-    final def int port = findAvailableTcpPort()
+    private final def int port = findAvailableTcpPort()
+
+    private MongodProcess executable
+
+    // Life-cycle
 
     EmbeddedMongo start() {
         IMongodConfig mongodConfig = new MongodConfigBuilder()
                 .version(V3_1_0)
                 .net(new Net(port, localhostIsIPv6()))
                 .build()
-        MongodStarter.getDefaultInstance().prepare(mongodConfig).start()
+        executable = MongodStarter.getDefaultInstance().prepare(mongodConfig).start()
 
         setIntProperty('MONGODB_SERVICE_PORT', port)
 
         this
     }
+
+    void stop() {
+        executable.stop()
+    }
+
+    // Accessors
 
     int port() {
         port

@@ -16,14 +16,22 @@
  */
 package io.rhiot.datastream.node
 
-import io.rhiot.datastream.document.CountOperation
-import io.rhiot.datastream.document.DocumentStore
 import io.rhiot.datastream.engine.DataStream
+import io.rhiot.datastream.engine.JsonWithHeaders
 import io.rhiot.mongodb.EmbeddedMongo
+import io.vertx.core.AsyncResult
+import io.vertx.core.Handler
+import io.vertx.core.Vertx
+import io.vertx.core.eventbus.Message
+import io.vertx.core.json.Json
+import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 
+import java.util.concurrent.Callable
+
 import static com.google.common.truth.Truth.assertThat
+import static com.jayway.awaitility.Awaitility.await
 import static io.rhiot.utils.Properties.setIntProperty
 
 class DataStreamNodeTest {
@@ -38,16 +46,28 @@ class DataStreamNodeTest {
         dataStream = new DataStream().start()
     }
 
-    @Test
-    void shouldInitializeMongoDBStore() {
-        // Given
+    @AfterClass
+    static void afterClass() {
+        mongo.stop()
+    }
 
-        def store = dataStream.beanRegistry().bean(DocumentStore.class).get()
+    @Test
+    void smokeTestMongoDocumentStreamConsumer() {
+        // Given
+        def vertx = dataStream.beanRegistry().bean(Vertx.class).get()
+        def message = new JsonWithHeaders(null, ['operation': 'count', 'collection': 'foo'])
+        def count = -1
 
         // When
-        def count = store.count(new CountOperation('foo'))
+        vertx.eventBus().send('document', message.json, message.deliveryOptions(), new Handler<AsyncResult<Message>>() {
+            @Override
+            void handle(AsyncResult<Message> event) {
+                count = Json.decodeValue((String) event.result().body(), Map.class).count
+            }
+        })
 
         // Then
+        await().until( (Callable<Boolean>) { count > -1 } )
         assertThat(count).isEqualTo(0)
     }
 

@@ -33,9 +33,15 @@
             <artifactId>rhiot-datastream-document-mongodb</artifactId>
         </dependency>
 
+        <!-- Testing -->
         <dependency>
             <groupId>com.google.truth</groupId>
             <artifactId>truth</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
