@@ -16,10 +16,6 @@
  */
 package io.rhiot.datastream.document
 
-import io.rhiot.datastream.engine.JsonWithHeaders
-import io.vertx.core.eventbus.Message
-import io.vertx.core.json.Json
-
 import static Pojos.collectionName
 import static io.rhiot.datastream.document.Pojos.pojoToMap;
 
@@ -44,10 +40,6 @@ public class SaveOperation {
 
     Map<String, Object> pojo() {
         return pojo;
-    }
-
-    JsonWithHeaders serialize() {
-        JsonWithHeaders.jsonWithHeaders(pojo, ['collection': collection, 'operation': 'save'])
     }
 
 }

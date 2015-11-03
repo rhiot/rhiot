@@ -101,32 +101,13 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder implements Bootst
 
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
-                setBody().groovy("new io.rhiot.datastream.document.SaveOperation(headers['collection'], body).serialize()").
-                process(new AsyncProcessor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        AsyncProcessorHelper.process(this, exchange);
-                    }
-
-                    @Override
-                    public boolean process(Exchange exchange, AsyncCallback callback) {
-                        Vertx vertx = bootstrap.beanRegistry().bean(Vertx.class).get();
-                        JsonWithHeaders operation = exchange.getIn().getBody(JsonWithHeaders.class);
-                        vertx.eventBus().send("document", operation.getJson(), operation.deliveryOptions(), new Handler<AsyncResult<Message<Object>>>() {
-                            @Override
-                            public void handle(AsyncResult<Message<Object>> event) {
-                                exchange.getOut().setBody(event.result().body());
-                                callback.done(false);
-                            }
-                        });
-                        return false;
-                    }
-                });
+                setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, [collection: headers['collection'], operation: 'save'])").
+                process(new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get()))
 
         rest("/api/document").
                 get("/count/{collection}").route().
-                setBody().groovy("new io.rhiot.datastream.document.CountOperation(headers['collection'])").
-                to("bean:mongodbDocumentStore?method=count");
+                setBody().groovy("new io.rhiot.datastream.engine.JsonWithHeaders(null, [collection : headers['collection'], operation: 'count'])").
+                process(new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get()))
 
         rest("/api/document").
                 get("/findOne/{collection}/{id}").route().

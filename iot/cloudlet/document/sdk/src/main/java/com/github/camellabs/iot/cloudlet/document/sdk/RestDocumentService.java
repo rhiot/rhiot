@@ -118,7 +118,13 @@ public class RestDocumentService<T> implements DocumentService<T> {
 
     @Override
     public long count(Class<?> documentClass) {
-        return restClient.getForObject(format("%s/count/%s", baseUrl, pojoClassToCollection(documentClass)), Long.class);
+        try {
+            String response = restClient.getForObject(format("%s/count/%s", baseUrl, pojoClassToCollection(documentClass)), String.class);
+            Map responseMap = new ObjectMapper().readValue(response, Map.class);
+            return (int) responseMap.get("count");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
