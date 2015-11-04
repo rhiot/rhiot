@@ -23,13 +23,14 @@ import io.rhiot.utils.process.ExecProcessManager;
 import io.rhiot.utils.process.ProcessManager;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
- * Default installer for Rhiot components using apt-get, eg camel-gpsd requires GPSD and camel-camera requires Video for Linux.
+ * Default installer for Rhiot components using apt-get, eg camel-gpsd requires GPSD and camel-webcam may require Video for Linux for some distros.
  */
 public class DefaultInstaller implements Installer {
 
@@ -37,6 +38,10 @@ public class DefaultInstaller implements Installer {
     private static final String DEFAULT_UNINSTALL_COMMAND = "apt-get -q -y remove";
     private static final String DEFAULT_IS_INSTALLED_COMMAND = "dpkg -s";
     private static final String DEFAULT_INSTALL_SUCCESS = "Status: install ok installed";
+    private static final String DEFAULT_COMMAND_NOT_FOUND_MESSAGE = "command not found";
+    private static final String PERMISSION_DENIED_MESSAGE = "Permission denied";
+
+    private static final Logger LOG = getLogger(DefaultInstaller.class);
 
 
     public static final int DEFAULT_TIMEOUT = 60000 * 10; //10 minutes max to install
@@ -65,8 +70,6 @@ public class DefaultInstaller implements Installer {
         this.isInstalledCommand = isInstalledCommand;
         this.installSuccess = installSuccess;
     }
-
-    private Logger LOG = LoggerFactory.getLogger(DefaultInstaller.class);
     
     private ProcessManager processManager = new ExecProcessManager(getTimeout());
 
@@ -87,7 +90,7 @@ public class DefaultInstaller implements Installer {
      * @return <tt>true</tt> if the given command is installed in the shell, false otherwise.
      */
     public boolean isCommandInstalled(String command){
-        return isCommandInstalled(command, "command not found");
+        return isCommandInstalled(command, DEFAULT_COMMAND_NOT_FOUND_MESSAGE);
     }
 
     @Override
@@ -123,7 +126,7 @@ public class DefaultInstaller implements Installer {
         if (output != null) {
             return output.stream().filter(s -> s != null && s.contains(getInstallSuccess())).findAny().isPresent();
         } else {
-            return true; //may be successfull;
+            return true; //may be successful
         }
     }
 
@@ -165,9 +168,9 @@ public class DefaultInstaller implements Installer {
 
         List<String> output = getProcessManager().executeAndJoinOutput((getUninstallCommand() + " " + packageNames.replaceAll(",", " ")).split(" "));
         
-        LOG.info("Uninstallation result : {}", output);
+        LOG.info("Uninstall result : {}", output);
         if (isPermissionDenied(output)) {
-            throw new PermissionDeniedException("You must have sufficient privileges to uninstall package [" + packageNames + "]");
+            throw new PermissionDeniedException("You must have sufficient privileges to uninstall package/s [" + packageNames + "]");
         }
         
     }
@@ -178,7 +181,7 @@ public class DefaultInstaller implements Installer {
      * @return true if permission was denied.
      */
     protected boolean isPermissionDenied(List<String> output){
-        return output.stream().filter(s -> s.contains("Permission denied")).findAny().isPresent();
+        return output.stream().filter(s -> s.contains(PERMISSION_DENIED_MESSAGE)).findAny().isPresent();
     }
 
 

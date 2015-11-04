@@ -88,10 +88,10 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
         String requiredPackages = getRequiredPackages();
 
         try {
-            if (!installer.install(requiredPackages)) {
+            if (!installer.install(requiredPackages) && !ignoreInstallerProblems) {
                 throw new IllegalStateException("Unable to start webcam, failed to install dependencies");
             }
-        } catch (PermissionDeniedException ex) {
+        } catch (Exception ex) {
             if(ignoreInstallerProblems) {
                 LOG.warn(ex.getMessage());
             } else {

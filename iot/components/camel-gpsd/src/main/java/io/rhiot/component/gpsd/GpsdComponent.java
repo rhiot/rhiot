@@ -22,22 +22,23 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 import io.rhiot.utils.install.DefaultInstaller;
+import io.rhiot.utils.install.Installer;
 import io.rhiot.utils.process.DefaultProcessManager;
 import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.Endpoint;
 
 import org.apache.camel.impl.UriEndpointComponent;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static java.lang.Thread.sleep;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Represents the component that manages {@link GpsdEndpoint}.
  */
 public class GpsdComponent extends UriEndpointComponent {
     
-    private static final Logger LOG = LoggerFactory.getLogger(GpsdComponent.class);
+    private static final Logger LOG = getLogger(GpsdComponent.class);
 
     private int gpsdRestartInterval = 5000;
 
@@ -47,9 +48,11 @@ public class GpsdComponent extends UriEndpointComponent {
     private CountDownLatch isLocalGpsdStarted = new CountDownLatch(1);
     private boolean gpsdStarted;
     
-    private DefaultInstaller installer;
+    private Installer installer;
     private String requiredPackages = GpsdConstants.GPSD_DEPENDENCIES_LINUX;
     
+    private boolean ignoreInstallerProblems = true;
+
     public GpsdComponent() {
         super(GpsdEndpoint.class);
     }
@@ -87,9 +90,17 @@ public class GpsdComponent extends UriEndpointComponent {
     protected void restartGpsDaemon() {
 
         installer = resolveInstaller();
-        
-        if (!installer.install(getRequiredPackages())) {
-            throw new IllegalStateException("Unable to start gpsd, failed to install dependencies");
+
+        try {
+            if (!installer.install(getRequiredPackages()) && !ignoreInstallerProblems) {
+                throw new IllegalStateException("Unable to start gpsd, failed to install dependencies");
+            }
+        } catch (Exception ex) {
+            if(ignoreInstallerProblems) {
+                LOG.warn(ex.getMessage());
+            } else {
+                throw ex;
+            }
         }
 
         try {
@@ -128,7 +139,7 @@ public class GpsdComponent extends UriEndpointComponent {
     }
 
 
-    protected DefaultInstaller resolveInstaller() {
+    protected Installer resolveInstaller() {
         LOG.debug("Started resolving Installer...");
         if(installer != null) {
             LOG.debug("Installer has been set on the component level. Camel will use it: {}", installer);
@@ -154,7 +165,7 @@ public class GpsdComponent extends UriEndpointComponent {
         this.processManager = processManager;
     }
 
-    public DefaultInstaller getInstaller() {
+    public Installer getInstaller() {
         return installer;
     }
 
@@ -168,5 +179,13 @@ public class GpsdComponent extends UriEndpointComponent {
 
     public void setRequiredPackages(String requiredPackages) {
         this.requiredPackages = requiredPackages;
+    }
+
+    public boolean isIgnoreInstallerProblems() {
+        return ignoreInstallerProblems;
+    }
+
+    public void setIgnoreInstallerProblems(boolean ignoreInstallerProblems) {
+        this.ignoreInstallerProblems = ignoreInstallerProblems;
     }
 }
