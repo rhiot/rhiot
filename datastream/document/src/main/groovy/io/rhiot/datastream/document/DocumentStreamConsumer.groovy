@@ -58,7 +58,7 @@ class DocumentStreamConsumer extends AbstractStreamConsumer {
                 break
             case 'count':
                 def collection = (String) message.headers().get('collection')
-                def count = documentStore.count(new CountOperation(collection))
+                def count = documentStore.count(collection)
                 message.reply(Json.encode([count: count]))
                 break
         }

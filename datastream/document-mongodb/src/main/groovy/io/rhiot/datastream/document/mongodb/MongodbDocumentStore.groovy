@@ -22,7 +22,6 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import io.rhiot.datastream.document.CountByQueryOperation;
-import io.rhiot.datastream.document.CountOperation;
 import io.rhiot.datastream.document.DocumentStore;
 import io.rhiot.datastream.document.FindByQueryOperation
 import io.rhiot.datastream.document.FindManyOperation;
@@ -75,8 +74,8 @@ public class MongodbDocumentStore implements DocumentStore {
     }
 
     @Override
-    long count(CountOperation countOperation) {
-        collection(countOperation.collection()).count()
+    long count(String documentCollection) {
+        collection(documentCollection).count()
     }
 
     @Override

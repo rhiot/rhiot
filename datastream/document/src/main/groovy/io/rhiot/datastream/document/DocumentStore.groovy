@@ -22,13 +22,19 @@ package io.rhiot.datastream.document
  */
 interface DocumentStore {
 
+    String save(SaveOperation saveOperation)
+
     Map<String, Object> findOne(FindOneOperation findOneOperation)
 
     List<Map<String, Object>> findMany(FindManyOperation findManyOperation)
 
-    String save(SaveOperation saveOperation)
-
-    long count(CountOperation countOperation)
+    /**
+     * Returns the number of the documents in the given collection.
+     *
+     * @param collection to query against.
+     * @return number of documents. Returns 0 for non-existing collections as well.
+     */
+    long count(String collection)
 
     List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation)
 
