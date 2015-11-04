@@ -52,6 +52,11 @@ public class MongodbDocumentStore implements DocumentStore {
     }
 
     @Override
+    long count(String documentCollection) {
+        collection(documentCollection).count()
+    }
+
+    @Override
     List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation) {
         def universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder.getOrDefault("query", emptyMap());
         DBObject mongoQuery = new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(universalQuery));
@@ -69,11 +74,6 @@ public class MongodbDocumentStore implements DocumentStore {
         DBCursor results = collection(findByQueryOperation.collection).find(mongoQuery).
                 limit((Integer) findByQueryOperation.query.getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.query));
         return results.count();
-    }
-
-    @Override
-    long count(String documentCollection) {
-        collection(documentCollection).count()
     }
 
     @Override
