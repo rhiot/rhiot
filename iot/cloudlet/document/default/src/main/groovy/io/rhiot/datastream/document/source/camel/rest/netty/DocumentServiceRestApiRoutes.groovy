@@ -16,23 +16,14 @@
  */
 package io.rhiot.datastream.document.source.camel.rest.netty
 
-import io.rhiot.datastream.engine.DataStream;
-import io.rhiot.datastream.engine.JsonWithHeaders;
 import io.rhiot.steroids.bootstrap.Bootstrap;
 import io.rhiot.steroids.bootstrap.BootstrapAware
 import io.rhiot.steroids.camel.Route;
 import io.rhiot.utils.Properties;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.Message;
-import org.apache.camel.AsyncCallback;
-import org.apache.camel.AsyncProcessor;
-import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestPropertyDefinition;
-import org.apache.camel.util.AsyncProcessorHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static java.util.Collections.singletonList;
@@ -81,6 +72,7 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder implements Bootst
 
     @Override
     public void configure() throws Exception {
+        def vertx = new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get())
 
         // REST API facade
 
@@ -102,17 +94,18 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder implements Bootst
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
                 setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, [collection: headers['collection'], operation: 'save'])").
-                process(new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get()))
+                process(vertx)
 
         rest("/api/document").
                 get("/count/{collection}").route().
                 setBody().groovy("new io.rhiot.datastream.engine.JsonWithHeaders(null, [collection : headers['collection'], operation: 'count'])").
-                process(new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get()))
+                process(vertx)
 
         rest("/api/document").
                 get("/findOne/{collection}/{id}").route().
-                setBody().groovy("new io.rhiot.datastream.document.FindOneOperation(headers['collection'], headers['id'])").
-                to("bean:mongodbDocumentStore?method=findOne");
+                setBody().groovy("new io.rhiot.datastream.engine.JsonWithHeaders(headers['id'], [collection : headers['collection'], operation: 'findOne'])").
+                process(vertx)
+
 
         rest("/api/document").
                 post("/findMany/{collection}").route().

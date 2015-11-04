@@ -25,7 +25,6 @@ import io.rhiot.datastream.document.CountByQueryOperation;
 import io.rhiot.datastream.document.DocumentStore;
 import io.rhiot.datastream.document.FindByQueryOperation
 import io.rhiot.datastream.document.FindManyOperation;
-import io.rhiot.datastream.document.FindOneOperation
 import io.rhiot.datastream.document.RemoveOperation;
 import org.bson.types.ObjectId;
 
@@ -78,9 +77,9 @@ public class MongodbDocumentStore implements DocumentStore {
     }
 
     @Override
-    public Map<String, Object> findOne(FindOneOperation findOneOperation) {
-        ObjectId id = new ObjectId(findOneOperation.id());
-        DBObject document = mongo.getDB(documentsDbName).getCollection(findOneOperation.collection()).findOne(id);
+    public Map<String, Object> findOne(String documentCollection, String documentId) {
+        ObjectId id = new ObjectId(documentId);
+        DBObject document = collection(documentCollection).findOne(id);
         if(document == null) {
             return null;
         }

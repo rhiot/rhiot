@@ -56,13 +56,19 @@ class DocumentStreamConsumer extends AbstractStreamConsumer {
             case 'save':
                 def collection = (String) message.headers().get('collection')
                 def document = Json.decodeValue((String) message.body(), Map.class)
-                def id = documentStore.save(collectionName(collection), pojoToMap(document))
+                def id = documentStore.save(collection, document)
                 message.reply(Json.encode([id: id]))
                 break
             case 'count':
                 def collection = (String) message.headers().get('collection')
                 def count = documentStore.count(collection)
                 message.reply(Json.encode([count: count]))
+                break
+            case 'findOne':
+                def collection = (String) message.headers().get('collection')
+                def id = (String) message.body()
+                def document = documentStore.findOne(collection, id)
+                message.reply(Json.encode(document))
                 break
         }
     }

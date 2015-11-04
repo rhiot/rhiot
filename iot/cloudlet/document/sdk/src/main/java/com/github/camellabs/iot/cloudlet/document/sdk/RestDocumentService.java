@@ -16,6 +16,7 @@
  */
 package com.github.camellabs.iot.cloudlet.document.sdk;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.camellabs.iot.cloudlet.sdk.HealthCheck;
 import com.github.camellabs.iot.cloudlet.sdk.ServiceDiscoveryException;
@@ -107,7 +108,15 @@ public class RestDocumentService<T> implements DocumentService<T> {
 
     @Override
     public T findOne(Class<T> documentClass, String id) {
-        return restClient.getForObject(format("%s/findOne/%s/%s", baseUrl, pojoClassToCollection(documentClass), id), documentClass);
+        ObjectMapper mapper  = new ObjectMapper();
+        mapper.setVisibilityChecker(mapper.getSerializationConfig().getDefaultVisibilityChecker()
+                .withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        try {
+            String response = restClient.getForObject(format("%s/findOne/%s/%s", baseUrl, pojoClassToCollection(documentClass), id), String.class);
+            return mapper.readValue(response, documentClass);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

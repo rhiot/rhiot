@@ -32,7 +32,7 @@ interface DocumentStore {
      */
     long count(String collection)
 
-    Map<String, Object> findOne(FindOneOperation findOneOperation)
+    Map<String, Object> findOne(String collection, String id)
 
     List<Map<String, Object>> findMany(FindManyOperation findManyOperation)
 
