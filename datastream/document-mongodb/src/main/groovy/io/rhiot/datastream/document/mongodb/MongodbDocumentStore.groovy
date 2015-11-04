@@ -27,7 +27,6 @@ import io.rhiot.datastream.document.FindByQueryOperation
 import io.rhiot.datastream.document.FindManyOperation;
 import io.rhiot.datastream.document.FindOneOperation
 import io.rhiot.datastream.document.RemoveOperation;
-import io.rhiot.datastream.document.SaveOperation;
 import org.bson.types.ObjectId;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -47,9 +46,9 @@ public class MongodbDocumentStore implements DocumentStore {
     }
 
     @Override
-    String save(SaveOperation saveOperation) {
-        def document = canonicalToMongo(new BasicDBObject(saveOperation.pojo()))
-        collection(saveOperation.collection()).save(document)
+    String save(String documentCollection, Map<String, Object> pojo) {
+        def document = canonicalToMongo(new BasicDBObject(pojo))
+        collection(documentCollection).save(document)
         document.get(MONGO_ID).toString()
     }
 

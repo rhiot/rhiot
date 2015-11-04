@@ -25,8 +25,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.maps.model.LatLng;
 import io.rhiot.datastream.document.DocumentStore;
-import io.rhiot.datastream.document.FindByQueryOperation;
-import io.rhiot.datastream.document.SaveOperation;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -54,6 +52,7 @@ import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
 import static io.rhiot.datastream.document.FindByQueryOperation.findByQueryOperation;
 import static io.rhiot.datastream.document.Pojos.collectionName;
+import static io.rhiot.datastream.document.Pojos.pojoToMap;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -105,7 +104,7 @@ public class DefaultRouteService implements RouteService {
             String routeId;
             if (lastCoordinates == null || (TimeUnit.MILLISECONDS.toMinutes(coordinates.getTimestamp().getTime() - lastCoordinates.getTimestamp().getTime()) > 5)) {
                 Route newRoute = createNewRoute(client);
-                routeId = documentDriver.save(new SaveOperation(newRoute));
+                routeId = documentDriver.save(collectionName(newRoute.getClass()), pojoToMap(newRoute));
             } else {
                 routeId = lastRouteCoordinates.getRouteId();
             }
@@ -132,7 +131,7 @@ public class DefaultRouteService implements RouteService {
         Map<String, Object> queryBuilder = ImmutableMap.of("query", ImmutableMap.of("_idIn", singletonList(new ObjectId(routeId))));
         Map<String,Object> route = documentDriver.findByQuery(findByQueryOperation(Route.class, queryBuilder)).get(0);
         route.put("deleted", new Date());
-        documentDriver.save(new SaveOperation(collectionName(Route.class), route));
+        documentDriver.save(collectionName(Route.class), route);
     }
 
     @Override

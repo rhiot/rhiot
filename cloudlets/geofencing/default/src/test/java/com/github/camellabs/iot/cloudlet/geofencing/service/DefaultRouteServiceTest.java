@@ -23,7 +23,6 @@ import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.LatLng;
 import io.rhiot.datastream.document.DocumentStore;
-import io.rhiot.datastream.document.SaveOperation;
 import io.rhiot.mongodb.EmbeddedMongo;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -35,7 +34,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -53,6 +51,8 @@ import java.util.Map;
 
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.awaitility.Duration.ONE_MINUTE;
+import static io.rhiot.datastream.document.Pojos.collectionName;
+import static io.rhiot.datastream.document.Pojos.pojoToMap;
 import static java.lang.Boolean.TRUE;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
@@ -112,7 +112,7 @@ public class DefaultRouteServiceTest extends Assert {
     @Test
     public void shouldReturnClients() throws URISyntaxException {
         // Given
-        documentDriver.save(new SaveOperation(point1));
+        documentDriver.save(collectionName(point1.getClass()), pojoToMap(point1));
         URI clientsRequestUri = new URI(restApi + "routes/clients");
 
         // When
@@ -126,7 +126,7 @@ public class DefaultRouteServiceTest extends Assert {
     @Test
     public void shouldReturnRoutes() throws URISyntaxException {
         // Given
-        documentDriver.save(new SaveOperation(point1));
+        documentDriver.save(collectionName(point1.getClass()), pojoToMap(point1));
         routeService.analyzeRoutes(client);
         URI clientsRequestUri = new URI(restApi + "routes/routes/" + client);
 
@@ -141,7 +141,7 @@ public class DefaultRouteServiceTest extends Assert {
     @Test
     public void shouldDeleteRoute() throws URISyntaxException {
         // Given
-        documentDriver.save(new SaveOperation(point1));
+        documentDriver.save(collectionName(point1.getClass()), pojoToMap(point1));
         routeService.analyzeRoutes(client);
         URI routesRequestUri = new URI(restApi + "routes/routes/" + client);
         @SuppressWarnings("unchecked")
@@ -164,7 +164,7 @@ public class DefaultRouteServiceTest extends Assert {
 
     @Test
     public void shouldIdempotentlyAssignSinglePointToRoute() {
-        documentDriver.save(new SaveOperation(point1));
+        documentDriver.save(collectionName(point1.getClass()), pojoToMap(point1));
         assertEquals(1, routeService.analyzeRoutes(client));
         assertEquals(0, routeService.analyzeRoutes(client));
         assertEquals(1, routeService.routes(client).size());
@@ -172,12 +172,12 @@ public class DefaultRouteServiceTest extends Assert {
 
     @Test
     public void shouldIdempotentlyAssignTwoPointsToRoute() {
-        documentDriver.save(new SaveOperation(point1));
+        documentDriver.save(collectionName(point1.getClass()), pojoToMap(point1));
         assertEquals(1, routeService.analyzeRoutes(client));
         assertEquals(0, routeService.analyzeRoutes(client));
         assertEquals(1, routeService.routes(client).size());
 
-        documentDriver.save(new SaveOperation(point2));
+        documentDriver.save(collectionName(point1.getClass()), pojoToMap(point1));
         assertEquals(1, routeService.analyzeRoutes(client));
         assertEquals(0, routeService.analyzeRoutes(client));
         assertEquals(1, routeService.routes(client).size());
@@ -185,9 +185,9 @@ public class DefaultRouteServiceTest extends Assert {
 
     @Test
     public void shouldDetectNextRoute() {
-        documentDriver.save(new SaveOperation(point1));
-        documentDriver.save(new SaveOperation(point2));
-        documentDriver.save(new SaveOperation(point3));
+        documentDriver.save(collectionName(point1.getClass()), pojoToMap(point1));
+        documentDriver.save(collectionName(point2.getClass()), pojoToMap(point2));
+        documentDriver.save(collectionName(point3.getClass()), pojoToMap(point3));
 
         assertEquals(3, routeService.analyzeRoutes(client));
 
@@ -197,7 +197,7 @@ public class DefaultRouteServiceTest extends Assert {
     @Test
     public void shouldTriggerRouteAnalysisTimer() {
         // Given
-        documentDriver.save(new SaveOperation(point1));
+        documentDriver.save(collectionName(point1.getClass()), pojoToMap(point1));
 
         // When
         await().atMost(ONE_MINUTE).until(() -> !routeService.routes(client).isEmpty());
@@ -209,8 +209,8 @@ public class DefaultRouteServiceTest extends Assert {
     @Test
     public void shouldDrawRouteOnMap() throws URISyntaxException, MalformedURLException {
         // Given
-        documentDriver.save(new SaveOperation(point1));
-        documentDriver.save(new SaveOperation(point2));
+        documentDriver.save(collectionName(point1.getClass()), pojoToMap(point1));
+        documentDriver.save(collectionName(point2.getClass()), pojoToMap(point2));
         routeService.analyzeRoutes(client);
         URI clientsRequestUri = new URI(restApi + "routes/routes/" + client);
         @SuppressWarnings("unchecked")
@@ -232,11 +232,11 @@ public class DefaultRouteServiceTest extends Assert {
     @Test
     public void shouldGenerateRoutesReport() throws URISyntaxException, IOException, InterruptedException {
         // Given
-        documentDriver.save(new SaveOperation(point1));
+        documentDriver.save(collectionName(point1.getClass()), pojoToMap(point1));
         routeService.analyzeRoutes(client);
         String routeId = routeService.routes(client).get(0).getId();
         RouteComment routeComment = new RouteComment(null, routeId, new Date(), "text");
-        documentDriver.save(new SaveOperation(routeComment));
+        documentDriver.save(collectionName(routeComment.getClass()), pojoToMap(routeComment));
         URI clientsRequestUri = new URI(restApi + "routes/export/" + client + "/xls");
 
         // When

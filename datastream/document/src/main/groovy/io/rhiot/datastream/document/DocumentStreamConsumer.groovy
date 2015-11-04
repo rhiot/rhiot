@@ -20,6 +20,9 @@ import io.rhiot.datastream.engine.AbstractStreamConsumer
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
 
+import static io.rhiot.datastream.document.Pojos.collectionName
+import static io.rhiot.datastream.document.Pojos.pojoToMap
+
 /**
  * Consumes a stream of document-related messages.
  */
@@ -53,7 +56,7 @@ class DocumentStreamConsumer extends AbstractStreamConsumer {
             case 'save':
                 def collection = (String) message.headers().get('collection')
                 def document = Json.decodeValue((String) message.body(), Map.class)
-                def id = documentStore.save(new SaveOperation(collection, document))
+                def id = documentStore.save(collectionName(collection), pojoToMap(document))
                 message.reply(Json.encode([id: id]))
                 break
             case 'count':

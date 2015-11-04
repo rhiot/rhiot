@@ -16,8 +16,6 @@
  */
 package com.github.camellabs.iot.cloudlet.document.driver;
 
-import boot.mongo.MongoDbEndpoint;
-import boot.mongo.MongoDbMvcEndpoint;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoTimeoutException;
@@ -29,9 +27,7 @@ import de.flapdoodle.embed.mongo.config.Net;
 import io.rhiot.datastream.document.mongodb.MongodbDocumentStore;
 import io.rhiot.datastream.engine.DataStream;
 import io.rhiot.steroids.camel.CamelBootInitializer;
-import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;
-import org.apache.camel.component.vertx.VertxComponent;
 import org.apache.camel.impl.SimpleRegistry;
 import org.apache.camel.spring.boot.CamelContextConfiguration;
 import org.apache.camel.spring.boot.FatJarRouter;
@@ -41,7 +37,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -124,16 +119,6 @@ public class DriverDocumentCloudlet extends FatJarRouter {
             LOG.info("Can't connect to the MongoDB server at mongodb:27017. Falling back to the localhost:27017.");
             return new MongoClient();
         }
-    }
-
-    @Bean
-    MongoDbEndpoint mongoDbEndpoint(MongoTemplate mongoTemplate) {
-        return new MongoDbEndpoint(mongoTemplate);
-    }
-
-    @Bean
-    MongoDbMvcEndpoint mongoDbMvcEndpoint(MongoDbEndpoint mongoDbEndpoint) {
-        return new MongoDbMvcEndpoint(mongoDbEndpoint);
     }
 
     @Bean
