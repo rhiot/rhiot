@@ -17,6 +17,7 @@
 package io.rhiot.datastream.document.mongodb
 
 import com.google.common.truth.Truth
+import io.rhiot.datastream.document.DocumentStreamConsumer
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.JsonWithHeaders
 import io.rhiot.mongodb.EmbeddedMongo
@@ -51,12 +52,12 @@ class MongodbDocumentStoreTest {
     void shouldCountSavedDocument() {
         def document = [foo: 'bar']
         def saveCommand = JsonWithHeaders.jsonWithHeaders(document, [operation: 'save', arg0: 'doc'])
-        bus.send('document', saveCommand.json, saveCommand.deliveryOptions())
+        bus.send(DocumentStreamConsumer.CHANNEL, saveCommand.json, saveCommand.deliveryOptions())
         def countCommand = JsonWithHeaders.jsonWithHeaders(null, [operation: 'count', arg0: 'doc'])
 
         // When
         def count = -1
-        bus.send('document', countCommand.json, countCommand.deliveryOptions(), new Handler<AsyncResult<Message>>() {
+        bus.send(DocumentStreamConsumer.CHANNEL, countCommand.json, countCommand.deliveryOptions(), new Handler<AsyncResult<Message>>() {
             @Override
             void handle(AsyncResult<Message> event) {
                 count = Json.decodeValue((String) event.result().body(), Map.class).count

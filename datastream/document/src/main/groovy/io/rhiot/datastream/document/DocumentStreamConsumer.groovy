@@ -29,13 +29,21 @@ import static io.rhiot.datastream.document.Pojos.pojoToMap
  */
 class DocumentStreamConsumer extends AbstractStreamConsumer {
 
-    private serviceBinding = new ServiceBinding()
+    // Constants
+
+    public static final String CHANNEL = 'document'
+
+    // Collaborators
 
     private DocumentStore documentStore
 
+    private serviceBinding = new ServiceBinding()
+
+    // Overridden
+
     @Override
     String fromChannel() {
-        'document'
+        CHANNEL
     }
 
     @Override
