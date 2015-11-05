@@ -186,11 +186,11 @@ public class DefaultInstaller implements Installer {
 
 
     /**
-     * Returns true if the installer can run on the current platform, false otherwise.
+     * Returns true if the installer can run on the current platform, false otherwise. Default is Linux.
      * @return true if the installer can run on the current platform, false otherwise.
      */
     public boolean isPlatformSupported(){
-        return OsUtils.isLinux();
+        return OsUtils.isLinux() ;
     }
     
     // Accessors

@@ -39,13 +39,16 @@ public interface Installer {
      *
      */
     boolean isInstalled(String packageName);
+    
     /**
      * Installs 1 or more packages, comma or space separated.
      *
      * @param packageNames package name, eg gpsd
+     * @return Returns true if all packages were/are installed.
      *
      */
     boolean install(String packageNames);
+    
     /**
      * Uninstalls packages, space or comma separated.
      *

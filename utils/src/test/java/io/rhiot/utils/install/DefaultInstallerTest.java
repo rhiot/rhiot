@@ -19,15 +19,14 @@ package io.rhiot.utils.install;
 
 import io.rhiot.utils.OsUtils;
 import io.rhiot.utils.Uuids;
+import io.rhiot.utils.install.exception.PermissionDeniedException;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 import static org.junit.Assume.assumeTrue;
 
-@Ignore("Taariq: will test for install privileges before running")
 public class DefaultInstallerTest {
     
     private static DefaultInstaller installer = new DefaultInstaller();
@@ -36,18 +35,21 @@ public class DefaultInstallerTest {
     public static void assumptions(){
         assumeTrue(OsUtils.isPlatform("linux"));
         assumeTrue(installer.isCommandInstalled("apt-get"));
+        
+        boolean hasPermissions = true;
+        //Ensure permissions to run installation
+        try {
+            installer.install("clockywock");
+            installer.uninstall("clockywock");
+        } catch (PermissionDeniedException e) {
+            hasPermissions = false;
+        }
+        assumeTrue(hasPermissions);
     }
 
     @Test
     public void testNoSuchPackage() throws Exception {
         assertFalse(installer.isInstalled(Uuids.uuid()));
-    }
-
-    @Test
-    public void testInstall() throws Exception {
-        assumeTrue(!installer.isInstalled("clockywock"));
-        installer.install("clockywock");
-        installer.uninstall("clockywock");
     }
 
     @Test
@@ -61,12 +63,5 @@ public class DefaultInstallerTest {
         assertTrue(installer.isInstalled("clockywock"));
         assertTrue(installer.isInstalled("cowsay"));
         installer.uninstall(packages);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testIncorrectPlatform() throws Exception {
-        if (!OsUtils.isPlatform("linux")) {
-            new DefaultInstaller().install("foo");
-        }
     }
 }

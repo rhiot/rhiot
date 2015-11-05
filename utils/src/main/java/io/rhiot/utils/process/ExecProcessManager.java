@@ -75,23 +75,23 @@ public class ExecProcessManager implements ProcessManager {
         }
 
         public ExecResultHandler(final int exitValue) {
-            LOG.info("Installation completed with exitValue [{}]", exitValue);
+            LOG.debug("Installation completed with exitValue [{}]", exitValue);
             super.onProcessComplete(exitValue);
         }
 
         @Override
         public void onProcessComplete(final int exitValue) {
             super.onProcessComplete(exitValue);
-            LOG.info("Successfully installed");
+            LOG.debug("Successfully installed");
         }
 
         @Override
         public void onProcessFailed(final ExecuteException e) {
             super.onProcessFailed(e);
             if (watchdog != null && watchdog.killedProcess()) {
-                LOG.info("Installation killed by watchdog");
+                LOG.warn("Installation killed by watchdog");
             } else {
-                LOG.info("Installation failed due to [{}]", e.getMessage());
+                LOG.warn("Installation failed due to [{}]", e.getMessage());
             }
         }
     }
