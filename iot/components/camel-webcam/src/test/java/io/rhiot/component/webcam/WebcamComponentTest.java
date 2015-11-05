@@ -19,12 +19,13 @@ package io.rhiot.component.webcam;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.ds.dummy.WebcamDummyDevice;
+import io.rhiot.utils.OsUtils;
+import io.rhiot.utils.install.DefaultInstaller;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Assume;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assume.assumeTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -48,6 +50,11 @@ public class WebcamComponentTest extends CamelTestSupport {
         given(webcam.open()).willReturn(true);
         given(webcam.getDevice()).willReturn(new WebcamDummyDevice(1));
         webcams.put("dummy", webcam);
+         
+        //Avoid the driver error when webcam/bridj loads the native lib
+        if (OsUtils.isLinux()) {
+            assumeTrue(new DefaultInstaller().isInstalled(WebcamConstants.WEBCAM_DEPENDENCIES_LINUX));
+        }
     }
     
     @Test 
@@ -113,17 +120,6 @@ public class WebcamComponentTest extends CamelTestSupport {
         component.setDriver(CustomDriver.class.getName());
         component.start();
 
-        assertTrue(component.isStarted());
-        component.stop();
-    }
-    
-    @Test 
-    public void testCompositeDriver() throws Exception {
-        
-        WebcamComponent component = new WebcamComponent(context);
-        component.setDriver(CustomCompositeDriver.class.getName());
-        component.start();
-        
         assertTrue(component.isStarted());
         component.stop();
     }
