@@ -36,12 +36,10 @@ import java.util.Map;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-
-@Ignore("quickfix for the build which fails due to driver")
 public class WebcamComponentTest extends CamelTestSupport {
 
     private static Webcam webcam = mock(Webcam.class);
-    private static final Map<String, Webcam> webcams = new HashMap();
+    private static final Map<String, Webcam> webcams = new HashMap<>();
 
     @BeforeClass
     public static void before() throws IOException {
