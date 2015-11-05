@@ -20,10 +20,10 @@ import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
 import org.junit.Test
 
-import static com.google.common.truth.Truth.assertThat
 import static org.mockito.BDDMockito.given
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS
 import static org.mockito.Mockito.mock
+import static org.mockito.Mockito.verify
 
 class ServiceBindingTest {
 
@@ -32,16 +32,16 @@ class ServiceBindingTest {
     def message = mock(Message.class, RETURNS_DEEP_STUBS)
 
     @Test
-    void shouldPassHeader() {
+    void shouldBindHeader() {
         // Given
         given(message.headers().get('operation')).willReturn('stringStringOperation')
         given(message.headers().get('arg0')).willReturn('foo')
 
         // When
-        def count = serviceBinding.invokeOperation(Service.class, new ServiceImpl(), message)
+        serviceBinding.handleOperation(Service.class, new ServiceImpl(), message)
 
         // Then
-        assertThat(count).isEqualTo('foo')
+        verify(message).reply(Json.encode([result: 'foo']))
     }
 
     @Test
@@ -51,10 +51,10 @@ class ServiceBindingTest {
         given(message.body()).willReturn(Json.encode([foo: 'bar']))
 
         // When
-        def count = serviceBinding.invokeOperation(Service.class, new ServiceImpl(), message)
+        serviceBinding.handleOperation(Service.class, new ServiceImpl(), message)
 
         // Then
-        assertThat(count).isEqualTo(1)
+        verify(message).reply(Json.encode([result: 1]))
     }
 
     @Test
@@ -65,10 +65,10 @@ class ServiceBindingTest {
         given(message.body()).willReturn(Json.encode([foo: 'bar']))
 
         // When
-        def count = serviceBinding.invokeOperation(Service.class, new ServiceImpl(), message)
+        serviceBinding.handleOperation(Service.class, new ServiceImpl(), message)
 
         // Then
-        assertThat(count).isEqualTo("foo1")
+        verify(message).reply(Json.encode([result: 'foo1']))
     }
 
     static interface Service {
