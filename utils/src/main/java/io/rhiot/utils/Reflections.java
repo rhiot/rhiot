@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.Map;
 
 import static java.lang.Character.toLowerCase;
@@ -95,6 +96,14 @@ public final class Reflections {
     public static String classNameToCamelCase(Class<?> clazz) {
         String simpleName = clazz.getSimpleName();
         return toLowerCase(simpleName.charAt(0)) + simpleName.substring(1);
+    }
+
+    public static boolean isNumber(Class<?> type) {
+        return wrapperClasses.containsKey(type) || wrapperClasses.containsValue(type);
+    }
+
+    public static boolean isJavaLibraryType(Class<?> type) {
+        return isNumber(type) || type == String.class || type == Date.class;
     }
 
 }

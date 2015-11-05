@@ -16,15 +16,18 @@
  */
 package io.rhiot.datastream.engine
 
+import io.rhiot.utils.WithLogger
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
 
 import java.lang.reflect.Method
 
+import static io.rhiot.utils.Reflections.isJavaLibraryType
+
 /**
  * Binds Vert.x message with a service invocation.
  */
-class ServiceBinding {
+class ServiceBinding implements WithLogger {
 
     public static final String OPERATION_HEADER = 'operation'
 
@@ -48,14 +51,14 @@ class ServiceBinding {
         operation.get().invoke(service, findArguments(operation.get(), message))
     }
 
+    // Operations
+
     void handleOperation(Class<?> serviceType, Object service, Message message) {
         def response = invokeOperation(serviceType, service, message)
         def returnType = findOperation(serviceType, message).get().returnType
-        if(!(returnType instanceof Void)) {
-            if(returnType == String.class ||
-                    returnType == Number.class ||
-                    returnType == int.class ||
-                    returnType == long.class) {
+        if(returnType != Void.class) {
+            if(isJavaLibraryType(returnType)) {
+                log().debug('Java library type {} - will be wrapped into JSON envelope.', returnType)
                 message.reply(Json.encode([result: response]))
             } else {
                 message.reply(Json.encode(response))
