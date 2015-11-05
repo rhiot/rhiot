@@ -65,9 +65,7 @@ class DocumentStreamConsumer extends AbstractStreamConsumer {
                 message.reply(Json.encode([count: count]))
                 break
             case 'findOne':
-                def collection = (String) message.headers().get('collection')
-                def id = (String) message.body()
-                def document = documentStore.findOne(collection, id)
+                def document = serviceBinding.invokeOperation(DocumentStore.class, documentStore, message)
                 message.reply(Json.encode(document))
                 break
         }
