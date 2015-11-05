@@ -99,7 +99,7 @@ public class RestDocumentService<T> implements DocumentService<T> {
         try {
             String response = restClient.postForObject(format("%s/save/%s", baseUrl, pojoClassToCollection(document.getClass())), document, String.class);
             Map responseMap = new ObjectMapper().readValue(response, Map.class);
-            writeField(document, "id", responseMap.get("id"));
+            writeField(document, "id", responseMap.get("result"));
             return document;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -130,7 +130,7 @@ public class RestDocumentService<T> implements DocumentService<T> {
         try {
             String response = restClient.getForObject(format("%s/count/%s", baseUrl, pojoClassToCollection(documentClass)), String.class);
             Map responseMap = new ObjectMapper().readValue(response, Map.class);
-            return (int) responseMap.get("count");
+            return (int) responseMap.get("result");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

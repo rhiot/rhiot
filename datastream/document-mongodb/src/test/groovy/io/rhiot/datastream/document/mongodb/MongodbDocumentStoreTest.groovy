@@ -60,7 +60,7 @@ class MongodbDocumentStoreTest {
         bus.send(DocumentStreamConsumer.CHANNEL, countCommand.json, countCommand.deliveryOptions(), new Handler<AsyncResult<Message>>() {
             @Override
             void handle(AsyncResult<Message> event) {
-                count = Json.decodeValue((String) event.result().body(), Map.class).count
+                count = Json.decodeValue((String) event.result().body(), Map.class).result
             }
         })
 

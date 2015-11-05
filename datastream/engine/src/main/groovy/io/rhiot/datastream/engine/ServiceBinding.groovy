@@ -50,8 +50,16 @@ class ServiceBinding {
 
     void handleOperation(Class<?> serviceType, Object service, Message message) {
         def response = invokeOperation(serviceType, service, message)
-        if(!(findOperation(serviceType, message).get().returnType instanceof Void)) {
-            message.reply(Json.encode([result: response]))
+        def returnType = findOperation(serviceType, message).get().returnType
+        if(!(returnType instanceof Void)) {
+            if(returnType == String.class ||
+                    returnType == Number.class ||
+                    returnType == int.class ||
+                    returnType == long.class) {
+                message.reply(Json.encode([result: response]))
+            } else {
+                message.reply(Json.encode(response))
+            }
         }
     }
 

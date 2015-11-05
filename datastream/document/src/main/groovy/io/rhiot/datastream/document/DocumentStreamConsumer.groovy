@@ -19,10 +19,6 @@ package io.rhiot.datastream.document
 import io.rhiot.datastream.engine.AbstractStreamConsumer
 import io.rhiot.datastream.engine.ServiceBinding
 import io.vertx.core.eventbus.Message
-import io.vertx.core.json.Json
-
-import static io.rhiot.datastream.document.Pojos.collectionName
-import static io.rhiot.datastream.document.Pojos.pojoToMap
 
 /**
  * Consumes a stream of document-related messages.
@@ -63,20 +59,7 @@ class DocumentStreamConsumer extends AbstractStreamConsumer {
 
     @Override
     void consume(Message message) {
-        switch (message.headers().get('operation')) {
-            case 'save':
-                def id = serviceBinding.invokeOperation(DocumentStore.class, documentStore, message)
-                message.reply(Json.encode([id: id]))
-                break
-            case 'count':
-                def count = serviceBinding.invokeOperation(DocumentStore.class, documentStore, message)
-                message.reply(Json.encode([count: count]))
-                break
-            case 'findOne':
-                def document = serviceBinding.invokeOperation(DocumentStore.class, documentStore, message)
-                message.reply(Json.encode(document))
-                break
-        }
+        serviceBinding.handleOperation(DocumentStore.class, documentStore, message)
     }
 
 }
