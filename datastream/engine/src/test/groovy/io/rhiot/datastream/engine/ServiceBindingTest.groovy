@@ -17,9 +17,8 @@
 package io.rhiot.datastream.engine
 
 import io.vertx.core.eventbus.Message
+import io.vertx.core.json.Json
 import org.junit.Test
-
-import javax.inject.Named
 
 import static com.google.common.truth.Truth.assertThat
 import static org.mockito.BDDMockito.given
@@ -36,7 +35,7 @@ class ServiceBindingTest {
     void shouldPassHeader() {
         // Given
         given(message.headers().get('operation')).willReturn('stringStringOperation')
-        given(message.headers().get('string')).willReturn('foo')
+        given(message.headers().get('arg0')).willReturn('foo')
 
         // When
         def count = serviceBinding.invokeOperation(Service.class, new ServiceImpl(), message)
@@ -46,10 +45,10 @@ class ServiceBindingTest {
     }
 
     @Test
-    void shouldPassBody() {
+    void shouldBindBody() {
         // Given
         given(message.headers().get('operation')).willReturn('pojoIntOperation')
-        given(message.body()).willReturn([foo: 'bar'])
+        given(message.body()).willReturn(Json.encode([foo: 'bar']))
 
         // When
         def count = serviceBinding.invokeOperation(Service.class, new ServiceImpl(), message)
@@ -58,11 +57,27 @@ class ServiceBindingTest {
         assertThat(count).isEqualTo(1)
     }
 
+    @Test
+    void shouldBindHeaderAndBody() {
+        // Given
+        given(message.headers().get('operation')).willReturn('stringPojoStringOperation')
+        given(message.headers().get('arg0')).willReturn('foo')
+        given(message.body()).willReturn(Json.encode([foo: 'bar']))
+
+        // When
+        def count = serviceBinding.invokeOperation(Service.class, new ServiceImpl(), message)
+
+        // Then
+        assertThat(count).isEqualTo("foo1")
+    }
+
     static interface Service {
 
-        String stringStringOperation(@Named('string') String string)
+        String stringStringOperation(String string)
 
         int pojoIntOperation(Map<String, String> pojo)
+
+        String stringPojoStringOperation(String string, Map<String, String> pojo)
 
 
     }
@@ -77,6 +92,11 @@ class ServiceBindingTest {
         @Override
         int pojoIntOperation(Map<String, String> pojo) {
             pojo.size()
+        }
+
+        @Override
+        String stringPojoStringOperation(String string, Map<String, String> pojo) {
+            "${string}${pojo.size()}"
         }
 
     }

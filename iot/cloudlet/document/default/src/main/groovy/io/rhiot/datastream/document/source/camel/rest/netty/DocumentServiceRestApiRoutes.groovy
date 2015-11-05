@@ -93,12 +93,12 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder implements Bootst
 
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
-                setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, [collection: headers['collection'], operation: 'save'])").
+                setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, [arg0: headers['collection'], operation: 'save'])").
                 process(vertx)
 
         rest("/api/document").
                 get("/count/{collection}").route().
-                setBody().groovy("new io.rhiot.datastream.engine.JsonWithHeaders(null, [collection : headers['collection'], operation: 'count'])").
+                setBody().groovy("new io.rhiot.datastream.engine.JsonWithHeaders(null, [arg0 : headers['collection'], operation: 'count'])").
                 process(vertx)
 
         rest("/api/document").

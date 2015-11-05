@@ -55,7 +55,7 @@ class DataStreamNodeTest {
     void smokeTestMongoDocumentStreamConsumer() {
         // Given
         def vertx = dataStream.beanRegistry().bean(Vertx.class).get()
-        def message = new JsonWithHeaders(null, ['operation': 'count', 'collection': 'foo'])
+        def message = new JsonWithHeaders(null, ['operation': 'count', 'arg0': 'foo'])
         def count = -1
 
         // When

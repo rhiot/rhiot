@@ -16,11 +16,8 @@
  */
 package io.rhiot.datastream.engine
 
-import com.thoughtworks.paranamer.AdaptiveParanamer
-import com.thoughtworks.paranamer.AnnotationParanamer
-import com.thoughtworks.paranamer.CachingParanamer
-import com.thoughtworks.paranamer.Paranamer
 import io.vertx.core.eventbus.Message
+import io.vertx.core.json.Json
 
 import java.lang.reflect.Method
 
@@ -28,28 +25,18 @@ class ServiceBinding {
 
     public static final String OPERATION_HEADER = 'operation'
 
-    private Paranamer paranamer
-
-    ServiceBinding(paranamer) {
-        this.paranamer = paranamer
-    }
-
-    ServiceBinding() {
-        this(new CachingParanamer(new AdaptiveParanamer(new AnnotationParanamer())))
-    }
-
     Optional<Method> findOperation(Class<?> service, Message message) {
         def operationName = message.headers().get(OPERATION_HEADER)
         Optional.ofNullable(service.declaredMethods.find { it.name == operationName })
     }
 
     Object[] findArguments(Method operation, Message message) {
-        def arguments = paranamer.lookupParameterNames(operation, false).collect{ parameter ->
-            message.headers().get(parameter)
-        }.toList()
+        def arguments = operation.parameters.collect{ parameter ->
+            message.headers().get(parameter.name)
+        }.findAll{ it != null }.toList()
 
         if(operation.parameterCount > arguments.size()) {
-            arguments << message.body()
+            arguments << Json.decodeValue(message.body(), operation.parameterTypes.last())
         }
         arguments
     }

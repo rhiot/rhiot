@@ -21,20 +21,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.thoughtworks.paranamer</groupId>
-            <artifactId>paranamer</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-steroids</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-steroids-vertx</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
         </dependency>
 
         <!-- Testing -->

@@ -17,6 +17,7 @@
 package io.rhiot.datastream.document
 
 import io.rhiot.datastream.engine.AbstractStreamConsumer
+import io.rhiot.datastream.engine.ServiceBinding
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
 
@@ -27,6 +28,8 @@ import static io.rhiot.datastream.document.Pojos.pojoToMap
  * Consumes a stream of document-related messages.
  */
 class DocumentStreamConsumer extends AbstractStreamConsumer {
+
+    private serviceBinding = new ServiceBinding()
 
     private DocumentStore documentStore
 
@@ -54,14 +57,11 @@ class DocumentStreamConsumer extends AbstractStreamConsumer {
     void consume(Message message) {
         switch (message.headers().get('operation')) {
             case 'save':
-                def collection = (String) message.headers().get('collection')
-                def document = Json.decodeValue((String) message.body(), Map.class)
-                def id = documentStore.save(collection, document)
+                def id = serviceBinding.invokeOperation(DocumentStore.class, documentStore, message)
                 message.reply(Json.encode([id: id]))
                 break
             case 'count':
-                def collection = (String) message.headers().get('collection')
-                def count = documentStore.count(collection)
+                def count = serviceBinding.invokeOperation(DocumentStore.class, documentStore, message)
                 message.reply(Json.encode([count: count]))
                 break
             case 'findOne':

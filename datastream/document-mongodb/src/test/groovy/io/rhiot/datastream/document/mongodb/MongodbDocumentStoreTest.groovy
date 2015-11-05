@@ -50,9 +50,9 @@ class MongodbDocumentStoreTest {
     @Test
     void shouldCountSavedDocument() {
         def document = [foo: 'bar']
-        def saveCommand = JsonWithHeaders.jsonWithHeaders(document, [operation: 'save', collection: 'doc'])
+        def saveCommand = JsonWithHeaders.jsonWithHeaders(document, [operation: 'save', arg0: 'doc'])
         bus.send('document', saveCommand.json, saveCommand.deliveryOptions())
-        def countCommand = JsonWithHeaders.jsonWithHeaders(null, [operation: 'count', collection: 'doc'])
+        def countCommand = JsonWithHeaders.jsonWithHeaders(null, [operation: 'count', arg0: 'doc'])
 
         // When
         def count = -1
