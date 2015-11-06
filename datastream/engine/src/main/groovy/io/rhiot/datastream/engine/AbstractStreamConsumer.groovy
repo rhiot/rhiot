@@ -25,13 +25,19 @@ import io.rhiot.utils.WithLogger
  */
 abstract class AbstractStreamConsumer implements StreamConsumer, BootstrapAware, WithLogger {
 
+    // Members
+
     private final String channel
 
     protected Bootstrap bootstrap
 
+    // Constructors
+
     AbstractStreamConsumer(String channel) {
         this.channel = channel
     }
+
+    // Default implementations
 
     @Override
     void start() {
@@ -46,8 +52,11 @@ abstract class AbstractStreamConsumer implements StreamConsumer, BootstrapAware,
         channel
     }
 
+    // Bootstrap awareness callbacks
+
     @Override
     void bootstrap(Bootstrap bootstrap) {
+        log().debug('Injecting bootstrap {}.', bootstrap)
         this.bootstrap = bootstrap
     }
 
