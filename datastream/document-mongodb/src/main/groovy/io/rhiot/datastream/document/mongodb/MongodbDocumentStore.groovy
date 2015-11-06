@@ -24,7 +24,6 @@ import com.mongodb.Mongo;
 import io.rhiot.datastream.document.CountByQueryOperation;
 import io.rhiot.datastream.document.DocumentStore;
 import io.rhiot.datastream.document.FindByQueryOperation
-import io.rhiot.datastream.document.FindManyOperation;
 import io.rhiot.datastream.document.RemoveOperation;
 import org.bson.types.ObjectId;
 
@@ -87,10 +86,10 @@ public class MongodbDocumentStore implements DocumentStore {
     }
 
     @Override
-    List<Map<String, Object>> findMany(FindManyOperation findManyOperation) {
-        def ids = new BasicDBObject('$in', findManyOperation.ids().collect{new ObjectId(it)})
-        def query = new BasicDBObject('_id', ids)
-        collection(findManyOperation.collection()).find(query).toArray().collect { mongoToCanonical(it).toMap() }
+    List<Map<String, Object>> findMany(String documentCollection, List<String> ids) {
+        def mongoIds = new BasicDBObject('$in', ids.collect{new ObjectId(it)})
+        def query = new BasicDBObject('_id', mongoIds)
+        collection(documentCollection).find(query).toArray().collect { mongoToCanonical(it).toMap() }
     }
 
     @Override

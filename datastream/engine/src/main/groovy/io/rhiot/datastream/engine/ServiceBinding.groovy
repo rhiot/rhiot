@@ -37,7 +37,12 @@ class ServiceBinding implements WithLogger {
         }.findAll { it != null }.toList()
 
         if (operation.parameterCount > arguments.size()) {
-            arguments << Json.decodeValue(message.body(), operation.parameterTypes.last())
+            if(List.isAssignableFrom(operation.parameterTypes.last())) {
+                def wrappedList = Json.decodeValue((String) message.body(), Map.class).values().first()
+                arguments << Json.mapper.convertValue(wrappedList, operation.parameterTypes.last())
+            } else {
+                arguments << Json.decodeValue((String) message.body(), operation.parameterTypes.last())
+            }
         }
         arguments
     }

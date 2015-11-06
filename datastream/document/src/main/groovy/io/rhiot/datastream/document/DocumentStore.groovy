@@ -34,7 +34,7 @@ interface DocumentStore {
 
     Map<String, Object> findOne(String collection, String id)
 
-    List<Map<String, Object>> findMany(FindManyOperation findManyOperation)
+    List<Map<String, Object>> findMany(String collection, List<String> ids)
 
     List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation)
 

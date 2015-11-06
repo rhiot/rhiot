@@ -121,8 +121,16 @@ public class RestDocumentService<T> implements DocumentService<T> {
 
     @Override
     public List<T> findMany(Class<T> documentClass, String... ids) {
-        T[] results = restClient.postForObject(format("%s/findMany/%s", baseUrl, pojoClassToCollection(documentClass)), new Ids(ids), classOfArrayOfClass(documentClass));
-        return ImmutableList.copyOf(results);
+        ObjectMapper mapper  = new ObjectMapper();
+        mapper.setVisibilityChecker(mapper.getSerializationConfig().getDefaultVisibilityChecker()
+                .withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        try {
+            String response = restClient.postForObject(format("%s/findMany/%s", baseUrl, pojoClassToCollection(documentClass)), new Ids(ids), String.class);
+            T[] arrayResponse =  mapper.readValue(response, classOfArrayOfClass(documentClass));
+            return ImmutableList.copyOf(arrayResponse);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

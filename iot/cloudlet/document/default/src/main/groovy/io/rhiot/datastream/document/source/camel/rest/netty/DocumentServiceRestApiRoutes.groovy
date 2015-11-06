@@ -108,8 +108,8 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder implements Bootst
 
         rest("/api/document").
                 post("/findMany/{collection}").route().
-                setBody().groovy("new io.rhiot.datastream.document.FindManyOperation(headers['collection'], body.ids)").
-                to("bean:mongodbDocumentStore?method=findMany");
+                setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, [operation: 'findMany', arg0 : headers['collection']])").
+                process(vertx)
 
         rest("/api/document").
                 post("/findByQuery/{collection}").route().
