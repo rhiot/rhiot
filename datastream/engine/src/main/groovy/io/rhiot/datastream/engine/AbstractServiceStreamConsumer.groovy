@@ -16,39 +16,38 @@
  */
 package io.rhiot.datastream.engine
 
-import io.rhiot.steroids.bootstrap.Bootstrap
-import io.rhiot.steroids.bootstrap.BootstrapAware
-import io.rhiot.utils.WithLogger
+import io.vertx.core.eventbus.Message
 
 /**
  * Base class for StreamConsumer, providing common access to logger, bootstrap and other commonly used collaborators.
  */
-abstract class AbstractStreamConsumer implements StreamConsumer, BootstrapAware, WithLogger {
+abstract class AbstractServiceStreamConsumer<T> extends AbstractStreamConsumer {
 
-    private final String channel
+    protected final Class<T> serviceClass
 
-    protected Bootstrap bootstrap
+    protected T service
 
-    AbstractStreamConsumer(String channel) {
-        this.channel = channel
+    private ServiceBinding serviceBinding = new ServiceBinding()
+
+    AbstractServiceStreamConsumer(String channel, Class<T> serviceInterface) {
+        super(channel)
+        this.service = service
+        this.serviceClass = serviceInterface
     }
 
     @Override
     void start() {
+        log().debug('Starting {} stream consumer.', getClass().simpleName)
+        def serviceFromRegistry = bootstrap.beanRegistry().bean(serviceClass)
+        if(!serviceFromRegistry.isPresent()) {
+            throw new IllegalStateException("Can't find ${serviceClass.name} in a Rhiot Bootstrap bean registry.")
+        }
+        service = serviceFromRegistry.get()
     }
 
     @Override
-    void stop() {
-    }
-
-    @Override
-    String fromChannel() {
-        channel
-    }
-
-    @Override
-    void bootstrap(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap
+    void consume(Message message) {
+        serviceBinding.handleOperation(serviceClass, service, message)
     }
 
 }

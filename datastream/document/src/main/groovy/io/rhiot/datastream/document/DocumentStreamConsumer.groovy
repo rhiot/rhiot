@@ -16,50 +16,21 @@
  */
 package io.rhiot.datastream.document
 
-import io.rhiot.datastream.engine.AbstractStreamConsumer
-import io.rhiot.datastream.engine.ServiceBinding
-import io.vertx.core.eventbus.Message
+import io.rhiot.datastream.engine.AbstractServiceStreamConsumer
 
 /**
  * Consumes a stream of document-related messages.
  */
-class DocumentStreamConsumer extends AbstractStreamConsumer {
+class DocumentStreamConsumer extends AbstractServiceStreamConsumer<DocumentStore> {
 
     // Constants
 
     public static final String CHANNEL = 'document'
 
-    // Collaborators
+    // Constructors
 
-    private DocumentStore documentStore
-
-    private serviceBinding = new ServiceBinding()
-
-    // Overridden
-
-    @Override
-    String fromChannel() {
-        CHANNEL
-    }
-
-    @Override
-    void start() {
-        log().debug('Starting document stream consumer.')
-        def storeFromRegistry = bootstrap.beanRegistry().bean(DocumentStore.class)
-        if(!storeFromRegistry.isPresent()) {
-            throw new IllegalStateException("Can't find ${DocumentStore.class.name} in a Rhiot Bootstrap bean registry.")
-        }
-        documentStore = storeFromRegistry.get()
-    }
-
-    @Override
-    void stop() {
-        documentStore = null
-    }
-
-    @Override
-    void consume(Message message) {
-        serviceBinding.handleOperation(DocumentStore.class, documentStore, message)
+    DocumentStreamConsumer() {
+        super(CHANNEL, DocumentStore.class)
     }
 
 }
