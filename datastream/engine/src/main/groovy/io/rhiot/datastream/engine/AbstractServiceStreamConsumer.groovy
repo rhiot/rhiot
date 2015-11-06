@@ -27,7 +27,7 @@ abstract class AbstractServiceStreamConsumer<T> extends AbstractStreamConsumer {
 
     protected T service
 
-    private ServiceBinding serviceBinding = new ServiceBinding()
+    protected ServiceBinding serviceBinding
 
     AbstractServiceStreamConsumer(String channel, Class<T> serviceInterface) {
         super(channel)
@@ -37,6 +37,9 @@ abstract class AbstractServiceStreamConsumer<T> extends AbstractStreamConsumer {
     @Override
     void start() {
         log().debug('Starting {} stream consumer.', getClass().simpleName)
+        serviceBinding = bootstrap.beanRegistry().bean(ServiceBinding.class).get()
+        serviceBinding.bootstrap(bootstrap)
+
         def serviceFromRegistry = bootstrap.beanRegistry().bean(serviceClass)
         if(!serviceFromRegistry.isPresent()) {
             throw new IllegalStateException("Can't find ${serviceClass.name} in a Rhiot Bootstrap bean registry.")

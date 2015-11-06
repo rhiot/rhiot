@@ -51,6 +51,7 @@ class CamelBootInitializer implements BootInitializer, BootstrapAware {
 
         beans(RoutesBuilder.class, Route.class).each { if(it instanceof BootstrapAware) it.bootstrap(bootstrap) }.each { camelContext.addRoutes(it) }
 
+        bootstrap.beanRegistry().register(camelContext)
         camelContext.start()
     }
 

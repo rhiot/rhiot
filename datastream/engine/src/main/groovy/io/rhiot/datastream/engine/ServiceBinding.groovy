@@ -16,6 +16,9 @@
  */
 package io.rhiot.datastream.engine
 
+import io.rhiot.steroids.Bean
+import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.steroids.bootstrap.BootstrapAware
 import io.rhiot.utils.WithLogger
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
@@ -27,13 +30,16 @@ import static io.rhiot.utils.Reflections.isJavaLibraryType
 /**
  * Binds Vert.x message with a service invocation.
  */
-class ServiceBinding implements WithLogger {
+@Bean
+class ServiceBinding implements BootstrapAware, WithLogger {
 
     public static final String OPERATION_HEADER = 'operation'
 
+    private TypeConverter typeConverter
+
     Object[] findArguments(Method operation, Message message) {
         def arguments = operation.parameters.collect { parameter ->
-            message.headers().get(parameter.name)
+            typeConverter.convert(message.headers().get(parameter.name), parameter.type)
         }.findAll { it != null }.toList()
 
         if (operation.parameterCount > arguments.size()) {
@@ -80,6 +86,14 @@ class ServiceBinding implements WithLogger {
 
     static boolean operationTransfersObject(Method operation) {
         !isJavaLibraryType(operation.parameterTypes.last())
+    }
+
+    @Override
+    void bootstrap(Bootstrap bootstrap) {
+        typeConverter = bootstrap.beanRegistry().bean(TypeConverter.class).get()
+        if(typeConverter instanceof BootstrapAware) {
+            typeConverter.bootstrap(bootstrap)
+        }
     }
 
 }

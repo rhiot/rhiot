@@ -18,7 +18,9 @@ package io.rhiot.datastream.node
 
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.JsonWithHeaders
+import io.rhiot.datastream.engine.TypeConverter
 import io.rhiot.mongodb.EmbeddedMongo
+import io.rhiot.steroids.Bean
 import io.rhiot.steroids.camel.Route
 import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
@@ -74,15 +76,13 @@ class DataStreamNodeTest {
         assertThat(count).isEqualTo(0)
     }
 
-    @Route
-    static class RestApi extends RouteBuilder {
+    @Bean
+    static class MockTypeConverter implements TypeConverter {
 
         @Override
-        void configure() throws Exception {
-            restConfiguration().component("netty4-http").
-                    host("0.0.0.0").port(findAvailableTcpPort())
+        def <T> T convert(Object object, Class<T> targetType) {
+            object
         }
-
     }
 
 }

@@ -16,6 +16,7 @@
  */
 package io.rhiot.datastream.engine
 
+import io.rhiot.steroids.Bean
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
 import org.junit.Test
@@ -27,7 +28,12 @@ import static org.mockito.Mockito.verify
 
 class ServiceBindingTest {
 
-    def serviceBinding = new ServiceBinding()
+    static dataStream = new DataStream().start()
+
+    static def serviceBinding = dataStream.beanRegistry().bean(ServiceBinding.class).get()
+    static {
+        serviceBinding.bootstrap(dataStream)
+    }
 
     def message = mock(Message.class, RETURNS_DEEP_STUBS)
 
@@ -99,6 +105,15 @@ class ServiceBindingTest {
             "${string}${pojo.size()}"
         }
 
+    }
+
+    @Bean
+    static class MockTypeConverter implements TypeConverter {
+
+        @Override
+        def <T> T convert(Object object, Class<T> targetType) {
+            object
+        }
     }
 
 }

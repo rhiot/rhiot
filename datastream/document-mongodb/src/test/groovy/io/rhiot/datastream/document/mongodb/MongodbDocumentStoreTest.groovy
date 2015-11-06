@@ -20,23 +20,21 @@ import com.google.common.truth.Truth
 import io.rhiot.datastream.document.DocumentStreamConsumer
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.JsonWithHeaders
+import io.rhiot.datastream.engine.TypeConverter
 import io.rhiot.mongodb.EmbeddedMongo
-import io.rhiot.steroids.camel.Route
-import io.rhiot.utils.Networks
+import io.rhiot.steroids.Bean
 import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
 import io.vertx.core.Vertx
 import io.vertx.core.eventbus.EventBus
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
-import org.apache.camel.builder.RouteBuilder
 import org.junit.BeforeClass
 import org.junit.Test
 
 import java.util.concurrent.Callable
 
 import static com.jayway.awaitility.Awaitility.await
-import static io.rhiot.utils.Networks.findAvailableTcpPort
 
 class MongodbDocumentStoreTest {
 
@@ -73,15 +71,13 @@ class MongodbDocumentStoreTest {
         Truth.assertThat(count).isEqualTo(1)
     }
 
-    @Route
-    static class RestApi extends RouteBuilder {
+    @Bean
+    static class MockTypeConverter implements TypeConverter {
 
         @Override
-        void configure() throws Exception {
-            restConfiguration().component("netty4-http").
-                    host("0.0.0.0").port(findAvailableTcpPort())
+        def <T> T convert(Object object, Class<T> targetType) {
+            object
         }
-
     }
 
 }

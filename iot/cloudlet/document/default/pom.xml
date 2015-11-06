@@ -34,6 +34,10 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-datastream-engine-camel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-steroids-camel</artifactId>
         </dependency>
         <dependency>

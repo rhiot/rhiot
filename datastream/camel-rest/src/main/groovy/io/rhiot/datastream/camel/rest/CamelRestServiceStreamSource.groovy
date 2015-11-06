@@ -61,12 +61,25 @@ abstract class CamelRestServiceStreamSource<T> extends AbstractServiceStreamSour
                     headers = headers.substring(0, headers.size() - 2) + ']'
 
                     def verb = operationTransfersObject(operation) ? 'POST' : 'GET'
+                    def body = operationTransfersObject(operation) ? 'body' : 'null'
                     rest(serviceName).verb(verb, operationPath).route().
-                            setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, ${headers})").
+                            setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(${body}, ${headers})").
                             process(new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get(), serviceName.replaceFirst('api/', '')))
             }
         }
-        CamelBootInitializer.camelContext().addRoutes(restRouteBuilder)
+        try {
+            CamelBootInitializer.camelContext().addRoutes(restRouteBuilder)
+        } catch (IllegalStateException e) {
+            CamelBootInitializer.camelContext().addRoutes(new RouteBuilder() {
+                @Override
+                void configure() throws Exception {
+                    restConfiguration().component("netty4-http").
+                            host("0.0.0.0").port(8080)
+                }
+            })
+            CamelBootInitializer.camelContext().stop()
+            CamelBootInitializer.camelContext().start()
+        }
     }
 
 }
