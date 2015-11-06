@@ -24,7 +24,7 @@ import org.springframework.web.client.RestTemplate
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createGenericLeshanClientTemplate
 import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle.UNKNOWN_DISCONNECTED
+import static io.rhiot.cloudlets.device.verticles.LeshanServerVerticle.UNKNOWN_DISCONNECTED
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid

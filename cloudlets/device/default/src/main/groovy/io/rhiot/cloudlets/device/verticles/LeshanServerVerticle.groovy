@@ -50,7 +50,6 @@ import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.longProperty
 import static io.rhiot.vertx.Vertxes.assertStringBody
 import static io.rhiot.vertx.jackson.Jacksons.json
-import static io.rhiot.vertx.jackson.Jacksons.jsonMessageToMap
 import static java.time.Instant.ofEpochMilli
 import static java.time.LocalDateTime.ofInstant
 import static java.util.concurrent.TimeUnit.DAYS
@@ -58,7 +57,7 @@ import static java.util.concurrent.TimeUnit.MINUTES
 import static org.eclipse.leshan.ResponseCode.CONTENT
 import static org.infinispan.configuration.cache.CacheMode.INVALIDATION_ASYNC
 
-class LeshanServerVeritcle extends GroovyVerticle {
+class LeshanServerVerticle extends GroovyVerticle {
 
     // Constants
 
@@ -94,7 +93,7 @@ class LeshanServerVeritcle extends GroovyVerticle {
 
     final def disconnectionPeriod = longProperty('disconnectionPeriod', DEFAULT_DISCONNECTION_PERIOD)
 
-    LeshanServerVeritcle() {
+    LeshanServerVerticle() {
         def cacheManager = new DefaultCacheManager(new GlobalConfigurationBuilder().transport().defaultTransport().build())
         Configuration builder = new ConfigurationBuilder().clustering().cacheMode(INVALIDATION_ASYNC).build();
         cacheManager.defineConfiguration("clients", builder);

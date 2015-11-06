@@ -16,7 +16,7 @@
  */
 package io.rhiot.cloudlets.device
 
-import io.rhiot.cloudlets.device.verticles.LeshanServerVeritcle
+import io.rhiot.cloudlets.device.verticles.LeshanServerVerticle
 import io.rhiot.cloudlets.device.verticles.DeviceRestApiVerticle
 import io.vertx.groovy.core.Vertx
 
@@ -40,7 +40,7 @@ class DeviceCloudlet {
     // Lifecycle operations
 
     DeviceCloudlet start() {
-        vertx.deployVerticle("groovy:${LeshanServerVeritcle.class.name}")
+        vertx.deployVerticle("groovy:${LeshanServerVerticle.class.name}")
         vertx.deployVerticle("groovy:${DeviceRestApiVerticle.class.name}")
         return this
     }
