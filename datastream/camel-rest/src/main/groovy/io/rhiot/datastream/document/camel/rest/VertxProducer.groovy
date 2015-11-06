@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.document.source.camel.rest.netty
+package io.rhiot.datastream.document.camel.rest
 
 import io.rhiot.datastream.engine.JsonWithHeaders
 import io.vertx.core.AsyncResult
@@ -30,8 +30,11 @@ class VertxProducer implements AsyncProcessor {
 
     private final Vertx vertx
 
-    VertxProducer(Vertx vertx) {
+    private final String channel
+
+    VertxProducer(Vertx vertx, String channel) {
         this.vertx = vertx
+        this.channel = channel
     }
 
     @Override
@@ -42,7 +45,7 @@ class VertxProducer implements AsyncProcessor {
     @Override
     public boolean process(Exchange exchange, AsyncCallback callback) {
         JsonWithHeaders operation = exchange.getIn().getBody(JsonWithHeaders.class);
-        vertx.eventBus().send("document", operation.getJson(), operation.deliveryOptions(), new Handler<AsyncResult<Message<Object>>>() {
+        vertx.eventBus().send(channel, operation.getJson(), operation.deliveryOptions(), new Handler<AsyncResult<Message<Object>>>() {
             @Override
             public void handle(AsyncResult<Message<Object>> event) {
                 exchange.getOut().setBody(event.result().body());

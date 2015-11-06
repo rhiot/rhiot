@@ -55,6 +55,11 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-netty4-http</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

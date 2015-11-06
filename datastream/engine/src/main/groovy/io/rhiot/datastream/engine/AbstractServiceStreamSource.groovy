@@ -16,37 +16,52 @@
  */
 package io.rhiot.datastream.engine
 
-import io.vertx.core.eventbus.Message
+import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.steroids.bootstrap.BootstrapAware
+import io.rhiot.utils.WithLogger
+import io.vertx.core.Vertx
+import io.vertx.core.eventbus.EventBus
 
-/**
- * Base class for StreamConsumer, providing common access to logger, bootstrap and other commonly used collaborators.
- */
-abstract class AbstractServiceStreamConsumer<T> extends AbstractStreamConsumer {
+abstract class AbstractServiceStreamSource<T> implements StreamSource, BootstrapAware, WithLogger {
 
     protected final Class<T> serviceClass
 
     protected T service
 
+    protected EventBus eventBus
+
     private ServiceBinding serviceBinding = new ServiceBinding()
 
-    AbstractServiceStreamConsumer(String channel, Class<T> serviceInterface) {
-        super(channel)
-        this.serviceClass = serviceInterface
+    protected Bootstrap bootstrap
+
+    AbstractServiceStreamSource(Class<T> serviceClass) {
+        this.serviceClass = serviceClass
     }
 
     @Override
     void start() {
-        log().debug('Starting {} stream consumer.', getClass().simpleName)
+        log().debug('Starting {} stream source.', getClass().simpleName)
         def serviceFromRegistry = bootstrap.beanRegistry().bean(serviceClass)
         if(!serviceFromRegistry.isPresent()) {
             throw new IllegalStateException("Can't find ${serviceClass.name} in a Rhiot Bootstrap bean registry.")
         }
         service = serviceFromRegistry.get()
+
+        eventBus = bootstrap.beanRegistry().bean(Vertx.class).get().eventBus()
     }
 
     @Override
-    void consume(Message message) {
-        serviceBinding.handleOperation(serviceClass, service, message)
+    void stop() {
+    }
+
+    @Override
+    EventBus eventBus() {
+        eventBus
+    }
+
+    @Override
+    void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
     }
 
 }

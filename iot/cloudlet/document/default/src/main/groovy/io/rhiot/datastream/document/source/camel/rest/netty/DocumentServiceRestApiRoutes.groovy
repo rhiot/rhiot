@@ -16,6 +16,8 @@
  */
 package io.rhiot.datastream.document.source.camel.rest.netty
 
+import io.rhiot.datastream.document.camel.rest.RestRouteBuilderProvider
+import io.rhiot.datastream.document.camel.rest.VertxProducer
 import io.rhiot.steroids.bootstrap.Bootstrap;
 import io.rhiot.steroids.bootstrap.BootstrapAware
 import io.rhiot.steroids.camel.Route;
@@ -72,7 +74,13 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder implements Bootst
 
     @Override
     public void configure() throws Exception {
-        def vertx = new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get())
+        def vertx = new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get(), 'document')
+        bootstrap.beanRegistry().register(new RestRouteBuilderProvider() {
+            @Override
+            RouteBuilder restRouteBuilder() {
+                return DocumentServiceRestApiRoutes.this
+            }
+        })
 
         // REST API facade
 
@@ -90,11 +98,6 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder implements Bootst
                 restConfiguration.endpointProperty(splittedOption[0], splittedOption[1]);
             }
         }
-
-        rest("/api/document").
-                post("/save/{collection}").type(Object.class).route().
-                setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, [arg0: headers['collection'], operation: 'save'])").
-                process(vertx)
 
         rest("/api/document").
                 get("/count/{collection}").route().

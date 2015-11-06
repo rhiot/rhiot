@@ -78,4 +78,8 @@ class ServiceBinding implements WithLogger {
         Optional.ofNullable(service.declaredMethods.find { it.name == operationName })
     }
 
+    static boolean transfersObject(Method operation) {
+        !isJavaLibraryType(operation.parameterTypes.last())
+    }
+
 }

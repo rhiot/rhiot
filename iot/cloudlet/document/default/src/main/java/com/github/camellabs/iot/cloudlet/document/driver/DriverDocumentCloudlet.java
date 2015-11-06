@@ -28,7 +28,6 @@ import io.rhiot.datastream.document.mongodb.MongodbDocumentStore;
 import io.rhiot.datastream.engine.DataStream;
 import io.rhiot.steroids.camel.CamelBootInitializer;
 import org.apache.camel.CamelContext;
-import org.apache.camel.impl.SimpleRegistry;
 import org.apache.camel.spring.boot.CamelContextConfiguration;
 import org.apache.camel.spring.boot.FatJarRouter;
 import org.slf4j.Logger;
@@ -75,24 +74,15 @@ public class DriverDocumentCloudlet extends FatJarRouter {
         return new DataStream();
     }
 
-//    @Bean
-//    MongodbDocumentStore mongodbDocumentStore(DataStream dataStream) {
-//        return dataStream.beanRegistry().bean(MongodbDocumentStore.class).get();
-//    }
-
     @Bean
     CamelContextConfiguration camelContextConfiguration(DataStream dataStream, Mongo mongo, @Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName) {
         MongodbDocumentStore mongodbDocumentStore = dataStream.beanRegistry().bean(MongodbDocumentStore.class).get();
 
-        ((SimpleRegistry) CamelBootInitializer.registry()).put("mongodbDocumentStore", mongodbDocumentStore);
+        CamelBootInitializer.registry().put("mongodbDocumentStore", mongodbDocumentStore);
 
         return new CamelContextConfiguration() {
             @Override
             public void beforeApplicationStart(CamelContext camelContext) {
-//                Vertx vertx = dataStream.beanRegistry().bean(Vertx.class).get();
-//                VertxComponent vertxComponent = new VertxComponent();
-//                vertxComponent.setVertx(vertx);
-//                camelContext.addComponent("vertx", vertxComponent);
             }
         };
     }
