@@ -93,11 +93,6 @@ public class DocumentServiceRestApiRoutes extends RouteBuilder implements Bootst
         }
 
         rest("/api/document").
-                get("/findOne/{collection}/{id}").route().
-                setBody().groovy("new io.rhiot.datastream.engine.JsonWithHeaders(null, [operation: 'findOne', arg0 : headers['collection'], arg1: headers['id']])").
-                process(vertx)
-
-        rest("/api/document").
                 post("/findMany/{collection}").route().
                 setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, [operation: 'findMany', arg0 : headers['collection']])").
                 process(vertx)

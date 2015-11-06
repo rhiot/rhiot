@@ -22,6 +22,8 @@ import io.rhiot.utils.WithLogger
 import io.vertx.core.Vertx
 import io.vertx.core.eventbus.EventBus
 
+import java.lang.reflect.Method
+
 abstract class AbstractServiceStreamSource<T> implements StreamSource, BootstrapAware, WithLogger {
 
     protected final Class<T> serviceClass
@@ -37,6 +39,8 @@ abstract class AbstractServiceStreamSource<T> implements StreamSource, Bootstrap
     AbstractServiceStreamSource(Class<T> serviceClass) {
         this.serviceClass = serviceClass
     }
+
+    abstract void registerOperationEndpoint(Method operation)
 
     @Override
     void start() {

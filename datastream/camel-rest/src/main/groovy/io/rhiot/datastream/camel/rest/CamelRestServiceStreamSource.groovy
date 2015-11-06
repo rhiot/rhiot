@@ -21,7 +21,9 @@ import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.core.Vertx
 import org.apache.camel.builder.RouteBuilder
 
-import static io.rhiot.datastream.engine.ServiceBinding.transfersObject
+import java.lang.reflect.Method
+
+import static io.rhiot.datastream.engine.ServiceBinding.operationTransfersObject
 import static io.rhiot.utils.Reflections.isJavaLibraryType
 
 abstract class CamelRestServiceStreamSource<T> extends AbstractServiceStreamSource<T> {
@@ -36,35 +38,35 @@ abstract class CamelRestServiceStreamSource<T> extends AbstractServiceStreamSour
     @Override
     void start() {
         super.start()
+        serviceClass.declaredMethods.findAll{ ['save', 'count', 'findOne'].contains(it.name) }.forEach{ Method op -> registerOperationEndpoint(op) }
+    }
 
+    @Override
+    void registerOperationEndpoint(Method operation) {
         def restRouteBuilder = new RouteBuilder() {
             @Override
             void configure() throws Exception {
-                def operations = serviceClass.declaredMethods.findAll{ ['save', 'count'].contains(it.name) }
-                operations.forEach { op ->
-                    def operationPath = "/${op.name}"
-                    op.parameterTypes.eachWithIndex { param, i ->
+                    def operationPath = "/${operation.name}"
+                    operation.parameterTypes.eachWithIndex { param, i ->
                         if(isJavaLibraryType(param)) {
                             operationPath += "/{arg${i}}"
                         }
                     }
 
-                    def headers = "[operation: '${op.name}', "
-                    for(int i = 0; i < op.parameterCount; i++) {
-                        if(isJavaLibraryType(op.parameterTypes[i]))
+                    def headers = "[operation: '${operation.name}', "
+                    for(int i = 0; i < operation.parameterCount; i++) {
+                        if(isJavaLibraryType(operation.parameterTypes[i]))
                             headers += "arg${i}: headers['arg${i}'], "
                     }
                     headers = headers.substring(0, headers.size() - 2) + ']'
 
-                    def verb = transfersObject(op) ? 'POST' : 'GET'
-                        rest(serviceName).verb(verb, operationPath).route().
-                                setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, ${headers})").
-                                process(new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get(), serviceName.replaceFirst('api/', '')))
-                }
+                    def verb = operationTransfersObject(operation) ? 'POST' : 'GET'
+                    rest(serviceName).verb(verb, operationPath).route().
+                            setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, ${headers})").
+                            process(new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get(), serviceName.replaceFirst('api/', '')))
             }
         }
-//        if(!CamelBootInitializer.camelContext().getRegistry().findByType(RestConsumerFactory.class).isEmpty())
-            CamelBootInitializer.camelContext().addRoutes(restRouteBuilder)
+        CamelBootInitializer.camelContext().addRoutes(restRouteBuilder)
     }
 
 }
