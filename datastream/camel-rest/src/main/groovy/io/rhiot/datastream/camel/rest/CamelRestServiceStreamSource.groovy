@@ -14,15 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.document.camel.rest
+package io.rhiot.datastream.camel.rest
 
 import io.rhiot.datastream.engine.AbstractServiceStreamSource
 import io.rhiot.steroids.camel.CamelBootInitializer
-import io.rhiot.utils.Reflections
 import io.vertx.core.Vertx
-import org.apache.camel.CamelContext
 import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.spi.RestConsumerFactory
 
 import static io.rhiot.datastream.engine.ServiceBinding.transfersObject
 import static io.rhiot.utils.Reflections.isJavaLibraryType
@@ -43,7 +40,7 @@ abstract class CamelRestServiceStreamSource<T> extends AbstractServiceStreamSour
         def restRouteBuilder = new RouteBuilder() {
             @Override
             void configure() throws Exception {
-                def operations = [serviceClass.declaredMethods.find{ it.name == 'save' }]
+                def operations = serviceClass.declaredMethods.findAll{ ['save', 'count'].contains(it.name) }
                 operations.forEach { op ->
                     def operationPath = "/${op.name}"
                     op.parameterTypes.eachWithIndex { param, i ->
@@ -59,13 +56,10 @@ abstract class CamelRestServiceStreamSource<T> extends AbstractServiceStreamSour
                     }
                     headers = headers.substring(0, headers.size() - 2) + ']'
 
-                    if(transfersObject(op)) {
-                        rest(serviceName).
-                                post(operationPath).route().
+                    def verb = transfersObject(op) ? 'POST' : 'GET'
+                        rest(serviceName).verb(verb, operationPath).route().
                                 setBody().groovy("io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders(body, ${headers})").
                                 process(new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get(), serviceName.replaceFirst('api/', '')))
-                    }
-
                 }
             }
         }

@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.document
 
-import io.rhiot.datastream.document.camel.rest.CamelRestServiceStreamSource
+import io.rhiot.datastream.camel.rest.CamelRestServiceStreamSource
 
 class DocumentStreamSource extends CamelRestServiceStreamSource<DocumentStore> {
 

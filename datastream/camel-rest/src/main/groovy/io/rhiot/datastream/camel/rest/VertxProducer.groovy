@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.document.camel.rest
+package io.rhiot.datastream.camel.rest
 
 import io.rhiot.datastream.engine.JsonWithHeaders
 import io.vertx.core.AsyncResult
