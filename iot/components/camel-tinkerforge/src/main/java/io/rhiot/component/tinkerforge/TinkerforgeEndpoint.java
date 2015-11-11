@@ -19,8 +19,8 @@ package io.rhiot.component.tinkerforge;
 import org.apache.camel.impl.DefaultEndpoint;
 
 public abstract class TinkerforgeEndpoint extends DefaultEndpoint {
-    private String host = "localhost";
-    private int port = 4223;
+    private String host;
+    private int port;
     private String uid;
 
     public TinkerforgeEndpoint(String uri, TinkerforgeComponent tinkerforgeComponent) {
