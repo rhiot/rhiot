@@ -39,11 +39,11 @@ public final class BMP180Consumer extends I2CConsumer {
     // Calibration data
     private static final int CALIBRATION_START = 0xAA;
 
-    private static final int CALIBRATION_END = 0xBF;
-    private final static short BMP085_CONTROL = 0xF4;
-    private final static short BMP085_TEMPDATA = 0xF6;
-    private final static short BMP085_PRESSUREDATA = 0xF6;
-    private final static byte BMP085_READTEMPCMD = 0x2E;
+	private static final int CALIBRATION_END = 0xBF;
+	private static final short BMP085_CONTROL = 0xF4;
+	private static final short BMP085_TEMPDATA = 0xF6;
+	private static final short BMP085_PRESSUREDATA = 0xF6;
+	private static final byte BMP085_READTEMPCMD = 0x2E;
 
     private final static byte BMP085_READPRESSURECMD = 0x34;
 
