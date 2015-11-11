@@ -25,6 +25,7 @@
         <activemq.version>5.12.1</activemq.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
         <apache-poi.version>3.13</apache-poi.version>
+        <bluecove.version>2.1.1-SNAPSHOT</bluecove.version>
         <californium-core.version>1.0.0-M3</californium-core.version>
         <camel.version>2.16.0</camel.version>
         <commons-exec.version>1.3</commons-exec.version>
@@ -74,6 +75,21 @@
             </dependency>
 
             <!-- Dependencies -->
+            <dependency>
+                <groupId>br.com.criativasoft.opendevice.ext</groupId>
+                <artifactId>bluecove</artifactId>
+                <version>${bluecove.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>br.com.criativasoft.opendevice.ext</groupId>
+                <artifactId>bluecove-gpl</artifactId>
+                <version>${bluecove.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>br.com.criativasoft.opendevice.ext</groupId>
+                <artifactId>bluecove-gpl-arm</artifactId>
+                <version>${bluecove.version}</version>
+            </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>

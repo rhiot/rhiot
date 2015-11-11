@@ -21,6 +21,7 @@
 	</licenses>
 
 	<modules>
+		<module>camel-bluetooth</module>
 		<module>camel-coap</module>
         <module>camel-device-io</module>
     </modules>
