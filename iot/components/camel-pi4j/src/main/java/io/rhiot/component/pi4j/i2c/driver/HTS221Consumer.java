@@ -30,6 +30,16 @@ import com.pi4j.io.i2c.I2CDevice;
 import io.rhiot.component.pi4j.i2c.I2CConsumer;
 import io.rhiot.component.pi4j.i2c.I2CEndpoint;
 
+/**
+ * 
+ * 
+ * inspired by
+ * https://github.com/richards-tech/RTIMULibCS/blob/master/RTIMULibCS/RTIMULibCS
+ * /Devices/HTS221/HTS221HumiditySensor.cs and
+ * https://github.com/richards-tech/RTIMULib/blob/master/RTIMULib/IMUDrivers/
+ * RTHumidityHTS221.cpp
+ * 
+ */
 public final class HTS221Consumer extends I2CConsumer {
 
 	private static final transient Logger LOG = LoggerFactory.getLogger(HTS221Consumer.class);
@@ -43,7 +53,7 @@ public final class HTS221Consumer extends I2CConsumer {
 	public static byte CTRL_REG3 = 0x22;
 
 	public static byte STATUS_REG = 0x27;
-	
+
 	/**
 	 * or H_OUT
 	 */
@@ -55,7 +65,7 @@ public final class HTS221Consumer extends I2CConsumer {
 	 */
 	public static byte TEMP_OUT_L = 0x2A;
 	public static byte TEMP_OUT_H = 0x2B;
-	
+
 	public static byte H0_rH_x2 = 0x30;
 	public static byte H1_rH_x2 = 0x31;
 
@@ -63,13 +73,13 @@ public final class HTS221Consumer extends I2CConsumer {
 	public static byte T1_degC_x8 = 0x33;
 
 	public static byte T1_T0_msb = 0x35;
-	
+
 	public static byte T0_OUT = 0x3C; // 0x3D
 	public static byte T1_OUT = 0x3E; // 0x3F
 
 	public static byte H0_T0_OUT = 0x36; // 0x37
 	public static byte H1_T0_OUT = 0x3A; // 0x3B
-	
+
 	public static byte MULTI_BYTE_READ_MASK = (byte) 0x80;
 	public static byte TEMP_DATA_AVAILABLE_MASK = 0x01;
 	public static byte HUMI_DATA_AVAILABLE_MASK = 0x02;
@@ -114,6 +124,7 @@ public final class HTS221Consumer extends I2CConsumer {
 		return ((status & exected) == exected);
 	}
 
+	@Override
 	public void doStart() throws Exception {
 		super.doStart();
 
@@ -228,4 +239,43 @@ public final class HTS221Consumer extends I2CConsumer {
 		return String.format("0b%16s", Integer.toBinaryString(0x0000ffff & i)).replace(' ', '0');
 	}
 
+	public HTS221TemperatureResolutionMode getTemperatureMode() {
+		return temperatureMode;
+	}
+
+	public void setTemperatureMode(HTS221TemperatureResolutionMode temperatureMode) {
+		this.temperatureMode = temperatureMode;
+	}
+
+	public HTS221HumidityResolutionMode getHumidityMode() {
+		return humidityMode;
+	}
+
+	public void setHumidityMode(HTS221HumidityResolutionMode humidityMode) {
+		this.humidityMode = humidityMode;
+	}
+
+	public HTS221ControlRegistry1 getBdu() {
+		return bdu;
+	}
+
+	public void setBdu(HTS221ControlRegistry1 bdu) {
+		this.bdu = bdu;
+	}
+
+	public HTS221ControlRegistry1 getOdr() {
+		return odr;
+	}
+
+	public void setOdr(HTS221ControlRegistry1 odr) {
+		this.odr = odr;
+	}
+
+	public HTS221ControlRegistry1 getPd() {
+		return pd;
+	}
+
+	public void setPd(HTS221ControlRegistry1 pd) {
+		this.pd = pd;
+	}
 }
