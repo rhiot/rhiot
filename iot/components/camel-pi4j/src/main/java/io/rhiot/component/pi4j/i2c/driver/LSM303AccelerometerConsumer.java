@@ -17,15 +17,18 @@
 package io.rhiot.component.pi4j.i2c.driver;
 
 import java.io.IOException;
-
-import io.rhiot.component.pi4j.i2c.I2CConsumer;
-import io.rhiot.component.pi4j.i2c.I2CEndpoint;
-import com.pi4j.io.i2c.I2CDevice;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pi4j.io.i2c.I2CDevice;
+
+import io.rhiot.component.pi4j.i2c.I2CConsumer;
+import io.rhiot.component.pi4j.i2c.I2CEndpoint;
 
 /*
  * Thx @OlivierLD
@@ -35,59 +38,61 @@ import org.slf4j.LoggerFactory;
  * device doc : http://cdn.sparkfun.com/datasheets/Sensors/Magneto/DM00026454.pdf
  */
 public class LSM303AccelerometerConsumer extends I2CConsumer {
-    private static final transient Logger LOG = LoggerFactory.getLogger(LSM303AccelerometerConsumer.class);
+	private static final transient Logger LOG = LoggerFactory.getLogger(LSM303AccelerometerConsumer.class);
 
-    // Those 2 next addresses are returned by "sudo i2cdetect -y 1", see above.
-    public final static int LSM303_ADDRESS_ACCEL = (0x32 >> 1); // 0011001x,
-                                                                // 0x19
-    public final static int LSM303_REGISTER_ACCEL_CTRL_REG1_A = 0x20; // 00000111
-                                                                      // rw
-    public final static int LSM303_REGISTER_ACCEL_CTRL_REG4_A = 0x23; // 00000000
-                                                                      // rw
-    public final static int LSM303_REGISTER_ACCEL_OUT_X_L_A = 0x28;
+	// Those 2 next addresses are returned by "sudo i2cdetect -y 1", see above.
+	public final static int LSM303_ADDRESS_ACCEL = (0x32 >> 1); // 0011001x,
+																// 0x19
+	public final static int LSM303_REGISTER_ACCEL_CTRL_REG1_A = 0x20; // 00000111
+																		// rw
+	public final static int LSM303_REGISTER_ACCEL_CTRL_REG4_A = 0x23; // 00000000
+																		// rw
+	public final static int LSM303_REGISTER_ACCEL_OUT_X_L_A = 0x28;
 
-    public LSM303AccelerometerConsumer(I2CEndpoint endpoint, Processor processor, I2CDevice device) {
-        super(endpoint, processor, device);
+	private static ByteBuffer buffer = ByteBuffer.allocate(6);
 
-    }
+	public LSM303AccelerometerConsumer(I2CEndpoint endpoint, Processor processor, I2CDevice device) {
+		super(endpoint, processor, device);
+		buffer.order(ByteOrder.LITTLE_ENDIAN);
+	}
 
-    private int accel12(byte[] list, int idx) {
-        int n = (0x000000ff & list[idx]) | ((0x000000ff & list[idx + 1]) << 8); // Low,
-                                                                                // high
-                                                                                // bytes
-        if (n > 32767)
-            n -= 65536; // 2's complement signed
-        return n >> 4; // 12-bit resolution
-    }
+	private int accel12(byte[] list, int idx) {
+		int n = (0x000000ff & list[idx]) | ((0x000000ff & list[idx + 1]) << 8); // Low,
+																				// high
+																				// bytes
+		if (n > 32767)
+			n -= 65536; // 2's complement signed
+		return n >> 4; // 12-bit resolution
+	}
 
-    @Override
-    protected void createBody(Exchange exchange) throws IOException {
-        LSM303Value body = readingSensors();
+	@Override
+	protected void createBody(Exchange exchange) throws IOException {
+		LSM303Value body = readingSensors();
 
-        LOG.debug("" + body);
+		LOG.debug("" + body);
 
-        exchange.getIn().setBody(body);
-    }
+		exchange.getIn().setBody(body);
+	}
 
-    protected void doStart() throws Exception {
-        super.doStart();
-        getDevice().write(LSM303_REGISTER_ACCEL_CTRL_REG1_A, (byte)0x27); // 00100111
-        getDevice().write(LSM303_REGISTER_ACCEL_CTRL_REG4_A, (byte)0x08);
+	@Override
+	protected void doStart() throws Exception {
+		super.doStart();
+		write(LSM303_REGISTER_ACCEL_CTRL_REG1_A, (byte) 0x27); // 00100111
+		write(LSM303_REGISTER_ACCEL_CTRL_REG4_A, (byte) 0x08);
 
-    }
+	}
 
-    private LSM303Value readingSensors() throws IOException {
-        LSM303Value ret = new LSM303Value();
-        byte[] accelData = {0, 0, 0, 0, 0, 0};
+	private LSM303Value readingSensors() throws IOException {
+		LSM303Value ret = new LSM303Value();
 
-        int r = getDevice().read(LSM303_REGISTER_ACCEL_OUT_X_L_A | 0x80, accelData, 0, 6);
-        if (r != 6) {
-            System.out.println("Error reading accel data, < 6 bytes");
-        }
-        ret.setX(accel12(accelData, 0));
-        ret.setY(accel12(accelData, 2));
-        ret.setZ(accel12(accelData, 4));
+		int r = read(LSM303_REGISTER_ACCEL_OUT_X_L_A | 0x80, buffer.array(), 0, 6);
+		if (r != 6) {
+			System.out.println("Error reading accel data, < 6 bytes");
+		}
+		ret.setX(accel12(buffer.array(), 0));
+		ret.setY(accel12(buffer.array(), 2));
+		ret.setZ(accel12(buffer.array(), 4));
 
-        return ret;
-    }
+		return ret;
+	}
 }
