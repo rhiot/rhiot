@@ -133,6 +133,10 @@ Rhiot comes with the following features:
   - [Steroids bootstrap](#steroids-bootstrap)
   - [Injecting MongoDB client](#injecting-mongodb-client)
 - [Quickstarts](#quickstarts)
+  - [Kura Camel quickstart](#kura-camel-quickstart)
+    - [Creating the Kura Camel project](#creating-the-kura-camel-project)
+    - [Prerequisites](#prerequisites)
+    - [Deployment](#deployment)
   - [AMQP cloudlet quickstart](#amqp-cloudlet-quickstart)
     - [Creating and running the AMQP cloudlet project](#creating-and-running-the-amqp-cloudlet-project)
     - [AMQP broker](#amqp-broker)
@@ -1802,6 +1806,76 @@ solution. Quickstarts are hosted at GitHub ([rhiot/quickstarts](https://github.c
 downloaded using the following shell command:
 
     git clone git@github.com:rhiot/quickstarts.git
+
+### Kura Camel quickstart
+
+The Kura Camel quickstart can be used to create Camel router OSGi bundle project deployable into the 
+[Eclipse Kura](https://www.eclipse.org/kura) gateway.
+
+#### Creating the Kura Camel project
+
+In order to create the AMQP cloudlet project execute the following commands:
+
+    git clone git@github.com:rhiot/quickstarts.git
+    cp -r quickstarts/kura-camel kura-camel
+    cd kura-camel
+    mvn install
+    
+#### Prerequisites
+
+We assume that you have Eclipse Kura installed on our target device. And that you know the IP address of that device.
+If you would like to find the IP of the Raspberry Pi device connected to your local network, you can use the Rhiot
+device scanner as follows:
+    
+    docker run --net=host -it rhiot/deploy-gateway scan
+    
+The command above will return the output similar to the one presented below:
+
+    Scanning local networks for devices...
+    
+    ======================================
+    Device type		IPv4 address
+    --------------------------------------
+    RaspberryPi2		/192.168.1.100
+
+Keep in mind that `/opt/eclipse/kura/kura/config.ini` file on your target device should have OSGi boot delegation
+enabled for packages `sun.*,com.sun.*`. Your `/opt/eclipse/kura/kura/config.ini` should contain the following line then: 
+
+    org.osgi.framework.bootdelegation=sun.*,com.sun.*
+
+A boot delegation of `sun` packages is required to make Camel work smoothly in an Equinox.
+
+#### Deployment
+
+Your bundle can be deployed into the target device by executing an `scp` command. For example:
+
+    scp target/rhiot-kura-camel-1.0.0-SNAPSHOT.jar pi@192.168.1.100:/tmp
+
+The command above will copy your bundle under the `/tmp/rhiot-kura-camel-1.0.0-SNAPSHOT.jar` location on a target device.
+Use similar scp command to deployed Camel jars required to run your project:
+
+    scp ~/.m2/repository/org/apache/camel/camel-core/2.16.0/camel-core-2.16.0.jar pi@192.168.1.100:/tmp
+    scp ~/.m2/repository/org/apache/camel/camel-core-osgi/2.16.0/camel-core-osgi-2.16.0.jar pi@192.168.1.100:/tmp
+    scp ~/.m2/repository/org/apache/camel/camel-kura/2.16.0/camel-kura-2.16.0.jar pi@192.168.1.100:/tmp
+
+Now log into your target device Kura shell using telnet:
+
+    telnet localhost 5002
+    
+And install the bundles you previously scp-ed:
+
+    install file:///tmp/camel-core-2.16.0.jar
+    install file:///tmp/camel-core-osgi-2.16.0.jar
+    install file:///tmp/camel-kura-2.16.0.jar
+    install file:///tmp/rhiot-kura-camel-1.0.0-SNAPSHOT.jar
+    
+Finally start your application using the following command:
+
+    start <ID_OF_rhiot-kura-camel-1.0.0-SNAPSHOT_BUNDLE)
+
+Keep in mind that bundles you deployed using the recipe above are not installed permanently and will be reverted
+after the server restart. Please read Kura documentation for more details regarding 
+[permanent deployments](http://eclipse.github.io/kura/doc/deploying-bundles.html#making-deployment-permanent).
 
 ### AMQP cloudlet quickstart
 
