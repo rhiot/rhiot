@@ -1877,6 +1877,11 @@ Keep in mind that bundles you deployed using the recipe above are not installed 
 after the server restart. Please read Kura documentation for more details regarding 
 [permanent deployments](http://eclipse.github.io/kura/doc/deploying-bundles.html#making-deployment-permanent).
 
+#### What the quickstart is actually doing?
+
+This quickstart triggers [Camel timer](http://camel.apache.org/timer.html) event every second and sends it to the 
+system logger using [Camel Log](http://camel.apache.org/log) component.
+
 ### AMQP cloudlet quickstart
 
 The AMQP cloudlet quickstart can be used as a base for the fat-jar AMQP microservices. If you wanna create a simple
