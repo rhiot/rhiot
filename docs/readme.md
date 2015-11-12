@@ -1880,7 +1880,8 @@ after the server restart. Please read Kura documentation for more details regard
 #### What the quickstart is actually doing?
 
 This quickstart triggers [Camel timer](http://camel.apache.org/timer.html) event every second and sends it to the 
-system logger using [Camel Log](http://camel.apache.org/log) component.
+system logger using [Camel Log](http://camel.apache.org/log) component. This is fairy simple functionality, but enough
+to demonstrate the Camel Kura project is actually working and processing messages.
 
 ### AMQP cloudlet quickstart
 
