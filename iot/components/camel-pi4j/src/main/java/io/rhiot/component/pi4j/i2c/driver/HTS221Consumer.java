@@ -140,7 +140,7 @@ public final class HTS221Consumer extends I2CConsumer {
 		write(CTRL_REG1, crtl1);
 		write(AV_CONF, avconf);
 
-		tempatureCalibration();
+		temperatureCalibration();
 		humidityCalibration();
 
 	}
@@ -192,7 +192,7 @@ public final class HTS221Consumer extends I2CConsumer {
 		internalHumidityYIntercept = H0 - (internalHumiditySlope * H0_T0_OUT);
 	}
 
-	public void tempatureCalibration() throws Exception {
+	public void temperatureCalibration() throws Exception {
 		byte tempMSB = (byte) (0x0f & read(T1_T0_msb));
 		LOG.debug("T1/T0 msb:" + toHexToString(tempMSB));
 
