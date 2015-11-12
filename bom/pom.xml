@@ -39,6 +39,7 @@
         <ivy.version>2.4.0</ivy.version>
         <jackson.version>2.6.3</jackson.version>
         <jcabi-aether.version>0.10.1</jcabi-aether.version>
+        <jdk-dio.version>1.0.2</jdk-dio.version>
         <jfreechart.version>1.0.19</jfreechart.version>
         <joda-time.version>2.9</joda-time.version>
         <jolokia.version>1.3.2</jolokia.version>
@@ -50,7 +51,7 @@
         <mockito-groovy-support.version>1.3</mockito-groovy-support.version>
         <mongo-java-driver.version>2.12.5</mongo-java-driver.version>
         <openimaj.version>1.3.1</openimaj.version>
-        <pi4j-version>1.0</pi4j-version>
+        <pi4j.version>1.0</pi4j.version>
         <pubnub.version>3.7.4</pubnub.version>
         <qpid.version>0.32</qpid.version>
         <reflections.version>0.9.10</reflections.version>
@@ -165,22 +166,27 @@
             <dependency>
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-core</artifactId>
-                <version>${pi4j-version}</version>
+                <version>${pi4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-device</artifactId>
-                <version>${pi4j-version}</version>
+                <version>${pi4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-gpio-extension</artifactId>
-                <version>${pi4j-version}</version>
+                <version>${pi4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.pi4j</groupId>
                 <artifactId>pi4j-service</artifactId>
-                <version>${pi4j-version}</version>
+                <version>${pi4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jdk</groupId>
+                <artifactId>jdk.dio</artifactId>
+                <version>${jdk-dio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.pubnub</groupId>
@@ -592,6 +598,15 @@
             </releases>
             <snapshots>
                 <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>kura_addons</id>
+            <name>Kura Addons Maven Repository</name>
+            <url>https://raw.github.com/eurotech/kura_addons/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
     </repositories>
