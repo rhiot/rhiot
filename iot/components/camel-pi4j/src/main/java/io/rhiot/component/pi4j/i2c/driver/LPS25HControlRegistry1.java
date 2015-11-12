@@ -19,30 +19,17 @@ package io.rhiot.component.pi4j.i2c.driver;
 /**
  * 
  */
-public class LPS25HValue {
+public enum LPS25HControlRegistry1 {
 
-	private double pressure;
-	private double temperature;
+	ODR_ONE_SHOT(0b000), ODR_1_HZ(0b001), ODR_7_HZ(0b010), ODR_12DOT5_HZ(0b011), ODR_25_HZ(0b100), ODR_RESERVED(
+			0b101), DIFFEN_DISABLED(0b0), DIFFEN_ENABLE(0b1), RESETAZ_DISABLE(0b0), RESETAZ_RESET(0b1), BDU_CONTINUOUS(
+					0b0), BDU_UPDATE_AFTER_READING(0b1), PD_ACTIVE(0b1), PD_POWER_DOWN(0b0), SIM_4WIRE(0b0), SIM_3WIRE(
+							0b1);
 
-	public double getPressure() {
-		return pressure;
-	}
+	final byte value;
 
-	public void setPressure(double pressure) {
-		this.pressure = pressure;
-	}
-
-	public double getTemperature() {
-		return temperature;
-	}
-
-	public void setTemperature(double temperature) {
-		this.temperature = temperature;
-	}
-
-	@Override
-	public String toString() {
-		return "[temperature:" + temperature + ",pressure:" + pressure + "]";
+	LPS25HControlRegistry1(int value) {
+		this.value = (byte) value;
 	}
 
 }
