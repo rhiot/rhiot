@@ -70,7 +70,7 @@ public class LPS25HConsumer extends I2CConsumer {
 	private static final byte CTRL_REG2_SC = 0x40;
 	private static final byte FIFO_CTRL_SC = (byte) 0xc0;
 
-	// Static constant
+	// Static constant for conversion
 	private static final double DOUBLE_42_5 = 42.5;
 	private static final double DOUBLE_480_0 = 480.0;
 	private static final double DOUBLE_4096_0 = 4096.0;
