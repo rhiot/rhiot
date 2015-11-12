@@ -24,6 +24,7 @@ import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.GpioPinPwmOutput;
 import com.pi4j.io.gpio.PinMode;
 
+import io.rhiot.component.pi4j.Pi4jConstants;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 
@@ -99,6 +100,10 @@ public class GPIOProducer extends DefaultProducer {
     public void process(Exchange exchange) throws Exception {
         if (log.isTraceEnabled()) {
             log.trace(exchange.toString());
+        }
+        GPIOAction headerAction = exchange.getIn().getHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, GPIOAction.class);
+        if (headerAction != null) {
+            action = headerAction;
         }
         if (action == null) {
             log.trace("No action pick up body");

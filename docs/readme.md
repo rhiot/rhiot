@@ -994,7 +994,12 @@ You can use static field name "*GPIO_XX*", pin name "*GPIO [0-9]*" or pin addres
 
     from("timer:default?period=2000")
     .to("pi4j-gpio://GPIO_04?mode=DIGITAL_OUTPUT&state=LOW&action=TOGGLE");
-    
+
+When using producer you can also set or override action using message header with a key of `Pi4jConstants.CAMEL_RBPI_PIN_ACTION`
+
+    from("timer:default?period=2000")
+    .process(exchange -> exchange.getIn().setHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, "LOW"))
+    .to("pi4j-gpio://GPIO_04?mode=DIGITAL_OUTPUT&state=LOW&action=TOGGLE");
     
 ##### Simple button w/ LED mode
 

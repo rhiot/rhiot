@@ -26,6 +26,7 @@ public final class Pi4jConstants {
     public static final String PROVIDER_NAME = "RaspberryPi GPIO Provider Mock";
     public static final String CAMEL_RBPI = "CamelPi4j";
     public static final String CAMEL_RBPI_PIN = CAMEL_RBPI + ".pin";
+    public static final String CAMEL_RBPI_PIN_ACTION = CAMEL_RBPI + ".pinAction";
     public static final String CAMEL_RBPI_PIN_STATE = CAMEL_RBPI + ".pinState";
     public static final String CAMEL_RBPI_PIN_TYPE = CAMEL_RBPI + ".pinType";
     public static final String CAMEL_RBPI_PIN_VALUE = CAMEL_RBPI + ".pinValue";
