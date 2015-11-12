@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pi4j.io.i2c.I2CDevice;
 
+import io.rhiot.component.pi4j.i2c.I2CConstants;
 import io.rhiot.component.pi4j.i2c.I2CConsumer;
 import io.rhiot.component.pi4j.i2c.I2CEndpoint;
 
@@ -49,7 +50,7 @@ public class LSM303AccelerometerConsumer extends I2CConsumer {
 																		// rw
 	public final static int LSM303_REGISTER_ACCEL_OUT_X_L_A = 0x28;
 
-	private static ByteBuffer buffer = ByteBuffer.allocate(6);
+	private ByteBuffer buffer = ByteBuffer.allocate(6);
 
 	public LSM303AccelerometerConsumer(I2CEndpoint endpoint, Processor processor, I2CDevice device) {
 		super(endpoint, processor, device);
@@ -85,7 +86,7 @@ public class LSM303AccelerometerConsumer extends I2CConsumer {
 	private LSM303Value readingSensors() throws IOException {
 		LSM303Value ret = new LSM303Value();
 
-		int r = read(LSM303_REGISTER_ACCEL_OUT_X_L_A | 0x80, buffer.array(), 0, 6);
+		int r = read(LSM303_REGISTER_ACCEL_OUT_X_L_A | I2CConstants.MULTI_BYTE_READ_MASK, buffer.array(), 0, 6);
 		if (r != 6) {
 			System.out.println("Error reading accel data, < 6 bytes");
 		}
