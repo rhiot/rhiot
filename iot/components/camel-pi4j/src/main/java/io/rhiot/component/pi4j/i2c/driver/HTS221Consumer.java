@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pi4j.io.i2c.I2CDevice;
 
+import io.rhiot.component.pi4j.i2c.I2CConstants;
 import io.rhiot.component.pi4j.i2c.I2CConsumer;
 import io.rhiot.component.pi4j.i2c.I2CEndpoint;
 
@@ -80,7 +81,6 @@ public final class HTS221Consumer extends I2CConsumer {
 	public static byte H0_T0_OUT = 0x36; // 0x37
 	public static byte H1_T0_OUT = 0x3A; // 0x3B
 
-	public static byte MULTI_BYTE_READ_MASK = (byte) 0x80;
 	public static byte TEMP_DATA_AVAILABLE_MASK = 0x01;
 	public static byte HUMI_DATA_AVAILABLE_MASK = 0x02;
 
@@ -147,7 +147,7 @@ public final class HTS221Consumer extends I2CConsumer {
 
 	public double getHumidity() throws IOException {
 
-		read(HUMIDITY_OUT_L | MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
+		read(HUMIDITY_OUT_L | I2CConstants.MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
 		short rawHumidity = buffer.getShort(0);
 
 		return (rawHumidity * internalHumiditySlope + internalHumidityYIntercept);
@@ -155,7 +155,7 @@ public final class HTS221Consumer extends I2CConsumer {
 
 	public double readTemperature() throws IOException {
 
-		read(TEMP_OUT_L | MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
+		read(TEMP_OUT_L | I2CConstants.MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
 		short TEMP_OUT_L = buffer.getShort(0);
 		LOG.debug("TEMP_OUT_L " + TEMP_OUT_L);
 
@@ -180,11 +180,11 @@ public final class HTS221Consumer extends I2CConsumer {
 		double H1 = H1_H_2 / 2.0;
 		LOG.debug("H1 " + H1);
 
-		read(H0_T0_OUT | MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
+		read(H0_T0_OUT | I2CConstants.MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
 		short H0_T0_OUT = buffer.getShort(0);
 		LOG.debug("H0_T0_OUT: " + toHexToString(H0_T0_OUT));
 
-		read(H1_T0_OUT | MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
+		read(H1_T0_OUT | I2CConstants.MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
 		short H1_T0_OUT = buffer.getShort(0);
 		LOG.debug("H1_T0_OUT: " + toHexToString(H1_T0_OUT));
 
@@ -215,12 +215,12 @@ public final class HTS221Consumer extends I2CConsumer {
 		LOG.debug("T1 " + T1);
 
 		// retrieve T0_OUT
-		read(T0_OUT | MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
+		read(T0_OUT | I2CConstants.MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
 		short T0_OUT = buffer.getShort(0);
 		LOG.debug("T0_OUT " + toHexToString(T0_OUT));
 
 		// retrieve T1_OUT
-		read(T1_OUT | MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
+		read(T1_OUT | I2CConstants.MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
 		short T1_OUT = buffer.getShort(0);
 		LOG.debug("T1_OUT " + toHexToString(T1_OUT));
 
