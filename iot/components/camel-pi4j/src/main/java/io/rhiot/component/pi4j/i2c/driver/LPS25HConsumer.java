@@ -122,8 +122,14 @@ public class LPS25HConsumer extends I2CConsumer {
 	}
 
 	@Override
-	protected void doStop() throws Exception {
+	public void doStop() throws Exception {
 		super.doStop();
+		byte crtl1 = (byte) read(CTRL_REG1);
+
+		byte maskToPowerDown = (byte) (0xff ^ (~LPS25HControlRegistry1.PD_POWER_DOWN.value << 7));
+		crtl1 &= maskToPowerDown;
+
+		write(CTRL_REG1, crtl1);
 
 	}
 

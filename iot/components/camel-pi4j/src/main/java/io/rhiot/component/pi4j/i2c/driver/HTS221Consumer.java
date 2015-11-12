@@ -145,6 +145,18 @@ public final class HTS221Consumer extends I2CConsumer {
 
 	}
 
+	@Override
+	public void doStop() throws Exception {
+		super.doStop();
+		byte crtl1 = (byte) read(CTRL_REG1);
+
+		byte maskToPowerDown = (byte) (0xff ^ (~HTS221ControlRegistry1.PD_POWER_DOWN.value << 7));
+		crtl1 &= maskToPowerDown;
+
+		write(CTRL_REG1, crtl1);
+
+	}
+
 	public double getHumidity() throws IOException {
 
 		read(HUMIDITY_OUT_L | I2CConstants.MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
