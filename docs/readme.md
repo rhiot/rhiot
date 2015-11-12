@@ -1026,10 +1026,10 @@ Plug an button on GPIO 1, and LED on GPIO 2 (with Resistor) and code a route lik
 | `bufferSize`         |  `-1`                     |                                                           |
 | `driver`             |                           | cf available i2c driver                                   |
 
-i2c component is realy simplist, for consumer endpoint you can just read byte or buffer byte,
-for producer one you can 
+I2C component is really simplistic, the consumer endpoint reads a single byte, or to a buffer of bytes directly from the device.
+The producer writes 1 or more bytes.
 
-for smarter device, you must implement an driver 
+For smarter devices, you must implement a driver.
 
 ###### i2c driver
 
