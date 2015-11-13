@@ -46,3 +46,4 @@ Execute the following command in the project main directory:
 
 * update the version on the main page of the project (`readme.md`)
 * update release guide (`docs/release-notes.md`) using GitHub tickets marked as done in the given version
+* upgrade version in Rhiot command line (`tooling/bash/rhiot.sh`). Look up for a line similar to `RHIOT_VERSION=x.y.z`.

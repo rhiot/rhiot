@@ -29,4 +29,12 @@ else
   fi
 fi
 
-docker run -v ~/rhiot/maven/repository:/root/.m2/repository --net=host -it rhiot/deploy-gateway "$@"
+### Rhiot version setup
+
+if [ -z "$RHIOT_VERSION" ]; then
+    RHIOT_VERSION=0.1.2
+fi
+
+### Command execution
+
+docker run -v ~/rhiot/maven/repository:/root/.m2/repository --net=host -it rhiot/deploy-gateway:${RHIOT_VERSION} "$@"
