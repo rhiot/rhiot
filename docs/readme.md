@@ -1616,6 +1616,16 @@ Cloudlet reuses the MongoDB connection settings used by the MongoDB LWM2M device
 
 Geofencing cloudlet provides backend cloud service for collecting and the basic analysis of the GPS data.
 
+## Tooling
+
+Rhiot comes with a set of tools making it easier to work with the IoT solutions.
+
+### Rhiot command
+
+The basic tool for Rhiot is the `rhiot` Bash command. In order to install Rhiot command, execute the following command:
+
+    wget -O /usr/bin/rhiot && chmod +x /usr/bin/rhiot 
+
 ## Performance Testing Framework
 
 The key part of the process of tailoring the perfect IoT solution is choosing the proper hardware for the gateway device.
