@@ -37,4 +37,4 @@ fi
 
 ### Command execution
 
-docker run -v ~/rhiot/maven/repository:/root/.m2/repository --net=host -it rhiot/deploy-gateway:${RHIOT_VERSION} "$@"
+docker run -v ~/rhiot/maven/repository:/root/.m2/repository --net=host -it rhiot/cmd:${RHIOT_VERSION} "$@"

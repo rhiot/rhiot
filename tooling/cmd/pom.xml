@@ -9,8 +9,8 @@
         <version>0.1.3-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>RHIOT :: Deployer :: App</name>
-    <artifactId>rhiot-deployer-app</artifactId>
+    <name>Rhiot :: Cmd</name>
+    <artifactId>rhiot-cmd</artifactId>
 
     <licenses>
         <license>
@@ -21,7 +21,7 @@
 
     <properties>
         <fatjar.mainClass>io.rhiot.deployer.Deployer</fatjar.mainClass>
-        <docker.image.target>deploy-gateway</docker.image.target>
+        <docker.image.target>cmd</docker.image.target>
     </properties>
 
     <dependencies>

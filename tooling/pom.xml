@@ -22,7 +22,7 @@
 
     <modules>
         <module>deployer</module>
-        <module>deployer-app</module>
+        <module>cmd</module>
     </modules>
 
 </project>
