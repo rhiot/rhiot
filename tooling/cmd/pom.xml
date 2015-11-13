@@ -20,7 +20,7 @@
     </licenses>
 
     <properties>
-        <fatjar.mainClass>io.rhiot.deployer.Deployer</fatjar.mainClass>
+        <fatjar.mainClass>io.rhiot.cmd.Cmd</fatjar.mainClass>
         <docker.image.target>cmd</docker.image.target>
     </properties>
 
@@ -28,6 +28,10 @@
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-deployer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-steroids</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
