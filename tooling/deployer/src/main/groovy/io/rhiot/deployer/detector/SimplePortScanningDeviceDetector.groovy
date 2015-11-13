@@ -104,10 +104,11 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
                 @Override
                 ScanResult call() throws Exception {
                     try {
+                        CmdOutput.LOG.debug('Scanning address {}', it.hostAddress)
                         return new ScanResult(it, it.isReachable(timeout));
                     } catch (SocketException e) {
                         if (e.message.contains('Permission denied')) {
-                            println("Cannot scan " + it + " - permission denied.")
+                            CmdOutput.LOG.debug("Cannot scan " + it + " - permission denied.")
                             return new ScanResult(it, false)
                         } else {
                             throw new RuntimeException(e);
