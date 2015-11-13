@@ -1632,6 +1632,10 @@ In order to display all avilable commands with their options, execute the `rhiot
 
     rhiot --help
 
+Rhiot command line assumes that there is Docker server running on your local machine. An actual commands execution is
+delegated by Docker client to the Rhiot Docker image. If Docker is not installed (or is installed in a version lower than
+a minimal version supported), Rhiot command line tool will automatically install or upgrade Docker.
+
 #### rhiot scan
 
 To perform port scanning in your local network and display detected devices, execute a `rhiot scan` command:
