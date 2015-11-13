@@ -134,9 +134,10 @@ Rhiot comes with the following features:
   - [Injecting MongoDB client](#injecting-mongodb-client)
 - [Quickstarts](#quickstarts)
   - [Kura Camel quickstart](#kura-camel-quickstart)
-    - [Creating the Kura Camel project](#creating-the-kura-camel-project)
+    - [Creating a Kura Camel project](#creating-a-kura-camel-project)
     - [Prerequisites](#prerequisites)
     - [Deployment](#deployment)
+    - [What the quickstart is actually doing?](#what-the-quickstart-is-actually-doing)
   - [AMQP cloudlet quickstart](#amqp-cloudlet-quickstart)
     - [Creating and running the AMQP cloudlet project](#creating-and-running-the-amqp-cloudlet-project)
     - [AMQP broker](#amqp-broker)
@@ -1810,11 +1811,13 @@ downloaded using the following shell command:
 ### Kura Camel quickstart
 
 The Kura Camel quickstart can be used to create Camel router OSGi bundle project deployable into the 
-[Eclipse Kura](https://www.eclipse.org/kura) gateway.
+[Eclipse Kura](https://www.eclipse.org/kura) gateway. Kura is a widely adopted field gateway software for the
+IoT solutions. Rhiot supports Kura gateway deployments as a first class citizen and this quickstart is intended to be
+used as a blueprint for the Camel deployments for Kura.
 
-#### Creating the Kura Camel project
+#### Creating a Kura Camel project
 
-In order to create the AMQP cloudlet project execute the following commands:
+In order to create the Kura Camel project execute the following commands:
 
     git clone git@github.com:rhiot/quickstarts.git
     cp -r quickstarts/kura-camel kura-camel
@@ -1823,13 +1826,13 @@ In order to create the AMQP cloudlet project execute the following commands:
     
 #### Prerequisites
 
-We assume that you have Eclipse Kura installed on our target device. And that you know the IP address of that device.
-If you would like to find the IP of the Raspberry Pi device connected to your local network, you can use the Rhiot
-device scanner as follows:
+We presume that you have Eclipse Kura already installed on your target device. And that you know the IP address of that device.
+If you happen to deploy to a Raspbian-based device, and you would like to find the IP of that Raspberry Pi device connected 
+to your local network, you can use the Rhiot device scanner, as demonstrated on the snippet below:
     
     docker run --net=host -it rhiot/deploy-gateway scan
     
-The command above will return the output similar to the one presented below:
+The command above will return an output similar to the one presented below:
 
     Scanning local networks for devices...
     
@@ -1847,12 +1850,13 @@ A boot delegation of `sun` packages is required to make Camel work smoothly in a
 
 #### Deployment
 
-Your bundle can be deployed into the target device by executing an `scp` command. For example:
+In order to deploy Camel application to a Kura server, you have to copy necessary Camel jars and a bundle containing your
+ application. Your bundle can be deployed into the target device by executing an `scp` command. For example:
 
     scp target/rhiot-kura-camel-1.0.0-SNAPSHOT.jar pi@192.168.1.100:/tmp
 
-The command above will copy your bundle under the `/tmp/rhiot-kura-camel-1.0.0-SNAPSHOT.jar` location on a target device.
-Use similar scp command to deployed Camel jars required to run your project:
+The command above will copy your bundle to the `/tmp/rhiot-kura-camel-1.0.0-SNAPSHOT.jar` location on a target device.
+Use similar `scp` command to deploy Camel jars required to run your project:
 
     scp ~/.m2/repository/org/apache/camel/camel-core/2.16.0/camel-core-2.16.0.jar pi@192.168.1.100:/tmp
     scp ~/.m2/repository/org/apache/camel/camel-core-osgi/2.16.0/camel-core-osgi-2.16.0.jar pi@192.168.1.100:/tmp
