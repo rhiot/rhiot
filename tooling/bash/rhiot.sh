@@ -2,8 +2,6 @@
 
 ### Docker server setup
 
-echo Checking Docker setup...
-
 if ! type "docker" > /dev/null; then
   echo 'Docker not found - installing...'
   wget -qO- https://get.docker.com/ | sh
