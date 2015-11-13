@@ -16,19 +16,21 @@
  */
 package io.rhiot.deployer.detector
 
+import io.rhiot.deployer.CmdOutput
+
 import static java.net.NetworkInterface.getNetworkInterfaces
 
 class JavaNetInterfaceProvider implements InterfacesProvider {
 
     @Override
     List<NetworkInterface> interfaces() {
-        println("Found network interfaces : " + getNetworkInterfaces().findAll())
+        CmdOutput.LOG.debug("Found network interfaces : " + getNetworkInterfaces().findAll())
         
         getNetworkInterfaces().findAll { def iface = it.displayName
             iface.startsWith("wlan") || iface.startsWith("eth") || iface.startsWith("en") || iface.startsWith("docker")}.
                 collect { java.net.NetworkInterface it ->
                     def ipv4Address = it.interfaceAddresses.find{ it.getAddress().getHostAddress().length() < 15 }
-                    println("Checking ipv4Address " + ipv4Address)
+                    CmdOutput.LOG.debug("Checking ipv4Address " + ipv4Address)
                     def broadcast = ipv4Address.broadcast.hostName
                     new NetworkInterface(ipv4Address: ipv4Address, broadcast: broadcast)
                 }

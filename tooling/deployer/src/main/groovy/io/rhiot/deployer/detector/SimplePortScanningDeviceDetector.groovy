@@ -16,6 +16,7 @@
  */
 package io.rhiot.deployer.detector
 
+import io.rhiot.deployer.CmdOutput
 import io.rhiot.utils.ssh.client.SshClient
 import org.slf4j.Logger
 
@@ -123,11 +124,11 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
                 @Override
                 Device call() throws Exception {
                     try {
-                        println("Probing for Raspberry Pi on " + device.hostAddress);
+                        CmdOutput.LOG.debug("Probing for Raspberry Pi on " + device.hostAddress)
                         new SshClient(device.hostAddress, 22, username, password).command("echo ping");
                         new Device(device, Device.DEVICE_RASPBERRY_PI_2)
                     } catch (Exception ex) {
-                        println("Can't connect to the Raspberry Pi device: " + device.getHostAddress());
+                        CmdOutput.LOG.debug("Can't connect to the Raspberry Pi device: " + device.getHostAddress());
                         return null
                     }
                 }
