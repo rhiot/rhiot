@@ -19,62 +19,74 @@ package io.rhiot.component.deviceio.gpio;
 
 import java.io.IOException;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.impl.DefaultProducer;
+
+import io.rhiot.component.deviceio.DeviceIOConstants;
 import jdk.dio.ClosedDeviceException;
 import jdk.dio.UnavailableDeviceException;
 import jdk.dio.gpio.GPIOPin;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.impl.DefaultProducer;
 
 /**
  * The DeviceIO GPIO producer.
  */
 public class GPIOProducer extends DefaultProducer {
 
-    private GPIOEndpoint endpoint;
-    private GPIOPin pin = null;
+	private GPIOEndpoint endpoint;
+	private GPIOPin pin = null;
+	private GPIOAction action;
 
-    public GPIOProducer(GPIOEndpoint endpoint, GPIOPin pin) {
-        super(endpoint);
-        this.endpoint = endpoint;
-        this.pin = pin;
-    }
+	public GPIOProducer(GPIOEndpoint endpoint, GPIOPin pin) {
+		super(endpoint);
+		this.endpoint = endpoint;
+		this.pin = pin;
+		this.action = endpoint.getAction();
 
-    /**
-     * Process the message
-     */
-    public void process(Exchange exchange) throws Exception {
-        log.debug(exchange.toString());
+	}
 
-        if (pin instanceof GPIOPin) {
-            GPIOAction action = endpoint.getAction();
-            if (action != null) {
-                switch (action) {
-                case HIGH:
-                    setValue(true);
-                    break;
-                case LOW:
-                    setValue(false);
-                    break;
-                case TOGGLE:
-                    setValue(!((GPIOPin)pin).getValue());
-                    break;
-                }
-            } else {
-                setValue(exchange.getIn().getBody(Boolean.class));
-            }
-        }
-    }
+	/**
+	 * Process the message
+	 */
+	@Override
+	public void process(Exchange exchange) throws Exception {
+		log.debug(exchange.toString());
 
-    private void setValue(boolean b) throws UnavailableDeviceException, ClosedDeviceException, IOException {
-        ((GPIOPin)pin).setValue(b);
-    }
+		if (pin instanceof GPIOPin) {
 
-    public void setPin(GPIOPin pin) {
-        this.pin = pin;
-    }
+			GPIOAction headerAction = exchange.getIn().getHeader(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION,
+					GPIOAction.class);
 
-    public GPIOPin getPin() {
-        return pin;
-    }
+			if (headerAction != null) {
+				action = headerAction;
+			}
+
+			if (action != null) {
+				switch (action) {
+				case HIGH:
+					setValue(true);
+					break;
+				case LOW:
+					setValue(false);
+					break;
+				case TOGGLE:
+					setValue(!pin.getValue());
+					break;
+				}
+			} else {
+				setValue(exchange.getIn().getBody(Boolean.class));
+			}
+		}
+	}
+
+	private void setValue(boolean b) throws UnavailableDeviceException, ClosedDeviceException, IOException {
+		pin.setValue(b);
+	}
+
+	public void setPin(GPIOPin pin) {
+		this.pin = pin;
+	}
+
+	public GPIOPin getPin() {
+		return pin;
+	}
 }
