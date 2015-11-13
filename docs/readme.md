@@ -120,6 +120,8 @@ Rhiot comes with the following features:
     - [Clustering Device Management Cloudlet](#clustering-device-management-cloudlet)
     - [Devices data analytics](#devices-data-analytics)
   - [Geofencing cloudlet](#geofencing-cloudlet)
+- [Tooling](#tooling)
+  - [Rhiot command](#rhiot-command)
 - [Performance Testing Framework](#performance-testing-framework)
   - [Hardware profiles](#hardware-profiles)
     - [Raspberry PI 2 B+ (aka RPI2)](#raspberry-pi-2-b-aka-rpi2)
@@ -1624,7 +1626,25 @@ Rhiot comes with a set of tools making it easier to work with the IoT solutions.
 
 The basic tool for Rhiot is the `rhiot` Bash command. In order to install Rhiot command, execute the following command:
 
-    wget -O /usr/bin/rhiot && chmod +x /usr/bin/rhiot 
+    sudo wget https://raw.githubusercontent.com/rhiot/rhiot/master/tooling/bash/rhiot.sh -O /usr/bin/rhiot && sudo chmod +x /usr/bin/rhiot 
+
+In order to display all avilable commands with their options, execute the `rhiot` command with `--help` or `-h` option:
+
+    rhiot --help
+
+#### rhiot scan
+
+To perform port scanning in your local network and display detected devices, execute a `rhiot scan` command:
+
+    $ rhiot scan
+    Scanning local networks for devices...
+        
+    ======================================
+    Device type		IPv4 address
+    --------------------------------------
+    RaspberryPi2		/192.168.1.100
+
+    
 
 ## Performance Testing Framework
 

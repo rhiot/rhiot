@@ -40,9 +40,9 @@ class ConsoleInputParser {
     }
 
     String helpText() {
-        """Welcome to the Rhiot Project Deployer application.
+        """Welcome to the Rhiot command line tool.
 
-Usage: docker run -t rhiot/deployer [deploy-gateway|scan]
+Usage: rhiot [OPTIONS] [deploy-gateway|scan]
 
 Commands:
 deploy-gateway (default)    Deploys gateway to the device.
@@ -64,7 +64,7 @@ Options:
     String command() {
         def command = args.find{!it.startsWith('-')} ?: DEFAULT_COMMAND
         if(![DEFAULT_COMMAND, 'scan'].contains(command)) {
-            throw new IllegalArgumentException("No such command - ${command} .")
+            throw new IllegalArgumentException("No such command - ${command}.")
         }
         command
     }
