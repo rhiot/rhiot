@@ -32,7 +32,8 @@ fi
 ### Rhiot version setup
 
 if [ -z "$RHIOT_VERSION" ]; then
-    RHIOT_VERSION=0.1.2
+    # RHIOT_VERSION=0.1.3
+    RHIOT_VERSION=0.1.3-SNAPSHOT # Remove this line and use the locked version above after 0.1.3 release
 fi
 
 ### Command execution
