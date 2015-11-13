@@ -14,6 +14,4 @@ else
   fi
 fi
 
-
-
-docker run -v ~/rhiot/maven/repository:/root/.m2/repository --net=host -it rhiot/deploy-gateway
+docker run -v ~/rhiot/maven/repository:/root/.m2/repository --net=host -it rhiot/deploy-gateway "@$"
