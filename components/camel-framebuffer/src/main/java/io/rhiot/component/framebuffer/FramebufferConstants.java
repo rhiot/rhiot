@@ -20,7 +20,7 @@ public final class FramebufferConstants {
 
 	public static final String NAME = "name";
 	public static final String ROOT = "/";
-	public static final String ROOT_4_TEST_SRC = "./src/test/resources/testingfb";
+	public static final String ROOT_4_TEST_SRC = "./src/test/testingfb";
 	public static final String ROOT_4_TEST = "./target/testingfb";
 	public static final String SYS_CLASS_GRAPHICS = "sys/class/graphics";
 	public static final String WITDH = "witdh";
