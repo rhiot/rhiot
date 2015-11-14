@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>  <!-- should be removed -->
+		<groupId>io.rhiot</groupId>
+		<artifactId>rhiot-components</artifactId>
+		<version>0.1.3-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<name>RHIOT :: Components :: FrameBuffer</name>
+	<artifactId>camel-framebuffer</artifactId>
+	<packaging>bundle</packaging>
+	<description>Camel FrameBuffer Component</description>
+
+	<properties>
+		<camel.osgi.export.pkg>
+			io.rhiot.component.framebuffer.*
+		</camel.osgi.export.pkg>
+		<camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=framebuffer</camel.osgi.export.service>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+		</dependency>
+
+		<!-- support camel documentation -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>apt</artifactId>
+		</dependency>
+
+		<!-- logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- testing -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
