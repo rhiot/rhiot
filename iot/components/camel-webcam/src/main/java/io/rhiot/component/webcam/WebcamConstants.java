@@ -28,6 +28,7 @@ public class WebcamConstants {
     public static final String V4L2_SET_FORMAT_JPEG_COMMAND = "v4l2-ctl --set-fmt-video=pixelformat=3";
     public static final String V4L2_LIST_DEVICES_COMMAND = "v4l2-ctl --list-devices";
     public static final String WEBCAM_DEPENDENCIES_LINUX = "v4l-utils";
+    public static final long   DEFAULT_WEBCAM_LOOKUP_TIMEOUT = 10000;
     
     private WebcamConstants() {
         // Constants class

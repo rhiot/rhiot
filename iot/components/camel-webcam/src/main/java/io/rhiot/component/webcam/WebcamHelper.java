@@ -41,8 +41,6 @@ public class WebcamHelper {
 
     private static final Logger LOG = getLogger(WebcamHelper.class);
 
-    private static final long DEFAULT_WEBCAM_LOOKUP_TIMEOUT = 10000;
-
     /**
      * Creates an OutOnly exchange with the BufferedImage.
      */
@@ -105,7 +103,7 @@ public class WebcamHelper {
      */
     public static boolean isWebcamPresent(){
         try {
-            Webcam.getDefault(DEFAULT_WEBCAM_LOOKUP_TIMEOUT);
+            Webcam.getDefault(WebcamConstants.DEFAULT_WEBCAM_LOOKUP_TIMEOUT);
             return true;
         } catch (Throwable exception) {
             LOG.debug("Problem occurred when detecting the webcam. Returning false.", exception);

@@ -63,7 +63,7 @@ public class WebcamComponentTest extends CamelTestSupport {
         //If we can find a webcam, we must have webcam names too
         Webcam webcam = null;
         try {
-            webcam = Webcam.getDefault();
+            webcam = Webcam.getDefault(WebcamConstants.DEFAULT_WEBCAM_LOOKUP_TIMEOUT);
         } catch (Error e) {
             //cannot run this test here, eg build
         }
@@ -88,7 +88,7 @@ public class WebcamComponentTest extends CamelTestSupport {
         //If we can find a webcam, we must have webcam names too
         Webcam webcam = null;
         try {
-            webcam = Webcam.getDefault();
+            webcam = Webcam.getDefault(WebcamConstants.DEFAULT_WEBCAM_LOOKUP_TIMEOUT);
         } catch (Error e) {
             //cannot run this test here, eg build
         }
