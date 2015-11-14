@@ -29,6 +29,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assume.assumeTrue;
 
@@ -42,6 +43,11 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
         assumeTrue(WebcamHelper.isWebcamPresent());
     }
 
+    @AfterClass
+    public static void after() throws TimeoutException {
+        Webcam.getDefault(WebcamConstants.DEFAULT_WEBCAM_LOOKUP_TIMEOUT).close();
+    }
+    
     @Test
     public void testWebcamProducer() throws Exception {
         
