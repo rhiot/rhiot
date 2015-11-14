@@ -59,17 +59,8 @@ public class WebcamComponentTest extends CamelTestSupport {
     
     @Test 
     public void testWebcamNames() throws Exception {
-        
-        //If we can find a webcam, we must have webcam names too
-        Webcam webcam = null;
-        try {
-            webcam = Webcam.getDefault(WebcamConstants.DEFAULT_WEBCAM_LOOKUP_TIMEOUT);
-        } catch (Error e) {
-            //cannot run this test here, eg build
-        }
 
         Assume.assumeNotNull(webcam);
-        webcam.close();
         
         WebcamComponent component = new WebcamComponent(context);
         HashMap<String, Webcam> webcams = new HashMap<>();
@@ -84,16 +75,6 @@ public class WebcamComponentTest extends CamelTestSupport {
     
     @Test
     public void testWebcamFindByName() throws Exception {
-        
-        //If we can find a webcam, we must have webcam names too
-        Webcam webcam = null;
-        try {
-            webcam = Webcam.getDefault(WebcamConstants.DEFAULT_WEBCAM_LOOKUP_TIMEOUT);
-        } catch (Error e) {
-            //cannot run this test here, eg build
-        }
-
-        Assume.assumeNotNull(webcam);
         
         WebcamComponent component = new WebcamComponent(context);
         HashMap<String, Webcam> webcams = new HashMap<>();
@@ -118,6 +99,7 @@ public class WebcamComponentTest extends CamelTestSupport {
         
         WebcamComponent component = new WebcamComponent(context);
         component.setDriver(CustomDriver.class.getName());
+        component.setWebcams(webcams);
         component.start();
 
         assertTrue(component.isStarted());
