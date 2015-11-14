@@ -34,12 +34,12 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class DefaultInstaller implements Installer {
 
-    private static final String DEFAULT_INSTALL_COMMAND = "apt-get -q -y install";
-    private static final String DEFAULT_UNINSTALL_COMMAND = "apt-get -q -y remove";
-    private static final String DEFAULT_IS_INSTALLED_COMMAND = "dpkg -s";
-    private static final String DEFAULT_INSTALL_SUCCESS = "Status: install ok installed";
-    private static final String DEFAULT_COMMAND_NOT_FOUND_MESSAGE = "command not found";
-    private static final String PERMISSION_DENIED_MESSAGE = "Permission denied";
+    public static final String DEFAULT_INSTALL_COMMAND = "apt-get -q -y install";
+    public static final String DEFAULT_UNINSTALL_COMMAND = "apt-get -q -y remove";
+    public static final String DEFAULT_IS_INSTALLED_COMMAND = "dpkg -s";
+    public static final String DEFAULT_INSTALL_SUCCESS = "Status: install ok installed";
+    public static final String DEFAULT_COMMAND_NOT_FOUND_MESSAGE = "command not found";
+    public static final String PERMISSION_DENIED_MESSAGE = "Permission denied";
 
     private static final Logger LOG = getLogger(DefaultInstaller.class);
 
@@ -98,14 +98,14 @@ public class DefaultInstaller implements Installer {
         if (packages == null || packages.size() == 0) {
             return true;
         } else {
-            return !packages.stream().filter(s -> !isInstalled(s)).findFirst().isPresent();
+            return !packages.stream().anyMatch(s -> !isInstalled(s));
         }
     }
 
     @Override
     public boolean isInstalled(String packageName) {
         if (!isPlatformSupported()) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("DefaultInstaller does not support this platform");
         }
         
         boolean installed = confirmInstalled(packageName, getProcessManager().executeAndJoinOutput((getIsInstalledCommand() + " " + packageName).split(" ")));
@@ -124,7 +124,7 @@ public class DefaultInstaller implements Installer {
      */
     public boolean confirmInstalled(String packageName, List<String> output){
         if (output != null) {
-            return output.stream().filter(s -> s != null && s.contains(getInstallSuccess())).findAny().isPresent();
+            return output.stream().anyMatch(s -> s != null && s.contains(getInstallSuccess()));
         } else {
             return true; //may be successful
         }
@@ -133,7 +133,7 @@ public class DefaultInstaller implements Installer {
     @Override
     public boolean install(String packageNames) {
         if (!isPlatformSupported()) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("DefaultInstaller does not support this platform");
         } 
         
         if (StringUtils.isEmpty(packageNames)){
@@ -161,7 +161,7 @@ public class DefaultInstaller implements Installer {
     @Override
     public void uninstall(String packageNames) {
         if (!isPlatformSupported()) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("DefaultInstaller does not support this platform");
         }
         
         LOG.info("Uninstalling [{}]", packageNames);
@@ -181,7 +181,7 @@ public class DefaultInstaller implements Installer {
      * @return true if permission was denied.
      */
     protected boolean isPermissionDenied(List<String> output){
-        return output.stream().filter(s -> s.contains(PERMISSION_DENIED_MESSAGE)).findAny().isPresent();
+        return output.stream().anyMatch(s -> s != null && s.contains(PERMISSION_DENIED_MESSAGE));
     }
 
 

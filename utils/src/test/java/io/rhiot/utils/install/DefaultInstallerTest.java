@@ -23,6 +23,8 @@ import io.rhiot.utils.install.exception.PermissionDeniedException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 import static org.junit.Assume.assumeTrue;
@@ -63,5 +65,32 @@ public class DefaultInstallerTest {
         assertTrue(installer.isInstalled("clockywock"));
         assertTrue(installer.isInstalled("cowsay"));
         installer.uninstall(packages);
+    }
+    
+    @Test
+    public void testConfirmInstalled(){
+        ArrayList<String> output = new ArrayList<>();
+        output.add(DefaultInstaller.DEFAULT_INSTALL_SUCCESS);
+        assertTrue(installer.confirmInstalled("test", output));
+    }
+    
+    @Test
+    public void testConfirmInstalledFails(){
+        ArrayList<String> output = new ArrayList<>();
+        assertFalse(installer.confirmInstalled("test", output));
+    }
+    
+    @Test
+    public void testPermissionDenied(){
+        ArrayList<String> output = new ArrayList<>();
+        output.add(DefaultInstaller.PERMISSION_DENIED_MESSAGE);
+        assertTrue(installer.isPermissionDenied(output));
+    }
+    
+    @Test
+    public void testPermissionNotDenied(){
+        ArrayList<String> output = new ArrayList<>();
+        output.add(null);
+        assertFalse(installer.isPermissionDenied(output));
     }
 }
