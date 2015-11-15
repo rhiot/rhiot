@@ -14,7 +14,7 @@ Rhiot comes with the following features:
 - [Performance Testing Framework for the IoT gateways](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#performance-testing-framework)
 
 ## Table Of Contents
- 
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -203,7 +203,7 @@ To find out what supported devices are available in your local network, execute 
 
 ### Configuration of the gateway
 
-The gateway configuration file is `/etc/default/camel-labs-iot-gateway`. This file is loaded by the gateway 
+The gateway configuration file is `/etc/default/camel-labs-iot-gateway`. This file is loaded by the gateway
 starting script. It means that all the configuration environment variables can be added here. For example to set the
 `foo_bar_baz` configuration property to value `qux`, the following environment variable should be added to the
 `/etc/default/camel-labs-iot-gateway` file:
@@ -212,7 +212,7 @@ starting script. It means that all the configuration environment variables can b
 
 ### Gateway logger configuration
 
-By default gateway keeps the last 100 MB of the logging history. Logs are grouped by the days and split into the 
+By default gateway keeps the last 100 MB of the logging history. Logs are grouped by the days and split into the
 10 MB files. The default logging level is `INFO`. You can change it by setting the `camellabs_iot_gateway_log_root_level`
 environment variable:
 
@@ -228,7 +228,7 @@ can change the heartbeat rate by setting the `camellabs_iot_gateway_heartbeat_ra
 number of the rate miliseconds. The snippet below demonstrates how to change the heartbeat rate to 10 seconds:
 
     export camellabs_iot_gateway_heartbeat_rate=10000
-    
+
 The heartbeat events are broadcasted to the Vert.x event bus address `heartbeat` (
 `io.rhiot.gateway.GatewayConstants.BUS_HEARTBEAT` constant).
 
@@ -240,23 +240,23 @@ and the message is `Ping!`.
 
 #### MQTT heartbeat
 
-Camel IoT gateway can send the heartbeat events to the data center using the MQTT protocol. MQTT heartbeats are 
+Camel IoT gateway can send the heartbeat events to the data center using the MQTT protocol. MQTT heartbeats are
 useful when verifying that gateway is still running and connected to the backend services deployed into the data
 center.
 
-In order to enable the 
-MQTT-based heartbeats set the `camellabs.iot.gateway.heartbeat.mqtt` environment variable to `true`. Just as 
+In order to enable the
+MQTT-based heartbeats set the `camellabs.iot.gateway.heartbeat.mqtt` environment variable to `true`. Just as
 demonstrated on the snippet below:
 
     export camellabs.iot.gateway.heartbeat.mqtt=true
 
-The address of the target MQTT broker can be set using the `camellabs.iot.gateway.heartbeat.mqtt.broker.url` environment 
+The address of the target MQTT broker can be set using the `camellabs.iot.gateway.heartbeat.mqtt.broker.url` environment
 variable, just as demonstrated on the example below:
 
     export camellabs.iot.gateway.heartbeat.mqtt.broker.url=tcp://mydatacenter.com
-    
+
 By default MQTT heartbeat sends events to the `heartbeat` topic. You can change the name of the topic using the
-`camellabs.iot.gateway.heartbeat.mqtt.topic` environment variable. For example to send the heartbeats to the 
+`camellabs.iot.gateway.heartbeat.mqtt.topic` environment variable. For example to send the heartbeats to the
 `myheartbeats` queue set the `camellabs.iot.gateway.heartbeat.mqtt.topic` environment variable as follows:
 
     export camellabs.iot.gateway.heartbeat.mqtt.topic=myheartbeats
@@ -271,7 +271,7 @@ software is still up and running. For activating LED heartbeat set `camellabs.io
 Like this
 
     export camellabs.iot.gateway.heartbeat.led=true
-    
+
 The LED output port can be set via `camellabs.iot.gateway.heartbeat.led.gpioId` environment variable, Default value is 0 *wiring lib pin index*
 Change LED output port like this:
 
@@ -294,7 +294,7 @@ collected from the GPS receiver will be serialized to the JSON format. Each GPS 
 
 The JSON schema of the collected coordinates is similar to teh following example:
 
-    {"timestamp": 1445356703704, 
+    {"timestamp": 1445356703704,
       "lat": 20.0, "lng": 30.0}
 
 #### Enriching GPS data
@@ -308,13 +308,13 @@ the results to collected GPS payloads.
 
 The enriched JSON schema of the collected coordinates is similar to teh following example:
 
-    {"timestamp": 1445356703704, 
+    {"timestamp": 1445356703704,
       "lat": 20.0, "lng": 30.0,
       "enriched": {
         "foo": "bar"
       }
     }      
-      
+
 #### Sending collected GPS data with a data center
 
 If you would like to synchronize the collected GPS data with a data center, consider using the out-of-the-box
@@ -329,7 +329,7 @@ the GPS data to a MQTT broker:
     gps_cloudlet_endpoint=paho:topic?brokerUrl=tcp://broker.com:1234
 
 The default data center endpoint is Netty REST call (using POST method) - `netty4-http:http://${cloudletAddress}/api/document/save/GpsCoordinates`, where
-`gps_cloudlet_address` configuration property has to be configured to match your HTTP API address (for example 
+`gps_cloudlet_address` configuration property has to be configured to match your HTTP API address (for example
 `gps_cloudlet_address=myapi.com:8080`).
 
 The default data format used by the gateway is JSON, where the message schema is similar to the folowwing example:
@@ -386,7 +386,7 @@ following jar:
         <version>${rhiot.version}</version>
       </dependency>
     </dependencies>
-    
+
  Avaliable for rhiot.version >= 0.1.1
 
 In order to create Vert.x verticle that can access single `CamelContex` instance shared between all the verticles
@@ -507,7 +507,7 @@ If an Installer is not set on the component, Camel will try to find an instance 
 **Deprecated:** BU353 component is deprecated and will be removed soon on the behalf of the
 [GPSD component](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#camel-gpsd-component).
 
-[BU353](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg) is one of the most popular and cheapest GPS units on the market. 
+[BU353](http://usglobalsat.com/p-688-bu-353-s4.aspx#images/product/large/688_2.jpg) is one of the most popular and cheapest GPS units on the market.
 It is connected to the device via the USB port. If you are looking for good and cheap GPS receiver for your IoT solution, definitely consider purchasing this unit.
 
 Camel GPS BU353 component can be used to read current GPS information from that device. With Camel GPS BU353 you can
@@ -536,13 +536,13 @@ BU353 component supports only consumer endpoints. The BU353 consumer is the poll
 current coordinates. The Camel endpoint URI format for the BU353 consumer is as follows:
 
     gps-bu353:label
-    
+
 Where `label` can be replaced with any text label:
 
     from("gps-bu353:current-position").
       convertBodyTo(String.class).
       to("file:///var/gps-coordinates");
-      
+
 BU353 consumer receives the `io.rhiot.component.gps.bu353.ClientGpsCoordinates` instances:
 
     ClientGpsCoordinates currentPosition = consumerTemplate.receiveBody("gps-bu353:current-position", ClientGpsCoordinates.class);
@@ -619,34 +619,34 @@ This option offers up to date information, but requires more resources than the 
 The Camel endpoint URI format for the GPSD consumer is as follows:
 
     gpsd:label
-    
+
 Where `label` can be replaced with any text label:
 
     from("gpsd:current-position").
       convertBodyTo(String.class).
       to("file:///var/gps-coordinates");
-      
-      
-A scheduled consumer is also supported. This kind of consumer polls GPS receiver every 5 seconds by default. In order to 
+
+
+A scheduled consumer is also supported. This kind of consumer polls GPS receiver every 5 seconds by default. In order to
 use it enable the `scheduled` param on the endpoint, just as demonstarted on the snippet below:
 
     from("gpsd:current-position?scheduled=true").
       convertBodyTo(String.class).
       to("file:///var/gps-coordinates");
-      
+
 Also the GPSD producer can be used to poll a GPS unit "on demand" and return the current location, for example;
 
     from("jms:current-position").
       to("gpsd:gps");
-      
+
 To subscribe to events or poll a device on another host you have to do two things:
 * start GPSD on that host with the param -G to listen on all addresses (eg `gpsd -G /dev/ttyUSB0`)
 * pass the host and optionally port to the GPSD endpoint, just as demonstrated on the snippet below:
-    
+
     from("gpsd:current-position?host=localhost?port=2947").
       convertBodyTo(String.class).
       to("file:///var/gps-coordinates");
-      
+
 The message body is a `io.rhiot.component.gpsd.ClientGpsCoordinates` instance:
 
     ClientGpsCoordinates currentPosition = consumerTemplate.receiveBody("gpsd:current-position", ClientGpsCoordinates.class);     
@@ -655,9 +655,9 @@ The message body is a `io.rhiot.component.gpsd.ClientGpsCoordinates` instance:
 not on the server side of the IoT solution.
 
 The TPVObject (Time-Position-Velocity report) instance created by a gpsd4java engine is available in exchange under the header
-`io.rhiot.gpsd.tpvObject` (constant `io.rhiot.component.gpsd.GpsdConstants.TPV_HEADER`). The original `TPVObject` can be 
+`io.rhiot.gpsd.tpvObject` (constant `io.rhiot.component.gpsd.GpsdConstants.TPV_HEADER`). The original `TPVObject` can be
 useful to enrich the payload or do content based routing, eg
-    
+
     TPVObject tpvObject = exchange.getIn().getHeader(GpsdConstants.TPV_HEADER, TPVObject.class);
     if (tpvObject.getSpeed() > 343) {
         log.info("Camel broke the sound barrier");
@@ -705,19 +705,19 @@ in order to make the GPSD up and running.
 #### Installer
 
 The GPSD component installs it's own dependencies for Debian-based systems using apt-get, these include psmisc, gpsd and gpsd-clients,
-as well as their dependencies. 
+as well as their dependencies.
 You can configure the installer or set an alternate one on the component:
-    
+
     GpsdComponent gpsd = new GpsdComponent();
     gpsd.setInstaller(new CustomInstaller());
     camelContext.addComponent("gpsd", gpsd);    
-    
+
 You can also specify alternate/additional dependencies for your platform, if your platform uses my-custom-tools for example, you should configure the component as follows:
 
     GpsdComponent gpsd = new GpsdComponent();
     gpsd.setRequiredPackages("my-custom-tools,gpsd,gpsd-clients"); //comma-separated list of packages to install
     camelContext.addComponent("gpsd", gpsd);    
-    
+
 If an Installer is not set on the component, Camel will try to find an instance in the
 [registry](http://camel.apache.org/registry.html). So for example for Spring application, you can configure the installer as a bean:
 
@@ -725,14 +725,14 @@ If an Installer is not set on the component, Camel will try to find an instance 
     Installer myInstaller() {
         new CustomInstaller();
     }
-         
+
 
 ### Camel Kura Wifi component
 
 The common scenario for the mobile IoT Gateways, for example those mounted on the trucks or other vehicles, is to cache
 collected data locally on the device storage and synchronizing the data with the data center only when trusted WiFi
 access point is available near the gateway. Such trusted WiFi network could be localized near the truck fleet parking.
-Using this approach, less urgent data (like GPS coordinates stored for the further offline analysis) can be delivered to 
+Using this approach, less urgent data (like GPS coordinates stored for the further offline analysis) can be delivered to
 the data center without the additional cost related to the GPS transmission fees.
 
 <a href="https://github.com/camel-labs/camel-labs"><img src="images/wifi_truck_1.png" align="center" height="400" hspace="30"></a>
@@ -752,14 +752,14 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-kura</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
-    
+
  Avaliable for rhiot.version >= 0.1.1
 
 #### URI format
 
     kura-wifi:networkInterface/ssid
-    
-Where both `networkInterface` and `ssid` can be replaced with the `*` wildcard matching respectively all the network 
+
+Where both `networkInterface` and `ssid` can be replaced with the `*` wildcard matching respectively all the network
 interfaces and SSIDs.
 
 For example to read all the SSID available near the device, the following route can be used:
@@ -770,13 +770,13 @@ The Kura WiFi consumer returns the list of the `org.eclipse.kura.net.wifi.WifiAc
 of the WiFi scan:
 
     WifiAccessPoint[] accessPoints = consumerTemplate.receiveBody("kura:wlan0/*", WifiAccessPoint[].class);
-    
+
 You can also request the WiFi scanning using the producer endpoint:
 
     from("direct:WifiScan").to("kura-wifi:*/*").to("mock:accessPoints");
-    
+
 Or using the producer template directly:
- 
+
     WifiAccessPoint[] accessPoints = template.requestBody("kura-wifi:*/*", null, WifiAccessPoint[].class);
 
 
@@ -811,36 +811,36 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-openimag</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
-    
+
  Avaliable for rhiot.version >= 0.1.3
 
 #### URI format
 
     openimaj:label
-    
+
 Where `label` can be replaced with any text label:
 
     from("webcam:spycam").to("openimaj:face-detection");
-    
-This routes the input stream from the webcam to the openimaj component, 
+
+This routes the input stream from the webcam to the openimaj component,
 when a face is detected the resulting body will be an instance of org.openimaj.image.processing.face.detection.DetectedFace,
-and List<DetectedFace> when there are multiple faces. 
+and List<DetectedFace> when there are multiple faces.
 
 The component uses a face detector based on the Haar cascade by default, optionally set an alternate detector;
-    
+
     from("webcam:spycam").to("openimaj:face-detection?faceDetector=#anotherDetector");
 
-Using the ProducerTemplate, the following example uses the FKEFaceDetector which is a wrapper around the Haar detector, providing additional 
+Using the ProducerTemplate, the following example uses the FKEFaceDetector which is a wrapper around the Haar detector, providing additional
 information by finding facial keypoints on top of the face;
-    
+
     KEDetectedFace face = template.requestBody("openimaj:face-detection?faceDetector=#fkeFaceDetector", inputStream, KEDetectedFace.class);
     FacialKeypoint keypoint = face.getKeypoint(FacialKeypoint.FacialKeypointType.EYE_LEFT_LEFT);
-        
-    
+
+
 The confidence in the face detection is set to the low default of 1, you can set the minimum confidence threshold on the endpoint;
-    
+
     from("webcam:spycam").to("openimaj:face-detection?confidence=50");
-    
+
 
 #### Options
 
@@ -864,7 +864,7 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-tinkerforge</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
- 
+
  Avaliable for rhiot.version >= 0.1.1
 
 #### General URI format
@@ -963,7 +963,7 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-pi4j</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
-    
+
  Avaliable for rhiot.version >= 0.1.1
 
 
@@ -973,7 +973,7 @@ Maven users should add the following dependency to their POM file:
 
 *gpioId* must match [A-Z_0-9]+ pattern.
 By default, pi4j-gpio uses *RaspiPin* Class, change it via *gpioClass* property
-You can use static field name "*GPIO_XX*", pin name "*GPIO [0-9]*" or pin address "*[0-9]*" 
+You can use static field name "*GPIO_XX*", pin name "*GPIO [0-9]*" or pin address "*[0-9]*"
 
 
 ###### Optional URI Parameters
@@ -1007,7 +1007,7 @@ When using producer you can also set or override action using message header wit
     from("timer:default?period=2000")
     .process(exchange -> exchange.getIn().setHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, "LOW"))
     .to("pi4j-gpio://GPIO_04?mode=DIGITAL_OUTPUT&state=LOW&action=TOGGLE");
-    
+
 ##### Simple button w/ LED mode
 
 Plug an button on GPIO 1, and LED on GPIO 2 (with Resistor) and code a route like this
@@ -1042,17 +1042,18 @@ For smarter devices, you must implement a driver.
 
 | Driver            | Feature                                                            |
 |-------------------|--------------------------------------------------------------------|
-| bmp180            | Temp and Pressure sensor   (http://www.adafruit.com/products/1603) |
+| bmp180            | Temperature and Pressure sensor   (http://www.adafruit.com/products/1603) |
 | tsl2561           | Light sensor            (http://www.adafruit.com/products/439)     |
 | lsm303-accel      | Accelerometer sensor    (http://www.adafruit.com/products/1120)    |
 | lsm303-magne      | Magnetometer sensor     (http://www.adafruit.com/products/1120)    |
 | mcp23017-lcd      | LCD 2x16 char           (http://www.adafruit.com/products/1109)    |
-
+| hts221      |  Humidity and Temperature sensor used by the [Official RaspberryPi Sense-Hat](https://www.raspberrypi.org/products/sense-hat/) (http://www.st.com/web/en/resource/technical/document/datasheet/DM00116291.pdf)    |
+| lps25h      |  Pressure and Temperature sensor used by the [Official RaspberryPi Sense-Hat](https://www.raspberrypi.org/products/sense-hat/) (http://www.st.com/web/en/resource/technical/document/datasheet/DM00116291.pdf)    |
 
 
 ### Camel PubNub component
 
-Camel PubNub component can be used to communicate with the [PubNub](http://www.pubnub.com) data stream network for connected devices. 
+Camel PubNub component can be used to communicate with the [PubNub](http://www.pubnub.com) data stream network for connected devices.
 This component uses [pubnub](https://www.pubnub.com/docs/java/javase/javase-sdk.html) library
 
 #### Maven dependency
@@ -1064,7 +1065,7 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-pubnub</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
-    
+
  Avaliable for rhiot.version >= 0.1.1
 
 
@@ -1094,10 +1095,10 @@ Operations can be used on the producer endpoint, or as a header:
 |:------------------------- |:------------- |
 | `PUBLISH`                 | Publish a message to pubnub. The message body shold contain a instance of  `org.json.JSONObject` or `org.json.JSONArray`. Otherwise the message is expected to be a string.
 | `HERE_NOW`                | Read presence (Who's online) information from the endpoint channel.|  
-| `WHERE_NOW`               | Read presence information for the uuid on the endpoint. You can override that by setting the header `CamelPubNubUUID` to another uuid. | 
+| `WHERE_NOW`               | Read presence information for the uuid on the endpoint. You can override that by setting the header `CamelPubNubUUID` to another uuid. |
 | `SET_STATE`               | Set the state by uuid. The message body should contain a instance of `org.json.JSONObject` with any state information. By default the endpoint uuid is updated, but you can override that by setting the header `CamelPubNubUUID` to another uuid. |
 | `GET_STATE`               | Get the state object `org.json.JSONObject` by for the endpoint uuid. You can override that by setting the `CamelPubNubUUID` header to another uuid. |
-| `GET_HISTORY`             | Gets the message history for the endpoint channel. | 
+| `GET_HISTORY`             | Gets the message history for the endpoint channel. |
 
 
 ##### Consuming:
@@ -1106,7 +1107,7 @@ Route that consumes messages from mychannel:
 
     from("pubnub://pubsub:mychannel?uuid=master&subscriberKey=mysubkey").routeId("my-route")
     .to("log:default?showHeaders=true");
-    
+
 Route that listens for presence (eg. join, leave, state change) events on a channel
 
     from("pubnub://presence:mychannel?subscriberKey=mysubkey").routeId("presence-route")
@@ -1120,15 +1121,15 @@ Route the collect data and sendt it to pubnub channel mychannel:
     .bean(EventGeneratorBean.class, "getEvent()")
     .convertBodyTo(JSONObject.class)
     .to("pubnub://pubsub:mychannel?uuid=deviceuuid&publisherKey=mypubkey");
-    
+
 
 ### Camel Webcam component
 
 Camel [Webcam](http://webcam-capture.sarxos.pl/) component can be used to capture still images and detect motion.
-With Camel Webcam you can connect a camera to your device's USB port, or install the camera mod on the Raspberry Pi board for example, 
+With Camel Webcam you can connect a camera to your device's USB port, or install the camera mod on the Raspberry Pi board for example,
 and poll for an image periodically and respond to motion events.
-The body of the message is the current image as a BufferedInputStream, while motion events are stored in the header 'io.rhiot.webcam.webcamMotionEvent'. 
-This event may be useful for getting the image captured prior to the motion event, as well the Points where the motion occurred and the center of motion gravity. 
+The body of the message is the current image as a BufferedInputStream, while motion events are stored in the header 'io.rhiot.webcam.webcamMotionEvent'.
+This event may be useful for getting the image captured prior to the motion event, as well the Points where the motion occurred and the center of motion gravity.
 
 
 #### Maven dependency
@@ -1140,7 +1141,7 @@ Maven users should add the following dependency to their POM file:
       <artifactId>camel-webcam</artifactId>
       <version>${rhiot.version}</version>
     </dependency>
-    
+
 Avaliable for rhiot.version >= 0.1.2
 
 #### URI format
@@ -1149,29 +1150,29 @@ Avaliable for rhiot.version >= 0.1.2
 The Camel endpoint URI format for the Webcam consumer is as follows:
 
     webcam:label
-    
+
 Where `label` can be replaced with any text label:
 
     from("webcam:spycam").
       to("file:///var/spycam");
-      
+
 This route creates a scheduled consumer taking 1 frame per second and writes it to file in the PNG format.
 
 Alternatively, respond to motion events by setting the endpoint parameter 'motion' to true.
 
     from("webcam:spycam?motion=true").
       to("file:///var/spycam");
-      
+
 You can also poll the webcam for a single image, for example;
 
     from("jms:webcam").
       to("webcam:spycam");
-      
+
 Specify the resolution with custom width and height, or the resolution name;
 
     from("webcam:spycam?resolution=HD720").
       to("seda:cam")
-      
+
 #### Options
 
 | Option                   | Default value                                                                 | Description   |
@@ -1218,19 +1219,19 @@ in order to load the v4l2 (Video for Linux) module.
 #### Installer
 
 For some Linux+webcam combinations, the webcam component requires `v4l-utils` and its dependencies to be installed on an
-operating system. By default the Webcam component installs `v4l-utils` using apt-get, you can configure the installer or 
+operating system. By default the Webcam component installs `v4l-utils` using apt-get, you can configure the installer or
 set an alternate one on the component:
-    
+
     WebcamComponent webcam = new WebcamComponent();
     webcam.setInstaller(new BrewInstaller());
     camelContext.addComponent("webcam", webcam);    
-    
+
 You can also specify alternate dependencies for your platform, if your platform uses my-custom-v4l-utils, configure the component as follows:
 
     WebcamComponent webcam = new WebcamComponent();
     webcam.setRequiredPackages("my-custom-v4l-utils");  //comma-separated list of packages to install
     camelContext.addComponent("webcam", webcam);    
-    
+
 If an Installer is not set on the component, Camel will try to find an instance in the
 [registry](http://camel.apache.org/registry.html). So for example for Spring application, you can configure the installer as a bean:
 
@@ -1241,12 +1242,12 @@ If an Installer is not set on the component, Camel will try to find an instance 
     }
 
 By default an installer ignores problems with the webcam packages installation and only logs the warning using a
-logger WARN message. If you would like the component to thrown an exception instead of logging a message, set 
+logger WARN message. If you would like the component to thrown an exception instead of logging a message, set
 `ignoreInstallerProblems` property of the `WebcamComponent` to `true`:
 
     WebcamComponent webcam = new WebcamComponent();
     webcam.setIgnoreInstallerProblems(true);
-    camelContext.addComponent("webcam", webcam); 
+    camelContext.addComponent("webcam", webcam);
 
 ## Rhiot Cloud
 
@@ -1626,7 +1627,7 @@ Rhiot comes with a set of tools making it easier to work with the IoT solutions.
 
 The basic tool for Rhiot is the `rhiot` Bash command. In order to install Rhiot command, execute the following command:
 
-    sudo wget https://raw.githubusercontent.com/rhiot/rhiot/master/tooling/bash/rhiot.sh -O /usr/bin/rhiot && sudo chmod +x /usr/bin/rhiot 
+    sudo wget https://raw.githubusercontent.com/rhiot/rhiot/master/tooling/bash/rhiot.sh -O /usr/bin/rhiot && sudo chmod +x /usr/bin/rhiot
 
 In order to display all avilable commands with their options, execute the `rhiot` command with `--help` or `-h` option:
 
@@ -1642,13 +1643,13 @@ To perform port scanning in your local network and display detected devices, exe
 
     $ rhiot scan
     Scanning local networks for devices...
-        
+
     ======================================
     Device type		IPv4 address
     --------------------------------------
     RaspberryPi2		/192.168.1.100
 
-    
+
 
 ## Performance Testing Framework
 
@@ -1767,7 +1768,7 @@ properties utility can be used to resolve the value of the given application pro
     int timeout = Properties.intProperty("timeout", 1000);
 
 The `Properties` tries to resolve the property value from the following locations (and in this order):
-* ThreadLocal map 
+* ThreadLocal map
 * JVM system properties
 * environment variables
 * `application.properties` file located in the classpath
@@ -1844,10 +1845,10 @@ downloaded using the following shell command:
 
 ### Kura Camel quickstart
 
-The Kura Camel quickstart can be used to create Camel router OSGi bundle project deployable into the 
+The Kura Camel quickstart can be used to create Camel router OSGi bundle project deployable into the
 [Eclipse Kura](https://www.eclipse.org/kura) gateway. Kura is a widely adopted field gateway software for the
 IoT solutions. Rhiot supports Kura gateway deployments as a first class citizen and this quickstart is intended to be
-used as a blueprint for the Camel deployments for Kura. It uses [Camel Kura component](http://camel.apache.org/kura.html) 
+used as a blueprint for the Camel deployments for Kura. It uses [Camel Kura component](http://camel.apache.org/kura.html)
 under the hood.
 
 #### Creating a Kura Camel project
@@ -1858,26 +1859,26 @@ In order to create the Kura Camel project execute the following commands:
     cp -r quickstarts/kura-camel kura-camel
     cd kura-camel
     mvn install
-    
+
 #### Prerequisites
 
 We presume that you have Eclipse Kura already installed on your target device. And that you know the IP address of that device.
-If you happen to deploy to a Raspbian-based device, and you would like to find the IP of that Raspberry Pi device connected 
+If you happen to deploy to a Raspbian-based device, and you would like to find the IP of that Raspberry Pi device connected
 to your local network, you can use the Rhiot device scanner, as demonstrated on the snippet below:
-    
+
     docker run --net=host -it rhiot/deploy-gateway scan
-    
+
 The command above will return an output similar to the one presented below:
 
     Scanning local networks for devices...
-    
+
     ======================================
     Device type		IPv4 address
     --------------------------------------
     RaspberryPi2		/192.168.1.100
 
 Keep in mind that `/opt/eclipse/kura/kura/config.ini` file on your target device should have OSGi boot delegation
-enabled for packages `sun.*,com.sun.*`. Your `/opt/eclipse/kura/kura/config.ini` should contain the following line then: 
+enabled for packages `sun.*,com.sun.*`. Your `/opt/eclipse/kura/kura/config.ini` should contain the following line then:
 
     org.osgi.framework.bootdelegation=sun.*,com.sun.*
 
@@ -1900,25 +1901,25 @@ Use similar `scp` command to deploy Camel jars required to run your project:
 Now log into your target device Kura shell using telnet:
 
     telnet localhost 5002
-    
+
 And install the bundles you previously scp-ed:
 
     install file:///tmp/camel-core-2.16.0.jar
     install file:///tmp/camel-core-osgi-2.16.0.jar
     install file:///tmp/camel-kura-2.16.0.jar
     install file:///tmp/rhiot-kura-camel-1.0.0-SNAPSHOT.jar
-    
+
 Finally start your application using the following command:
 
     start <ID_OF_rhiot-kura-camel-1.0.0-SNAPSHOT_BUNDLE)
 
 Keep in mind that bundles you deployed using the recipe above are not installed permanently and will be reverted
-after the server restart. Please read Kura documentation for more details regarding 
+after the server restart. Please read Kura documentation for more details regarding
 [permanent deployments](http://eclipse.github.io/kura/doc/deploying-bundles.html#making-deployment-permanent).
 
 #### What the quickstart is actually doing?
 
-This quickstart triggers [Camel timer](http://camel.apache.org/timer.html) event every second and sends it to the 
+This quickstart triggers [Camel timer](http://camel.apache.org/timer.html) event every second and sends it to the
 system logger using [Camel Log](http://camel.apache.org/log) component. This is fairy simple functionality, but enough
 to demonstrate the Camel Kura project is actually working and processing messages.
 
@@ -2060,7 +2061,7 @@ Here is the bunch of useful resources regarding Camel IoT project:
 - [Make Your IoT Gateway WiFi-Aware Using Camel and Kura](http://java.dzone.com/articles/make-your-iot-gateway-wifi) - DZone article by Henryk Konsek (2015)
 - [IoT gateway dream team - Eclipse Kura and Apache Camel](http://www.slideshare.net/hekonsek/io-t-gateway-dream-team-eclipse-kura-and-apache-camel) - slides from the Henryk Konsek talk for Eclipse IoT Virtual Meetup (2015)
 - [IoT gateway dream team - Eclipse Kura and Apache Camel](https://www.youtube.com/watch?v=mli5c-oTN1U) - video from the Henryk Konsek talk for Eclipse IoT Virtual Meetup (2015)
-- [Apache Camel & RaspberryPi PoC w/ GPIO & LED & Button](http://gautric.github.io/blog/2015/04/03/apache-camel-raspberrypi-integration.html) - Greg's blog post (video included) (April 2015) 
+- [Apache Camel & RaspberryPi PoC w/ GPIO & LED & Button](http://gautric.github.io/blog/2015/04/03/apache-camel-raspberrypi-integration.html) - Greg's blog post (video included) (April 2015)
 - [Using Camel & Tinkerforge in Jboss Fuse](https://www.youtube.com/watch?v=J1hN9NLLbro) - Interview with Geert, includes live demo of Camel loadbalancer via RGB Led Strip (October 2014)
 - [Rhiot (ex-Camel IoT Labs) i2c gpio mqtt lcd](http://gautric.github.io/blog/2015/05/20/camel-iot-labs-i2c-gpio-mqtt-lcd.html) - Greg's blog post (video included) (may 2015)
 - [Running Camel-Tinkerforge on Karaf](https://geertschuring.wordpress.com/2015/05/25/running-camel-tinkerforge-on-karaf/) - Blogpost describing how to install and run camel-tinkerforge on Karaf. Geerts blog (may 2015)
