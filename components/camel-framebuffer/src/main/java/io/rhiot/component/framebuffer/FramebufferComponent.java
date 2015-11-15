@@ -58,6 +58,7 @@ public class FramebufferComponent extends UriEndpointComponent {
 		Path sysClassGraphics = Paths.get(getRootDir()).resolve(FramebufferConstants.SYS_CLASS_GRAPHICS)
 				.resolve(devFileName);
 
+		// Extract size and definition from virtual fs
 		Path bitsPerPixelFile = sysClassGraphics.resolve(FramebufferConstants.BITS_PER_PIXEL_FILE);
 		Path sizeFile = sysClassGraphics.resolve(FramebufferConstants.VIRTUAL_SIZE);
 
