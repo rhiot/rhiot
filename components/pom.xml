@@ -24,8 +24,9 @@
 		<module>camel-bluetooth</module>
 		<module>camel-coap</module>
         <module>camel-device-io</module>
-    <module>camel-framebuffer</module>
-  </modules>
+        <module>camel-framebuffer</module>
+		<module>camel-spark</module>
+	</modules>
 
 	<build>
 		<plugins>
