@@ -52,6 +52,13 @@ public class framebufferComponentTest extends CamelTestSupport {
 
 		mock.expectedMinimumMessageCount(1);
 
+		String uuidFb1 = Files
+				.readAllLines(
+						Paths.get(FramebufferConstants.ROOT_4_TEST).resolve(FramebufferConstants.DEV).resolve("fb1"))
+				.get(0);
+
+		assertTrue(uuidFb1.startsWith(uuid));
+		assertEquals(128, uuidFb1.length());
 		assertMockEndpointsSatisfied();
 	}
 
