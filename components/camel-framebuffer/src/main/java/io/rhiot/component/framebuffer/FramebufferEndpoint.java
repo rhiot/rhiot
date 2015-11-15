@@ -42,11 +42,11 @@ public class FramebufferEndpoint extends DefaultEndpoint {
 	@UriPath
 	@Metadata(required = "true")
 	private File dev;
-	@UriParam(defaultValue = "0", description = "Auto caculated")
+	@UriParam(defaultValue = "0", description = "Auto calculated")
 	private int height = 0;
-	@UriParam(defaultValue = "0", description = "Auto caculated")
+	@UriParam(defaultValue = "0", description = "Auto calculated")
 	private int witdh = 0;
-	@UriParam(defaultValue = "0", description = "Auto caculated")
+	@UriParam(defaultValue = "0", description = "Auto calculated")
 	private int bitsPerPixel = 0;
 	@UriParam()
 	private FramebufferConverter converter;

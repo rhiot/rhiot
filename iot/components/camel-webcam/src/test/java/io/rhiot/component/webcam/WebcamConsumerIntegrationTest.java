@@ -17,7 +17,6 @@
 
 package io.rhiot.component.webcam;
 
-import com.github.sarxos.webcam.Webcam;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -26,7 +25,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assume.assumeTrue;
 
