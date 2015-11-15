@@ -45,6 +45,10 @@ public class framebufferComponentTest extends CamelTestSupport {
 	@Produce(uri = "direct:start")
 	protected ProducerTemplate sender;
 
+	public static final String ROOT_4_TEST = "./target/testingfb";
+
+	public static final String ROOT_4_TEST_SRC = "./src/test/testingfb";
+
 	@Test
 	public void testframebuffer() throws Exception {
 		String uuid = UUID.randomUUID().toString();
@@ -52,9 +56,7 @@ public class framebufferComponentTest extends CamelTestSupport {
 
 		mock.expectedMinimumMessageCount(1);
 
-		String uuidFb1 = Files
-				.readAllLines(
-						Paths.get(FramebufferConstants.ROOT_4_TEST).resolve(FramebufferConstants.DEV).resolve("fb1"))
+		String uuidFb1 = Files.readAllLines(Paths.get(ROOT_4_TEST).resolve(FramebufferConstants.DEV).resolve("fb1"))
 				.get(0);
 
 		assertTrue(uuidFb1.startsWith(uuid));
@@ -65,8 +67,8 @@ public class framebufferComponentTest extends CamelTestSupport {
 	@Override
 	protected RouteBuilder createRouteBuilder() throws Exception {
 
-		Path sourcePath = Paths.get(FramebufferConstants.ROOT_4_TEST_SRC);
-		Path targetPath = Paths.get(FramebufferConstants.ROOT_4_TEST);
+		Path sourcePath = Paths.get(ROOT_4_TEST_SRC);
+		Path targetPath = Paths.get(ROOT_4_TEST);
 
 		Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>() {
 			@Override
@@ -84,7 +86,7 @@ public class framebufferComponentTest extends CamelTestSupport {
 		});
 
 		FramebufferComponent fc = new FramebufferComponent();
-		fc.setRootDir(FramebufferConstants.ROOT_4_TEST);
+		fc.setRootDir(ROOT_4_TEST);
 
 		this.context().addComponent("framebuffer", fc);
 

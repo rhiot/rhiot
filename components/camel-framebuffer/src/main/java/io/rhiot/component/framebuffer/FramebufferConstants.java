@@ -20,13 +20,10 @@ public final class FramebufferConstants {
 
 	public static final String NAME = "name";
 	public static final String ROOT = "/";
-	public static final String ROOT_4_TEST_SRC = "./src/test/testingfb";
-	public static final String ROOT_4_TEST = "./target/testingfb";
 	public static final String SYS_CLASS_GRAPHICS = "sys/class/graphics";
 	public static final String WITDH = "witdh";
 	public static final String BITS_PER_PIXEL_FILE = "bits_per_pixel";
 	public static final String DEV = "dev";
-	public static final String DEV2 = "dev";
 	public static final String FB = "fb*";
 	public static final String HEIGHT = "height";
 	public static final String BITS_PER_PIXEL = "bitsPerPixel";
