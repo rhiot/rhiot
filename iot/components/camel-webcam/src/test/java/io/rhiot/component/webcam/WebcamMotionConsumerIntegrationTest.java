@@ -40,7 +40,7 @@ public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
     
     @AfterClass
     public static void after() throws TimeoutException {
-        Webcam.getDefault(WebcamConstants.DEFAULT_WEBCAM_LOOKUP_TIMEOUT).close();
+        WebcamHelper.closeWebcam();
     }
     
     @Test

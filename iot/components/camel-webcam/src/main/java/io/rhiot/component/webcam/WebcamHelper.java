@@ -31,6 +31,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -108,6 +109,15 @@ public class WebcamHelper {
         } catch (Throwable exception) {
             LOG.debug("Problem occurred when detecting the webcam. Returning false.", exception);
             return false;
+        }
+    }
+
+    /**
+     * Close the default webcam.
+     */
+    public static void closeWebcam() throws TimeoutException {
+        if (isWebcamPresent()) {
+            Webcam.getDefault(WebcamConstants.DEFAULT_WEBCAM_LOOKUP_TIMEOUT).close();
         }
     }
 
