@@ -1047,8 +1047,8 @@ For smarter devices, you must implement a driver.
 | lsm303-accel      | Accelerometer sensor    (http://www.adafruit.com/products/1120)    |
 | lsm303-magne      | Magnetometer sensor     (http://www.adafruit.com/products/1120)    |
 | mcp23017-lcd      | LCD 2x16 char           (http://www.adafruit.com/products/1109)    |
-| hts221      |  Humidity and Temperature sensor used by the [Official RaspberryPi Sense-Hat](https://www.raspberrypi.org/products/sense-hat/) (http://www.st.com/web/en/resource/technical/document/datasheet/DM00116291.pdf)    |
-| lps25h      |  Pressure and Temperature sensor used by the [Official RaspberryPi Sense-Hat](https://www.raspberrypi.org/products/sense-hat/) (http://www.st.com/web/en/resource/technical/document/datasheet/DM00116291.pdf)    |
+| hts221      |  Humidity and Temperature sensor used by the [Official RaspberryPi Sense-Hat](https://www.raspberrypi.org/products/sense-hat/) [ST device doc](http://www.st.com/web/en/resource/technical/document/datasheet/DM00116291.pdf)    |
+| lps25h      |  Pressure and Temperature sensor used by the [Official RaspberryPi Sense-Hat](https://www.raspberrypi.org/products/sense-hat/) [ST device doc](http://www.st.com/web/en/resource/technical/document/datasheet/DM00066332.pdf)    |
 
 
 ### Camel PubNub component
