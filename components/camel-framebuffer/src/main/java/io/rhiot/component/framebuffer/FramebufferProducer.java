@@ -78,8 +78,11 @@ public class FramebufferProducer extends DefaultProducer {
 			} else {
 				doubleBuffer.put(buffer, 0, Math.min(doubleBuffer.limit(), buffer.length));
 			}
-
-			Files.write(path, doubleBuffer.array(), WRITE, SYNC, endpoint.getCreateDevice());
+			if (endpoint.getCreateDevice() != null) {
+				Files.write(path, doubleBuffer.array(), WRITE, SYNC, endpoint.getCreateDevice());
+			} else {
+				Files.write(path, doubleBuffer.array(), WRITE, SYNC);
+			}
 		}
 	}
 }
