@@ -167,14 +167,17 @@ between the sensors and the data center. Under the hood, Rhiot gateway is the fa
 
 In order to install Rhiot gateway on one of 
 [supported gateway platforms](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#supported-gateway-platforms)
-(like Raspberry Pi with Raspbian), connect your device to your local network
-(using WiFi or the ethernet cable) and execute the following command on the laptop connected to the same network as your Pi:
+(like Raspberry Pi with Raspbian) use Rhiot cmd tool 
+([`rhiot cmd` section describes how to install Rhiot cmd](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#rhiot-command-line-tool-cmd)).
+After Rhiot cmd tool is installed, connect your device to your local network
+(using WiFi or the ethernet cable) and execute the following command on a laptop connected to the same network as your 
+target device:
 
     rhiot deploy-gateway
 
 From this point forward Rhiot gateway will be installed on your device as `camel-iot-gateway` service and started
 whenever the device boots up. Under the hood, gateway deployer performs the simple port scanning in the local network
-and attempts to connect to the Raspian devices using the default SSH credentials.
+and attempts to connect to supported devices using the default SSH credentials.
 
 To learn more about a gateway deployment tool, see 
 [`rhiot gateway-deploy` command section](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#rhiot-deploy-gateway). To learn about
@@ -1636,9 +1639,8 @@ To perform port scanning in your local network and display detected devices, exe
 
 #### rhiot deploy-gateway
 
-Deploys gateway to a detected device. In order to install Rhiot gateway on a target device:
-- connect it to your local network (using WiFi or the ethernet cable) 
-- execute the following command on the laptop connected to the same network as your device
+Deploys gateway to a detected device. In order to install Rhiot gateway on a target device connect it to your local 
+network (using WiFi or the ethernet cable). Then execute the following command on the laptop connected to the same network as your device
 
     rhiot deploy-gateway
 
