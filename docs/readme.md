@@ -175,7 +175,7 @@ target device:
 
     rhiot deploy-gateway
 
-From this point forward Rhiot gateway will be installed on your device as `camel-iot-gateway` service and started
+From this point forward Rhiot gateway will be installed on your device as `rhiot-gateway` service and started
 whenever the device boots up. Under the hood, gateway deployer performs the simple port scanning in the local network
 and attempts to connect to supported devices using the default SSH credentials.
 
@@ -185,10 +185,10 @@ the other useful Rhiot cmd commands, see [`rhiot cmd` section](https://github.co
 
 ### Configuration of the gateway
 
-The gateway configuration file is `/etc/default/camel-labs-iot-gateway`. This file is loaded by the gateway
+The gateway configuration file is `/etc/default/rhiot-gateway`. This file is loaded by the gateway
 starting script. It means that all the configuration environment variables can be added here. For example to set the
 `foo_bar_baz` configuration property to value `qux`, the following environment variable should be added to the
-`/etc/default/camel-labs-iot-gateway` file:
+`/etc/default/rhiot-gateway` file:
 
     export foo_bar_baz=qux
 
@@ -1644,7 +1644,7 @@ network (using WiFi or the ethernet cable). Then execute the following command o
 
     rhiot deploy-gateway
 
-From this point forward Rhiot gateway will be installed on your device as `camel-iot-gateway` service and started
+From this point forward Rhiot gateway will be installed on your device as `rhiot-gateway` service and started
 whenever the device boots up. Under the hood, gateway deployer performs a simple port scanning in a local network
 and attempts to connect to supported devices using the default SSH credentials.
 

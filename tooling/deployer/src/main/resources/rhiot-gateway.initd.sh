@@ -15,35 +15,36 @@
  # limitations under the License.
 
 #!/bin/bash
-# /etc/init.d/camel-labs-iot-gateway
+# /etc/init.d/rhiot-gateway
 
 ### BEGIN INIT INFO
-# Provides:          camel-labs-iot-gateway
+# Provides:          rhiot-gateway
 # Required-Start:    $syslog
 # Required-Stop:     $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Camel Labs IoT Gateway
-# Description:       Camel Labs IoT Gateway
+# Short-Description: Rhiot field gateway
+# Description:       Rhiot field gateway
 ### END INIT INFO
 
+GATEWAY_HOME=/var/rhiot-gateway
 
 case "$1" in
     start)
-        echo "Starting Camel Labs IoT Gateway..."
-        mkdir -p /var/camel-labs-iot-gateway
-        echo "Loading gateway configuration from /etc/default/camel-labs-iot-gateway file..."
-        . /etc/default/camel-labs-iot-gateway
-        java -jar /var/camel-labs-iot-gateway/camel-labs-iot-gateway-*.jar >/var/camel-labs-iot-gateway/camel-labs-iot-gateway.log 2>&1 &
-        echo $! > /var/camel-labs-iot-gateway/pid
-        echo "Camel Labs IoT Gateway started."
+        echo "Starting Rhiot field gateway..."
+        mkdir -p /var/rhiot
+        echo "Loading gateway configuration from /etc/default/rhiot-gateway file..."
+        . /etc/default/rhiot-gateway
+        java -jar ${GATEWAY_HOME}/rhiot-gateway-*.jar >${GATEWAY_HOME}/rhiot-gateway.log 2>&1 &
+        echo $! > ${GATEWAY_HOME}/pid
+        echo "Rhiot field gateway started."
         ;;
     stop)
-        echo "Stopping Camel Labs IoT Gateway"
-        kill -9 `cat /var/camel-labs-iot-gateway/pid`
+        echo "Stopping Rhiot field gateway"
+        kill -9 `cat ${GATEWAY_HOME}/pid`
         ;;
     *)
-        echo "Usage: /etc/init.d/camel-labs-iot-gateway start|stop"
+        echo "Usage: /etc/init.d/rhiot-gateway start|stop"
         exit 1
         ;;
 esac

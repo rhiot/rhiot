@@ -68,36 +68,36 @@ class Deployer {
         println("Detected Raspberry Pi at ${device.address().hostAddress}")
 
         def ssh = new SshClient(device.address().hostAddress, username, password)
-        def gatewayHome = '/var/camel-labs-iot-gateway'
+        def gatewayHome = '/var/rhiot-gateway'
 
-        ssh.printCommand('sudo /etc/init.d/camel-labs-iot-gateway stop')
+        ssh.printCommand('sudo /etc/init.d/rhiot-gateway stop')
 
         println("Preparing gateway home directory ($gatewayHome)...")
         ssh.printCommand("sudo mkdir -p ${gatewayHome}")
         ssh.printCommand("sudo chown pi ${gatewayHome}")
 
         println("Cleaning old artifacts from gateway home directory ($gatewayHome)...")
-        ssh.printCommand("sudo rm ${gatewayHome}/camel-labs-iot-gateway-*.jar")
-        ssh.scp(gatewayJar.get(), new File("${gatewayHome}/camel-labs-iot-gateway-0.1.1-SNAPSHOT.jar"), false)
+        ssh.printCommand("sudo rm ${gatewayHome}/rhiot-gateway-*.jar")
+        ssh.scp(gatewayJar.get(), new File("${gatewayHome}/rhiot-gateway-0.1.1-SNAPSHOT.jar"), false)
 
         ssh.printCommand("sudo chown pi /etc/init.d")
-        ssh.scp(getClass().getResourceAsStream('/camel-labs-iot-gateway.initd.sh'), new File('/etc/init.d/camel-labs-iot-gateway'), false)
+        ssh.scp(getClass().getResourceAsStream('/rhiot-gateway.initd.sh'), new File('/etc/init.d/rhiot-gateway'), false)
 
         ssh.printCommand("sudo chown pi /etc/default")
         def properties = new Properties()
-        properties.load(getClass().getResourceAsStream('/camel-labs-iot-gateway.config.sh'))
+        properties.load(getClass().getResourceAsStream('/rhiot-gateway.config.sh'))
         properties.putAll(additionalProperties)
 
         def output = new ByteArrayOutputStream()
         def pw = new PrintWriter(output)
         properties.each { pw.println('export ' + it.key + '=' + it.value) }
         pw.flush()
-        ssh.scp(new ByteArrayInputStream(output.toByteArray()), new File('/etc/default/camel-labs-iot-gateway'), false)
+        ssh.scp(new ByteArrayInputStream(output.toByteArray()), new File('/etc/default/rhiot-gateway'), false)
 
-        ssh.printCommand('sudo chmod +x /etc/init.d/camel-labs-iot-gateway')
-        ssh.printCommand('sudo update-rc.d camel-labs-iot-gateway defaults')
+        ssh.printCommand('sudo chmod +x /etc/init.d/rhiot-gateway')
+        ssh.printCommand('sudo update-rc.d rhiot-gateway defaults')
 
-        ssh.printCommand('sudo /etc/init.d/camel-labs-iot-gateway start')
+        ssh.printCommand('sudo /etc/init.d/rhiot-gateway start')
 
         device
     }
