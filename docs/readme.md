@@ -20,7 +20,7 @@ Rhiot comes with the following features:
 
 
 - [Rhiot field gateway](#rhiot-field-gateway)
-  - [Installing gateway on the Raspbian](#installing-gateway-on-the-raspbian)
+  - [Installing gateway](#installing-gateway)
   - [Configuration of the gateway](#configuration-of-the-gateway)
   - [Gateway logger configuration](#gateway-logger-configuration)
   - [Device heartbeats](#device-heartbeats)
