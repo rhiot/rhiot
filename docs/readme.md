@@ -19,7 +19,7 @@ Rhiot comes with the following features:
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Rhiot IoT gateway](#rhiot-iot-gateway)
+- [Rhiot field gateway](#rhiot-field-gateway)
   - [Installing gateway on the Raspbian](#installing-gateway-on-the-raspbian)
   - [Configuration of the gateway](#configuration-of-the-gateway)
   - [Gateway logger configuration](#gateway-logger-configuration)
@@ -121,7 +121,10 @@ Rhiot comes with the following features:
     - [Devices data analytics](#devices-data-analytics)
   - [Geofencing cloudlet](#geofencing-cloudlet)
 - [Tooling](#tooling)
-  - [Rhiot command](#rhiot-command)
+  - [Supported gateway platforms](#supported-gateway-platforms)
+  - [Rhiot command line tool (cmd)](#rhiot-command-line-tool-cmd)
+    - [rhiot scan](#rhiot-scan)
+    - [rhiot deploy-gateway](#rhiot-deploy-gateway)
 - [Performance Testing Framework](#performance-testing-framework)
   - [Hardware profiles](#hardware-profiles)
     - [Raspberry PI 2 B+ (aka RPI2)](#raspberry-pi-2-b-aka-rpi2)
@@ -154,52 +157,28 @@ Rhiot comes with the following features:
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Rhiot IoT gateway
+## Rhiot field gateway
 
 *Rhiot gateway* is the small fat jar application that can be installed into the field device. Gateway acts as a bridge
 between the sensors and the data center. Under the hood, Rhiot gateway is the fat jar running
 [Vert.x](http://vertx.io) and Apache Camel.
 
-### Installing gateway on the Raspbian
+### Installing gateway
 
-In order to install Camel IoT gateway on the Raspberry Pi running Raspbian, connect the device to your local network
+In order to install Rhiot gateway on one of 
+[supported gateway platforms](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#supported-gateway-platforms)
+(like Raspberry Pi with Raspbian), connect your device to your local network
 (using WiFi or the ethernet cable) and execute the following command on the laptop connected to the same network as your Pi:
 
-    docker run --net=host rhiot/deploy-gateway
+    rhiot deploy-gateway
 
-From this point forward Camel IoT gateway will be installed on your device as `camel-iot-gateway` service and started
+From this point forward Rhiot gateway will be installed on your device as `camel-iot-gateway` service and started
 whenever the device boots up. Under the hood, gateway deployer performs the simple port scanning in the local network
 and attempts to connect to the Raspian devices using the default SSH credentials.
 
-To see all the options available for the gateway deployer, execute the following command:
-
-    docker run --net=host rhiot/deploy-gateway --help
-
-In case of problems with the gateway, you can try to run it in verbose mode (called *debug mode*):
-
-    docker run --net=host rhiot/deploy-gateway --debug
-
-You can also configure the gateway during the deployment process using the `-P` option. For example to set the configuration property
-responsible for gateway heartbeats interval, execute the following command:
-
-    docker run --net=host rhiot/deploy-gateway -Pcamellabs_iot_gateway_heartbeat_rate=10000
-
-You can use the `-P` option multiple times:
-
-    docker run --net=host rhiot/deploy-gateway -Pfoo=bar -Pbar=qux
-
-If you would like to use different SSH credentials than default (username `pi`, password `raspberry`), then pass the
-`--username` and `--password` options to the deployer:
-
-    docker run --net=host rhiot/deploy-gateway --username=john --password=secret
-
-If you would like to deploy your customized gateway fat jar, you can specify its Maven coordinates when running the deployer:
-
-    docker run --net=host rhiot/deploy-gateway --artifact=com.example:custom-gateway:1.0
-
-To find out what supported devices are available in your local network, execute the following command:
-
-    docker run --net=host rhiot/deploy-gateway scan
+To learn more about a gateway deployment tool, see 
+[`rhiot gateway-deploy` command section](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#rhiot-deploy-gateway). To learn about
+the other useful Rhiot cmd commands, see [`rhiot cmd` section](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#rhiot-command-line-tool-cmd).
 
 ### Configuration of the gateway
 
@@ -1623,7 +1602,13 @@ Geofencing cloudlet provides backend cloud service for collecting and the basic 
 
 Rhiot comes with a set of tools making it easier to work with the IoT solutions.
 
-### Rhiot command
+### Supported gateway platforms
+
+Rhiot supports following gateway platforms:
+
+- Raspberry Pi 2 B+ with Raspbian 2015-05-05
+
+### Rhiot command line tool (cmd)
 
 The basic tool for Rhiot is the `rhiot` Bash command. In order to install Rhiot command, execute the following command:
 
@@ -1635,7 +1620,7 @@ In order to display all avilable commands with their options, execute the `rhiot
 
 Rhiot command line assumes that there is Docker server running on your local machine. An actual commands execution is
 delegated by Docker client to the Rhiot Docker image. If Docker is not installed (or is installed in a version lower than
-a minimal version supported), Rhiot command line tool will automatically install or upgrade Docker.
+a minimal version supported), Rhiot cmd will automatically install or upgrade Docker.
 
 #### rhiot scan
 
@@ -1649,7 +1634,43 @@ To perform port scanning in your local network and display detected devices, exe
     --------------------------------------
     RaspberryPi2		/192.168.1.100
 
+#### rhiot deploy-gateway
 
+Deploys gateway to a detected device. In order to install Rhiot gateway on a target device:
+- connect it to your local network (using WiFi or the ethernet cable) 
+- execute the following command on the laptop connected to the same network as your device
+
+    rhiot deploy-gateway
+
+From this point forward Rhiot gateway will be installed on your device as `camel-iot-gateway` service and started
+whenever the device boots up. Under the hood, gateway deployer performs a simple port scanning in a local network
+and attempts to connect to supported devices using the default SSH credentials.
+
+To see all the options available for the gateway deployer, execute the following command:
+
+    rhiot --help
+
+In case of problems with the gateway, you can try to run it in verbose mode (called *debug mode*):
+
+    rhiot deploy-gateway --debug
+
+You can also configure the gateway during the deployment process using the `-P` option. For example to set the configuration property
+responsible for gateway heartbeats interval, execute the following command:
+
+    rhiot deploy-gateway -Pcamellabs_iot_gateway_heartbeat_rate=10000
+
+You can use the `-P` option multiple times:
+
+    rhiot deploy-gateway -Pfoo=bar -Pbar=qux
+
+If you would like to use different SSH credentials than default (username `pi`, password `raspberry`), then pass the
+`--username` and `--password` options to the deployer:
+
+    rhiot deploy-gateway --username=john --password=secret
+
+If you would like to deploy your customized gateway fat jar, you can specify its Maven coordinates when running the deployer:
+
+    rhiot deploy-gateway --artifact=com.example:custom-gateway:1.0
 
 ## Performance Testing Framework
 

@@ -21,10 +21,6 @@ import static java.util.Optional.of
 
 class ConsoleInputParser {
 
-    // Constants
-
-    static final def DEFAULT_COMMAND = 'deploy-gateway'
-
     // Members
 
     private final String[] args
@@ -36,7 +32,7 @@ class ConsoleInputParser {
     }
 
     boolean isHelp() {
-        args.contains('--help') || args.contains('-h')
+        args.contains('--help') || args.contains('-h') || args.find{!it.startsWith('-')} == null
     }
 
     String helpText() {
@@ -45,12 +41,14 @@ class ConsoleInputParser {
 Usage: rhiot [OPTIONS] [deploy-gateway|scan]
 
 Commands:
-deploy-gateway (default)    Deploys gateway to the device.
 scan                        Lists possible target devices.
+deploy-gateway              Deploys gateway to a detected device.
 
-Options:
+Global options:
  -h --help                                                      Prints this help page.
  -d --debug                                                     Debug (verbose) mode.
+
+deploy-gateway options:
  -a=group:artifact:version --artifact=group:artifact:version    Overrides default gateway artifact coordinates (io.rhiot:rhiot-gateway-app).
  -Pfoo=bar                                                      Adds foo=bar configuration property to the deployed gateway. Can be used multiple times.
  -u=user --username=user                                        SSH username of the target device.
@@ -62,8 +60,8 @@ Options:
     }
 
     String command() {
-        def command = args.find{!it.startsWith('-')} ?: DEFAULT_COMMAND
-        if(![DEFAULT_COMMAND, 'scan'].contains(command)) {
+        def command = args.find{!it.startsWith('-')}
+        if(!['scan', 'deploy-gateway'].contains(command)) {
             throw new IllegalArgumentException("No such command - ${command}.")
         }
         command

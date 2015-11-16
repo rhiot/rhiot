@@ -29,8 +29,8 @@ class ConsoleInputParserTest extends Assert {
     }
 
     @Test
-    void shouldReturnDefaultCommand() {
-        assertThat(new ConsoleInputParser('-someOption=foo').command()).isEqualTo('deploy-gateway')
+    void shouldReturnHelpForNoCommand() {
+        assertThat(new ConsoleInputParser('-someOption=foo').help).isEqualTo(true)
     }
 
     @Test
