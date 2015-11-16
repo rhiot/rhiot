@@ -35,8 +35,8 @@ case "$1" in
         mkdir -p /var/rhiot
         echo "Loading gateway configuration from /etc/default/rhiot-gateway file..."
         . /etc/default/rhiot-gateway
-        java -jar ${GATEWAY_HOME}/rhiot-gateway-*.jar >${GATEWAY_HOME}/rhiot-gateway.log 2>&1 &
-        echo $! > ${GATEWAY_HOME}/pid
+        java -jar ${GATEWAY_HOME}/rhiot-gateway-*.jar >"${GATEWAY_HOME}/rhiot-gateway.log" 2>&1 &
+        echo $! > "${GATEWAY_HOME}/pid"
         echo "Rhiot field gateway started."
         ;;
     stop)
