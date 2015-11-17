@@ -33,7 +33,11 @@ import static org.apache.camel.component.spark.Sparks.createLocalSparkContext;
 
 public class SparkProducerTest extends CamelTestSupport {
 
+    // Fixtures
+
     static JavaSparkContext sparkContext = createLocalSparkContext();
+
+    // Tests
 
     @Test
     public void shouldExecuteRddCallback() {
@@ -44,6 +48,28 @@ public class SparkProducerTest extends CamelTestSupport {
             }
         }, Long.class);
         Truth.assertThat(pomLinesCount).isGreaterThan(0L);
+    }
+
+    @Test
+    public void shouldExecuteRddCallbackWithSinglePayload() {
+        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", 10, "CAMEL_SPARK_RDD_CALLBACK", new RddCallback<Long>() {
+            @Override
+            public Long onRdd(JavaRDD rdd, Object... payloads) {
+                return rdd.count() * (int) payloads[0];
+            }
+        }, Long.class);
+        Truth.assertThat(pomLinesCount).isEqualTo(170);
+    }
+
+    @Test
+    public void shouldExecuteRddCallbackWithPayloads() {
+        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", asList(10, 10), "CAMEL_SPARK_RDD_CALLBACK", new RddCallback<Long>() {
+            @Override
+            public Long onRdd(JavaRDD rdd, Object... payloads) {
+                return rdd.count() * (int) payloads[0] * (int) payloads[1];
+            }
+        }, Long.class);
+        Truth.assertThat(pomLinesCount).isEqualTo(1700);
     }
 
     @Test

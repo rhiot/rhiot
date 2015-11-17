@@ -24,6 +24,8 @@ import org.apache.spark.api.java.function.Function;
 
 import java.util.List;
 
+import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_HEADER;
+
 public class SparkProducer extends DefaultProducer {
 
     public SparkProducer(SparkEndpoint endpoint) {
@@ -31,19 +33,8 @@ public class SparkProducer extends DefaultProducer {
     }
 
     @Override
-    protected void doStart() throws Exception {
-        if(getEndpoint().getRdd() == null) {
-            throw new IllegalStateException("No RDD defined.");
-        }
-        super.doStart();
-    }
-
-    @Override
     public void process(Exchange exchange) throws Exception {
-        JavaRDD rdd = getEndpoint().getRdd();
-        if(exchange.getIn().getHeader("CAMEL_SPARK_RDD") != null) {
-            rdd = (JavaRDD) exchange.getIn().getHeader("CAMEL_SPARK_RDD");
-        }
+        JavaRDD rdd = resolveRdd(exchange);
 
         RddCallback rddCallback = null;
         if(exchange.getIn().getHeader("CAMEL_SPARK_RDD_CALLBACK") != null) {
@@ -71,23 +62,35 @@ public class SparkProducer extends DefaultProducer {
         }
     }
 
-    private void collectResults(Exchange exchange, Object result) {
+    @Override
+    public SparkEndpoint getEndpoint() {
+        return (SparkEndpoint) super.getEndpoint();
+    }
+
+    // Helpers
+
+    protected void collectResults(Exchange exchange, Object result) {
         if(result instanceof JavaRDD) {
             JavaRDD rddResults = (JavaRDD) result;
             if(getEndpoint().isCollect()) {
                 exchange.getIn().setBody(rddResults.collect());
             } else {
                 exchange.getIn().setBody(result);
-                exchange.getIn().setHeader("CAMEL_SPARK_RDD", result);
+                exchange.getIn().setHeader(SPARK_RDD_HEADER, result);
             }
         } else {
             exchange.getIn().setBody(result);
         }
     }
 
-    @Override
-    public SparkEndpoint getEndpoint() {
-        return (SparkEndpoint) super.getEndpoint();
+    protected JavaRDD resolveRdd(Exchange exchange) {
+        if(exchange.getIn().getHeader(SPARK_RDD_HEADER) != null) {
+            return (JavaRDD) exchange.getIn().getHeader(SPARK_RDD_HEADER);
+        } else if(getEndpoint().getRdd() != null) {
+            return getEndpoint().getRdd();
+        } else {
+            throw new IllegalStateException("No RDD defined.");
+        }
     }
 
 }
