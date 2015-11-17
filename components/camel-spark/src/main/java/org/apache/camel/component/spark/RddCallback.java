@@ -20,6 +20,6 @@ import org.apache.spark.api.java.JavaRDD;
 
 public interface RddCallback<T> {
 
-    T onRdd(JavaRDD rdd);
+    T onRdd(JavaRDD rdd, Object... payloads);
 
 }

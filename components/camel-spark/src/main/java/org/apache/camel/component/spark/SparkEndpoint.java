@@ -29,6 +29,8 @@ public class SparkEndpoint extends DefaultEndpoint {
 
     private JavaRDD rdd;
 
+    private RddCallback rddCallback;
+
     private boolean collect = true;
 
     public SparkEndpoint(String endpointUri, SparkComponent component) {
@@ -64,6 +66,14 @@ public class SparkEndpoint extends DefaultEndpoint {
 
     public void setRdd(JavaRDD rdd) {
         this.rdd = rdd;
+    }
+
+    public RddCallback getRddCallback() {
+        return rddCallback;
+    }
+
+    public void setRddCallback(RddCallback rddCallback) {
+        this.rddCallback = rddCallback;
     }
 
     public boolean isCollect() {

@@ -37,9 +37,9 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteRddCallback() {
-        long pomLinesCount = template.requestBody("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", null, "CAMEL_SPARK_RDD_CALLBACK", new RddCallback<Long>() {
             @Override
-            public Long onRdd(JavaRDD rdd) {
+            public Long onRdd(JavaRDD rdd, Object... payloads) {
                 return rdd.count();
             }
         }, Long.class);
@@ -66,7 +66,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldUseTransformationFromRegistry() {
-        long pomLinesCount = template.requestBody("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", "countLinesTransformation", Long.class);
+        long pomLinesCount = template.requestBody("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext&rddCallback=#countLinesTransformation", null, Long.class);
         Truth.assertThat(pomLinesCount).isGreaterThan(0L);
     }
 
@@ -77,7 +77,7 @@ public class SparkProducerTest extends CamelTestSupport {
         registry.bind("pomRdd", sparkContext.textFile("testrdd.txt"));
         registry.bind("countLinesTransformation", new RddCallback() {
             @Override
-            public Object onRdd(JavaRDD rdd) {
+            public Object onRdd(JavaRDD rdd, Object... payloads) {
                 return rdd.count();
             }
         });

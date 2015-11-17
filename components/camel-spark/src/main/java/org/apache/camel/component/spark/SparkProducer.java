@@ -22,6 +22,8 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
 
+import java.util.List;
+
 public class SparkProducer extends DefaultProducer {
 
     public SparkProducer(SparkEndpoint endpoint) {
@@ -39,30 +41,33 @@ public class SparkProducer extends DefaultProducer {
     @Override
     public void process(Exchange exchange) throws Exception {
         JavaRDD rdd = getEndpoint().getRdd();
-        if(exchange.getIn().getHeader("CAMEL_SPARK_LAST_RDD") != null) {
-            rdd = (JavaRDD) exchange.getIn().getHeader("CAMEL_SPARK_LAST_RDD");
-        }
-        Object body = exchange.getIn().getBody();
-
-        if(body == null) {
-            throw new IllegalArgumentException("Empty ");
+        if(exchange.getIn().getHeader("CAMEL_SPARK_RDD") != null) {
+            rdd = (JavaRDD) exchange.getIn().getHeader("CAMEL_SPARK_RDD");
         }
 
-        if(body instanceof RddCallback) {
-            Object result = ((RddCallback) body).onRdd(rdd);
-            exchange.getIn().setBody(result);
-        } else if(body instanceof String) {
-            RddCallback rddCallback = (RddCallback) getEndpoint().getComponent().getCamelContext().getRegistry().lookupByName((String) body);
-            Object result = rddCallback.onRdd(rdd);
-            collectResults(exchange, result);
-        } else if(body instanceof Function) {
-            JavaRDD result = rdd.map((Function) body);
-            collectResults(exchange, result);
-        } else if(body instanceof FlatMapFunction) {
-            JavaRDD result = rdd.flatMap((FlatMapFunction) body);
-            collectResults(exchange, result);
+        RddCallback rddCallback = null;
+        if(exchange.getIn().getHeader("CAMEL_SPARK_RDD_CALLBACK") != null) {
+            rddCallback = (RddCallback) exchange.getIn().getHeader("CAMEL_SPARK_RDD_CALLBACK");
         } else {
-            throw new IllegalArgumentException("Unrecognized body type: " + body);
+            rddCallback = getEndpoint().getRddCallback();
+        }
+
+        if(rddCallback == null) {
+            Object body = exchange.getIn().getBody();
+
+            if(body instanceof Function) {
+                JavaRDD result = rdd.map((Function) body);
+                collectResults(exchange, result);
+            } else if(body instanceof FlatMapFunction) {
+                JavaRDD result = rdd.flatMap((FlatMapFunction) body);
+                collectResults(exchange, result);
+            } else {
+                throw new IllegalArgumentException("Unrecognized body type: " + body);
+            }
+        } else {
+            Object body = exchange.getIn().getBody();
+            Object result = body instanceof List ? rddCallback.onRdd(rdd, ((List)body).toArray(new Object[0])) : rddCallback.onRdd(rdd, body);
+            collectResults(exchange, result);
         }
     }
 
@@ -73,7 +78,7 @@ public class SparkProducer extends DefaultProducer {
                 exchange.getIn().setBody(rddResults.collect());
             } else {
                 exchange.getIn().setBody(result);
-                exchange.getIn().setHeader("CAMEL_SPARK_LAST_RDD", result);
+                exchange.getIn().setHeader("CAMEL_SPARK_RDD", result);
             }
         } else {
             exchange.getIn().setBody(result);
