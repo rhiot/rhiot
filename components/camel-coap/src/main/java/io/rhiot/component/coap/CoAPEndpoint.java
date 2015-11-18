@@ -33,89 +33,93 @@ import org.eclipse.californium.core.coap.MediaTypeRegistry;
 /**
  * Represents a CoAP endpoint.
  */
-@UriEndpoint(scheme = "coap", title = "coap", syntax = "coap:uri", consumerClass = CoAPConsumer.class, label = "coap,protocol")
+@UriEndpoint(scheme = "coap", title = "coap", syntax = "coap:uri", label = "coap,protocol")
 public class CoAPEndpoint extends DefaultEndpoint {
-    @UriPath
-    @Metadata(required = "true")
-    private URI coapUri;
+	@UriPath
+	@Metadata(required = "true")
+	private URI coapUri;
 
-    private CoapClient client = null;
+	private CoapClient client = null;
 
-    @UriParam(description = "", enums = "GET,POST,POST,PUT")
-    private Code coapMethod;
+	@UriParam(description = "", enums = "GET,POST,POST,PUT")
+	private Code coapMethod;
 
-    @UriParam(defaultValue = "0 = TEXT_PLAIN", description = "cf. MediaTypeRegistry")
-    private int coapMediaType = MediaTypeRegistry.TEXT_PLAIN;
+	@UriParam(defaultValue = "0 = TEXT_PLAIN", description = "cf. MediaTypeRegistry")
+	private int coapMediaType = MediaTypeRegistry.TEXT_PLAIN;
 
-    @UriParam(defaultValue = "1000L", description = "timeout")
-    private long coapTimeout = 1000L;
+	@UriParam(defaultValue = "1000L", description = "timeout")
+	private long coapTimeout = 1000L;
 
-    public CoAPEndpoint() {
-    }
+	public CoAPEndpoint() {
+	}
 
-    public CoAPEndpoint(String endpointUri) {
-        super(endpointUri);
-    }
+	public CoAPEndpoint(String endpointUri) {
+		super(endpointUri);
+	}
 
-    public CoAPEndpoint(String uri, CoAPComponent component) {
-        super(uri, component);
-    }
+	public CoAPEndpoint(String uri, CoAPComponent component) {
+		super(uri, component);
+	}
 
-    public Consumer createConsumer(Processor processor) throws Exception {
-        return new CoAPConsumer(this, processor);
-    }
+	@Override
+	public Consumer createConsumer(Processor processor) throws Exception {
+		throw new IllegalArgumentException("no yet implemented");
+	}
 
-    public Producer createProducer() throws Exception {
+	@Override
+	public Producer createProducer() throws Exception {
 
-        return new CoAPProducer(this);
-    }
+		return new CoAPProducer(this);
+	}
 
-    public CoapClient getClient() {
-        return client;
-    }
+	public CoapClient getClient() {
+		return client;
+	}
 
-    public int getCoapMediaType() {
-        return coapMediaType;
-    }
+	public int getCoapMediaType() {
+		return coapMediaType;
+	}
 
-    public Code getCoapMethod() {
-        return coapMethod;
-    }
+	public Code getCoapMethod() {
+		return coapMethod;
+	}
 
-    public long getCoapTimeout() {
-        return coapTimeout;
-    }
+	public long getCoapTimeout() {
+		return coapTimeout;
+	}
 
-    public URI getCoapUri() {
-        return coapUri;
-    }
+	public URI getCoapUri() {
+		return coapUri;
+	}
 
-    public boolean isLenientProperties() {
-        return true;
-    }
+	@Override
+	public boolean isLenientProperties() {
+		return true;
+	}
 
-    public boolean isSingleton() {
-        return true;
-    }
+	@Override
+	public boolean isSingleton() {
+		return true;
+	}
 
-    public void setClient(CoapClient client) {
-        this.client = client;
-    }
+	public void setClient(CoapClient client) {
+		this.client = client;
+	}
 
-    public void setCoapMediaType(int coapMediaType) {
-        this.coapMediaType = coapMediaType;
-    }
+	public void setCoapMediaType(int coapMediaType) {
+		this.coapMediaType = coapMediaType;
+	}
 
-    public void setCoapMethod(Code coapMethod) {
-        this.coapMethod = coapMethod;
-    }
+	public void setCoapMethod(Code coapMethod) {
+		this.coapMethod = coapMethod;
+	}
 
-    public void setCoapTimeout(long coapTimeout) {
-        this.coapTimeout = coapTimeout;
-    }
+	public void setCoapTimeout(long coapTimeout) {
+		this.coapTimeout = coapTimeout;
+	}
 
-    public void setCoapUri(URI coapUri) {
-        this.coapUri = coapUri;
-    }
+	public void setCoapUri(URI coapUri) {
+		this.coapUri = coapUri;
+	}
 
 }
