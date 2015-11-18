@@ -85,7 +85,7 @@ Rhiot comes with the following features:
    - [Camel Framebuffer component](#camel-framebuffer-component)
      - [Maven dependency](#maven-dependency-7)
      - [General URI format](#uri-format-for-framebuffer)
-        - [URI Parameters](#uri-parameters)
+        - [URI Parameters](#uri-parameters-3)
      - [Consuming:](#consuming-2)  
   - [Camel PubNub component](#camel-pubnub-component)
     - [Maven dependency](#maven-dependency-8)
