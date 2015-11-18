@@ -165,12 +165,12 @@ between the sensors and the data center. Under the hood, Rhiot gateway is the fa
 
 ### Installing gateway
 
-In order to install Rhiot gateway on one of 
+In order to install Rhiot gateway on one of
 [supported gateway platforms](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#supported-gateway-platforms)
-(like Raspberry Pi with Raspbian) use Rhiot cmd tool 
+(like Raspberry Pi with Raspbian) use Rhiot cmd tool
 ([`rhiot cmd` section describes how to install Rhiot cmd](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#rhiot-command-line-tool-cmd)).
 After Rhiot cmd tool is installed, connect your device to your local network
-(using WiFi or the ethernet cable) and execute the following command on a laptop connected to the same network as your 
+(using WiFi or the ethernet cable) and execute the following command on a laptop connected to the same network as your
 target device:
 
     rhiot deploy-gateway
@@ -179,7 +179,7 @@ From this point forward Rhiot gateway will be installed on your device as `rhiot
 whenever the device boots up. Under the hood, gateway deployer performs the simple port scanning in the local network
 and attempts to connect to supported devices using the default SSH credentials.
 
-To learn more about a gateway deployment tool, see 
+To learn more about a gateway deployment tool, see
 [`rhiot gateway-deploy` command section](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#rhiot-deploy-gateway). To learn about
 the other useful Rhiot cmd commands, see [`rhiot cmd` section](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#rhiot-command-line-tool-cmd).
 
@@ -931,6 +931,7 @@ be a header on the exchange.
     .setBody(constant("on"))
     .to("tinkerforge:/io16/io9?ioport=b");
 
+
 ### Camel Pi4j component
 
 Camel Pi4j component can be used to manage GPIO and I2C bus features from Raspberry Pi.
@@ -1032,6 +1033,46 @@ For smarter devices, you must implement a driver.
 | hts221      |  Humidity and Temperature sensor used by the [Official RaspberryPi Sense-Hat](https://www.raspberrypi.org/products/sense-hat/) [ST device doc](http://www.st.com/web/en/resource/technical/document/datasheet/DM00116291.pdf)    |
 | lps25h      |  Pressure and Temperature sensor used by the [Official RaspberryPi Sense-Hat](https://www.raspberrypi.org/products/sense-hat/) [ST device doc](http://www.st.com/web/en/resource/technical/document/datasheet/DM00066332.pdf)    |
 
+
+### Camel Framebuffer component
+
+Camel Framebuffer component can be used to manage any Linux Framebuffer.
+This component should work with any /dev/fb* linux device.
+
+#### Maven dependency
+
+Maven users should add the following dependency to their POM file:
+
+    <dependency>
+      <groupId>io.rhiot</groupId>
+      <artifactId>camel-framebuffer</artifactId>
+      <version>${rhiot.version}</version>
+    </dependency>
+
+ Avaliable for rhiot.version >= 0.1.3
+
+
+#### URI format for Framebuffer
+
+    framebuffer://name
+
+*name* can /dev/*fbN* or /sys/class/graphics/name content file
+
+###### Optional URI Parameters
+
+| Parameter            | Default value             | Description                                               |
+|----------------------|---------------------------|-----------------------------------------------------------|
+| `name`               |                           |                                                           |
+
+##### Consuming:
+
+Route that consumes messages from mychannel:
+
+    from("direct:start").
+    .to("framebuffer://RPi-Sense FB");
+
+if the body message is empty framebuffer component copies the framebuffer file to the In Body Exchange as byte[].
+if the body message not empty framebuffer component copies the In Body Exchange (byte[]) directly to the framebuffer file.
 
 ### Camel PubNub component
 
@@ -1639,7 +1680,7 @@ To perform port scanning in your local network and display detected devices, exe
 
 #### rhiot deploy-gateway
 
-Deploys gateway to a detected device. In order to install Rhiot gateway on a target device connect it to your local 
+Deploys gateway to a detected device. In order to install Rhiot gateway on a target device connect it to your local
 network (using WiFi or the ethernet cable). Then execute the following command on the laptop connected to the same network as your device
 
     rhiot deploy-gateway
