@@ -62,6 +62,7 @@
         <v4l4j.version>0.9.1-r507</v4l4j.version>
         <vertx.version>3.1.0</vertx.version>
         <webcam-capture.version>0.3.11</webcam-capture.version>
+        <felix-connect.version>0.1.0</felix-connect.version>
     </properties>
 
     <dependencyManagement>
@@ -583,6 +584,16 @@
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-mongodb</artifactId>
                 <version>1.7.1.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.connect</artifactId>
+                <version>${felix-connect.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-kura</artifactId>
+                <version>${camel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
