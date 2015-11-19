@@ -720,7 +720,7 @@ If an Installer is not set on the component, Camel will try to find an instance 
 
 **Avaliable since Rhiot 0.1.3**: Rhiot provides `io.rhiot.component.kura.router.RhiotKuraRouter` class, which
 extends `org.apache.camel.component.kura.KuraRouter` class from the Apache Camel 
-[camel-kura](http://camel.apache.org/kura) module. While `KuraRouter` provides generic base for Kura routes, it doesn't
+[camel-kura](http://camel.apache.org/kura) module. While `KuraRouter` provides a generic base for Kura routes, it doesn't
 rely on the Kura-specific jars, because of limitations of the Apache Camel policy regarding adding 3rd parties repositories
 to the Camel (like Eclipse Kura repository). `RhiotKuraRouter` extends `KuraRouter` and enhances it with Kura-specific API.
 
