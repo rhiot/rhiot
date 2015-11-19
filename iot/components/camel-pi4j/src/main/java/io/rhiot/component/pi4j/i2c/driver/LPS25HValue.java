@@ -21,28 +21,28 @@ package io.rhiot.component.pi4j.i2c.driver;
  */
 public class LPS25HValue {
 
-	private double pressure;
-	private double temperature;
+    private double pressure;
+    private double temperature;
 
-	public double getPressure() {
-		return pressure;
-	}
+    public double getPressure() {
+        return pressure;
+    }
 
-	public void setPressure(double pressure) {
-		this.pressure = pressure;
-	}
+    public void setPressure(double pressure) {
+        this.pressure = pressure;
+    }
 
-	public double getTemperature() {
-		return temperature;
-	}
+    public double getTemperature() {
+        return temperature;
+    }
 
-	public void setTemperature(double temperature) {
-		this.temperature = temperature;
-	}
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
 
-	@Override
-	public String toString() {
-		return "[temperature:" + temperature + ",pressure:" + pressure + "]";
-	}
+    @Override
+    public String toString() {
+        return "[temperature:" + temperature + ",pressure:" + pressure + "]";
+    }
 
 }

@@ -66,8 +66,8 @@ public class AnalogOutputBodyMockitoTest extends CamelTestSupport {
                 Mockito.when(MOCK_RASPI.getMode(RaspiPin.GPIO_24)).thenReturn(PinMode.ANALOG_OUTPUT);
 
                 GpioFactory.setDefaultProvider(MOCK_RASPI);
-                from("direct:start").to("pi4j-gpio://23?mode=PWM_OUTPUT").transform().simple("" + DOUBLE_RESULT).to("pi4j-gpio://24?mode=ANALOG_OUTPUT")
-                    .to("mock:result");
+                from("direct:start").to("pi4j-gpio://23?mode=PWM_OUTPUT").transform().simple("" + DOUBLE_RESULT)
+                        .to("pi4j-gpio://24?mode=ANALOG_OUTPUT").to("mock:result");
             }
         };
     }

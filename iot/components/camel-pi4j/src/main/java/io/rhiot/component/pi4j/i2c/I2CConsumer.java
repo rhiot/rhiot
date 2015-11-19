@@ -93,7 +93,8 @@ public class I2CConsumer extends ScheduledPollConsumer implements I2CDevice {
         return this.device.read(buffer, offset, size);
     }
 
-    public int read(byte[] writeBuffer, int writeOffset, int writeSize, byte[] buffer, int offset, int size) throws IOException {
+    public int read(byte[] writeBuffer, int writeOffset, int writeSize, byte[] buffer, int offset, int size)
+            throws IOException {
         return this.device.read(writeBuffer, writeOffset, writeSize, buffer, offset, size);
     }
 

@@ -71,8 +71,8 @@ public class LSM303MagnetometerConsumer extends I2CConsumer {
 
     protected void doStart() throws Exception {
         super.doStart();
-        getDevice().write(LSM303_REGISTER_MAG_MR_REG_M, (byte)0x00);
-        getDevice().write(LSM303_REGISTER_MAG_CRB_REG_M, (byte)gain);
+        getDevice().write(LSM303_REGISTER_MAG_MR_REG_M, (byte) 0x00);
+        getDevice().write(LSM303_REGISTER_MAG_CRB_REG_M, (byte) gain);
     }
 
     public int getGain() {

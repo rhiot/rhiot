@@ -21,6 +21,6 @@ package io.rhiot.component.pi4j.i2c;
  */
 public final class I2CConstants {
 
-	public static final int MULTI_BYTE_READ_MASK = 0x80;
+    public static final int MULTI_BYTE_READ_MASK = 0x80;
 
 }

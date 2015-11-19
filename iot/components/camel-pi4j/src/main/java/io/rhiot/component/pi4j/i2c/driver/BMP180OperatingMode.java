@@ -24,18 +24,17 @@ public enum BMP180OperatingMode {
     /**
      * Max conversion time (pressure): 4.5ms Current draw: 3µA
      */
-    ULTRA_LOW_POWER(45, 3),
-    /**
-     * Max conversion time (pressure): 7.5ms Current draw: 5µA
-     */
-    STANDARD(75, 5),
-    /**
-     * Max conversion time (pressure): 13.5ms Current draw: 7µA
-     */
-    HIGH_RES(135, 7),
-    /**
-     * Max conversion time (pressure): 25.5ms Current draw: 12µA
-     */
+    ULTRA_LOW_POWER(45,
+            3), /**
+                 * Max conversion time (pressure): 7.5ms Current draw: 5µA
+                 */
+    STANDARD(75, 5), /**
+                      * Max conversion time (pressure): 13.5ms Current draw: 7µA
+                      */
+    HIGH_RES(135,
+            7), /**
+                 * Max conversion time (pressure): 25.5ms Current draw: 12µA
+                 */
     ULTRA_HIGH_RES(255, 12);
 
     final int waitTime;

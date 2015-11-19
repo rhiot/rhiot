@@ -21,19 +21,13 @@ package io.rhiot.component.pi4j.i2c.driver;
  */
 public enum HTS221ControlRegistry1 {
 
-	ODR_ONE_SHOT(0b00), 
-	ODR_1_HZ(0b01), 
-	ODR_7_HZ(0b10), 
-	ODR_12DOT5_HZ(0b011), 
-	BDU_CONTINUOUS(0b0), 
-	BDU_UPDATE_AFTER_READING(0b1), 
-	PD_ACTIVE(0b1), 
-	PD_POWER_DOWN(0b0);
+    ODR_ONE_SHOT(0b00), ODR_1_HZ(0b01), ODR_7_HZ(0b10), ODR_12DOT5_HZ(0b011), BDU_CONTINUOUS(
+            0b0), BDU_UPDATE_AFTER_READING(0b1), PD_ACTIVE(0b1), PD_POWER_DOWN(0b0);
 
-	final byte value;
+    final byte value;
 
-	HTS221ControlRegistry1(int value) {
-		this.value = (byte) value;
-	}
+    HTS221ControlRegistry1(int value) {
+        this.value = (byte) value;
+    }
 
 }

@@ -96,9 +96,10 @@ public class MCP23017LCD extends I2CProducer {
     // that order. Because this sequence is 'reversed,' a direct shift
     // won't work. This table remaps 4-bit data values to MCP PORTB
     // outputs, incorporating both the reverse and shift.
-    private static final int[] SHIFT_REVERSE = {0x00, 0x10, 0x08, 0x18, 0x04, 0x14, 0x0C, 0x1C, 0x02, 0x12, 0x0A, 0x1A, 0x06, 0x16, 0x0E, 0x1E};
+    private static final int[] SHIFT_REVERSE = { 0x00, 0x10, 0x08, 0x18, 0x04, 0x14, 0x0C, 0x1C, 0x02, 0x12, 0x0A, 0x1A,
+            0x06, 0x16, 0x0E, 0x1E };
 
-    private static final int[] ROW_OFFSETS = new int[] {0x00, 0x40, 0x14, 0x54};
+    private static final int[] ROW_OFFSETS = new int[] { 0x00, 0x40, 0x14, 0x54 };
 
     private int portA = 0x00;
     private int portB = 0x00;
@@ -126,36 +127,36 @@ public class MCP23017LCD extends I2CProducer {
         // which won't seriously bother anything on the plate right now
         // (blue backlight LED will come on, but that's done in the next
         // step anyway).
-        write(MCP23017_IOCON_BANK1, (byte)0);
+        write(MCP23017_IOCON_BANK1, (byte) 0);
 
         // Brute force reload ALL registers to known state. This also
         // sets up all the input pins, pull-ups, etc. for the Pi Plate.
         // NOTE(marcus/9 dec 2013): 0x3F assumes that GPA5 is input too -
         // it is however not connected.
-        byte[] registers = {0x3F, // IODIRA R+G LEDs=outputs, buttons=inputs
-                            (byte)ddrB, // IODIRB LCD D7=input, Blue LED=output
-                            0x3F, // IPOLA Invert polarity on button inputs
-                            0x00, // IPOLB
-                            0x00, // GPINTENA Disable interrupt-on-change
-                            0x00, // GPINTENB
-                            0x00, // DEFVALA
-                            0x00, // DEFVALB
-                            0x00, // INTCONA
-                            0x00, // INTCONB
-                            0x00, // IOCON
-                            0x00, // IOCON
-                            0x3F, // GPPUA Enable pull-ups on buttons
-                            0x00, // GPPUB
-                            0x00, // INTFA
-                            0x00, // INTFB
-                            0x00, // INTCAPA
-                            0x00, // INTCAPB
-                            (byte)portA, // GPIOA
-                            (byte)portB, // GPIOB
-                            (byte)portA, // OLATA 0 on all outputs; side effect
-                                         // of
-                            (byte)portB // OLATB turning on R+G+B backlight
-                                        // LEDs.
+        byte[] registers = { 0x3F, // IODIRA R+G LEDs=outputs, buttons=inputs
+                (byte) ddrB, // IODIRB LCD D7=input, Blue LED=output
+                0x3F, // IPOLA Invert polarity on button inputs
+                0x00, // IPOLB
+                0x00, // GPINTENA Disable interrupt-on-change
+                0x00, // GPINTENB
+                0x00, // DEFVALA
+                0x00, // DEFVALB
+                0x00, // INTCONA
+                0x00, // INTCONB
+                0x00, // IOCON
+                0x00, // IOCON
+                0x3F, // GPPUA Enable pull-ups on buttons
+                0x00, // GPPUB
+                0x00, // INTFA
+                0x00, // INTFB
+                0x00, // INTCAPA
+                0x00, // INTCAPB
+                (byte) portA, // GPIOA
+                (byte) portB, // GPIOB
+                (byte) portA, // OLATA 0 on all outputs; side effect
+                              // of
+                (byte) portB // OLATB turning on R+G+B backlight
+                             // LEDs.
         };
         write(0, registers, 0, registers.length);
 
@@ -165,7 +166,7 @@ public class MCP23017LCD extends I2CProducer {
         // at the start of the class. Also, the address register will no
         // longer increment automatically after this -- multi-byte
         // operations must be broken down into single-byte calls.
-        write(MCP23017_IOCON_BANK0, (byte)0xA0);
+        write(MCP23017_IOCON_BANK0, (byte) 0xA0);
 
         internalWrite(0x33); // Init
         internalWrite(0x32); // Init
@@ -185,29 +186,29 @@ public class MCP23017LCD extends I2CProducer {
         portA = 0xC0; // Turn off LEDs on the way out
         portB = 0x01;
         sleep(2);
-        write(MCP23017_IOCON_BANK1, (byte)0);
-        byte[] registers = {0x3F, // IODIRA
-                            (byte)ddrB, // IODIRB
-                            0x0, // IPOLA
-                            0x0, // IPOLB
-                            0x0, // GPINTENA
-                            0x0, // GPINTENB
-                            0x0, // DEFVALA
-                            0x0, // DEFVALB
-                            0x0, // INTCONA
-                            0x0, // INTCONB
-                            0x0, // IOCON
-                            0x0, // IOCON
-                            0x3F, // GPPUA
-                            0x0, // GPPUB
-                            0x0, // INTFA
-                            0x0, // INTFB
-                            0x0, // INTCAPA
-                            0x0, // INTCAPB
-                            (byte)portA, // GPIOA
-                            (byte)portB, // GPIOB
-                            (byte)portA, // OLATA
-                            (byte)portB // OLATB
+        write(MCP23017_IOCON_BANK1, (byte) 0);
+        byte[] registers = { 0x3F, // IODIRA
+                (byte) ddrB, // IODIRB
+                0x0, // IPOLA
+                0x0, // IPOLB
+                0x0, // GPINTENA
+                0x0, // GPINTENB
+                0x0, // DEFVALA
+                0x0, // DEFVALB
+                0x0, // INTCONA
+                0x0, // INTCONB
+                0x0, // IOCON
+                0x0, // IOCON
+                0x3F, // GPPUA
+                0x0, // GPPUB
+                0x0, // INTFA
+                0x0, // INTFB
+                0x0, // INTCAPA
+                0x0, // INTCAPB
+                (byte) portA, // GPIOA
+                (byte) portB, // GPIOB
+                (byte) portA, // OLATA
+                (byte) portB // OLATB
         };
         write(0, registers, 0, registers.length);
     }
@@ -236,7 +237,7 @@ public class MCP23017LCD extends I2CProducer {
         // pin as input to indicate need for polling on next call.
         if (value == LCD_CLEARDISPLAY || value == LCD_RETURNHOME) {
             ddrB |= 0x10;
-            write(MCP23017_IODIRB, (byte)ddrB);
+            write(MCP23017_IODIRB, (byte) ddrB);
         }
     }
 
@@ -284,7 +285,7 @@ public class MCP23017LCD extends I2CProducer {
         int hi = bitmask | SHIFT_REVERSE[value >> 4];
         int lo = bitmask | SHIFT_REVERSE[value & 0x0F];
 
-        return new byte[] {(byte)(hi | 0x20), (byte)hi, (byte)(lo | 0x20), (byte)lo};
+        return new byte[] { (byte) (hi | 0x20), (byte) hi, (byte) (lo | 0x20), (byte) lo };
     }
 
     @Override
@@ -344,8 +345,8 @@ public class MCP23017LCD extends I2CProducer {
         portA = (portA & 0x3F) | ((c & 0x03) << 6);
         portB = (portB & 0xFE) | ((c & 0x04) >> 2);
         // Has to be done as two writes because sequential operation is off.
-        getDevice().write(MCP23017_GPIOA, (byte)portA);
-        getDevice().write(MCP23017_GPIOB, (byte)portB);
+        getDevice().write(MCP23017_GPIOA, (byte) portA);
+        getDevice().write(MCP23017_GPIOB, (byte) portB);
         this.color = color;
     }
 
@@ -418,12 +419,12 @@ public class MCP23017LCD extends I2CProducer {
         if ((ddrB & 0x10) != 0) {
             int lo = (portB & 0x01) | 0x40;
             int hi = lo | 0x20; // E=1 (strobe)
-            write(MCP23017_GPIOB, (byte)lo);
+            write(MCP23017_GPIOB, (byte) lo);
             while (true) {
-                write((byte)hi); // Strobe high (enable)
+                write((byte) hi); // Strobe high (enable)
                 int bits = read(); // First nybble contains busy
                                    // state
-                getDevice().write(MCP23017_GPIOB, new byte[] {(byte)lo, (byte)hi, (byte)lo}, 0, 3); // Strobe
+                getDevice().write(MCP23017_GPIOB, new byte[] { (byte) lo, (byte) hi, (byte) lo }, 0, 3); // Strobe
                 // low,
                 // high,
                 // low.
@@ -437,7 +438,7 @@ public class MCP23017LCD extends I2CProducer {
             }
             portB = lo;
             ddrB &= 0xEF; // Polling complete, change D7 pin to output
-            write(MCP23017_IODIRB, (byte)ddrB);
+            write(MCP23017_IODIRB, (byte) ddrB);
         }
     }
 

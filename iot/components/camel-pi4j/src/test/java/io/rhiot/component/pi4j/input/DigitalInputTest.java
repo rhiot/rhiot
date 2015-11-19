@@ -39,14 +39,16 @@ public class DigitalInputTest extends CamelTestSupport {
     @Test
     public void consumeDigitalEvent() throws Exception {
 
-        GPIOConsumer consumer = (GPIOConsumer)this.context.getRoute("test-route").getConsumer();
+        GPIOConsumer consumer = (GPIOConsumer) this.context.getRoute("test-route").getConsumer();
 
         mock.expectedBodyReceived().body(GpioPinDigitalStateChangeEvent.class);
         mock.expectedMessageCount(2);
 
-        consumer.handleGpioPinDigitalStateChangeEvent(new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin)consumer.getPin(), PinState.LOW));
+        consumer.handleGpioPinDigitalStateChangeEvent(
+                new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin) consumer.getPin(), PinState.LOW));
         Thread.sleep(100);
-        consumer.handleGpioPinDigitalStateChangeEvent(new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin)consumer.getPin(), PinState.HIGH));
+        consumer.handleGpioPinDigitalStateChangeEvent(
+                new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin) consumer.getPin(), PinState.HIGH));
 
         assertMockEndpointsSatisfied();
     }
@@ -58,8 +60,8 @@ public class DigitalInputTest extends CamelTestSupport {
                 GpioProvider factory = Mockito.mock(RaspiGpioProvider.class);
 
                 GpioFactory.setDefaultProvider(factory);
-                from("pi4j-gpio://15?mode=DIGITAL_INPUT").id("test-route").to("log:io.rhiot.component.pi4j?showAll=true&multiline=true")
-                    .to("mock:result");
+                from("pi4j-gpio://15?mode=DIGITAL_INPUT").id("test-route")
+                        .to("log:io.rhiot.component.pi4j?showAll=true&multiline=true").to("mock:result");
 
             }
         };

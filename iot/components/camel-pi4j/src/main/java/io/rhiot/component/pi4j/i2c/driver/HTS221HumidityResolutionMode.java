@@ -21,19 +21,13 @@ package io.rhiot.component.pi4j.i2c.driver;
  */
 public enum HTS221HumidityResolutionMode {
 
-	AVGH_4(0b000), 
-	AVGH_8(0b001), 
-	AVGH_16(0b010), 
-	AVGH_32(0b011), 
-	AVGH_64(0b100), 
-	AVGH_128(0b101), 
-	AVGH_256(0b110), 
-	AVGH_512(0b0111);
+    AVGH_4(0b000), AVGH_8(0b001), AVGH_16(0b010), AVGH_32(0b011), AVGH_64(0b100), AVGH_128(0b101), AVGH_256(
+            0b110), AVGH_512(0b0111);
 
-	final int average;
+    final int average;
 
-	HTS221HumidityResolutionMode(int average) {
-		this.average = average;
-	}
+    HTS221HumidityResolutionMode(int average) {
+        this.average = average;
+    }
 
 }

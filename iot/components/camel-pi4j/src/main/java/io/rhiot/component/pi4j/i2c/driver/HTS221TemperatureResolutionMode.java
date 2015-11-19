@@ -22,20 +22,14 @@ package io.rhiot.component.pi4j.i2c.driver;
  */
 public enum HTS221TemperatureResolutionMode {
 
-	AVGT_2(0b000), 
-	AVGT_4(0b001), 
-	AVGT_8(0b010), 
-	AVGT_16(0b011), 
-	AVGT_32(0b100), 
-	AVGT_64(0b101),
-	AVGT_128(0b110), 
-	AVGT_256(0b111);
+    AVGT_2(0b000), AVGT_4(0b001), AVGT_8(0b010), AVGT_16(0b011), AVGT_32(0b100), AVGT_64(0b101), AVGT_128(
+            0b110), AVGT_256(0b111);
 
-	final int average;
+    final int average;
 
-	HTS221TemperatureResolutionMode(int average) {
+    HTS221TemperatureResolutionMode(int average) {
 
-		this.average = average;
-	}
+        this.average = average;
+    }
 
 }

@@ -21,27 +21,27 @@ package io.rhiot.component.pi4j.i2c.driver;
  */
 public class HTS221Value {
 
-	private double humidity;
-	private double temperature;
+    private double humidity;
+    private double temperature;
 
-	public double getHumidity() {
-		return humidity;
-	}
+    public double getHumidity() {
+        return humidity;
+    }
 
-	public void setHumidity(double humidity) {
-		this.humidity = humidity;
-	}
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
+    }
 
-	public double getTemperature() {
-		return temperature;
-	}
+    public double getTemperature() {
+        return temperature;
+    }
 
-	public void setTemperature(double temperature) {
-		this.temperature = temperature;
-	}
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
 
-	public String toString() {
-		return "[temperature:" + temperature + ",humidity:" + humidity + "]";
-	}
+    public String toString() {
+        return "[temperature:" + temperature + ",humidity:" + humidity + "]";
+    }
 
 }

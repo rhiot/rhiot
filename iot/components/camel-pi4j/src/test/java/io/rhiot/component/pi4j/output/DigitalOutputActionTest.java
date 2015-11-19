@@ -60,11 +60,10 @@ public class DigitalOutputActionTest extends CamelTestSupport {
             public void configure() {
                 GpioFactory.setDefaultProvider(MOCK_RASPI);
                 from("direct:start").id("rbpi-route").to("log:io.rhiot.component.pi4j?showAll=true&multiline=true")
-                            .process(exchange -> exchange.getIn().setHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, "HIGH"))
+                        .process(exchange -> exchange.getIn().setHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, "HIGH"))
                         .to("pi4j-gpio://6?mode=DIGITAL_OUTPUT&state=LOW&action=LOW")
-                            .process(exchange -> exchange.getIn().setHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, "LOW"))
-                        .to("pi4j-gpio://7?mode=DIGITAL_OUTPUT&state=LOW&action=HIGH")
-                        .to("mock:result");
+                        .process(exchange -> exchange.getIn().setHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, "LOW"))
+                        .to("pi4j-gpio://7?mode=DIGITAL_OUTPUT&state=LOW&action=HIGH").to("mock:result");
 
             }
         };

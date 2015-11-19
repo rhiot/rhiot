@@ -39,11 +39,11 @@ public final class BMP180Consumer extends I2CConsumer {
     // Calibration data
     private static final int CALIBRATION_START = 0xAA;
 
-	private static final int CALIBRATION_END = 0xBF;
-	private static final short BMP085_CONTROL = 0xF4;
-	private static final short BMP085_TEMPDATA = 0xF6;
-	private static final short BMP085_PRESSUREDATA = 0xF6;
-	private static final byte BMP085_READTEMPCMD = 0x2E;
+    private static final int CALIBRATION_END = 0xBF;
+    private static final short BMP085_CONTROL = 0xF4;
+    private static final short BMP085_TEMPDATA = 0xF6;
+    private static final short BMP085_PRESSUREDATA = 0xF6;
+    private static final byte BMP085_READTEMPCMD = 0x2E;
 
     private final static byte BMP085_READPRESSURECMD = 0x34;
 
@@ -99,7 +99,8 @@ public final class BMP180Consumer extends I2CConsumer {
         MC = calibrationData.readShort();
         MD = calibrationData.readShort();
 
-        LOG.debug(String.format("AC1:%d, AC2:%d, AC3:%d, AC4:%d, AC5:%d, AC6:%d, B1:%d, B2:%d, MC:%d, MD:%d", AC1, AC2, AC3, AC4, AC5, AC6, B1, B2, MC, MD));
+        LOG.debug(String.format("AC1:%d, AC2:%d, AC3:%d, AC4:%d, AC5:%d, AC6:%d, B1:%d, B2:%d, MC:%d, MD:%d", AC1, AC2,
+                AC3, AC4, AC5, AC6, B1, B2, MC, MD));
     }
 
     public BMP180OperatingMode getMode() {
@@ -124,8 +125,8 @@ public final class BMP180Consumer extends I2CConsumer {
         X1 = (AC3 * B6) >> 13;
         X2 = (B1 * ((B6 * B6) >> 12)) >> 16;
         X3 = ((X1 + X2) + 2) >> 2;
-        long B4 = (AC4 * ((long)(X3 + 32768))) >> 15;
-        long B7 = ((long)UP - B3) * (50000 >> mode.getOverSamplingSetting());
+        long B4 = (AC4 * ((long) (X3 + 32768))) >> 15;
+        long B7 = ((long) UP - B3) * (50000 >> mode.getOverSamplingSetting());
 
         if (B7 < 0x80000000) {
             p = (B7 * 2) / B4;
@@ -133,11 +134,11 @@ public final class BMP180Consumer extends I2CConsumer {
             p = (B7 / B4) * 2;
         }
 
-        X1 = (int)((p >> 8) * (p >> 8));
+        X1 = (int) ((p >> 8) * (p >> 8));
         X1 = (X1 * 3038) >> 16;
-        X2 = (int)(-7357 * p) >> 16;
+        X2 = (int) (-7357 * p) >> 16;
         p = p + ((X1 + X2 + 3791) >> 4);
-        return (int)p;
+        return (int) p;
     }
 
     private int readRawPressure() throws IOException {

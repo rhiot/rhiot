@@ -148,7 +148,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
                 pin = getOrCreateController().provisionAnalogOutputPin(getPin(), value);
                 break;
             case PWM_OUTPUT:
-                pin = getOrCreateController().provisionPwmOutputPin(getPin(), (int)value);
+                pin = getOrCreateController().provisionPwmOutputPin(getPin(), (int) value);
                 break;
             case ANALOG_INPUT: // PinMode.allInput()
             case DIGITAL_INPUT:
@@ -160,7 +160,8 @@ public class GPIOEndpoint extends DefaultEndpoint {
             }
             pin.setMode(this.mode); // Force Mode to avoid NPE
         } else { // enhancement we could manage several pins with one producer
-            throw new IllegalArgumentException("Cannot create twice same output gpio [" + this.gpioId + "] for Producer");
+            throw new IllegalArgumentException(
+                    "Cannot create twice same output gpio [" + this.gpioId + "] for Producer");
         }
 
         // shutdownOption(pin);
@@ -231,7 +232,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
         try {
             Field field = gpioClass.getDeclaredField(this.gpioId);
-            ret = (Pin)field.get(null);
+            ret = (Pin) field.get(null);
         } catch (NoSuchFieldException e) {
             LOG.trace(" Field " + gpioId + " not found in class " + gpioClass);
         } catch (SecurityException e) {
@@ -257,7 +258,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
         for (Field field : gpioClass.getFields()) {
             if (field.getType().equals(Pin.class)) {
                 try {
-                    ret = (Pin)field.get(null);
+                    ret = (Pin) field.get(null);
                     if (ret.getAddress() == address) {
                         return ret;
                     }
@@ -276,7 +277,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
         for (Field field : gpioClass.getFields()) {
             if (field.getType().equals(Pin.class)) {
                 try {
-                    ret = (Pin)field.get(null);
+                    ret = (Pin) field.get(null);
                     if (ret.getName().compareTo(gpioId) == 0) {
                         return ret;
                     }

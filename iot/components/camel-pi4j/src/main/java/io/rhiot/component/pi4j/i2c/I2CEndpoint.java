@@ -85,7 +85,8 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     private I2CBus bus;
 
-    public I2CEndpoint(String uri, I2CComponent i2cComponent, String remaining, I2CBus bus, Map<String, Object> parameters) {
+    public I2CEndpoint(String uri, I2CComponent i2cComponent, String remaining, I2CBus bus,
+            Map<String, Object> parameters) {
         super(uri, i2cComponent);
 
         this.bus = bus;
@@ -102,15 +103,16 @@ public class I2CEndpoint extends DefaultEndpoint {
 
         Constructor constructor = driverClass.getConstructor(I2CEndpoint.class, Processor.class, I2CDevice.class);
 
-        ret = (Consumer)constructor.newInstance(this, processor, device);
+        ret = (Consumer) constructor.newInstance(this, processor, device);
 
         // Inject last parameter to i2c derived consumer
         EndpointHelper.setProperties(this.getCamelContext(), ret, parameters);
 
         if (!parameters.isEmpty()) {
             for (String param : parameters.keySet()) {
-                LOG.warn("There are parameters that couldn't be set on the endpoint Consumer. Check the uri if the parameters are spelt correctly and that they are properties of the endpoint."
-                         + " Unknown Consumer parameters=[" + param + "]");
+                LOG.warn(
+                        "There are parameters that couldn't be set on the endpoint Consumer. Check the uri if the parameters are spelt correctly and that they are properties of the endpoint."
+                                + " Unknown Consumer parameters=[" + param + "]");
             }
         }
 
@@ -126,15 +128,16 @@ public class I2CEndpoint extends DefaultEndpoint {
 
         Constructor constructor = driverClass.getConstructor(I2CEndpoint.class, I2CDevice.class);
 
-        ret = (Producer)constructor.newInstance(this, device);
+        ret = (Producer) constructor.newInstance(this, device);
 
         // Inject last parameter to i2c derived producer
         EndpointHelper.setProperties(this.getCamelContext(), ret, parameters);
 
         if (!parameters.isEmpty()) {
             for (String param : parameters.keySet()) {
-                LOG.warn("There are parameters that couldn't be set on the endpoint Producer. Check the uri if the parameters are spelt correctly and that they are properties of the endpoint."
-                         + " Unknown Producer parameters=[" + param + "]");
+                LOG.warn(
+                        "There are parameters that couldn't be set on the endpoint Producer. Check the uri if the parameters are spelt correctly and that they are properties of the endpoint."
+                                + " Unknown Producer parameters=[" + param + "]");
             }
         }
         return ret;

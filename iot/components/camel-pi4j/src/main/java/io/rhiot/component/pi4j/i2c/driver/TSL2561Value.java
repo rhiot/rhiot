@@ -17,7 +17,6 @@
 
 package io.rhiot.component.pi4j.i2c.driver;
 
-
 /**
  * 
  */

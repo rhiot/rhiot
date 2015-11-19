@@ -41,11 +41,12 @@ public class DigitalInputLowTest extends CamelTestSupport {
     @Test
     public void consumeDigitalEventIncorrectState() throws Exception {
 
-        GPIOConsumer pinConsumer = (GPIOConsumer)this.context.getRoute("test-route").getConsumer();
+        GPIOConsumer pinConsumer = (GPIOConsumer) this.context.getRoute("test-route").getConsumer();
 
         mock.expectedMessageCount(0);
 
-        pinConsumer.handleGpioPinDigitalStateChangeEvent(new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin)pinConsumer.getPin(), PinState.HIGH));
+        pinConsumer.handleGpioPinDigitalStateChangeEvent(
+                new GpioPinDigitalStateChangeEvent("CAMEL-EVENT", (GpioPin) pinConsumer.getPin(), PinState.HIGH));
 
         assertMockEndpointsSatisfied();
     }
@@ -56,8 +57,8 @@ public class DigitalInputLowTest extends CamelTestSupport {
             public void configure() {
 
                 GpioFactory.setDefaultProvider(factory);
-                from("pi4j-gpio://0?mode=DIGITAL_INPUT&state=LOW").id("test-route").to("log:io.rhiot.component.pi4j?showAll=true&multiline=true")
-                    .to("mock:result");
+                from("pi4j-gpio://0?mode=DIGITAL_INPUT&state=LOW").id("test-route")
+                        .to("log:io.rhiot.component.pi4j?showAll=true&multiline=true").to("mock:result");
 
             }
         };

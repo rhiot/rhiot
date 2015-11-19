@@ -117,14 +117,14 @@ public class TSL2561Consumer extends I2CConsumer {
 
     protected void doStart() throws Exception {
         super.doStart();
-        write(TSL2561_COMMAND_BIT, (byte)TSL2561_CONTROL_POWERON);
-        write(TSL2561_COMMAND_BIT | TSL2561_REGISTER_TIMING, (byte)(gain.gain | integration.integrationTime));
+        write(TSL2561_COMMAND_BIT, (byte) TSL2561_CONTROL_POWERON);
+        write(TSL2561_COMMAND_BIT | TSL2561_REGISTER_TIMING, (byte) (gain.gain | integration.integrationTime));
         sleep(pause);
     }
 
     protected void doStop() throws Exception {
         super.doStop();
-        write(TSL2561_COMMAND_BIT, (byte)TSL2561_CONTROL_POWEROFF);
+        write(TSL2561_COMMAND_BIT, (byte) TSL2561_CONTROL_POWEROFF);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class TSL2561Consumer extends I2CConsumer {
             ambient *= 16; // scale 1x to 16x
             ir *= 16; // scale 1x to 16x
         }
-        double ratio = (ir / (float)ambient);
+        double ratio = (ir / (float) ambient);
 
         LOG.debug("IR Result:" + ir);
         LOG.debug("Ambient Result:" + ambient);

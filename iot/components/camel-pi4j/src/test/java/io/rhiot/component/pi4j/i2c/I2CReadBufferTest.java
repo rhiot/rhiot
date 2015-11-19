@@ -35,7 +35,7 @@ public class I2CReadBufferTest extends CamelTestSupport {
 
     @Test
     public void consumeAnalogEvent() throws Exception {
-        byte result[] = {0b00000000, 0b00000100, 0b00000111, 0b00001010};
+        byte result[] = { 0b00000000, 0b00000100, 0b00000111, 0b00001010 };
 
         MockEndpoint mock = getMockEndpoint("mock:result");
 

@@ -41,9 +41,12 @@ public class GPIOProducer extends DefaultProducer {
     /**
      * Create Producer to PIN with OUTPUT mode
      *
-     * @param endpoint the endpoint
-     * @param pin the pin to manage
-     * @param action the action to do
+     * @param endpoint
+     *            the endpoint
+     * @param pin
+     *            the pin to manage
+     * @param action
+     *            the action to do
      */
     public GPIOProducer(GPIOEndpoint endpoint, GpioPin pin, GPIOAction action) {
         super(endpoint);
@@ -68,17 +71,17 @@ public class GPIOProducer extends DefaultProducer {
 
         case DIGITAL_OUTPUT:
             Boolean outputBoolean = exchange.getContext().getTypeConverter().convertTo(Boolean.class, value);
-            ((GpioPinDigitalOutput)pin).setState(outputBoolean);
+            ((GpioPinDigitalOutput) pin).setState(outputBoolean);
             break;
 
         case ANALOG_OUTPUT:
             Double outputDouble = exchange.getContext().getTypeConverter().convertTo(Double.class, value);
-            ((GpioPinAnalogOutput)pin).setValue(outputDouble);
+            ((GpioPinAnalogOutput) pin).setValue(outputDouble);
             break;
 
         case PWM_OUTPUT:
             Integer outputInt = exchange.getContext().getTypeConverter().convertTo(Integer.class, value);
-            ((GpioPinPwmOutput)pin).setPwm(outputInt);
+            ((GpioPinPwmOutput) pin).setPwm(outputInt);
 
             break;
 
@@ -114,34 +117,35 @@ public class GPIOProducer extends DefaultProducer {
 
             case TOGGLE:
                 if (pin.getMode() == PinMode.DIGITAL_OUTPUT) {
-                    ((GpioPinDigitalOutput)pin).toggle();
+                    ((GpioPinDigitalOutput) pin).toggle();
                 }
                 break;
 
             case LOW:
                 if (pin.getMode() == PinMode.DIGITAL_OUTPUT) {
-                    ((GpioPinDigitalOutput)pin).low();
+                    ((GpioPinDigitalOutput) pin).low();
                 }
                 break;
 
             case HIGH:
                 if (pin.getMode() == PinMode.DIGITAL_OUTPUT) {
-                    ((GpioPinDigitalOutput)pin).high();
+                    ((GpioPinDigitalOutput) pin).high();
                 }
                 break;
 
             case BLINK:
                 if (pin.getMode() == PinMode.DIGITAL_OUTPUT) {
-                    pool = this.getEndpoint().getCamelContext().getExecutorServiceManager().newSingleThreadExecutor(this, "gpio");
+                    pool = this.getEndpoint().getCamelContext().getExecutorServiceManager()
+                            .newSingleThreadExecutor(this, "gpio");
                     pool.submit(new Runnable() {
 
                         @Override
                         public void run() {
                             try {
                                 Thread.sleep(endpoint.getDelay());
-                                ((GpioPinDigitalOutput)pin).toggle();
+                                ((GpioPinDigitalOutput) pin).toggle();
                                 Thread.sleep(endpoint.getDuration());
-                                ((GpioPinDigitalOutput)pin).toggle();
+                                ((GpioPinDigitalOutput) pin).toggle();
                             } catch (InterruptedException e) {
                                 log.error("Thread interruption into BLINK sequence", e);
                             }

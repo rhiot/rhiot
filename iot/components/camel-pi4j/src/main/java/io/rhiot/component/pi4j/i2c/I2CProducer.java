@@ -48,15 +48,15 @@ public class I2CProducer extends DefaultProducer implements I2CDevice {
 
         if (o instanceof Byte) {
             if (endpoint.getAddress() >= 0) {
-                write(endpoint.getAddress(), (Byte)o);
+                write(endpoint.getAddress(), (Byte) o);
             } else {
-                write((Byte)o);
+                write((Byte) o);
             }
         } else if (o instanceof Byte[]) {
             if (endpoint.getAddress() >= 0) {
-                write(endpoint.getAddress(), (byte[])o, endpoint.getOffset(), endpoint.getSize());
+                write(endpoint.getAddress(), (byte[]) o, endpoint.getOffset(), endpoint.getSize());
             } else {
-                write((byte[])o, endpoint.getOffset(), endpoint.getSize());
+                write((byte[]) o, endpoint.getOffset(), endpoint.getSize());
             }
         }
 
@@ -70,7 +70,8 @@ public class I2CProducer extends DefaultProducer implements I2CDevice {
         return this.device.read(buffer, offset, size);
     }
 
-    public int read(byte[] writeBuffer, int writeOffset, int writeSize, byte[] buffer, int offset, int size) throws IOException {
+    public int read(byte[] writeBuffer, int writeOffset, int writeSize, byte[] buffer, int offset, int size)
+            throws IOException {
         return this.device.read(writeBuffer, writeOffset, writeSize, buffer, offset, size);
     }
 

@@ -40,14 +40,15 @@ public class AnalogInputTest extends CamelTestSupport {
 
     @Test
     public void consumeAnalogEvent() throws Exception {
-        GPIOConsumer pinConsumer = (GPIOConsumer)this.context.getRoute("test-route").getConsumer();
-        Object body = new GpioPinAnalogValueChangeEvent("CAMEL-EVENT", (GpioPin)pinConsumer.getPin(), 11);
+        GPIOConsumer pinConsumer = (GPIOConsumer) this.context.getRoute("test-route").getConsumer();
+        Object body = new GpioPinAnalogValueChangeEvent("CAMEL-EVENT", (GpioPin) pinConsumer.getPin(), 11);
 
         mock.expectedBodyReceived().body(GpioPinAnalogValueChangeEvent.class);
         mock.expectedMessageCount(1);
         mock.expectedHeaderReceived(Pi4jConstants.CAMEL_RBPI_PIN_VALUE, 11);
 
-        pinConsumer.handleGpioPinAnalogValueChangeEvent(new GpioPinAnalogValueChangeEvent("CAMEL-EVENT", (GpioPin)pinConsumer.getPin(), 11));
+        pinConsumer.handleGpioPinAnalogValueChangeEvent(
+                new GpioPinAnalogValueChangeEvent("CAMEL-EVENT", (GpioPin) pinConsumer.getPin(), 11));
 
         assertMockEndpointsSatisfied();
 
@@ -61,7 +62,8 @@ public class AnalogInputTest extends CamelTestSupport {
 
                 GpioFactory.setDefaultProvider(factory);
 
-                from("pi4j-gpio://0?mode=ANALOG_INPUT").id("test-route").to("log:io.rhiot.component.pi4j?showAll=true&multiline=true").to("mock:result");
+                from("pi4j-gpio://0?mode=ANALOG_INPUT").id("test-route")
+                        .to("log:io.rhiot.component.pi4j?showAll=true&multiline=true").to("mock:result");
 
             }
         };

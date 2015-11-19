@@ -65,7 +65,7 @@ public class DigitalOutput3Test extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:start").id("rbpi-route").to("log:io.rhiot.component.pi4j?showAll=true&multiline=true")
-                    .to("pi4j-gpio://5?mode=DIGITAL_OUTPUT&state=LOW&action=TOGGLE").to("mock:result");
+                        .to("pi4j-gpio://5?mode=DIGITAL_OUTPUT&state=LOW&action=TOGGLE").to("mock:result");
 
             }
         };

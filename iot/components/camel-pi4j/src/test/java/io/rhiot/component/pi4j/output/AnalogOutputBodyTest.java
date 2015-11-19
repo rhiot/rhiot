@@ -63,8 +63,8 @@ public class AnalogOutputBodyTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:start").id("rbpi-route").to("pi4j-gpio://1?mode=PWM_OUTPUT").transform().simple("64.3").to("pi4j-gpio://7?mode=ANALOG_OUTPUT")
-                    .to("mock:result");
+                from("direct:start").id("rbpi-route").to("pi4j-gpio://1?mode=PWM_OUTPUT").transform().simple("64.3")
+                        .to("pi4j-gpio://7?mode=ANALOG_OUTPUT").to("mock:result");
             }
         };
     }

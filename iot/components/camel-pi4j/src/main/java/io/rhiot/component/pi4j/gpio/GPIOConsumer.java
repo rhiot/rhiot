@@ -40,10 +40,14 @@ public class GPIOConsumer extends DefaultConsumer implements GpioPinListenerDigi
     /**
      * Create Consumer mapped to INPUT pin
      * 
-     * @param endpoint Camel Endpoint
-     * @param processor Camel Processor
-     * @param pin pin
-     * @param state state
+     * @param endpoint
+     *            Camel Endpoint
+     * @param processor
+     *            Camel Processor
+     * @param pin
+     *            pin
+     * @param state
+     *            state
      */
     public GPIOConsumer(GPIOEndpoint endpoint, Processor processor, GpioPin pin, PinState state) {
         super(endpoint, processor);
@@ -82,14 +86,16 @@ public class GPIOConsumer extends DefaultConsumer implements GpioPinListenerDigi
         exchange.getIn().setHeader(Pi4jConstants.CAMEL_RBPI_PIN_VALUE, event.getValue());
         exchange.getIn().setHeader(Pi4jConstants.CAMEL_RBPI_PIN_TYPE, event.getEventType());
 
-        log.debug("GpioEvent pin {}, event {}, state {} ", new Object[] {event.getPin().getName(), event.getEventType().name(), event.getValue()});
+        log.debug("GpioEvent pin {}, event {}, state {} ",
+                new Object[] { event.getPin().getName(), event.getEventType().name(), event.getValue() });
 
         sendEvent(exchange);
     }
 
     public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 
-        log.debug("GpioEvent pin {}, event {}, state {} ", new String[] {event.getPin().getName(), event.getEventType().name(), event.getState().getName()});
+        log.debug("GpioEvent pin {}, event {}, state {} ",
+                new String[] { event.getPin().getName(), event.getEventType().name(), event.getState().getName() });
 
         // We just listen correct state
         if (state != null && state != event.getState()) {

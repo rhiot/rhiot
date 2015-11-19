@@ -44,7 +44,7 @@ public class MockI2CDevice implements I2CDevice {
 
     public int read(byte[] buffer, int offset, int size) throws IOException {
         for (int i = offset; i < offset + size; i++) {
-            buffer[i] = (byte)(i * 3 + 1);
+            buffer[i] = (byte) (i * 3 + 1);
         }
         return size;
     }
@@ -57,7 +57,8 @@ public class MockI2CDevice implements I2CDevice {
         return 0;
     }
 
-    public int read(byte[] writeBuffer, int writeOffset, int writeSize, byte[] readBuffer, int readOffset, int readSize) throws IOException {
+    public int read(byte[] writeBuffer, int writeOffset, int writeSize, byte[] readBuffer, int readOffset, int readSize)
+            throws IOException {
         return 0;
     }
 

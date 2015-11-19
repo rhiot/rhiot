@@ -17,8 +17,9 @@
 package io.rhiot.component.pi4j.i2c.driver;
 
 public enum MCP23017LCDColor {
-    OFF(0x00), RED(0x01), GREEN(0x02), BLUE(0x04), YELLOW(RED.getValue() + GREEN.getValue()), TEAL(GREEN.getValue() + BLUE.getValue()), VIOLET(RED.getValue() + BLUE.getValue()), WHITE(
-        RED.getValue() + GREEN.getValue() + BLUE.getValue()), ON(WHITE.getValue());
+    OFF(0x00), RED(0x01), GREEN(0x02), BLUE(0x04), YELLOW(RED.getValue() + GREEN.getValue()), TEAL(
+            GREEN.getValue() + BLUE.getValue()), VIOLET(RED.getValue() + BLUE.getValue()), WHITE(
+                    RED.getValue() + GREEN.getValue() + BLUE.getValue()), ON(WHITE.getValue());
 
     private final int value;
 
