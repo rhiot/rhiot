@@ -19,13 +19,12 @@ package io.rhiot.component.kura.wifi;
 import org.eclipse.kura.core.net.WifiAccessPointImpl;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
 
+import java.util.Arrays;
 import java.util.List;
-
-import static java.util.Arrays.asList;
 
 public class MockAccessPointProvider implements AccessPointsProvider {
 
-    public static final List<WifiAccessPoint> ACCESS_POINTS = asList(
+    public static final List<WifiAccessPoint> ACCESS_POINTS = Arrays.<WifiAccessPoint>asList(
             new WifiAccessPointImpl("ssid1"),
             new WifiAccessPointImpl("ssid2"));
 

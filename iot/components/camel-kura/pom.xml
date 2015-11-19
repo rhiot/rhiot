@@ -23,6 +23,9 @@
 	<description>Camel Kura Components (WiFi)</description>
 
 	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+
 		<slf4j.version>1.6.6</slf4j.version>
 
 		<camel.osgi.export.pkg>
