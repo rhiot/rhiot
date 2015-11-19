@@ -27,17 +27,25 @@ import org.apache.spark.api.java.JavaSparkContext;
 @UriEndpoint(scheme = "spark", title = "Spark connector", producerOnly = true, label = "bigdata", syntax = "spark:label")
 public class SparkEndpoint extends DefaultEndpoint {
 
+    // Endpoint collaborators
+
     private JavaSparkContext sparkContext;
 
     private JavaRDD rdd;
 
     private RddCallback rddCallback;
 
+    // Endpoint configuration
+
     private boolean collect = true;
+
+    // Constructors
 
     public SparkEndpoint(String endpointUri, SparkComponent component) {
         super(endpointUri, component);
     }
+
+    // Overridden
 
     @Override
     public Producer createProducer() throws Exception {
@@ -49,12 +57,12 @@ public class SparkEndpoint extends DefaultEndpoint {
         throw new UnsupportedOperationException("Spark component supports producer endpoints only.");
     }
 
-    // Setters & getters
-
     @Override
     public boolean isSingleton() {
         return true;
     }
+
+    // Setters & getters
 
     public JavaSparkContext getSparkContext() {
         return sparkContext;
