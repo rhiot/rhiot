@@ -17,18 +17,17 @@
 package io.rhiot.component.kura.wifi;
 
 import org.apache.camel.spi.Registry;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.eclipse.kura.KuraException;
 import org.eclipse.kura.linux.net.NetworkServiceImpl;
 import org.eclipse.kura.net.NetworkService;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static io.rhiot.utils.Reflections.writeField;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -82,6 +81,14 @@ public class KuraAccessPointsProvider implements AccessPointsProvider {
 
     protected void initializeNetworkService(NetworkService networkService) {
         writeField(networkService, "m_addedModems", new ArrayList());
+    }
+
+    private static void writeField(Object object, String field, Object value) {
+        try {
+            FieldUtils.writeField(object, field, value, true);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

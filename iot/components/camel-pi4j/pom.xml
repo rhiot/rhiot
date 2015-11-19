@@ -31,7 +31,10 @@
           io.rhiot.component.pi4j.gpio.*,
           io.rhiot.component.pi4j.converter.*
     </camel.osgi.export.pkg>
-    <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=pi4j</camel.osgi.export.service>
+    <camel.osgi.export.service>
+    			org.apache.camel.spi.ComponentResolver;component=pi4j-gpio,
+    			org.apache.camel.spi.ComponentResolver;component=pi4j-i2c
+    </camel.osgi.export.service>
   </properties>
 
   <dependencies>

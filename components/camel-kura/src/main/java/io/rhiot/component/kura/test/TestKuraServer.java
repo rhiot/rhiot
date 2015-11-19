@@ -14,24 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.component.kura.wifi;
+package io.rhiot.component.kura.test;
 
-import org.eclipse.kura.core.net.WifiAccessPointImpl;
-import org.eclipse.kura.net.wifi.WifiAccessPoint;
+import org.apache.camel.component.kura.KuraRouter;
+import org.apache.felix.connect.launch.PojoServiceRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
+public class TestKuraServer {
 
-import static java.util.Arrays.asList;
+	private static Logger log = LoggerFactory.getLogger(TestKuraServer.class);
 
-public class MockAccessPointProvider implements AccessPointsProvider {
+	private PojoServiceRegistry registry;
 
-    public static final List<WifiAccessPoint> ACCESS_POINTS = asList(
-            new WifiAccessPointImpl("ssid1"),
-            new WifiAccessPointImpl("ssid2"));
+	public <T extends KuraRouter> T start(Class<? extends KuraRouter> kuraRouter) {
+		registry = PojosrRegistry.getInstance().getRegistry();
+		T router = null;
+		try {
+			log.debug("Starting router for class {}...", kuraRouter.getName());
+			router = (T) kuraRouter.newInstance();
+			router.start(registry.getBundleContext());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
-    @Override
-    public List<WifiAccessPoint> accessPoints(String forInterface) {
-        return ACCESS_POINTS;
-    }
+		return router;
+	}
 
 }

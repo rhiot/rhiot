@@ -23,47 +23,66 @@
 	<description>Camel Kura Components (WiFi)</description>
 
 	<properties>
-		<camel.osgi.export.pkg>io.rhiot.component.kura.wifi</camel.osgi.export.pkg>
-		<camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=kura-wifi</camel.osgi.export.service>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+
+		<slf4j.version>1.6.6</slf4j.version>
+
+		<camel.osgi.export.pkg>
+			io.rhiot.component.kura.*,
+			io.rhiot.component.kura.router.*,
+			io.rhiot.component.kura.wifi.*
+		</camel.osgi.export.pkg>
+		<camel.osgi.export.service>
+			org.apache.camel.spi.ComponentResolver;component=kura-wifi
+		</camel.osgi.export.service>
 	</properties>
 
 	<dependencies>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-utils</artifactId>
-        </dependency>
-        <dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-kura</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.api</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.core</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.core.net</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.linux.net</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.connect</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-kura</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- Testing API -->
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.connect</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- Testing -->
 		<dependency>
@@ -82,6 +101,20 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<configuration>
+					<instructions>
+						<Import-Package>!org.apache.felix.connect.*,*</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<repositories>
 		<repository>

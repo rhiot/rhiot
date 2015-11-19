@@ -52,17 +52,20 @@ Rhiot comes with the following features:
     - [Options](#options-2)
     - [Process manager](#process-manager-1)
     - [Installer](#installer-1)
-  - [Camel Kura Wifi component](#camel-kura-wifi-component)
+  - [Camel Kura router](#camel-kura-router)
     - [Maven dependency](#maven-dependency-3)
+    - [Usage](#usage)
+  - [Camel Kura Wifi component](#camel-kura-wifi-component)
+    - [Maven dependency](#maven-dependency-4)
     - [URI format](#uri-format-3)
     - [Options](#options-3)
     - [Detecting Kura NetworkService](#detecting-kura-networkservice)
   - [Camel OpenIMAJ component](#camel-openimaj-component)
-    - [Maven dependency](#maven-dependency-4)
+    - [Maven dependency](#maven-dependency-5)
     - [URI format](#uri-format-4)
     - [Options](#options-4)
   - [Camel TinkerForge component](#camel-tinkerforge-component)
-    - [Maven dependency](#maven-dependency-5)
+    - [Maven dependency](#maven-dependency-6)
     - [General URI format](#general-uri-format)
       - [Ambientlight](#ambientlight)
       - [Temperature](#temperature)
@@ -73,7 +76,7 @@ Rhiot comes with the following features:
       - [Consuming:](#consuming)
       - [Producing](#producing)
   - [Camel Pi4j component](#camel-pi4j-component)
-    - [Maven dependency](#maven-dependency-6)
+    - [Maven dependency](#maven-dependency-7)
     - [URI format for GPIO](#uri-format-for-gpio)
         - [Optional URI Parameters](#optional-uri-parameters-1)
       - [Consuming:](#consuming-1)
@@ -82,19 +85,19 @@ Rhiot comes with the following features:
     - [URI format for I2C](#uri-format-for-i2c)
         - [Optional URI Parameters](#optional-uri-parameters-2)
         - [i2c driver](#i2c-driver)
-   - [Camel Framebuffer component](#camel-framebuffer-component)
-     - [Maven dependency](#maven-dependency-7)
-     - [General URI format](#uri-format-for-framebuffer)
-        - [URI Parameters](#uri-parameters)
-     - [Consuming:](#consuming-2)  
-  - [Camel PubNub component](#camel-pubnub-component)
+  - [Camel Framebuffer component](#camel-framebuffer-component)
     - [Maven dependency](#maven-dependency-8)
+    - [URI format for Framebuffer](#uri-format-for-framebuffer)
+        - [Optional URI Parameters](#optional-uri-parameters-3)
+      - [Consuming:](#consuming-2)
+  - [Camel PubNub component](#camel-pubnub-component)
+    - [Maven dependency](#maven-dependency-9)
     - [General URI format](#general-uri-format-1)
         - [URI Parameters](#uri-parameters)
-      - [Consuming:](#consuming-2)
+      - [Consuming:](#consuming-3)
       - [Producing](#producing-2)
   - [Camel Webcam component](#camel-webcam-component)
-    - [Maven dependency](#maven-dependency-9)
+    - [Maven dependency](#maven-dependency-10)
     - [URI format](#uri-format-5)
     - [Options](#options-5)
     - [Process manager](#process-manager-2)
@@ -713,7 +716,45 @@ If an Installer is not set on the component, Camel will try to find an instance 
         new CustomInstaller();
     }
 
+### Camel Kura router
 
+**Avaliable since Rhiot 0.1.3**: Rhiot provides `io.rhiot.component.kura.router.RhiotKuraRouter` class, which
+extends `org.apache.camel.component.kura.KuraRouter` class from the Apache Camel 
+[camel-kura](http://camel.apache.org/kura) module. While `KuraRouter` provides a generic base for Kura routes, it doesn't
+rely on the Kura-specific jars, because of limitations of the Apache Camel policy regarding adding 3rd parties repositories
+to the Camel (like Eclipse Kura repository). `RhiotKuraRouter` extends `KuraRouter` and enhances it with Kura-specific API.
+
+#### Maven dependency
+
+Maven users should add the following dependency to their POM file:
+
+    <dependency>
+      <groupId>io.rhiot</groupId>
+      <artifactId>camel-kura</artifactId>
+      <version>${rhiot.version}</version>
+    </dependency>
+
+Adding Rhiot camel-kura module to your project, imports transitive Kura dependencies. This is big advantage over Apache
+Camel camel-kura module, which doesn't rely on Kura API and therefore doesn't import Kura jars.
+
+
+#### Usage
+
+The principle of using `RhiotKuraRouter` is the same as using `KuraRouter` i.e. just extend `RhiotKuraRouter` class:
+
+    import io.rhiot.component.kura.router.RhiotKuraRouter;
+    
+    class TestKuraRouter extends RhiotKuraRouter {
+
+      @Override
+	  public void configure() throws Exception {
+	    from("direct:test")
+	     .to("mock:test");
+	  }
+
+	}
+
+ 
 ### Camel Kura Wifi component
 
 The common scenario for the mobile IoT Gateways, for example those mounted on the trucks or other vehicles, is to cache

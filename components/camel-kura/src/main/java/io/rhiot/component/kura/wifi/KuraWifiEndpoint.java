@@ -26,7 +26,7 @@ import org.eclipse.kura.net.wifi.WifiAccessPoint;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.singletonList;
 
 @UriEndpoint(scheme = "kura-wifi", title = "Kura WiFi", consumerClass = KuraWifiConsumer.class, label = "iot,raspberrypi,kura", syntax = "kura-wifi:interface/ssid")
 public class KuraWifiEndpoint extends DefaultEndpoint {
@@ -48,7 +48,11 @@ public class KuraWifiEndpoint extends DefaultEndpoint {
     public List<WifiAccessPoint> wifiAccessPoints() {
         List<WifiAccessPoint> wifiAccessPoints = getAccessPointsProvider().accessPoints(getNetworkInterface());
         if(!getSsid().equals("*")) {
-            return wifiAccessPoints.parallelStream().filter(point -> point.getSSID().equals(getSsid())).collect(toList());
+            for(WifiAccessPoint accessPoint : wifiAccessPoints) {
+                if(accessPoint.getSSID().equals(getSsid())) {
+                    return singletonList(accessPoint);
+                }
+            }
         }
         return wifiAccessPoints;
     }
