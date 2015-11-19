@@ -36,11 +36,6 @@
 	</properties>
 
 	<dependencies>
-
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-utils</artifactId>
-        </dependency>
         <dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
@@ -49,19 +44,23 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-kura</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.api</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.core</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.core.net</artifactId>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.eclipse.kura</groupId>
 			<artifactId>org.eclipse.kura.linux.net</artifactId>
 		</dependency>
