@@ -25,6 +25,7 @@
 	<properties>
 		<camel.osgi.export.pkg>
 			io.rhiot.component.kura.*,
+			io.rhiot.component.kura.router.*,
 			io.rhiot.component.kura.wifi.*
 		</camel.osgi.export.pkg>
 		<camel.osgi.export.service>
