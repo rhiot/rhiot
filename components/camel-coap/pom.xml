@@ -10,7 +10,7 @@
         <relativePath>..</relativePath>
 	</parent>
 
-	<name>RHIOT :: Components :: CAoP</name>
+	<name>RHIOT :: Components :: CoAP</name>
 	<artifactId>camel-coap</artifactId>
 	<packaging>bundle</packaging>
 
