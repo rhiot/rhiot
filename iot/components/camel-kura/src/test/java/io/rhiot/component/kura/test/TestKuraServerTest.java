@@ -1,15 +1,15 @@
-package io.rhiot.component.kura;
+package io.rhiot.component.kura.test;
 
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.kura.KuraRouter;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Test;
 
-public class PojosrKuraServerTestUnit {
+public class TestKuraServerTest {
 
 	@Test
 	public void test() throws InterruptedException {
-		PojosrKuraServer pks = new PojosrKuraServer();
+		TestKuraServer pks = new TestKuraServer();
 		KuraRouter kr = pks.start(TestKuraRouter.class);
 
 		MockEndpoint out = (MockEndpoint) kr.endpoint("mock:out");

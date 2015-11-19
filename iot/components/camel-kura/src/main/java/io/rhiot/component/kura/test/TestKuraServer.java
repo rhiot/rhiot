@@ -14,19 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.component.kura;
+package io.rhiot.component.kura.test;
 
 import org.apache.camel.component.kura.KuraRouter;
 import org.apache.felix.connect.launch.PojoServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PojosrKuraServer {
-	private static Logger log = LoggerFactory.getLogger(PojosrKuraServer.class);
-	private PojoServiceRegistry registry;
+public class TestKuraServer {
 
-	public PojosrKuraServer() {
-	}
+	private static Logger log = LoggerFactory.getLogger(TestKuraServer.class);
+
+	private PojoServiceRegistry registry;
 
 	public <T extends KuraRouter> T start(Class<? extends KuraRouter> kuraRouter) {
 		registry = PojosrRegistry.getInstance().getRegistry();
@@ -41,4 +40,5 @@ public class PojosrKuraServer {
 
 		return router;
 	}
+
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.component.kura;
+package io.rhiot.component.kura.test;
 
 import java.util.HashMap;
 import java.util.Map;
