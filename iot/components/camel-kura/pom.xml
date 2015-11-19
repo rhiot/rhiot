@@ -23,8 +23,13 @@
 	<description>Camel Kura Components (WiFi)</description>
 
 	<properties>
-		<camel.osgi.export.pkg>io.rhiot.component.kura.wifi</camel.osgi.export.pkg>
-		<camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=kura-wifi</camel.osgi.export.service>
+		<camel.osgi.export.pkg>
+			io.rhiot.component.kura.*,
+			io.rhiot.component.kura.wifi.*
+		</camel.osgi.export.pkg>
+		<camel.osgi.export.service>
+			org.apache.camel.spi.ComponentResolver;component=kura-wifi
+		</camel.osgi.export.service>
 	</properties>
 
 	<dependencies>
