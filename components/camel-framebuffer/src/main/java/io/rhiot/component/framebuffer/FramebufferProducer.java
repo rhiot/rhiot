@@ -36,53 +36,53 @@ import io.rhiot.component.framebuffer.convert.FramebufferConverter;
  * The framebuffer producer.
  */
 public class FramebufferProducer extends DefaultProducer {
-	private static final Logger LOG = LoggerFactory.getLogger(FramebufferProducer.class);
-	private FramebufferEndpoint endpoint;
-	private ByteBuffer doubleBuffer = null;
-	private FramebufferConverter converter;
+    private static final Logger LOG = LoggerFactory.getLogger(FramebufferProducer.class);
+    private FramebufferEndpoint endpoint;
+    private ByteBuffer doubleBuffer = null;
+    private FramebufferConverter converter;
 
-	public FramebufferProducer(FramebufferEndpoint endpoint) {
-		super(endpoint);
-		this.endpoint = endpoint;
-		this.doubleBuffer = ByteBuffer
-				.allocate(endpoint.getHeight() * endpoint.getWitdh() * endpoint.getBitsPerPixel() / 8);
-		this.converter = endpoint.getConverter();
-	}
+    public FramebufferProducer(FramebufferEndpoint endpoint) {
+        super(endpoint);
+        this.endpoint = endpoint;
+        this.doubleBuffer = ByteBuffer
+                .allocate(endpoint.getHeight() * endpoint.getWitdh() * endpoint.getBitsPerPixel() / 8);
+        this.converter = endpoint.getConverter();
+    }
 
-	@Override
-	public void process(Exchange exchange) throws Exception {
-		File fbFile = endpoint.getDev();
-		Path path = Paths.get(fbFile.getAbsolutePath());
-		doubleBuffer.clear();
+    @Override
+    public void process(Exchange exchange) throws Exception {
+        File fbFile = endpoint.getDev();
+        Path path = Paths.get(fbFile.getAbsolutePath());
+        doubleBuffer.clear();
 
-		byte[] buffer = exchange.getIn().getBody(byte[].class);
+        byte[] buffer = exchange.getIn().getBody(byte[].class);
 
-		if (buffer == null) {
+        if (buffer == null) {
 
-			buffer = Files.readAllBytes(path);
-			exchange.getIn().setHeader(FramebufferConstants.CAMEL_FRAMEBUFFER_HEIGHT, endpoint.getHeight());
-			exchange.getIn().setHeader(FramebufferConstants.CAMEL_FRAMEBUFFER_WITDH, endpoint.getWitdh());
-			exchange.getIn().setHeader(FramebufferConstants.CAMEL_FRAMEBUFFER_BITS_PER_PIXEL,
-					endpoint.getBitsPerPixel());
+            buffer = Files.readAllBytes(path);
+            exchange.getIn().setHeader(FramebufferConstants.CAMEL_FRAMEBUFFER_HEIGHT, endpoint.getHeight());
+            exchange.getIn().setHeader(FramebufferConstants.CAMEL_FRAMEBUFFER_WITDH, endpoint.getWitdh());
+            exchange.getIn().setHeader(FramebufferConstants.CAMEL_FRAMEBUFFER_BITS_PER_PIXEL,
+                    endpoint.getBitsPerPixel());
 
-			exchange.getIn().setBody(buffer);
-		} else {
-			if (buffer.length > doubleBuffer.limit()) {
-				LOG.error("Truncate Body to Framebuffer : body size is too large");
-			} else if (buffer.length < doubleBuffer.limit()) {
-				LOG.info("Framebuffer.size is larger than body size");
-			}
+            exchange.getIn().setBody(buffer);
+        } else {
+            if (buffer.length > doubleBuffer.limit()) {
+                LOG.error("Truncate Body to Framebuffer : body size is too large");
+            } else if (buffer.length < doubleBuffer.limit()) {
+                LOG.info("Framebuffer.size is larger than body size");
+            }
 
-			if (converter != null) {
-				endpoint.getConverter().converterByteToFramebuffer(buffer, doubleBuffer.array());
-			} else {
-				doubleBuffer.put(buffer, 0, Math.min(doubleBuffer.limit(), buffer.length));
-			}
-			if (endpoint.getCreateDevice() != null) {
-				Files.write(path, doubleBuffer.array(), WRITE, SYNC, endpoint.getCreateDevice());
-			} else {
-				Files.write(path, doubleBuffer.array(), WRITE, SYNC);
-			}
-		}
-	}
+            if (converter != null) {
+                endpoint.getConverter().converterByteToFramebuffer(buffer, doubleBuffer.array());
+            } else {
+                doubleBuffer.put(buffer, 0, Math.min(doubleBuffer.limit(), buffer.length));
+            }
+            if (endpoint.getCreateDevice() != null) {
+                Files.write(path, doubleBuffer.array(), WRITE, SYNC, endpoint.getCreateDevice());
+            } else {
+                Files.write(path, doubleBuffer.array(), WRITE, SYNC);
+            }
+        }
+    }
 }

@@ -16,6 +16,8 @@
  */
 package io.rhiot.component.framebuffer;
 
+import io.rhiot.component.framebuffer.convert.FramebufferConverter;
+
 import java.io.File;
 import java.nio.file.StandardOpenOption;
 
@@ -30,8 +32,6 @@ import org.apache.camel.spi.UriPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.rhiot.component.framebuffer.convert.FramebufferConverter;
-
 /**
  * Represents a framebuffer endpoint.
  */
@@ -43,15 +43,15 @@ public class FramebufferEndpoint extends DefaultEndpoint {
     @Metadata(required = "true")
     private File dev;
     @UriParam(defaultValue = "0", description = "Auto calculated")
-    private int height = 0;
+    private int height;
     @UriParam(defaultValue = "0", description = "Auto calculated")
-    private int witdh = 0;
+    private int witdh;
     @UriParam(defaultValue = "0", description = "Auto calculated")
-    private int bitsPerPixel = 0;
+    private int bitsPerPixel;
     @UriParam()
     private FramebufferConverter converter;
     @UriParam(description = "For test only")
-    private StandardOpenOption createDevice = null;
+    private StandardOpenOption createDevice;
 
     public FramebufferEndpoint() {
     }

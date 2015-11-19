@@ -18,19 +18,22 @@ package io.rhiot.component.framebuffer;
 
 public final class FramebufferConstants {
 
-	public static final String NAME = "name";
-	public static final String ROOT = "/";
-	public static final String SYS_CLASS_GRAPHICS = "sys/class/graphics";
-	public static final String WITDH = "witdh";
-	public static final String BITS_PER_PIXEL_FILE = "bits_per_pixel";
-	public static final String DEV = "dev";
-	public static final String FB = "fb*";
-	public static final String HEIGHT = "height";
-	public static final String BITS_PER_PIXEL = "bitsPerPixel";
-	public static final String VIRTUAL_SIZE = "virtual_size";
-	public static final String CAMEL_FRAMEBUFFER = "CamelFramebuffer";
-	public static final String CAMEL_FRAMEBUFFER_BITS_PER_PIXEL = CAMEL_FRAMEBUFFER + ".bits_per_pixel";
-	public static final String CAMEL_FRAMEBUFFER_HEIGHT = CAMEL_FRAMEBUFFER + ".height";
-	public static final String CAMEL_FRAMEBUFFER_WITDH = CAMEL_FRAMEBUFFER + ".witdh";
+    public static final String NAME = "name";
+    public static final String ROOT = "/";
+    public static final String SYS_CLASS_GRAPHICS = "sys/class/graphics";
+    public static final String WITDH = "witdh";
+    public static final String BITS_PER_PIXEL_FILE = "bits_per_pixel";
+    public static final String DEV = "dev";
+    public static final String FB = "fb*";
+    public static final String HEIGHT = "height";
+    public static final String BITS_PER_PIXEL = "bitsPerPixel";
+    public static final String VIRTUAL_SIZE = "virtual_size";
+    public static final String CAMEL_FRAMEBUFFER = "CamelFramebuffer";
+    public static final String CAMEL_FRAMEBUFFER_BITS_PER_PIXEL = CAMEL_FRAMEBUFFER + ".bits_per_pixel";
+    public static final String CAMEL_FRAMEBUFFER_HEIGHT = CAMEL_FRAMEBUFFER + ".height";
+    public static final String CAMEL_FRAMEBUFFER_WITDH = CAMEL_FRAMEBUFFER + ".witdh";
+
+    private FramebufferConstants() {
+    }
 
 }

@@ -39,63 +39,63 @@ import io.rhiot.component.framebuffer.FramebufferConstants;
 
 public class framebufferComponentTest extends CamelTestSupport {
 
-	@EndpointInject(uri = "mock:result")
-	protected MockEndpoint mock;
+    @EndpointInject(uri = "mock:result")
+    protected MockEndpoint mock;
 
-	@Produce(uri = "direct:start")
-	protected ProducerTemplate sender;
+    @Produce(uri = "direct:start")
+    protected ProducerTemplate sender;
 
-	public static final String ROOT_4_TEST = "./target/testingfb";
+    public static final String ROOT_4_TEST = "./target/testingfb";
 
-	public static final String ROOT_4_TEST_SRC = "./src/test/testingfb";
+    public static final String ROOT_4_TEST_SRC = "./src/test/testingfb";
 
-	@Test
-	public void testframebuffer() throws Exception {
-		String uuid = UUID.randomUUID().toString();
-		sender.sendBodyAndHeader(uuid, "foo", "bar");
+    @Test
+    public void testframebuffer() throws Exception {
+        String uuid = UUID.randomUUID().toString();
+        sender.sendBodyAndHeader(uuid, "foo", "bar");
 
-		mock.expectedMinimumMessageCount(1);
+        mock.expectedMinimumMessageCount(1);
 
-		String uuidFb1 = Files.readAllLines(Paths.get(ROOT_4_TEST).resolve(FramebufferConstants.DEV).resolve("fb1"))
-				.get(0);
+        String uuidFb1 = Files.readAllLines(Paths.get(ROOT_4_TEST).resolve(FramebufferConstants.DEV).resolve("fb1"))
+                .get(0);
 
-		assertTrue(uuidFb1.startsWith(uuid));
-		assertEquals(128, uuidFb1.length());
-		assertMockEndpointsSatisfied();
-	}
+        assertTrue(uuidFb1.startsWith(uuid));
+        assertEquals(128, uuidFb1.length());
+        assertMockEndpointsSatisfied();
+    }
 
-	@Override
-	protected RouteBuilder createRouteBuilder() throws Exception {
+    @Override
+    protected RouteBuilder createRouteBuilder() throws Exception {
 
-		Path sourcePath = Paths.get(ROOT_4_TEST_SRC);
-		Path targetPath = Paths.get(ROOT_4_TEST);
+        Path sourcePath = Paths.get(ROOT_4_TEST_SRC);
+        Path targetPath = Paths.get(ROOT_4_TEST);
 
-		Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>() {
-			@Override
-			public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
-					throws IOException {
-				Files.createDirectories(targetPath.resolve(sourcePath.relativize(dir)));
-				return FileVisitResult.CONTINUE;
-			}
+        Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
+                    throws IOException {
+                Files.createDirectories(targetPath.resolve(sourcePath.relativize(dir)));
+                return FileVisitResult.CONTINUE;
+            }
 
-			@Override
-			public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-				Files.copy(file, targetPath.resolve(sourcePath.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
-				return FileVisitResult.CONTINUE;
-			}
-		});
+            @Override
+            public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+                Files.copy(file, targetPath.resolve(sourcePath.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+        });
 
-		FramebufferComponent fc = new FramebufferComponent();
-		fc.setRootDir(ROOT_4_TEST);
+        FramebufferComponent fc = new FramebufferComponent();
+        fc.setRootDir(ROOT_4_TEST);
 
-		this.context().addComponent("framebuffer", fc);
+        this.context().addComponent("framebuffer", fc);
 
-		return new RouteBuilder() {
-			@Override
-			public void configure() {
-				from("direct:start").to("framebuffer://Test FB?createDevice=CREATE")
-						.to("framebuffer://fb1?createDevice=CREATE").to("mock:result");
-			}
-		};
-	}
+        return new RouteBuilder() {
+            @Override
+            public void configure() {
+                from("direct:start").to("framebuffer://Test FB?createDevice=CREATE")
+                        .to("framebuffer://fb1?createDevice=CREATE").to("mock:result");
+            }
+        };
+    }
 }
