@@ -25,6 +25,7 @@
 		<module>camel-coap</module>
         <module>camel-device-io</module>
         <module>camel-framebuffer</module>
+		<module>camel-kura</module>
 		<module>camel-spark</module>
 	</modules>
 
