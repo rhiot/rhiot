@@ -6,21 +6,24 @@ import org.apache.camel.component.kura.KuraRouter;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Test;
 
+import static org.apache.camel.component.mock.MockEndpoint.assertIsSatisfied;
+
 public class TestKuraServerTest {
 
 	@Test
 	public void shouldStartRoute() throws InterruptedException {
-		TestKuraServer pks = new TestKuraServer();
-		KuraRouter kr = pks.start(TestKuraRouter.class);
+		// Given
+		TestKuraServer kuraServer = new TestKuraServer();
+		KuraRouter router = kuraServer.start(TestKuraRouter.class);
+		MockEndpoint mock = router.getContext().getEndpoint("mock:out", MockEndpoint.class);
+		mock.expectedMessageCount(1);
+		ProducerTemplate template = router.getContext().createProducerTemplate();
 
-		MockEndpoint out = (MockEndpoint) kr.endpoint("mock:out");
-
-		ProducerTemplate template = kr.getContext().createProducerTemplate();
+		// When
 		template.sendBody("direct:start", "This is a test message");
 
-		out.expectedMessageCount(1);
-
-		MockEndpoint.assertIsSatisfied(out);
+		// Then
+		assertIsSatisfied(mock);
 	}
 
 	static class TestKuraRouter extends RhiotKuraRouter {
