@@ -49,7 +49,7 @@ public class URIRegexTest {
         String url = "ABC_DE";
         Matcher m = p.matcher(url);
         Assert.assertTrue(m.matches());
-        String[] tot = {"ABC_DE"};
+        String[] tot = { "ABC_DE" };
         Assert.assertArrayEquals(tot, url.split(DeviceIOConstants.CAMEL_SPLIT));
     }
 
@@ -59,7 +59,7 @@ public class URIRegexTest {
         String url = "ABC_DE|EF_GHI";
         Matcher m = p.matcher(url);
         Assert.assertTrue(m.matches());
-        String[] tot = {"ABC_DE", "EF_GHI"};
+        String[] tot = { "ABC_DE", "EF_GHI" };
         Assert.assertArrayEquals(tot, url.split(DeviceIOConstants.CAMEL_SPLIT));
     }
 

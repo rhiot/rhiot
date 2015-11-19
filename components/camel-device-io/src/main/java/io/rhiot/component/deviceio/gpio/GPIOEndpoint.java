@@ -91,9 +91,10 @@ public class GPIOEndpoint extends DefaultEndpoint {
         int internalMode = internalValueWithOR(mode);
         int internalTrigger = internalValueWithOR(trigger);
 
-        GPIOPinConfig pinConfig = new GPIOPinConfig(0, Integer.parseInt(this.gpioId), internalDirection, internalMode, internalTrigger, initValue);
+        GPIOPinConfig pinConfig = new GPIOPinConfig(0, Integer.parseInt(this.gpioId), internalDirection, internalMode,
+                internalTrigger, initValue);
 
-        GPIOPin pin = (GPIOPin)DeviceManager.open(GPIOPin.class, pinConfig);
+        GPIOPin pin = (GPIOPin) DeviceManager.open(GPIOPin.class, pinConfig);
         return new GPIOConsumer(this, processor, pin);
     }
 
@@ -117,8 +118,9 @@ public class GPIOEndpoint extends DefaultEndpoint {
         int internalMode = internalValueWithOR(mode);
         int internalTrigger = internalValueWithOR(trigger);
 
-        GPIOPinConfig pinConfig = new GPIOPinConfig(DeviceConfig.DEFAULT, Integer.parseInt(this.gpioId), internalDirection, internalMode, internalTrigger, initValue);
-        GPIOPin pin = (GPIOPin)DeviceManager.open(GPIOPin.class, pinConfig);
+        GPIOPinConfig pinConfig = new GPIOPinConfig(DeviceConfig.DEFAULT, Integer.parseInt(this.gpioId),
+                internalDirection, internalMode, internalTrigger, initValue);
+        GPIOPin pin = (GPIOPin) DeviceManager.open(GPIOPin.class, pinConfig);
 
         return new GPIOProducer(this, pin);
     }
@@ -186,13 +188,14 @@ public class GPIOEndpoint extends DefaultEndpoint {
             Matcher m = p.matcher(valueList);
 
             if (!m.matches()) {
-                throw new IllegalArgumentException("Attr = " + valueList + " doesn't mach [" + DeviceIOConstants.CAMEL_SPLIT_REGEX + "]");
+                throw new IllegalArgumentException(
+                        "Attr = " + valueList + " doesn't mach [" + DeviceIOConstants.CAMEL_SPLIT_REGEX + "]");
             }
             String[] directionList = valueList.split(DeviceIOConstants.CAMEL_SPLIT);
 
             for (String string : directionList) {
                 Field clazzField = clazz.getField(string);
-                ret |= (int)clazzField.get(null);
+                ret |= (int) clazzField.get(null);
             }
 
         } catch (NoSuchFieldException e) {

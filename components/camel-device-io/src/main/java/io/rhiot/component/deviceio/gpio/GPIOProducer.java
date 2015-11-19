@@ -32,61 +32,61 @@ import jdk.dio.gpio.GPIOPin;
  */
 public class GPIOProducer extends DefaultProducer {
 
-	private GPIOEndpoint endpoint;
-	private GPIOPin pin = null;
-	private GPIOAction action;
+    private GPIOEndpoint endpoint;
+    private GPIOPin pin = null;
+    private GPIOAction action;
 
-	public GPIOProducer(GPIOEndpoint endpoint, GPIOPin pin) {
-		super(endpoint);
-		this.endpoint = endpoint;
-		this.pin = pin;
-		this.action = endpoint.getAction();
+    public GPIOProducer(GPIOEndpoint endpoint, GPIOPin pin) {
+        super(endpoint);
+        this.endpoint = endpoint;
+        this.pin = pin;
+        this.action = endpoint.getAction();
 
-	}
+    }
 
-	/**
-	 * Process the message
-	 */
-	@Override
-	public void process(Exchange exchange) throws Exception {
-		log.debug(exchange.toString());
+    /**
+     * Process the message
+     */
+    @Override
+    public void process(Exchange exchange) throws Exception {
+        log.debug(exchange.toString());
 
-		if (pin instanceof GPIOPin) {
+        if (pin instanceof GPIOPin) {
 
-			GPIOAction headerAction = exchange.getIn().getHeader(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION,
-					GPIOAction.class);
+            GPIOAction headerAction = exchange.getIn().getHeader(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION,
+                    GPIOAction.class);
 
-			if (headerAction != null) {
-				action = headerAction;
-			}
+            if (headerAction != null) {
+                action = headerAction;
+            }
 
-			if (action != null) {
-				switch (action) {
-				case HIGH:
-					setValue(true);
-					break;
-				case LOW:
-					setValue(false);
-					break;
-				case TOGGLE:
-					setValue(!pin.getValue());
-					break;
-				}
-			} else {
-				setValue(exchange.getIn().getBody(Boolean.class));
-			}
-		}
-	}
+            if (action != null) {
+                switch (action) {
+                case HIGH:
+                    setValue(true);
+                    break;
+                case LOW:
+                    setValue(false);
+                    break;
+                case TOGGLE:
+                    setValue(!pin.getValue());
+                    break;
+                }
+            } else {
+                setValue(exchange.getIn().getBody(Boolean.class));
+            }
+        }
+    }
 
-	private void setValue(boolean b) throws UnavailableDeviceException, ClosedDeviceException, IOException {
-		pin.setValue(b);
-	}
+    private void setValue(boolean b) throws UnavailableDeviceException, ClosedDeviceException, IOException {
+        pin.setValue(b);
+    }
 
-	public void setPin(GPIOPin pin) {
-		this.pin = pin;
-	}
+    public void setPin(GPIOPin pin) {
+        this.pin = pin;
+    }
 
-	public GPIOPin getPin() {
-		return pin;
-	}
+    public GPIOPin getPin() {
+        return pin;
+    }
 }
