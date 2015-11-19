@@ -20,9 +20,11 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.spi.UriEndpoint;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 
+@UriEndpoint(scheme = "spark", title = "Spark connector", producerOnly = true, label = "bigdata", syntax = "spark:label")
 public class SparkEndpoint extends DefaultEndpoint {
 
     private JavaSparkContext sparkContext;
@@ -44,8 +46,10 @@ public class SparkEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        return null;
+        throw new UnsupportedOperationException("Spark component supports producer endpoints only.");
     }
+
+    // Setters & getters
 
     @Override
     public boolean isSingleton() {
