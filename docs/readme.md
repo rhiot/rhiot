@@ -746,11 +746,11 @@ The principle of using `RhiotKuraRouter` is the same as using `KuraRouter` i.e. 
     
     class TestKuraRouter extends RhiotKuraRouter {
 
-		@Override
-		public void configure() throws Exception {
-			from("direct:test")
-			    .to("mock:test");
-		}
+      @Override
+	  public void configure() throws Exception {
+	    from("direct:test")
+	     .to("mock:test");
+	  }
 
 	}
 
