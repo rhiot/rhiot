@@ -16,6 +16,10 @@
  */
 package io.rhiot.component.kura.wifi;
 
+import static java.util.Collections.singletonList;
+
+import java.util.List;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -24,80 +28,76 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
 
-import java.util.List;
-
-import static java.util.Collections.singletonList;
-
 @UriEndpoint(scheme = "kura-wifi", title = "Kura WiFi", consumerClass = KuraWifiConsumer.class, label = "iot,raspberrypi,kura", syntax = "kura-wifi:interface/ssid")
 public class KuraWifiEndpoint extends DefaultEndpoint {
 
-    @UriParam(defaultValue = "*")
-    private String networkInterface = "*";
+	@UriParam(defaultValue = "*")
+	private String networkInterface = "*";
 
-    @UriParam(defaultValue = "*")
-    private String ssid = "*";
+	@UriParam(defaultValue = "*")
+	private String ssid = "*";
 
-    @UriParam
-    AccessPointsProvider accessPointsProvider;
+	@UriParam
+	AccessPointsProvider accessPointsProvider;
 
-    public KuraWifiEndpoint(String endpointUri, KuraWifiComponent component) {
-        super(endpointUri, component);
-        accessPointsProvider = new KuraAccessPointsProvider(component.getCamelContext().getRegistry());
-    }
+	public KuraWifiEndpoint(String endpointUri, KuraWifiComponent component) {
+		super(endpointUri, component);
+		accessPointsProvider = new KuraAccessPointsProvider(component.getCamelContext().getRegistry());
+	}
 
-    public List<WifiAccessPoint> wifiAccessPoints() {
-        List<WifiAccessPoint> wifiAccessPoints = getAccessPointsProvider().accessPoints(getNetworkInterface());
-        if(!getSsid().equals("*")) {
-            for(WifiAccessPoint accessPoint : wifiAccessPoints) {
-                if(accessPoint.getSSID().equals(getSsid())) {
-                    return singletonList(accessPoint);
-                }
-            }
-        }
-        return wifiAccessPoints;
-    }
+	public List<WifiAccessPoint> wifiAccessPoints() {
+		List<WifiAccessPoint> wifiAccessPoints = getAccessPointsProvider().accessPoints(getNetworkInterface());
+		if (!getSsid().equals("*")) {
+			for (WifiAccessPoint accessPoint : wifiAccessPoints) {
+				if (accessPoint.getSSID().equals(getSsid())) {
+					return singletonList(accessPoint);
+				}
+			}
+		}
+		return wifiAccessPoints;
+	}
 
-    @Override
-    public Producer createProducer() throws Exception {
-        return new KuraWifiProducer(this);
-    }
+	@Override
+	public Producer createProducer() throws Exception {
+		return new KuraWifiProducer(this);
+	}
 
-    @Override
-    public Consumer createConsumer(Processor processor) throws Exception {
-        return new KuraWifiConsumer(this, processor);
-    }
+	@Override
+	public Consumer createConsumer(Processor processor) throws Exception {
+		return new KuraWifiConsumer(this, processor);
+	}
 
-    @Override
-    public boolean isSingleton() {
-        return true;
-    }
+	@Override
+	public boolean isSingleton() {
+		return true;
+	}
 
-    // Configuration getters and setters
+	// Configuration getters and setters
 
-    public String getNetworkInterface() {
-        return networkInterface;
-    }
+	public String getNetworkInterface() {
+		return networkInterface;
+	}
 
-    public void setNetworkInterface(String networkInterface) {
-        this.networkInterface = networkInterface;
-    }
+	public void setNetworkInterface(String networkInterface) {
+		this.networkInterface = networkInterface;
+	}
 
-    public String getSsid() {
-        return ssid;
-    }
+	public String getSsid() {
+		return ssid;
+	}
 
-    public void setSsid(String ssid) {
-        this.ssid = ssid;
-    }
+	public void setSsid(String ssid) {
+		this.ssid = ssid;
+	}
 
-    // Collaborators getters and setters
+	// Collaborators getters and setters
 
-    public AccessPointsProvider getAccessPointsProvider() {
-        return accessPointsProvider;
-    }
+	public AccessPointsProvider getAccessPointsProvider() {
+		return accessPointsProvider;
+	}
 
-    public void setAccessPointsProvider(AccessPointsProvider accessPointsProvider) {
-        this.accessPointsProvider = accessPointsProvider;
-    }
+	public void setAccessPointsProvider(AccessPointsProvider accessPointsProvider) {
+		this.accessPointsProvider = accessPointsProvider;
+	}
 
 }

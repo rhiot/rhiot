@@ -37,94 +37,94 @@ import io.rhiot.component.framebuffer.convert.FramebufferConverter;
  */
 @UriEndpoint(scheme = "framebuffer", syntax = "framebuffer://dev", label = "framebuffer", title = "framebuffer")
 public class FramebufferEndpoint extends DefaultEndpoint {
-	private static final Logger LOG = LoggerFactory.getLogger(FramebufferEndpoint.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FramebufferEndpoint.class);
 
-	@UriPath
-	@Metadata(required = "true")
-	private File dev;
-	@UriParam(defaultValue = "0", description = "Auto calculated")
-	private int height = 0;
-	@UriParam(defaultValue = "0", description = "Auto calculated")
-	private int witdh = 0;
-	@UriParam(defaultValue = "0", description = "Auto calculated")
-	private int bitsPerPixel = 0;
-	@UriParam()
-	private FramebufferConverter converter;
-	@UriParam(description = "For test only")
-	private StandardOpenOption createDevice = null;
+    @UriPath
+    @Metadata(required = "true")
+    private File dev;
+    @UriParam(defaultValue = "0", description = "Auto calculated")
+    private int height = 0;
+    @UriParam(defaultValue = "0", description = "Auto calculated")
+    private int witdh = 0;
+    @UriParam(defaultValue = "0", description = "Auto calculated")
+    private int bitsPerPixel = 0;
+    @UriParam()
+    private FramebufferConverter converter;
+    @UriParam(description = "For test only")
+    private StandardOpenOption createDevice = null;
 
-	public FramebufferEndpoint() {
-	}
+    public FramebufferEndpoint() {
+    }
 
-	public FramebufferEndpoint(String uri, FramebufferComponent component) {
-		super(uri, component);
-	}
+    public FramebufferEndpoint(String uri, FramebufferComponent component) {
+        super(uri, component);
+    }
 
-	public FramebufferEndpoint(String endpointUri) {
-		super(endpointUri);
-	}
+    public FramebufferEndpoint(String endpointUri) {
+        super(endpointUri);
+    }
 
-	@Override
-	public Producer createProducer() throws Exception {
-		return new FramebufferProducer(this);
-	}
+    @Override
+    public Producer createProducer() throws Exception {
+        return new FramebufferProducer(this);
+    }
 
-	@Override
-	public Consumer createConsumer(Processor processor) throws Exception {
-		return null;
-	}
+    @Override
+    public Consumer createConsumer(Processor processor) throws Exception {
+        return null;
+    }
 
-	@Override
-	public boolean isSingleton() {
-		return true;
-	}
+    @Override
+    public boolean isSingleton() {
+        return true;
+    }
 
-	public File getDev() {
-		return dev;
-	}
+    public File getDev() {
+        return dev;
+    }
 
-	public void setDev(File dev) {
-		this.dev = dev;
-	}
+    public void setDev(File dev) {
+        this.dev = dev;
+    }
 
-	public int getHeight() {
-		return height;
-	}
+    public int getHeight() {
+        return height;
+    }
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
-	public int getWitdh() {
-		return witdh;
-	}
+    public int getWitdh() {
+        return witdh;
+    }
 
-	public void setWitdh(int witdh) {
-		this.witdh = witdh;
-	}
+    public void setWitdh(int witdh) {
+        this.witdh = witdh;
+    }
 
-	public int getBitsPerPixel() {
-		return bitsPerPixel;
-	}
+    public int getBitsPerPixel() {
+        return bitsPerPixel;
+    }
 
-	public void setBitsPerPixel(int bitPerPixel) {
-		this.bitsPerPixel = bitPerPixel;
-	}
+    public void setBitsPerPixel(int bitPerPixel) {
+        this.bitsPerPixel = bitPerPixel;
+    }
 
-	public FramebufferConverter getConverter() {
-		return converter;
-	}
+    public FramebufferConverter getConverter() {
+        return converter;
+    }
 
-	public void setConverter(FramebufferConverter converter) {
-		this.converter = converter;
-	}
+    public void setConverter(FramebufferConverter converter) {
+        this.converter = converter;
+    }
 
-	public StandardOpenOption getCreateDevice() {
-		return createDevice;
-	}
+    public StandardOpenOption getCreateDevice() {
+        return createDevice;
+    }
 
-	public void setCreateDevice(StandardOpenOption createDevice) {
-		this.createDevice = createDevice;
-	}
+    public void setCreateDevice(StandardOpenOption createDevice) {
+        this.createDevice = createDevice;
+    }
 
 }

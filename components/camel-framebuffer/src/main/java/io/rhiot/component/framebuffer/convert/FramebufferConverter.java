@@ -18,8 +18,8 @@ package io.rhiot.component.framebuffer.convert;
 
 public interface FramebufferConverter {
 
-	void converterByteToFramebuffer(byte[] inBody, byte[] frameBuffer);
+    void converterByteToFramebuffer(byte[] inBody, byte[] frameBuffer);
 
-	void converterFramebufferToByte(byte[] frameBuffer, byte[] outBody);
+    void converterFramebufferToByte(byte[] frameBuffer, byte[] outBody);
 
 }
