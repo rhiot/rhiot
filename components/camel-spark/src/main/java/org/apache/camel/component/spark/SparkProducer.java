@@ -24,6 +24,7 @@ import org.apache.spark.api.java.function.Function;
 
 import java.util.List;
 
+import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_CALLBACK_HEADER;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_HEADER;
 
 public class SparkProducer extends DefaultProducer {
@@ -35,13 +36,7 @@ public class SparkProducer extends DefaultProducer {
     @Override
     public void process(Exchange exchange) throws Exception {
         JavaRDD rdd = resolveRdd(exchange);
-
-        RddCallback rddCallback = null;
-        if(exchange.getIn().getHeader("CAMEL_SPARK_RDD_CALLBACK") != null) {
-            rddCallback = (RddCallback) exchange.getIn().getHeader("CAMEL_SPARK_RDD_CALLBACK");
-        } else {
-            rddCallback = getEndpoint().getRddCallback();
-        }
+        RddCallback rddCallback = resolveRddCallback(exchange);
 
         if(rddCallback == null) {
             Object body = exchange.getIn().getBody();
@@ -90,6 +85,14 @@ public class SparkProducer extends DefaultProducer {
             return getEndpoint().getRdd();
         } else {
             throw new IllegalStateException("No RDD defined.");
+        }
+    }
+
+    protected RddCallback resolveRddCallback(Exchange exchange) {
+        if(exchange.getIn().getHeader(SPARK_RDD_CALLBACK_HEADER) != null) {
+            return  (RddCallback) exchange.getIn().getHeader(SPARK_RDD_CALLBACK_HEADER);
+        } else {
+            return getEndpoint().getRddCallback();
         }
     }
 

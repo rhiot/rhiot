@@ -29,6 +29,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_CALLBACK_HEADER;
 import static org.apache.camel.component.spark.Sparks.createLocalSparkContext;
 
 public class SparkProducerTest extends CamelTestSupport {
@@ -41,7 +42,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteRddCallback() {
-        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", null, "CAMEL_SPARK_RDD_CALLBACK", new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", null, SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
             @Override
             public Long onRdd(JavaRDD rdd, Object... payloads) {
                 return rdd.count();
@@ -52,7 +53,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteRddCallbackWithSinglePayload() {
-        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", 10, "CAMEL_SPARK_RDD_CALLBACK", new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", 10, SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
             @Override
             public Long onRdd(JavaRDD rdd, Object... payloads) {
                 return rdd.count() * (int) payloads[0];
@@ -63,7 +64,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteRddCallbackWithPayloads() {
-        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", asList(10, 10), "CAMEL_SPARK_RDD_CALLBACK", new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", asList(10, 10), SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
             @Override
             public Long onRdd(JavaRDD rdd, Object... payloads) {
                 return rdd.count() * (int) payloads[0] * (int) payloads[1];
