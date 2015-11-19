@@ -23,6 +23,8 @@
 	<description>Camel Kura Components (WiFi)</description>
 
 	<properties>
+		<slf4j.version>1.6.6</slf4j.version>
+
 		<camel.osgi.export.pkg>
 			io.rhiot.component.kura.*,
 			io.rhiot.component.kura.router.*,
@@ -34,6 +36,7 @@
 	</properties>
 
 	<dependencies>
+
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-utils</artifactId>
@@ -65,6 +68,11 @@
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 
 		<!-- Testing API -->
