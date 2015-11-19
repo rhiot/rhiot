@@ -24,9 +24,8 @@ import java.util.List;
 
 public class MockAccessPointProvider implements AccessPointsProvider {
 
-    public static final List<WifiAccessPoint> ACCESS_POINTS = Arrays.<WifiAccessPoint>asList(
-            new WifiAccessPointImpl("ssid1"),
-            new WifiAccessPointImpl("ssid2"));
+    public static final List<WifiAccessPoint> ACCESS_POINTS = Arrays
+            .<WifiAccessPoint> asList(new WifiAccessPointImpl("ssid1"), new WifiAccessPointImpl("ssid2"));
 
     @Override
     public List<WifiAccessPoint> accessPoints(String forInterface) {

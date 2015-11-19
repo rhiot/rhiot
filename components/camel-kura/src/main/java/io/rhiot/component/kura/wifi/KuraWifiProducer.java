@@ -16,11 +16,11 @@
  */
 package io.rhiot.component.kura.wifi;
 
+import java.util.List;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
-
-import java.util.List;
 
 public class KuraWifiProducer extends DefaultProducer {
 

@@ -82,7 +82,8 @@ public class KuraComponentTest extends CamelTestSupport {
     public void shouldFilterSsid() throws InterruptedException {
         filteredAccessPointMockEndpoint.setExpectedMessageCount(1);
         filteredAccessPointMockEndpoint.assertIsSatisfied();
-        WifiAccessPoint[] accessPoint = filteredAccessPointMockEndpoint.getExchanges().get(0).getIn().getBody(WifiAccessPoint[].class);
+        WifiAccessPoint[] accessPoint = filteredAccessPointMockEndpoint.getExchanges().get(0).getIn()
+                .getBody(WifiAccessPoint[].class);
         assertEquals("ssid1", accessPoint[0].getSSID());
     }
 
@@ -90,13 +91,15 @@ public class KuraComponentTest extends CamelTestSupport {
     public void shouldFindAllAccessPoints() throws InterruptedException {
         allAccessPointsMockEndpoint.setExpectedMessageCount(1);
         allAccessPointsMockEndpoint.assertIsSatisfied();
-        WifiAccessPoint[] accessPoint = allAccessPointsMockEndpoint.getExchanges().get(0).getIn().getBody(WifiAccessPoint[].class);
+        WifiAccessPoint[] accessPoint = allAccessPointsMockEndpoint.getExchanges().get(0).getIn()
+                .getBody(WifiAccessPoint[].class);
         assertEquals(2, accessPoint.length);
     }
 
     @Test
     public void shouldFindAllAccessPointsUsingProducer() {
-        WifiAccessPoint[] accessPoints = template.requestBody("kura-wifi:*/*?accessPointsProvider=#accessPointsProvider", null, WifiAccessPoint[].class);
+        WifiAccessPoint[] accessPoints = template
+                .requestBody("kura-wifi:*/*?accessPointsProvider=#accessPointsProvider", null, WifiAccessPoint[].class);
         assertEquals(2, accessPoints.length);
     }
 
@@ -107,7 +110,8 @@ public class KuraComponentTest extends CamelTestSupport {
         networkServiceFromRegistryMockEndpoint.assertIsSatisfied();
 
         // When
-        WifiAccessPoint[] accessPoints = networkServiceFromRegistryMockEndpoint.getExchanges().get(0).getIn().getBody(WifiAccessPoint[].class);
+        WifiAccessPoint[] accessPoints = networkServiceFromRegistryMockEndpoint.getExchanges().get(0).getIn()
+                .getBody(WifiAccessPoint[].class);
 
         // Then
         assertEquals(1, accessPoints.length);

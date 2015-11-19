@@ -23,22 +23,22 @@ import org.slf4j.LoggerFactory;
 
 public class TestKuraServer {
 
-	private static Logger log = LoggerFactory.getLogger(TestKuraServer.class);
+    private static Logger log = LoggerFactory.getLogger(TestKuraServer.class);
 
-	private PojoServiceRegistry registry;
+    private PojoServiceRegistry registry;
 
-	public <T extends KuraRouter> T start(Class<? extends KuraRouter> kuraRouter) {
-		registry = PojosrRegistry.getInstance().getRegistry();
-		T router = null;
-		try {
-			log.debug("Starting router for class {}...", kuraRouter.getName());
-			router = (T) kuraRouter.newInstance();
-			router.start(registry.getBundleContext());
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+    public <T extends KuraRouter> T start(Class<? extends KuraRouter> kuraRouter) {
+        registry = PojosrRegistry.getInstance().getRegistry();
+        T router = null;
+        try {
+            log.debug("Starting router for class {}...", kuraRouter.getName());
+            router = (T) kuraRouter.newInstance();
+            router.start(registry.getBundleContext());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-		return router;
-	}
+        return router;
+    }
 
 }

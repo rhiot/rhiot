@@ -26,7 +26,8 @@ import org.eclipse.kura.net.wifi.WifiAccessPoint;
 import java.util.List;
 
 /**
- * Kura WiFi Consumer periodically scans the access points available for the device.
+ * Kura WiFi Consumer periodically scans the access points available for the
+ * device.
  */
 public class KuraWifiConsumer extends DefaultScheduledPollConsumer {
 
@@ -37,7 +38,8 @@ public class KuraWifiConsumer extends DefaultScheduledPollConsumer {
     @Override
     protected int poll() throws Exception {
         List<WifiAccessPoint> wifiAccessPoints = getEndpoint().wifiAccessPoints();
-        Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(wifiAccessPoints).build();
+        Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(wifiAccessPoints)
+                .build();
         getProcessor().process(exchange);
         return wifiAccessPoints.isEmpty() ? 0 : 1;
     }

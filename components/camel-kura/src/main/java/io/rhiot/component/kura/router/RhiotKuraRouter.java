@@ -21,7 +21,8 @@ import org.osgi.framework.BundleContext;
 
 public abstract class RhiotKuraRouter extends KuraRouter {
 
-    // TODO Remove this overridden method as soon as Camel 2.17 is out (see CAMEL-9314)
+    // TODO Remove this overridden method as soon as Camel 2.17 is out (see
+    // CAMEL-9314)
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         try {

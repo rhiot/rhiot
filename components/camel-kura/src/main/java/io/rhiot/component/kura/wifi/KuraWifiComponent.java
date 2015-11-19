@@ -16,10 +16,10 @@
  */
 package io.rhiot.component.kura.wifi;
 
+import java.util.Map;
+
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
-
-import java.util.Map;
 
 public class KuraWifiComponent extends UriEndpointComponent {
 

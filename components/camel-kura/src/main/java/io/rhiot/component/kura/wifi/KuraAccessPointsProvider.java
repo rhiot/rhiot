@@ -16,6 +16,12 @@
  */
 package io.rhiot.component.kura.wifi;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.camel.spi.Registry;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.eclipse.kura.KuraException;
@@ -24,14 +30,9 @@ import org.eclipse.kura.net.NetworkService;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import static org.slf4j.LoggerFactory.getLogger;
-
 /**
- * Access point provider using the Kura NetworkService to scan the WiFi networks.
+ * Access point provider using the Kura NetworkService to scan the WiFi
+ * networks.
  */
 public class KuraAccessPointsProvider implements AccessPointsProvider {
 
@@ -68,7 +69,7 @@ public class KuraAccessPointsProvider implements AccessPointsProvider {
 
     private NetworkService resolveNetworkService(Registry registry) {
         Set<NetworkService> servicesFromRegistry = registry.findByType(NetworkService.class);
-        if(servicesFromRegistry.size() != 1) {
+        if (servicesFromRegistry.size() != 1) {
             LOG.info("Found {} Kura NetworkService instances in the registry. Creating and using custom instance then.",
                     servicesFromRegistry.size());
             NetworkService networkService = new NetworkServiceImpl();
