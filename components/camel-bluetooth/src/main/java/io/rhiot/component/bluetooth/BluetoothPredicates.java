@@ -16,21 +16,19 @@
  */
 package io.rhiot.component.bluetooth;
 
-import org.apache.camel.Predicate;
-
 import java.util.Arrays;
+
+import org.apache.camel.Predicate;
 
 public class BluetoothPredicates {
 
     public static Predicate deviceWithName(String deviceName) {
         return exchange -> Arrays.stream(exchange.getIn().getBody(BluetoothDevice[].class))
-                .filter(bluetoothDevice -> bluetoothDevice.getName().equals(deviceName))
-                .count() > 0;
+                .filter(bluetoothDevice -> bluetoothDevice.getName().equals(deviceName)).count() > 0;
     }
 
     public static Predicate deviceWithAddress(String deviceAddress) {
         return exchange -> Arrays.stream(exchange.getIn().getBody(BluetoothDevice[].class))
-                .filter(bluetoothDevice -> bluetoothDevice.getAddress().equals(deviceAddress))
-                .count() > 0;
+                .filter(bluetoothDevice -> bluetoothDevice.getAddress().equals(deviceAddress)).count() > 0;
     }
 }

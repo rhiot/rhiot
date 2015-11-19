@@ -18,15 +18,14 @@ package io.rhiot.component.bluetooth;
 
 import io.rhiot.utils.install.DefaultInstaller;
 import io.rhiot.utils.install.Installer;
-import io.rhiot.utils.process.DefaultProcessManager;
-import io.rhiot.utils.process.ProcessManager;
+
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
-import java.util.Set;
 
 public class BluetoothComponent extends UriEndpointComponent {
 
@@ -97,7 +96,7 @@ public class BluetoothComponent extends UriEndpointComponent {
                 throw new IllegalStateException("Failed to install dependencies");
             }
         } catch (Exception ex) {
-            if(ignoreInstallerProblems) {
+            if (ignoreInstallerProblems) {
                 LOG.warn(ex.getMessage());
             } else {
                 throw ex;
@@ -107,15 +106,15 @@ public class BluetoothComponent extends UriEndpointComponent {
 
     protected Installer resolveInstaller() {
         LOG.debug("Started resolving Installer...");
-        if(installer != null) {
+        if (installer != null) {
             LOG.debug("Installer has been set on the component level. Camel will use it: {}", installer);
             return installer;
         }
         Set<Installer> installers = getCamelContext().getRegistry().findByType(Installer.class);
-        if(installers.isEmpty()) {
+        if (installers.isEmpty()) {
             LOG.debug("No Installer found in the registry - creating new DefaultInstaller.");
             return new DefaultInstaller();
-        } else if(installers.size() == 1) {
+        } else if (installers.size() == 1) {
             return installers.iterator().next();
         } else {
             return new DefaultInstaller();

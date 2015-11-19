@@ -45,9 +45,6 @@ public class BluetoothDevice implements Serializable {
 
     @Override
     public String toString() {
-        return "BluetoothDevice{" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                '}';
+        return "BluetoothDevice{" + "name='" + name + '\'' + ", address='" + address + '\'' + '}';
     }
 }

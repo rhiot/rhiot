@@ -22,8 +22,7 @@ import static java.util.Arrays.asList;
 
 public class MockBluetoothDeviceProvider implements BluetoothDevicesProvider {
 
-    public static final List<BluetoothDevice> BLUETOOTH_DEVICES = asList(
-            new BluetoothDevice("name1", "address1"),
+    public static final List<BluetoothDevice> BLUETOOTH_DEVICES = asList(new BluetoothDevice("name1", "address1"),
             new BluetoothDevice("name2", "address2"));
 
     @Override

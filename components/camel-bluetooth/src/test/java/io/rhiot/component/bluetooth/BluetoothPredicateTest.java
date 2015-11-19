@@ -35,8 +35,7 @@ public class BluetoothPredicateTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("bluetooth://scan").routeId("two")
-                        .filter(deviceWithName("name3"))
+                from("bluetooth://scan").routeId("two").filter(deviceWithName("name3"))
                         .to("mock:shouldFilterBluetoothDevices");
             }
         };

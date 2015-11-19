@@ -16,6 +16,8 @@
  */
 package io.rhiot.component.bluetooth;
 
+import java.util.Set;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -24,8 +26,6 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Set;
 
 @UriEndpoint(scheme = "bluetooth", title = "Bluetooth", syntax = "bluetooth:label", consumerClass = BluetoothConsumer.class, label = "iot,messaging,bluetooth")
 public class BluetoothEndpoint extends DefaultEndpoint {
@@ -47,7 +47,7 @@ public class BluetoothEndpoint extends DefaultEndpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         BluetoothConsumer consumer = new BluetoothConsumer(this, processor);
-        if(!getConsumerProperties().containsKey("delay")) {
+        if (!getConsumerProperties().containsKey("delay")) {
             consumer.setDelay(5000);
         }
         configureConsumer(consumer);
@@ -84,11 +84,13 @@ public class BluetoothEndpoint extends DefaultEndpoint {
     // Helpers
 
     protected BluetoothDevicesProvider resolveBluetoothDeviceProvider() {
-        if(bluetoothDevicesProvider == null) {
-            Set<BluetoothDevicesProvider> providers = getCamelContext().getRegistry().findByType(BluetoothDevicesProvider.class);
-            if(providers.size() == 1) {
+        if (bluetoothDevicesProvider == null) {
+            Set<BluetoothDevicesProvider> providers = getCamelContext().getRegistry()
+                    .findByType(BluetoothDevicesProvider.class);
+            if (providers.size() == 1) {
                 BluetoothDevicesProvider provider = providers.iterator().next();
-                LOG.info("Found single instance of the BluetoothDevicesProvider in the registry. {} will be used.", provider);
+                LOG.info("Found single instance of the BluetoothDevicesProvider in the registry. {} will be used.",
+                        provider);
                 return provider;
             } else if (getComponent().getBluetoothDevicesProvider() != null) {
                 return getComponent().getBluetoothDevicesProvider();

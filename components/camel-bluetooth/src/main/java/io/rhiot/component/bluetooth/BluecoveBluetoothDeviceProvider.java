@@ -34,7 +34,8 @@ public class BluecoveBluetoothDeviceProvider implements BluetoothDevicesProvider
     public BluecoveBluetoothDeviceProvider() {
         try {
             this.localDevice = LocalDevice.getLocalDevice();
-            LOG.info("Local bluetooth device({}) with address {}", localDevice.getFriendlyName(), localDevice.getBluetoothAddress());
+            LOG.info("Local bluetooth device({}) with address {}", localDevice.getFriendlyName(),
+                    localDevice.getBluetoothAddress());
         } catch (BluetoothStateException e) {
             LOG.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
