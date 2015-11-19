@@ -17,7 +17,25 @@
 package io.rhiot.component.kura.router;
 
 import org.apache.camel.component.kura.KuraRouter;
+import org.osgi.framework.BundleContext;
 
 public abstract class RhiotKuraRouter extends KuraRouter {
+
+    // TODO Remove this overridden method as soon as Camel 2.17 is out (see CAMEL-9314)
+    @Override
+    public void start(BundleContext bundleContext) throws Exception {
+        try {
+            super.start(bundleContext);
+        } catch (Throwable e) {
+            String errorMessage = "Problem when starting Kura module " + getClass().getName() + ":";
+            log.warn(errorMessage, e);
+
+            // Print error to the Kura console.
+            System.err.println(errorMessage);
+            e.printStackTrace();
+
+            throw e;
+        }
+    }
 
 }
