@@ -25,9 +25,11 @@
 
 	<properties>
 		<camel.osgi.export.pkg>
-			io.rhiot.component.deviceio.*
+			io.rhiot.component.deviceio.gpio.*
 		</camel.osgi.export.pkg>
-		<camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=deviceio</camel.osgi.export.service>
+		<camel.osgi.export.service>
+			org.apache.camel.spi.ComponentResolver;component=deviceio-gpio
+		</camel.osgi.export.service>
 	</properties>
 
 	<dependencies>
