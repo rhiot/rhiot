@@ -31,10 +31,12 @@
 		<camel.osgi.export.pkg>
 			io.rhiot.component.kura.*,
 			io.rhiot.component.kura.router.*,
+			io.rhiot.component.kura.cloud.*,			
 			io.rhiot.component.kura.wifi.*
 		</camel.osgi.export.pkg>
 		<camel.osgi.export.service>
-			org.apache.camel.spi.ComponentResolver;component=kura-wifi
+			org.apache.camel.spi.ComponentResolver;component=kura-wifi,
+			org.apache.camel.spi.ComponentResolver;component=kura-cloud			
 		</camel.osgi.export.service>
 	</properties>
 
@@ -74,7 +76,6 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
 		</dependency>
 
 		<!-- Testing API -->
