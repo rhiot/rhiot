@@ -1,7 +1,5 @@
 # Rhiot - the messaging platform for the Internet Of Things
 
-# READ ONLY, this documentation is moving to gitbook repo
-
 <a href="https://github.com/rhiot/rhiot"><img src="../rhiot.png" align="left" height="280" hspace="30"></a>
 Rhiot is the messaging platform for the Internet Of Things. We are focused on an adoption of the
 [Red Hat JBoss middleware portfolio](http://www.redhat.com/en/technologies/jboss-middleware) to provide solutions to
@@ -14,6 +12,9 @@ Rhiot comes with the following features:
 - [Web console for managing the devices, gateways and Cloudlets](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#rhiot-cloud)
 - IoT deployment utilities
 - [Performance Testing Framework for the IoT gateways](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#performance-testing-framework)
+
+**We are currently in a process of moving Rhiot documentation to GitBook. Our new documentation site can be found
+[here](https://rhiot.gitbooks.io/gitbook/content)**
 
 ## Table Of Contents
 
