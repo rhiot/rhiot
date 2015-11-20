@@ -36,23 +36,25 @@ public class KuraCloudComponent extends UriEndpointComponent {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remain, Map<String, Object> parameters) throws Exception {
-
         Set<CloudService> cloudServiceSet = this.getCamelContext().getRegistry().findByType(CloudService.class);
         CloudService cloudService = null;
 
-        if (cloudServiceSet.size() == 1) {
+        int cloudServiceCount = cloudServiceSet.size();
+        if (cloudServiceCount == 1) {
             for (CloudService cloudServiceIt : cloudServiceSet) {
                 cloudService = cloudServiceIt;
             }
-        } else {
-            throw new IllegalArgumentException("");
+        } else if(cloudServiceCount > 1) {
+            throw new IllegalStateException("Too many cloud services found in a registry: " + cloudServiceCount);
+        } else  {
+            throw new IllegalArgumentException("No cloud service instance found in a registry.");
         }
 
         KuraCloudEndpoint kuraCloudEndpoint = new KuraCloudEndpoint(uri, this, cloudService);
 
         String[] res = remain.split("/");
         if (res.length != 2) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("Wrong kura-cloud URI format. Should be: kura-cloud:app/topic");
         }
         parameters.put(KuraCloudConstants.APPLICATION_ID, res[0]);
         parameters.put(KuraCloudConstants.TOPIC, res[1]);
