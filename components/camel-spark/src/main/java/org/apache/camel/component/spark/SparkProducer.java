@@ -25,6 +25,7 @@ import org.apache.spark.api.java.function.Function;
 import java.util.List;
 
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_CALLBACK_HEADER;
+import static org.apache.camel.component.spark.SparkConstants.SPARK_TRANSFORMATION_HEADER;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_HEADER;
 
 public class SparkProducer extends DefaultProducer {
@@ -40,10 +41,16 @@ public class SparkProducer extends DefaultProducer {
 
         if(rddCallback == null) {
             Object body = exchange.getIn().getBody();
+            Object transformation = exchange.getIn().getHeader(SPARK_TRANSFORMATION_HEADER);
 
             if(body instanceof Function) {
-                JavaRDD result = rdd.map((Function) body);
-                collectResults(exchange, result);
+                if(transformation == null || transformation == SparkTransformation.FILTER) {
+                    JavaRDD result = rdd.filter((Function) body);
+                    collectResults(exchange, result);
+                } else {
+                    JavaRDD result = rdd.map((Function) body);
+                    collectResults(exchange, result);
+                }
             } else if(body instanceof FlatMapFunction) {
                 JavaRDD result = rdd.flatMap((FlatMapFunction) body);
                 collectResults(exchange, result);

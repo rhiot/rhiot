@@ -30,6 +30,8 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_CALLBACK_HEADER;
+import static org.apache.camel.component.spark.SparkConstants.SPARK_TRANSFORMATION_HEADER;
+import static org.apache.camel.component.spark.SparkTransformation.MAP;
 import static org.apache.camel.component.spark.Sparks.createLocalSparkContext;
 
 public class SparkProducerTest extends CamelTestSupport {
@@ -75,7 +77,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteMap() {
-        List<String> words = template.requestBody("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", new DoubleWord(), List.class);
+        List<String> words = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", new DoubleWord(), SPARK_TRANSFORMATION_HEADER, MAP, List.class);
         Truth.assertThat(words).contains("foo barfoo bar");
     }
 
@@ -87,7 +89,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteMapAndFlatMap() {
-        List<String> doubledWords = template.requestBody("direct:mapAndFlatMap", null, List.class);
+        List<String> doubledWords = template.requestBodyAndHeader("direct:mapAndFlatMap", null, SPARK_TRANSFORMATION_HEADER, MAP, List.class);
         Truth.assertThat(doubledWords).contains("foofoo");
     }
 
