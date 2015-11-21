@@ -13,7 +13,7 @@ Rhiot comes with the following features:
 - [Performance Testing Framework for the IoT gateways](https://github.com/rhiot/rhiot/blob/master/docs/readme.md#performance-testing-framework)
 
 **We are currently in a process of moving Rhiot documentation to GitBook. Our new documentation site can be found
-[here](https://rhiot.gitbooks.io/gitbook/content).**
+[here](https://rhiot.gitbooks.io/gitbook/content/).**
 
 ## Table Of Contents
 
