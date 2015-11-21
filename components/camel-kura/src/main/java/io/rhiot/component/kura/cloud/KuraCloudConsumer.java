@@ -17,51 +17,83 @@
 package io.rhiot.component.kura.cloud;
 
 import org.apache.camel.Endpoint;
+import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.builder.ExchangeBuilder;
 import org.apache.camel.impl.DefaultConsumer;
+import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudClientListener;
 import org.eclipse.kura.message.KuraPayload;
 
 public class KuraCloudConsumer extends DefaultConsumer implements CloudClientListener {
 
-    public KuraCloudConsumer(Endpoint endpoint, Processor processor) {
+    private CloudClient cloudClient;
+
+    public KuraCloudConsumer(Endpoint endpoint, Processor processor, CloudClient cloudClient) {
         super(endpoint, processor);
+        this.cloudClient = cloudClient;
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+        cloudClient.addCloudClientListener(this);
+        log.trace("Start Listening CloudClient");
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+        cloudClient.removeCloudClientListener(this);
+        log.trace("Stop Listening CloudClient");
     }
 
     @Override
     public void onControlMessageArrived(String deviceId, String appTopic, KuraPayload msg, int qos, boolean retain) {
-        // TODO Auto-generated method stub
-
+        onInternalMessageArrived(deviceId, appTopic, msg, qos, retain, true);
     }
 
     @Override
     public void onMessageArrived(String deviceId, String appTopic, KuraPayload msg, int qos, boolean retain) {
-        // TODO Auto-generated method stub
+        onInternalMessageArrived(deviceId, appTopic, msg, qos, retain, false);
+    }
 
+    private void onInternalMessageArrived(String deviceId, String appTopic, KuraPayload msg, int qos, boolean retain,
+            boolean control) {
+        Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(msg)
+                .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC, appTopic)
+                .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID, deviceId)
+                .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_QOS, qos)
+                .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL, control)
+                .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_RETAIN, retain).build();
+        try {
+            getProcessor().process(exchange);
+        } catch (Exception e) {
+            exchange.setException(e);
+        } finally {
+            // log exception if an exception occurred and was not handled
+            if (exchange.getException() != null) {
+                getExceptionHandler().handleException("Error processing exchange", exchange, exchange.getException());
+            }
+        }
     }
 
     @Override
     public void onConnectionLost() {
-        // TODO Auto-generated method stub
-
+        log.trace("Do Nothing");
     }
 
     @Override
     public void onConnectionEstablished() {
-        // TODO Auto-generated method stub
-
+        log.trace("Do Nothing");
     }
 
     @Override
     public void onMessageConfirmed(int messageId, String appTopic) {
-        // TODO Auto-generated method stub
-
+        log.trace("Do Nothing");
     }
 
     @Override
     public void onMessagePublished(int messageId, String appTopic) {
-        // TODO Auto-generated method stub
-
+        log.trace("Do Nothing");
     }
 
 }

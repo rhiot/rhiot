@@ -58,7 +58,8 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        throw new IllegalArgumentException("Not yet developped");
+        CloudClient cloudClient = this.cloudService.newCloudClient(applicationId);
+        return new KuraCloudConsumer(this, processor, cloudClient);
     }
 
     @Override
