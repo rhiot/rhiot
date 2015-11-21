@@ -25,7 +25,7 @@ import org.apache.camel.spi.UriParam;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudService;
 
-@UriEndpoint(scheme = "kura-cloud", title = "Kura CLoud", label = "iot,kura,cloud", syntax = "kura-cloud:appId/appTopic")
+@UriEndpoint(scheme = "kura-cloud", title = "Kura CLoud", label = "iot,kura,cloud", syntax = "kura-cloud:applicationId/appTopic")
 public class KuraCloudEndpoint extends DefaultEndpoint {
 
     @UriParam(defaultValue = "")
@@ -34,7 +34,7 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "")
     private String topic = "";
 
-    @UriParam(defaultValue = "")
+    @UriParam(defaultValue = "0")
     private int qos;
 
     @UriParam(defaultValue = "false")
