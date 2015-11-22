@@ -16,23 +16,13 @@
  */
 package io.rhiot.component.bluetooth;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-public class BluetoothDevice implements Serializable {
+public class BluetoothService {
     private String name;
-    private String address;
-    private Set<BluetoothService> bluetoothServices;
+    private String url;
 
-    public BluetoothDevice(String name, String address) {
-        this(name, address, new HashSet<>());
-    }
-
-    public BluetoothDevice(String name, String address, Set<BluetoothService> bluetoothServices) {
+    public BluetoothService(String name, String url) {
         this.name = name;
-        this.address = address;
-        this.bluetoothServices = bluetoothServices;
+        this.url = url;
     }
 
     public String getName() {
@@ -43,25 +33,34 @@ public class BluetoothDevice implements Serializable {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public String getUrl() {
+        return url;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    public Set<BluetoothService> getBluetoothServices() {
-        return bluetoothServices;
+        BluetoothService that = (BluetoothService) o;
+
+        return !(name != null ? !name.equals(that.name) : that.name != null) && !(url != null ? !url.equals(that.url) : that.url != null);
+
     }
 
-    public void setBluetoothServices(Set<BluetoothService> bluetoothServices) {
-        this.bluetoothServices = bluetoothServices;
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
-        return "BluetoothDevice{" + "name='" + name + '\'' + ", address='" + address + '\'' + ", bluetoothServices=" + bluetoothServices + '}';
+        return "BluetoothService{" + "name='" + name + '\'' + ", url='" + url + '\'' + '}';
     }
 }

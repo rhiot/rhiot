@@ -16,13 +16,13 @@
  */
 package io.rhiot.component.bluetooth;
 
-import java.util.List;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.ExchangeBuilder;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.impl.DefaultScheduledPollConsumer;
+
+import java.util.List;
 
 public class BluetoothConsumer extends DefaultScheduledPollConsumer {
 
@@ -34,7 +34,8 @@ public class BluetoothConsumer extends DefaultScheduledPollConsumer {
     protected int poll() throws Exception {
         log.debug("Started Bluetooth consumer poll.");
 
-        List<BluetoothDevice> bluetoothDevices = getEndpoint().getBluetoothDevicesProvider().bluetoothDevices();
+        List<BluetoothDevice> bluetoothDevices = getEndpoint().getBluetoothDevicesProvider()
+                .bluetoothDevices(getEndpoint().isServiceDiscovery());
         Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(bluetoothDevices)
                 .build();
         exchange.setFromEndpoint(getEndpoint());

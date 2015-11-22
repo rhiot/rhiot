@@ -16,6 +16,8 @@
  */
 package io.rhiot.component.bluetooth;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -25,8 +27,22 @@ public class MockBluetoothDeviceProvider implements BluetoothDevicesProvider {
     public static final List<BluetoothDevice> BLUETOOTH_DEVICES = asList(new BluetoothDevice("name1", "address1"),
             new BluetoothDevice("name2", "address2"));
 
+    public static final List<BluetoothDevice> BLUETOOTH_DEVICES_WITH_SERVICES = asList(
+            new BluetoothDevice("name1", "address1", new HashSet<>(Arrays.asList(
+                    new BluetoothService("serviceName1a", "serviceUrl1a"),
+                    new BluetoothService("serviceName1b", "serviceUrl1b")
+            ))),
+            new BluetoothDevice("name2", "address2", new HashSet<>(Arrays.asList(
+                    new BluetoothService("serviceName2a", "serviceUrl2a"),
+                    new BluetoothService("serviceName2b", "serviceUrl2b")
+            ))));
+
     @Override
-    public List<BluetoothDevice> bluetoothDevices() {
-        return BLUETOOTH_DEVICES;
+    public List<BluetoothDevice> bluetoothDevices(boolean serviceDiscovery) {
+        if (serviceDiscovery) {
+            return BLUETOOTH_DEVICES_WITH_SERVICES;
+        } else {
+            return BLUETOOTH_DEVICES;
+        }
     }
 }

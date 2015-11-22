@@ -28,7 +28,8 @@ public class BluetoothProducer extends DefaultProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        List<BluetoothDevice> bluetoothDevices = getEndpoint().getBluetoothDevicesProvider().bluetoothDevices();
+        List<BluetoothDevice> bluetoothDevices = getEndpoint().getBluetoothDevicesProvider()
+                .bluetoothDevices(getEndpoint().isServiceDiscovery());
         exchange.getIn().setBody(bluetoothDevices);
     }
 

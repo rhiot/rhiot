@@ -31,4 +31,11 @@ public class BluetoothPredicates {
         return exchange -> Arrays.stream(exchange.getIn().getBody(BluetoothDevice[].class))
                 .filter(bluetoothDevice -> bluetoothDevice.getAddress().equals(deviceAddress)).count() > 0;
     }
+
+    public static Predicate deviceWithServiceName(String serviceName) {
+        return exchange -> Arrays.stream(exchange.getIn().getBody(BluetoothDevice[].class))
+                .flatMap(bluetoothDevice -> bluetoothDevice.getBluetoothServices().stream())
+                .filter(bluetoothService -> bluetoothService.getName().equals(serviceName))
+                .count() > 0;
+    }
 }

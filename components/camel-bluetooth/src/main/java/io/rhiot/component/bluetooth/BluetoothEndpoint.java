@@ -35,6 +35,9 @@ public class BluetoothEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "new BluecoveBluetoothDeviceProvider()")
     private BluetoothDevicesProvider bluetoothDevicesProvider;
 
+    @UriParam(defaultValue = "false", description = "service discovery of bluetooth device")
+    private boolean serviceDiscovery = false;
+
     public BluetoothEndpoint(String endpointUri, BluetoothComponent component) {
         super(endpointUri, component);
     }
@@ -79,6 +82,14 @@ public class BluetoothEndpoint extends DefaultEndpoint {
 
     public void setBluetoothDevicesProvider(BluetoothDevicesProvider bluetoothDevicesProvider) {
         this.bluetoothDevicesProvider = bluetoothDevicesProvider;
+    }
+
+    public boolean isServiceDiscovery() {
+        return serviceDiscovery;
+    }
+
+    public void setServiceDiscovery(boolean serviceDiscovery) {
+        this.serviceDiscovery = serviceDiscovery;
     }
 
     // Helpers

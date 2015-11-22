@@ -19,5 +19,5 @@ package io.rhiot.component.bluetooth;
 import java.util.List;
 
 public interface BluetoothDevicesProvider {
-    List<BluetoothDevice> bluetoothDevices();
+    List<BluetoothDevice> bluetoothDevices(boolean serviceDiscovery);
 }
