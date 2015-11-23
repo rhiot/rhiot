@@ -16,6 +16,7 @@
  */
 package org.apache.camel.component.spark;
 
+import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -23,6 +24,8 @@ import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+
+import java.util.Set;
 
 @UriEndpoint(scheme = "spark", title = "Spark connector", producerOnly = true, label = "bigdata", syntax = "spark:label")
 public class SparkEndpoint extends DefaultEndpoint {
@@ -62,7 +65,32 @@ public class SparkEndpoint extends DefaultEndpoint {
         return true;
     }
 
+    // Resolvers
+
+    protected JavaSparkContext resolveSparkContext() {
+        if(sparkContext != null) {
+            return sparkContext;
+        } else if(getComponent().getJavaSparkContext() != null) {
+            return getComponent().getJavaSparkContext();
+        } else {
+            Set<JavaSparkContext> contexts = getCamelContext().getRegistry().findByType(JavaSparkContext.class);
+            if(contexts.isEmpty()) {
+                return Sparks.createLocalSparkContext();
+            } else if(contexts.size() == 1) {
+                return contexts.iterator().next();
+            } else {
+                return null;
+            }
+        }
+    }
+
     // Setters & getters
+
+
+    @Override
+    public SparkComponent getComponent() {
+        return (SparkComponent) super.getComponent();
+    }
 
     public JavaSparkContext getSparkContext() {
         return sparkContext;

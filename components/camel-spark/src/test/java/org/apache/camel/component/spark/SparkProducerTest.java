@@ -44,7 +44,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteRddCallback() {
-        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", null, SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd", null, SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
             @Override
             public Long onRdd(JavaRDD rdd, Object... payloads) {
                 return rdd.count();
