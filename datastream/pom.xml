@@ -26,6 +26,7 @@
         <module>camel-rest</module>
         <module>document</module>
         <module>document-mongodb</module>
+        <module>spark</module>
         <module>node</module>
     </modules>
 
