@@ -27,6 +27,7 @@
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 
+		<!-- This module should use SLF4J version provided with Kura server. -->
 		<slf4j.version>1.6.6</slf4j.version>
 
 		<camel.osgi.export.pkg>
@@ -74,6 +75,7 @@
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
 		</dependency>
+		<!-- This module should use SLF4J version provided with Kura server. -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
