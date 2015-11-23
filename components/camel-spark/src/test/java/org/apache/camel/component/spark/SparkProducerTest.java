@@ -50,7 +50,7 @@ public class SparkProducerTest extends CamelTestSupport {
                 return rdd.count();
             }
         }, Long.class);
-        Truth.assertThat(pomLinesCount).isGreaterThan(0L);
+        Truth.assertThat(pomLinesCount).isEqualTo(17);
     }
 
     @Test
@@ -72,6 +72,18 @@ public class SparkProducerTest extends CamelTestSupport {
                 return rdd.count() * (int) payloads[0] * (int) payloads[1];
             }
         }, Long.class);
+        Truth.assertThat(pomLinesCount).isEqualTo(1700);
+    }
+
+    @Test
+    public void shouldExecuteRddCallbackWithTypedPayloads() {
+        TypedRddCallback rddCallback = new TypedRddCallback<Long>(context, new Class[]{int.class, int.class}) {
+            @Override
+            public Long doOnRdd(JavaRDD rdd, Object... payloads) {
+                return rdd.count() * (int) payloads[0] * (int) payloads[1];
+            }
+        };
+        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", asList("10", "10"), SPARK_RDD_CALLBACK_HEADER, rddCallback, Long.class);
         Truth.assertThat(pomLinesCount).isEqualTo(1700);
     }
 
