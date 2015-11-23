@@ -47,13 +47,27 @@ class ScanningMapBeanRegistryTest {
     }
 
     @Test
-    void shouldRegisterBean() {
+    void shouldRegisterAnonymousBean() {
         // Given
         def bean = 'Register me!'
         beanRegistry.register(bean)
 
         // When
         def loadedBean = beanRegistry.bean(String.class).get()
+
+        // Then
+        assertThat(loadedBean).isEqualTo(bean)
+    }
+
+    @Test
+    void shouldRegisterBean() {
+        // Given
+        def bean = 'Register me!'
+        def name = 'name'
+        beanRegistry.register(name, bean)
+
+        // When
+        def loadedBean = beanRegistry.bean(name, String.class).get()
 
         // Then
         assertThat(loadedBean).isEqualTo(bean)

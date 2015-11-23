@@ -24,10 +24,14 @@ interface BeanRegistry {
 
     def <T> Optional<T> bean(Class<T> type)
 
+    def <T> Optional<T> bean(String name, Class<T> type)
+
     def <T> List<T> beans(Class<T> type)
 
     // Mutable operations
 
     void register(Object bean) throws UnsupportedOperationException
+
+    void register(String name, Object bean) throws UnsupportedOperationException
 
 }
