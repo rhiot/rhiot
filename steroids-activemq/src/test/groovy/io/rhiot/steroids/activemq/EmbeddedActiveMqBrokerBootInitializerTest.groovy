@@ -23,6 +23,7 @@ import org.junit.AfterClass
 import org.junit.Test
 
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpByPrefix
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpJmsBridge
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.mqtt
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.mqttJmsBridge
@@ -245,6 +246,26 @@ class EmbeddedActiveMqBrokerBootInitializerTest {
 
         // When
         camelContext().createProducerTemplate().sendBody(seda, 'foo')
+
+        // Then
+        mock.assertIsSatisfied()
+    }
+
+    @Test
+    void shouldReadMessagesByPrefix() {
+        // Given
+        def message = uuid()
+        camelContext().addRoutes(new RouteBuilder() {
+            @Override
+            void configure() {
+                from(amqpByPrefix(queue)).to("mock:${queue}")
+            }
+        })
+        def mock = camelContext().getEndpoint("mock:${queue}", MockEndpoint.class)
+        mock.expectedBodiesReceived(message)
+
+        // When
+        camelContext().createProducerTemplate().sendBody(amqp("${queue}.bar.baz"), message)
 
         // Then
         mock.assertIsSatisfied()

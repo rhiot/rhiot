@@ -17,6 +17,8 @@
 package io.rhiot.steroids.activemq
 
 import io.rhiot.steroids.bootstrap.BootInitializer
+import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.steroids.bootstrap.BootstrapAware
 import org.apache.activemq.ActiveMQConnectionFactory
 import org.apache.activemq.broker.BrokerService
 import org.springframework.jms.connection.CachingConnectionFactory
@@ -26,13 +28,15 @@ import static io.rhiot.utils.Properties.booleanProperty
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.stringProperty
 
-public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
+public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer, BootstrapAware {
 
     // Constants
 
     public static final String DEFAULT_BROKER_NAME = 'embedded-rhiot-broker'
 
     // Collaborators
+
+    private Bootstrap bootstrap
 
     private BrokerService brokerService
 
@@ -90,6 +94,10 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
         "amqp:${channel}"
     }
 
+    static String amqpByPrefix(String channelPrefix) {
+        "amqp:${channelPrefix}.>"
+    }
+
     static String amqpJmsBridge(String channel) {
         if(!registry().containsKey('jmsConnectionFactory')) {
             def brokerUrl = externalBrokerUrl() ?: "vm:${DEFAULT_BROKER_NAME}"
@@ -111,6 +119,11 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer {
 
     static int amqpPort() {
         intProperty('AMQP_PORT', 5672)
+    }
+
+    @Override
+    void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
     }
 
 }

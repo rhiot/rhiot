@@ -5,14 +5,16 @@ import io.vertx.core.json.Json
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.jms.JmsMessage
 
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpByPrefix
 
 @Route
 class CamelSparkStreamConsumer extends RouteBuilder {
 
+    public static final String CHANNEL = 'spark'
+
     @Override
     void configure() {
-        from(amqp('spark.>')).
+        from(amqpByPrefix(CHANNEL)).
                 process {
                     def channel = it.getIn(JmsMessage.class).jmsMessage.properties._to.toString()
                     def rawChannel = channel.substring(channel.indexOf('.') + 1)
