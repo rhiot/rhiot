@@ -22,7 +22,14 @@ package io.rhiot.steroids.bootstrap
  */
 interface BeanRegistry {
 
-    def <T> Optional<T> bean(Class<T> type)
+    /**
+     * Looks up for a bean by its type.
+     *
+     * @param type Type of bean to find in registry.
+     * @return bean or empty optional if bean can't be found.
+     * @throws TooManyBeansFoundException if more than a single bean of a given type have been found
+     */
+    def <T> Optional<T> bean(Class<T> type) throws TooManyBeansFoundException
 
     def Optional<?> bean(String name)
 

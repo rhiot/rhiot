@@ -17,6 +17,7 @@
 package io.rhiot.steroids.bootstrap
 
 import static io.rhiot.utils.Uuids.uuid
+import static java.util.Optional.empty
 
 class MapBeanRegistry implements BeanRegistry {
 
@@ -24,8 +25,14 @@ class MapBeanRegistry implements BeanRegistry {
 
     @Override
     def <T> Optional<T> bean(Class<T> type) {
-        def bean = registry.values().find{ type.isAssignableFrom(it.class) }
-        Optional.ofNullable((T) bean)
+        def beans = registry.values().findAll{ type.isAssignableFrom(it.class) }
+        if(beans.size() > 1) {
+            throw new TooManyBeansFoundException("Expected 0 or 1 beans of type ${type.name}. Found ${beans.size()}.")
+        } else if(beans.size() == 1) {
+            Optional.of((T) beans.first())
+        } else {
+            empty()
+        }
     }
 
     @Override
