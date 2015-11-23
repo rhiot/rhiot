@@ -17,9 +17,10 @@
 package io.rhiot.component.kura.router;
 
 import org.apache.camel.component.kura.KuraRouter;
+import org.eclipse.kura.configuration.ConfigurableComponent;
 import org.osgi.framework.BundleContext;
 
-public abstract class RhiotKuraRouter extends KuraRouter {
+public abstract class RhiotKuraRouter extends KuraRouter implements ConfigurableComponent {
 
     // TODO Remove this overridden method as soon as Camel 2.17 is out (see
     // CAMEL-9314)
