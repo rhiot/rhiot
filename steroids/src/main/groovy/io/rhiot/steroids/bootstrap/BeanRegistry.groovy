@@ -24,6 +24,8 @@ interface BeanRegistry {
 
     def <T> Optional<T> bean(Class<T> type)
 
+    def Optional<?> bean(String name)
+
     def <T> Optional<T> bean(String name, Class<T> type)
 
     def <T> List<T> beans(Class<T> type)

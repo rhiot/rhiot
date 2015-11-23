@@ -24,7 +24,13 @@ class MapBeanRegistry implements BeanRegistry {
 
     @Override
     def <T> Optional<T> bean(Class<T> type) {
-        Optional.ofNullable(registry.values().find{ type.isAssignableFrom(it.class) })
+        def bean = registry.values().find{ type.isAssignableFrom(it.class) }
+        Optional.ofNullable((T) bean)
+    }
+
+    @Override
+    Optional<?> bean(String name) {
+        Optional.ofNullable(registry[name])
     }
 
     @Override
@@ -39,12 +45,12 @@ class MapBeanRegistry implements BeanRegistry {
     }
 
     @Override
-    void register(Object bean) throws UnsupportedOperationException {
+    void register(Object bean) {
         registry.put(bean.class.name + uuid(), bean)
     }
 
     @Override
-    void register(String name, Object bean) throws UnsupportedOperationException {
+    void register(String name, Object bean) {
         registry.put(name, bean)
     }
 
