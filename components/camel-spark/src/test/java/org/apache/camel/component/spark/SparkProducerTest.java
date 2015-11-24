@@ -20,7 +20,7 @@ import com.google.common.truth.Truth;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.AbstractJavaRDDLike;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
@@ -40,13 +40,15 @@ public class SparkProducerTest extends CamelTestSupport {
 
     static JavaSparkContext sparkContext = createLocalSparkContext();
 
+    String sparkUri = "spark:analyze?rdd=#pomRdd";
+
     // Tests
 
     @Test
     public void shouldExecuteRddCallback() {
-        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd", null, SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader(sparkUri, null, SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
             @Override
-            public Long onRdd(JavaRDD rdd, Object... payloads) {
+            public Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 return rdd.count();
             }
         }, Long.class);
@@ -55,9 +57,9 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteRddCallbackWithSinglePayload() {
-        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", 10, SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader(sparkUri, 10, SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
             @Override
-            public Long onRdd(JavaRDD rdd, Object... payloads) {
+            public Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 return rdd.count() * (int) payloads[0];
             }
         }, Long.class);
@@ -68,7 +70,7 @@ public class SparkProducerTest extends CamelTestSupport {
     public void shouldExecuteRddCallbackWithPayloads() {
         long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", asList(10, 10), SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
             @Override
-            public Long onRdd(JavaRDD rdd, Object... payloads) {
+            public Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 return rdd.count() * (int) payloads[0] * (int) payloads[1];
             }
         }, Long.class);
@@ -79,7 +81,7 @@ public class SparkProducerTest extends CamelTestSupport {
     public void shouldExecuteRddCallbackWithTypedPayloads() {
         TypedRddCallback rddCallback = new TypedRddCallback<Long>(context, new Class[]{int.class, int.class}) {
             @Override
-            public Long doOnRdd(JavaRDD rdd, Object... payloads) {
+            public Long doOnRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 return rdd.count() * (int) payloads[0] * (int) payloads[1];
             }
         };
@@ -118,7 +120,7 @@ public class SparkProducerTest extends CamelTestSupport {
         registry.bind("pomRdd", sparkContext.textFile("testrdd.txt"));
         registry.bind("countLinesTransformation", new RddCallback() {
             @Override
-            public Object onRdd(JavaRDD rdd, Object... payloads) {
+            public Object onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 return rdd.count();
             }
         });

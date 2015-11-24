@@ -17,7 +17,7 @@
 package org.apache.camel.component.spark;
 
 import org.apache.camel.CamelContext;
-import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.AbstractJavaRDDLike;
 
 public abstract class TypedRddCallback<T> implements RddCallback<T> {
 
@@ -31,13 +31,13 @@ public abstract class TypedRddCallback<T> implements RddCallback<T> {
     }
 
     @Override
-    public T onRdd(JavaRDD rdd, Object... payloads) {
+    public T onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
         for(int i = 0; i < payloads.length; i++) {
             payloads[i] = camelContext.getTypeConverter().convertTo(payloadsTypes[i], payloads[i]);
         }
         return doOnRdd(rdd, payloads);
     }
 
-    public abstract T doOnRdd(JavaRDD rdd, Object... payloads);
+    public abstract T doOnRdd(AbstractJavaRDDLike rdd, Object... payloads);
 
 }

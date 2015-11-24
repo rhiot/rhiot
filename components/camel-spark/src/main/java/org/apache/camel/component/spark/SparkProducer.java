@@ -18,6 +18,7 @@ package org.apache.camel.component.spark;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
+import org.apache.spark.api.java.AbstractJavaRDDLike;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
@@ -36,7 +37,7 @@ public class SparkProducer extends DefaultProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        JavaRDD rdd = resolveRdd(exchange);
+        AbstractJavaRDDLike rdd = resolveRdd(exchange);
         RddCallback rddCallback = resolveRddCallback(exchange);
 
         if(rddCallback == null) {
@@ -45,8 +46,12 @@ public class SparkProducer extends DefaultProducer {
 
             if(body instanceof Function) {
                 if(transformation == null || transformation == SparkTransformation.FILTER) {
-                    JavaRDD result = rdd.filter((Function) body);
-                    collectResults(exchange, result);
+                    if(rdd instanceof JavaRDD) {
+                        JavaRDD result = ((JavaRDD) rdd).filter((Function) body);
+                        collectResults(exchange, result);
+                    } else {
+                        throw new IllegalArgumentException("Can't execute filter operation on RDD of type: " + rdd.getClass().getName());
+                    }
                 } else {
                     JavaRDD result = rdd.map((Function) body);
                     collectResults(exchange, result);
@@ -85,7 +90,7 @@ public class SparkProducer extends DefaultProducer {
         }
     }
 
-    protected JavaRDD resolveRdd(Exchange exchange) {
+    protected AbstractJavaRDDLike resolveRdd(Exchange exchange) {
         if(exchange.getIn().getHeader(SPARK_RDD_HEADER) != null) {
             return (JavaRDD) exchange.getIn().getHeader(SPARK_RDD_HEADER);
         } else if(getEndpoint().getRdd() != null) {

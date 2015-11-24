@@ -16,13 +16,12 @@
  */
 package org.apache.camel.component.spark;
 
-import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriEndpoint;
-import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.AbstractJavaRDDLike;
 import org.apache.spark.api.java.JavaSparkContext;
 
 import java.util.Set;
@@ -34,7 +33,7 @@ public class SparkEndpoint extends DefaultEndpoint {
 
     private JavaSparkContext sparkContext;
 
-    private JavaRDD rdd;
+    private AbstractJavaRDDLike rdd;
 
     private RddCallback rddCallback;
 
@@ -100,11 +99,11 @@ public class SparkEndpoint extends DefaultEndpoint {
         this.sparkContext = sparkContext;
     }
 
-    public JavaRDD getRdd() {
+    public AbstractJavaRDDLike getRdd() {
         return rdd;
     }
 
-    public void setRdd(JavaRDD rdd) {
+    public void setRdd(AbstractJavaRDDLike rdd) {
         this.rdd = rdd;
     }
 

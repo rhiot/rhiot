@@ -16,10 +16,15 @@
  */
 package org.apache.camel.component.spark;
 
-import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.AbstractJavaRDDLike;
 
+/**
+ * Generic block of code with parameters which can be executed against RDD and return results.
+ *
+ * @param <T> results type
+ */
 public interface RddCallback<T> {
 
-    T onRdd(JavaRDD rdd, Object... payloads);
+    T onRdd(AbstractJavaRDDLike rdd, Object... payloads);
 
 }
