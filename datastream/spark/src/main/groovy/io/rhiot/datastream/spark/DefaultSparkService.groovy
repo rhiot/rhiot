@@ -16,8 +16,25 @@
  */
 package io.rhiot.datastream.spark
 
-interface SparkService {
+import io.rhiot.steroids.Bean
+import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.steroids.bootstrap.BootstrapAware
+import org.apache.camel.CamelContext
 
-    Object execute(String rdd, String rddCallback, Object payload)
+@Bean
+class DefaultSparkService implements SparkService, BootstrapAware {
+
+    private Bootstrap bootstrap
+
+    @Override
+    Object execute(String rdd, String rddCallback, Object payload) {
+        def template = bootstrap.beanRegistry().bean(CamelContext.class).get().createProducerTemplate()
+        template.requestBody("spark:rhiot?rdd=#${rdd}&rddCallback=#${rddCallback}", payload)
+    }
+
+    @Override
+    void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
+    }
 
 }
