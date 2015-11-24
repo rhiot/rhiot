@@ -33,6 +33,9 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
 
     // Members
 
+    /**
+     * Camel route XML, usually configured using SCR property.
+     */
     private String camelRouteXml;
 
     // Getters & setters
@@ -55,6 +58,7 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
 
     // ASF Camel workarounds
 
+    // TODO: Remove this overridden method as soon as Camel 2.17 is out (see CAMEL-9357)
     @Override
     public void configure() throws Exception {
         log.debug("No programmatic routes configuration found.");
