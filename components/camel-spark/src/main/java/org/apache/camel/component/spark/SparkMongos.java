@@ -16,15 +16,26 @@
  */
 package org.apache.camel.component.spark;
 
+import com.mongodb.hadoop.MongoInputFormat;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.bson.BSONObject;
 
-public final class Sparks {
+public final class SparkMongos {
 
-    private Sparks() {
+    private SparkMongos() {
     }
 
-    public static JavaSparkContext createLocalSparkContext() {
-        return new JavaSparkContext("local[*]", "local-camel-spark-context");
+    public static JavaPairRDD<Object, BSONObject> mongoRdd(JavaSparkContext sparkContext, String mongoHost, long mongoPort, String db, String collection) {
+        Configuration mongodbConfig = new Configuration();
+        mongodbConfig.set("mongo.job.input.format", "com.mongodb.hadoop.MongoInputFormat");
+        mongodbConfig.set("mongo.input.uri", String.format("mongodb://%s:%d/%s.%s", mongoHost, mongoPort, db, collection));
+        return sparkContext.newAPIHadoopRDD(
+                mongodbConfig,
+                MongoInputFormat.class,
+                Object.class,
+                BSONObject.class);
     }
 
 }
