@@ -91,13 +91,18 @@
 
 		<!-- Testing -->
 		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test</artifactId>
+			<groupId>com.google.truth</groupId>
+			<artifactId>truth</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

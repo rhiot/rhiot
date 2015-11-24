@@ -17,13 +17,38 @@
 package io.rhiot.component.kura.router;
 
 import org.apache.camel.component.kura.KuraRouter;
+import org.apache.camel.model.RoutesDefinition;
+import org.apache.camel.util.StringHelper;
 import org.eclipse.kura.configuration.ConfigurableComponent;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 
+import java.io.ByteArrayInputStream;
 import java.util.Map;
 
 public abstract class RhiotKuraRouter extends KuraRouter implements ConfigurableComponent {
+
+    String camelRouteXml;
+
+    // Getters & setters
+
+    public String getCamelRouteXml() {
+        return camelRouteXml;
+    }
+
+    public void setCamelRouteXml(String camelRouteXml) {
+        this.camelRouteXml = camelRouteXml;
+        if(camelRouteXml != null && !camelRouteXml.isEmpty()) {
+            try {
+                RoutesDefinition routesDefinition = camelContext.loadRoutesDefinition(new ByteArrayInputStream(camelRouteXml.getBytes()));
+                camelContext.addRouteDefinitions(routesDefinition.getRoutes());
+            } catch (Exception e) {
+                log.warn("Cannot load routes definitions: {}", camelRouteXml);
+            }
+        }
+    }
+
+    // ASF Camel workarounds
 
     // TODO: Remove this overridden method as soon as Camel 2.17 is out (see CAMEL-9314)
     @Override
