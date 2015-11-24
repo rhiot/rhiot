@@ -52,10 +52,6 @@ public class RhiotKuraRouterTest {
     }
 
     public static class MyRouter extends RhiotKuraRouter {
-        @Override
-        public void configure() throws Exception {
-
-        }
     }
 
 }

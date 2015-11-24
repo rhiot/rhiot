@@ -31,6 +31,8 @@ import java.util.Map;
  */
 public abstract class RhiotKuraRouter extends KuraRouter implements ConfigurableComponent {
 
+    // Members
+
     private String camelRouteXml;
 
     // Getters & setters
@@ -52,6 +54,12 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
     }
 
     // ASF Camel workarounds
+
+
+    @Override
+    public void configure() throws Exception {
+        log.debug("No programmatic routes configuration found.");
+    }
 
     // TODO: Remove this overridden method as soon as Camel 2.17 is out (see CAMEL-9314)
     @Override
