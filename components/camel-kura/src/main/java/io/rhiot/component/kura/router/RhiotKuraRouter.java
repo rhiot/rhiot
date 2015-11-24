@@ -18,7 +18,6 @@ package io.rhiot.component.kura.router;
 
 import org.apache.camel.component.kura.KuraRouter;
 import org.apache.camel.model.RoutesDefinition;
-import org.apache.camel.util.StringHelper;
 import org.eclipse.kura.configuration.ConfigurableComponent;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
@@ -26,9 +25,13 @@ import org.osgi.service.component.ComponentContext;
 import java.io.ByteArrayInputStream;
 import java.util.Map;
 
+/**
+ * Base class for Camel routers deployable into Eclipse Kura. All RhiotKuraRouters are configurable components managable
+ * from the Everywere cloud.
+ */
 public abstract class RhiotKuraRouter extends KuraRouter implements ConfigurableComponent {
 
-    String camelRouteXml;
+    private String camelRouteXml;
 
     // Getters & setters
 
