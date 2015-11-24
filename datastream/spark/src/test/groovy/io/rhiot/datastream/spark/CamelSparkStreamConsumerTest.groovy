@@ -22,17 +22,18 @@ import io.rhiot.steroids.camel.CamelBootInitializer
 import org.apache.camel.CamelContext
 import org.apache.camel.component.spark.RddCallback
 import org.apache.spark.api.java.AbstractJavaRDDLike
+import org.apache.spark.api.java.JavaSparkContext
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
-import static org.apache.camel.component.spark.Sparks.createLocalSparkContext
 
 class CamelSparkStreamConsumerTest {
 
     static dataStream = new DataStream().start()
     static {
-        CamelBootInitializer.registry().put('rdd', createLocalSparkContext().textFile('src/test/resources/testrdd.txt'))
+        def sparkContext = dataStream.beanRegistry().bean(JavaSparkContext.class).get()
+        CamelBootInitializer.registry().put('rdd', sparkContext.textFile('src/test/resources/testrdd.txt'))
         CamelBootInitializer.registry().put('callback', new LinesXPayload())
 
     }
