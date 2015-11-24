@@ -16,40 +16,37 @@
  */
 package io.rhiot.datastream.node
 
+import com.mongodb.BasicDBObject
+import com.mongodb.Mongo
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.JsonWithHeaders
 import io.rhiot.datastream.engine.TypeConverter
 import io.rhiot.mongodb.EmbeddedMongo
 import io.rhiot.steroids.Bean
-import io.rhiot.steroids.camel.Route
+import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
 import io.vertx.core.Vertx
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
-import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.component.spark.RddCallback
+import org.apache.spark.api.java.AbstractJavaRDDLike
+import org.apache.spark.api.java.JavaSparkContext
 import org.junit.AfterClass
-import org.junit.BeforeClass
 import org.junit.Test
 
 import java.util.concurrent.Callable
 
 import static com.google.common.truth.Truth.assertThat
 import static com.jayway.awaitility.Awaitility.await
-import static io.rhiot.utils.Networks.findAvailableTcpPort
-import static io.rhiot.utils.Properties.setIntProperty
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
+import static org.apache.camel.component.spark.SparkMongos.mongoRdd
 
 class DataStreamNodeTest {
 
-    static def dataStream = new DataStream()
-
     static def mongo = new EmbeddedMongo().start()
 
-    @BeforeClass
-    static void beforeClass() {
-        setIntProperty('MONGODB_SERVICE_PORT', mongo.port)
-        dataStream = new DataStream().start()
-    }
+    static def dataStream = new DataStream().start()
 
     @AfterClass
     static void afterClass() {
@@ -74,6 +71,26 @@ class DataStreamNodeTest {
         // Then
         await().until( (Callable<Boolean>) { count > -1 } )
         assertThat(count).isEqualTo(0)
+    }
+
+    @Test
+    void smokeTestMongoSparkTask() {
+        CamelBootInitializer.registry().put('callback', new RddCallback<Long>() {
+            @Override
+            Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
+                rdd.count() * (int) payloads[0]
+            }
+        })
+
+        def mongoClient = new Mongo('localhost', mongo.port())
+        mongoClient.getDB('db').getCollection('collection').save(new BasicDBObject([foo: 'bar']))
+
+        def sparkContext = dataStream.beanRegistry().bean(JavaSparkContext.class).get()
+        CamelBootInitializer.registry().put('rdd', mongoRdd(sparkContext, 'localhost', mongo.port(), 'db', 'collection'))
+
+        def encodedResult = CamelBootInitializer.camelContext().createProducerTemplate().requestBody(amqp('spark.rdd.callback'), Json.encode([payload: 10]), String.class)
+        def result = Json.decodeValue(encodedResult, Map.class).payload
+        assertThat(result).isEqualTo(10)
     }
 
     @Bean

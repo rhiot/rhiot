@@ -20,6 +20,8 @@
     </licenses>
 
     <properties>
+        <jackson.version>2.4.4</jackson.version>
+
         <fatjar.mainClass>io.rhiot.datastream.engine.DataStream</fatjar.mainClass>
     </properties>
 
@@ -31,6 +33,10 @@
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-datastream-document-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-datastream-spark</artifactId>
         </dependency>
 
         <!-- Testing -->
