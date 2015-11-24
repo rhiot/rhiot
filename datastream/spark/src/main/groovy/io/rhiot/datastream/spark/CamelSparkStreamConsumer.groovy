@@ -39,9 +39,9 @@ class CamelSparkStreamConsumer extends RouteBuilder {
                     def rddCallback = channelParts[1]
                     it.in.headers.target = "spark:rhiot?rdd=#${rdd}&rddCallback=#${rddCallback}"
 
-                    it.in.body = Json.decodeValue(it.in.getBody(String.class), Map.class).input
+                    it.in.body = Json.decodeValue(it.in.getBody(String.class), Map.class).payload
                 }.recipientList().header('target').
-                transform{ Json.encode([result: it.in.body]) }
+                transform{ Json.encode([payload: it.in.body]) }
     }
 
 }
