@@ -27,7 +27,7 @@ import java.util.Map;
 
 /**
  * Base class for Camel routers deployable into Eclipse Kura. All RhiotKuraRouters are configurable components managable
- * from the Everywere cloud.
+ * from the Everyware cloud.
  */
 public abstract class RhiotKuraRouter extends KuraRouter implements ConfigurableComponent {
 
