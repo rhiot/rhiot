@@ -77,7 +77,9 @@ abstract class CamelRestServiceStreamSource<T> extends AbstractServiceStreamSour
                             host("0.0.0.0").port(8080)
                 }
             })
+            def components = CamelBootInitializer.camelContext().componentNames.collect{ [it, CamelBootInitializer.camelContext().getComponent(it)] }
             CamelBootInitializer.camelContext().stop()
+            components.each{ CamelBootInitializer.camelContext().addComponent(it[0], it[1]) }
             CamelBootInitializer.camelContext().start()
         }
     }
