@@ -17,12 +17,15 @@
 package io.rhiot.steroids.spark
 
 import io.rhiot.steroids.bootstrap.Bootstrap
+import org.apache.spark.api.java.JavaSparkContext
 import org.junit.AfterClass
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
 
 class SparkBootInitializerTest {
+
+    // Fixtures
 
     static def bootstrap = new Bootstrap().start()
 
@@ -31,10 +34,12 @@ class SparkBootInitializerTest {
         bootstrap.stop()
     }
 
+    // Tests
+
     @Test
     void shouldStartSparkContext() {
         // Given
-        def sparkContext = bootstrap.initializer(SparkBootInitializer.class).sparkContext()
+        def sparkContext = bootstrap.beanRegistry().bean(JavaSparkContext.class).get()
 
         // When
         def aCounter = { line -> line.contains('a') }.dehydrate()

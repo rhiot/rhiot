@@ -16,11 +16,17 @@
  */
 package io.rhiot.steroids.spark
 
+import io.rhiot.steroids.Bean
 import io.rhiot.steroids.bootstrap.BootInitializer
+import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.steroids.bootstrap.BootstrapAware
 import org.apache.spark.SparkConf
 import org.apache.spark.api.java.JavaSparkContext
 
-class SparkBootInitializer implements BootInitializer {
+@Bean
+class SparkBootInitializer implements BootInitializer, BootstrapAware {
+
+    private Bootstrap bootstrap
 
     private JavaSparkContext sparkContext
 
@@ -28,6 +34,7 @@ class SparkBootInitializer implements BootInitializer {
     void start() {
         def conf = new SparkConf().setAppName("Rhiot application").setMaster('local[*]')
         sparkContext = new JavaSparkContext(conf);
+        bootstrap.beanRegistry().register(sparkContext)
     }
 
     @Override
@@ -42,6 +49,11 @@ class SparkBootInitializer implements BootInitializer {
 
     JavaSparkContext sparkContext() {
         sparkContext
+    }
+
+    @Override
+    void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
     }
 
 }
