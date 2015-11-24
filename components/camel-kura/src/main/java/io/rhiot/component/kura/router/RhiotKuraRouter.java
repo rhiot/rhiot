@@ -55,7 +55,6 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
 
     // ASF Camel workarounds
 
-
     @Override
     public void configure() throws Exception {
         log.debug("No programmatic routes configuration found.");
