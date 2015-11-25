@@ -59,8 +59,8 @@ public class GeofencingCloudlet extends FatJarRouter {
     }
 
     @Bean
-    String initalizer(DefaultRouteService routeService) throws Exception {
-        CamelBootInitializer.registry().put("routeService", routeService);
+    String initalizer(DefaultRouteService routeService, DataStream dataStream) throws Exception {
+        dataStream.beanRegistry().register("routeService", routeService);
         CamelBootInitializer.camelContext().addRoutes(new GeofencingRoutes());
         return "init";
     }
