@@ -26,7 +26,6 @@ import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
 import io.rhiot.datastream.document.mongodb.MongodbDocumentStore;
 import io.rhiot.datastream.engine.DataStream;
-import io.rhiot.steroids.camel.CamelBootInitializer;
 import org.apache.camel.CamelContext;
 import org.apache.camel.spring.boot.CamelContextConfiguration;
 import org.apache.camel.spring.boot.FatJarRouter;
@@ -78,7 +77,7 @@ public class DriverDocumentCloudlet extends FatJarRouter {
     CamelContextConfiguration camelContextConfiguration(DataStream dataStream, Mongo mongo, @Value("${cloudlet.document.driver.mongodb.db}") String documentsDbName) {
         MongodbDocumentStore mongodbDocumentStore = dataStream.beanRegistry().bean(MongodbDocumentStore.class).get();
 
-        CamelBootInitializer.registry().put("mongodbDocumentStore", mongodbDocumentStore);
+        dataStream.beanRegistry().register("mongodbDocumentStore", mongodbDocumentStore);
 
         return new CamelContextConfiguration() {
             @Override
