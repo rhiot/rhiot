@@ -17,12 +17,14 @@
 
 package io.rhiot.component.deviceio.gpio;
 
+import io.rhiot.component.deviceio.DeviceIOConstants;
+
 import java.io.IOException;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 
-import io.rhiot.component.deviceio.DeviceIOConstants;
 import jdk.dio.ClosedDeviceException;
 import jdk.dio.UnavailableDeviceException;
 import jdk.dio.gpio.GPIOPin;
@@ -44,6 +46,15 @@ public class GPIOProducer extends DefaultProducer {
 
     }
 
+    protected GPIOAction resolveAction(Message message) {
+        if (message.getHeaders().containsKey(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION)) {
+            // Exchange Action
+            return message.getHeader(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION, GPIOAction.class);
+        } else {
+            return action; // Endpoint Action
+        }
+    }
+
     /**
      * Process the message
      */
@@ -53,15 +64,10 @@ public class GPIOProducer extends DefaultProducer {
 
         if (pin instanceof GPIOPin) {
 
-            GPIOAction headerAction = exchange.getIn().getHeader(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION,
-                    GPIOAction.class);
+            GPIOAction messageAction = resolveAction(exchange.getIn());
 
-            if (headerAction != null) {
-                action = headerAction;
-            }
-
-            if (action != null) {
-                switch (action) {
+            if (messageAction != null) {
+                switch (messageAction) {
                 case HIGH:
                     setValue(true);
                     break;
