@@ -17,6 +17,8 @@
 package io.rhiot.component.kura.test;
 
 import io.rhiot.component.kura.router.RhiotKuraRouter;
+import io.rhiot.component.kura.test.TestKuraServer;
+
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.kura.KuraRouter;
 import org.apache.camel.component.mock.MockEndpoint;
