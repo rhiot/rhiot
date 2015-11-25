@@ -23,7 +23,9 @@
 	<modules>
 		<module>camel-bluetooth</module>
 		<module>camel-coap</module>
-        <module>camel-device-io</module>
+		<module>camel-gps-bu353</module>
+		<module>camel-gpsd</module>
+		<module>camel-device-io</module>
         <module>camel-framebuffer</module>
 		<module>camel-kura</module>
 		<module>camel-spark</module>
