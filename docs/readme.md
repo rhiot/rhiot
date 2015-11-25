@@ -41,24 +41,6 @@ the common IoT-related challenges.
     - [Devices data analytics](#devices-data-analytics)
   - [Geofencing cloudlet](#geofencing-cloudlet)
 
-- [Quickstarts](#quickstarts)
-  - [Kura Camel quickstart](#kura-camel-quickstart)
-    - [Creating a Kura Camel project](#creating-a-kura-camel-project)
-    - [Prerequisites](#prerequisites)
-    - [Deployment](#deployment)
-    - [What the quickstart is actually doing?](#what-the-quickstart-is-actually-doing)
-  - [AMQP cloudlet quickstart](#amqp-cloudlet-quickstart)
-    - [Creating and running the AMQP cloudlet project](#creating-and-running-the-amqp-cloudlet-project)
-    - [AMQP broker](#amqp-broker)
-    - [Sample chat application](#sample-chat-application)
-    - [Architectural overview](#architectural-overview)
-  - [MQTT cloudlet quickstart](#mqtt-cloudlet-quickstart)
-    - [Creating and running the MQTT cloudlet project](#creating-and-running-the-mqtt-cloudlet-project)
-    - [MQTT broker](#mqtt-broker)
-    - [Sample chat application](#sample-chat-application-1)
-    - [Architectural overview](#architectural-overview-1)
-- [Articles, presentations & videos](#articles-presentations-&-videos)
-
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Rhiot Cloud
