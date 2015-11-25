@@ -41,7 +41,7 @@ class CamelSparkStreamConsumer extends RouteBuilder implements BootstrapAware {
         def serviceBinding = bootstrap.beanRegistry().bean(ServiceBinding.class).get()
         def sparkService = bootstrap.beanRegistry().bean(SparkService.class).get()
         sparkService.asType(DefaultSparkService.class).bootstrap(bootstrap)
-        CamelBootInitializer.registry().put('sparkService', sparkService)
+        bootstrap.beanRegistry().register('sparkService', sparkService)
 
         from(amqpByPrefix(CHANNEL)).
                 transform {

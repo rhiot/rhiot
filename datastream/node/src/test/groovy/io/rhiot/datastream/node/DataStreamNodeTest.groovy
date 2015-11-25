@@ -75,7 +75,7 @@ class DataStreamNodeTest {
 
     @Test
     void smokeTestMongoSparkTask() {
-        CamelBootInitializer.registry().put('callback', new RddCallback<Long>() {
+        dataStream.beanRegistry().register('callback', new RddCallback<Long>() {
             @Override
             Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 rdd.count() * (int) payloads[0]
@@ -86,7 +86,7 @@ class DataStreamNodeTest {
         mongoClient.getDB('db').getCollection('collection').save(new BasicDBObject([foo: 'bar']))
 
         def sparkContext = dataStream.beanRegistry().bean(JavaSparkContext.class).get()
-        CamelBootInitializer.registry().put('rdd', mongoRdd(sparkContext, 'localhost', mongo.port(), 'db', 'collection'))
+        dataStream.beanRegistry().register('rdd', mongoRdd(sparkContext, 'localhost', mongo.port(), 'db', 'collection'))
 
         def encodedResult = CamelBootInitializer.camelContext().createProducerTemplate().requestBody(amqp('spark.rdd.callback'), Json.encode([payload: 10]), String.class)
         def result = Json.decodeValue(encodedResult, Map.class).payload

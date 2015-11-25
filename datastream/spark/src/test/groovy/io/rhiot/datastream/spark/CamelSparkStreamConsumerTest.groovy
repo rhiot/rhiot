@@ -18,7 +18,6 @@ package io.rhiot.datastream.spark
 
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
-import io.rhiot.steroids.camel.CamelBootInitializer
 import org.apache.camel.CamelContext
 import org.apache.camel.component.spark.RddCallback
 import org.apache.spark.api.java.AbstractJavaRDDLike
@@ -33,8 +32,8 @@ class CamelSparkStreamConsumerTest {
     static dataStream = new DataStream().start()
     static {
         def sparkContext = dataStream.beanRegistry().bean(JavaSparkContext.class).get()
-        CamelBootInitializer.registry().put('rdd', sparkContext.textFile('src/test/resources/testrdd.txt'))
-        CamelBootInitializer.registry().put('callback', new LinesXPayload())
+        dataStream.beanRegistry().register('rdd', sparkContext.textFile('src/test/resources/testrdd.txt'))
+        dataStream.beanRegistry().register('callback', new LinesXPayload())
 
     }
 

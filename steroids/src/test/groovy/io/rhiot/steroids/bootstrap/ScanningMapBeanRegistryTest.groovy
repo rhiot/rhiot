@@ -73,6 +73,35 @@ class ScanningMapBeanRegistryTest {
         assertThat(loadedBean).isEqualTo(bean)
     }
 
+    @Test
+    void shouldFindBeanWithNameByType() {
+        // Given
+        def bean = 'Register me!'
+        def name = 'name'
+        beanRegistry.register(name, bean)
+
+        // When
+        def beansWithNames = beanRegistry.beansWithNames(String.class)
+
+        // Then
+        assertThat(beansWithNames).hasSize(1)
+        assertThat(beansWithNames.keySet().first()).isEqualTo(name)
+    }
+
+    @Test
+    void shouldFindNotBeanWithNameByType() {
+        // Given
+        def bean = 'Register me!'
+        def name = 'name'
+        beanRegistry.register(name, bean)
+
+        // When
+        def beansWithNames = beanRegistry.beansWithNames(Date.class)
+
+        // Then
+        assertThat(beansWithNames).hasSize(0)
+    }
+
     @Bean
     static class TestSingletonBean {}
 

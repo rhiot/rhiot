@@ -16,6 +16,8 @@
  */
 package io.rhiot.steroids.bootstrap
 
+import com.google.common.collect.ImmutableMap
+
 import static io.rhiot.utils.Uuids.uuid
 import static java.util.Optional.empty
 
@@ -43,12 +45,18 @@ class MapBeanRegistry implements BeanRegistry {
     @Override
     def <T> Optional<T> bean(String name, Class<T> type) {
         def bean = registry[name]
-        Optional.ofNullable(type.isAssignableFrom(bean.class) ? bean : null)
+        Optional.ofNullable(bean != null && type.isAssignableFrom(bean.class) ? bean : null)
     }
 
     @Override
     def <T> List<T> beans(Class<T> type) {
         registry.values().findAll{ type.isAssignableFrom(it.class) }
+    }
+
+    @Override
+    def <T> Map<String, T> beansWithNames(Class<T> type) {
+        registry.entrySet().findAll{ type.isAssignableFrom(it.value.class) }.
+                inject([:]){ result, entry -> result[entry.key] = entry.value; result }
     }
 
     @Override

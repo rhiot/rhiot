@@ -37,6 +37,8 @@ interface BeanRegistry {
 
     def <T> List<T> beans(Class<T> type)
 
+    def <T> Map<String, T> beansWithNames(Class<T> type)
+
     // Mutable operations
 
     void register(Object bean) throws UnsupportedOperationException

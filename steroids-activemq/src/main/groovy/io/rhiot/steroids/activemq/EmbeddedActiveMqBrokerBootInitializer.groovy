@@ -19,11 +19,8 @@ package io.rhiot.steroids.activemq
 import io.rhiot.steroids.bootstrap.BootInitializer
 import io.rhiot.steroids.bootstrap.Bootstrap
 import io.rhiot.steroids.bootstrap.BootstrapAware
-import org.apache.activemq.ActiveMQConnectionFactory
 import org.apache.activemq.broker.BrokerService
-import org.springframework.jms.connection.CachingConnectionFactory
 
-import static io.rhiot.steroids.camel.CamelBootInitializer.registry
 import static io.rhiot.utils.Properties.booleanProperty
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.stringProperty
@@ -82,11 +79,6 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer, B
     }
 
     static String mqttJmsBridge(String topic) {
-        if(!registry().containsKey('jmsConnectionFactory')) {
-            def brokerUrl = externalBrokerUrl() ?: "vm:${DEFAULT_BROKER_NAME}"
-            def jmsConnectionFactory = new CachingConnectionFactory(new ActiveMQConnectionFactory(brokerUrl))
-            registry().put('jmsConnectionFactory', jmsConnectionFactory)
-        }
         "jms:topic:${topic}?connectionFactory=#jmsConnectionFactory"
     }
 
@@ -99,11 +91,6 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer, B
     }
 
     static String amqpJmsBridge(String channel) {
-        if(!registry().containsKey('jmsConnectionFactory')) {
-            def brokerUrl = externalBrokerUrl() ?: "vm:${DEFAULT_BROKER_NAME}"
-            def jmsConnectionFactory = new CachingConnectionFactory(new ActiveMQConnectionFactory(brokerUrl))
-            registry().put('jmsConnectionFactory', jmsConnectionFactory)
-        }
         "jms:${channel}?connectionFactory=#jmsConnectionFactory"
     }
 

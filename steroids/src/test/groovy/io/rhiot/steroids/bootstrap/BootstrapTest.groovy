@@ -16,7 +16,6 @@
  */
 package io.rhiot.steroids.bootstrap
 
-import io.rhiot.steroids.Bean
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
@@ -35,25 +34,25 @@ class BootstrapTest {
         assertThat(TestBootInitializer.started).isFalse()
     }
 
-}
+    static class TestBootInitializer implements BootInitializer {
 
-class TestBootInitializer implements BootInitializer {
+        static boolean started
 
-    static boolean started
+        @Override
+        void start() {
+            started = true
+        }
 
-    @Override
-    void start() {
-        started = true
-    }
+        @Override
+        void stop() {
+            started = false
+        }
 
-    @Override
-    void stop() {
-        started = false
-    }
+        @Override
+        int order() {
+            0
+        }
 
-    @Override
-    int order() {
-        0
     }
 
 }

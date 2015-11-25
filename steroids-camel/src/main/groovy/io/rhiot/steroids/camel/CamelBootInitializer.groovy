@@ -37,13 +37,11 @@ class CamelBootInitializer implements BootInitializer, BootstrapAware {
 
     private static Vertx vertx
 
-    private static SimpleRegistry registry = new SimpleRegistry()
-
-    Bootstrap bootstrap
+    private Bootstrap bootstrap
 
     @Override
     public void start() {
-        camelContext = new DefaultCamelContext(registry)
+        camelContext = new DefaultCamelContext(new BootstrapRegistry(bootstrap.beanRegistry()))
         camelContext.streamCaching = true
         vertx = Vertx.vertx()
         def vertxComponent = new VertxComponent(vertx: vertx)
@@ -72,10 +70,6 @@ class CamelBootInitializer implements BootInitializer, BootstrapAware {
 
     static Vertx vertx() {
         vertx
-    }
-
-    static SimpleRegistry registry() {
-        registry
     }
 
     static String eventBus(String channel) {
