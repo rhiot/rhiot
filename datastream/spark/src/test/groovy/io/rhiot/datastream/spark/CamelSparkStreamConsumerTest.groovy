@@ -44,7 +44,7 @@ class CamelSparkStreamConsumerTest {
         def payload = payloadEncoding.encode(10)
 
         // When
-        def encodedResult = dataStream.beanRegistry().bean(CamelContext.class).get().createProducerTemplate().requestBody(amqp('spark.rdd.callback'), payload, byte[].class)
+        def encodedResult = dataStream.beanRegistry().bean(CamelContext.class).get().createProducerTemplate().requestBody(amqp('spark.execute.rdd.callback'), payload, byte[].class)
         def result = payloadEncoding.decode(encodedResult, int.class)
 
         // Then

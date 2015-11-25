@@ -16,48 +16,23 @@
  */
 package io.rhiot.datastream.spark
 
-import io.rhiot.datastream.engine.ServiceBinding
-import io.rhiot.datastream.engine.encoding.PayloadEncoding
-import io.rhiot.steroids.bootstrap.Bootstrap
-import io.rhiot.steroids.bootstrap.BootstrapAware
-import io.rhiot.steroids.camel.CamelBootInitializer
 import io.rhiot.steroids.camel.Route
-import io.vertx.core.json.Json
-import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.component.jms.JmsMessage
-
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpByPrefix
 
 @Route
-class CamelSparkStreamConsumer extends RouteBuilder implements BootstrapAware {
+class CamelSparkStreamConsumer extends AbstractServiceRouteStreamConsumer {
 
-    public static final String CHANNEL = 'spark'
+    public static final String SERVICE_CHANNEL = 'spark'
 
-    private Bootstrap bootstrap
-
-    @Override
-    void configure() {
-        def encoding = bootstrap.beanRegistry().bean(PayloadEncoding.class).get()
-        def serviceBinding = bootstrap.beanRegistry().bean(ServiceBinding.class).get()
-        def sparkService = bootstrap.beanRegistry().bean(SparkService.class).get()
-        sparkService.asType(DefaultSparkService.class).bootstrap(bootstrap)
-        bootstrap.beanRegistry().register('sparkService', sparkService)
-
-        from(amqpByPrefix(CHANNEL)).
-                transform {
-                    def channel = it.getIn(JmsMessage.class).jmsMessage.properties._to.toString()
-                    def rawChannel = channel.substring(channel.indexOf('.') + 1)
-                    def channelParts = rawChannel.split(/\./)
-                    def rdd = channelParts[0]
-                    def rddCallback = channelParts[1]
-                    [rdd, rddCallback, Json.decodeValue(it.in.getBody(String.class), Map.class).payload]
-                }.to('bean:sparkService?method=execute&multiParameterArray=true').
-                transform{ encoding.encode(it.in.body) }
+    CamelSparkStreamConsumer() {
+        super(SERVICE_CHANNEL)
     }
 
     @Override
-    void bootstrap(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap
+    void configure() {
+        def sparkService = bootstrap.beanRegistry().bean(SparkService.class).get()
+        sparkService.asType(DefaultSparkService.class).bootstrap(bootstrap)
+        bootstrap.beanRegistry().register(serviceChannel, sparkService)
+        super.configure()
     }
 
 }

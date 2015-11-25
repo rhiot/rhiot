@@ -88,7 +88,7 @@ class DataStreamNodeTest {
         def sparkContext = dataStream.beanRegistry().bean(JavaSparkContext.class).get()
         dataStream.beanRegistry().register('rdd', mongoRdd(sparkContext, 'localhost', mongo.port(), 'db', 'collection'))
 
-        def encodedResult = CamelBootInitializer.camelContext().createProducerTemplate().requestBody(amqp('spark.rdd.callback'), Json.encode([payload: 10]), String.class)
+        def encodedResult = CamelBootInitializer.camelContext().createProducerTemplate().requestBody(amqp('spark.execute.rdd.callback'), Json.encode([payload: 10]), String.class)
         def result = Json.decodeValue(encodedResult, Map.class).payload
         assertThat(result).isEqualTo(10)
     }
