@@ -57,7 +57,7 @@ public class GPIOProducer extends DefaultProducer {
         this.pin = pin;
         this.action = action;
         this.pool = this.getEndpoint().getCamelContext().getExecutorServiceManager().newSingleThreadExecutor(this,
-                "camel-pi4j-gpio-thread");
+                Pi4jConstants.CAMEL_PI4J_GPIO_THREADPOOL);
     }
 
     public GpioPin getPin() {
