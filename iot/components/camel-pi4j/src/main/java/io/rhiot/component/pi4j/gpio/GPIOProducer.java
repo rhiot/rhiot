@@ -16,17 +16,19 @@
  */
 package io.rhiot.component.pi4j.gpio;
 
+import io.rhiot.component.pi4j.Pi4jConstants;
+
 import java.util.concurrent.ExecutorService;
+
+import org.apache.camel.Exchange;
+import org.apache.camel.Message;
+import org.apache.camel.impl.DefaultProducer;
 
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.GpioPinAnalogOutput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.GpioPinPwmOutput;
 import com.pi4j.io.gpio.PinMode;
-
-import io.rhiot.component.pi4j.Pi4jConstants;
-import org.apache.camel.Exchange;
-import org.apache.camel.impl.DefaultProducer;
 
 /**
  * The Pin producer.
@@ -100,20 +102,20 @@ public class GPIOProducer extends DefaultProducer {
     /**
      * Process the message
      */
+    @Override
     public void process(Exchange exchange) throws Exception {
         if (log.isTraceEnabled()) {
             log.trace(exchange.toString());
         }
-        GPIOAction headerAction = exchange.getIn().getHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, GPIOAction.class);
-        if (headerAction != null) {
-            action = headerAction;
-        }
-        if (action == null) {
+
+        GPIOAction messageAction = resolveAction(exchange.getIn());
+
+        if (messageAction == null) {
             log.trace("No action pick up body");
             this.output(exchange, exchange.getIn().getBody());
         } else {
             log.trace("action= {} ", action);
-            switch (action) {
+            switch (messageAction) {
 
             case TOGGLE:
                 if (pin.getMode() == PinMode.DIGITAL_OUTPUT) {
@@ -159,6 +161,15 @@ public class GPIOProducer extends DefaultProducer {
                 log.error("Any action set found");
                 break;
             }
+        }
+    }
+
+    protected GPIOAction resolveAction(Message message) {
+        if (message.getHeaders().containsKey(Pi4jConstants.CAMEL_RBPI_PIN_ACTION)) {
+            // Exchange Action
+            return message.getHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, GPIOAction.class);
+        } else {
+            return action; // Endpoint Action
         }
     }
 
