@@ -9,8 +9,8 @@
         <version>0.1.3-SNAPSHOT</version>
     </parent>
 
-    <name>RHIOT :: DataStrean :: Bootstrap :: ActiveMQ</name>
-    <artifactId>bootstrap-activemq</artifactId>
+    <name>Rhiot :: DataStream :: Bootstrap :: ActiveMQ</name>
+    <artifactId>rhiot-bootstrap-activemq</artifactId>
 
     <licenses>
         <license>
