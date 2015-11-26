@@ -16,11 +16,15 @@
  */
 package io.rhiot.bootstrap.classpath
 
+import io.rhiot.bootstrap.Bootstrap
+import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.bootstrap.MapBeanRegistry
 
 import static io.rhiot.utils.Uuids.uuid
 
-class ClasspathMapBeanRegistry extends MapBeanRegistry  {
+class ClasspathMapBeanRegistry extends MapBeanRegistry implements BootstrapAware {
+
+    private Bootstrap bootstrap
 
     @Override
     def <T> Optional<T> bean(Class<T> type) {
@@ -31,6 +35,7 @@ class ClasspathMapBeanRegistry extends MapBeanRegistry  {
 
         def scanResult = ClasspathBeans.bean(type)
         if(scanResult.isPresent()) {
+            bootstrap.makeBootstrapAware(scanResult.get())
             registry[type.simpleName + uuid()] = scanResult.get()
         }
         scanResult
@@ -45,6 +50,7 @@ class ClasspathMapBeanRegistry extends MapBeanRegistry  {
 
         def scanResult = ClasspathBeans.bean(name)
         if(scanResult.isPresent()) {
+            bootstrap.makeBootstrapAware(scanResult.get())
             registry[name] = scanResult.get()
         }
         scanResult
@@ -59,9 +65,15 @@ class ClasspathMapBeanRegistry extends MapBeanRegistry  {
 
         def scanResults = ClasspathBeans.beans(type)
         scanResults.forEach {
+            bootstrap.makeBootstrapAware(it)
             registry[type.simpleName + uuid()] = it
         }
         scanResults
+    }
+
+    @Override
+    void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
     }
 
 }

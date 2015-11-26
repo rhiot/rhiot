@@ -16,8 +16,6 @@
  */
 package io.rhiot.bootstrap
 
-import io.rhiot.bootstrap.Bootstrap;
-
 interface BootstrapAware {
 
     void bootstrap(Bootstrap bootstrap)

@@ -37,7 +37,7 @@ class Bootstrap implements WithLogger {
     // Constructors
 
     Bootstrap(BeanRegistry beanRegistry) {
-        this.beanRegistry = beanRegistry
+        this.beanRegistry = makeBootstrapAware(beanRegistry)
     }
 
     Bootstrap() {
@@ -69,6 +69,15 @@ class Bootstrap implements WithLogger {
 
     def <T extends BootInitializer> T initializer(Class<T> type) {
         initializers.find { type.isAssignableFrom(it.class) }
+    }
+
+    // Bootstrap awareness
+
+    def <T> T makeBootstrapAware(T object) {
+        if(object instanceof BootstrapAware) {
+            object.asType(BootstrapAware.class).bootstrap(this)
+        }
+        object
     }
 
     // Main entry point

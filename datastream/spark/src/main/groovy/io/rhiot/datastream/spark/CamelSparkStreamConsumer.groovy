@@ -25,12 +25,4 @@ class CamelSparkStreamConsumer extends AbstractServiceRouteStreamConsumer {
         super('spark')
     }
 
-    @Override
-    void configure() {
-        def sparkService = bootstrap.beanRegistry().bean(SparkService.class).get()
-        sparkService.asType(DefaultSparkService.class).bootstrap(bootstrap)
-        bootstrap.beanRegistry().register(serviceChannel, sparkService)
-        super.configure()
-    }
-
 }
