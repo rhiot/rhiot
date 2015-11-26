@@ -56,6 +56,8 @@ public class GPIOProducer extends DefaultProducer {
         this.endpoint = endpoint;
         this.pin = pin;
         this.action = action;
+        this.pool = this.getEndpoint().getCamelContext().getExecutorServiceManager().newSingleThreadExecutor(this,
+                "camel-pi4j-gpio-thread");
     }
 
     public GpioPin getPin() {
@@ -137,8 +139,7 @@ public class GPIOProducer extends DefaultProducer {
 
             case BLINK:
                 if (pin.getMode() == PinMode.DIGITAL_OUTPUT) {
-                    pool = this.getEndpoint().getCamelContext().getExecutorServiceManager()
-                            .newSingleThreadExecutor(this, "gpio");
+
                     pool.submit(new Runnable() {
 
                         @Override

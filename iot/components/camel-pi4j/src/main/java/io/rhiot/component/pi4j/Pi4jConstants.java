@@ -41,6 +41,7 @@ public final class Pi4jConstants {
     public static final String CAMEL_GPIO_ID = "gpioId";
     public static final String CAMEL_GPIO_CLAZZ = "com.pi4j.io.gpio.RaspiPin";
     public static final boolean CAMEL_PI4j_LENIENT = true;
+    public static final String CAMEL_PI4J_GPIO_THREADPOOL = "camel-pi4j-gpio-thread";
 
     private Pi4jConstants() {
         // Constants class
