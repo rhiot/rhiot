@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.bootstrap
 
-import io.rhiot.bootstrap.BootInitializer
-import io.rhiot.bootstrap.Bootstrap
+import io.rhiot.bootstrap.classpath.Bean
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
@@ -36,6 +35,9 @@ class BootstrapTest {
         assertThat(TestBootInitializer.started).isFalse()
     }
 
+    // Class fixtures
+
+    @Bean
     static class TestBootInitializer implements BootInitializer {
 
         static boolean started
