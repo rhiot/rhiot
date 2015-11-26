@@ -6,11 +6,10 @@
     <parent>
         <groupId>io.rhiot</groupId>
         <version>0.1.3-SNAPSHOT</version>
-        <artifactId>rhiot-bom</artifactId>
-        <relativePath>../bom</relativePath>
+        <artifactId>rhiot-datastream</artifactId>
     </parent>
-    <name>Rhiot :: Bootstrap</name>
-    <artifactId>rhiot-bootstrap</artifactId>
+    <name>Rhiot :: Datastream :: Bootstrap</name>
+    <artifactId>rhiot-datastream-bootstrap</artifactId>
     <packaging>pom</packaging>
 
     <licenses>
@@ -22,6 +21,7 @@
 
     <modules>
         <module>bootstrap-core</module>
+        <module>bootstrap-activemq</module>
     </modules>
 
 </project>

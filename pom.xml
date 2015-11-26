@@ -14,8 +14,6 @@
         <module>utils</module>
         <module>utils-ssh</module>
         <module>mongodb</module>
-        <module>bootstrap</module>
-        <module>steroids-activemq</module>
         <module>steroids-camel</module>
         <module>steroids-spark</module>
         <module>steroids-vertx</module>

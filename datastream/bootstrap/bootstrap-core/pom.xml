@@ -5,10 +5,10 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-bootstrap</artifactId>
+        <artifactId>rhiot-datastream-bootstrap</artifactId>
         <version>0.1.3-SNAPSHOT</version>
     </parent>
-    <name>Rhiot :: Bootstrap :: Core</name>
+    <name>Rhiot :: DataStream :: Bootstrap :: Core</name>
     <artifactId>rhiot-bootstrap-core</artifactId>
 
     <licenses>

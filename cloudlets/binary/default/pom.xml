@@ -38,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-steroids-activemq</artifactId>
+            <artifactId>rhiot-bootstrap-activemq</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
