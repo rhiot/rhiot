@@ -23,6 +23,8 @@ import io.rhiot.utils.Properties
 import org.reflections.Reflections
 import org.reflections.scanners.MethodAnnotationsScanner
 import org.reflections.util.ConfigurationBuilder
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.lang.annotation.Annotation
 
@@ -31,11 +33,16 @@ import static io.rhiot.utils.Properties.stringProperty
 import static com.google.common.base.Preconditions.checkNotNull
 import static java.lang.reflect.Modifier.isAbstract
 import static java.util.Optional.empty
+import static org.slf4j.LoggerFactory.getLogger
 
 /**
  * Central point of accessing the steroids beans.
  */
 final class ClasspathBeans {
+
+    private final static Logger LOG = getLogger(ClasspathBeans.class)
+
+    // Constants
 
     static final def RHIOT_PACKAGE = 'io.rhiot'
 
@@ -148,9 +155,8 @@ final class ClasspathBeans {
     private static Optional<?> instantiate(Class<?> type) {
         try {
             Optional.of(type.newInstance())
-        } catch (GroovyRuntimeException e) {
-            empty()
-        } catch (InstantiationException e) {
+        } catch (GroovyRuntimeException | InstantiationException e) {
+            LOG.trace("Failed to create instance of ${type.name}", e)
             empty()
         }
     }
