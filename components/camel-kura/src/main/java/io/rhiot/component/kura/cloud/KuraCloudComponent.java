@@ -44,9 +44,9 @@ public class KuraCloudComponent extends UriEndpointComponent {
             for (CloudService cloudServiceIt : cloudServiceSet) {
                 cloudService = cloudServiceIt;
             }
-        } else if(cloudServiceCount > 1) {
+        } else if (cloudServiceCount > 1) {
             throw new IllegalStateException("Too many cloud services found in a registry: " + cloudServiceCount);
-        } else  {
+        } else {
             throw new IllegalArgumentException("No cloud service instance found in a registry.");
         }
 
