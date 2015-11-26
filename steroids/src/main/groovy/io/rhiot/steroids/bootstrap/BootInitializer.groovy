@@ -16,7 +16,7 @@
  */
 package io.rhiot.steroids.bootstrap
 
-import io.rhiot.steroids.Bean
+import io.rhiot.bootstrap.classpath.Bean
 
 @Bean
 interface BootInitializer {

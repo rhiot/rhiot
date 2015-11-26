@@ -16,7 +16,7 @@
  */
 package io.rhiot.cloudlets.binary.store
 
-import io.rhiot.steroids.Bean
+import io.rhiot.bootstrap.classpath.Bean
 
 @Bean
 interface BinaryStore {

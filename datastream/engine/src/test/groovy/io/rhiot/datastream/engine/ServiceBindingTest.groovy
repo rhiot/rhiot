@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.engine
 
-import io.rhiot.steroids.Bean
+import io.rhiot.bootstrap.classpath.Bean
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
 import org.junit.Test

@@ -16,6 +16,7 @@
  */
 package io.rhiot.steroids
 
+import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.bootstrap.classpath.ClasspathBeans
 import org.junit.Test
 

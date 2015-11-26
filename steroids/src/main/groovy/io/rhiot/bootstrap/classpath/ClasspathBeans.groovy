@@ -16,9 +16,6 @@
  */
 package io.rhiot.bootstrap.classpath
 
-import io.rhiot.steroids.Bean
-import io.rhiot.steroids.Named
-import io.rhiot.steroids.PropertyCondition
 import io.rhiot.utils.Properties
 import org.reflections.Reflections
 import org.reflections.scanners.MethodAnnotationsScanner

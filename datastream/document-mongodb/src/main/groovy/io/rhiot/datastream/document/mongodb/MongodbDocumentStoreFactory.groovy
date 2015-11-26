@@ -17,7 +17,7 @@
 package io.rhiot.datastream.document.mongodb
 
 import com.mongodb.Mongo
-import io.rhiot.steroids.Bean
+import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.bootstrap.classpath.ClasspathBeans
 
 import static io.rhiot.utils.Properties.stringProperty

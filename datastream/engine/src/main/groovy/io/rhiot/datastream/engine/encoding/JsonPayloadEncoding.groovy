@@ -17,7 +17,7 @@
 package io.rhiot.datastream.engine.encoding
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.steroids.Bean
+import io.rhiot.bootstrap.classpath.Bean
 
 @Bean
 class JsonPayloadEncoding implements PayloadEncoding {

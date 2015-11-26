@@ -16,8 +16,8 @@
  */
 package io.rhiot.steroids.conditions
 
-import io.rhiot.steroids.Bean
-import io.rhiot.steroids.PropertyCondition
+import io.rhiot.bootstrap.classpath.Bean
+import io.rhiot.bootstrap.classpath.PropertyCondition
 import io.rhiot.bootstrap.classpath.ClasspathBeans
 import org.junit.Test
 

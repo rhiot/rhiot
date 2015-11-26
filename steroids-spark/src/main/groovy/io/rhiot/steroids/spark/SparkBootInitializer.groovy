@@ -16,7 +16,7 @@
  */
 package io.rhiot.steroids.spark
 
-import io.rhiot.steroids.Bean
+import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.steroids.bootstrap.BootInitializer
 import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.steroids.bootstrap.BootstrapAware
