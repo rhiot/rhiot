@@ -18,7 +18,7 @@ package io.rhiot.datastream.engine
 
 import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.bootstrap.Bootstrap
-import io.rhiot.steroids.bootstrap.BootstrapAware
+import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.utils.WithLogger
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json

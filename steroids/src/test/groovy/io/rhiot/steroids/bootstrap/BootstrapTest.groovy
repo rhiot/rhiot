@@ -16,6 +16,7 @@
  */
 package io.rhiot.steroids.bootstrap
 
+import io.rhiot.bootstrap.BootInitializer
 import io.rhiot.bootstrap.Bootstrap
 import org.junit.Test
 

@@ -16,9 +16,9 @@
  */
 package io.rhiot.steroids.camel
 
-import io.rhiot.steroids.bootstrap.BootInitializer
+import io.rhiot.bootstrap.BootInitializer
 import io.rhiot.bootstrap.Bootstrap
-import io.rhiot.steroids.bootstrap.BootstrapAware
+import io.rhiot.bootstrap.BootstrapAware
 import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;
 import org.apache.camel.RoutesBuilder;

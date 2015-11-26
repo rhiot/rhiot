@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.bootstrap
 
-import com.google.common.collect.ImmutableMap
+import io.rhiot.bootstrap.BeanRegistry
+import io.rhiot.bootstrap.TooManyBeansFoundException
 
 import static io.rhiot.utils.Uuids.uuid
 import static java.util.Optional.empty

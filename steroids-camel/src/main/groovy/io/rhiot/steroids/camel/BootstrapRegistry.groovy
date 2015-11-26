@@ -16,7 +16,7 @@
  */
 package io.rhiot.steroids.camel
 
-import io.rhiot.steroids.bootstrap.BeanRegistry
+import io.rhiot.bootstrap.BeanRegistry
 import org.apache.camel.spi.Registry
 
 class BootstrapRegistry implements Registry {

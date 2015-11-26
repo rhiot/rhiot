@@ -16,9 +16,6 @@
  */
 package io.rhiot.bootstrap
 
-import io.rhiot.steroids.bootstrap.BeanRegistry
-import io.rhiot.steroids.bootstrap.BootInitializer
-import io.rhiot.steroids.bootstrap.BootstrapAware
 import io.rhiot.bootstrap.classpath.ClasspathMapBeanRegistry
 import io.rhiot.utils.WithLogger
 

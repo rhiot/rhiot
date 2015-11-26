@@ -17,7 +17,7 @@
 package io.rhiot.steroids.activemq
 
 import io.rhiot.bootstrap.Bootstrap
-import io.rhiot.steroids.bootstrap.BootstrapAware
+import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.steroids.camel.Route
 import org.apache.activemq.ActiveMQConnectionFactory
 import org.apache.camel.builder.RouteBuilder

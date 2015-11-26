@@ -16,7 +16,7 @@
  */
 package io.rhiot.bootstrap.classpath
 
-import io.rhiot.steroids.bootstrap.MapBeanRegistry
+import io.rhiot.bootstrap.MapBeanRegistry
 
 import static io.rhiot.utils.Uuids.uuid
 

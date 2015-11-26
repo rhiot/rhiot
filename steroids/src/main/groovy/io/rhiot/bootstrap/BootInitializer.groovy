@@ -14,12 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.bootstrap
 
-import io.rhiot.bootstrap.Bootstrap;
+import io.rhiot.bootstrap.classpath.Bean
 
-interface BootstrapAware {
+@Bean
+interface BootInitializer {
 
-    void bootstrap(Bootstrap bootstrap)
+    void start()
+
+    void stop()
+
+    int order()
 
 }
