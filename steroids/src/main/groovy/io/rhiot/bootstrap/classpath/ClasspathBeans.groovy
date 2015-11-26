@@ -37,11 +37,13 @@ import static java.util.Optional.empty
  */
 final class ClasspathBeans {
 
-    static def APPLICATION_PACKAGE_PROPERTY = 'application_package'
+    static final def RHIOT_PACKAGE = 'io.rhiot'
+
+    static final def APPLICATION_PACKAGE_PROPERTY = 'application_package'
 
     final private static Reflections classpath
     static {
-        def classpathConfiguration = new ConfigurationBuilder().forPackages('io.rhiot')
+        def classpathConfiguration = new ConfigurationBuilder().forPackages(RHIOT_PACKAGE)
         if(Properties.hasProperty(APPLICATION_PACKAGE_PROPERTY)) {
             classpathConfiguration.forPackages(stringProperty(APPLICATION_PACKAGE_PROPERTY))
         }
@@ -49,12 +51,12 @@ final class ClasspathBeans {
         classpath = new Reflections(classpathConfiguration)
     }
 
+    // Constructors
+
     private ClasspathBeans() {
     }
 
-    static <T> Optional<T> bean(Class<T> type, Class<? extends Annotation> annotation) {
-        bean(type, annotation, null)
-    }
+    // Scanning operations
 
     static <T> Optional<T> bean(Class<T> type, Class<? extends Annotation> annotation, String name) {
         checkNotNull(type, 'Type of the bean cannot be null.')
@@ -66,6 +68,10 @@ final class ClasspathBeans {
         Optional.of(beans.first())
     }
 
+    static <T> Optional<T> bean(Class<T> type, Class<? extends Annotation> annotation) {
+        bean(type, annotation, null)
+    }
+
     static <T> Optional<T> bean(Class<T> type) {
         bean(type, (String) null)
     }
@@ -75,7 +81,7 @@ final class ClasspathBeans {
     }
 
     static <T> Optional<T> bean(String name) {
-        def beans = scanForBeans(null, Named.class, name)
+        def beans = scanForNamedBeans(name)
         if(beans.isEmpty()) {
             return empty()
         }
@@ -106,10 +112,6 @@ final class ClasspathBeans {
         subtypes
     }
 
-    private static List<Class<?>> annotatedWith(Class<? extends Annotation> annotation) {
-        classpath.getTypesAnnotatedWith(annotation).findAll{ !isAbstract(it.getModifiers()) }.toList()
-    }
-
     private static List<Object> createdByFactories(Class<?> type) {
         def factories = classpath.getMethodsAnnotatedWith(Bean.class).findAll{ type.isAssignableFrom(it.returnType) }.toList()
         factories.collect {
@@ -122,7 +124,7 @@ final class ClasspathBeans {
     }
 
     private static List<Object> scanForBeans(Class<?> type, Class<? extends Annotation> annotation, String name) {
-        def beansClasses = type != null ? inclusiveSubTypesOf(type, annotation) : annotatedWith(Named.class)
+        def beansClasses = inclusiveSubTypesOf(type, annotation)
         beansClasses = classesMatchingConditions(beansClasses)
         if(name != null) {
             beansClasses = beansClasses.findAll { it.getAnnotation(Named.class).name() == name }
@@ -130,6 +132,17 @@ final class ClasspathBeans {
         def beans = beansClasses.collect{ instantiate(it) }.findAll{ it.isPresent() }.collect{ it.get() }
 
         beans + (type != null ? createdByFactories(type) : [])
+    }
+
+    private static List<Object> scanForNamedBeans(String name) {
+        def beansClasses = instantiableOnly(classpath.getTypesAnnotatedWith(Named.class).toList())
+        beansClasses = classesMatchingConditions(beansClasses)
+        beansClasses = beansClasses.findAll { it.getAnnotation(Named.class).name() == name }
+        beansClasses.collect{ instantiate(it) }.findAll{ it.isPresent() }.collect{ it.get() }
+    }
+
+    private static List<Class> instantiableOnly(List<Class> classes) {
+        classes.findAll{ !isAbstract(it.getModifiers()) && !it.interface }
     }
 
     private static Optional<?> instantiate(Class<?> type) {
