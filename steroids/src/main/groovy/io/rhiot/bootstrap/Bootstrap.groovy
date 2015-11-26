@@ -19,7 +19,7 @@ package io.rhiot.bootstrap
 import io.rhiot.steroids.bootstrap.BeanRegistry
 import io.rhiot.steroids.bootstrap.BootInitializer
 import io.rhiot.steroids.bootstrap.BootstrapAware
-import io.rhiot.steroids.bootstrap.ScanningMapBeanRegistry
+import io.rhiot.bootstrap.classpath.ClasspathMapBeanRegistry
 import io.rhiot.utils.WithLogger
 
 import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
@@ -44,7 +44,7 @@ class Bootstrap implements WithLogger {
     }
 
     Bootstrap() {
-        this(new ScanningMapBeanRegistry())
+        this(new ClasspathMapBeanRegistry())
     }
 
     // Lifecycle

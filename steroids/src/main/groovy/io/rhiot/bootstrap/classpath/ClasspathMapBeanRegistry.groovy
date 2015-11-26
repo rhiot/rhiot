@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.bootstrap.classpath
 
-import io.rhiot.bootstrap.classpath.ClasspathBeans
+import io.rhiot.steroids.bootstrap.MapBeanRegistry
 
 import static io.rhiot.utils.Uuids.uuid
 
-class ScanningMapBeanRegistry extends MapBeanRegistry  {
+class ClasspathMapBeanRegistry extends MapBeanRegistry  {
 
     @Override
     def <T> Optional<T> bean(Class<T> type) {
