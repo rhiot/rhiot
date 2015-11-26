@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-steroids-camel</artifactId>
+            <artifactId>rhiot-bootstrap-camel</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>

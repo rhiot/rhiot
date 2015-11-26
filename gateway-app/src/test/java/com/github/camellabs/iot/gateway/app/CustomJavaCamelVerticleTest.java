@@ -17,7 +17,6 @@
 package com.github.camellabs.iot.gateway.app;
 
 import io.rhiot.gateway.GatewayVerticle;
-import io.rhiot.gateway.Gateway;
 import io.rhiot.gateway.test.GatewayTest;
 import io.rhiot.steroids.camel.CamelBootInitializer;
 import io.rhiot.vertx.camel.JavaCamelVerticle;

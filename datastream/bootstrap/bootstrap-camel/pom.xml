@@ -5,13 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-bom</artifactId>
+        <artifactId>rhiot-datastream-bootstrap</artifactId>
         <version>0.1.3-SNAPSHOT</version>
-        <relativePath>../bom</relativePath>
     </parent>
 
-    <name>RHIOT :: Steroids :: Camel</name>
-    <artifactId>rhiot-steroids-camel</artifactId>
+    <name>Rhiot :: DataStream :: Bootstrap :: Camel</name>
+    <artifactId>rhiot-bootstrap-camel</artifactId>
 
     <licenses>
         <license>

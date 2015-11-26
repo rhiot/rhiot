@@ -19,7 +19,6 @@ package io.rhiot.gateway.heartbeat
 import io.rhiot.gateway.Gateway
 import io.rhiot.steroids.camel.CamelBootInitializer
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
 
 import java.util.concurrent.CountDownLatch

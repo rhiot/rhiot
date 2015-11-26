@@ -22,6 +22,7 @@
     <modules>
         <module>bootstrap-core</module>
         <module>bootstrap-activemq</module>
+        <module>bootstrap-camel</module>
     </modules>
 
 </project>

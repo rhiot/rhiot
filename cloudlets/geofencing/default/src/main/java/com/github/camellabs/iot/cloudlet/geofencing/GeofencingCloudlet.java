@@ -21,9 +21,6 @@ import io.rhiot.cloudlets.geofencing.GeofencingRoutes;
 import io.rhiot.datastream.document.mongodb.MongodbDocumentStore;
 import io.rhiot.datastream.engine.DataStream;
 import io.rhiot.steroids.camel.CamelBootInitializer;
-import org.apache.camel.Exchange;
-import org.apache.camel.impl.RouteService;
-import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.spring.boot.FatJarRouter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -34,8 +31,6 @@ import org.springframework.data.mongodb.core.convert.CustomConversions;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static org.apache.camel.model.rest.RestBindingMode.off;
 
 @SpringBootApplication
 @ComponentScan("com.github.camellabs.iot.cloudlet")
