@@ -16,8 +16,7 @@
  */
 package io.rhiot.steroids.camel
 
-import io.rhiot.bootstrap.BootInitializer
-import io.rhiot.bootstrap.Bootstrap
+import io.rhiot.bootstrap.AbstractBootInitializer
 import io.rhiot.bootstrap.BootstrapAware
 import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;
@@ -26,17 +25,12 @@ import org.apache.camel.component.vertx.VertxComponent
 import org.apache.camel.impl.DefaultCamelContext
 
 import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
-import static org.slf4j.LoggerFactory.getLogger;
 
-class CamelBootInitializer implements BootInitializer, BootstrapAware {
-
-    private static final def LOG = getLogger(CamelBootInitializer.class)
+class CamelBootInitializer extends AbstractBootInitializer {
 
     private static CamelContext camelContext
 
     private static Vertx vertx
-
-    private Bootstrap bootstrap
 
     @Override
     public void start() {
@@ -73,11 +67,6 @@ class CamelBootInitializer implements BootInitializer, BootstrapAware {
 
     static String eventBus(String channel) {
         "event-bus:${channel}"
-    }
-
-    @Override
-    void bootstrap(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap
     }
 
 }
