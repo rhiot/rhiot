@@ -16,7 +16,7 @@
  */
 package io.rhiot.steroids.bootstrap
 
-import io.rhiot.steroids.Steroids
+import io.rhiot.bootstrap.classpath.ClasspathBeans
 
 import static io.rhiot.utils.Uuids.uuid
 
@@ -29,7 +29,7 @@ class ScanningMapBeanRegistry extends MapBeanRegistry  {
             return cachedBean
         }
 
-        def scanResult = Steroids.bean(type)
+        def scanResult = ClasspathBeans.bean(type)
         if(scanResult.isPresent()) {
             registry[type.simpleName + uuid()] = scanResult.get()
         }
@@ -43,7 +43,7 @@ class ScanningMapBeanRegistry extends MapBeanRegistry  {
             return cachedBean
         }
 
-        def scanResult = Steroids.bean(name)
+        def scanResult = ClasspathBeans.bean(name)
         if(scanResult.isPresent()) {
             registry[name] = scanResult.get()
         }
@@ -57,7 +57,7 @@ class ScanningMapBeanRegistry extends MapBeanRegistry  {
             return cachedBeans
         }
 
-        def scanResults = Steroids.beans(type)
+        def scanResults = ClasspathBeans.beans(type)
         scanResults.forEach {
             registry[type.simpleName + uuid()] = it
         }

@@ -19,7 +19,7 @@ package io.rhiot.vertx.web
 import io.vertx.core.Handler
 import io.vertx.groovy.ext.web.RoutingContext
 
-import static io.rhiot.steroids.Steroids.beans
+import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 import static org.slf4j.LoggerFactory.getLogger
 
 class HttpExchangeInterceptorHandler implements Handler<RoutingContext> {

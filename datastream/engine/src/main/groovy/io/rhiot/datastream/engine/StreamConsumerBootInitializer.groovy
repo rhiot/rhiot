@@ -20,7 +20,7 @@ import io.rhiot.steroids.bootstrap.AbstractBootInitializer
 import io.rhiot.steroids.bootstrap.BootstrapAware
 import io.vertx.core.Vertx
 
-import static io.rhiot.steroids.Steroids.beans
+import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 
 class StreamConsumerBootInitializer extends AbstractBootInitializer {
 

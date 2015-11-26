@@ -18,7 +18,7 @@ package io.rhiot.datastream.engine.camel
 
 import io.rhiot.datastream.engine.TypeConverter
 import io.rhiot.steroids.Bean
-import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.steroids.bootstrap.BootstrapAware
 import org.apache.camel.CamelContext
 

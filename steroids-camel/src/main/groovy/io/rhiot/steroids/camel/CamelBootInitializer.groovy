@@ -17,16 +17,15 @@
 package io.rhiot.steroids.camel
 
 import io.rhiot.steroids.bootstrap.BootInitializer
-import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.steroids.bootstrap.BootstrapAware
 import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.component.vertx.VertxComponent
 import org.apache.camel.impl.DefaultCamelContext
-import org.apache.camel.impl.SimpleRegistry;
 
-import static io.rhiot.steroids.Steroids.beans
+import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 import static org.slf4j.LoggerFactory.getLogger;
 
 class CamelBootInitializer implements BootInitializer, BootstrapAware {

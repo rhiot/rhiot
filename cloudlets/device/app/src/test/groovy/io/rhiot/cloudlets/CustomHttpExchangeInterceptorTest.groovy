@@ -25,7 +25,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.steroids.Steroids.APPLICATION_PACKAGE_PROPERTY
+import static io.rhiot.bootstrap.classpath.ClasspathBeans.APPLICATION_PACKAGE_PROPERTY
 import static io.rhiot.utils.Properties.setStringProperty
 
 class CustomHttpExchangeInterceptorTest extends Assert {

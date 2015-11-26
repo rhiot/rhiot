@@ -16,6 +16,7 @@
  */
 package io.rhiot.steroids.bootstrap
 
+import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.utils.WithLogger
 
 abstract class AbstractBootInitializer implements BootInitializer, BootstrapAware, WithLogger  {

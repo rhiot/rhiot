@@ -17,7 +17,7 @@
 package io.rhiot.cloudlets.binary
 
 import io.rhiot.cloudlets.binary.store.BinaryStore
-import io.rhiot.steroids.Steroids
+import io.rhiot.bootstrap.classpath.ClasspathBeans
 import io.rhiot.steroids.camel.CamelBootstrap
 import org.apache.camel.Exchange
 
@@ -27,7 +27,7 @@ import static io.rhiot.steroids.camel.CamelBootInitializer.eventBus
 
 class BinaryCloudlet extends CamelBootstrap {
 
-    def store = Steroids.bean(BinaryStore.class).get()
+    def store = ClasspathBeans.bean(BinaryStore.class).get()
 
     @Override
     void configure() {

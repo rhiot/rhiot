@@ -16,6 +16,7 @@
  */
 package io.rhiot.steroids
 
+import io.rhiot.bootstrap.classpath.ClasspathBeans
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
@@ -24,7 +25,7 @@ class FactoryBeanTest {
 
     @Test
     void shouldCreateStringUsingFactory() {
-        assertThat(Steroids.bean(String.class).get()).isEqualTo('Hello world!')
+        assertThat(ClasspathBeans.bean(String.class).get()).isEqualTo('Hello world!')
     }
 
     static class StringFactory {

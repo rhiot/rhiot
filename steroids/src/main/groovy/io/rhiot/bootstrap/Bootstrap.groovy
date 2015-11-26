@@ -14,11 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.bootstrap
 
+import io.rhiot.steroids.bootstrap.BeanRegistry
+import io.rhiot.steroids.bootstrap.BootInitializer
+import io.rhiot.steroids.bootstrap.BootstrapAware
+import io.rhiot.steroids.bootstrap.ScanningMapBeanRegistry
 import io.rhiot.utils.WithLogger
 
-import static io.rhiot.steroids.Steroids.beans
+import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 import static java.lang.Runtime.runtime;
 
 /**

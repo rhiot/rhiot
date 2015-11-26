@@ -16,7 +16,7 @@
  */
 package io.rhiot.steroids.camel
 
-import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.bootstrap.Bootstrap
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.mock.MockEndpoint
 import org.junit.Test

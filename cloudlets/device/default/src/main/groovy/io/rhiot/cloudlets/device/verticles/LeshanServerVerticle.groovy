@@ -45,7 +45,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 import static com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail.allDeviceDetails
-import static io.rhiot.steroids.Steroids.bean
+import static io.rhiot.bootstrap.classpath.ClasspathBeans.bean
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.longProperty
 import static io.rhiot.vertx.Vertxes.assertStringBody

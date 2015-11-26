@@ -16,10 +16,11 @@
  */
 package io.rhiot.steroids
 
+import io.rhiot.bootstrap.classpath.ClasspathBeans
 import org.junit.Assert
 import org.junit.Test
 
-import static Steroids.bean
+import static ClasspathBeans.bean
 import static com.google.common.truth.Truth.assertThat
 
 class ClasspathDependencyInjectionTest extends Assert {
@@ -31,7 +32,7 @@ class ClasspathDependencyInjectionTest extends Assert {
 
     @Test
     void shouldFindAllCallbacks() {
-        assertThat(Steroids.beans(ConfigurationCallback.class)).hasSize(1)
+        assertThat(ClasspathBeans.beans(ConfigurationCallback.class)).hasSize(1)
     }
 
     @Test

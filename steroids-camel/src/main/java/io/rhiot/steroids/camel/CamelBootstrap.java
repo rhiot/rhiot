@@ -16,7 +16,7 @@
  */
 package io.rhiot.steroids.camel;
 
-import io.rhiot.steroids.bootstrap.Bootstrap;
+import io.rhiot.bootstrap.Bootstrap;
 import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

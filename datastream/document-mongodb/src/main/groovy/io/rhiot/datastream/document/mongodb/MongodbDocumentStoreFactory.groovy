@@ -18,7 +18,7 @@ package io.rhiot.datastream.document.mongodb
 
 import com.mongodb.Mongo
 import io.rhiot.steroids.Bean
-import io.rhiot.steroids.Steroids
+import io.rhiot.bootstrap.classpath.ClasspathBeans
 
 import static io.rhiot.utils.Properties.stringProperty
 
@@ -27,7 +27,7 @@ class MongodbDocumentStoreFactory {
     @Bean
     MongodbDocumentStore mongodbDocumentStore() {
         new MongodbDocumentStore(
-                Steroids.bean(Mongo.class).get(),
+                ClasspathBeans.bean(Mongo.class).get(),
                 stringProperty('cloudlet.document.driver.mongodb.db', 'cloudlet_document')
         )
     }
