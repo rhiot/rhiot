@@ -17,14 +17,14 @@
 package io.rhiot.steroids.spark
 
 import io.rhiot.bootstrap.classpath.Bean
-import io.rhiot.bootstrap.BootInitializer
+import io.rhiot.bootstrap.BootModule
 import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.bootstrap.BootstrapAware
 import org.apache.spark.SparkConf
 import org.apache.spark.api.java.JavaSparkContext
 
 @Bean
-class SparkBootInitializer implements BootInitializer, BootstrapAware {
+class SparkBootInitializer implements BootModule, BootstrapAware {
 
     private Bootstrap bootstrap
 

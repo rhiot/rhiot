@@ -19,7 +19,7 @@ package io.rhiot.bootstrap
 import io.rhiot.bootstrap.classpath.Bean
 
 @Bean
-interface BootInitializer {
+interface BootModule {
 
     void start()
 

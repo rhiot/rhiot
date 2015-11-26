@@ -16,7 +16,7 @@
  */
 package io.rhiot.steroids.activemq
 
-import io.rhiot.bootstrap.BootInitializer
+import io.rhiot.bootstrap.BootModule
 import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.bootstrap.BootstrapAware
 import org.apache.activemq.broker.BrokerService
@@ -25,7 +25,7 @@ import static io.rhiot.utils.Properties.booleanProperty
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.stringProperty
 
-public class EmbeddedActiveMqBrokerBootInitializer implements BootInitializer, BootstrapAware {
+public class EmbeddedActiveMqBrokerBootInitializer implements BootModule, BootstrapAware {
 
     // Constants
 

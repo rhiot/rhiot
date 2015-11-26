@@ -31,7 +31,7 @@ class Bootstrap implements WithLogger {
 
     private final BeanRegistry beanRegistry
 
-    private final def initializers = beans(BootInitializer.class).
+    private final def initializers = beans(BootModule.class).
             sort{ first, second -> first.order() - second.order()}.asImmutable()
 
     // Constructors
@@ -67,7 +67,7 @@ class Bootstrap implements WithLogger {
         beanRegistry
     }
 
-    def <T extends BootInitializer> T initializer(Class<T> type) {
+    def <T extends BootModule> T initializer(Class<T> type) {
         initializers.find { type.isAssignableFrom(it.class) }
     }
 

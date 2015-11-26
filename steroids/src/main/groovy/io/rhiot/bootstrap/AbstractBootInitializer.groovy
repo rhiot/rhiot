@@ -16,12 +16,9 @@
  */
 package io.rhiot.bootstrap
 
-import io.rhiot.bootstrap.BootInitializer
-import io.rhiot.bootstrap.Bootstrap
-import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.utils.WithLogger
 
-abstract class AbstractBootInitializer implements BootInitializer, BootstrapAware, WithLogger  {
+abstract class AbstractBootInitializer implements BootModule, BootstrapAware, WithLogger  {
 
     protected Bootstrap bootstrap
 

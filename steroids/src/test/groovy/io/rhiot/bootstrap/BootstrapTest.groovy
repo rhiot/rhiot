@@ -38,7 +38,7 @@ class BootstrapTest {
     // Class fixtures
 
     @Bean
-    static class TestBootInitializer implements BootInitializer {
+    static class TestBootInitializer implements BootModule {
 
         static boolean started
 
