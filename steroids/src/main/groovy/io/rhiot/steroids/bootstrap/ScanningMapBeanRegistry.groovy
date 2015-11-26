@@ -37,6 +37,20 @@ class ScanningMapBeanRegistry extends MapBeanRegistry  {
     }
 
     @Override
+    Optional<?> bean(String name) {
+        def cachedBean = super.bean(name)
+        if(cachedBean.isPresent()) {
+            return cachedBean
+        }
+
+        def scanResult = Steroids.bean(name)
+        if(scanResult.isPresent()) {
+            registry[name] = scanResult.get()
+        }
+        scanResult
+    }
+
+    @Override
     def <T> List<T> beans(Class<T> type) {
         def cachedBeans = super.beans(type)
         if(!cachedBeans.isEmpty()) {

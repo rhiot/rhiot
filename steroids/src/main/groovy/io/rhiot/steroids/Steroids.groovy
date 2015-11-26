@@ -50,9 +50,13 @@ final class Steroids {
     }
 
     static <T> Optional<T> bean(Class<T> type, Class<? extends Annotation> annotation) {
+        bean(type, annotation, null)
+    }
+
+    static <T> Optional<T> bean(Class<T> type, Class<? extends Annotation> annotation, String name) {
         checkNotNull(type, 'Type of the bean cannot be null.')
 
-        def beans = scanForBeans(type, annotation)
+        def beans = scanForBeans(type, annotation, name)
         if(beans.isEmpty()) {
             return empty()
         }
@@ -60,11 +64,23 @@ final class Steroids {
     }
 
     static <T> Optional<T> bean(Class<T> type) {
-        bean(type, Bean.class)
+        bean(type, (String) null)
+    }
+
+    static <T> Optional<T> bean(Class<T> type, String name) {
+        bean(type, Bean.class, name)
+    }
+
+    static <T> Optional<T> bean(String name) {
+        def beans = scanForBeans(null, Named.class, name)
+        if(beans.isEmpty()) {
+            return empty()
+        }
+        Optional.of(beans.first())
     }
 
     static <T> List<T> beans(Class<T> type, Class<? extends Annotation> annotation) {
-        scanForBeans(type, annotation)
+        scanForBeans(type, annotation, null)
     }
 
     static <T> List<T> beans(Class<T> type) {
@@ -87,6 +103,10 @@ final class Steroids {
         subtypes
     }
 
+    private static List<Class<?>> annotatedWith(Class<? extends Annotation> annotation) {
+        classpath.getTypesAnnotatedWith(annotation).findAll{ !isAbstract(it.getModifiers()) }.toList()
+    }
+
     private static List<Object> createdByFactories(Class<?> type) {
         def factories = classpath.getMethodsAnnotatedWith(Bean.class).findAll{ type.isAssignableFrom(it.returnType) }.toList()
         factories.collect {
@@ -98,12 +118,15 @@ final class Steroids {
         }.findAll{ it != null }
     }
 
-    private static List<Object> scanForBeans(Class<?> type, Class<? extends Annotation> annotation) {
-        def beansClasses = inclusiveSubTypesOf(type, annotation)
+    private static List<Object> scanForBeans(Class<?> type, Class<? extends Annotation> annotation, String name) {
+        def beansClasses = type != null ? inclusiveSubTypesOf(type, annotation) : annotatedWith(Named.class)
         beansClasses = classesMatchingConditions(beansClasses)
+        if(name != null) {
+            beansClasses = beansClasses.findAll { it.getAnnotation(Named.class).name() == name }
+        }
         def beans = beansClasses.collect{ instantiate(it) }.findAll{ it.isPresent() }.collect{ it.get() }
 
-        beans + createdByFactories(type)
+        beans + (type != null ? createdByFactories(type) : [])
     }
 
     private static Optional<?> instantiate(Class<?> type) {

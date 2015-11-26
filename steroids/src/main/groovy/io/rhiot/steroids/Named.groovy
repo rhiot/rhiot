@@ -14,29 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.spark
+package io.rhiot.steroids
 
-import io.rhiot.steroids.Bean
-import io.rhiot.steroids.Named
-import io.rhiot.steroids.bootstrap.Bootstrap
-import io.rhiot.steroids.bootstrap.BootstrapAware
-import org.apache.camel.CamelContext
+import java.lang.annotation.Inherited
+import java.lang.annotation.Retention
+import java.lang.annotation.Target
 
-@Bean
-@Named(name = 'spark')
-class DefaultSparkService implements SparkService, BootstrapAware {
+import static java.lang.annotation.ElementType.METHOD
+import static java.lang.annotation.ElementType.TYPE
+import static java.lang.annotation.RetentionPolicy.RUNTIME
 
-    private Bootstrap bootstrap
+@Inherited
+@Target([METHOD, TYPE])
+@Retention(RUNTIME)
+@interface Named {
 
-    @Override
-    Object execute(String rdd, String rddCallback, Object payload) {
-        def template = bootstrap.beanRegistry().bean(CamelContext.class).get().createProducerTemplate()
-        template.requestBody("spark:rhiot?rdd=#${rdd}&rddCallback=#${rddCallback}", payload)
-    }
-
-    @Override
-    void bootstrap(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap
-    }
+    String name()
 
 }
