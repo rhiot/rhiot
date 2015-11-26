@@ -16,15 +16,15 @@
  */
 package io.rhiot.steroids.bootstrap
 
+import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.bootstrap.classpath.Bean
-import io.rhiot.bootstrap.classpath.ClasspathMapBeanRegistry
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
 
 class ScanningMapBeanRegistryTest {
 
-    def beanRegistry = new ClasspathMapBeanRegistry()
+    def beanRegistry = new Bootstrap().beanRegistry()
 
     @Test
     void shouldReturnCachedBean() {
