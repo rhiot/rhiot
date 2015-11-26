@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.spark
+package io.rhiot.datastream.engine
 
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
 import io.rhiot.bootstrap.Bootstrap
@@ -25,9 +25,6 @@ import org.apache.camel.component.jms.JmsMessage
 
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpByPrefix
 
-/**
- * Created by hekonsek on 25.11.15.
- */
 abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implements BootstrapAware {
 
     protected final String serviceChannel

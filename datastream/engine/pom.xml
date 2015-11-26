@@ -22,7 +22,11 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-bootstrap-core</artifactId>
+            <artifactId>rhiot-bootstrap-activemq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-bootstrap-camel</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>

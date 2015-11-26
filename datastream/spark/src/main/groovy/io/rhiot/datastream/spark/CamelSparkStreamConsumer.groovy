@@ -16,6 +16,7 @@
  */
 package io.rhiot.datastream.spark
 
+import io.rhiot.datastream.engine.AbstractServiceRouteStreamConsumer
 import io.rhiot.steroids.camel.Route
 
 @Route
