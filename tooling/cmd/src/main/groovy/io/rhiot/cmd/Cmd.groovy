@@ -18,7 +18,7 @@ package io.rhiot.cmd
 
 import io.rhiot.deployer.Command
 import io.rhiot.deployer.Deployer
-import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.bootstrap.Bootstrap
 
 class Cmd {
 

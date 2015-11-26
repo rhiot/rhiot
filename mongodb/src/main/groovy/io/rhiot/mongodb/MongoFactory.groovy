@@ -17,7 +17,7 @@
 package io.rhiot.mongodb
 
 import com.mongodb.Mongo
-import io.rhiot.steroids.Bean
+import io.rhiot.bootstrap.classpath.Bean
 
 import static io.rhiot.mongodb.Mongos.discoverMongo
 

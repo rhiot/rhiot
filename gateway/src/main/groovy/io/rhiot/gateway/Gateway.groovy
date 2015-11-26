@@ -17,13 +17,10 @@
 package io.rhiot.gateway
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.steroids.bootstrap.Bootstrap
-import io.rhiot.steroids.camel.CamelBootInitializer
-import io.vertx.core.Vertx
+import io.rhiot.bootstrap.Bootstrap
 import org.jolokia.jvmagent.JvmAgent
 import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
-import org.slf4j.Logger
 
 import static io.rhiot.steroids.camel.CamelBootInitializer.vertx
 import static io.rhiot.utils.Properties.stringProperty

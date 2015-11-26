@@ -22,7 +22,7 @@ import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.JsonWithHeaders
 import io.rhiot.datastream.engine.TypeConverter
 import io.rhiot.mongodb.EmbeddedMongo
-import io.rhiot.steroids.Bean
+import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.core.AsyncResult
 import io.vertx.core.Handler

@@ -14,28 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids
+package io.rhiot.bootstrap
 
 import io.rhiot.bootstrap.classpath.Bean
-import io.rhiot.bootstrap.classpath.ClasspathBeans
-import org.junit.Test
 
-import static com.google.common.truth.Truth.assertThat
+@Bean
+interface BootInitializer {
 
-class FactoryBeanTest {
+    void start()
 
-    @Test
-    void shouldCreateStringUsingFactory() {
-        assertThat(ClasspathBeans.bean(String.class).get()).isEqualTo('Hello world!')
-    }
+    void stop()
 
-    static class StringFactory {
-
-        @Bean
-        String myString() {
-            'Hello world!'
-        }
-
-    }
+    int order()
 
 }

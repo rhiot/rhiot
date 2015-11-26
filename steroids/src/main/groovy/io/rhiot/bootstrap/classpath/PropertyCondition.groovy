@@ -14,17 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.bootstrap.classpath
 
-import io.rhiot.steroids.Bean
+import java.lang.annotation.Inherited
+import java.lang.annotation.Retention
+import java.lang.annotation.Target
 
-@Bean
-interface BootInitializer {
+import static java.lang.annotation.ElementType.TYPE
+import static java.lang.annotation.RetentionPolicy.RUNTIME
 
-    void start()
+@Inherited
+@Target(TYPE)
+@Retention(RUNTIME)
+@interface PropertyCondition {
 
-    void stop()
-
-    int order()
+    String property() default ''
 
 }

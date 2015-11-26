@@ -16,6 +16,8 @@
  */
 package io.rhiot.steroids
 
+import io.rhiot.bootstrap.classpath.Bean
+
 @Bean
 class MyConfigurationCallback implements ConfigurationCallback {
 

@@ -14,13 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.bootstrap.classpath
 
-import io.rhiot.steroids.Steroids
+import io.rhiot.bootstrap.Bootstrap
+import io.rhiot.bootstrap.BootstrapAware
+import io.rhiot.bootstrap.MapBeanRegistry
 
 import static io.rhiot.utils.Uuids.uuid
 
-class ScanningMapBeanRegistry extends MapBeanRegistry  {
+class ClasspathMapBeanRegistry extends MapBeanRegistry implements BootstrapAware {
+
+    private Bootstrap bootstrap
 
     @Override
     def <T> Optional<T> bean(Class<T> type) {
@@ -29,9 +33,25 @@ class ScanningMapBeanRegistry extends MapBeanRegistry  {
             return cachedBean
         }
 
-        def scanResult = Steroids.bean(type)
+        def scanResult = ClasspathBeans.bean(type)
         if(scanResult.isPresent()) {
+            bootstrap.makeBootstrapAware(scanResult.get())
             registry[type.simpleName + uuid()] = scanResult.get()
+        }
+        scanResult
+    }
+
+    @Override
+    Optional<?> bean(String name) {
+        def cachedBean = super.bean(name)
+        if(cachedBean.isPresent()) {
+            return cachedBean
+        }
+
+        def scanResult = ClasspathBeans.bean(name)
+        if(scanResult.isPresent()) {
+            bootstrap.makeBootstrapAware(scanResult.get())
+            registry[name] = scanResult.get()
         }
         scanResult
     }
@@ -43,11 +63,17 @@ class ScanningMapBeanRegistry extends MapBeanRegistry  {
             return cachedBeans
         }
 
-        def scanResults = Steroids.beans(type)
+        def scanResults = ClasspathBeans.beans(type)
         scanResults.forEach {
+            bootstrap.makeBootstrapAware(it)
             registry[type.simpleName + uuid()] = it
         }
         scanResults
+    }
+
+    @Override
+    void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
     }
 
 }

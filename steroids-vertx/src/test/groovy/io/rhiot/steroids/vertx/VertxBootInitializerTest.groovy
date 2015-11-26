@@ -16,7 +16,7 @@
  */
 package io.rhiot.steroids.vertx
 
-import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.bootstrap.Bootstrap
 import io.vertx.core.Vertx
 import org.junit.Test
 

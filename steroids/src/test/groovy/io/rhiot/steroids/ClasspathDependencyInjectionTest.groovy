@@ -16,11 +16,13 @@
  */
 package io.rhiot.steroids
 
-import com.google.common.truth.Truth
+import io.rhiot.bootstrap.classpath.ClasspathBeans
+import io.rhiot.bootstrap.classpath.Named
 import org.junit.Assert
 import org.junit.Test
 
-import static Steroids.bean
+import static ClasspathBeans.bean
+import static com.google.common.truth.Truth.assertThat
 
 class ClasspathDependencyInjectionTest extends Assert {
 
@@ -31,12 +33,26 @@ class ClasspathDependencyInjectionTest extends Assert {
 
     @Test
     void shouldFindAllCallbacks() {
-        Truth.assertThat(Steroids.beans(ConfigurationCallback.class)).hasSize(1)
+        assertThat(ClasspathBeans.beans(ConfigurationCallback.class)).hasSize(1)
     }
 
     @Test
     void shouldNotFindBean() {
-        Truth.assertThat(bean(NotImplementedCallback.class).isPresent()).isFalse()
+        assertThat(bean(NotImplementedCallback.class).isPresent()).isFalse()
+    }
+
+    @Test
+    void shouldFindBeanByName() {
+        assertThat(bean('foo').isPresent()).isTrue()
+    }
+
+    @Test
+    void shouldNotFindBeanByName() {
+        assertThat(bean('unknownName').isPresent()).isFalse()
+    }
+
+    @Named(name = 'foo')
+    static class NamedOnly {
     }
 
 }

@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
-
+package io.rhiot.bootstrap
 /**
  * Allows to access (and optionally register) beans. Provides a layer of abstraction above the IoC frameworks and
  * servers used by the end client.

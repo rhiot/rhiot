@@ -14,10 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap;
+package io.rhiot.bootstrap
 
-interface BootstrapAware {
+class TooManyBeansFoundException extends RuntimeException {
 
-    void bootstrap(Bootstrap bootstrap)
+    TooManyBeansFoundException(String message) {
+        super(message)
+    }
 
 }

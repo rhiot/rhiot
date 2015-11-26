@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.engine
 
-import io.rhiot.steroids.bootstrap.Bootstrap
+import io.rhiot.bootstrap.Bootstrap
 
 class DataStream extends Bootstrap {
 

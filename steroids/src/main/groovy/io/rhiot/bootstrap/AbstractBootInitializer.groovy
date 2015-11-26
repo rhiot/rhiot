@@ -14,19 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids
+package io.rhiot.bootstrap
 
-import java.lang.annotation.Inherited
-import java.lang.annotation.Retention
-import java.lang.annotation.Target
+import io.rhiot.bootstrap.BootInitializer
+import io.rhiot.bootstrap.Bootstrap
+import io.rhiot.bootstrap.BootstrapAware
+import io.rhiot.utils.WithLogger
 
-import static java.lang.annotation.ElementType.METHOD
-import static java.lang.annotation.ElementType.TYPE
-import static java.lang.annotation.RetentionPolicy.RUNTIME
+abstract class AbstractBootInitializer implements BootInitializer, BootstrapAware, WithLogger  {
 
-@Inherited
-@Target([METHOD, TYPE])
-@Retention(RUNTIME)
-@interface Bean {
+    protected Bootstrap bootstrap
+
+    @Override
+    void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
+    }
+
+    @Override
+    void start() {
+    }
+
+    @Override
+    void stop() {
+    }
 
 }

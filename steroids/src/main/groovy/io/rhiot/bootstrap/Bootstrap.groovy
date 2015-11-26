@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.bootstrap
 
+import io.rhiot.bootstrap.classpath.ClasspathMapBeanRegistry
 import io.rhiot.utils.WithLogger
 
-import static io.rhiot.steroids.Steroids.beans
+import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 import static java.lang.Runtime.runtime;
 
 /**
@@ -36,11 +37,11 @@ class Bootstrap implements WithLogger {
     // Constructors
 
     Bootstrap(BeanRegistry beanRegistry) {
-        this.beanRegistry = beanRegistry
+        this.beanRegistry = makeBootstrapAware(beanRegistry)
     }
 
     Bootstrap() {
-        this(new ScanningMapBeanRegistry())
+        this(new ClasspathMapBeanRegistry())
     }
 
     // Lifecycle
@@ -68,6 +69,15 @@ class Bootstrap implements WithLogger {
 
     def <T extends BootInitializer> T initializer(Class<T> type) {
         initializers.find { type.isAssignableFrom(it.class) }
+    }
+
+    // Bootstrap awareness
+
+    def <T> T makeBootstrapAware(T object) {
+        if(object instanceof BootstrapAware) {
+            object.asType(BootstrapAware.class).bootstrap(this)
+        }
+        object
     }
 
     // Main entry point

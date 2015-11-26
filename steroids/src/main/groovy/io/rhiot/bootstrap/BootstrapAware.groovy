@@ -14,25 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.bootstrap
+package io.rhiot.bootstrap
 
-import io.rhiot.utils.WithLogger
+interface BootstrapAware {
 
-abstract class AbstractBootInitializer implements BootInitializer, BootstrapAware, WithLogger  {
-
-    protected Bootstrap bootstrap
-
-    @Override
-    void bootstrap(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap
-    }
-
-    @Override
-    void start() {
-    }
-
-    @Override
-    void stop() {
-    }
+    void bootstrap(Bootstrap bootstrap)
 
 }

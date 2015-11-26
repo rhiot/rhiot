@@ -31,27 +31,32 @@ import java.util.Map;
  */
 public abstract class RhiotKuraRouter extends KuraRouter implements ConfigurableComponent {
 
+    // Constants
+
+    public static final String XML_ROUTE_PROPERTY = "camel.route.xml";
+
     // Members
 
     /**
      * Camel route XML, usually configured using SCR property.
      */
-    private String camelRouteXml;
+    protected String camelRouteXml;
 
-    // Getters & setters
-
-    public String getCamelRouteXml() {
-        return camelRouteXml;
+    protected void updated(Map<String, Object> properties) {
+        log.debug("Refreshing SCR properties: " + properties);
+        refreshCamelRouteXml(camelRouteXml, (String) properties.get(XML_ROUTE_PROPERTY));
     }
 
-    public void setCamelRouteXml(String camelRouteXml) {
-        this.camelRouteXml = camelRouteXml;
-        if(camelRouteXml != null && !camelRouteXml.isEmpty()) {
-            try {
-                RoutesDefinition routesDefinition = camelContext.loadRoutesDefinition(new ByteArrayInputStream(camelRouteXml.getBytes()));
-                camelContext.addRouteDefinitions(routesDefinition.getRoutes());
-            } catch (Exception e) {
-                log.warn("Cannot load routes definitions: {}", camelRouteXml);
+    public void refreshCamelRouteXml(String oldCamelRouteXml, String newCamelRouteXml) {
+        if(newCamelRouteXml != null && !newCamelRouteXml.equals(oldCamelRouteXml)) {
+            this.camelRouteXml = newCamelRouteXml;
+            if (!camelRouteXml.isEmpty()) {
+                try {
+                    RoutesDefinition routesDefinition = camelContext.loadRoutesDefinition(new ByteArrayInputStream(camelRouteXml.getBytes()));
+                    camelContext.addRouteDefinitions(routesDefinition.getRoutes());
+                } catch (Exception e) {
+                    log.warn("Cannot load routes definitions: {}", camelRouteXml);
+                }
             }
         }
     }
@@ -85,6 +90,7 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
 
     protected void activate(ComponentContext componentContext, Map<String,Object> properties) throws Exception {
         start(componentContext.getBundleContext());
+        updated(properties); // TODO Keep this line even when Camel 2.17 is out
     }
 
     protected void deactivate(ComponentContext componentContext) throws Exception{

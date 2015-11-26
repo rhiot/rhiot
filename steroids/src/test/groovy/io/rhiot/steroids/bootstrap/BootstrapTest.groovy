@@ -16,6 +16,8 @@
  */
 package io.rhiot.steroids.bootstrap
 
+import io.rhiot.bootstrap.BootInitializer
+import io.rhiot.bootstrap.Bootstrap
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat

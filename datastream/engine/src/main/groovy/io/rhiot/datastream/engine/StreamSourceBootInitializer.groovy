@@ -16,11 +16,10 @@
  */
 package io.rhiot.datastream.engine
 
-import io.rhiot.steroids.bootstrap.AbstractBootInitializer
-import io.rhiot.steroids.bootstrap.BootstrapAware
-import io.vertx.core.Vertx
+import io.rhiot.bootstrap.AbstractBootInitializer
+import io.rhiot.bootstrap.BootstrapAware
 
-import static io.rhiot.steroids.Steroids.beans
+import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 
 class StreamSourceBootInitializer extends AbstractBootInitializer {
 

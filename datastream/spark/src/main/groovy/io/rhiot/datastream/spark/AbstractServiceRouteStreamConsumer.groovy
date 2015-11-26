@@ -17,8 +17,8 @@
 package io.rhiot.datastream.spark
 
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
-import io.rhiot.steroids.bootstrap.Bootstrap
-import io.rhiot.steroids.bootstrap.BootstrapAware
+import io.rhiot.bootstrap.Bootstrap
+import io.rhiot.bootstrap.BootstrapAware
 import io.vertx.core.json.Json
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.jms.JmsMessage

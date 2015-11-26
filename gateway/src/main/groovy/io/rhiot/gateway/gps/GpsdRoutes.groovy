@@ -17,7 +17,7 @@
 package io.rhiot.gateway.gps
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.steroids.PropertyCondition
+import io.rhiot.bootstrap.classpath.PropertyCondition
 import io.rhiot.steroids.camel.Route
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder

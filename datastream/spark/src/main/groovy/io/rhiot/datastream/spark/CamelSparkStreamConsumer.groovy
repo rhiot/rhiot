@@ -21,18 +21,8 @@ import io.rhiot.steroids.camel.Route
 @Route
 class CamelSparkStreamConsumer extends AbstractServiceRouteStreamConsumer {
 
-    public static final String SERVICE_CHANNEL = 'spark'
-
     CamelSparkStreamConsumer() {
-        super(SERVICE_CHANNEL)
-    }
-
-    @Override
-    void configure() {
-        def sparkService = bootstrap.beanRegistry().bean(SparkService.class).get()
-        sparkService.asType(DefaultSparkService.class).bootstrap(bootstrap)
-        bootstrap.beanRegistry().register(serviceChannel, sparkService)
-        super.configure()
+        super('spark')
     }
 
 }

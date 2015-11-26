@@ -16,9 +16,9 @@
  */
 package io.rhiot.steroids.conditions
 
-import io.rhiot.steroids.Bean
-import io.rhiot.steroids.PropertyCondition
-import io.rhiot.steroids.Steroids
+import io.rhiot.bootstrap.classpath.Bean
+import io.rhiot.bootstrap.classpath.PropertyCondition
+import io.rhiot.bootstrap.classpath.ClasspathBeans
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
@@ -30,19 +30,19 @@ class ConditionalPropertyTest {
     @Test
     void shouldLoadConditionalBean() {
         setBooleanProperty('load_that_bean', true)
-        assertThat(Steroids.bean(ConditionalBean.class).isPresent()).isTrue()
+        assertThat(ClasspathBeans.bean(ConditionalBean.class).isPresent()).isTrue()
     }
 
     @Test
     void shouldNotLoadConditionalBean_false() {
         setBooleanProperty('load_that_bean', false)
-        assertThat(Steroids.bean(ConditionalBean.class).isPresent()).isFalse()
+        assertThat(ClasspathBeans.bean(ConditionalBean.class).isPresent()).isFalse()
     }
 
     @Test
     void shouldNotLoadConditionalBean_empty() {
         clearProperty('load_that_bean')
-        assertThat(Steroids.bean(ConditionalBean.class).isPresent()).isFalse()
+        assertThat(ClasspathBeans.bean(ConditionalBean.class).isPresent()).isFalse()
     }
 
 }
