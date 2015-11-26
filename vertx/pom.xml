@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-steroids</artifactId>
+            <artifactId>rhiot-bootstrap-core</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>

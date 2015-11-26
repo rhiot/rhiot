@@ -16,9 +16,6 @@
  */
 package io.rhiot.bootstrap
 
-import io.rhiot.bootstrap.BeanRegistry
-import io.rhiot.bootstrap.TooManyBeansFoundException
-
 import static io.rhiot.utils.Uuids.uuid
 import static java.util.Optional.empty
 

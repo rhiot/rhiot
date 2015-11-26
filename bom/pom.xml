@@ -326,7 +326,7 @@
             </dependency>
             <dependency>
                 <groupId>io.rhiot</groupId>
-                <artifactId>rhiot-steroids</artifactId>
+                <artifactId>rhiot-bootstrap-core</artifactId>
                 <version>${rhiot.version}</version>
             </dependency>
             <dependency>
