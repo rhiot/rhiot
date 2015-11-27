@@ -21,6 +21,7 @@ import com.github.camellabs.iot.cloudlet.document.sdk.DocumentService;
 import com.github.camellabs.iot.cloudlet.document.sdk.QueryBuilder;
 import com.github.camellabs.iot.cloudlet.document.sdk.RestDocumentService;
 import io.rhiot.mongodb.EmbeddedMongo;
+import io.rhiot.utils.Properties;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.netty4.http.NettyHttpEndpoint;
@@ -46,6 +47,7 @@ import java.util.List;
 
 import static com.github.camellabs.iot.cloudlet.document.sdk.Pojos.pojoClassToCollection;
 import static com.github.camellabs.iot.cloudlet.document.sdk.QueryBuilder.buildQuery;
+import static io.rhiot.utils.Properties.setBooleanProperty;
 import static java.lang.Boolean.TRUE;
 import static org.joda.time.DateTime.now;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
@@ -67,6 +69,8 @@ public class MongoDbDocumentServiceTest extends Assert {
 
     @BeforeClass
     public static void beforeClass() {
+        setBooleanProperty("AMQP_ENABLED", false);
+        setBooleanProperty("MQTT_ENABLED", false);
         System.setProperty("server.port", findAvailableTcpPort() + "");
         System.setProperty("camel.labs.iot.cloudlet.rest.port", findAvailableTcpPort() + "");
 
