@@ -23,6 +23,7 @@ import io.rhiot.datastream.engine.JsonWithHeaders
 import io.rhiot.datastream.engine.TypeConverter
 import io.rhiot.mongodb.EmbeddedMongo
 import io.rhiot.bootstrap.classpath.Bean
+import io.rhiot.utils.Properties
 import io.vertx.core.AsyncResult
 import io.vertx.core.Handler
 import io.vertx.core.Vertx
@@ -35,6 +36,7 @@ import org.junit.Test
 import java.util.concurrent.Callable
 
 import static com.jayway.awaitility.Awaitility.await
+import static io.rhiot.utils.Properties.setBooleanProperty
 
 class MongodbDocumentStoreTest {
 
@@ -46,6 +48,7 @@ class MongodbDocumentStoreTest {
 
     @BeforeClass
     static void beforeClass() {
+        setBooleanProperty('MQTT_ENABLED', false)
         dataStream = new DataStream().start()
         bus = dataStream.beanRegistry().bean(Vertx.class).get().eventBus()
     }
