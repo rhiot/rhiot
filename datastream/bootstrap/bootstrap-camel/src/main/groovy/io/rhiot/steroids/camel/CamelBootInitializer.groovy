@@ -40,9 +40,10 @@ class CamelBootInitializer extends AbstractBootInitializer {
         def vertxComponent = new VertxComponent(vertx: vertx)
         camelContext.addComponent('event-bus', vertxComponent)
 
+        bootstrap.beanRegistry().register(camelContext)
+
         beans(RoutesBuilder.class, Route.class).each { if(it instanceof BootstrapAware) it.bootstrap(bootstrap) }.each { camelContext.addRoutes(it) }
 
-        bootstrap.beanRegistry().register(camelContext)
         camelContext.start()
     }
 

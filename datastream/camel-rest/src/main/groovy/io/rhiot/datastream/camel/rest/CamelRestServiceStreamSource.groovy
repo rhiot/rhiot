@@ -19,6 +19,7 @@ package io.rhiot.datastream.camel.rest
 import io.rhiot.datastream.engine.AbstractServiceStreamSource
 import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.core.Vertx
+import org.apache.camel.CamelContext
 import org.apache.camel.builder.RouteBuilder
 
 import java.lang.reflect.Method
@@ -31,6 +32,8 @@ abstract class CamelRestServiceStreamSource<T> extends AbstractServiceStreamSour
 
     protected final String serviceName
 
+    protected CamelContext camelContext
+
     CamelRestServiceStreamSource(Class<T> serviceClass, String serviceName) {
         super(serviceClass)
         this.serviceName = serviceName
@@ -39,6 +42,7 @@ abstract class CamelRestServiceStreamSource<T> extends AbstractServiceStreamSour
     @Override
     void start() {
         super.start()
+        camelContext = bootstrap.beanRegistry().bean(CamelContext.class).get()
         serviceClass.declaredMethods.findAll{ ['save', 'count', 'findOne'].contains(it.name) }.forEach{ Method op -> registerOperationEndpoint(op) }
     }
 
@@ -68,7 +72,8 @@ abstract class CamelRestServiceStreamSource<T> extends AbstractServiceStreamSour
                             process(new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get(), serviceName.replaceFirst('api/', '')))
             }
         }
-        startCamelRestEndpoint(restRouteBuilder)
+        startCamelRestEndpoint(camelContext, restRouteBuilder)
+        camelContext.addRoutes(restRouteBuilder)
     }
 
 }

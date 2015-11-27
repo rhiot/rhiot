@@ -19,6 +19,7 @@ package io.rhiot.datastream.camel.rest
 import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.utils.WithLogger
+import org.apache.camel.CamelContext
 import org.apache.camel.builder.RouteBuilder
 
 import java.lang.reflect.Method
@@ -42,8 +43,6 @@ abstract class CamelRestServiceRouteStreamSource<T> extends RouteBuilder impleme
 
     @Override
     void configure() {
-        startCamelRestEndpoint(this)
-
         serviceClass.declaredMethods.each { Method operation ->
             def operationPath = "/${operation.name}"
             operation.parameterTypes.eachWithIndex { param, i ->
@@ -65,6 +64,8 @@ abstract class CamelRestServiceRouteStreamSource<T> extends RouteBuilder impleme
                 it.setProperty('target', operationChannel)
             }
         }
+
+        startCamelRestEndpoint(bootstrap.beanRegistry().bean(CamelContext.class).get(), this)
     }
 
     @Override
