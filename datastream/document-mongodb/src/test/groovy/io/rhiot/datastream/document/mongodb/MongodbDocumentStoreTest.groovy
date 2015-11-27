@@ -21,6 +21,7 @@ import io.rhiot.datastream.document.DocumentStreamConsumer
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.JsonWithHeaders
 import io.rhiot.datastream.engine.TypeConverter
+import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.mongodb.EmbeddedMongo
 import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.utils.Properties
@@ -39,25 +40,21 @@ import java.util.concurrent.Callable
 import static com.jayway.awaitility.Awaitility.await
 import static io.rhiot.utils.Properties.setBooleanProperty
 
-class MongodbDocumentStoreTest {
+class MongodbDocumentStoreTest extends DataStreamTest {
 
     static mongo = new EmbeddedMongo().start()
 
-    static DataStream dataStream
+    EventBus bus
 
-    static EventBus bus
-
-    @BeforeClass
-    static void beforeClass() {
+    @Override
+    protected void beforeDataStreamStarted() {
         setBooleanProperty('MQTT_ENABLED', false)
         setBooleanProperty('AMQP_ENABLED', false)
-        dataStream = new DataStream().start()
-        bus = dataStream.beanRegistry().bean(Vertx.class).get().eventBus()
     }
 
-    @AfterClass
-    static void afterClass() {
-        dataStream.stop()
+    @Override
+    protected void afterDataStreamStarted() {
+        bus = dataStream.beanRegistry().bean(Vertx.class).get().eventBus()
     }
 
     @Test
