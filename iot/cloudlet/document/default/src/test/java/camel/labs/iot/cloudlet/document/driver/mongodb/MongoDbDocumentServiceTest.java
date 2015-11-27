@@ -29,6 +29,7 @@ import org.bson.types.ObjectId;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,7 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {DriverDocumentCloudlet.class, MongoDocumentServiceTestConfiguration.class})
 @IntegrationTest("camel.labs.iot.cloudlet.rest.endpoint.options=connectTimeout=20000:requestTimeout=1000")
+@Ignore
 public class MongoDbDocumentServiceTest extends Assert {
 
     static EmbeddedMongo embeddedMongo = new EmbeddedMongo().start();

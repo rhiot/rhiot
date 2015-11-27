@@ -21,6 +21,7 @@ import com.mongodb.Mongo;
 import com.mongodb.MongoTimeoutException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {DriverDocumentCloudlet.class, EmbeddedMongoDbTest.class})
 @IntegrationTest("camel.labs.iot.cloudlet.document.driver.mongodb.embedded=true")
+@Ignore
 public class EmbeddedMongoDbTest extends Assert {
 
     // Collaborator fixtures

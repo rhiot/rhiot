@@ -20,12 +20,14 @@ import io.rhiot.steroids.camel.Route
 import org.apache.camel.builder.RouteBuilder
 import org.junit.Assert
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
 import static io.rhiot.steroids.camel.CamelBootInitializer.eventBus
 
+@Ignore
 class BinaryCloudletTest extends Assert {
 
     static def cloudlet = new BinaryCloudlet()
