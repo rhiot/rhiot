@@ -19,6 +19,7 @@ package io.rhiot.datastream.engine
 import io.rhiot.bootstrap.classpath.Bean
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
+import org.junit.AfterClass
 import org.junit.Test
 
 import static org.mockito.BDDMockito.given
@@ -29,6 +30,11 @@ import static org.mockito.Mockito.verify
 class ServiceBindingTest {
 
     static dataStream = new DataStream().start()
+
+    @AfterClass
+    static void afterClass() {
+        dataStream.stop()
+    }
 
     static def serviceBinding = dataStream.beanRegistry().bean(ServiceBinding.class).get()
     static {

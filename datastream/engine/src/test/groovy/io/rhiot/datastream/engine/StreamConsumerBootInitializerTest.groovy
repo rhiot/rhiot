@@ -18,6 +18,7 @@ package io.rhiot.datastream.engine
 
 import io.vertx.core.Vertx
 import io.vertx.core.eventbus.Message
+import org.junit.After
 import org.junit.Test
 
 import java.util.concurrent.Callable
@@ -27,21 +28,28 @@ import static com.jayway.awaitility.Awaitility.await
 
 class StreamConsumerBootInitializerTest {
 
+    def dataStream = new DataStream()
+
+    @After
+    void after() {
+        dataStream.stop()
+    }
+
     @Test
     void shouldStartStreamConsumer() {
-        new DataStream().start()
+        dataStream.start()
         assertThat(StubStreamConsumer.started).isTrue()
     }
 
     @Test
     void shouldStopStreamConsumer() {
-        new DataStream().start().stop()
+        dataStream.start().stop()
         assertThat(StubStreamConsumer.started).isFalse()
     }
 
     @Test
     void shouldAccessLoadedStreamCosnumers() {
-        def dataStream = new DataStream().start()
+        dataStream.start()
         def loadedConsumers = dataStream.initializer(StreamConsumerBootInitializer.class).consumers()
         assertThat(loadedConsumers).hasSize(1)
         assertThat(loadedConsumers.first()).isInstanceOf(StubStreamConsumer.class)
@@ -51,10 +59,10 @@ class StreamConsumerBootInitializerTest {
     void shouldConsumeFromChannel() {
         // Given
         def message = 'message'
-        def stream = new DataStream().start()
+        dataStream.start()
 
         // Then
-        stream.beanRegistry().bean(Vertx.class).get().eventBus().publish('channel', message)
+        dataStream.beanRegistry().bean(Vertx.class).get().eventBus().publish('channel', message)
 
         // Then
         await().until((Callable<Boolean>){ StubStreamConsumer.lastMessage != null })
