@@ -23,6 +23,7 @@ import org.apache.camel.builder.RouteBuilder
 
 import java.lang.reflect.Method
 
+import static io.rhiot.datastream.camel.rest.CamelRestEndpoint.startCamelRestEndpoint
 import static io.rhiot.datastream.engine.ServiceBinding.operationTransfersObject
 import static io.rhiot.utils.Reflections.isJavaLibraryType
 
@@ -41,6 +42,8 @@ abstract class CamelRestServiceRouteStreamSource<T> extends RouteBuilder impleme
 
     @Override
     void configure() {
+        startCamelRestEndpoint(this)
+
         serviceClass.declaredMethods.each { Method operation ->
             def operationPath = "/${operation.name}"
             operation.parameterTypes.eachWithIndex { param, i ->

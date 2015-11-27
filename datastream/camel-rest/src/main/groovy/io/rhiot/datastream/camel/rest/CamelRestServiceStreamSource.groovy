@@ -23,6 +23,7 @@ import org.apache.camel.builder.RouteBuilder
 
 import java.lang.reflect.Method
 
+import static io.rhiot.datastream.camel.rest.CamelRestEndpoint.startCamelRestEndpoint
 import static io.rhiot.datastream.engine.ServiceBinding.operationTransfersObject
 import static io.rhiot.utils.Reflections.isJavaLibraryType
 
@@ -67,21 +68,7 @@ abstract class CamelRestServiceStreamSource<T> extends AbstractServiceStreamSour
                             process(new VertxProducer(bootstrap.beanRegistry().bean(Vertx.class).get(), serviceName.replaceFirst('api/', '')))
             }
         }
-        try {
-            CamelBootInitializer.camelContext().addRoutes(restRouteBuilder)
-        } catch (IllegalStateException e) {
-            CamelBootInitializer.camelContext().addRoutes(new RouteBuilder() {
-                @Override
-                void configure() throws Exception {
-                    restConfiguration().component("netty4-http").
-                            host("0.0.0.0").port(8080)
-                }
-            })
-            def components = CamelBootInitializer.camelContext().componentNames.collect{ [it, CamelBootInitializer.camelContext().getComponent(it)] }
-            CamelBootInitializer.camelContext().stop()
-            components.each{ CamelBootInitializer.camelContext().addComponent(it[0], it[1]) }
-            CamelBootInitializer.camelContext().start()
-        }
+        startCamelRestEndpoint(restRouteBuilder)
     }
 
 }
