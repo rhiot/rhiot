@@ -25,10 +25,15 @@ import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.a
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
+import static io.rhiot.utils.Uuids.uuid
 
 class MongodbDocumentStoreTest extends DataStreamTest {
 
     static mongo = new EmbeddedMongo().start()
+
+    def collection = uuid()
+
+    def invoice = new Invoice(invoiceId: 'foo')
 
     @Override
     protected void beforeDataStreamStarted() {
@@ -37,16 +42,47 @@ class MongodbDocumentStoreTest extends DataStreamTest {
     }
 
     @Test
-    void shouldCountSavedDocument() {
+    void shouldCountInvoice() {
         // Given
-        def document = payloadEncoding.encode([foo: 'bar'])
-        camelContext.createProducerTemplate().sendBody(amqp('document.save.doc'), document)
+        toBus("document.save.${collection}", invoice)
 
         // When
-        def count = fromBus('document.count.doc', int.class)
+        def count = fromBus("document.count.${collection}", int.class)
 
         // Then
         assertThat(count).isEqualTo(1)
+    }
+
+    @Test
+    public void shouldFindOne() {
+        // Given
+        def id = fromBus("document.save.${collection}", invoice, String.class)
+
+        // When
+        def loadedInvoice = fromBus("document.findOne.${collection}", id, Map.class)
+
+        // Then
+        assertThat(loadedInvoice).isNotNull()
+    }
+
+    // Class fixtures
+
+    static class Invoice {
+
+        String id
+
+        Date timestamp = new Date()
+
+        String invoiceId
+
+        Address address
+
+        static class Address {
+
+            String street
+
+        }
+
     }
 
 }

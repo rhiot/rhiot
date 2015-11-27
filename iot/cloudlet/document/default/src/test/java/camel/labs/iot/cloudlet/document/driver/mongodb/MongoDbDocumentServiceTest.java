@@ -21,10 +21,6 @@ import com.github.camellabs.iot.cloudlet.document.sdk.DocumentService;
 import com.github.camellabs.iot.cloudlet.document.sdk.QueryBuilder;
 import com.github.camellabs.iot.cloudlet.document.sdk.RestDocumentService;
 import io.rhiot.mongodb.EmbeddedMongo;
-import io.rhiot.utils.Properties;
-import org.apache.camel.CamelContext;
-import org.apache.camel.Endpoint;
-import org.apache.camel.component.netty4.http.NettyHttpEndpoint;
 import org.bson.types.ObjectId;
 import org.junit.Assert;
 import org.junit.Before;
@@ -86,16 +82,6 @@ public class MongoDbDocumentServiceTest extends Assert {
     }
 
     // Tests
-
-    @Test
-    public void shouldCreatePojo() {
-        // When
-        invoice = documentService.save(invoice);
-
-        // Then
-        Invoice loadedInvoice = documentService.findOne(Invoice.class, invoice.id);
-        assertNotNull(loadedInvoice);
-    }
 
     @Test
     public void shouldUpdatePojoWithAssignedId() {

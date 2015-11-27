@@ -18,8 +18,6 @@ package io.rhiot.datastream.camel.rest
 
 import com.google.common.truth.Truth
 import io.rhiot.datastream.engine.AbstractServiceRouteStreamConsumer
-import io.rhiot.datastream.engine.AbstractServiceStreamConsumer
-import io.rhiot.datastream.engine.DataStream
 import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.vertx.core.json.Json

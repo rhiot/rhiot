@@ -69,6 +69,14 @@ abstract class DataStreamTest extends Assert {
         }
     }
 
+    protected def <T> T toBus(String channel) {
+        camelContext.createProducerTemplate().sendBody(amqp(channel), null)
+    }
+
+    protected def <T> T toBus(String channel, Object payload) {
+        camelContext.createProducerTemplate().sendBody(amqp(channel), payloadEncoding.encode(payload))
+    }
+
     protected def <T> T fromBus(String channel, Class<T> responseType) {
         def busResponse = camelContext.createProducerTemplate().requestBody(amqp(channel), null, byte[].class)
         payloadEncoding.decode(busResponse) as T
