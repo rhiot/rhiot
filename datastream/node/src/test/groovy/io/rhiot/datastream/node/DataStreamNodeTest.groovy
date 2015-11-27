@@ -21,6 +21,7 @@ import com.mongodb.Mongo
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.JsonWithHeaders
 import io.rhiot.datastream.engine.TypeConverter
+import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.mongodb.EmbeddedMongo
 import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.steroids.camel.CamelBootInitializer
@@ -42,11 +43,9 @@ import static com.jayway.awaitility.Awaitility.await
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
 import static org.apache.camel.component.spark.SparkMongos.mongoRdd
 
-class DataStreamNodeTest {
+class DataStreamNodeTest extends DataStreamTest {
 
     static def mongo = new EmbeddedMongo().start()
-
-    static def dataStream = new DataStream().start()
 
     @AfterClass
     static void afterClass() {
@@ -55,22 +54,9 @@ class DataStreamNodeTest {
 
     @Test
     void smokeTestMongoDocumentStreamConsumer() {
-        // Given
-        def vertx = dataStream.beanRegistry().bean(Vertx.class).get()
-        def message = new JsonWithHeaders(null, ['operation': 'count', 'arg0': 'foo'])
-        def count = -1
-
-        // When
-        vertx.eventBus().send('document', message.json, message.deliveryOptions(), new Handler<AsyncResult<Message>>() {
-            @Override
-            void handle(AsyncResult<Message> event) {
-                count = Json.decodeValue((String) event.result().body(), Map.class).result
-            }
-        })
-
-        // Then
-        await().until( (Callable<Boolean>) { count > -1 } )
-        assertThat(count).isEqualTo(0)
+        fromBus('document.save.doc', [foo: 'bar'], String.class)
+        def count = fromBus('document.count.doc', int.class)
+        assertThat(count).isEqualTo(1)
     }
 
     @Test

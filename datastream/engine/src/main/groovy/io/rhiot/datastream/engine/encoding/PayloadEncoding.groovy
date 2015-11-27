@@ -20,6 +20,6 @@ interface PayloadEncoding {
 
     byte[] encode(Object payload)
 
-    def <T> T decode(byte[] payload, Class<T> type)
+    def Object decode(byte[] payload)
 
 }

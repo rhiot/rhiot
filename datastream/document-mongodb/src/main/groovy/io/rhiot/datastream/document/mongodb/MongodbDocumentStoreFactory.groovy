@@ -19,12 +19,14 @@ package io.rhiot.datastream.document.mongodb
 import com.mongodb.Mongo
 import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.bootstrap.classpath.ClasspathBeans
+import io.rhiot.bootstrap.classpath.Named
 
 import static io.rhiot.utils.Properties.stringProperty
 
 class MongodbDocumentStoreFactory {
 
     @Bean
+    @Named(name = 'document')
     MongodbDocumentStore mongodbDocumentStore() {
         new MongodbDocumentStore(
                 ClasspathBeans.bean(Mongo.class).get(),

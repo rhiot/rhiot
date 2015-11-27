@@ -18,27 +18,38 @@ package io.rhiot.datastream.engine.test
 
 import io.rhiot.bootstrap.BeanRegistry
 import io.rhiot.datastream.engine.DataStream
+import io.rhiot.datastream.engine.encoding.PayloadEncoding
+import io.vertx.core.json.Json
+import org.apache.camel.CamelContext
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
 
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
 import static io.rhiot.utils.Properties.restoreSystemProperties
 
 abstract class DataStreamTest extends Assert {
 
-    static private boolean started
+    static private boolean dataStreamStarted
 
     protected static DataStream dataStream = new DataStream()
 
     protected static BeanRegistry beanRegistry
 
+    protected static CamelContext camelContext
+
+    protected static PayloadEncoding payloadEncoding
+
+
     @Before
     public void before() {
         beforeDataStreamStarted()
-        if(!started) {
+        if(!dataStreamStarted) {
             dataStream = dataStream.start().asType(DataStream.class)
             beanRegistry = dataStream.beanRegistry()
-            started = true
+            camelContext = beanRegistry.bean(CamelContext.class).get()
+            payloadEncoding = beanRegistry.bean(PayloadEncoding.class).get()
+            dataStreamStarted = true
         }
         afterDataStreamStarted()
     }
@@ -56,6 +67,16 @@ abstract class DataStreamTest extends Assert {
         } finally {
             restoreSystemProperties()
         }
+    }
+
+    protected def <T> T fromBus(String channel, Class<T> responseType) {
+        def busResponse = camelContext.createProducerTemplate().requestBody(amqp(channel), null, byte[].class)
+        payloadEncoding.decode(busResponse) as T
+    }
+
+    protected def <T> T fromBus(String channel, Object payload, Class<T> responseType) {
+        def busResponse = camelContext.createProducerTemplate().requestBody(amqp(channel), payloadEncoding.encode(payload), byte[].class)
+        payloadEncoding.decode(busResponse) as T
     }
 
 }

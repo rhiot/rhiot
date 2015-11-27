@@ -19,7 +19,6 @@ package io.rhiot.datastream.engine
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
 import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.bootstrap.BootstrapAware
-import io.vertx.core.json.Json
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.jms.JmsMessage
 
@@ -46,10 +45,18 @@ abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implement
                     def channelParts = rawChannel.split(/\./)
                     def service = channelParts[0]
                     def operation = channelParts[1]
-                    def rdd = channelParts[2]
-                    def rddCallback = channelParts[3]
                     it.setProperty('target', "bean:${service}?method=${operation}&multiParameterArray=true")
-                    [rdd, rddCallback, Json.decodeValue(it.in.getBody(String.class), Map.class).payload]
+
+                    def arguments = []
+                    for(int i = 2; i < channelParts.length;i++) {
+                        arguments.add(channelParts[i])
+                    }
+                    def incomingPayload = it.in.getBody(byte[].class)
+                    if(incomingPayload != null) {
+                        def payload = encoding.decode(incomingPayload)
+                        arguments.add(payload)
+                    }
+                    arguments
                 }.recipientList().exchangeProperty('target').
                 transform{ encoding.encode(it.in.body) }
     }

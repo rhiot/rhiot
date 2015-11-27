@@ -16,77 +16,37 @@
  */
 package io.rhiot.datastream.document.mongodb
 
-import com.google.common.truth.Truth
-import io.rhiot.datastream.document.DocumentStreamConsumer
-import io.rhiot.datastream.engine.DataStream
-import io.rhiot.datastream.engine.JsonWithHeaders
-import io.rhiot.datastream.engine.TypeConverter
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.mongodb.EmbeddedMongo
-import io.rhiot.bootstrap.classpath.Bean
-import io.rhiot.utils.Properties
-import io.vertx.core.AsyncResult
-import io.vertx.core.Handler
-import io.vertx.core.Vertx
-import io.vertx.core.eventbus.EventBus
-import io.vertx.core.eventbus.Message
-import io.vertx.core.json.Json
-import org.junit.AfterClass
-import org.junit.BeforeClass
 import org.junit.Test
 
-import java.util.concurrent.Callable
-
 import static com.google.common.truth.Truth.assertThat
-import static com.jayway.awaitility.Awaitility.await
-import static io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
+import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setBooleanProperty
+import static io.rhiot.utils.Properties.setIntProperty
 
 class MongodbDocumentStoreTest extends DataStreamTest {
 
     static mongo = new EmbeddedMongo().start()
 
-    EventBus bus
-
     @Override
     protected void beforeDataStreamStarted() {
         setBooleanProperty('MQTT_ENABLED', false)
-        setBooleanProperty('AMQP_ENABLED', false)
-    }
-
-    @Override
-    protected void afterDataStreamStarted() {
-        bus = beanRegistry.bean(Vertx.class).get().eventBus()
+        setIntProperty('AMQP_PORT', findAvailableTcpPort())
     }
 
     @Test
     void shouldCountSavedDocument() {
-        def document = [foo: 'bar']
-        def saveCommand = jsonWithHeaders(document, [operation: 'save', arg0: 'doc'])
-        bus.send(DocumentStreamConsumer.CHANNEL, saveCommand.json, saveCommand.deliveryOptions())
-        def countCommand = jsonWithHeaders(null, [operation: 'count', arg0: 'doc'])
+        // Given
+        def document = payloadEncoding.encode([foo: 'bar'])
+        camelContext.createProducerTemplate().sendBody(amqp('document.save.doc'), document)
 
         // When
-        def count = -1
-        bus.send(DocumentStreamConsumer.CHANNEL, countCommand.json, countCommand.deliveryOptions(), new Handler<AsyncResult<Message>>() {
-            @Override
-            void handle(AsyncResult<Message> event) {
-                count = Json.decodeValue((String) event.result().body(), Map.class).result
-            }
-        })
+        def count = fromBus('document.count.doc', int.class)
 
         // Then
-        await().until((Callable<Boolean>) { count > -1 })
         assertThat(count).isEqualTo(1)
-    }
-
-    @Bean
-    static class MockTypeConverter implements TypeConverter {
-
-        @Override
-        def <T> T convert(Object object, Class<T> targetType) {
-            object
-        }
     }
 
 }

@@ -16,21 +16,14 @@
  */
 package io.rhiot.datastream.document
 
-import io.rhiot.datastream.engine.AbstractServiceStreamConsumer
+import io.rhiot.datastream.engine.AbstractServiceRouteStreamConsumer
+import io.rhiot.steroids.camel.Route
 
-/**
- * Consumes a stream of document-related messages.
- */
-class DocumentStreamConsumer extends AbstractServiceStreamConsumer<DocumentStore> {
-
-    // Constants
-
-    public static final String CHANNEL = 'document'
-
-    // Constructors
+@Route
+class DocumentStreamConsumer extends AbstractServiceRouteStreamConsumer {
 
     DocumentStreamConsumer() {
-        super(CHANNEL, DocumentStore.class)
+        super('document')
     }
 
 }

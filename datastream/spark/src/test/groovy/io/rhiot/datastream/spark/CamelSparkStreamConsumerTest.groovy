@@ -18,6 +18,7 @@ package io.rhiot.datastream.spark
 
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
+import io.rhiot.datastream.engine.test.DataStreamTest
 import org.apache.camel.CamelContext
 import org.apache.camel.component.spark.RddCallback
 import org.apache.spark.api.java.AbstractJavaRDDLike
@@ -27,27 +28,18 @@ import org.junit.Test
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
 
-class CamelSparkStreamConsumerTest {
+class CamelSparkStreamConsumerTest extends DataStreamTest {
 
-    static dataStream = new DataStream().start()
-    static {
-        def sparkContext = dataStream.beanRegistry().bean(JavaSparkContext.class).get()
-        dataStream.beanRegistry().register('rdd', sparkContext.textFile('src/test/resources/testrdd.txt'))
-        dataStream.beanRegistry().register('callback', new LinesXPayload())
-
+    @Override
+    protected void afterDataStreamStarted() {
+        def sparkContext = beanRegistry.bean(JavaSparkContext.class).get()
+        beanRegistry.register('rdd', sparkContext.textFile('src/test/resources/testrdd.txt'))
+        beanRegistry.register('callback', new LinesXPayload())
     }
 
     @Test
     void shouldExecuteTaskViaAmqpApi() {
-        // Given
-        def payloadEncoding = dataStream.beanRegistry().bean(PayloadEncoding.class).get()
-        def payload = payloadEncoding.encode(10)
-
-        // When
-        def encodedResult = dataStream.beanRegistry().bean(CamelContext.class).get().createProducerTemplate().requestBody(amqp('spark.execute.rdd.callback'), payload, byte[].class)
-        def result = payloadEncoding.decode(encodedResult, int.class)
-
-        // Then
+        def result = fromBus('spark.execute.rdd.callback', 10, int.class)
         assertThat(result).isEqualTo(170)
     }
 

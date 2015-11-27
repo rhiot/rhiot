@@ -30,9 +30,8 @@ class JsonPayloadEncoding implements PayloadEncoding {
     }
 
     @Override
-    def <T> T decode(byte[] payload, Class<T> type) {
-        def response = objectMapper.readValue(payload, Map.class)
-        objectMapper.convertValue(response.payload, type)
+    Object decode(byte[] payload) {
+        objectMapper.readValue(payload, Map.class).payload
     }
 
 }
