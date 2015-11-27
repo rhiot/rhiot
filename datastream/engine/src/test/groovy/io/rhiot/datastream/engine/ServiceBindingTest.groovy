@@ -17,9 +17,9 @@
 package io.rhiot.datastream.engine
 
 import io.rhiot.bootstrap.classpath.Bean
+import io.rhiot.datastream.engine.test.DataStreamTest
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
-import org.junit.AfterClass
 import org.junit.Test
 
 import static org.mockito.BDDMockito.given
@@ -27,21 +27,16 @@ import static org.mockito.Mockito.RETURNS_DEEP_STUBS
 import static org.mockito.Mockito.mock
 import static org.mockito.Mockito.verify
 
-class ServiceBindingTest {
+class ServiceBindingTest extends DataStreamTest {
 
-    static dataStream = new DataStream().start()
-
-    @AfterClass
-    static void afterClass() {
-        dataStream.stop()
-    }
-
-    static def serviceBinding = dataStream.beanRegistry().bean(ServiceBinding.class).get()
-    static {
-        serviceBinding.bootstrap(dataStream)
-    }
+    ServiceBinding serviceBinding
 
     def message = mock(Message.class, RETURNS_DEEP_STUBS)
+
+    @Override
+    protected void afterDataStreamStarted() {
+        serviceBinding = beanRegistry.bean(ServiceBinding.class).get()
+    }
 
     @Test
     void shouldBindHeader() {

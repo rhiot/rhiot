@@ -37,7 +37,9 @@ import org.junit.Test
 
 import java.util.concurrent.Callable
 
+import static com.google.common.truth.Truth.assertThat
 import static com.jayway.awaitility.Awaitility.await
+import static io.rhiot.datastream.engine.JsonWithHeaders.jsonWithHeaders
 import static io.rhiot.utils.Properties.setBooleanProperty
 
 class MongodbDocumentStoreTest extends DataStreamTest {
@@ -54,15 +56,15 @@ class MongodbDocumentStoreTest extends DataStreamTest {
 
     @Override
     protected void afterDataStreamStarted() {
-        bus = dataStream.beanRegistry().bean(Vertx.class).get().eventBus()
+        bus = beanRegistry.bean(Vertx.class).get().eventBus()
     }
 
     @Test
     void shouldCountSavedDocument() {
         def document = [foo: 'bar']
-        def saveCommand = JsonWithHeaders.jsonWithHeaders(document, [operation: 'save', arg0: 'doc'])
+        def saveCommand = jsonWithHeaders(document, [operation: 'save', arg0: 'doc'])
         bus.send(DocumentStreamConsumer.CHANNEL, saveCommand.json, saveCommand.deliveryOptions())
-        def countCommand = JsonWithHeaders.jsonWithHeaders(null, [operation: 'count', arg0: 'doc'])
+        def countCommand = jsonWithHeaders(null, [operation: 'count', arg0: 'doc'])
 
         // When
         def count = -1
@@ -75,7 +77,7 @@ class MongodbDocumentStoreTest extends DataStreamTest {
 
         // Then
         await().until((Callable<Boolean>) { count > -1 })
-        Truth.assertThat(count).isEqualTo(1)
+        assertThat(count).isEqualTo(1)
     }
 
     @Bean

@@ -16,6 +16,7 @@
  */
 package io.rhiot.datastream.engine.test
 
+import io.rhiot.bootstrap.BeanRegistry
 import io.rhiot.datastream.engine.DataStream
 import org.junit.AfterClass
 import org.junit.Assert
@@ -25,15 +26,18 @@ import static io.rhiot.utils.Properties.restoreSystemProperties
 
 abstract class DataStreamTest extends Assert {
 
-    private boolean started
+    static private boolean started
 
     protected static DataStream dataStream = new DataStream()
+
+    protected static BeanRegistry beanRegistry
 
     @Before
     public void before() {
         beforeDataStreamStarted()
         if(!started) {
             dataStream = dataStream.start().asType(DataStream.class)
+            beanRegistry = dataStream.beanRegistry()
             started = true
         }
         afterDataStreamStarted()
