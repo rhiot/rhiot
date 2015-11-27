@@ -21,7 +21,6 @@ import io.rhiot.mongodb.EmbeddedMongo
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
@@ -63,6 +62,21 @@ class MongodbDocumentStoreTest extends DataStreamTest {
 
         // Then
         assertThat(loadedInvoice).isNotNull()
+    }
+
+    @Test
+    public void shouldUpdateDocument() {
+        // Given
+        def id = fromBus("document.save.${collection}", invoice, String.class)
+        invoice.id = id
+        invoice.invoiceId = 'newValue'
+
+        // When
+        toBus("document.save.${collection}", invoice)
+
+        // Then
+        def updatedInvoice = fromBus("document.findOne.${collection}", id, Map.class)
+        assertThat(updatedInvoice.invoiceId).isEqualTo(invoice.invoiceId)
     }
 
     // Class fixtures

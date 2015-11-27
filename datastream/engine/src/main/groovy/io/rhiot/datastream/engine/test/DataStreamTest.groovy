@@ -19,7 +19,6 @@ package io.rhiot.datastream.engine.test
 import io.rhiot.bootstrap.BeanRegistry
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
-import io.vertx.core.json.Json
 import org.apache.camel.CamelContext
 import org.junit.AfterClass
 import org.junit.Assert
@@ -69,11 +68,11 @@ abstract class DataStreamTest extends Assert {
         }
     }
 
-    protected def <T> T toBus(String channel) {
+    protected def void toBus(String channel) {
         camelContext.createProducerTemplate().sendBody(amqp(channel), null)
     }
 
-    protected def <T> T toBus(String channel, Object payload) {
+    protected def void toBus(String channel, Object payload) {
         camelContext.createProducerTemplate().sendBody(amqp(channel), payloadEncoding.encode(payload))
     }
 

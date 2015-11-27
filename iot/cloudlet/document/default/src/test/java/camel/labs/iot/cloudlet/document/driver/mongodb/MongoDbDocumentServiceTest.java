@@ -84,18 +84,6 @@ public class MongoDbDocumentServiceTest extends Assert {
     // Tests
 
     @Test
-    public void shouldUpdatePojoWithAssignedId() {
-        // Given
-        invoice = documentService.save(invoice);
-
-        // When
-        documentService.save(invoice);
-
-        // Then
-        assertEquals(1, documentService.count(Invoice.class));
-    }
-
-    @Test
     public void shouldUpdateLoadedDocument() {
         // Given
         invoice = documentService.save(invoice);
