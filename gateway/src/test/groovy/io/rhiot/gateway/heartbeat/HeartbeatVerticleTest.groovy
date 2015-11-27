@@ -18,6 +18,7 @@ package io.rhiot.gateway.heartbeat
 
 import io.rhiot.gateway.Gateway
 import io.rhiot.steroids.camel.CamelBootInitializer
+import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Test
 
@@ -25,7 +26,12 @@ import java.util.concurrent.CountDownLatch
 
 class HeartbeatVerticleTest extends Assert {
 
-    def gateway = new Gateway().start()
+    static def gateway = new Gateway().start()
+
+    @AfterClass
+    static void afterClass() {
+        gateway.stop()
+    }
 
     @Test
     void shouldReceiveHeartbeatFromEventBus() {
