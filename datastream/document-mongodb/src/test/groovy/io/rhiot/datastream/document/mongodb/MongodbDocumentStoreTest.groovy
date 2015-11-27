@@ -30,6 +30,7 @@ import io.vertx.core.Vertx
 import io.vertx.core.eventbus.EventBus
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
+import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 
@@ -49,8 +50,14 @@ class MongodbDocumentStoreTest {
     @BeforeClass
     static void beforeClass() {
         setBooleanProperty('MQTT_ENABLED', false)
+        setBooleanProperty('AMQP_ENABLED', false)
         dataStream = new DataStream().start()
         bus = dataStream.beanRegistry().bean(Vertx.class).get().eventBus()
+    }
+
+    @AfterClass
+    static void afterClass() {
+        dataStream.stop()
     }
 
     @Test
