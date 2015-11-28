@@ -16,16 +16,18 @@
  */
 package io.rhiot.component.kura.router;
 
-import com.google.common.collect.ImmutableMap;
+import static com.google.common.truth.Truth.assertThat;
+import static org.eclipse.kura.core.util.IOUtil.readResource;
+
 import io.rhiot.component.kura.test.TestKuraServer;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.truth.Truth.assertThat;
-import static org.eclipse.kura.core.util.IOUtil.readResource;
+import org.junit.Test;
+
+import com.google.common.collect.ImmutableMap;
 
 public class RhiotKuraRouterTest {
 
@@ -46,7 +48,8 @@ public class RhiotKuraRouterTest {
     @Test
     public void shouldLoadScrRoutes() throws IOException {
         // Given
-        Map<String, Object> scrProperties = ImmutableMap.<String, Object>of(RhiotKuraRouter.XML_ROUTE_PROPERTY, readResource("routes.xml"));
+        Map<String, Object> scrProperties = ImmutableMap.<String, Object> of(RhiotKuraConstants.XML_ROUTE_PROPERTY,
+                readResource("routes.xml"));
         MyRouter router = kuraServer.start(MyRouter.class);
 
         // When
@@ -59,7 +62,8 @@ public class RhiotKuraRouterTest {
     @Test
     public void shouldReloadScrRoutes() throws IOException {
         // Given
-        Map<String, Object> scrProperties = ImmutableMap.<String, Object>of(RhiotKuraRouter.XML_ROUTE_PROPERTY, readResource("routes.xml"));
+        Map<String, Object> scrProperties = ImmutableMap.<String, Object> of(RhiotKuraConstants.XML_ROUTE_PROPERTY,
+                readResource("routes.xml"));
         MyRouter router = kuraServer.start(MyRouter.class);
 
         // When
@@ -73,8 +77,10 @@ public class RhiotKuraRouterTest {
     @Test
     public void shouldAddMoreScrRoutes() throws IOException {
         // Given
-        Map<String, Object> scrProperties = ImmutableMap.<String, Object>of(RhiotKuraRouter.XML_ROUTE_PROPERTY, readResource("routes.xml"));
-        Map<String, Object> newScrProperties = ImmutableMap.<String, Object>of(RhiotKuraRouter.XML_ROUTE_PROPERTY, readResource("routes-new.xml"));
+        Map<String, Object> scrProperties = ImmutableMap.<String, Object> of(RhiotKuraConstants.XML_ROUTE_PROPERTY,
+                readResource("routes.xml"));
+        Map<String, Object> newScrProperties = ImmutableMap.<String, Object> of(RhiotKuraConstants.XML_ROUTE_PROPERTY,
+                readResource("routes-new.xml"));
         MyRouter router = kuraServer.start(MyRouter.class);
 
         // When
@@ -91,4 +97,3 @@ public class RhiotKuraRouterTest {
     }
 
 }
-
