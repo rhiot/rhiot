@@ -16,24 +16,21 @@
  */
 package io.rhiot.component.kura.router;
 
+import java.io.ByteArrayInputStream;
+import java.util.Map;
+
 import org.apache.camel.component.kura.KuraRouter;
 import org.apache.camel.model.RoutesDefinition;
 import org.eclipse.kura.configuration.ConfigurableComponent;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 
-import java.io.ByteArrayInputStream;
-import java.util.Map;
-
 /**
- * Base class for Camel routers deployable into Eclipse Kura. All RhiotKuraRouters are configurable components managable
- * from the Everyware cloud.
+ * Base class for Camel routers deployable into Eclipse Kura. All
+ * RhiotKuraRouters are configurable components managable from the Everyware
+ * cloud.
  */
 public abstract class RhiotKuraRouter extends KuraRouter implements ConfigurableComponent {
-
-    // Constants
-
-    public static final String XML_ROUTE_PROPERTY = "camel.route.xml";
 
     // Members
 
@@ -44,15 +41,16 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
 
     protected void updated(Map<String, Object> properties) {
         log.debug("Refreshing SCR properties: " + properties);
-        refreshCamelRouteXml(camelRouteXml, (String) properties.get(XML_ROUTE_PROPERTY));
+        refreshCamelRouteXml(camelRouteXml, (String) properties.get(RhiotKuraConstants.XML_ROUTE_PROPERTY));
     }
 
     public void refreshCamelRouteXml(String oldCamelRouteXml, String newCamelRouteXml) {
-        if(newCamelRouteXml != null && !newCamelRouteXml.equals(oldCamelRouteXml)) {
+        if (newCamelRouteXml != null && !newCamelRouteXml.equals(oldCamelRouteXml)) {
             this.camelRouteXml = newCamelRouteXml;
             if (!camelRouteXml.isEmpty()) {
                 try {
-                    RoutesDefinition routesDefinition = camelContext.loadRoutesDefinition(new ByteArrayInputStream(camelRouteXml.getBytes()));
+                    RoutesDefinition routesDefinition = camelContext
+                            .loadRoutesDefinition(new ByteArrayInputStream(camelRouteXml.getBytes()));
                     camelContext.addRouteDefinitions(routesDefinition.getRoutes());
                 } catch (Exception e) {
                     log.warn("Cannot load routes definitions: {}", camelRouteXml);
@@ -63,13 +61,15 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
 
     // ASF Camel workarounds
 
-    // TODO: Remove this overridden method as soon as Camel 2.17 is out (see CAMEL-9357)
+    // TODO: Remove this overridden method as soon as Camel 2.17 is out (see
+    // CAMEL-9357)
     @Override
     public void configure() throws Exception {
         log.debug("No programmatic routes configuration found.");
     }
 
-    // TODO: Remove this overridden method as soon as Camel 2.17 is out (see CAMEL-9314)
+    // TODO: Remove this overridden method as soon as Camel 2.17 is out (see
+    // CAMEL-9314)
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         try {
@@ -86,14 +86,15 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
         }
     }
 
-    // TODO: Remove these overridden methods as soon as Camel 2.17 is out (see CAMEL-9351)
+    // TODO: Remove these overridden methods as soon as Camel 2.17 is out (see
+    // CAMEL-9351)
 
-    protected void activate(ComponentContext componentContext, Map<String,Object> properties) throws Exception {
+    protected void activate(ComponentContext componentContext, Map<String, Object> properties) throws Exception {
         start(componentContext.getBundleContext());
         updated(properties); // TODO Keep this line even when Camel 2.17 is out
     }
 
-    protected void deactivate(ComponentContext componentContext) throws Exception{
+    protected void deactivate(ComponentContext componentContext) throws Exception {
         stop(componentContext.getBundleContext());
     }
 
