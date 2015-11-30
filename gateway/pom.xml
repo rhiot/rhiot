@@ -20,6 +20,7 @@
     </licenses>
 
     <modules>
+        <module>components</module>
         <module>gateway</module>
     </modules>
 
