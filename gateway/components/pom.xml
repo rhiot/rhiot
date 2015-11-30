@@ -6,11 +6,10 @@
 	<parent>
 		<groupId>io.rhiot</groupId>
 		<version>0.1.3-SNAPSHOT</version>
-		<artifactId>rhiot-iot</artifactId>
-		<relativePath>..</relativePath>
+		<artifactId>rhiot-gateway-parent</artifactId>
 	</parent>
-	<name>RHIOT :: IoT :: Components</name>
-	<artifactId>rhiot-iot-components</artifactId>
+	<name>Rhiot :: Gateway :: Camel components</name>
+	<artifactId>rhiot-gateway-components</artifactId>
 	<packaging>pom</packaging>
 
 	<licenses>
@@ -21,12 +20,7 @@
 	</licenses>
 
 	<modules>
-		<module>camel-openimaj</module>
-		<module>camel-pubnub</module>
-		<module>camel-pubnub-feature</module>
-		<module>camel-tinkerforge</module>
-		<module>camel-tinkerforge-feature</module>
-		<module>camel-webcam</module>
+		<module>camel-pi4j</module>
     </modules>
 
 	<build>

@@ -19,8 +19,6 @@ package io.rhiot.component.pi4j;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.rhiot.component.pi4j.Pi4jConstants;
-
 import org.junit.Assert;
 import org.junit.Test;
 

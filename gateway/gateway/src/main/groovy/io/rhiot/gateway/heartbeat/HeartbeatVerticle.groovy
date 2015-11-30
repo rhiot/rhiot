@@ -16,11 +16,11 @@
  */
 package io.rhiot.gateway.heartbeat
 
+import io.rhiot.gateway.Gateway
 import io.rhiot.gateway.GatewayVerticle
 import io.vertx.lang.groovy.GroovyVerticle
 
 import static io.rhiot.gateway.GatewayConstants.BUS_HEARTBEAT
-import static io.rhiot.gateway.Gateway.JSON
 import static io.rhiot.utils.Properties.intProperty
 
 @GatewayVerticle
@@ -29,7 +29,7 @@ class HeartbeatVerticle extends GroovyVerticle {
     @Override
     void start() throws Exception {
         vertx.setPeriodic(intProperty('camellabs_iot_gateway_heartbeat_rate', 5000)) {
-            vertx.eventBus().publish(BUS_HEARTBEAT, JSON.writeValueAsString(new HeartbeatEvent()))
+            vertx.eventBus().publish(BUS_HEARTBEAT, Gateway.JSON.writeValueAsString(new HeartbeatEvent()))
         }
     }
 
