@@ -26,6 +26,8 @@ import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -68,7 +70,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteRddCallbackWithPayloads() {
-        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", asList(10, 10), SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader(sparkUri, asList(10, 10), SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
             @Override
             public Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 return rdd.count() * (int) payloads[0] * (int) payloads[1];
@@ -139,6 +141,24 @@ public class SparkProducerTest extends CamelTestSupport {
                         to("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext");
             }
         };
+    }
+
+    @Test
+    public void shouldExecuteVoidCallback() throws IOException {
+        // Given
+        File output = File.createTempFile("camel", "spark");
+        output.delete();
+
+        // When
+        template.sendBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", null, SPARK_RDD_CALLBACK_HEADER, new VoidRddCallback() {
+            @Override
+            public void doOnRdd(AbstractJavaRDDLike rdd, Object... payloads) {
+                rdd.saveAsTextFile(output.getAbsolutePath());
+            }
+        });
+
+        // Then
+        Truth.assertThat(output.length()).isGreaterThan(0L);
     }
 
     static class DoubleWord implements Function<String, String> {
