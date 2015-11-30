@@ -44,6 +44,56 @@ public class SparkProducerTest extends CamelTestSupport {
 
     String sparkUri = "spark:analyze?rdd=#pomRdd";
 
+    // Routes fixtures
+
+    @Override
+    protected JndiRegistry createRegistry() throws Exception {
+        JndiRegistry registry = super.createRegistry();
+        registry.bind("sparkContext", sparkContext);
+        registry.bind("pomRdd", sparkContext.textFile("testrdd.txt"));
+        registry.bind("countLinesTransformation", new RddCallback() {
+            @Override
+            public Object onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
+                return rdd.count();
+            }
+        });
+        return registry;
+    }
+
+    @Override
+    protected RouteBuilder createRouteBuilder() throws Exception {
+        return new RouteBuilder() {
+            @Override
+            public void configure() throws Exception {
+                from("direct:mapAndFlatMap").
+                        setBody().constant(new LineToWord()).
+                        to("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext&collect=false").
+                        setBody().constant(new DoubleWord()).
+                        to("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext");
+            }
+        };
+    }
+
+    // Functions fixtures
+
+    static class DoubleWord implements Function<String, String> {
+
+        @Override
+        public String call(String v1) throws Exception {
+            return v1 + v1;
+        }
+
+    }
+
+    static class LineToWord implements FlatMapFunction<String, String> {
+
+        @Override
+        public Iterable<String> call(String s) throws Exception {
+            return asList(s.split(" "));
+        }
+
+    }
+
     // Tests
 
     @Test
@@ -115,34 +165,6 @@ public class SparkProducerTest extends CamelTestSupport {
         Truth.assertThat(pomLinesCount).isGreaterThan(0L);
     }
 
-    @Override
-    protected JndiRegistry createRegistry() throws Exception {
-        JndiRegistry registry = super.createRegistry();
-        registry.bind("sparkContext", sparkContext);
-        registry.bind("pomRdd", sparkContext.textFile("testrdd.txt"));
-        registry.bind("countLinesTransformation", new RddCallback() {
-            @Override
-            public Object onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
-                return rdd.count();
-            }
-        });
-        return registry;
-    }
-
-    @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                from("direct:mapAndFlatMap").
-                        setBody().constant(new LineToWord()).
-                        to("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext&collect=false").
-                        setBody().constant(new DoubleWord()).
-                        to("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext");
-            }
-        };
-    }
-
     @Test
     public void shouldExecuteVoidCallback() throws IOException {
         // Given
@@ -150,7 +172,7 @@ public class SparkProducerTest extends CamelTestSupport {
         output.delete();
 
         // When
-        template.sendBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", null, SPARK_RDD_CALLBACK_HEADER, new VoidRddCallback() {
+        template.sendBodyAndHeader(sparkUri, null, SPARK_RDD_CALLBACK_HEADER, new VoidRddCallback() {
             @Override
             public void doOnRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 rdd.saveAsTextFile(output.getAbsolutePath());
@@ -159,24 +181,6 @@ public class SparkProducerTest extends CamelTestSupport {
 
         // Then
         Truth.assertThat(output.length()).isGreaterThan(0L);
-    }
-
-    static class DoubleWord implements Function<String, String> {
-
-        @Override
-        public String call(String v1) throws Exception {
-            return v1 + v1;
-        }
-
-    }
-
-    static class LineToWord implements FlatMapFunction<String, String> {
-
-        @Override
-        public Iterable<String> call(String s) throws Exception {
-            return asList(s.split(" "));
-        }
-
     }
 
 }

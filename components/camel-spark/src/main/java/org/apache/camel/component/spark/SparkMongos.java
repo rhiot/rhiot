@@ -31,11 +31,7 @@ public final class SparkMongos {
         Configuration mongodbConfig = new Configuration();
         mongodbConfig.set("mongo.job.input.format", "com.mongodb.hadoop.MongoInputFormat");
         mongodbConfig.set("mongo.input.uri", String.format("mongodb://%s:%d/%s.%s", mongoHost, mongoPort, db, collection));
-        return sparkContext.newAPIHadoopRDD(
-                mongodbConfig,
-                MongoInputFormat.class,
-                Object.class,
-                BSONObject.class);
+        return sparkContext.newAPIHadoopRDD(mongodbConfig, MongoInputFormat.class, Object.class, BSONObject.class);
     }
 
 }
