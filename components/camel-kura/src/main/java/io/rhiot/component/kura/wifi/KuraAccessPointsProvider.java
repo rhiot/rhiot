@@ -18,9 +18,10 @@ package io.rhiot.component.kura.wifi;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import io.rhiot.component.kura.utils.KuraServiceFactory;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.camel.spi.Registry;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -67,19 +68,7 @@ public class KuraAccessPointsProvider implements AccessPointsProvider {
     // Helpers
 
     private NetworkService resolveNetworkService(Registry registry) {
-        NetworkService ret = null;
-        Set<NetworkService> servicesFromRegistry = registry.findByType(NetworkService.class);
-        if (servicesFromRegistry.size() == 1) {
-            ret = servicesFromRegistry.iterator().next();
-        } else if (servicesFromRegistry.size() > 1) {
-            throw new IllegalStateException(
-                    "Too many NetworkService services found in a registry: " + servicesFromRegistry.size());
-        } else {
-            throw new IllegalArgumentException("No NetworkService service instance found in a registry.");
-        }
-
-        LOG.info("Found Kura NetworkService in the registry. Kura component will use that instance.");
-        return ret;
+        return KuraServiceFactory.retrieveService(NetworkService.class, registry);
     }
 
     protected void initializeNetworkService(NetworkService networkService) {
