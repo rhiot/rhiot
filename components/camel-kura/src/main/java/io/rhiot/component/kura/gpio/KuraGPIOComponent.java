@@ -16,8 +16,9 @@
  */
 package io.rhiot.component.kura.gpio;
 
+import io.rhiot.component.kura.utils.KuraServiceFactory;
+
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
@@ -37,19 +38,8 @@ public class KuraGPIOComponent extends UriEndpointComponent {
     @Override
     protected Endpoint createEndpoint(String uri, String remain, Map<String, Object> parameters) throws Exception {
 
-        Set<GPIOService> serviceSet = this.getCamelContext().getRegistry().findByType(GPIOService.class);
-        GPIOService service = null;
-
-        int serviceCount = serviceSet.size();
-        if (serviceCount == 1) {
-            for (GPIOService serviceIt : serviceSet) {
-                service = serviceIt;
-            }
-        } else if (serviceCount > 1) {
-            throw new IllegalStateException("Too many GPIOService services found in a registry: " + serviceCount);
-        } else {
-            throw new IllegalArgumentException("No GPIOService service instance found in a registry.");
-        }
+        GPIOService service = KuraServiceFactory.retrieveService(GPIOService.class,
+                this.getCamelContext().getRegistry());
 
         KuraGPIOEndpoint ret = new KuraGPIOEndpoint(uri, this, service);
 
