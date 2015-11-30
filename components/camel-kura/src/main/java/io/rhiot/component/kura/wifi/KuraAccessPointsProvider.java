@@ -25,7 +25,6 @@ import java.util.Set;
 import org.apache.camel.spi.Registry;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.eclipse.kura.KuraException;
-import org.eclipse.kura.linux.net.NetworkServiceImpl;
 import org.eclipse.kura.net.NetworkService;
 import org.eclipse.kura.net.wifi.WifiAccessPoint;
 import org.slf4j.Logger;
@@ -68,16 +67,19 @@ public class KuraAccessPointsProvider implements AccessPointsProvider {
     // Helpers
 
     private NetworkService resolveNetworkService(Registry registry) {
+        NetworkService ret = null;
         Set<NetworkService> servicesFromRegistry = registry.findByType(NetworkService.class);
-        if (servicesFromRegistry.size() != 1) {
-            LOG.info("Found {} Kura NetworkService instances in the registry. Creating and using custom instance then.",
-                    servicesFromRegistry.size());
-            NetworkService networkService = new NetworkServiceImpl();
-            initializeNetworkService(networkService);
-            return networkService;
+        if (servicesFromRegistry.size() == 1) {
+            ret = servicesFromRegistry.iterator().next();
+        } else if (servicesFromRegistry.size() > 1) {
+            throw new IllegalStateException(
+                    "Too many NetworkService services found in a registry: " + servicesFromRegistry.size());
+        } else {
+            throw new IllegalArgumentException("No NetworkService service instance found in a registry.");
         }
+
         LOG.info("Found Kura NetworkService in the registry. Kura component will use that instance.");
-        return servicesFromRegistry.iterator().next();
+        return ret;
     }
 
     protected void initializeNetworkService(NetworkService networkService) {
