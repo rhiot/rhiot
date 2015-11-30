@@ -18,9 +18,11 @@ package org.apache.camel.component.spark;
 
 import com.google.common.truth.Truth;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.spark.annotations.RddCallback;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.spark.api.java.AbstractJavaRDDLike;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
@@ -31,6 +33,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.apache.camel.component.spark.AnnotatedRddCallback.annotatedRddCallback;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_CALLBACK_HEADER;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_TRANSFORMATION_HEADER;
 import static org.apache.camel.component.spark.SparkTransformation.MAP;
@@ -51,7 +54,7 @@ public class SparkProducerTest extends CamelTestSupport {
         JndiRegistry registry = super.createRegistry();
         registry.bind("sparkContext", sparkContext);
         registry.bind("pomRdd", sparkContext.textFile("testrdd.txt"));
-        registry.bind("countLinesTransformation", new RddCallback() {
+        registry.bind("countLinesTransformation", new org.apache.camel.component.spark.RddCallback() {
             @Override
             public Object onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 return rdd.count();
@@ -98,7 +101,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteRddCallback() {
-        long pomLinesCount = template.requestBodyAndHeader(sparkUri, null, SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader(sparkUri, null, SPARK_RDD_CALLBACK_HEADER, new org.apache.camel.component.spark.RddCallback() {
             @Override
             public Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 return rdd.count();
@@ -109,7 +112,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteRddCallbackWithSinglePayload() {
-        long pomLinesCount = template.requestBodyAndHeader(sparkUri, 10, SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader(sparkUri, 10, SPARK_RDD_CALLBACK_HEADER, new org.apache.camel.component.spark.RddCallback() {
             @Override
             public Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 return rdd.count() * (int) payloads[0];
@@ -120,7 +123,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteRddCallbackWithPayloads() {
-        long pomLinesCount = template.requestBodyAndHeader(sparkUri, asList(10, 10), SPARK_RDD_CALLBACK_HEADER, new RddCallback<Long>() {
+        long pomLinesCount = template.requestBodyAndHeader(sparkUri, asList(10, 10), SPARK_RDD_CALLBACK_HEADER, new org.apache.camel.component.spark.RddCallback() {
             @Override
             public Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
                 return rdd.count() * (int) payloads[0] * (int) payloads[1];
@@ -181,6 +184,18 @@ public class SparkProducerTest extends CamelTestSupport {
 
         // Then
         Truth.assertThat(output.length()).isGreaterThan(0L);
+    }
+
+    @Test
+    public void shouldExecuteAnnotatedCallback() {
+        org.apache.camel.component.spark.RddCallback rddCallback = annotatedRddCallback(new Object(){
+            @RddCallback
+            long countLines(JavaRDD<String> textFile) {
+                return textFile.count();
+            }
+        });
+        long pomLinesCount = template.requestBodyAndHeader(sparkUri, null, SPARK_RDD_CALLBACK_HEADER, rddCallback, Long.class);
+        Truth.assertThat(pomLinesCount).isEqualTo(17);
     }
 
 }
