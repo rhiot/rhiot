@@ -16,8 +16,9 @@
  */
 package io.rhiot.component.kura.cloud;
 
+import io.rhiot.component.kura.utils.KuraServiceFactory;
+
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
@@ -36,19 +37,8 @@ public class KuraCloudComponent extends UriEndpointComponent {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remain, Map<String, Object> parameters) throws Exception {
-        Set<CloudService> cloudServiceSet = this.getCamelContext().getRegistry().findByType(CloudService.class);
-        CloudService cloudService = null;
-
-        int cloudServiceCount = cloudServiceSet.size();
-        if (cloudServiceCount == 1) {
-            for (CloudService cloudServiceIt : cloudServiceSet) {
-                cloudService = cloudServiceIt;
-            }
-        } else if (cloudServiceCount > 1) {
-            throw new IllegalStateException("Too many cloud services found in a registry: " + cloudServiceCount);
-        } else {
-            throw new IllegalArgumentException("No cloud service instance found in a registry.");
-        }
+        CloudService cloudService = KuraServiceFactory.retrieveService(CloudService.class,
+                this.getCamelContext().getRegistry());
 
         KuraCloudEndpoint kuraCloudEndpoint = new KuraCloudEndpoint(uri, this, cloudService);
 
