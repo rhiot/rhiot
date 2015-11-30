@@ -7,6 +7,7 @@
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-gateway-parent</artifactId>
         <version>0.1.3-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
     <name>Rhiot :: Gateway</name>
     <artifactId>rhiot-gateway</artifactId>
