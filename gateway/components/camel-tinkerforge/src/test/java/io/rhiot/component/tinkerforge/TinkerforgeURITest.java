@@ -20,8 +20,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.URISyntaxException;
 
-import io.rhiot.component.tinkerforge.TinkerforgeDeviceType;
-import io.rhiot.component.tinkerforge.TinkerforgeURI;
 import org.junit.Test;
 
 public class TinkerforgeURITest {

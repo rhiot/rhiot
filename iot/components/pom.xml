@@ -24,8 +24,6 @@
 		<module>camel-openimaj</module>
 		<module>camel-pubnub</module>
 		<module>camel-pubnub-feature</module>
-		<module>camel-tinkerforge</module>
-		<module>camel-tinkerforge-feature</module>
 		<module>camel-webcam</module>
     </modules>
 

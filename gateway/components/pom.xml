@@ -21,6 +21,8 @@
 
 	<modules>
 		<module>camel-pi4j</module>
+		<module>camel-tinkerforge</module>
+		<module>camel-tinkerforge-feature</module>
     </modules>
 
 	<build>
