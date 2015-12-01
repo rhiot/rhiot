@@ -29,3 +29,7 @@ Californium.properties
 
 # ActiveMQ
 activemq-data/
+
+# Apache Spark
+metastore_db/
+derby.log
