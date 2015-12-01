@@ -40,20 +40,11 @@
             <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
-                <version>3.0.3</version>
-                <extensions>true</extensions>
                 <configuration>
                     <aggregateFeatures>true</aggregateFeatures>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>features-generate-descriptor</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
 	</build>
+
 </project>
