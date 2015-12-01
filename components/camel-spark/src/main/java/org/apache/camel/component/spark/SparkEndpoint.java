@@ -31,8 +31,6 @@ public class SparkEndpoint extends DefaultEndpoint {
 
     // Endpoint collaborators
 
-    private JavaSparkContext sparkContext;
-
     private AbstractJavaRDDLike rdd;
 
     private RddCallback rddCallback;
@@ -64,39 +62,12 @@ public class SparkEndpoint extends DefaultEndpoint {
         return true;
     }
 
-    // Resolvers
-
-    protected JavaSparkContext resolveSparkContext() {
-        if(sparkContext != null) {
-            return sparkContext;
-        } else if(getComponent().getJavaSparkContext() != null) {
-            return getComponent().getJavaSparkContext();
-        } else {
-            Set<JavaSparkContext> contexts = getCamelContext().getRegistry().findByType(JavaSparkContext.class);
-            if(contexts.isEmpty()) {
-                return Sparks.createLocalSparkContext();
-            } else if(contexts.size() == 1) {
-                return contexts.iterator().next();
-            } else {
-                return null;
-            }
-        }
-    }
-
     // Setters & getters
 
 
     @Override
     public SparkComponent getComponent() {
         return (SparkComponent) super.getComponent();
-    }
-
-    public JavaSparkContext getSparkContext() {
-        return sparkContext;
-    }
-
-    public void setSparkContext(JavaSparkContext sparkContext) {
-        this.sparkContext = sparkContext;
     }
 
     public AbstractJavaRDDLike getRdd() {

@@ -70,9 +70,9 @@ public class SparkProducerTest extends CamelTestSupport {
             public void configure() throws Exception {
                 from("direct:mapAndFlatMap").
                         setBody().constant(new LineToWord()).
-                        to("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext&collect=false").
+                        to("spark:analyze?rdd=#pomRdd&collect=false").
                         setBody().constant(new DoubleWord()).
-                        to("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext");
+                        to("spark:analyze?rdd=#pomRdd");
             }
         };
     }
@@ -140,19 +140,19 @@ public class SparkProducerTest extends CamelTestSupport {
                 return rdd.count() * (int) payloads[0] * (int) payloads[1];
             }
         };
-        long pomLinesCount = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", asList("10", "10"), SPARK_RDD_CALLBACK_HEADER, rddCallback, Long.class);
+        long pomLinesCount = template.requestBodyAndHeader(sparkUri, asList("10", "10"), SPARK_RDD_CALLBACK_HEADER, rddCallback, Long.class);
         Truth.assertThat(pomLinesCount).isEqualTo(1700);
     }
 
     @Test
     public void shouldExecuteMap() {
-        List<String> words = template.requestBodyAndHeader("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", new DoubleWord(), SPARK_TRANSFORMATION_HEADER, MAP, List.class);
+        List<String> words = template.requestBodyAndHeader(sparkUri, new DoubleWord(), SPARK_TRANSFORMATION_HEADER, MAP, List.class);
         Truth.assertThat(words).contains("foo barfoo bar");
     }
 
     @Test
     public void shouldExecuteFlatMap() {
-        List<String> words = template.requestBody("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext", new LineToWord(), List.class);
+        List<String> words = template.requestBody(sparkUri, new LineToWord(), List.class);
         Truth.assertThat(words).contains("foo");
     }
 
@@ -164,7 +164,7 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldUseTransformationFromRegistry() {
-        long pomLinesCount = template.requestBody("spark:analyze?rdd=#pomRdd&sparkContext=#sparkContext&rddCallback=#countLinesTransformation", null, Long.class);
+        long pomLinesCount = template.requestBody(sparkUri + "&rddCallback=#countLinesTransformation", null, Long.class);
         Truth.assertThat(pomLinesCount).isGreaterThan(0L);
     }
 

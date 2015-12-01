@@ -24,8 +24,6 @@ import java.util.Map;
 
 public class SparkComponent extends UriEndpointComponent {
 
-    private JavaSparkContext javaSparkContext;
-
     public SparkComponent() {
         super(SparkEndpoint.class);
     }
@@ -33,14 +31,6 @@ public class SparkComponent extends UriEndpointComponent {
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new SparkEndpoint(uri, this);
-    }
-
-    public JavaSparkContext getJavaSparkContext() {
-        return javaSparkContext;
-    }
-
-    public void setJavaSparkContext(JavaSparkContext javaSparkContext) {
-        this.javaSparkContext = javaSparkContext;
     }
 
 }
