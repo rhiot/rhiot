@@ -20,6 +20,9 @@ public final class RhiotKuraConstants {
     // Constants
     public static final String XML_ROUTE_PROPERTY = "camel.route.xml";
 
+    public static final String METATYPE_NAME = "metatype";
+    public static final String PROPERTIES_COMPONENT = "properties";
+
     private RhiotKuraConstants() {
     }
 }

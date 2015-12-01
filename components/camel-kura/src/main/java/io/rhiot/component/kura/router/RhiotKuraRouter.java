@@ -18,8 +18,12 @@ package io.rhiot.component.kura.router;
 
 import java.io.ByteArrayInputStream;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.Route;
 import org.apache.camel.component.kura.KuraRouter;
+import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.model.RoutesDefinition;
 import org.eclipse.kura.configuration.ConfigurableComponent;
 import org.osgi.framework.BundleContext;
@@ -38,6 +42,7 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
      * Camel route XML, usually configured using SCR property.
      */
     protected String camelRouteXml;
+    private Map<String, Object> m_properties;
 
     protected void updated(Map<String, Object> properties) {
         log.debug("Refreshing SCR properties: " + properties);
@@ -88,14 +93,38 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
 
     // TODO: Remove these overridden methods as soon as Camel 2.17 is out (see
     // CAMEL-9351)
-
     protected void activate(ComponentContext componentContext, Map<String, Object> properties) throws Exception {
+        m_properties = properties;
         start(componentContext.getBundleContext());
         updated(properties); // TODO Keep this line even when Camel 2.17 is out
     }
 
     protected void deactivate(ComponentContext componentContext) throws Exception {
         stop(componentContext.getBundleContext());
+    }
+
+    @Override
+    protected void beforeStart(CamelContext camelContext) {
+        PropertiesComponent pc = camelContext.getComponent(RhiotKuraConstants.PROPERTIES_COMPONENT,
+                PropertiesComponent.class);
+        pc.addFunction(new RhiotKuraMetatypePropertiesFunction(m_properties));
+    }
+
+    protected void modified(Map<String, Object> properties) {
+        m_properties = properties;
+        try {
+            for (Route route : camelContext.getRoutes()) {
+                camelContext.stopRoute(route.getId(), 10, TimeUnit.SECONDS);
+                camelContext.removeRoute(route.getId());
+            }
+            camelContext.stop();
+            beforeStart(camelContext);
+            updated(m_properties);
+            camelContext.addRoutes(this);
+            camelContext.start();
+        } catch (Exception e) {
+            log.error("Cannot restart Kura RHIOT Camel Context", e);
+        }
     }
 
 }
