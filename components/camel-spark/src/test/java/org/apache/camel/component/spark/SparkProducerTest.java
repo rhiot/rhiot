@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.apache.camel.component.spark.AnnotatedRddCallback.annotatedRddCallback;
+import static org.apache.camel.component.spark.annotations.AnnotatedRddCallback.annotatedRddCallback;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_CALLBACK_HEADER;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_TRANSFORMATION_HEADER;
 import static org.apache.camel.component.spark.SparkTransformation.MAP;
@@ -196,6 +196,26 @@ public class SparkProducerTest extends CamelTestSupport {
         });
         long pomLinesCount = template.requestBodyAndHeader(sparkUri, null, SPARK_RDD_CALLBACK_HEADER, rddCallback, Long.class);
         Truth.assertThat(pomLinesCount).isEqualTo(17);
+    }
+
+    @Test
+    public void shouldExecuteAnnotatedVoidCallback() throws IOException {
+        // Given
+        File output = File.createTempFile("camel", "spark");
+        output.delete();
+        org.apache.camel.component.spark.RddCallback rddCallback = annotatedRddCallback(new Object(){
+            @RddCallback
+            void countLines(JavaRDD<String> textFile) {
+                textFile.saveAsTextFile(output.getAbsolutePath());
+            }
+        });
+
+        // When
+        template.sendBodyAndHeader(sparkUri, null, SPARK_RDD_CALLBACK_HEADER, rddCallback);
+
+
+            // Then
+        Truth.assertThat(output.length()).isGreaterThan(0L);
     }
 
 }

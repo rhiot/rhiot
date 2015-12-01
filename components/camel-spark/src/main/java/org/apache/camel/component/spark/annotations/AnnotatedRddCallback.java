@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.component.spark;
+package org.apache.camel.component.spark.annotations;
 
 import org.apache.camel.component.spark.annotations.RddCallback;
 import org.apache.spark.api.java.AbstractJavaRDDLike;
@@ -42,7 +42,10 @@ public class AnnotatedRddCallback {
                         if(arguments.get(1) == null) {
                             arguments.remove(1);
                         }
-                        return rddCallbacks.get(0).invoke(callback, arguments.toArray(new Object[0]));
+
+                        Method callbackMethod = rddCallbacks.get(0);
+                        callbackMethod.setAccessible(true);
+                        return callbackMethod.invoke(callback, arguments.toArray(new Object[arguments.size()]));
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         throw new RuntimeException(e);
                     }
