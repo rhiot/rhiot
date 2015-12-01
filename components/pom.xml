@@ -21,7 +21,6 @@
 	</licenses>
 
 	<modules>
-		<module>camel-bluetooth</module>
 		<module>camel-coap</module>
 		<module>camel-gps-bu353</module>
 		<module>camel-gpsd</module>

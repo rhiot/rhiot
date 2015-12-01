@@ -23,7 +23,6 @@ import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
-import static io.rhiot.component.bluetooth.BluetoothPredicates.deviceWithAddress;
 import static io.rhiot.component.bluetooth.BluetoothPredicates.deviceWithName;
 
 public class BluetoothPredicateTest extends CamelTestSupport {

@@ -12,13 +12,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>rhiot-components</artifactId>
+		<artifactId>rhiot-gateway-components</artifactId>
 		<groupId>io.rhiot</groupId>
 		<version>0.1.3-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
-	<name>RHIOT :: Components :: Bluetooth</name>
+	<name>Rhiot :: Gateway :: Camel components :: Bluetooth</name>
 	<packaging>bundle</packaging>
 	<artifactId>camel-bluetooth</artifactId>
 	<description>Camel Bluetooth Component</description>
