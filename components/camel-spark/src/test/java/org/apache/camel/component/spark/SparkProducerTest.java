@@ -26,6 +26,7 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.sql.hive.HiveContext;
 import org.junit.Test;
 
 import java.io.File;
@@ -44,6 +45,8 @@ public class SparkProducerTest extends CamelTestSupport {
     // Fixtures
 
     static JavaSparkContext sparkContext = createLocalSparkContext();
+
+    static HiveContext hiveContext = new HiveContext(sparkContext.sc());
 
     String sparkUri = "spark:analyze?rdd=#pomRdd";
 
@@ -216,6 +219,21 @@ public class SparkProducerTest extends CamelTestSupport {
 
             // Then
         Truth.assertThat(output.length()).isGreaterThan(0L);
+    }
+
+    // Hive tests
+
+    @Test
+    public void shouldExecuteHiveQuery() {
+        org.apache.camel.component.spark.RddCallback rddCallback = annotatedRddCallback(new Object(){
+            @RddCallback
+            long countTables(JavaRDD<String> textFile) {
+                hiveContext.jsonFile("src/test/resources/cars.json").registerTempTable("cars");
+                return hiveContext.sql("SELECT * FROM cars").count();
+            }
+        });
+        long tablesCount = template.requestBodyAndHeader(sparkUri, null, SPARK_RDD_CALLBACK_HEADER, rddCallback, Long.class);
+        Truth.assertThat(tablesCount).isEqualTo(2);
     }
 
 }

@@ -296,6 +296,9 @@
                             <!-- ActiveMQ test data -->
                             <exclude>**/activemq-data/**/KahaDB/*.*</exclude>
 
+                            <!-- Excluded test data -->
+                            <exclude>**/cars.json</exclude>
+
                             <exclude>**/Californium.properties</exclude>
                             <exclude>build.out</exclude>
                             <exclude>global-groovy.log</exclude>
