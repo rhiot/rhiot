@@ -31,7 +31,7 @@ class DefaultSparkService implements SparkService, BootstrapAware {
     @Override
     Object execute(String rdd, String rddCallback, Object payload) {
         def template = bootstrap.beanRegistry().bean(CamelContext.class).get().createProducerTemplate()
-        template.requestBody("spark:rhiot?rdd=#${rdd}&rddCallback=#${rddCallback}", payload)
+        template.requestBody("spark:rdd?rdd=#${rdd}&rddCallback=#${rddCallback}", payload)
     }
 
     @Override

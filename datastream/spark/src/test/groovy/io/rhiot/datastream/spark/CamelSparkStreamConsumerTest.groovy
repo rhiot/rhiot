@@ -16,17 +16,13 @@
  */
 package io.rhiot.datastream.spark
 
-import io.rhiot.datastream.engine.DataStream
-import io.rhiot.datastream.engine.encoding.PayloadEncoding
 import io.rhiot.datastream.engine.test.DataStreamTest
-import org.apache.camel.CamelContext
 import org.apache.camel.component.spark.RddCallback
 import org.apache.spark.api.java.AbstractJavaRDDLike
 import org.apache.spark.api.java.JavaSparkContext
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
 
 class CamelSparkStreamConsumerTest extends DataStreamTest {
 

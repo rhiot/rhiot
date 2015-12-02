@@ -24,7 +24,7 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.spark.api.java.AbstractJavaRDDLike;
 import org.apache.spark.sql.DataFrame;
 
-@UriEndpoint(scheme = "spark", title = "Spark connector", producerOnly = true, label = "bigdata", syntax = "spark:label")
+@UriEndpoint(scheme = "spark:{rdd|datastream}", title = "Spark connector", producerOnly = true, label = "bigdata", syntax = "spark:label")
 public class SparkEndpoint extends DefaultEndpoint {
 
     // Endpoint collaborators
