@@ -16,33 +16,28 @@
  */
 package io.rhiot.datastream.camel.rest
 
-import io.rhiot.bootstrap.Bootstrap
-import io.rhiot.bootstrap.BootstrapAware
+import io.rhiot.datastream.engine.AbstractCamelStreamSource
 import io.rhiot.steroids.camel.Route
-import io.rhiot.utils.WithLogger
-import org.apache.camel.builder.RouteBuilder
 
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
+import static io.rhiot.utils.Properties.intProperty
+import static org.apache.camel.Exchange.CONTENT_TYPE
 import static org.apache.camel.Exchange.HTTP_URI
 
 @Route
-class CamelRestStreamSource extends RouteBuilder implements WithLogger, BootstrapAware {
-
-    private Bootstrap bootstrap
+class CamelRestStreamSource extends AbstractCamelStreamSource {
 
     @Override
     void configure() {
-        from('netty4-http:http://0.0.0.0:8080/?matchOnUriPrefix=true').
-                process {
-                    def uri = it.in.getHeader(HTTP_URI, String.class)
-                    def channel = uri.substring(1).replaceAll(/\//, '.')
-                    it.setProperty('target', amqp(channel))
-                }.recipientList().exchangeProperty('target')
-    }
+        def httpPort = intProperty('http_port', 8080)
 
-    @Override
-    void bootstrap(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap
+        from("netty4-http:http://0.0.0.0:${httpPort}/?matchOnUriPrefix=true").
+                setHeader(CONTENT_TYPE).constant('application/json').
+                process {
+                    def requestUri = it.in.getHeader(HTTP_URI, String.class)
+                    def busChannel = requestUri.substring(1).replaceAll(/\//, '.')
+                    it.setProperty('target', amqp(busChannel))
+                }.recipientList().exchangeProperty('target')
     }
 
 }
