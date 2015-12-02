@@ -22,6 +22,8 @@ import io.rhiot.bootstrap.BootstrapAware
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.jms.JmsMessage
 
+import java.lang.reflect.Method
+
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpByPrefix
 
 abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implements BootstrapAware {
@@ -52,18 +54,14 @@ abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implement
                         arguments.add(channelParts[i])
                     }
                     def incomingPayload = it.in.getBody(byte[].class)
-                    if(incomingPayload != null) {
+                    if(incomingPayload != null && incomingPayload.length > 0) {
                         def payload = encoding.decode(incomingPayload)
                         arguments.add(payload)
                     }
 
                     def beanType = context.registry.lookupByName(service).getClass()
                     def beanOperation = beanType.declaredMethods.find{ it.name == operation }
-                    for(int i = 0; i < arguments.size(); i++) {
-                        arguments[i] = context.typeConverter.convertTo(beanOperation.parameterTypes[i], arguments[i])
-                    }
-
-                    it.in.body = arguments
+                    it.in.body = convertArguments(arguments, beanOperation)
                 }.recipientList().exchangeProperty('target').
                 process{ it.in.body = encoding.encode(it.in.body) }
     }
@@ -71,6 +69,16 @@ abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implement
     @Override
     void bootstrap(Bootstrap bootstrap) {
         this.bootstrap = bootstrap
+    }
+
+    // Helpers
+
+    protected List<?> convertArguments(List<?> arguments, Method operation) {
+        def convertedArguments = []
+        arguments.eachWithIndex{ argument, i ->
+            convertedArguments << context.typeConverter.convertTo(operation.parameterTypes[i], arguments[i])
+        }
+        convertedArguments.asImmutable()
     }
 
 }

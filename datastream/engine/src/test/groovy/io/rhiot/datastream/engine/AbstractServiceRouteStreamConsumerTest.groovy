@@ -33,6 +33,15 @@ class AbstractServiceRouteStreamConsumerTest extends DataStreamTest {
         assertThat(response).isEqualTo(payload)
     }
 
+    @Test
+    void shouldHandlePostedMap() {
+        def payload = [foo: 'foo', bar: 'bar']
+        def receivedSize = fromBus("echo.sizeOfMap", payload, long.class)
+        assertThat(receivedSize).isEqualTo(payload.size())
+    }
+
+    // Beans fixtures
+
     @Route
     static class EchoStreamConsumer extends AbstractServiceRouteStreamConsumer {
 
@@ -46,6 +55,8 @@ class AbstractServiceRouteStreamConsumerTest extends DataStreamTest {
 
         long echo(long value)
 
+        long sizeOfMap(Map map)
+
     }
 
     @Bean
@@ -55,6 +66,11 @@ class AbstractServiceRouteStreamConsumerTest extends DataStreamTest {
         @Override
         long echo(long value) {
             value
+        }
+
+        @Override
+        long sizeOfMap(Map map) {
+            map.size()
         }
 
     }
