@@ -16,21 +16,22 @@
  */
 package io.rhiot.datastream.camel.rest
 
-import com.google.common.truth.Truth
+import io.rhiot.bootstrap.classpath.Named
 import io.rhiot.datastream.engine.AbstractServiceRouteStreamConsumer
 import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.datastream.engine.test.DataStreamTest
+import io.rhiot.steroids.camel.Route
 import io.vertx.core.json.Json
-import org.junit.Ignore
 import org.junit.Test
 
-@Ignore
+import static com.google.common.truth.Truth.assertThat
+
 class CamelRestServiceStreamSourceTest extends DataStreamTest {
 
     @Test
     void shouldInvokeGetOperation() {
         def response = Json.mapper.readValue(new URL('http://localhost:8080/test/count/1'), Map.class)
-        Truth.assertThat(response.result).isEqualTo(1)
+        assertThat(response.payload).isEqualTo(1)
     }
 
     static interface TestService {
@@ -40,6 +41,7 @@ class CamelRestServiceStreamSourceTest extends DataStreamTest {
     }
 
     @Bean
+    @Named(name = 'test')
     static class TestInterfaceImpl implements TestService {
 
         @Override
@@ -49,14 +51,7 @@ class CamelRestServiceStreamSourceTest extends DataStreamTest {
 
     }
 
-    static class TestInterfaceCamelRestStreamSource extends CamelRestServiceStreamSource<TestService> {
-
-        TestInterfaceCamelRestStreamSource() {
-            super(TestService.class, 'test')
-        }
-
-    }
-
+    @Route
     static class TestInterfaceStreamConsumer extends AbstractServiceRouteStreamConsumer {
 
         TestInterfaceStreamConsumer() {

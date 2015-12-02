@@ -14,14 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.document
+package io.rhiot.datastream.engine
 
-import io.rhiot.datastream.camel.rest.CamelRestServiceStreamSource
+import io.rhiot.bootstrap.Bootstrap
+import io.rhiot.bootstrap.BootstrapAware
+import io.rhiot.utils.WithLogger
+import org.apache.camel.builder.RouteBuilder
 
-class RestDocumentStreamSource extends CamelRestServiceStreamSource<DocumentStore> {
+abstract class AbstractCamelStreamSource extends RouteBuilder implements WithLogger, BootstrapAware {
 
-    RestDocumentStreamSource() {
-        super(DocumentStore.class, 'api/document')
+    protected Bootstrap bootstrap
+
+    @Override
+    void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
     }
 
 }
