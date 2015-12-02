@@ -18,6 +18,7 @@ package io.rhiot.component.kura.gpio;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -42,7 +43,7 @@ public class KuraGPIOProducer extends DefaultProducer {
         this.pin = pin;
         this.action = endpoint.getAction();
         this.pool = this.getEndpoint().getCamelContext().getExecutorServiceManager().newSingleThreadExecutor(this,
-                KuraGPIOConstants.CAMEL_KURA_GPIO_THREADPOOL);
+                KuraGPIOConstants.CAMEL_KURA_GPIO_THREADPOOL + pin.getIndex());
     }
 
     private void output(Exchange exchange)
@@ -140,8 +141,13 @@ public class KuraGPIOProducer extends DefaultProducer {
 
     @Override
     protected void doShutdown() throws Exception {
-        super.doShutdown();
+        // 2 x (delay + timeout) + 5s
+        long timeToWait = (((KuraGPIOEndpoint) getEndpoint()).getDelay()
+                + ((KuraGPIOEndpoint) getEndpoint()).getDuration()) * 2 + 5000;
+        log.debug("Wait for {} ms", timeToWait);
+        pool.awaitTermination(timeToWait, TimeUnit.MILLISECONDS);
         pin.close();
+        log.debug("Pin {} {}", pin.getIndex(), pin.getValue());
     }
 
     @Override
