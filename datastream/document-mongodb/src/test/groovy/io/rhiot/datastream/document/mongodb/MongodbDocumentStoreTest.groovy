@@ -19,6 +19,7 @@ package io.rhiot.datastream.document.mongodb
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.mongodb.EmbeddedMongo
 import org.junit.Test
+import org.springframework.web.client.RestTemplate
 
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.utils.Networks.findAvailableTcpPort
@@ -26,9 +27,11 @@ import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 
-class MongodbDocumentStoreAmqpTest extends DataStreamTest {
+class MongodbDocumentStoreTest extends DataStreamTest {
 
     static mongo = new EmbeddedMongo().start()
+
+    static def httpPort = findAvailableTcpPort()
 
     def collection = uuid()
 
@@ -38,6 +41,7 @@ class MongodbDocumentStoreAmqpTest extends DataStreamTest {
     protected void beforeDataStreamStarted() {
         setBooleanProperty('MQTT_ENABLED', false)
         setIntProperty('AMQP_PORT', findAvailableTcpPort())
+        setIntProperty('http_port', httpPort)
     }
 
     @Test
@@ -75,9 +79,51 @@ class MongodbDocumentStoreAmqpTest extends DataStreamTest {
         toBus("document.save.${collection}", invoice)
 
         // Then
-        def updatedInvoice = fromBus("document.findOne.${collection}/${id}", Map.class)
+        def updatedInvoice = fromBus("document.findOne.${collection}.${id}", Map.class)
         assertThat(updatedInvoice.invoiceId).isEqualTo(invoice.invoiceId)
     }
+
+    // REST tests
+
+    @Test
+    void rest_shouldCountInvoice() {
+        // Given
+        new RestTemplate().postForLocation("http://localhost:${httpPort}/document/save/${collection}", payloadEncoding.encode(invoice))
+
+        // When
+        def count = payloadEncoding.decode(new RestTemplate().getForObject("http://localhost:${httpPort}/document/count/${collection}", byte[].class))
+
+        // Then
+        assertThat(count).isEqualTo(1)
+    }
+
+    @Test
+    public void rest_shouldFindOne() {
+        // Given
+        def id = payloadEncoding.decode(new RestTemplate().postForObject("http://localhost:${httpPort}/document/save/${collection}", payloadEncoding.encode(invoice), byte[].class))
+
+        // When
+        def loadedInvoice = payloadEncoding.decode(new RestTemplate().getForObject("http://localhost:${httpPort}/document/findOne/${collection}/${id}", byte[].class))
+
+        // Then
+        assertThat(loadedInvoice).isNotNull()
+    }
+
+    @Test
+    public void rest_shouldUpdateDocument() {
+        // Given
+        def id = payloadEncoding.decode(new RestTemplate().postForObject("http://localhost:${httpPort}/document/save/${collection}", payloadEncoding.encode(invoice), byte[].class))
+        invoice.id = id
+        invoice.invoiceId = 'newValue'
+
+        // When
+        new RestTemplate().postForLocation("http://localhost:${httpPort}/document/save/${collection}", payloadEncoding.encode(invoice))
+
+        // Then
+        def updatedInvoice = payloadEncoding.decode(new RestTemplate().getForObject("http://localhost:${httpPort}/document/findOne/${collection}/${id}", byte[].class))
+        assertThat(updatedInvoice.invoiceId).isEqualTo(invoice.invoiceId)
+    }
+
 
     // Class fixtures
 
