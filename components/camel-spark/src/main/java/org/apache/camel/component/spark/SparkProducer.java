@@ -20,13 +20,10 @@ import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.spark.api.java.AbstractJavaRDDLike;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.api.java.function.Function;
 
 import java.util.List;
 
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_CALLBACK_HEADER;
-import static org.apache.camel.component.spark.SparkConstants.SPARK_TRANSFORMATION_HEADER;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_HEADER;
 
 public class SparkProducer extends DefaultProducer {
@@ -40,33 +37,9 @@ public class SparkProducer extends DefaultProducer {
         AbstractJavaRDDLike rdd = resolveRdd(exchange);
         RddCallback rddCallback = resolveRddCallback(exchange);
 
-        if(rddCallback == null) {
-            Object body = exchange.getIn().getBody();
-            Object transformation = exchange.getIn().getHeader(SPARK_TRANSFORMATION_HEADER);
-
-            if(body instanceof Function) {
-                if(transformation == null || transformation == SparkTransformation.FILTER) {
-                    if(rdd instanceof JavaRDD) {
-                        JavaRDD result = ((JavaRDD) rdd).filter((Function) body);
-                        collectResults(exchange, result);
-                    } else {
-                        throw new IllegalArgumentException("Can't execute filter operation on RDD of type: " + rdd.getClass().getName());
-                    }
-                } else {
-                    JavaRDD result = rdd.map((Function) body);
-                    collectResults(exchange, result);
-                }
-            } else if(body instanceof FlatMapFunction) {
-                JavaRDD result = rdd.flatMap((FlatMapFunction) body);
-                collectResults(exchange, result);
-            } else {
-                throw new IllegalArgumentException("Unrecognized body type: " + body);
-            }
-        } else {
-            Object body = exchange.getIn().getBody();
-            Object result = body instanceof List ? rddCallback.onRdd(rdd, ((List)body).toArray(new Object[0])) : rddCallback.onRdd(rdd, body);
-            collectResults(exchange, result);
-        }
+        Object body = exchange.getIn().getBody();
+        Object result = body instanceof List ? rddCallback.onRdd(rdd, ((List)body).toArray(new Object[0])) : rddCallback.onRdd(rdd, body);
+        collectResults(exchange, result);
     }
 
     @Override

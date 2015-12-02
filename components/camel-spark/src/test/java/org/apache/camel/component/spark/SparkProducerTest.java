@@ -17,27 +17,21 @@
 package org.apache.camel.component.spark;
 
 import com.google.common.truth.Truth;
-import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.spark.annotations.RddCallback;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.spark.api.java.AbstractJavaRDDLike;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.sql.hive.HiveContext;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.apache.camel.component.spark.annotations.AnnotatedRddCallback.annotatedRddCallback;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_CALLBACK_HEADER;
-import static org.apache.camel.component.spark.SparkConstants.SPARK_TRANSFORMATION_HEADER;
-import static org.apache.camel.component.spark.SparkTransformation.MAP;
 import static org.apache.camel.component.spark.Sparks.createLocalSparkContext;
 
 public class SparkProducerTest extends CamelTestSupport {
@@ -55,7 +49,6 @@ public class SparkProducerTest extends CamelTestSupport {
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = super.createRegistry();
-        registry.bind("sparkContext", sparkContext);
         registry.bind("pomRdd", sparkContext.textFile("testrdd.txt"));
         registry.bind("countLinesTransformation", new org.apache.camel.component.spark.RddCallback() {
             @Override
@@ -64,40 +57,6 @@ public class SparkProducerTest extends CamelTestSupport {
             }
         });
         return registry;
-    }
-
-    @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                from("direct:mapAndFlatMap").
-                        setBody().constant(new LineToWord()).
-                        to("spark:analyze?rdd=#pomRdd&collect=false").
-                        setBody().constant(new DoubleWord()).
-                        to("spark:analyze?rdd=#pomRdd");
-            }
-        };
-    }
-
-    // Functions fixtures
-
-    static class DoubleWord implements Function<String, String> {
-
-        @Override
-        public String call(String v1) throws Exception {
-            return v1 + v1;
-        }
-
-    }
-
-    static class LineToWord implements FlatMapFunction<String, String> {
-
-        @Override
-        public Iterable<String> call(String s) throws Exception {
-            return asList(s.split(" "));
-        }
-
     }
 
     // Tests
@@ -145,24 +104,6 @@ public class SparkProducerTest extends CamelTestSupport {
         };
         long pomLinesCount = template.requestBodyAndHeader(sparkUri, asList("10", "10"), SPARK_RDD_CALLBACK_HEADER, rddCallback, Long.class);
         Truth.assertThat(pomLinesCount).isEqualTo(1700);
-    }
-
-    @Test
-    public void shouldExecuteMap() {
-        List<String> words = template.requestBodyAndHeader(sparkUri, new DoubleWord(), SPARK_TRANSFORMATION_HEADER, MAP, List.class);
-        Truth.assertThat(words).contains("foo barfoo bar");
-    }
-
-    @Test
-    public void shouldExecuteFlatMap() {
-        List<String> words = template.requestBody(sparkUri, new LineToWord(), List.class);
-        Truth.assertThat(words).contains("foo");
-    }
-
-    @Test
-    public void shouldExecuteMapAndFlatMap() {
-        List<String> doubledWords = template.requestBodyAndHeader("direct:mapAndFlatMap", null, SPARK_TRANSFORMATION_HEADER, MAP, List.class);
-        Truth.assertThat(doubledWords).contains("foofoo");
     }
 
     @Test
@@ -228,7 +169,7 @@ public class SparkProducerTest extends CamelTestSupport {
         org.apache.camel.component.spark.RddCallback rddCallback = annotatedRddCallback(new Object(){
             @RddCallback
             long countTables(JavaRDD<String> textFile) {
-                hiveContext.jsonFile("src/test/resources/cars.json").registerTempTable("cars");
+                hiveContext.read().json("src/test/resources/cars.json").registerTempTable("cars");
                 return hiveContext.sql("SELECT * FROM cars").count();
             }
         });
