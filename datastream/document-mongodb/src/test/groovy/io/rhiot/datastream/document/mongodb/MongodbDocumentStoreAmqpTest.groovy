@@ -26,7 +26,7 @@ import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 
-class MongodbDocumentStoreTest extends DataStreamTest {
+class MongodbDocumentStoreAmqpTest extends DataStreamTest {
 
     static mongo = new EmbeddedMongo().start()
 
@@ -58,7 +58,7 @@ class MongodbDocumentStoreTest extends DataStreamTest {
         def id = fromBus("document.save.${collection}", invoice, String.class)
 
         // When
-        def loadedInvoice = fromBus("document.findOne.${collection}", id, Map.class)
+        def loadedInvoice = fromBus("document.findOne.${collection}.${id}", Map.class)
 
         // Then
         assertThat(loadedInvoice).isNotNull()
@@ -75,7 +75,7 @@ class MongodbDocumentStoreTest extends DataStreamTest {
         toBus("document.save.${collection}", invoice)
 
         // Then
-        def updatedInvoice = fromBus("document.findOne.${collection}", id, Map.class)
+        def updatedInvoice = fromBus("document.findOne.${collection}/${id}", Map.class)
         assertThat(updatedInvoice.invoiceId).isEqualTo(invoice.invoiceId)
     }
 
