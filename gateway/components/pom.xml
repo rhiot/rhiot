@@ -21,6 +21,7 @@
 
 	<modules>
 		<module>camel-bluetooth</module>
+		<module>camel-kura</module>
 		<module>camel-pi4j</module>
 		<module>camel-tinkerforge</module>
 		<module>camel-tinkerforge-feature</module>
