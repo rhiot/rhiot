@@ -23,7 +23,7 @@ public final class KuraGPIOConstants {
     public static final String CAMEL_KURA_GPIO_ID = CAMEL_KURA_GPIO + ".id";
     public static final String CAMEL_KURA_GPIO_NAME = CAMEL_KURA_GPIO + ".name";
     public static final String CAMEL_KURA_GPIO_ACTION = CAMEL_KURA_GPIO + ".action";
-    public static final String CAMEL_KURA_GPIO_THREADPOOL = "kura-gpio-camel";
+    public static final String CAMEL_KURA_GPIO_THREADPOOL = "kura-gpio-camel-";
     public static final String CAMEL_KURA_GPIO_ATTR_NAME_GPIOID = "gpioId";
 
     private KuraGPIOConstants() {
