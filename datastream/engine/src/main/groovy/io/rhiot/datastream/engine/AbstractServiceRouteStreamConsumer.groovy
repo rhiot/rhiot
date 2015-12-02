@@ -39,7 +39,7 @@ abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implement
         def encoding = bootstrap.beanRegistry().bean(PayloadEncoding.class).get()
 
         from(amqpByPrefix(serviceChannel)).
-                transform {
+                process {
                     def channel = it.getIn(JmsMessage.class).jmsMessage.properties._to.toString()
                     def rawChannel = channel.substring(channel.lastIndexOf('/') + 1)
                     def channelParts = rawChannel.split(/\./)
@@ -56,9 +56,16 @@ abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implement
                         def payload = encoding.decode(incomingPayload)
                         arguments.add(payload)
                     }
-                    arguments
+
+                    def beanType = context.registry.lookupByName(service).getClass()
+                    def beanOperation = beanType.declaredMethods.find{ it.name == operation }
+                    for(int i = 0; i < arguments.size(); i++) {
+                        arguments[i] = context.typeConverter.convertTo(beanOperation.parameterTypes[i], arguments[i])
+                    }
+
+                    it.in.body = arguments
                 }.recipientList().exchangeProperty('target').
-                transform{ encoding.encode(it.in.body) }
+                process{ it.in.body = encoding.encode(it.in.body) }
     }
 
     @Override
