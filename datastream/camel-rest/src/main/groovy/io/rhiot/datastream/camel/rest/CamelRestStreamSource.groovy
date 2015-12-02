@@ -26,7 +26,7 @@ import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.a
 import static org.apache.camel.Exchange.HTTP_URI
 
 @Route
-class CamelRestServiceRouteStreamSource<T> extends RouteBuilder implements WithLogger, BootstrapAware {
+class CamelRestStreamSource extends RouteBuilder implements WithLogger, BootstrapAware {
 
     private Bootstrap bootstrap
 
