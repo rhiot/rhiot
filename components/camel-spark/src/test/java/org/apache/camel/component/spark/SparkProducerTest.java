@@ -23,6 +23,7 @@ import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.spark.api.java.AbstractJavaRDDLike;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.hive.HiveContext;
 import org.junit.Test;
 
@@ -30,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static java.util.Arrays.asList;
+import static org.apache.camel.component.spark.SparkConstants.SPARK_DATAFRAME_CALLBACK_HEADER;
 import static org.apache.camel.component.spark.annotations.AnnotatedRddCallback.annotatedRddCallback;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_CALLBACK_HEADER;
 import static org.apache.camel.component.spark.Sparks.createLocalSparkContext;
@@ -42,14 +44,22 @@ public class SparkProducerTest extends CamelTestSupport {
 
     static HiveContext hiveContext = new HiveContext(sparkContext.sc());
 
-    String sparkUri = "spark:analyze?rdd=#pomRdd";
+    String sparkUri = "spark:rdd?rdd=#pomRdd";
+
+    String sparkDataFrameUri = "spark:dataframe?dataFrame=#jsonCars";
 
     // Routes fixtures
 
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = super.createRegistry();
+
         registry.bind("pomRdd", sparkContext.textFile("testrdd.txt"));
+
+        DataFrame jsonCars = hiveContext.read().json("src/test/resources/cars.json");
+        jsonCars.registerTempTable("cars");
+        registry.bind("jsonCars", jsonCars);
+
         registry.bind("countLinesTransformation", new org.apache.camel.component.spark.RddCallback() {
             @Override
             public Object onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
@@ -166,15 +176,41 @@ public class SparkProducerTest extends CamelTestSupport {
 
     @Test
     public void shouldExecuteHiveQuery() {
-        org.apache.camel.component.spark.RddCallback rddCallback = annotatedRddCallback(new Object(){
-            @RddCallback
-            long countTables(JavaRDD<String> textFile) {
-                hiveContext.read().json("src/test/resources/cars.json").registerTempTable("cars");
+        DataFrameCallback callback = new DataFrameCallback<Long>() {
+            @Override
+            public Long onDataFrame(DataFrame dataFrame, Object... payloads) {
                 return hiveContext.sql("SELECT * FROM cars").count();
             }
-        });
-        long tablesCount = template.requestBodyAndHeader(sparkUri, null, SPARK_RDD_CALLBACK_HEADER, rddCallback, Long.class);
+        };
+        long tablesCount = template.requestBodyAndHeader(sparkDataFrameUri, null, SPARK_DATAFRAME_CALLBACK_HEADER, callback, Long.class);
         Truth.assertThat(tablesCount).isEqualTo(2);
+    }
+
+    // Data frames tests
+
+    @Test
+    public void shouldCountFrame() {
+        DataFrameCallback callback = new DataFrameCallback<Long>() {
+            @Override
+            public Long onDataFrame(DataFrame dataFrame, Object... payloads) {
+                return dataFrame.count();
+            }
+        };
+        long tablesCount = template.requestBodyAndHeader(sparkDataFrameUri, null, SPARK_DATAFRAME_CALLBACK_HEADER, callback, Long.class);
+        Truth.assertThat(tablesCount).isEqualTo(2);
+    }
+
+    @Test
+    public void shouldExecuteConditionalFrameCount() {
+        DataFrameCallback callback = new DataFrameCallback<Long>() {
+            @Override
+            public Long onDataFrame(DataFrame dataFrame, Object... payloads) {
+                String model = (String) payloads[0];
+                return dataFrame.where(dataFrame.col("model").eqNullSafe(model)).count();
+            }
+        };
+        long tablesCount = template.requestBodyAndHeader(sparkDataFrameUri, "Micra", SPARK_DATAFRAME_CALLBACK_HEADER, callback, Long.class);
+        Truth.assertThat(tablesCount).isEqualTo(1);
     }
 
 }

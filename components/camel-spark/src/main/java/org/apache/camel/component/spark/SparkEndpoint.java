@@ -22,9 +22,7 @@ import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.spark.api.java.AbstractJavaRDDLike;
-import org.apache.spark.api.java.JavaSparkContext;
-
-import java.util.Set;
+import org.apache.spark.sql.DataFrame;
 
 @UriEndpoint(scheme = "spark", title = "Spark connector", producerOnly = true, label = "bigdata", syntax = "spark:label")
 public class SparkEndpoint extends DefaultEndpoint {
@@ -35,21 +33,28 @@ public class SparkEndpoint extends DefaultEndpoint {
 
     private RddCallback rddCallback;
 
+    private DataFrame dataFrame;
+
+    private DataFrameCallback dataFrameCallback;
+
     // Endpoint configuration
+
+    private final EndpointType endpointType;
 
     private boolean collect = true;
 
     // Constructors
 
-    public SparkEndpoint(String endpointUri, SparkComponent component) {
+    public SparkEndpoint(String endpointUri, SparkComponent component, EndpointType endpointType) {
         super(endpointUri, component);
+        this.endpointType = endpointType;
     }
 
     // Overridden
 
     @Override
     public Producer createProducer() throws Exception {
-        return new SparkProducer(this);
+        return endpointType == EndpointType.rdd ? new RddSparkProducer(this) : new DataFrameSparkProducer(this);
     }
 
     @Override
@@ -84,6 +89,22 @@ public class SparkEndpoint extends DefaultEndpoint {
 
     public void setRddCallback(RddCallback rddCallback) {
         this.rddCallback = rddCallback;
+    }
+
+    public DataFrame getDataFrame() {
+        return dataFrame;
+    }
+
+    public void setDataFrame(DataFrame dataFrame) {
+        this.dataFrame = dataFrame;
+    }
+
+    public DataFrameCallback getDataFrameCallback() {
+        return dataFrameCallback;
+    }
+
+    public void setDataFrameCallback(DataFrameCallback dataFrameCallback) {
+        this.dataFrameCallback = dataFrameCallback;
     }
 
     public boolean isCollect() {

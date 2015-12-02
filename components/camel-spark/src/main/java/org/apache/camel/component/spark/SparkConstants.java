@@ -22,4 +22,8 @@ public class SparkConstants {
 
     public static final String SPARK_RDD_CALLBACK_HEADER = "CAMEL_SPARK_RDD_CALLBACK";
 
+    public static final String SPARK_DATAFRAME_HEADER = "CAMEL_SPARK_DATAFRAME";
+
+    public static final String SPARK_DATAFRAME_CALLBACK_HEADER = "CAMEL_SPARK_DATAFRAME_CALLBACK";
+
 }

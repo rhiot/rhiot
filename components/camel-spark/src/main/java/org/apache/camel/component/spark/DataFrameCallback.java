@@ -16,21 +16,15 @@
  */
 package org.apache.camel.component.spark;
 
-import org.apache.camel.Endpoint;
-import org.apache.camel.impl.UriEndpointComponent;
-import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.DataFrame;
 
-import java.util.Map;
+/**
+ * Generic block of code with parameters which can be executed against Spark Data Frames and return results.
+ *
+ * @param <T> results type
+ */
+public interface DataFrameCallback<T> {
 
-public class SparkComponent extends UriEndpointComponent {
-
-    public SparkComponent() {
-        super(SparkEndpoint.class);
-    }
-
-    @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new SparkEndpoint(uri, this, EndpointType.valueOf(remaining));
-    }
+    T onDataFrame(DataFrame dataFrame, Object... payloads);
 
 }

@@ -23,12 +23,13 @@ import org.apache.spark.api.java.JavaRDD;
 
 import java.util.List;
 
+import static org.apache.camel.component.spark.SparkConstants.SPARK_DATAFRAME_CALLBACK_HEADER;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_CALLBACK_HEADER;
 import static org.apache.camel.component.spark.SparkConstants.SPARK_RDD_HEADER;
 
-public class SparkProducer extends DefaultProducer {
+public class RddSparkProducer extends DefaultProducer {
 
-    public SparkProducer(SparkEndpoint endpoint) {
+    public RddSparkProducer(SparkEndpoint endpoint) {
         super(endpoint);
     }
 
@@ -36,9 +37,8 @@ public class SparkProducer extends DefaultProducer {
     public void process(Exchange exchange) throws Exception {
         AbstractJavaRDDLike rdd = resolveRdd(exchange);
         RddCallback rddCallback = resolveRddCallback(exchange);
-
         Object body = exchange.getIn().getBody();
-        Object result = body instanceof List ? rddCallback.onRdd(rdd, ((List)body).toArray(new Object[0])) : rddCallback.onRdd(rdd, body);
+        Object result = body instanceof List ? rddCallback.onRdd(rdd, ((List) body).toArray(new Object[0])) : rddCallback.onRdd(rdd, body);
         collectResults(exchange, result);
     }
 
@@ -76,8 +76,10 @@ public class SparkProducer extends DefaultProducer {
     protected RddCallback resolveRddCallback(Exchange exchange) {
         if(exchange.getIn().getHeader(SPARK_RDD_CALLBACK_HEADER) != null) {
             return  (RddCallback) exchange.getIn().getHeader(SPARK_RDD_CALLBACK_HEADER);
-        } else {
+        } else if(getEndpoint().getRddCallback() != null) {
             return getEndpoint().getRddCallback();
+        } else {
+            throw new IllegalStateException("Cannot resolve RDD callback.");
         }
     }
 

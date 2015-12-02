@@ -16,21 +16,8 @@
  */
 package org.apache.camel.component.spark;
 
-import org.apache.camel.Endpoint;
-import org.apache.camel.impl.UriEndpointComponent;
-import org.apache.spark.api.java.JavaSparkContext;
+public enum EndpointType {
 
-import java.util.Map;
-
-public class SparkComponent extends UriEndpointComponent {
-
-    public SparkComponent() {
-        super(SparkEndpoint.class);
-    }
-
-    @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new SparkEndpoint(uri, this, EndpointType.valueOf(remaining));
-    }
+    rdd, dataframe
 
 }
