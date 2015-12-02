@@ -18,54 +18,26 @@ package io.rhiot.datastream.camel.rest
 
 import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.bootstrap.BootstrapAware
+import io.rhiot.steroids.camel.Route
 import io.rhiot.utils.WithLogger
-import org.apache.camel.CamelContext
 import org.apache.camel.builder.RouteBuilder
 
-import java.lang.reflect.Method
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
+import static org.apache.camel.Exchange.HTTP_URI
 
-import static io.rhiot.datastream.camel.rest.CamelRestEndpoint.startCamelRestEndpoint
-import static io.rhiot.datastream.engine.ServiceBinding.operationTransfersObject
-import static io.rhiot.utils.Reflections.isJavaLibraryType
+@Route
+class CamelRestServiceRouteStreamSource<T> extends RouteBuilder implements WithLogger, BootstrapAware {
 
-abstract class CamelRestServiceRouteStreamSource<T> extends RouteBuilder implements WithLogger, BootstrapAware {
-
-    protected final Class<T> serviceClass
-
-    protected final String serviceName
-
-    protected Bootstrap bootstrap
-
-    CamelRestServiceRouteStreamSource(Class<T> serviceClass, String serviceName) {
-        this.serviceClass = serviceClass
-        this.serviceName = serviceName
-    }
+    private Bootstrap bootstrap
 
     @Override
     void configure() {
-        serviceClass.declaredMethods.each { Method operation ->
-            def operationPath = "/${operation.name}"
-            operation.parameterTypes.eachWithIndex { param, i ->
-                if(isJavaLibraryType(param)) {
-                    operationPath += "/{arg${i}}"
-                }
-            }
-
-            def verb = operationTransfersObject(operation) ? 'POST' : 'GET'
-            rest(serviceName).verb(verb, operationPath).route().process {
-                def operationChannel = "${serviceName}/${operation}"
-                for(int i = 0; i < 10; i++) {
-                    def parameter = it.in.headers["arg${i}"]
-                    if(parameter == null) {
-                        break
-                    }
-                    operationChannel += ".${parameter}"
-                }
-                it.setProperty('target', operationChannel)
-            }
-        }
-
-        startCamelRestEndpoint(bootstrap.beanRegistry().bean(CamelContext.class).get(), this)
+        from('netty4-http:http://0.0.0.0:8080/?matchOnUriPrefix=true').
+                process {
+                    def uri = it.in.getHeader(HTTP_URI, String.class)
+                    def channel = uri.substring(1).replaceAll(/\//, '.')
+                    it.setProperty('target', amqp(channel))
+                }.recipientList().exchangeProperty('target')
     }
 
     @Override
