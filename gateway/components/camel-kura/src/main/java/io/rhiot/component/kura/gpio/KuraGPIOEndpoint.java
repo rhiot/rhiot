@@ -41,6 +41,12 @@ public class KuraGPIOEndpoint extends DefaultEndpoint {
     @Metadata(required = "true")
     private String gpioId;
 
+    @UriParam(defaultValue = "false")
+    private boolean state;
+
+    @UriParam(defaultValue = "false")
+    private boolean shutdownState;
+
     @UriParam(defaultValue = "0")
     private long delay;
 
@@ -147,6 +153,22 @@ public class KuraGPIOEndpoint extends DefaultEndpoint {
 
     public void setAction(KuraGPIOAction action) {
         this.action = action;
+    }
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    public boolean isShutdownState() {
+        return shutdownState;
+    }
+
+    public void setShutdownState(boolean shutdownState) {
+        this.shutdownState = shutdownState;
     }
 
 }

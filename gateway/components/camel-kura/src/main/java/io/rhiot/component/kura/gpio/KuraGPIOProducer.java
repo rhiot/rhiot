@@ -146,6 +146,7 @@ public class KuraGPIOProducer extends DefaultProducer {
                 + ((KuraGPIOEndpoint) getEndpoint()).getDuration()) * 2 + 5000;
         log.debug("Wait for {} ms", timeToWait);
         pool.awaitTermination(timeToWait, TimeUnit.MILLISECONDS);
+        pin.setValue(((KuraGPIOEndpoint) getEndpoint()).isShutdownState());
         pin.close();
         log.debug("Pin {} {}", pin.getIndex(), pin.getValue());
     }
@@ -154,6 +155,7 @@ public class KuraGPIOProducer extends DefaultProducer {
     protected void doStart() throws Exception {
         super.doStart();
         pin.open();
+        pin.setValue(((KuraGPIOEndpoint) getEndpoint()).isState());
     }
 
     public KuraGPIOPin getPin() {
