@@ -18,23 +18,40 @@ package io.rhiot.datastream.camel.rest
 
 import io.rhiot.datastream.engine.AbstractCamelStreamSource
 import io.rhiot.steroids.camel.Route
+import io.vertx.core.json.Json
 
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
 import static io.rhiot.utils.Properties.intProperty
 import static org.apache.camel.Exchange.CONTENT_TYPE
+import static org.apache.camel.Exchange.EXCEPTION_CAUGHT
 import static org.apache.camel.Exchange.HTTP_URI
+import static org.apache.commons.lang3.StringUtils.countMatches
+import static org.apache.commons.lang3.StringUtils.removeEnd
 
 @Route
 class CamelRestStreamSource extends AbstractCamelStreamSource {
+
+    // Constants
+
+    static final def URI_TOO_SHORT_MESSAGE = 'URI too short. The proper request format is /service/operation[/argument1/argument2/...]'
+
+    // Routes
 
     @Override
     void configure() {
         def httpPort = intProperty('http_port', 8080)
 
+        onException(Exception.class).handled(true).
+                transform{Json.encode([error: it.getProperty(EXCEPTION_CAUGHT, Exception.class).message])}
+
         from("netty4-http:http://0.0.0.0:${httpPort}/?matchOnUriPrefix=true").
                 setHeader(CONTENT_TYPE).constant('application/json').
                 process {
                     def requestUri = it.in.getHeader(HTTP_URI, String.class)
+                    requestUri = removeEnd(requestUri, '/')
+                    if(countMatches(requestUri, '/') < 2) {
+                        throw new IllegalArgumentException(URI_TOO_SHORT_MESSAGE)
+                    }
                     def busChannel = requestUri.substring(1).replaceAll(/\//, '.')
                     it.setProperty('target', amqp(busChannel))
                 }.recipientList().exchangeProperty('target')

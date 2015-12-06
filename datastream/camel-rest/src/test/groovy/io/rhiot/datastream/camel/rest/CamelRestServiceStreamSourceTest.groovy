@@ -25,6 +25,7 @@ import io.vertx.core.json.Json
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.datastream.camel.rest.CamelRestStreamSource.URI_TOO_SHORT_MESSAGE
 
 class CamelRestServiceStreamSourceTest extends DataStreamTest {
 
@@ -33,6 +34,32 @@ class CamelRestServiceStreamSourceTest extends DataStreamTest {
         def response = Json.mapper.readValue(new URL('http://localhost:8080/test/count/1'), Map.class)
         assertThat(response.payload).isEqualTo(1)
     }
+
+    @Test
+    void shouldDetectTooShortUri_none() {
+        def response = Json.mapper.readValue(new URL('http://localhost:8080'), Map.class)
+        assertThat(response.error).isEqualTo(URI_TOO_SHORT_MESSAGE)
+    }
+
+    @Test
+    void shouldDetectTooShortUri_rootOnly() {
+        def response = Json.mapper.readValue(new URL('http://localhost:8080/'), Map.class)
+        assertThat(response.error).isEqualTo(URI_TOO_SHORT_MESSAGE)
+    }
+
+    @Test
+    void shouldDetectTooShortUri_serviceOnly() {
+        def response = Json.mapper.readValue(new URL('http://localhost:8080/service'), Map.class)
+        assertThat(response.error).isEqualTo(URI_TOO_SHORT_MESSAGE)
+    }
+
+    @Test
+    void shouldDetectTooShortUri_serviceWithEmptyOperation() {
+        def response = Json.mapper.readValue(new URL('http://localhost:8080/service/'), Map.class)
+        assertThat(response.error).isEqualTo(URI_TOO_SHORT_MESSAGE)
+    }
+
+    // Beans fixtures
 
     static interface TestService {
 
