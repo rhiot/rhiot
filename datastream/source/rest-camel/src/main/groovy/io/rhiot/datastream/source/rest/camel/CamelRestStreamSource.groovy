@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.camel.rest
+package io.rhiot.datastream.source.rest.camel
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.datastream.engine.AbstractCamelStreamSource
 import io.rhiot.steroids.camel.Route
 import io.vertx.core.json.Json
@@ -47,6 +48,8 @@ class CamelRestStreamSource extends AbstractCamelStreamSource {
         from("netty4-http:http://0.0.0.0:${httpPort}/?matchOnUriPrefix=true").
                 setHeader(CONTENT_TYPE).constant('application/json').
                 process {
+                    def x = new ObjectMapper().readValue(it.in.getBody(byte[].class), Map.class)
+                    println x
                     def requestUri = it.in.getHeader(HTTP_URI, String.class)
                     requestUri = removeEnd(requestUri, '/')
                     if(countMatches(requestUri, '/') < 2) {

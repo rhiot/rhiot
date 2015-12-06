@@ -14,25 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.camel.rest
+package io.rhiot.datastream.source.rest.camel
 
 import io.rhiot.bootstrap.classpath.Named
 import io.rhiot.datastream.engine.AbstractServiceRouteStreamConsumer
 import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.datastream.engine.test.DataStreamTest
+import io.rhiot.datastream.source.rest.camel.CamelRestStreamSource
 import io.rhiot.steroids.camel.Route
 import io.vertx.core.json.Json
 import org.junit.Test
+import org.springframework.web.client.RestTemplate
 
 import static com.google.common.truth.Truth.assertThat
 
 class CamelRestServiceStreamSourceTest extends DataStreamTest {
+
+    def rest = new RestTemplate()
 
     @Test
     void shouldInvokeGetOperation() {
         def response = Json.mapper.readValue(new URL('http://localhost:8080/test/count/1'), Map.class)
         assertThat(response.payload).isEqualTo(1)
     }
+
+    @Test
+    void shouldInvokePostOperation() {
+        def request = payloadEncoding.encode([foo: 'bar'])
+        def payload = rest.postForObject('http://localhost:8080/test/sizeOf', request, Map.class).payload
+        assertThat(payload).isEqualTo(1)
+    }
+
+    // URI validation tests
 
     @Test
     void shouldDetectTooShortUri_none() {
@@ -64,6 +77,8 @@ class CamelRestServiceStreamSourceTest extends DataStreamTest {
 
         int count(int number)
 
+        int sizeOf(Map map)
+
     }
 
     @Bean
@@ -73,6 +88,11 @@ class CamelRestServiceStreamSourceTest extends DataStreamTest {
         @Override
         int count(int number) {
             number
+        }
+
+        @Override
+        int sizeOf(Map map) {
+            map.size()
         }
 
     }

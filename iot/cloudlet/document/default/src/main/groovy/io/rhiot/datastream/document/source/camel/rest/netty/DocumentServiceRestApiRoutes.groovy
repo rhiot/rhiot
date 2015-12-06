@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.document.source.camel.rest.netty
 
-import io.rhiot.datastream.camel.rest.VertxProducer
+import io.rhiot.datastream.source.rest.camel.VertxProducer
 import io.rhiot.bootstrap.Bootstrap;
 import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.steroids.camel.Route;

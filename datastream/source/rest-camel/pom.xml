@@ -58,13 +58,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-datastream-engine-camel</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-datastream-engine-camel</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
