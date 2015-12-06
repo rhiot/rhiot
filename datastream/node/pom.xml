@@ -20,6 +20,7 @@
     </licenses>
 
     <properties>
+        <docker.image.target>datastream-node</docker.image.target>
         <fatjar.mainClass>io.rhiot.datastream.engine.DataStream</fatjar.mainClass>
 
         <!-- Downgraded version of Jackson to match Spark 1.5.1. -->
