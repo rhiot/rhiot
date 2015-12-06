@@ -31,7 +31,7 @@
 		<camel.version>2.16.0</camel.version>
 		<commons-exec.version>1.3</commons-exec.version>
 		<embedmongo.version>1.50.0</embedmongo.version>
-		<google-maps-services.version>0.1.8</google-maps-services.version>
+		<google-maps-services.version>0.1.9</google-maps-services.version>
 		<google-truth.version>0.27</google-truth.version>
 		<gpsd4java.version>1.4</gpsd4java.version>
 		<groovy.version>2.4.5</groovy.version>
