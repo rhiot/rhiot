@@ -60,6 +60,11 @@ else
 fi
 docker run --name cloudlet-device -d --link mongodb:mongodb -p 15000:15000 ${lwm2m_port} rhiot/cloudlet-device
 
+### Data stream node
+docker rm datastream-node
+docker pull rhiot/datastream-node
+docker run -d --name datastream-node --link mongodb:mongodb -p 8080:8080 -p 5672:5672 rhiot/datastream-node
+
 if [ -z "$HTTP_PORT" ]; then
     echo 'HTTP port not set, running Cloudlet Console using the default development port 9000.'
     HTTP_PORT=9000
