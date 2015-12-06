@@ -55,7 +55,7 @@ class CamelRestStreamSource extends AbstractCamelStreamSource {
                     }
                     def busChannel = trimmedUri.substring(1).replaceAll(/\//, '.')
                     it.setProperty('target', amqp(busChannel))
-                }.recipientList().exchangeProperty('target')
+                }.toD('${property.target}')
     }
 
 }
