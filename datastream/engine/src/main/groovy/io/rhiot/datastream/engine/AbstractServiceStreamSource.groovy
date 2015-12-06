@@ -32,8 +32,6 @@ abstract class AbstractServiceStreamSource<T> implements StreamSource, Bootstrap
 
     protected EventBus eventBus
 
-    private ServiceBinding serviceBinding = new ServiceBinding()
-
     protected Bootstrap bootstrap
 
     AbstractServiceStreamSource(Class<T> serviceClass) {

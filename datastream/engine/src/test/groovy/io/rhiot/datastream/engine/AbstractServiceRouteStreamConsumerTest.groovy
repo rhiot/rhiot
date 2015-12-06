@@ -26,6 +26,8 @@ import static com.google.common.truth.Truth.assertThat
 
 class AbstractServiceRouteStreamConsumerTest extends DataStreamTest {
 
+    // Tests
+
     @Test
     void shouldBindServiceToChannel() {
         def payload = 100
@@ -38,6 +40,14 @@ class AbstractServiceRouteStreamConsumerTest extends DataStreamTest {
         def payload = [foo: 'foo', bar: 'bar']
         def receivedSize = fromBus("echo.sizeOfMap", payload, long.class)
         assertThat(receivedSize).isEqualTo(payload.size())
+    }
+
+    @Test
+    void shouldHandleArgumentAndPojo() {
+        def stringPayload = 'foo'
+        def mapPayload = [foo: 'foo', bar: 'bar']
+        def received = fromBus("echo.stringAndPojoToStringOperation.foo", mapPayload, String.class)
+        assertThat(received).isEqualTo("${stringPayload}${mapPayload.size()}".toString())
     }
 
     // Beans fixtures
@@ -57,6 +67,8 @@ class AbstractServiceRouteStreamConsumerTest extends DataStreamTest {
 
         long sizeOfMap(Map map)
 
+        String stringAndPojoToStringOperation(String string, Map<String, String> pojo)
+
     }
 
     @Bean
@@ -71,6 +83,11 @@ class AbstractServiceRouteStreamConsumerTest extends DataStreamTest {
         @Override
         long sizeOfMap(Map map) {
             map.size()
+        }
+
+        @Override
+        String stringAndPojoToStringOperation(String string, Map<String, String> pojo) {
+            "${string}${pojo.size()}"
         }
 
     }
