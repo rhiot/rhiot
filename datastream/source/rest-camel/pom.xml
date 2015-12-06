@@ -5,12 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-datastream</artifactId>
+        <artifactId>rhiot-datastream-source</artifactId>
         <version>0.1.3-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: DataStream :: Camel :: REST</name>
-    <artifactId>rhiot-datastream-camel-rest</artifactId>
+    <name>Rhiot :: DataStream :: Source :: REST :: Camel</name>
+    <artifactId>rhiot-datastream-source-rest-camel</artifactId>
 
     <licenses>
         <license>

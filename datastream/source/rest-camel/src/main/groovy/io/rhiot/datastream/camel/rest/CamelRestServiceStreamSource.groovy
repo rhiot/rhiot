@@ -17,7 +17,6 @@
 package io.rhiot.datastream.camel.rest
 
 import io.rhiot.datastream.engine.AbstractServiceStreamSource
-import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.core.Vertx
 import org.apache.camel.CamelContext
 import org.apache.camel.builder.RouteBuilder
