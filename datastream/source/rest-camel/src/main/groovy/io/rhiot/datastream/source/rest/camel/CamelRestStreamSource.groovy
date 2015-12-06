@@ -16,7 +16,6 @@
  */
 package io.rhiot.datastream.source.rest.camel
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.datastream.engine.AbstractCamelStreamSource
 import io.rhiot.steroids.camel.Route
 import io.vertx.core.json.Json
@@ -41,6 +40,7 @@ class CamelRestStreamSource extends AbstractCamelStreamSource {
     @Override
     void configure() {
         def httpPort = intProperty('http_port', 8080)
+        log.debug('Started REST data stream source at port {}.', httpPort)
 
         onException(Exception.class).handled(true).
                 transform{Json.encode([error: it.getProperty(EXCEPTION_CAUGHT, Exception.class).message])}
@@ -48,14 +48,12 @@ class CamelRestStreamSource extends AbstractCamelStreamSource {
         from("netty4-http:http://0.0.0.0:${httpPort}/?matchOnUriPrefix=true").
                 setHeader(CONTENT_TYPE).constant('application/json').
                 process {
-                    def x = new ObjectMapper().readValue(it.in.getBody(byte[].class), Map.class)
-                    println x
                     def requestUri = it.in.getHeader(HTTP_URI, String.class)
-                    requestUri = removeEnd(requestUri, '/')
-                    if(countMatches(requestUri, '/') < 2) {
+                    def trimmedUri = removeEnd(requestUri, '/')
+                    if(countMatches(trimmedUri, '/') < 2) {
                         throw new IllegalArgumentException(URI_TOO_SHORT_MESSAGE)
                     }
-                    def busChannel = requestUri.substring(1).replaceAll(/\//, '.')
+                    def busChannel = trimmedUri.substring(1).replaceAll(/\//, '.')
                     it.setProperty('target', amqp(busChannel))
                 }.recipientList().exchangeProperty('target')
     }
