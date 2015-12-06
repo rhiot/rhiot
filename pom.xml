@@ -240,6 +240,10 @@
                                     <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                         <mainClass>${fatjar.mainClass}</mainClass>
                                     </transformer>
+                                    <!-- Transformer below is needed by Akka to work in shaded jars. -->
+                                    <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                        <resource>reference.conf</resource>
+                                    </transformer>
                                 </transformers>
                                 <filters>
                                     <filter>
