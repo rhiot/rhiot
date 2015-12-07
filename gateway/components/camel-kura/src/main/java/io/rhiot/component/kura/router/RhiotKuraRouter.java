@@ -18,10 +18,8 @@ package io.rhiot.component.kura.router;
 
 import java.io.ByteArrayInputStream;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.Route;
 import org.apache.camel.component.kura.KuraRouter;
 import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.model.RoutesDefinition;
@@ -113,10 +111,6 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
     protected void modified(Map<String, Object> properties) {
         m_properties = properties;
         try {
-            for (Route route : camelContext.getRoutes()) {
-                camelContext.stopRoute(route.getId(), 10, TimeUnit.SECONDS);
-                camelContext.removeRoute(route.getId());
-            }
             camelContext.stop();
             beforeStart(camelContext);
             updated(m_properties);
