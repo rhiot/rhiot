@@ -67,19 +67,18 @@ public class KuraGPIOEndpoint extends DefaultEndpoint {
 
     private GPIOService service;
 
-    public KuraGPIOEndpoint(String uri, KuraGPIOComponent kuraGPIOComponent, GPIOService service) {
+    public KuraGPIOEndpoint(String uri, KuraGPIOComponent kuraGPIOComponent, GPIOService service, String gpioId) {
         super(uri, kuraGPIOComponent);
         this.service = service;
+        this.gpioId = gpioId;
     }
 
     private KuraGPIOPin retrieveGPIOPin() {
-        KuraGPIOPin ret = null;
         try {
-            ret = service.getPinByTerminal(Integer.parseInt(getGpioId()), direction, mode, trigger);
+            return service.getPinByTerminal(Integer.parseInt(getGpioId()), direction, mode, trigger);
         } catch (NumberFormatException e) {
-            ret = service.getPinByName(getGpioId(), direction, mode, trigger);
+            return service.getPinByName(getGpioId(), direction, mode, trigger);
         }
-        return ret;
     }
 
     @Override

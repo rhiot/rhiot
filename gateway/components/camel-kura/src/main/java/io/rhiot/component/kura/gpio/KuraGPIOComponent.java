@@ -37,16 +37,8 @@ public class KuraGPIOComponent extends UriEndpointComponent {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remain, Map<String, Object> parameters) throws Exception {
-
-        GPIOService service = KuraServiceFactory.retrieveService(GPIOService.class,
-                this.getCamelContext().getRegistry());
-
-        KuraGPIOEndpoint ret = new KuraGPIOEndpoint(uri, this, service);
-
-        parameters.put(KuraGPIOConstants.CAMEL_KURA_GPIO_ATTR_NAME_GPIOID, remain);
-        setProperties(ret, parameters);
-
-        return ret;
+        GPIOService service = KuraServiceFactory.retrieveService(GPIOService.class, this.getCamelContext().getRegistry());
+        return new KuraGPIOEndpoint(uri, this, service, remain);
     }
 
 }
