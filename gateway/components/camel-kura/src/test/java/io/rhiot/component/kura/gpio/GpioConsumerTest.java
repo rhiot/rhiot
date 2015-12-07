@@ -75,7 +75,7 @@ public class GpioConsumerTest extends CamelTestSupport {
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                from("kura-gpio://13?mode=INPUT_PULL_UP&state=false").to("mock:test");
+                from("kura-gpio:13?mode=INPUT_PULL_UP&state=false").to("mock:test");
             }
         };
     }
