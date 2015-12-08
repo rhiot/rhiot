@@ -7,11 +7,11 @@ the common IoT-related challenges.
 
 ## Documentation
 
-[Here](https://github.com/rhiot/rhiot/blob/master/docs/readme.md) you can find the reference documentation for the Rhiot.
+[Here](https://rhiot.gitbooks.io/rhiotdocumentation/content/) you can find the reference documentation for the Rhiot.
 
 ## Current release
 
-The latest and the greatest version of the Rhiot is 0.1.2. Wondering what's new there? Here are the [release notes](https://github.com/rhiot/rhiot/blob/master/docs/release-notes.md).
+The latest and the greatest version of the Rhiot is 0.1.2. Wondering what's new there? Here are the [release notes](https://rhiot.gitbooks.io/rhiotdocumentation/content/releases_notes/index.html).
 
 ## Community
 
@@ -26,7 +26,7 @@ You can create [new issue, bug, comment here](https://github.com/rhiot/rhiot/iss
 
 [![Build Status](https://travis-ci.org/rhiot/rhiot.svg?branch=master)](https://travis-ci.org/rhiot/rhiot)
 
-If you want to build the project yourself, read [this document](https://github.com/rhiot/rhiot/blob/master/docs/building.md).
+If you want to build the project yourself, read [this document](https://rhiot.gitbooks.io/rhiotdocumentation/content/building/index.html).
 
 ## License
 
