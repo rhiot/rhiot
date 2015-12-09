@@ -370,7 +370,7 @@
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
                     <configuration>
-                        <mainClass>org.apache.camel.spring.boot.FatJarRouter</mainClass>
+                        <mainClass>${fatjar.mainClass}</mainClass>
                     </configuration>
                     <executions>
                         <execution>
