@@ -317,6 +317,9 @@
                             <!-- Excluded test data -->
                             <exclude>**/cars.json</exclude>
 
+                            <!-- Excluded Spring banner -->
+                            <exclude>**/banner.txt</exclude>
+
                             <exclude>**/Californium.properties</exclude>
                             <exclude>build.out</exclude>
                             <exclude>global-groovy.log</exclude>
