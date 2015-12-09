@@ -41,12 +41,25 @@ class ConsoleInputParser {
 Usage: rhiot [OPTIONS] [deploy-gateway|scan]
 
 Commands:
-scan                        Lists possible target devices.
-deploy-gateway              Deploys gateway to a detected device.
+scan                         Lists possible target devices.
+raspbian:install             Installs Raspbian to a target SD card.
+deploy-gateway               Deploys gateway to a detected device.
 
 Global options:
  -h --help                                                      Prints this help page.
  -d --debug                                                     Debug (verbose) mode.
+
+===
+
+Command: raspbian:install sdDevice
+
+Example: rhiot raspbian:install sdd1
+
+===
+
+Command: deploy-gateway
+
+Example: rhiot deploy-gateway
 
 deploy-gateway options:
  -a=group:artifact:version --artifact=group:artifact:version    Overrides default gateway artifact coordinates (io.rhiot:rhiot-gateway-app).
@@ -61,7 +74,7 @@ deploy-gateway options:
 
     String command() {
         def command = args.find{!it.startsWith('-')}
-        if(!['scan', 'deploy-gateway'].contains(command)) {
+        if(!['scan', 'deploy-gateway', 'raspbian:install'].contains(command)) {
             throw new IllegalArgumentException("No such command - ${command}.")
         }
         command

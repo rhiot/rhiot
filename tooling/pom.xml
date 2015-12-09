@@ -21,6 +21,7 @@
     </licenses>
 
     <modules>
+        <module>devagent</module>
         <module>deployer</module>
         <module>cmd</module>
     </modules>
