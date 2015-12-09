@@ -41,7 +41,7 @@ fi
 DEVAGENT_CONTAINER_STARTED=`docker ps | grep devagent`
 if [ -z "${DEVAGENT_CONTAINER_STARTED}" ]; then
     docker rm devagent >> ~/.rhiot/rhiot-cmd.log
-    docker run -d --name devagent -p 2000:2000 \
+    docker run -d --name devagent --privileged=true -p 2000:2000 \
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
     -v ~/.rhiot/downloads:/root/.rhiot/downloads \
     -it rhiot/devagent:${RHIOT_VERSION}  >> /dev/null

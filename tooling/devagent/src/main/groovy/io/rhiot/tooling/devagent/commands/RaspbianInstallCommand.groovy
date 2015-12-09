@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 import java.nio.file.Paths
+import java.util.zip.ZipInputStream
 
 @Component
 class RaspbianInstallCommand {
@@ -41,17 +42,26 @@ class RaspbianInstallCommand {
 
     List<String> execute(String device) {
         def downloadDirectory = Paths.get(SystemUtils.userHome.absolutePath, '.rhiot', 'downloads').toFile()
-        def imageFile = new File(downloadDirectory, '2015-11-21-raspbian-jessie.img')
+        def imageFile = new File(downloadDirectory, '2015-11-21-raspbian-jessie.zip')
 
         if(!imageFile.exists()) {
             def tmpImageFile = File.createTempFile('rhiot', 'raspbian')
-            println 'Downloading Raspbian image...'
             IOUtils.copyLarge(new URL('http://director.downloads.raspberrypi.org/raspbian/images/raspbian-2015-11-24/2015-11-21-raspbian-jessie.zip').openStream(), new FileOutputStream(tmpImageFile))
             imageFile.parentFile.mkdirs()
             tmpImageFile.renameTo(imageFile)
         }
 
-        processManager.executeAndJoinOutput("dd", "bs=4M", "if=${imageFile}", "of=${devicesDirectory}/${device}")
+        def extractedImageFile = new File(downloadDirectory, '2015-11-21-raspbian-jessie.img')
+        if(!extractedImageFile.exists()) {
+            def tmpImageFile = File.createTempFile('rhiot', 'raspbian')
+            def zip = new ZipInputStream(new FileInputStream(imageFile))
+            zip.nextEntry
+            IOUtils.copyLarge(zip, new FileOutputStream(tmpImageFile))
+            zip.close()
+            tmpImageFile.renameTo(extractedImageFile)
+        }
+
+        processManager.executeAndJoinOutput("dd", "bs=4M", "if=${extractedImageFile}", "of=${devicesDirectory}/${device}")
     }
 
 }
