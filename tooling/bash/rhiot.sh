@@ -36,15 +36,15 @@ if [ -z "$RHIOT_VERSION" ]; then
     RHIOT_VERSION=0.1.3-SNAPSHOT # Remove this line and use the locked version above after 0.1.3 release
 fi
 
-### DevAgent startup
+### Shell startup
 
-DEVAGENT_CONTAINER_STARTED=`docker ps | grep devagent`
-if [ -z "${DEVAGENT_CONTAINER_STARTED}" ]; then
-    docker rm devagent >> ~/.rhiot/rhiot-cmd.log
-    docker run -d --name devagent --privileged=true -p 2000:2000 \
+SHELL_CONTAINER_STARTED=`docker ps | grep shell`
+if [ -z "${SHELL_CONTAINER_STARTED}" ]; then
+    docker rm shell >> ~/.rhiot/rhiot-cmd.log
+    docker run -d --name shell --privileged=true -p 2000:2000 \
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
     -v ~/.rhiot/downloads:/root/.rhiot/downloads \
-    -it rhiot/devagent:${RHIOT_VERSION}  >> /dev/null
+    -it rhiot/shell:${RHIOT_VERSION}  >> /dev/null
     sleep 5 # Give SSHD time to start
 fi
 

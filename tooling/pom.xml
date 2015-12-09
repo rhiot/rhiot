@@ -21,7 +21,7 @@
     </licenses>
 
     <modules>
-        <module>devagent</module>
+        <module>shell</module>
         <module>cmd-core</module>
         <module>cmd</module>
     </modules>

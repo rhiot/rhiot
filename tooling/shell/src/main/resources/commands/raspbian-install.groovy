@@ -14,24 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.tooling.devagent
+package commands
 
-import io.rhiot.utils.process.DefaultProcessManager
-import io.rhiot.utils.process.ProcessManager
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.annotation.Bean
+import io.rhiot.tooling.shell.commands.RaspbianInstallCommand
+import org.crsh.cli.Argument
+import org.crsh.cli.Command
+import org.crsh.cli.Required
+import org.crsh.cli.Usage
+import org.crsh.command.InvocationContext
+import org.springframework.beans.factory.BeanFactory
 
-@SpringBootApplication
-class DevAgent {
+class raspbian_install {
 
-    static void main(String... args) {
-        new SpringApplication(DevAgent.class).run(args)
-    }
-
-    @Bean
-    ProcessManager processManager() {
-        new DefaultProcessManager()
+    @Usage("raspbian-install sdDevice")
+    @Command
+    def main(InvocationContext context, @Usage("Name of a device. For example 'sdd1'.") @Required @Argument String device) {
+        BeanFactory beanFactory = context.attributes['spring.beanfactory']
+        beanFactory.getBean(RaspbianInstallCommand.class).execute(device).join('\n')
     }
 
 }

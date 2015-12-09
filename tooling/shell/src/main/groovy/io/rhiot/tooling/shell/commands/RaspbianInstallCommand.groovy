@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.tooling.devagent.commands
+package io.rhiot.tooling.shell.commands
 
 import io.rhiot.utils.WithLogger
 import io.rhiot.utils.process.ProcessManager
