@@ -26,17 +26,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-remote-shell</artifactId>
             <version>${spring-boot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-utils</artifactId>
         </dependency>
     </dependencies>
 
