@@ -24,9 +24,9 @@ import org.crsh.cli.Usage
 import org.crsh.command.InvocationContext
 import org.springframework.beans.factory.BeanFactory
 
-class RaspbianInstall {
+class raspbian_install {
 
-    @Usage("raspbian:install sdDevice")
+    @Usage("raspbian-install sdDevice")
     @Command
     def main(InvocationContext context, @Usage("Name of a device. For example 'sdd1'.") @Required @Argument String device) {
         BeanFactory beanFactory = context.attributes['spring.beanfactory']
