@@ -17,11 +17,8 @@
 package io.rhiot.cloudlets.device.analytics
 
 import com.mongodb.BasicDBObject
-import com.mongodb.Mongo
 
 import static io.rhiot.mongodb.Mongos.discoverMongo
-import static io.rhiot.utils.Networks.serviceHost
-import static io.rhiot.utils.Networks.servicePort
 
 class MongoDbDeviceMetricsStore implements DeviceMetricsStore {
 

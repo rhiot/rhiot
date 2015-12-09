@@ -16,7 +16,6 @@
  */
 package io.rhiot.vertx.web
 
-import io.rhiot.utils.Properties
 import io.vertx.core.AsyncResult
 import io.vertx.core.Future
 import io.vertx.core.http.HttpMethod
@@ -28,7 +27,6 @@ import io.vertx.groovy.ext.web.RoutingContext
 import io.vertx.groovy.ext.web.handler.BodyHandler
 import io.vertx.groovy.ext.web.handler.CorsHandler
 import io.vertx.lang.groovy.GroovyVerticle
-import org.apache.commons.lang3.StringUtils
 
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.vertx.jackson.Jacksons.json

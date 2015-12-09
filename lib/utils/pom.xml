@@ -5,9 +5,9 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-bom</artifactId>
+        <artifactId>rhiot-lib</artifactId>
         <version>0.1.3-SNAPSHOT</version>
-        <relativePath>../bom</relativePath>
+        <relativePath>..</relativePath>
     </parent>
     <name>RHIOT :: Utils</name>
     <artifactId>rhiot-utils</artifactId>

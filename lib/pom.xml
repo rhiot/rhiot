@@ -5,12 +5,13 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-bom</artifactId>
         <version>0.1.3-SNAPSHOT</version>
+        <artifactId>rhiot-bom</artifactId>
         <relativePath>../bom</relativePath>
     </parent>
-    <name>RHIOT :: Utils SSH</name>
-    <artifactId>rhiot-utils-ssh</artifactId>
+    <name>Rhiot :: Libraries</name>
+    <artifactId>rhiot-lib</artifactId>
+    <packaging>pom</packaging>
 
     <licenses>
         <license>
@@ -19,18 +20,9 @@
         </license>
     </licenses>
 
-    <dependencies>
-        <!-- Rhiot dependencies -->
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-utils</artifactId>
-        </dependency>
-
-        <!-- 3rd parties dependencies -->
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch</artifactId>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>utils</module>
+        <module>utils-ssh</module>
+    </modules>
 
 </project>

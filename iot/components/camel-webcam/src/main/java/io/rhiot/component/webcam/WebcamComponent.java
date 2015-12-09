@@ -27,7 +27,6 @@ import com.github.sarxos.webcam.ds.v4l4j.V4l4jDriver;
 import io.rhiot.utils.OsUtils;
 import io.rhiot.utils.install.DefaultInstaller;
 import io.rhiot.utils.install.Installer;
-import io.rhiot.utils.install.exception.PermissionDeniedException;
 import io.rhiot.utils.process.DefaultProcessManager;
 import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.CamelContext;

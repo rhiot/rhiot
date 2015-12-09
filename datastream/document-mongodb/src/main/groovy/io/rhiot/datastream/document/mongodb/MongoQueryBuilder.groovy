@@ -17,15 +17,10 @@
 package io.rhiot.datastream.document.mongodb;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import com.mongodb.DBObject
 
 import static io.rhiot.utils.Maps.immutableMapOf;
-import static java.lang.Boolean.parseBoolean;
-import static java.util.stream.Collectors.toList;
+import static java.lang.Boolean.parseBoolean
 
 public class MongoQueryBuilder {
 

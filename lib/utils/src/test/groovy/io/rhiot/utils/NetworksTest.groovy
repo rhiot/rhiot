@@ -20,7 +20,6 @@ import org.junit.Assert
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.utils.Networks.MIN_PORT_NUMBER
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Networks.isReachable
 import static io.rhiot.utils.Networks.currentLocalNetworkIp
@@ -32,7 +31,7 @@ class NetworksTest extends Assert {
 
     @Test
     void shouldReturnAvailablePort() {
-        assertThat(findAvailableTcpPort()).isGreaterThan(MIN_PORT_NUMBER)
+        assertThat(findAvailableTcpPort()).isGreaterThan(Networks.MIN_PORT_NUMBER)
     }
 
     @Test

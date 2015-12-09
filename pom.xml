@@ -11,8 +11,7 @@
 
     <modules>
         <module>bom</module>
-        <module>utils</module>
-        <module>utils-ssh</module>
+        <module>lib</module>
         <module>mongodb</module>
         <module>steroids-spark</module>
         <module>steroids-vertx</module>
