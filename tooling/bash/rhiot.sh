@@ -45,6 +45,7 @@ if [ -z "${DEVAGENT_CONTAINER_STARTED}" ]; then
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
     -v ~/.rhiot/downloads:/root/.rhiot/downloads \
     -it rhiot/devagent:${RHIOT_VERSION}  >> /dev/null
+    sleep 5 # Give SSHD time to start
 fi
 
 ### Command execution
