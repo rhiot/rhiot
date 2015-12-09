@@ -38,10 +38,10 @@ fi
 
 ### Shell startup
 
-SHELL_CONTAINER_STARTED=`docker ps | grep shell`
+SHELL_CONTAINER_STARTED=`docker ps | grep rhiot-shell`
 if [ -z "${SHELL_CONTAINER_STARTED}" ]; then
-    docker rm shell >> ~/.rhiot/rhiot-cmd.log
-    docker run -d --name shell --privileged=true -p 2000:2000 \
+    docker rm rhiot-shell >> ~/.rhiot/rhiot-cmd.log
+    docker run -d --name rhiot-shell --privileged=true -p 2000:2000 \
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
     -v ~/.rhiot/downloads:/root/.rhiot/downloads \
     -it rhiot/shell:${RHIOT_VERSION}  >> /dev/null
