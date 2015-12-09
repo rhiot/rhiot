@@ -16,32 +16,12 @@
  */
 package io.rhiot.cmd
 
-import io.rhiot.deployer.Command
 import io.rhiot.deployer.Deployer
-import io.rhiot.bootstrap.Bootstrap
 
 class Cmd {
 
-    private final Bootstrap bootstrap
-
-    private final List<Command> commands
-
-    Cmd() {
-        this.bootstrap = new Bootstrap().start()
-        this.commands = bootstrap.beanRegistry().beans(Command.class)
-    }
-
-    void stop() {
-        bootstrap.stop()
-    }
-
-    public static void main(String... args) {
-        def cmd = new Cmd()
-        try {
-            Deployer.main(args)
-        } finally {
-            cmd.stop()
-        }
+    static void main(String... args) {
+        Deployer.main(args)
     }
 
 }

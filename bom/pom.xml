@@ -348,11 +348,6 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-deployer</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-gateway</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
@@ -402,6 +397,11 @@
 				<version>${rhiot.version}</version>
 				<type>feature</type>
 				<classifier>features</classifier>
+			</dependency>
+			<dependency>
+				<groupId>io.rhiot</groupId>
+				<artifactId>rhiot-tooling-cmd-core</artifactId>
+				<version>${rhiot.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>

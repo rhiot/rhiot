@@ -22,7 +22,7 @@
 
     <modules>
         <module>devagent</module>
-        <module>deployer</module>
+        <module>cmd-core</module>
         <module>cmd</module>
     </modules>
 

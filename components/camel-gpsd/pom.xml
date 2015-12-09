@@ -52,7 +52,7 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-deployer</artifactId>
+            <artifactId>rhiot-tooling-cmd-core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

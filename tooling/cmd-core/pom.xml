@@ -9,8 +9,8 @@
         <version>0.1.3-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>RHIOT :: Deployer</name>
-    <artifactId>rhiot-deployer</artifactId>
+    <name>Rhiot :: Tooling :: CMD :: Core</name>
+    <artifactId>rhiot-tooling-cmd-core</artifactId>
 
     <licenses>
         <license>
