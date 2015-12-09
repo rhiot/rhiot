@@ -36,9 +36,15 @@ if [ -z "$RHIOT_VERSION" ]; then
     RHIOT_VERSION=0.1.3-SNAPSHOT # Remove this line and use the locked version above after 0.1.3 release
 fi
 
+### DevAgent startup
+
+if [ -z `docker ps | grep devagent` ]; then
+    docker run --name devagent -d -p 2000:2000 \
+    -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
+    -v ~/.rhiot/downloads:/root/.rhiot/downloads \
+    -it rhiot/devagent:${RHIOT_VERSION}
+fi
+
 ### Command execution
 
-docker run -v ~/.rhiot/maven/repository:/root/.m2/repository \
-           -v ~/.rhiot/downloads:/root/.rhiot/downloads \
-           -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
-           --net=host -p 2000:2000 -it rhiot/cmd:${RHIOT_VERSION} "$@"
+docker run -v ~/.rhiot/maven/repository:/root/.m2/repository --net=host -it rhiot/cmd:${RHIOT_VERSION} "$@"
