@@ -139,7 +139,7 @@ class Deployer {
                     detector.close()
                     break;
                 case 'raspbian-install':
-                    println(new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' ')))
+                    new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
                     break;
                 case 'deploy-gateway':
                     deployGateway(parser)
