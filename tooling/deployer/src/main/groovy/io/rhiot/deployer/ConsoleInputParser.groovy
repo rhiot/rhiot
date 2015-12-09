@@ -42,7 +42,7 @@ Usage: rhiot [OPTIONS] [deploy-gateway|scan]
 
 Commands:
 scan                         Lists possible target devices.
-raspbian:install             Installs Raspbian to a target SD card.
+raspbian-install             Installs Raspbian to a target SD card.
 deploy-gateway               Deploys gateway to a detected device.
 
 Global options:
@@ -51,9 +51,9 @@ Global options:
 
 ===
 
-Command: raspbian:install sdDevice
+Command: raspbian-install sdDevice
 
-Example: rhiot raspbian:install sdd1
+Example: rhiot raspbian-install sdd1
 
 ===
 
@@ -74,7 +74,7 @@ deploy-gateway options:
 
     String command() {
         def command = args.find{!it.startsWith('-')}
-        if(!['scan', 'deploy-gateway', 'raspbian:install'].contains(command)) {
+        if(!['scan', 'deploy-gateway', 'raspbian-install'].contains(command)) {
             throw new IllegalArgumentException("No such command - ${command}.")
         }
         command
