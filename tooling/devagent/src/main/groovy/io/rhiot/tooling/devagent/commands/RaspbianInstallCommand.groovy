@@ -33,8 +33,8 @@ class RaspbianInstallCommand {
     private final ProcessManager processManager
 
     @Autowired
-    RaspbianInstallCommand(String devicesDirectory,
-                           @Value('${devices.directory:/dev}') ProcessManager processManager) {
+    RaspbianInstallCommand(@Value('${devices.directory:/dev}') String devicesDirectory,
+                           ProcessManager processManager) {
         this.devicesDirectory = devicesDirectory
         this.processManager = processManager
     }

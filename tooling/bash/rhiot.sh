@@ -38,11 +38,13 @@ fi
 
 ### DevAgent startup
 
-if [ -z `docker ps | grep devagent` ]; then
-    docker run --name devagent -d -p 2000:2000 \
+if [ -z `docker ps -a | grep 'devagent$'` ]; then
+    docker run -d --name devagent -p 2000:2000 \
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
     -v ~/.rhiot/downloads:/root/.rhiot/downloads \
     -it rhiot/devagent:${RHIOT_VERSION}
+else if [ -z `docker ps | grep devagent` ]; then
+    docker start devagent
 fi
 
 ### Command execution
