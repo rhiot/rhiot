@@ -40,5 +40,5 @@ fi
 
 docker run -v ~/.rhiot/maven/repository:/root/.m2/repository \
            -v ~/.rhiot/downloads:/root/.rhiot/downloads \
-           -v /dev:/root/hostdev -e devices_directory=/root/hostdev
+           -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
            --net=host -it rhiot/cmd:${RHIOT_VERSION} "$@"
