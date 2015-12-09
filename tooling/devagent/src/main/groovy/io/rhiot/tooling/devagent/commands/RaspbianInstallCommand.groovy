@@ -16,6 +16,7 @@
  */
 package io.rhiot.tooling.devagent.commands
 
+import io.rhiot.utils.WithLogger
 import io.rhiot.utils.process.ProcessManager
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.SystemUtils
@@ -27,7 +28,7 @@ import java.nio.file.Paths
 import java.util.zip.ZipInputStream
 
 @Component
-class RaspbianInstallCommand {
+class RaspbianInstallCommand implements WithLogger {
 
     private final String devicesDirectory
 
@@ -42,26 +43,25 @@ class RaspbianInstallCommand {
 
     List<String> execute(String device) {
         def downloadDirectory = Paths.get(SystemUtils.userHome.absolutePath, '.rhiot', 'downloads').toFile()
-        def imageFile = new File(downloadDirectory, '2015-11-21-raspbian-jessie.zip')
+        def imageZip = new File(downloadDirectory, '2015-11-21-raspbian-jessie.zip')
 
-        if(!imageFile.exists()) {
+        if(!imageZip.exists()) {
             def tmpImageFile = File.createTempFile('rhiot', 'raspbian')
             IOUtils.copyLarge(new URL('http://director.downloads.raspberrypi.org/raspbian/images/raspbian-2015-11-24/2015-11-21-raspbian-jessie.zip').openStream(), new FileOutputStream(tmpImageFile))
-            imageFile.parentFile.mkdirs()
-            tmpImageFile.renameTo(imageFile)
+            imageZip.parentFile.mkdirs()
+            tmpImageFile.renameTo(imageZip)
         }
 
-        def extractedImageFile = new File(downloadDirectory, '2015-11-21-raspbian-jessie.img')
-        if(!extractedImageFile.exists()) {
+        def image = new File(downloadDirectory, '2015-11-21-raspbian-jessie.img')
+        if(!image.exists()) {
             def tmpImageFile = File.createTempFile('rhiot', 'raspbian')
-            def zip = new ZipInputStream(new FileInputStream(imageFile))
+            def zip = new ZipInputStream(new FileInputStream(imageZip))
             zip.nextEntry
-            IOUtils.copyLarge(zip, new FileOutputStream(tmpImageFile))
+            log().debug('Extracting Raspbian ZIP {} to {}', imageZip.absolutePath, tmpImageFile.absolutePath)
+            IOUtils.copyLarge(zip, new FileOutputStream(image))
             zip.close()
-            tmpImageFile.renameTo(extractedImageFile)
         }
-
-        processManager.executeAndJoinOutput("dd", "bs=4M", "if=${extractedImageFile}", "of=${devicesDirectory}/${device}")
+        processManager.executeAndJoinOutput("dd", "bs=4M", "if=${image}", "of=${devicesDirectory}/${device}")
     }
 
 }
