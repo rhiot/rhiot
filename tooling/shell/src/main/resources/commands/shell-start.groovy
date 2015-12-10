@@ -25,6 +25,7 @@ class shell_start {
     @Usage("shell-start")
     @Command
     def main(InvocationContext context) {
+        'Shell is up and running.'
     }
 
 }
