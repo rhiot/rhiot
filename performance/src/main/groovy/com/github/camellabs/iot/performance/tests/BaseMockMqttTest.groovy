@@ -17,8 +17,8 @@
 package com.github.camellabs.iot.performance.tests
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.deployer.detector.Device
 import com.github.camellabs.iot.performance.TestSpecification
+import io.rhiot.scanner.Device
 import io.rhiot.utils.ssh.client.SshClient
 
 import java.text.SimpleDateFormat
