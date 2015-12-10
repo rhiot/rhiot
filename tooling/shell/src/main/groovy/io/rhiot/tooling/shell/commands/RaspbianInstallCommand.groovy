@@ -61,7 +61,9 @@ class RaspbianInstallCommand implements WithLogger {
             IOUtils.copyLarge(zip, new FileOutputStream(image))
             zip.close()
         }
-        processManager.executeAndJoinOutput("dd", "bs=4M", "if=${image}", "of=${devicesDirectory}/${device}")
+        def output = processManager.executeAndJoinOutput("dd", "bs=4M", "if=${image}", "of=${devicesDirectory}/${device}")
+        output += processManager.executeAndJoinOutput('sync')
+        output
     }
 
 }
