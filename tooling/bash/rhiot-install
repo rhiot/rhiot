@@ -13,4 +13,4 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-wget https://raw.githubusercontent.com/rhiot/rhiot/master/tooling/bash/rhiot.sh -O /usr/bin/rhiot && sudo chmod +x /usr/bin/rhiot
+sudo wget https://raw.githubusercontent.com/rhiot/rhiot/master/tooling/bash/rhiot.sh -O /usr/bin/rhiot && sudo chmod +x /usr/bin/rhiot
