@@ -41,7 +41,8 @@ class ShellTest {
     @Test
     void shouldExecuteCommand() {
         def result = new SshClient('localhost', sshPort, 'rhiot', 'rhiot').command('shell-start')
-        assertThat(result).hasSize(0)
+        assertThat(result).hasSize(1)
+        assertThat(result.first()).contains('up and running')
     }
 
 }
