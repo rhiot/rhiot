@@ -29,7 +29,10 @@ else
   fi
 fi
 
-### Rhiot version setup
+### Rhiot setup
+
+RHIOT_HOME=~/.rhiot
+DOWNLOADS="${RHIOT_HOME}/downloads"
 
 if [ -z "$RHIOT_VERSION" ]; then
     # RHIOT_VERSION=0.1.3
@@ -43,7 +46,7 @@ if [ -z "${SHELL_CONTAINER_STARTED}" ]; then
     docker rm rhiot-shell >> ~/.rhiot/rhiot-cmd.log 2>&1
     docker run -d --name rhiot-shell --privileged=true -p 2000:2000 \
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
-    -v ~/.rhiot/downloads:/root/.rhiot/downloads \
+    -v $DOWNLOADS:/root/.rhiot/downloads \
     -it rhiot/shell:${RHIOT_VERSION}  >> /dev/null
     sleep 5 # Give SSHD time to start
 fi
