@@ -25,7 +25,9 @@ class shell_start {
     @Usage("shell-start")
     @Command
     def main(InvocationContext context) {
-        'Shell is up and running.'
+        """Shell is up and running. You can use the SSH client to use it:
+    ssh rhiot@localhost -p 2000
+Your password is 'rhiot."""
     }
 
 }
