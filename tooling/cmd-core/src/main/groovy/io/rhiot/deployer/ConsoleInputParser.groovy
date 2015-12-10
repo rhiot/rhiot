@@ -88,7 +88,7 @@ deploy-gateway options:
 
     String command() {
         def command = args.find{!it.startsWith('-')}
-        if(!['scan', 'deploy-gateway', 'raspbian-install'].contains(command)) {
+        if(!['scan', 'deploy-gateway', 'raspbian-install', 'shell-start'].contains(command)) {
             throw new IllegalArgumentException("No such command - ${command}.")
         }
         command
