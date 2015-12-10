@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.deployer.detector
+package io.rhiot.scanner
 
 import org.junit.Test
 
@@ -30,14 +30,14 @@ class SimplePortScanningDeviceDetectorTest {
         assertThat(addresses).hasSize(0)
     }
 
-}
+    static class StubInterfacesProvider implements InterfacesProvider {
 
-class StubInterfacesProvider implements InterfacesProvider {
+        @Override
+        List<NetworkInterface> interfaces() {
+            [new NetworkInterface(ipv4Address: '192.169.1.1', broadcast: '192.169.1.1'),
+             new NetworkInterface(ipv4Address: '192.169.0.1', broadcast: '192.169.0.1')]
+        }
 
-    @Override
-    List<NetworkInterface> interfaces() {
-        [new NetworkInterface(ipv4Address: '192.169.1.1', broadcast: '192.169.1.1'),
-         new NetworkInterface(ipv4Address: '192.169.0.1', broadcast: '192.169.0.1')]
     }
 
 }

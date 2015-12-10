@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.deployer.detector
+package io.rhiot.scanner
 
-import io.rhiot.deployer.CmdOutput
+import io.rhiot.utils.WithLogger
 import io.rhiot.utils.ssh.client.SshClient
 import org.slf4j.Logger
 
@@ -30,15 +30,11 @@ import static java.util.concurrent.Executors.newCachedThreadPool
 import static java.util.concurrent.TimeUnit.SECONDS
 import static org.slf4j.LoggerFactory.getLogger
 
-class SimplePortScanningDeviceDetector implements DeviceDetector {
+class SimplePortScanningDeviceDetector implements DeviceDetector, WithLogger {
 
     // Constants
 
     private static final DEFAULT_PING_TIMEOUT = 500
-
-    // Logger
-
-    private final static Logger LOG = getLogger(SimplePortScanningDeviceDetector.class);
 
     // Configuration members
 
@@ -104,11 +100,11 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
                 @Override
                 ScanResult call() throws Exception {
                     try {
-                        CmdOutput.LOG.debug('Scanning address {}', it.hostAddress)
+                        log().debug('Scanning address {}', it.hostAddress)
                         return new ScanResult(it, it.isReachable(timeout));
                     } catch (SocketException e) {
                         if (e.message.contains('Permission denied')) {
-                            CmdOutput.LOG.debug("Cannot scan " + it + " - permission denied.")
+                            log().debug("Cannot scan " + it + " - permission denied.")
                             return new ScanResult(it, false)
                         } else {
                             throw new RuntimeException(e);
@@ -125,11 +121,11 @@ class SimplePortScanningDeviceDetector implements DeviceDetector {
                 @Override
                 Device call() throws Exception {
                     try {
-                        CmdOutput.LOG.debug("Probing for Raspberry Pi on " + device.hostAddress)
+                        log().debug("Probing for Raspberry Pi on " + device.hostAddress)
                         new SshClient(device.hostAddress, 22, username, password).command("echo ping");
                         new Device(device, Device.DEVICE_RASPBERRY_PI_2)
                     } catch (Exception ex) {
-                        CmdOutput.LOG.debug("Can't connect to the Raspberry Pi device: " + device.getHostAddress());
+                        log().debug("Can't connect to the Raspberry Pi device: " + device.getHostAddress());
                         return null
                     }
                 }

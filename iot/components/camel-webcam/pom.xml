@@ -59,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-tooling-cmd-core</artifactId>
+            <artifactId>rhiot-scanner</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

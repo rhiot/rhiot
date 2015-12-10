@@ -17,9 +17,9 @@
 
 package io.rhiot.component.gpsd;
 
-import io.rhiot.deployer.detector.Device;
-import io.rhiot.deployer.detector.DeviceDetector;
-import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector;
+import io.rhiot.scanner.Device;
+import io.rhiot.scanner.DeviceDetector;
+import io.rhiot.scanner.SimplePortScanningDeviceDetector;
 import io.rhiot.utils.Networks;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -31,7 +31,6 @@ import org.junit.Test;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static io.rhiot.deployer.detector.Device.DEVICE_RASPBERRY_PI_2;
 import static org.junit.Assume.assumeTrue;
 
 public class GpsdProducerIntegrationTest extends CamelTestSupport {
@@ -46,7 +45,7 @@ public class GpsdProducerIntegrationTest extends CamelTestSupport {
 
         devices = deviceDetector.detectDevices();
         piAddress = devices.size() == 1 ? devices.get(0).address().getHostAddress() : null;
-        isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(DEVICE_RASPBERRY_PI_2) &&
+        isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(Device.DEVICE_RASPBERRY_PI_2) &&
                 Networks.available(piAddress, GpsdConstants.DEFAULT_PORT);
 
         assumeTrue(isRpiAvailable);

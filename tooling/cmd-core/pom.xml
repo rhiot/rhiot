@@ -22,6 +22,10 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-scanner</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-utils-ssh</artifactId>
         </dependency>
         <dependency>

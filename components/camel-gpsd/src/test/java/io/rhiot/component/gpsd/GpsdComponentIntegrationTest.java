@@ -18,9 +18,9 @@
 package io.rhiot.component.gpsd;
 
 import de.taimos.gpsd4java.types.TPVObject;
-import io.rhiot.deployer.detector.Device;
-import io.rhiot.deployer.detector.DeviceDetector;
-import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector;
+import io.rhiot.scanner.Device;
+import io.rhiot.scanner.DeviceDetector;
+import io.rhiot.scanner.SimplePortScanningDeviceDetector;
 import io.rhiot.utils.Networks;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static io.rhiot.deployer.detector.Device.DEVICE_RASPBERRY_PI_2;
 import static org.junit.Assume.assumeTrue;
 import static io.rhiot.utils.Properties.booleanProperty;
 
@@ -55,7 +54,7 @@ public class GpsdComponentIntegrationTest extends CamelTestSupport {
         
         devices = deviceDetector.detectDevices();
         piAddress = devices.size() == 1 ? devices.get(0).address().getHostAddress() : "localhost";
-        isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(DEVICE_RASPBERRY_PI_2) &&
+        isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(Device.DEVICE_RASPBERRY_PI_2) &&
                 Networks.available(piAddress, GpsdConstants.DEFAULT_PORT);
         
         //If Pi is available and the default GPSD port is open then test that 

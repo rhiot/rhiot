@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.deployer.detector
+package io.rhiot.scanner
 
-import io.rhiot.deployer.CmdOutput
+import io.rhiot.utils.WithLogger
 
 import static java.net.NetworkInterface.getNetworkInterfaces
 
-class JavaNetInterfaceProvider implements InterfacesProvider {
+class JavaNetInterfaceProvider implements InterfacesProvider, WithLogger {
 
     @Override
     List<NetworkInterface> interfaces() {
-        CmdOutput.LOG.debug("Found network interfaces : " + getNetworkInterfaces().findAll())
-        
+        log().debug("Found network interfaces : " + getNetworkInterfaces().findAll())
+
         getNetworkInterfaces().findAll { def iface = it.displayName
             iface.startsWith("wlan") || iface.startsWith("eth") || iface.startsWith("en") || iface.startsWith("docker")}.
                 collect { java.net.NetworkInterface it ->
                     def ipv4Address = it.interfaceAddresses.find{ it.getAddress().getHostAddress().length() < 15 }
-                    CmdOutput.LOG.debug("Checking ipv4Address " + ipv4Address)
+                    log().debug("Checking ipv4Address " + ipv4Address)
                     def broadcast = ipv4Address.broadcast.hostName
                     new NetworkInterface(ipv4Address: ipv4Address, broadcast: broadcast)
                 }

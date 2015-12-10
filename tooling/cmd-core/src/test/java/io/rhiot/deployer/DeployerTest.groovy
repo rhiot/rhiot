@@ -16,7 +16,7 @@
  */
 package io.rhiot.deployer
 
-import io.rhiot.deployer.detector.DeviceDetector
+import io.rhiot.scanner.DeviceDetector
 import org.junit.Assert
 import org.junit.Test
 

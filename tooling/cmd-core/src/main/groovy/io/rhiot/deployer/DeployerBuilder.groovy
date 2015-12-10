@@ -16,8 +16,8 @@
  */
 package io.rhiot.deployer
 
-import io.rhiot.deployer.detector.DeviceDetector
-import io.rhiot.deployer.detector.SimplePortScanningDeviceDetector
+import io.rhiot.scanner.DeviceDetector
+import io.rhiot.scanner.SimplePortScanningDeviceDetector
 
 class DeployerBuilder {
 
