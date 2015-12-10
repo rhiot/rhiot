@@ -41,6 +41,7 @@ class ConsoleInputParser {
 Usage: rhiot [OPTIONS] [deploy-gateway|scan]
 
 Commands:
+shell-start                  Starts background shell process.
 scan                         Lists possible target devices.
 raspbian-install             Installs Raspbian to a target SD card.
 deploy-gateway               Deploys gateway to a detected device.
@@ -48,6 +49,19 @@ deploy-gateway               Deploys gateway to a detected device.
 Global options:
  -h --help                                                      Prints this help page.
  -d --debug                                                     Debug (verbose) mode.
+
+===
+
+Command: shell-start
+
+Example: shell-start
+
+Starts background shell process (if one is not started already). You can connect to a shell process using SSH and
+default credentials:
+
+    ssh rhiot@localhost -p 2000
+    password: rhiot
+
 
 ===
 

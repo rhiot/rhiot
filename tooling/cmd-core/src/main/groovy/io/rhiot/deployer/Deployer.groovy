@@ -126,6 +126,9 @@ class Deployer {
 
         try {
             switch(parser.command()) {
+                case 'shell-start':
+                    new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
+                    break;
                 case 'scan':
                     println 'Scanning local networks for devices...'
                     println()
