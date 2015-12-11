@@ -7,7 +7,7 @@ the common IoT-related challenges.
 
 ## Documentation
 
-[Here](https://rhiot.gitbooks.io/rhiotdocumentation/content/) you can find the reference documentation for the Rhiot.
+[Here](https://rhiot.gitbooks.io/rhiotdocumentation/content) you can find the reference documentation for the Rhiot.
 
 ## Current release
 
