@@ -54,18 +54,20 @@ public class GPIOEndpoint extends DefaultEndpoint {
     @UriParam(description = "Default : use Body if Action for ouput Pin (TOGGLE, HIGH, LOW)", enums = "TOGGLE:HIGH:LOW")
     private GPIOAction action;
 
-    @UriParam(defaultValue = "false", description = "")
-    private boolean initValue;
+    @UriParam(defaultValue = "false")
+    private boolean state;
+
+    @UriParam(defaultValue = "false")
+    private boolean shutdownState;
 
     @UriParam(defaultValue = "DIR_OUTPUT_ONLY(Producer),DIR_INPUT_ONLY(Consumer)", description = "")
     private String direction;
 
+    @UriParam(defaultValue = "MODE_OUTPUT_PUSH_PULL(Producer),DEFAULT(Consumer)", description = "")
     private String mode;
 
+    @UriParam(defaultValue = "TRIGGER_RISING_EDGE|TRIGGER_FALLING_EDGE(Producer),TRIGGER_NONE(Consumer)", description = "")
     private String trigger;
-
-    public GPIOEndpoint() {
-    }
 
     public GPIOEndpoint(String uri, String pin, GPIOComponent component) {
         super(uri, component);
@@ -93,7 +95,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
         int internalTrigger = internalValueWithOR(trigger);
 
         GPIOPinConfig pinConfig = new GPIOPinConfig(0, Integer.parseInt(this.gpioId), internalDirection, internalMode,
-                internalTrigger, initValue);
+                internalTrigger, state);
 
         GPIOPin pin = DeviceManager.open(GPIOPin.class, pinConfig);
         return new GPIOConsumer(this, processor, pin);
@@ -121,7 +123,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
         int internalTrigger = internalValueWithOR(trigger);
 
         GPIOPinConfig pinConfig = new GPIOPinConfig(DeviceConfig.DEFAULT, Integer.parseInt(this.gpioId),
-                internalDirection, internalMode, internalTrigger, initValue);
+                internalDirection, internalMode, internalTrigger, state);
         GPIOPin pin = DeviceManager.open(GPIOPin.class, pinConfig);
 
         return new GPIOProducer(this, pin);
@@ -134,14 +136,6 @@ public class GPIOEndpoint extends DefaultEndpoint {
     @Override
     public boolean isSingleton() {
         return true;
-    }
-
-    public boolean isInitValue() {
-        return initValue;
-    }
-
-    public void setInitValue(boolean initValue) {
-        this.initValue = initValue;
     }
 
     public String getDirection() {
@@ -214,6 +208,22 @@ public class GPIOEndpoint extends DefaultEndpoint {
         }
 
         return ret;
+    }
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    public boolean isShutdownState() {
+        return shutdownState;
+    }
+
+    public void setShutdownState(boolean shutdownState) {
+        this.shutdownState = shutdownState;
     }
 
 }

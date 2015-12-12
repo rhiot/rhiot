@@ -36,14 +36,11 @@ public class GPIOProducer extends DefaultProducer {
 
     private GPIOEndpoint endpoint;
     private GPIOPin pin = null;
-    private GPIOAction action;
 
     public GPIOProducer(GPIOEndpoint endpoint, GPIOPin pin) {
         super(endpoint);
         this.endpoint = endpoint;
         this.pin = pin;
-        this.action = endpoint.getAction();
-
     }
 
     protected GPIOAction resolveAction(Message message) {
@@ -51,7 +48,7 @@ public class GPIOProducer extends DefaultProducer {
             // Exchange Action
             return message.getHeader(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION, GPIOAction.class);
         } else {
-            return action; // Endpoint Action
+            return endpoint.getAction(); // Endpoint Action
         }
     }
 
