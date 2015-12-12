@@ -17,16 +17,11 @@
 
 package io.rhiot.component.deviceio.gpio;
 
+import io.rhiot.component.deviceio.DeviceIOConstants;
+
 import java.lang.reflect.Field;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import jdk.dio.DeviceConfig;
-import jdk.dio.DeviceManager;
-import jdk.dio.gpio.GPIOPin;
-import jdk.dio.gpio.GPIOPinConfig;
-
-import io.rhiot.component.deviceio.DeviceIOConstants;
 
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
@@ -38,6 +33,11 @@ import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jdk.dio.DeviceConfig;
+import jdk.dio.DeviceManager;
+import jdk.dio.gpio.GPIOPin;
+import jdk.dio.gpio.GPIOPinConfig;
 
 /**
  * Represents a DeviceIO GPIO Endpoint.
@@ -51,7 +51,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
     @Metadata(required = "true")
     private String gpioId;
 
-    @UriParam(description = "Default : use Body if Action for ouput Pin (TOGGLE, HIGH, LOW for digital only) ", enums = "TOGGLE:HIGH:LOW:HEADER")
+    @UriParam(description = "Default : use Body if Action for ouput Pin (TOGGLE, HIGH, LOW)", enums = "TOGGLE:HIGH:LOW")
     private GPIOAction action;
 
     @UriParam(defaultValue = "false", description = "")
@@ -74,6 +74,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
     /**
      * Create consumer map to an Input PIN
      */
+    @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         LOG.debug(this.toString());
 
@@ -94,13 +95,14 @@ public class GPIOEndpoint extends DefaultEndpoint {
         GPIOPinConfig pinConfig = new GPIOPinConfig(0, Integer.parseInt(this.gpioId), internalDirection, internalMode,
                 internalTrigger, initValue);
 
-        GPIOPin pin = (GPIOPin) DeviceManager.open(GPIOPin.class, pinConfig);
+        GPIOPin pin = DeviceManager.open(GPIOPin.class, pinConfig);
         return new GPIOConsumer(this, processor, pin);
     }
 
     /**
      * Create producer map to an Output PIN
      */
+    @Override
     public Producer createProducer() throws Exception {
         LOG.debug(this.toString());
 
@@ -120,7 +122,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
 
         GPIOPinConfig pinConfig = new GPIOPinConfig(DeviceConfig.DEFAULT, Integer.parseInt(this.gpioId),
                 internalDirection, internalMode, internalTrigger, initValue);
-        GPIOPin pin = (GPIOPin) DeviceManager.open(GPIOPin.class, pinConfig);
+        GPIOPin pin = DeviceManager.open(GPIOPin.class, pinConfig);
 
         return new GPIOProducer(this, pin);
     }
@@ -129,6 +131,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
         return action;
     }
 
+    @Override
     public boolean isSingleton() {
         return true;
     }

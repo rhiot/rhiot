@@ -18,5 +18,5 @@
 package io.rhiot.component.deviceio.gpio;
 
 public enum GPIOAction {
-    TOGGLE, HIGH, LOW
+    TOGGLE, LOW, HIGH, BLINK
 }
