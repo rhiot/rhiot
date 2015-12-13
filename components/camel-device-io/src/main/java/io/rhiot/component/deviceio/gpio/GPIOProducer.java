@@ -74,6 +74,11 @@ public class GPIOProducer extends DefaultProducer {
                 case TOGGLE:
                     setValue(!pin.getValue());
                     break;
+                case BLINK:
+                    log.error("Not yet implemented");
+                    break;
+                default:
+                    break;
                 }
             } else {
                 setValue(exchange.getIn().getBody(Boolean.class));
