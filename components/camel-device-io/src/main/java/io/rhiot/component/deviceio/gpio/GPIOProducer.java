@@ -28,6 +28,7 @@ import org.apache.camel.impl.DefaultProducer;
 import jdk.dio.ClosedDeviceException;
 import jdk.dio.UnavailableDeviceException;
 import jdk.dio.gpio.GPIOPin;
+import jdk.dio.gpio.GPIOPinConfig;
 
 /**
  * The DeviceIO GPIO producer.
@@ -81,7 +82,12 @@ public class GPIOProducer extends DefaultProducer {
                     break;
                 }
             } else {
-                setValue(exchange.getIn().getBody(Boolean.class));
+                if (pin.getDirection() == GPIOPinConfig.DIR_OUTPUT_ONLY && exchange.getIn().getBody() != null) {
+                    setValue(exchange.getIn().getBody(Boolean.class));
+                } else if ((pin.getDirection() == GPIOPinConfig.DIR_OUTPUT_ONLY && exchange.getIn().getBody() == null)
+                        || pin.getDirection() == GPIOPinConfig.DIR_INPUT_ONLY) {
+                    exchange.getIn().setBody(pin.getValue(), Boolean.class);
+                }
             }
         }
     }
