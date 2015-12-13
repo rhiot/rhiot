@@ -69,7 +69,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "DIR_OUTPUT_ONLY(Producer),DIR_INPUT_ONLY(Consumer)", description = "")
     private String direction;
 
-    @UriParam(defaultValue = "MODE_OUTPUT_PUSH_PULL(Producer),DEFAULT(Consumer)", description = "")
+    @UriParam(defaultValue = "MODE_OUTPUT_PUSH_PULL(Producer),MODE_INPUT_PULL_UP(Consumer)", description = "")
     private String mode;
 
     @UriParam(defaultValue = "TRIGGER_RISING_EDGE|TRIGGER_FALLING_EDGE(Producer),TRIGGER_NONE(Consumer)", description = "")
@@ -90,7 +90,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
             direction = "DIR_INPUT_ONLY";
         }
         if (mode == null || (mode.compareTo("") == 0)) {
-            mode = "DEFAULT";
+            mode = "MODE_INPUT_PULL_UP";
         }
         if (trigger == null || (trigger.compareTo("") == 0)) {
             trigger = "TRIGGER_RISING_EDGE|TRIGGER_FALLING_EDGE";
