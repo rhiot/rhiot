@@ -60,6 +60,12 @@ public class GPIOEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "false")
     private boolean shutdownState;
 
+    @UriParam(defaultValue = "0")
+    private long delay;
+
+    @UriParam(defaultValue = "50")
+    private long duration = 50;
+
     @UriParam(defaultValue = "DIR_OUTPUT_ONLY(Producer),DIR_INPUT_ONLY(Consumer)", description = "")
     private String direction;
 
@@ -133,45 +139,28 @@ public class GPIOEndpoint extends DefaultEndpoint {
         return action;
     }
 
-    @Override
-    public boolean isSingleton() {
-        return true;
+    public long getDelay() {
+        return delay;
     }
 
     public String getDirection() {
         return direction;
     }
 
-    public void setDirection(String direction) {
-        this.direction = direction;
-    }
-
-    public String getMode() {
-        return mode;
-    }
-
-    public void setMode(String mode) {
-        this.mode = mode;
-    }
-
-    public String getTrigger() {
-        return trigger;
-    }
-
-    public void setTrigger(String trigger) {
-        this.trigger = trigger;
-    }
-
-    public void setAction(GPIOAction action) {
-        this.action = action;
+    public long getDuration() {
+        return duration;
     }
 
     public String getGpioId() {
         return gpioId;
     }
 
-    public void setGpioId(String gpioId) {
-        this.gpioId = gpioId;
+    public String getMode() {
+        return mode;
+    }
+
+    public String getTrigger() {
+        return trigger;
     }
 
     private int internalValueWithOR(String valueList) {
@@ -210,20 +199,53 @@ public class GPIOEndpoint extends DefaultEndpoint {
         return ret;
     }
 
+    public boolean isShutdownState() {
+        return shutdownState;
+    }
+
+    @Override
+    public boolean isSingleton() {
+        return true;
+    }
+
     public boolean isState() {
         return state;
+    }
+
+    public void setAction(GPIOAction action) {
+        this.action = action;
+    }
+
+    public void setDelay(long delay) {
+        this.delay = delay;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public void setGpioId(String gpioId) {
+        this.gpioId = gpioId;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public void setShutdownState(boolean shutdownState) {
+        this.shutdownState = shutdownState;
     }
 
     public void setState(boolean state) {
         this.state = state;
     }
 
-    public boolean isShutdownState() {
-        return shutdownState;
-    }
-
-    public void setShutdownState(boolean shutdownState) {
-        this.shutdownState = shutdownState;
+    public void setTrigger(String trigger) {
+        this.trigger = trigger;
     }
 
 }
