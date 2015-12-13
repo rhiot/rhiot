@@ -18,11 +18,10 @@ package io.rhiot.component.kura.gpio;
 
 public final class KuraGPIOConstants {
     public static final String CAMEL_KURA_GPIO = "CamelKuraGPIO";
-    public static final String CAMEL_KURA_GPIO_TOPIC = CAMEL_KURA_GPIO + ".topic";
     public static final String CAMEL_KURA_GPIO_PIN = CAMEL_KURA_GPIO + ".pin";
-    public static final String CAMEL_KURA_GPIO_ID = CAMEL_KURA_GPIO + ".id";
-    public static final String CAMEL_KURA_GPIO_NAME = CAMEL_KURA_GPIO + ".name";
-    public static final String CAMEL_KURA_GPIO_ACTION = CAMEL_KURA_GPIO + ".action";
+    public static final String CAMEL_KURA_GPIO_ID = CAMEL_KURA_GPIO + ".pinId";
+    public static final String CAMEL_KURA_GPIO_NAME = CAMEL_KURA_GPIO + ".pinName";
+    public static final String CAMEL_KURA_GPIO_ACTION = CAMEL_KURA_GPIO + ".pinAction";
     public static final String CAMEL_KURA_GPIO_THREADPOOL = "kura-gpio-camel-";
     public static final String CAMEL_KURA_GPIO_ATTR_NAME_GPIOID = "gpioId";
 
