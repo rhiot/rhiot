@@ -72,7 +72,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "MODE_OUTPUT_PUSH_PULL(Producer),MODE_INPUT_PULL_UP(Consumer)", description = "")
     private String mode;
 
-    @UriParam(defaultValue = "TRIGGER_RISING_EDGE|TRIGGER_FALLING_EDGE(Producer),TRIGGER_NONE(Consumer)", description = "")
+    @UriParam(defaultValue = "TRIGGER_BOTH_EDGES(Producer),TRIGGER_NONE(Consumer)", description = "")
     private String trigger;
 
     public GPIOEndpoint(String uri, String pin, GPIOComponent component) {
@@ -93,7 +93,7 @@ public class GPIOEndpoint extends DefaultEndpoint {
             mode = "MODE_INPUT_PULL_UP";
         }
         if (trigger == null || (trigger.compareTo("") == 0)) {
-            trigger = "TRIGGER_RISING_EDGE|TRIGGER_FALLING_EDGE";
+            trigger = "TRIGGER_BOTH_EDGES";
         }
 
         int internalDirection = internalValueWithOR(direction);
