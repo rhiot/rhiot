@@ -20,6 +20,7 @@ package io.rhiot.component.deviceio.gpio;
 import io.rhiot.component.deviceio.DeviceIOConstants;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -37,11 +38,14 @@ public class GPIOProducer extends DefaultProducer {
 
     private GPIOEndpoint endpoint;
     private GPIOPin pin = null;
+    private ExecutorService pool;
 
     public GPIOProducer(GPIOEndpoint endpoint, GPIOPin pin) {
         super(endpoint);
         this.endpoint = endpoint;
         this.pin = pin;
+        this.pool = this.getEndpoint().getCamelContext().getExecutorServiceManager().newSingleThreadExecutor(this,
+                DeviceIOConstants.CAMEL_DEVICE_IO_THREADPOOL + pin.getDescriptor().getID());
     }
 
     protected GPIOAction resolveAction(Message message) {
@@ -76,7 +80,21 @@ public class GPIOProducer extends DefaultProducer {
                     setValue(!pin.getValue());
                     break;
                 case BLINK:
-                    log.error("Not yet implemented");
+                    pool.submit(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(((GPIOEndpoint) getEndpoint()).getDelay());
+                                pin.setValue(!pin.getValue());
+                                Thread.sleep(((GPIOEndpoint) getEndpoint()).getDuration());
+                                pin.setValue(!pin.getValue());
+                            } catch (Exception e) {
+                                log.error("Thread interruption into BLINK sequence", e);
+                            }
+                        }
+                    });
+
                     break;
                 default:
                     break;
@@ -87,6 +105,10 @@ public class GPIOProducer extends DefaultProducer {
                 } else if ((pin.getDirection() == GPIOPinConfig.DIR_OUTPUT_ONLY && exchange.getIn().getBody() == null)
                         || pin.getDirection() == GPIOPinConfig.DIR_INPUT_ONLY) {
                     exchange.getIn().setBody(pin.getValue(), Boolean.class);
+                    exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_PIN, pin.getDescriptor().getID());
+                    exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_NAME, pin.getDescriptor().getName());
+                    exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_TIMESTAMP, System.currentTimeMillis());
+
                 }
             }
         }
