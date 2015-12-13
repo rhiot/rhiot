@@ -17,17 +17,17 @@
 
 package io.rhiot.component.deviceio.gpio;
 
-import jdk.dio.gpio.GPIOPin;
-import jdk.dio.gpio.PinEvent;
-import jdk.dio.gpio.PinListener;
-import jdk.dio.gpio.PortEvent;
-import jdk.dio.gpio.PortListener;
-
 import io.rhiot.component.deviceio.DeviceIOConstants;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
+
+import jdk.dio.gpio.GPIOPin;
+import jdk.dio.gpio.PinEvent;
+import jdk.dio.gpio.PinListener;
+import jdk.dio.gpio.PortEvent;
+import jdk.dio.gpio.PortListener;
 
 /**
  * The DeviceIO GPIO consumer.
@@ -75,9 +75,9 @@ public class GPIOConsumer extends DefaultConsumer implements PinListener, PortLi
     @Override
     public void valueChanged(PinEvent event) {
         Exchange exchange = endpoint.createExchange();
-        exchange.getIn().setBody(event);
-        exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_PIN, event.getDevice());
-        exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_VALUE, event.getValue());
+        exchange.getIn().setBody(event.getValue());
+        exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_PIN, event.getDevice().getDescriptor().getID());
+        exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_NAME, event.getDevice().getDescriptor().getName());
         exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_TIMESTAMP, event.getTimeStamp());
         sendEvent(exchange);
     }
@@ -86,9 +86,9 @@ public class GPIOConsumer extends DefaultConsumer implements PinListener, PortLi
     @Override
     public void valueChanged(PortEvent event) {
         Exchange exchange = endpoint.createExchange();
-        exchange.getIn().setBody(event);
-        exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_PIN, event.getDevice());
-        exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_VALUE, event.getValue());
+        exchange.getIn().setBody(event.getValue());
+        exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_PIN, event.getDevice().getDescriptor().getID());
+        exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_NAME, event.getDevice().getDescriptor().getName());
         exchange.getIn().setHeader(DeviceIOConstants.CAMEL_DEVICE_IO_TIMESTAMP, event.getTimeStamp());
         sendEvent(exchange);
     }
