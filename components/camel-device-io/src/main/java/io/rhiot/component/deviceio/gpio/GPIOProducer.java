@@ -21,6 +21,7 @@ import io.rhiot.component.deviceio.DeviceIOConstants;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -55,6 +56,18 @@ public class GPIOProducer extends DefaultProducer {
         } else {
             return endpoint.getAction(); // Endpoint Action
         }
+    }
+
+    @Override
+    protected void doShutdown() throws Exception {
+        // 2 x (delay + timeout) + 5s
+        long timeToWait = (((GPIOEndpoint) getEndpoint()).getDelay() + ((GPIOEndpoint) getEndpoint()).getDuration()) * 2
+                + 5000;
+        log.debug("Wait for {} ms", timeToWait);
+        pool.awaitTermination(timeToWait, TimeUnit.MILLISECONDS);
+        pin.setValue(((GPIOEndpoint) getEndpoint()).isShutdownState());
+        pin.close(); // TODO check this part
+        log.debug("Pin {} {}", pin.getDescriptor().getID(), pin.getValue());
     }
 
     /**
