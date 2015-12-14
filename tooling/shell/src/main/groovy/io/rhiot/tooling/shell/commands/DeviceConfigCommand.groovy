@@ -63,7 +63,7 @@ class DeviceConfigCommand extends CommandSupport {
 
         sshClient.scp(new ByteArrayInputStream(result.toByteArray()), new File(file))
 
-        output << "Updated ${file} property ${property} to value ${value}"
+        output << "Updated ${file} - set property '${property}' to value '${value}'."
     }
 
 }
