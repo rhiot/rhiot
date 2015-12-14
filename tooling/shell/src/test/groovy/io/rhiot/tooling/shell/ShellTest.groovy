@@ -16,10 +16,8 @@
  */
 package io.rhiot.tooling.shell
 
-import io.rhiot.utils.Uuids
 import io.rhiot.utils.ssh.client.SshClient
 import io.rhiot.utils.ssh.client.SshServer
-import org.apache.commons.io.IOUtils
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -53,6 +51,8 @@ class ShellTest {
         assertThat(result.first()).contains('up and running')
     }
 
+    // device-config tests
+
     @Test
     void shouldAddConfigurationFile() {
         // When
@@ -63,6 +63,12 @@ class ShellTest {
         // Then
         assertThat(properties.getProperty('foo')).isEqualTo('bar')
         assertThat(result.first()).startsWith('Updated')
+    }
+
+    @Test
+    void shouldHandleMissingFile() {
+        def result = new SshClient('localhost', sshPort, 'rhiot', 'rhiot').command("device-config --host localhost --port ${device.port()}")
+        assertThat(result.first()).contains("Parameter \'file\' is required")
     }
 
 }

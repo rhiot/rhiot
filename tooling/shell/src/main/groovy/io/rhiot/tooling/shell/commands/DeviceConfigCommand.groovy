@@ -1,6 +1,7 @@
 package io.rhiot.tooling.shell.commands
 
 import io.rhiot.scanner.DeviceDetector
+import io.rhiot.tooling.shell.CommandSupport
 import io.rhiot.utils.ssh.client.SshClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component
 import static org.apache.commons.lang3.StringUtils.isBlank
 
 @Component
-class DeviceConfigCommand {
+class DeviceConfigCommand extends CommandSupport {
 
     private final DeviceDetector deviceDetector
 
@@ -17,19 +18,20 @@ class DeviceConfigCommand {
         this.deviceDetector = deviceDetector
     }
 
-    List<String> execute(String deviceAddress, Integer port, String username, String password, String file, String property, String value) {
-        if(isBlank(deviceAddress)) {
-            deviceAddress = deviceDetector.detectDevices().first().address().hostAddress
+    @Override
+    protected List<String> doExecute(List<String> output, String... command) {
+        def deviceAddress = parameter(command[0]){
+            deviceDetector.detectDevices().first().address().hostAddress
         }
-        if(port == null) {
-            port = 22
-        }
-        if(isBlank(username)) {
-            username = 'root'
-        }
-        if(isBlank(password)) {
-            password = 'raspberry'
-        }
+
+        String portString = command[1]
+        int port = isBlank(portString) ? 22 : portString.toInteger()
+
+        String username = parameter(command[2], 'root')
+        String password = parameter(command[3], 'raspberry')
+        String file = requiredParameter('file', command[4])
+        String property = command[5]
+        String value = command[6]
 
         def sshClient = new SshClient(deviceAddress, port, username, password)
 
@@ -45,7 +47,7 @@ class DeviceConfigCommand {
 
         sshClient.scp(new ByteArrayInputStream(result.toByteArray()), new File(file))
 
-        ["Updated ${file} property ${property} to value ${value}"]
+        output << "Updated ${file} property ${property} to value ${value}"
     }
 
 }

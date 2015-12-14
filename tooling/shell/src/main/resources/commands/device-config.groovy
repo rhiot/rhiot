@@ -29,10 +29,10 @@ class device_config {
     @Usage("device-config file property key")
     @Command
     def main(InvocationContext context, @Argument String file, @Argument String property, @Argument String value,
-             @Option(names = ['host', 'ho']) String host, @Option(names = ['port', 'p']) Integer port,
+             @Option(names = ['host', 'ho']) String host, @Option(names = ['port', 'p']) String port,
              @Option(names = ['username', 'u']) String username, @Option(names = ['password', 'pa']) String password) {
         BeanFactory beanFactory = context.attributes['spring.beanfactory']
-        beanFactory.getBean(DeviceConfigCommand.class).execute(host, port, username, password, file, property, value).join('\n')
+        beanFactory.getBean(DeviceConfigCommand.class).execute(host, port, username, password, file, property, value)
     }
 
 }
