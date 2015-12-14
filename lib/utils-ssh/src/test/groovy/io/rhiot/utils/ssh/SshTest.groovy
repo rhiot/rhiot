@@ -14,31 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.tooling.shell
+package io.rhiot.utils.ssh
 
-import io.rhiot.scanner.DeviceDetector
-import io.rhiot.scanner.SimplePortScanningDeviceDetector
-import io.rhiot.utils.process.DefaultProcessManager
-import io.rhiot.utils.process.ProcessManager
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.annotation.Bean
+import io.rhiot.utils.ssh.client.SshServer
+import org.junit.Test
 
-@SpringBootApplication
-class Shell {
+import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.utils.Uuids.uuid
 
-    static void main(String... args) {
-        new SpringApplication(Shell.class).run(args)
+class SshTest {
+
+    static sshd = new SshServer().start()
+
+    static ssh = sshd.client('foo', 'bar')
+
+    def file = new File("/parent/${uuid()}")
+
+    @Test
+    void shouldHandleEmptyFile() {
+        assertThat(ssh.scp(file)).isNull()
     }
 
-    @Bean
-    ProcessManager processManager() {
-        new DefaultProcessManager()
-    }
+    @Test
+    void shouldSendFile() {
+        // Given
+        def text = 'foo'
+        ssh.scp(new ByteArrayInputStream(text.getBytes()), file)
 
-    @Bean
-    DeviceDetector deviceDetector() {
-        new SimplePortScanningDeviceDetector()
+        // When
+        def received = new String(ssh.scp(file))
+
+        // Then
+        assertThat(received).isEqualTo(text)
     }
 
 }

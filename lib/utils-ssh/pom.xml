@@ -20,16 +20,29 @@
     </licenses>
 
     <dependencies>
-        <!-- Rhiot dependencies -->
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-utils</artifactId>
         </dependency>
-
-        <!-- 3rd parties dependencies -->
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sshd</groupId>
+            <artifactId>sshd-core</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.truth</groupId>
+            <artifactId>truth</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

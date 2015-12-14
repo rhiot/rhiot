@@ -78,10 +78,10 @@ class Deployer {
 
         println("Cleaning old artifacts from gateway home directory ($gatewayHome)...")
         ssh.printCommand("sudo rm ${gatewayHome}/rhiot-gateway-*.jar")
-        ssh.scp(gatewayJar.get(), new File("${gatewayHome}/rhiot-gateway-0.1.1-SNAPSHOT.jar"), false)
+        ssh.scp(gatewayJar.get(), new File("${gatewayHome}/rhiot-gateway-0.1.1-SNAPSHOT.jar"))
 
         ssh.printCommand("sudo chown pi /etc/init.d")
-        ssh.scp(getClass().getResourceAsStream('/rhiot-gateway.initd.sh'), new File('/etc/init.d/rhiot-gateway'), false)
+        ssh.scp(getClass().getResourceAsStream('/rhiot-gateway.initd.sh'), new File('/etc/init.d/rhiot-gateway'))
 
         ssh.printCommand("sudo chown pi /etc/default")
         def properties = new Properties()
@@ -92,7 +92,7 @@ class Deployer {
         def pw = new PrintWriter(output)
         properties.each { pw.println('export ' + it.key + '=' + it.value) }
         pw.flush()
-        ssh.scp(new ByteArrayInputStream(output.toByteArray()), new File('/etc/default/rhiot-gateway'), false)
+        ssh.scp(new ByteArrayInputStream(output.toByteArray()), new File('/etc/default/rhiot-gateway'))
 
         ssh.printCommand('sudo chmod +x /etc/init.d/rhiot-gateway')
         ssh.printCommand('sudo update-rc.d rhiot-gateway defaults')
@@ -142,6 +142,9 @@ class Deployer {
                     detector.close()
                     break;
                 case 'raspbian-install':
+                    new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
+                    break;
+                case 'device-config':
                     new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
                     break;
                 case 'deploy-gateway':

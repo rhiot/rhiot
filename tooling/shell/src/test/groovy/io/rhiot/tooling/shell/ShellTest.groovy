@@ -16,7 +16,10 @@
  */
 package io.rhiot.tooling.shell
 
+import io.rhiot.utils.Uuids
 import io.rhiot.utils.ssh.client.SshClient
+import io.rhiot.utils.ssh.client.SshServer
+import org.apache.commons.io.IOUtils
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,12 +29,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setIntProperty
+import static io.rhiot.utils.Uuids.uuid
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Shell.class)
 class ShellTest {
 
+    static device = new SshServer().start()
+
     static int sshPort = findAvailableTcpPort()
+
+    def file = uuid()
 
     @BeforeClass
     static void beforeClass() {
@@ -43,6 +51,18 @@ class ShellTest {
         def result = new SshClient('localhost', sshPort, 'rhiot', 'rhiot').command('shell-start')
         assertThat(result.size()).isGreaterThan(1)
         assertThat(result.first()).contains('up and running')
+    }
+
+    @Test
+    void shouldAddConfigurationFile() {
+        // When
+        def result = new SshClient('localhost', sshPort, 'rhiot', 'rhiot').command("device-config --host localhost --port ${device.port()} /${file} foo bar")
+        def properties = new Properties()
+        properties.load(new FileInputStream(new File(device.root(), file)))
+
+        // Then
+        assertThat(properties.getProperty('foo')).isEqualTo('bar')
+        assertThat(result.first()).startsWith('Updated')
     }
 
 }

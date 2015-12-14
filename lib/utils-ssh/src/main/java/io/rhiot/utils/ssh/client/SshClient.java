@@ -17,6 +17,7 @@
 package io.rhiot.utils.ssh.client;
 
 import com.jcraft.jsch.*;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.util.List;
@@ -95,7 +96,7 @@ public class SshClient {
         }
     }
 
-    public void scp(InputStream inputStream, File destination, Boolean toRoot) {
+    public void scp(InputStream inputStream, File destination) {
         Session session = null;
         Channel channel = null;
         try {
@@ -104,10 +105,8 @@ public class SshClient {
             channel.connect();
 
             ChannelSftp channelSftp = (ChannelSftp) channel;
-            if (!Boolean.TRUE.equals(toRoot)) {
-                mkdirs(channelSftp, destination.getParent());
-                channelSftp.cd(destination.getParent());
-            }
+            mkdirs(channelSftp, destination.getParent());
+            channelSftp.cd(destination.getParent());
             channelSftp.put(inputStream, destination.getName());
 
             channelSftp.disconnect();
@@ -118,6 +117,36 @@ public class SshClient {
             if (channel != null) {
                 channel.disconnect();
                 session.disconnect();
+            }
+        }
+    }
+
+    public byte[] scp(File from) {
+        Session session = null;
+        Channel channel = null;
+        try {
+            session = connect();
+            channel = session.openChannel("sftp");
+            channel.connect();
+
+            ChannelSftp channelSftp = (ChannelSftp) channel;
+            if(from.getParent() != null) {
+                channelSftp.cd(from.getParent());
+            }
+            return IOUtils.toByteArray(channelSftp.get(from.getName()));
+        } catch (SftpException e) {
+            if(e.id == 2) {
+                return null;
+            }
+            throw new RuntimeException(e);
+        } catch (IOException | JSchException jsche) {
+            throw new RuntimeException(jsche);
+        } finally {
+            if(session != null) {
+                session.disconnect();
+            }
+            if (channel != null) {
+                channel.disconnect();
             }
         }
     }
@@ -137,6 +166,9 @@ public class SshClient {
     }
 
     private void mkdirs(ChannelSftp ch, String path) {
+        if(path.equals("/")) {
+            return;
+        }
         try {
             String[] folders = path.split("/");
             if (folders[0].isEmpty()) folders[0] = "/";

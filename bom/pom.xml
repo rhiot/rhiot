@@ -26,6 +26,7 @@
 		<activemq.version>5.13.0</activemq.version>
 		<apache-commons-lang3.version>3.4</apache-commons-lang3.version>
 		<apache-poi.version>3.13</apache-poi.version>
+		<apache-ssh.version>0.11.0</apache-ssh.version>
 		<bluecove.version>2.1.1-SNAPSHOT</bluecove.version>
 		<californium-core.version>1.0.0-M3</californium-core.version>
 		<camel.version>2.16.1</camel.version>
@@ -558,6 +559,11 @@
 				<groupId>org.apache.spark</groupId>
 				<artifactId>spark-hive_2.11</artifactId>
 				<version>${spark.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.sshd</groupId>
+				<artifactId>sshd-core</artifactId>
+				<version>${apache-ssh.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.codehaus.groovy</groupId>
