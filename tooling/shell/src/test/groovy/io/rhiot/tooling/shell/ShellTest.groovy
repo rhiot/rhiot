@@ -46,6 +46,8 @@ class ShellTest {
         setIntProperty('shell.ssh.port', sshPort)
     }
 
+    // Commands core tests
+
     @Test
     void shouldExecuteCommand() {
         def result = ssh.command('shell-start')
