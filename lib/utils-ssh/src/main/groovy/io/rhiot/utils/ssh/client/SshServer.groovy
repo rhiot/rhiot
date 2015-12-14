@@ -24,6 +24,7 @@ import org.apache.sshd.server.session.ServerSession
 import org.apache.sshd.server.sftp.SftpSubsystem
 
 import static io.rhiot.utils.Networks.findAvailableTcpPort
+import static java.io.File.createTempFile
 
 class SshServer {
 
@@ -43,17 +44,12 @@ class SshServer {
     SshServer start() {
         def sshd = org.apache.sshd.SshServer.setUpDefaultServer()
         sshd.setPort(port)
-        sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(File.createTempFile('foo', 'bar').absolutePath));
-        sshd.setPasswordAuthenticator(new PasswordAuthenticator() {
-            @Override
-            boolean authenticate(String username, String password, ServerSession session) {
-                true
-            }
-        })
-        sshd.setCommandFactory(new ScpCommandFactory());
-        sshd.setFileSystemFactory(new VirtualFileSystemFactory(root.absolutePath));
-        sshd.setSubsystemFactories([new SftpSubsystem.Factory()]);
-        sshd.start();
+        sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(createTempFile('rhiot', 'host_keys').absolutePath));
+        sshd.setPasswordAuthenticator(new AnyCredentialsPasswordAuthenticator())
+        sshd.setCommandFactory(new ScpCommandFactory())
+        sshd.setFileSystemFactory(new VirtualFileSystemFactory(root.absolutePath))
+        sshd.setSubsystemFactories([new SftpSubsystem.Factory()])
+        sshd.start()
 
         this
     }
@@ -62,12 +58,14 @@ class SshServer {
         new SshClient('localhost', port, username, password)
     }
 
+    // Accessors
+
     int port() {
         port
     }
 
     File root() {
-        return root
+        root
     }
 
 }
