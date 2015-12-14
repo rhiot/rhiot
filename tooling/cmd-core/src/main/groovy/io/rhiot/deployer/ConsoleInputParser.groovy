@@ -43,6 +43,7 @@ Usage: rhiot [OPTIONS] [deploy-gateway|scan]
 Commands:
 shell-start                  Starts background shell process.
 scan                         Lists possible target devices.
+device-config                Edit configuration file on a device.
 raspbian-install             Installs Raspbian to a target SD card.
 deploy-gateway               Deploys gateway to a detected device.
 
@@ -62,6 +63,26 @@ default credentials:
     ssh rhiot@localhost -p 2000
     password: rhiot
 
+===
+
+Command: scan
+
+Example: scan
+
+Lists possible target devices.
+
+===
+
+Command: device-config file property value
+
+Example: device-config /etc/config delay 1000
+
+Sets property on a given configuration file on a remote device. Configuration file will be created if doesn't exists.
+
+Options:
+--host (-ho) host    Address of the target device. The device will be automatically detected if this option is not specified.
+--port (-p)          Port of the SSH server on a target device. Default is 22.
+--
 
 ===
 
@@ -75,7 +96,7 @@ Command: deploy-gateway
 
 Example: rhiot deploy-gateway
 
-deploy-gateway options:
+Options:
  -a=group:artifact:version --artifact=group:artifact:version    Overrides default gateway artifact coordinates (io.rhiot:rhiot-gateway-app).
  -Pfoo=bar                                                      Adds foo=bar configuration property to the deployed gateway. Can be used multiple times.
  -u=user --username=user                                        SSH username of the target device.

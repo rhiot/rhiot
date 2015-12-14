@@ -29,7 +29,7 @@ class device_config {
     @Usage("device-config file property key")
     @Command
     def main(InvocationContext context, @Argument String file, @Argument String property, @Argument String value,
-             @Option(names = ['host', 'h']) String host, @Option(names = ['port', 'p']) Integer port) {
+             @Option(names = ['host', 'ho']) String host, @Option(names = ['port', 'p']) Integer port) {
         BeanFactory beanFactory = context.attributes['spring.beanfactory']
         beanFactory.getBean(DeviceConfigCommand.class).execute(host, port, file, property, value).join('\n')
     }
