@@ -55,14 +55,14 @@ public class SshClient {
         this(host, DEFAULT_SSH_PORT, username, password);
     }
 
-    public List<String> command(String command) {
+    public List<String> command(String commandToExecute) {
         ListSshClientOutputCollector outputCollector = new ListSshClientOutputCollector();
-        command(command, outputCollector);
+        command(commandToExecute, outputCollector);
         return outputCollector.lines();
     }
 
-    public void printCommand(String command) {
-        command(command, new StdoutSshClientOutputCollector());
+    public void printCommand(String commandToExecute) {
+        command(commandToExecute, new StdoutSshClientOutputCollector());
     }
 
     public void command(String command, SshClientOutputCollector outputCollector) {
