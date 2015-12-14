@@ -25,8 +25,9 @@
 		<module>camel-gps-bu353</module>
 		<module>camel-gpsd</module>
 		<module>camel-device-io</module>
-        <module>camel-framebuffer</module>
+		<module>camel-framebuffer</module>
 		<module>camel-spark</module>
+		<module>camel-lwm2m</module>
 	</modules>
 
 	<build>
