@@ -81,8 +81,9 @@ Sets property on a given configuration file on a remote device. Configuration fi
 
 Options:
 --host (-ho) host    Address of the target device. The device will be automatically detected if this option is not specified.
---port (-p)          Port of the SSH server on a target device. Default is 22.
---
+--port (-p)          Port of the SSH server on a target device. Defaults to 22.
+--username (-u)      SSH username of the device. Defaults to 'root'.
+--password (-pa)     SSH password of the device. Defaults to 'raspberry'.
 
 ===
 

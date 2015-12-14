@@ -10,22 +10,28 @@ import static org.apache.commons.lang3.StringUtils.isBlank
 @Component
 class DeviceConfigCommand {
 
-    DeviceDetector deviceDetector
+    private final DeviceDetector deviceDetector
 
     @Autowired
     DeviceConfigCommand(DeviceDetector deviceDetector) {
         this.deviceDetector = deviceDetector
     }
 
-    List<String> execute(String deviceAddress, Integer port, String file, String property, String value) {
+    List<String> execute(String deviceAddress, Integer port, String username, String password, String file, String property, String value) {
         if(isBlank(deviceAddress)) {
             deviceAddress = deviceDetector.detectDevices().first().address().hostAddress
         }
         if(port == null) {
             port = 22
         }
+        if(isBlank(username)) {
+            username = 'root'
+        }
+        if(isBlank(password)) {
+            password = 'raspberry'
+        }
 
-        def sshClient = new SshClient(deviceAddress, port, 'pi', 'raspberry')
+        def sshClient = new SshClient(deviceAddress, port, username, password)
 
         def properties = new Properties()
         def originalFile = sshClient.scp(new File(file))
