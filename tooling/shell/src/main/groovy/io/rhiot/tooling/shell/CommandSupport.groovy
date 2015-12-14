@@ -40,7 +40,7 @@ abstract class CommandSupport implements WithLogger {
     String execute(String... command) {
         def output = []
         try {
-            output += doExecute(output, command)
+            doExecute(output, command)
         } catch (Exception e) {
             output += e.message
         }
