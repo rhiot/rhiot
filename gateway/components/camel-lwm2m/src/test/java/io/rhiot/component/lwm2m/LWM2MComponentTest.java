@@ -36,13 +36,13 @@ public class LWM2MComponentTest extends CamelTestSupport {
 
 	@Test
 	public void testRegistration() throws Exception {
-		final MockEndpoint mock = getMockEndpoint("mock:result");
+		MockEndpoint mock = getMockEndpoint("mock:result");
 		mock.expectedMinimumMessageCount(1);
 
-		final RegisterRequest request = new RegisterRequest("myDevice");
+		RegisterRequest request = new RegisterRequest("myDevice");
 		producerTemplate.sendBody(request);
 
-		final RegisterResponse response = mock.getExchanges().get(0).getIn().getBody(RegisterResponse.class);
+		RegisterResponse response = mock.getExchanges().get(0).getIn().getBody(RegisterResponse.class);
 		Assert.assertEquals(ResponseCode.CREATED, response.getCode());
 
 		assertMockEndpointsSatisfied();
