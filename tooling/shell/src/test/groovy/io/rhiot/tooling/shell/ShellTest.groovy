@@ -37,6 +37,8 @@ class ShellTest {
 
     static int sshPort = findAvailableTcpPort()
 
+    static def ssh = new SshClient('localhost', sshPort, 'rhiot', 'rhiot')
+
     def file = uuid()
 
     @BeforeClass
@@ -46,9 +48,15 @@ class ShellTest {
 
     @Test
     void shouldExecuteCommand() {
-        def result = new SshClient('localhost', sshPort, 'rhiot', 'rhiot').command('shell-start')
+        def result = ssh.command('shell-start')
         assertThat(result.size()).isGreaterThan(1)
         assertThat(result.first()).contains('up and running')
+    }
+
+    @Test
+    void shouldPrintSingleLineOfOutput() {
+        def result = ssh.command("device-config --host localhost --port ${device.port()} /${file} foo bar")
+        assertThat(result).hasSize(1)
     }
 
     // device-config tests
@@ -56,7 +64,7 @@ class ShellTest {
     @Test
     void shouldAddConfigurationFile() {
         // When
-        def result = new SshClient('localhost', sshPort, 'rhiot', 'rhiot').command("device-config --host localhost --port ${device.port()} /${file} foo bar")
+        def result = ssh.command("device-config --host localhost --port ${device.port()} /${file} foo bar")
         def properties = new Properties()
         properties.load(new FileInputStream(new File(device.root(), file)))
 
@@ -67,7 +75,7 @@ class ShellTest {
 
     @Test
     void shouldHandleMissingFile() {
-        def result = new SshClient('localhost', sshPort, 'rhiot', 'rhiot').command("device-config --host localhost --port ${device.port()}")
+        def result = ssh.command("device-config --host localhost --port ${device.port()}")
         assertThat(result.first()).contains("Parameter \'file\' is required")
     }
 
