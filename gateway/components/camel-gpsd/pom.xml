@@ -5,11 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-components</artifactId>
+        <artifactId>rhiot-gateway-components</artifactId>
         <version>0.1.3-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
 
-    <name>RHIOT :: IoT :: Components :: GPSd</name>
+    <name>Rhiot :: IoT :: Components :: GPSd</name>
     <artifactId>camel-gpsd</artifactId>
     <packaging>bundle</packaging>
     <description>Camel GPSD Component</description>
