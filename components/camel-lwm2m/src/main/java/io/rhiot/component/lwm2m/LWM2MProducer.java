@@ -35,14 +35,16 @@ import java.util.List;
  * The LWM2M producer.
  */
 public class LWM2MProducer extends DefaultProducer {
+
 	private static final Logger LOG = LoggerFactory.getLogger(LWM2MProducer.class);
+
 	private LWM2MEndpoint endpoint;
+
 	private LeshanClient client;
 
 	public LWM2MProducer(LWM2MEndpoint endpoint) {
 		super(endpoint);
 		this.endpoint = endpoint;
-		this.client = createClient();
 	}
 
 	public void process(Exchange exchange) throws Exception {
@@ -54,7 +56,7 @@ public class LWM2MProducer extends DefaultProducer {
 		exchange.getOut().setBody(response);
 	}
 
-	private LeshanClient createClient() {
+	protected LeshanClient createClient() {
 		final List<ObjectEnabler> enablers = new ObjectsInitializer().create(3, 6);
 		final InetSocketAddress serverAddress = new InetSocketAddress(endpoint.getHost(), endpoint.getPort());
 		client = new LeshanClient(serverAddress, new ArrayList<LwM2mObjectEnabler>(enablers));
@@ -64,6 +66,7 @@ public class LWM2MProducer extends DefaultProducer {
 	@Override
 	protected void doStart() throws Exception {
 		super.doStart();
+		this.client = createClient();
 		client.start();
 	}
 
@@ -72,4 +75,5 @@ public class LWM2MProducer extends DefaultProducer {
 		client.stop();
 		super.doStop();
 	}
+
 }
