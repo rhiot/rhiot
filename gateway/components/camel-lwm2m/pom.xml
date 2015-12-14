@@ -20,7 +20,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<name>Rhiot :: Components :: LWM2M</name>
+	<name>Rhiot :: Gateway :: Camel components :: LWM2M</name>
 	<artifactId>camel-lwm2m</artifactId>
 	<packaging>bundle</packaging>
 
@@ -48,10 +48,11 @@
 			<artifactId>leshan-client-cf</artifactId>
 		</dependency>
 
-		<!-- logging -->
+		<!-- testing -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -61,13 +62,6 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- testing -->
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
