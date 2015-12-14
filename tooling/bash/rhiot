@@ -44,7 +44,7 @@ fi
 SHELL_CONTAINER_STARTED=`docker ps | grep rhiot-shell`
 if [ -z "${SHELL_CONTAINER_STARTED}" ]; then
     docker rm rhiot-shell >> ~/.rhiot/rhiot-cmd.log 2>&1
-    docker run -d --name rhiot-shell --privileged=true  --net=host -p 2000:2000 \
+    docker run -d --name rhiot-shell --privileged=true --net=host -p 2000:2000 \
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
     -v $DOWNLOADS:/root/.rhiot/downloads \
     -it rhiot/shell:${RHIOT_VERSION}  >> /dev/null
