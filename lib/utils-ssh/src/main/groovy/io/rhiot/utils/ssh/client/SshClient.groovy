@@ -22,11 +22,11 @@ import java.io.*;
 
 import static org.apache.commons.io.IOUtils.toByteArray;
 
-public class SshClient {
+class SshClient {
 
     // Constants
 
-    private static final int DEFAULT_SSH_PORT = 22;
+    private static final int DEFAULT_SSH_PORT = 22
 
     // Configuration members
 
@@ -40,18 +40,18 @@ public class SshClient {
 
     // Collaborators
 
-    private final JSch jsch = new JSch();
+    private final def jsch = new JSch()
 
     // Constructors
 
-    public SshClient(String host, int port, String username, String password) {
+    SshClient(String host, int port, String username, String password) {
         this.host = host;
         this.port = port;
         this.username = username;
         this.password = password;
     }
 
-    public SshClient(String host, String username, String password) {
+    SshClient(String host, String username, String password) {
         this(host, DEFAULT_SSH_PORT, username, password);
     }
 
@@ -94,7 +94,7 @@ public class SshClient {
         }
     }
 
-    public void scp(InputStream inputStream, File destination) {
+    void scp(InputStream inputStream, File destination) {
         Session session = null;
         try {
             session = connect();
@@ -120,14 +120,14 @@ public class SshClient {
     public byte[] scp(File from) {
         Session session = null;
         try {
-            session = connect();
-            ChannelSftp channel = (ChannelSftp) session.openChannel("sftp");
-            channel.connect();
+            session = connect()
+            def channel = (ChannelSftp) session.openChannel("sftp")
+            channel.connect()
 
             if(from.getParent() != null) {
-                channel.cd(from.getParent());
+                channel.cd(from.getParent())
             }
-            return toByteArray(channel.get(from.getName()));
+            toByteArray(channel.get(from.getName()));
         } catch (SftpException e) {
             if(e.id == 2) {
                 return null;
