@@ -48,19 +48,20 @@ public class LWM2MProducer extends DefaultProducer {
 	}
 
 	public void process(Exchange exchange) throws Exception {
-		final Object body = exchange.getIn().getBody();
+		Object body = exchange.getIn().getBody();
+		LOG.debug("About to send uplink request {}", body);
 		if (!(body instanceof UplinkRequest)) {
 			throw new IllegalArgumentException("Invalid body type, it should be a subtype of " + UplinkRequest.class);
 		}
-		final Object response = client.send((UplinkRequest) body);
+
+		Object response = client.send((UplinkRequest) body);
 		exchange.getOut().setBody(response);
 	}
 
 	protected LeshanClient createClient() {
-		final List<ObjectEnabler> enablers = new ObjectsInitializer().create(3, 6);
-		final InetSocketAddress serverAddress = new InetSocketAddress(endpoint.getHost(), endpoint.getPort());
-		client = new LeshanClient(serverAddress, new ArrayList<LwM2mObjectEnabler>(enablers));
-		return client;
+		List<ObjectEnabler> enablers = new ObjectsInitializer().create(3, 6);
+		InetSocketAddress serverAddress = new InetSocketAddress(endpoint.getHost(), endpoint.getPort());
+		return new LeshanClient(serverAddress, new ArrayList<>(enablers));
 	}
 
 	@Override
