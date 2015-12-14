@@ -17,12 +17,10 @@
 package io.rhiot.utils.ssh.client;
 
 import com.jcraft.jsch.*;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
-import java.util.List;
-import java.util.Properties;
-import java.util.Vector;
+
+import static org.apache.commons.io.IOUtils.toByteArray;
 
 public class SshClient {
 
@@ -76,11 +74,11 @@ public class SshClient {
             ((ChannelExec) channel).setCommand(command);
 
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(channel.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(channel.getInputStream()));
             channel.connect();
 
             String msg = null;
-            while ((msg = in.readLine()) != null) {
+            while ((msg = br.readLine()) != null) {
                 outputCollector.collect(msg);
             }
 
@@ -98,10 +96,9 @@ public class SshClient {
 
     public void scp(InputStream inputStream, File destination) {
         Session session = null;
-        Channel channel = null;
         try {
             session = connect();
-            channel = session.openChannel("sftp");
+            Channel channel = session.openChannel("sftp");
             channel.connect();
 
             ChannelSftp channelSftp = (ChannelSftp) channel;
@@ -114,8 +111,7 @@ public class SshClient {
         } catch (JSchException | SftpException jsche) {
             throw new RuntimeException(jsche);
         } finally {
-            if (channel != null) {
-                channel.disconnect();
+            if (session!= null) {
                 session.disconnect();
             }
         }
@@ -123,17 +119,15 @@ public class SshClient {
 
     public byte[] scp(File from) {
         Session session = null;
-        Channel channel = null;
         try {
             session = connect();
-            channel = session.openChannel("sftp");
+            ChannelSftp channel = (ChannelSftp) session.openChannel("sftp");
             channel.connect();
 
-            ChannelSftp channelSftp = (ChannelSftp) channel;
             if(from.getParent() != null) {
-                channelSftp.cd(from.getParent());
+                channel.cd(from.getParent());
             }
-            return IOUtils.toByteArray(channelSftp.get(from.getName()));
+            return toByteArray(channel.get(from.getName()));
         } catch (SftpException e) {
             if(e.id == 2) {
                 return null;
@@ -144,9 +138,6 @@ public class SshClient {
         } finally {
             if(session != null) {
                 session.disconnect();
-            }
-            if (channel != null) {
-                channel.disconnect();
             }
         }
     }

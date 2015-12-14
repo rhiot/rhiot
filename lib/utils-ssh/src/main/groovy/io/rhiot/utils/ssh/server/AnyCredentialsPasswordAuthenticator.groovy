@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.utils.ssh.client
+package io.rhiot.utils.ssh.server
 
 import org.apache.sshd.server.PasswordAuthenticator
 import org.apache.sshd.server.session.ServerSession

@@ -17,7 +17,7 @@
 package io.rhiot.tooling.shell
 
 import io.rhiot.utils.ssh.client.SshClient
-import io.rhiot.utils.ssh.client.SshServer
+import io.rhiot.utils.ssh.server.SshServer
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith

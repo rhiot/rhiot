@@ -16,7 +16,7 @@
  */
 package io.rhiot.utils.ssh
 
-import io.rhiot.utils.ssh.client.SshServer
+import io.rhiot.utils.ssh.server.SshServer
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat

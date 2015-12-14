@@ -14,13 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.utils.ssh.client
+package io.rhiot.utils.ssh.server
 
+import io.rhiot.utils.ssh.client.SshClient
 import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory
-import org.apache.sshd.server.PasswordAuthenticator
 import org.apache.sshd.server.command.ScpCommandFactory
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
-import org.apache.sshd.server.session.ServerSession
 import org.apache.sshd.server.sftp.SftpSubsystem
 
 import static io.rhiot.utils.Networks.findAvailableTcpPort
@@ -32,6 +31,8 @@ class SshServer {
 
     private final File root
 
+    // Constructors
+
     SshServer(int port, File root) {
         this.port = port
         this.root = root
@@ -40,6 +41,8 @@ class SshServer {
     SshServer() {
         this(findAvailableTcpPort(), File.createTempDir())
     }
+
+    // Life-cycle
 
     SshServer start() {
         def sshd = org.apache.sshd.SshServer.setUpDefaultServer()
@@ -53,6 +56,8 @@ class SshServer {
 
         this
     }
+
+    // Factory methods
 
     SshClient client(String username, String password) {
         new SshClient('localhost', port, username, password)
