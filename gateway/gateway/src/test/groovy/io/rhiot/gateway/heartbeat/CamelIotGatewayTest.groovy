@@ -24,12 +24,14 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import static io.rhiot.utils.Properties.restoreSystemProperties
 import static io.rhiot.utils.Properties.setBooleanProperty;
 import static java.lang.System.setProperty;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
+@Ignore
 public class CamelIotGatewayTest extends Assert {
 
     static int mqttPort = findAvailableTcpPort();
