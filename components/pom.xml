@@ -25,7 +25,6 @@
 		<module>camel-gps-bu353</module>
 		<module>camel-device-io</module>
 		<module>camel-framebuffer</module>
-		<module>camel-spark</module>
 	</modules>
 
 	<build>

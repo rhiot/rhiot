@@ -257,11 +257,6 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>camel-spark</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-datastream-document</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
@@ -886,6 +881,11 @@
 				<groupId>org.apache.camel</groupId>
 				<artifactId>camel-kura</artifactId>
 				<version>${camel.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-spark</artifactId>
+				<version>2.17-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
