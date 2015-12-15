@@ -37,13 +37,11 @@ import jdk.dio.gpio.GPIOPinConfig;
  */
 public class GPIOProducer extends DefaultProducer {
 
-    private GPIOEndpoint endpoint;
     private GPIOPin pin = null;
     private ExecutorService pool;
 
     public GPIOProducer(GPIOEndpoint endpoint, GPIOPin pin) {
         super(endpoint);
-        this.endpoint = endpoint;
         this.pin = pin;
         this.pool = this.getEndpoint().getCamelContext().getExecutorServiceManager().newSingleThreadExecutor(this,
                 DeviceIOConstants.CAMEL_DEVICE_IO_THREADPOOL + pin.getDescriptor().getID());
@@ -54,18 +52,17 @@ public class GPIOProducer extends DefaultProducer {
             // Exchange Action
             return message.getHeader(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION, GPIOAction.class);
         } else {
-            return endpoint.getAction(); // Endpoint Action
+            return getEndpoint().getAction(); // Endpoint Action
         }
     }
 
     @Override
     protected void doShutdown() throws Exception {
         // 2 x (delay + timeout) + 5s
-        long timeToWait = (((GPIOEndpoint) getEndpoint()).getDelay() + ((GPIOEndpoint) getEndpoint()).getDuration()) * 2
-                + 5000;
+        long timeToWait = (getEndpoint().getDelay() + getEndpoint().getDuration()) * 2 + 5000;
         log.debug("Wait for {} ms", timeToWait);
         pool.awaitTermination(timeToWait, TimeUnit.MILLISECONDS);
-        pin.setValue(((GPIOEndpoint) getEndpoint()).isShutdownState());
+        pin.setValue(getEndpoint().isShutdownState());
         pin.close(); // TODO check this part
         log.debug("Pin {} {}", pin.getDescriptor().getID(), pin.getValue());
     }
@@ -98,9 +95,9 @@ public class GPIOProducer extends DefaultProducer {
                         @Override
                         public void run() {
                             try {
-                                Thread.sleep(((GPIOEndpoint) getEndpoint()).getDelay());
+                                Thread.sleep(getEndpoint().getDelay());
                                 pin.setValue(!pin.getValue());
-                                Thread.sleep(((GPIOEndpoint) getEndpoint()).getDuration());
+                                Thread.sleep(getEndpoint().getDuration());
                                 pin.setValue(!pin.getValue());
                             } catch (Exception e) {
                                 log.error("Thread interruption into BLINK sequence", e);
@@ -138,4 +135,10 @@ public class GPIOProducer extends DefaultProducer {
     public GPIOPin getPin() {
         return pin;
     }
+
+    @Override
+    public GPIOEndpoint getEndpoint() {
+        return (GPIOEndpoint) super.getEndpoint();
+    }
+
 }
