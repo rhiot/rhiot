@@ -163,47 +163,6 @@ public class MongoDbDocumentServiceTest extends Assert {
     }
 
     @Test
-    public void shouldFindByQuery() {
-        // Given
-        documentService.save(invoice);
-        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.invoiceId);
-
-        // When
-        List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
-
-        // Then
-        assertEquals(1, invoices.size());
-        assertEquals(invoice.invoiceId, invoices.get(0).invoiceId);
-    }
-
-    @Test
-    public void shouldFindAllByQuery() {
-        // Given
-        documentService.save(new Invoice());
-        documentService.save(new Invoice());
-
-        // When
-        InvoiceQuery query = new InvoiceQuery();
-        List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
-
-        // Then
-        assertEquals(2, invoices.size());
-    }
-
-    @Test
-    public void shouldNotFindByQuery() {
-        // Given
-        documentService.save(new Invoice().invoiceId("invoice001"));
-        InvoiceQuery query = new InvoiceQuery().invoiceId("randomValue");
-
-        // When
-        List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
-
-        // Then
-        assertEquals(0, invoices.size());
-    }
-
-    @Test
     public void shouldFindByNestedQuery() {
         // Given
         String street = "someStreet";

@@ -36,7 +36,7 @@ interface DocumentStore {
 
     List<Map<String, Object>> findMany(String collection, List<String> ids)
 
-    List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation)
+    List<Map<String,Object>> findByQuery(String collection, Map<String, Object> queryBuilder)
 
     long countByQuery(CountByQueryOperation countByQueryOperation)
 

@@ -19,10 +19,12 @@ package io.rhiot.datastream.engine.encoding
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.bootstrap.classpath.Bean
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
+
 @Bean
 class JsonPayloadEncoding implements PayloadEncoding {
 
-    private final ObjectMapper objectMapper = new ObjectMapper()
+    private final ObjectMapper objectMapper = new ObjectMapper().setSerializationInclusion(NON_NULL)
 
     @Override
     byte[] encode(Object payload) {

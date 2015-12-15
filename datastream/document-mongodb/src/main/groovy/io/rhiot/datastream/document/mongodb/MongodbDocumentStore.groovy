@@ -23,7 +23,6 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import io.rhiot.datastream.document.CountByQueryOperation;
 import io.rhiot.datastream.document.DocumentStore;
-import io.rhiot.datastream.document.FindByQueryOperation
 import io.rhiot.datastream.document.RemoveOperation;
 import org.bson.types.ObjectId;
 
@@ -56,12 +55,12 @@ public class MongodbDocumentStore implements DocumentStore {
     }
 
     @Override
-    List<Map<String,Object>> findByQuery(FindByQueryOperation findByQueryOperation) {
-        def universalQuery = (Map<String, Object>) findByQueryOperation.queryBuilder.getOrDefault("query", emptyMap());
+    List<Map<String,Object>> findByQuery(String documentCollection, Map<String, Object> queryBuilder) {
+        def universalQuery = (Map<String, Object>) queryBuilder.getOrDefault("query", emptyMap());
         DBObject mongoQuery = new MongoQueryBuilder().jsonToMongoQuery(new BasicDBObject(universalQuery));
-        int skip = ((int) findByQueryOperation.queryBuilder.getOrDefault("page", 0)) * ((int) findByQueryOperation.queryBuilder.getOrDefault("size", 100));
-        DBCursor results = collection(findByQueryOperation.collection).find(mongoQuery).
-                limit((Integer) findByQueryOperation.queryBuilder.getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(findByQueryOperation.queryBuilder));
+        int skip = ((int) queryBuilder.getOrDefault("page", 0)) * ((int) queryBuilder.getOrDefault("size", 100));
+        DBCursor results = collection(documentCollection).find(mongoQuery).
+                limit((Integer) queryBuilder.getOrDefault("size", 100)).skip(skip).sort(new MongoQueryBuilder().queryBuilderToSortConditions(queryBuilder));
         results.toArray().collect{ mongoToCanonical(it).toMap() }
     }
 
