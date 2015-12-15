@@ -16,10 +16,10 @@
  */
 package io.rhiot.deployer
 
+import static com.google.common.truth.Truth.assertThat
+
 import org.junit.Assert
 import org.junit.Test
-
-import static com.google.common.truth.Truth.assertThat
 
 class ConsoleInputParserTest extends Assert {
 
@@ -35,12 +35,12 @@ class ConsoleInputParserTest extends Assert {
 
     @Test
     void shouldReturnScanCommandFromBeginning() {
-        assertThat(new ConsoleInputParser('scan', '-a=foo:bar:1').command()).isEqualTo('scan')
+        assertThat(new ConsoleInputParser('device-scan', '-a=foo:bar:1').command()).isEqualTo('device-scan')
     }
 
     @Test
     void shouldReturnScanCommandFromEnd() {
-        assertThat(new ConsoleInputParser('-a=foo:bar:1', 'scan').command()).isEqualTo('scan')
+        assertThat(new ConsoleInputParser('-a=foo:bar:1', 'device-scan').command()).isEqualTo('device-scan')
     }
 
     @Test
@@ -83,5 +83,4 @@ class ConsoleInputParserTest extends Assert {
     void shouldParseEmptyGatewayArtifact() {
         assertThat(new ConsoleInputParser('--someRandomOption').artifact().isPresent()).isFalse()
     }
-
 }
