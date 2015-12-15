@@ -28,6 +28,7 @@ import io.rhiot.datastream.document.FindByQueryOperation;
 import org.apache.camel.TypeConverter;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 @SpringApplicationConfiguration(classes = MongoDbDocumentDriverTest.class)
 @SpringBootApplication
 @IntegrationTest("spring.main.sources=camel.labs.iot.cloudlet.document.mongodb")
+@Ignore
 public class MongoDbDocumentDriverTest extends Assert {
 
     @Autowired
