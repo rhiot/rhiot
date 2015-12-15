@@ -23,6 +23,8 @@ import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriPath;
 
+import org.eclipse.leshan.client.resource.LwM2mInstanceEnabler;
+
 /**
  * Represents a LWM2M endpoint.
  */
@@ -33,6 +35,12 @@ public class LWM2MEndpoint extends DefaultEndpoint {
 
 	@UriPath(defaultValue = "5683")
 	private Integer port;
+
+	@UriPath
+	private Class<? extends LwM2mInstanceEnabler> deviceClass;
+
+	@UriPath
+	private LWM2MObjectEnablersFactory objectEnablersFactory;
 
 	public LWM2MEndpoint(String uri, LWM2MComponent component) {
 		super(uri, component);
@@ -64,5 +72,21 @@ public class LWM2MEndpoint extends DefaultEndpoint {
 
 	public Integer getPort() {
 		return port;
+	}
+
+	public void setObjectEnablersFactory(LWM2MObjectEnablersFactory objectEnablersFactory) {
+		this.objectEnablersFactory = objectEnablersFactory;
+	}
+
+	public LWM2MObjectEnablersFactory getObjectEnablersFactory() {
+		return objectEnablersFactory;
+	}
+
+	public void setDeviceClass(Class<? extends LwM2mInstanceEnabler> deviceClass) {
+		this.deviceClass = deviceClass;
+	}
+
+	public Class<? extends LwM2mInstanceEnabler> getDeviceClass() {
+		return deviceClass;
 	}
 }
