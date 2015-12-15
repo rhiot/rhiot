@@ -129,17 +129,8 @@ class Deployer {
                 case 'shell-start':
                     new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
                     break;
-                case 'scan':
-                    println 'Scanning local networks for devices...'
-                    println()
-                    println '======================================'
-                    println "Device type\t\tIPv4 address"
-                    println '--------------------------------------'
-                    def detector = new SimplePortScanningDeviceDetector()
-                    detector.detectDevices().each {
-                        println "${it.type()}\t\t${it.address()}"
-                    }
-                    detector.close()
+                case 'device-scan':
+                    new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
                     break;
                 case 'raspbian-install':
                     new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))

@@ -42,8 +42,8 @@ Usage: rhiot [OPTIONS] [deploy-gateway|scan]
 
 Commands:
 shell-start                  Starts background shell process.
-scan                         Lists possible target devices.
 device-config                Edit configuration file on a device.
+device-scan                  Lists possible target devices.
 raspbian-install             Installs Raspbian to a target SD card.
 deploy-gateway               Deploys gateway to a detected device.
 
@@ -65,14 +65,6 @@ default credentials:
 
 ===
 
-Command: scan
-
-Example: scan
-
-Lists possible target devices.
-
-===
-
 Command: device-config file property value
 
 Example: device-config /etc/config delay 1000
@@ -84,6 +76,14 @@ Options:
 --port (-p)          Port of the SSH server on a target device. Defaults to 22.
 --username (-u)      SSH username of the device. Defaults to 'root'.
 --password (-pa)     SSH password of the device. Defaults to 'raspberry'.
+
+===
+
+Command: device-scan
+
+Example: device-scan
+
+Lists possible target devices. Performs simple TCP port scanning and SSH authentication attempt under the hood.
 
 ===
 
@@ -119,7 +119,7 @@ Options:
 
     String command() {
         def command = args.find{!it.startsWith('-')}
-        if(!['scan', 'deploy-gateway', 'raspbian-install', 'shell-start', 'device-config', 'raspbian-config-boot'].contains(command)) {
+        if(!['device-scan', 'deploy-gateway', 'raspbian-install', 'shell-start', 'device-config', 'raspbian-config-boot'].contains(command)) {
             throw new IllegalArgumentException("No such command - ${command}.")
         }
         command

@@ -14,31 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.tooling.shell
+package commands
 
-import io.rhiot.scanner.DeviceDetector
-import io.rhiot.scanner.SimplePortScanningDeviceDetector
-import io.rhiot.utils.process.DefaultProcessManager
-import io.rhiot.utils.process.ProcessManager
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.annotation.Bean
+import io.rhiot.tooling.shell.commands.DeviceScanCommand
+import org.crsh.cli.Command
+import org.crsh.cli.Usage
+import org.crsh.command.InvocationContext
+import org.springframework.beans.factory.BeanFactory
 
-@SpringBootApplication
-class Shell {
+class device_scan {
 
-    static void main(String... args) {
-        new SpringApplication(Shell.class).run(args)
-    }
-
-    @Bean
-    ProcessManager processManager() {
-        new DefaultProcessManager()
-    }
-
-    @Bean(destroyMethod = "close")
-    DeviceDetector deviceDetector() {
-        new SimplePortScanningDeviceDetector()
+    @Usage("device-config file property key")
+    @Command
+    def main(InvocationContext context) {
+        BeanFactory beanFactory = context.attributes['spring.beanfactory']
+        beanFactory.getBean(DeviceScanCommand.class).execute()
     }
 
 }

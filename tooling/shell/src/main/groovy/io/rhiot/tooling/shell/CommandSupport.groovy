@@ -47,6 +47,6 @@ abstract class CommandSupport implements WithLogger {
         output.join('\n')
     }
 
-    abstract protected List<String> doExecute(List<String> output, String... command)
+    abstract protected void doExecute(List<String> output, String... command)
 
 }

@@ -35,7 +35,7 @@ class DeviceConfigCommand extends CommandSupport {
     }
 
     @Override
-    protected List<String> doExecute(List<String> output, String... command) {
+    protected void doExecute(List<String> output, String... command) {
         def deviceAddress = parameter(command[0]){
             deviceDetector.detectDevices().first().address().hostAddress
         }
