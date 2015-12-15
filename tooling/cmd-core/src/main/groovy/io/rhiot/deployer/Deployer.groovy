@@ -144,6 +144,9 @@ class Deployer {
                 case 'raspbian-install':
                     new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
                     break;
+                case 'raspbian-config-boot':
+                    new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
+                    break;
                 case 'device-config':
                     new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
                     break;

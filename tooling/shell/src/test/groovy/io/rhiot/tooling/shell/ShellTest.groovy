@@ -24,6 +24,8 @@ import org.junit.runner.RunWith
 import org.springframework.boot.test.SpringApplicationConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
+import java.nio.file.Paths
+
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setIntProperty
@@ -35,29 +37,29 @@ class ShellTest {
 
     static device = new SshServer().start()
 
-    static int sshPort = findAvailableTcpPort()
+    static int shellPort = findAvailableTcpPort()
 
-    static def ssh = new SshClient('localhost', sshPort, 'rhiot', 'rhiot')
+    static def shellClient = new SshClient('localhost', shellPort, 'rhiot', 'rhiot')
 
     def file = uuid()
 
     @BeforeClass
     static void beforeClass() {
-        setIntProperty('shell.ssh.port', sshPort)
+        setIntProperty('shell.ssh.port', shellPort)
     }
 
     // Commands core tests
 
     @Test
     void shouldExecuteCommand() {
-        def result = ssh.command('shell-start')
+        def result = shellClient.command('shell-start')
         assertThat(result.size()).isGreaterThan(1)
         assertThat(result.first()).contains('up and running')
     }
 
     @Test
     void shouldPrintSingleLineOfOutput() {
-        def result = ssh.command("device-config --host localhost --port ${device.port()} /${file} foo bar")
+        def result = shellClient.command("device-config --host localhost --port ${device.port()} /${file} foo bar")
         assertThat(result).hasSize(1)
     }
 
@@ -66,7 +68,7 @@ class ShellTest {
     @Test
     void shouldAddConfigurationFile() {
         // When
-        def result = ssh.command("device-config --host localhost --port ${device.port()} /${file} foo bar")
+        def result = shellClient.command("device-config --host localhost --port ${device.port()} /${file} foo bar")
         def properties = new Properties()
         properties.load(new FileInputStream(new File(device.root(), file)))
 
@@ -77,8 +79,21 @@ class ShellTest {
 
     @Test
     void shouldHandleMissingFile() {
-        def result = ssh.command("device-config --host localhost --port ${device.port()}")
+        def result = shellClient.command("device-config --host localhost --port ${device.port()}")
         assertThat(result.first()).contains("Parameter \'file\' is required")
+    }
+
+    // raspbian-config-boot tests
+
+    @Test
+    void shouldPropertyToRaspianBootConfig() {
+        // When
+        def result = shellClient.command("raspbian-config-boot --host localhost --port ${device.port()} foo bar")
+
+        // Then
+        def properties = new Properties()
+        properties.load(new FileInputStream(Paths.get(device.root().absolutePath, 'boot', 'config.txt').toFile()))
+        assertThat(properties.getProperty('foo')).isEqualTo('bar')
     }
 
 }

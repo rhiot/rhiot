@@ -93,6 +93,15 @@ Example: rhiot raspbian-install sdd1
 
 ===
 
+Command: raspbian-config-boot property value
+
+Example: raspbian-config-boot hdmi_drive 2
+
+Sets property on a /boot/config.txt file on a remote device. All the device-config command options are also available
+for this command.
+
+===
+
 Command: deploy-gateway
 
 Example: rhiot deploy-gateway
@@ -110,7 +119,7 @@ Options:
 
     String command() {
         def command = args.find{!it.startsWith('-')}
-        if(!['scan', 'deploy-gateway', 'raspbian-install', 'shell-start', 'device-config'].contains(command)) {
+        if(!['scan', 'deploy-gateway', 'raspbian-install', 'shell-start', 'device-config', 'raspbian-config-boot'].contains(command)) {
             throw new IllegalArgumentException("No such command - ${command}.")
         }
         command
