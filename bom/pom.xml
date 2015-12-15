@@ -113,6 +113,13 @@
 		<dependencies>
 			<!-- BOMs -->
 			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.camel</groupId>
 				<artifactId>camel-parent</artifactId>
 				<version>${camel.version}</version>
@@ -857,26 +864,6 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-nop</artifactId>
 				<version>${slfj4.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-actuator</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-test</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-web</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.data</groupId>
-				<artifactId>spring-data-mongodb</artifactId>
-				<version>1.7.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.felix</groupId>
