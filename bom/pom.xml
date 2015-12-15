@@ -486,13 +486,24 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.activemq</groupId>
-				<artifactId>activemq-pool</artifactId>
+				<artifactId>activemq-mqtt</artifactId>
 				<version>${activemq.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.activemq</groupId>
-				<artifactId>activemq-mqtt</artifactId>
+				<artifactId>activemq-pool</artifactId>
 				<version>${activemq.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-spark</artifactId>
+				<!-- Camel Spark is available starting from Camel 2.17 -->
+				<version>2.17-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-exec</artifactId>
+				<version>${commons-exec.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -569,11 +580,6 @@
 				<groupId>org.codehaus.groovy</groupId>
 				<artifactId>groovy-all</artifactId>
 				<version>${groovy.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-exec</artifactId>
-				<version>${commons-exec.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.californium</groupId>
@@ -876,16 +882,6 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>org.apache.felix.connect</artifactId>
 				<version>${felix-connect.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-kura</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-spark</artifactId>
-				<version>2.17-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
