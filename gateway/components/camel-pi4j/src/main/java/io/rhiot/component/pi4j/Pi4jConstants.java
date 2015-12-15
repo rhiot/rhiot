@@ -22,6 +22,7 @@ package io.rhiot.component.pi4j;
 public final class Pi4jConstants {
     public static final String LOG_COMPONENT = "log:iot.rhiot.component.pi4j?showAll=true&multiline=true";
     public static final String CAMEL_I2C_DRIVER_LOCATION = "/META-INF/services/io/rhiot/component/pi4j/i2c/";
+    public static final String CAMEL_SPI_DRIVER_LOCATION = "/META-INF/services/io/rhiot/component/pi4j/spi/";
     public static final String CAMEL_ID_ROUTE = "raspberry-pi";
     public static final String PROVIDER_NAME = "RaspberryPi GPIO Provider Mock";
     public static final String CAMEL_RBPI = "CamelPi4j";
@@ -33,11 +34,13 @@ public final class Pi4jConstants {
     public static final String CAMEL_RBPI_URL_PATTERN = "((?<scheme>raspberrypi):(//)?)?(?<type>gpio|i2c|serial|spi)/(?<id>[a-zA-Z0-9_-]+)(/(?<device>[a-zA-Z0-9_-]+))?";
     public static final String CAMEL_GPIO_URL_PATTERN = "((?<scheme>pi4j-gpio)://)?(?<gpioId>[0-9A-Z_]+)";
     public static final String CAMEL_I2C_URL_PATTERN = "((?<scheme>pi4j-i2c)://)?(?<busId>(0x)?[0-9a-f]+)/(?<deviceId>(0x)?[0-9a-f]+)";
+    public static final String CAMEL_SPI_URL_PATTERN = "((?<scheme>pi4j-spi)://)?(?<channelId>[0-1]+)";
     public static final String CAMEL_URL_ID = "id";
     public static final String CAMEL_URL_TYPE = "type";
     public static final String CAMEL_URL_DEVICE = "device";
     public static final String CAMEL_DEVICE_ID = "deviceId";
     public static final String CAMEL_BUS_ID = "busId";
+    public static final String CAMEL_CHANNEL_ID = "channelId";
     public static final String CAMEL_GPIO_ID = "gpioId";
     public static final String CAMEL_GPIO_CLAZZ = "com.pi4j.io.gpio.RaspiPin";
     public static final boolean CAMEL_PI4j_LENIENT = true;
