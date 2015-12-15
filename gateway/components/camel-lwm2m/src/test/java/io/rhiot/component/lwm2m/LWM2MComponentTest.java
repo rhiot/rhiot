@@ -26,8 +26,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.eclipse.leshan.ResponseCode;
+import org.eclipse.leshan.client.resource.ObjectEnabler;
+import org.eclipse.leshan.client.resource.ObjectsInitializer;
+import org.eclipse.leshan.core.request.DeregisterRequest;
 import org.eclipse.leshan.core.request.RegisterRequest;
+import org.eclipse.leshan.core.response.LwM2mResponse;
 import org.eclipse.leshan.core.response.RegisterResponse;
+
+import java.util.List;
 
 public class LWM2MComponentTest extends CamelTestSupport {
 
@@ -35,15 +41,52 @@ public class LWM2MComponentTest extends CamelTestSupport {
 	ProducerTemplate producerTemplate;
 
 	@Test
-	public void testRegistration() throws Exception {
+	public void testRegistrationDefaultClient() throws Exception {
 		MockEndpoint mock = getMockEndpoint("mock:result");
-		mock.expectedMinimumMessageCount(1);
+		mock.expectedMinimumMessageCount(2);
 
-		RegisterRequest request = new RegisterRequest("myDevice");
-		producerTemplate.sendBody(request);
+		// register
+		RegisterRequest registerRequest = new RegisterRequest("myDeviceDefault");
+		producerTemplate.sendBody(registerRequest);
 
-		RegisterResponse response = mock.getExchanges().get(0).getIn().getBody(RegisterResponse.class);
-		Assert.assertEquals(ResponseCode.CREATED, response.getCode());
+		RegisterResponse registerResponse = mock.getExchanges().get(0).getIn().getBody(RegisterResponse.class);
+		Assert.assertEquals(ResponseCode.CREATED, registerResponse.getCode());
+
+		// deregister
+		DeregisterRequest deregisterRequest = new DeregisterRequest(registerResponse.getRegistrationID());
+		producerTemplate.sendBody(deregisterRequest);
+
+		LwM2mResponse deregisterResponse = mock.getExchanges().get(1).getIn().getBody(LwM2mResponse.class);
+		Assert.assertEquals(ResponseCode.DELETED, deregisterResponse.getCode());
+
+		assertMockEndpointsSatisfied();
+	}
+
+	@Test
+	public void testRegistrationOneShotClient() throws Exception {
+		MockEndpoint mock = getMockEndpoint("mock:result");
+		mock.expectedMinimumMessageCount(2);
+
+		// register
+		RegisterRequest request = new RegisterRequest("myDeviceOneShot");
+		LWM2MObjectEnablersFactory objectEnablersFactory = new LWM2MObjectEnablersFactory() {
+			@Override
+			public List<ObjectEnabler> getObjectEnablers() {
+				ObjectsInitializer objectsInitializer = new ObjectsInitializer();
+				return objectsInitializer.create(3, 6);
+			}
+		};
+		producerTemplate.sendBodyAndHeader(request, LWM2MConstants.OBJECT_ENABLERS_FACTORY, objectEnablersFactory);
+
+		RegisterResponse registerResponse = mock.getExchanges().get(0).getIn().getBody(RegisterResponse.class);
+		Assert.assertEquals(ResponseCode.CREATED, registerResponse.getCode());
+
+		// deregister
+		DeregisterRequest deregisterRequest = new DeregisterRequest(registerResponse.getRegistrationID());
+		producerTemplate.sendBody(deregisterRequest);
+
+		LwM2mResponse deregisterResponse = mock.getExchanges().get(1).getIn().getBody(LwM2mResponse.class);
+		Assert.assertEquals(ResponseCode.DELETED, deregisterResponse.getCode());
 
 		assertMockEndpointsSatisfied();
 	}
