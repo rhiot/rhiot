@@ -19,7 +19,6 @@
         <module>vertx</module>
         <module>components</module>
         <module>gateway</module>
-        <module>gateway-app</module>
         <module>cloudlets</module>
         <module>iot</module>
         <module>tooling</module>
