@@ -106,7 +106,7 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
     @Override
     protected void beforeStart(CamelContext camelContext) {
         if(camelContext.hasComponent(PROPERTIES_COMPONENT) == null) {
-            camelContext.addComponent("properties", new PropertiesComponent());
+            camelContext.addComponent(PROPERTIES_COMPONENT, new PropertiesComponent());
         }
         PropertiesComponent pc = camelContext.getComponent(PROPERTIES_COMPONENT,
                 PropertiesComponent.class);
