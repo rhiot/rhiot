@@ -49,6 +49,10 @@ class ShellTest {
         shellClient.command("${command} --host localhost --port ${device.port()} ${remaining}")
     }
 
+    def configCommand(String command) {
+        configCommand(command, '')
+    }
+
     @BeforeClass
     static void beforeClass() {
         setIntProperty('shell.ssh.port', shellPort)
@@ -98,6 +102,19 @@ class ShellTest {
     void shouldHandleMissingFile() {
         def result = shellClient.command("device-config --host localhost --port ${device.port()}")
         assertThat(result.first()).contains("Parameter \'file\' is required")
+    }
+
+    // kura-config-bootdelegation tests
+
+    @Test
+    void shouldConfigureBootDelegation() {
+        // When
+        configCommand('kura-config-bootdelegation')
+
+        // Then
+        def properties = new Properties()
+        properties.load(new FileInputStream(Paths.get(device.root().absolutePath, 'opt', 'eclipse', 'kura', 'kura', 'config.ini').toFile()))
+        assertThat(properties.getProperty('org.osgi.framework.bootdelegation')).isEqualTo('sun.*,com.sun.*')
     }
 
     // kura-config-ini tests

@@ -87,6 +87,18 @@ Lists possible target devices. Performs simple TCP port scanning and SSH authent
 
 ===
 
+Command: kura-config-bootdelegation
+
+Example: kura-config-bootdelegation
+
+Enables OSGi boot delegation for Sun packages i.e. adds `org.osgi.framework.bootdelegation=sun.*,com.sun.*` property to
+the `/opt/eclipse/kura/kura/config.ini` file on a remote device. This settings is required to use libraries relying on
+`com.sun` and `sun` packages deployed into Kura.
+
+All the device-config command options are also available for this command.
+
+===
+
 Command: kura-config-ini property value
 
 Example: kura-config-ini equinox.ds.debug true

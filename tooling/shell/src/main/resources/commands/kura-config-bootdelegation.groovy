@@ -17,7 +17,6 @@
 package commands
 
 import io.rhiot.tooling.shell.commands.DeviceConfigCommand
-import org.crsh.cli.Argument
 import org.crsh.cli.Command
 import org.crsh.cli.Option
 import org.crsh.cli.Usage
@@ -28,7 +27,7 @@ class kura_config_bootdelegation {
 
     @Usage("raspbian-config-boot property key")
     @Command
-    def main(InvocationContext context, @Argument String property, @Argument String value,
+    def main(InvocationContext context,
              @Option(names = ['host', 'ho']) String host, @Option(names = ['port', 'p']) String port,
              @Option(names = ['username', 'u']) String username, @Option(names = ['password', 'pa']) String password) {
         BeanFactory beanFactory = context.attributes['spring.beanfactory']
