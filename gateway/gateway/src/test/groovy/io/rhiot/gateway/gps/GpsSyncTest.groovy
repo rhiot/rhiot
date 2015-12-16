@@ -16,21 +16,25 @@
  */
 package io.rhiot.gateway.gps
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.component.gpsd.ClientGpsCoordinates;
+import io.rhiot.component.gpsd.ClientGpsCoordinates
+import io.rhiot.gateway.Gateway
 import io.rhiot.gateway.test.GatewayTest
+import org.apache.camel.component.mock.MockEndpoint
+import org.junit.AfterClass
+import org.junit.Assert
+import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 
-import java.util.concurrent.Callable
-
-import static com.google.common.truth.Truth.assertThat
-import static com.jayway.awaitility.Awaitility.await
+import static com.google.common.io.Files.createTempDir
 import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
-import static io.rhiot.utils.Properties.setStringProperty;
-import static com.google.common.io.Files.createTempDir;
-import static io.rhiot.utils.Properties.setBooleanProperty;
+import static io.rhiot.utils.Properties.restoreSystemProperties
+import static io.rhiot.utils.Properties.setBooleanProperty
+import static io.rhiot.utils.Properties.setStringProperty
 
-public class GpsRoutesTest extends GatewayTest {
+class GpsSyncTest extends GatewayTest {
+
+    static def gateway = new Gateway()
 
     static def gpsCoordinatesStore = createTempDir()
 
@@ -39,28 +43,26 @@ public class GpsRoutesTest extends GatewayTest {
         // Gateway GPS store fixtures
         setBooleanProperty('gps', true)
         setStringProperty('gps_endpoint', 'seda:gps')
-        setStringProperty('gps_enrich', 'seda:enrich')
         setStringProperty("gps_store_directory", gpsCoordinatesStore.getAbsolutePath());
+
+        // Cloudlet synchronization fixtures
+        setBooleanProperty('gps_cloudlet_sync', true)
+        setStringProperty('gps_cloudlet_endpoint', 'mock:gps')
     }
 
     @Test
-    public void shouldSaveEnrichedGpsData() {
+    void shouldSendGpsData() {
+        // Given
         def coordinates = new ClientGpsCoordinates(new Date(), 10.0, 20.0)
+        def dataStreamConsumerMock = camelContext().getEndpoint('mock:gps', MockEndpoint.class)
+        dataStreamConsumerMock.setExpectedMessageCount(1)
+
+        // When
         camelContext().createProducerTemplate().sendBody('seda:gps', coordinates)
-        camelContext().createProducerTemplate().sendBody('seda:enrich', new EnrichingData(extraData: 'foo'))
 
         // Then
-        await().until((Callable<Boolean>) {gpsCoordinatesStore.listFiles().length > 0})
-        def savedCoordinates = new ObjectMapper().readValue(gpsCoordinatesStore.listFiles().first(), Map.class)
-        assertThat(savedCoordinates.enriched.extraData).isEqualTo('foo')
-        assertThat(savedCoordinates.lat).isEqualTo(coordinates.lat())
-        assertThat(savedCoordinates.lng).isEqualTo(coordinates.lng())
+        dataStreamConsumerMock.assertIsSatisfied()
     }
 
 }
 
-class EnrichingData {
-
-    String extraData
-
-}
