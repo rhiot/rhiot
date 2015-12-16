@@ -35,6 +35,8 @@ import static io.rhiot.utils.Uuids.uuid
 @SpringApplicationConfiguration(classes = Shell.class)
 class ShellTest {
 
+    // Fixtures
+
     static device = new SshServer().start()
 
     static int shellPort = findAvailableTcpPort()
@@ -42,6 +44,10 @@ class ShellTest {
     static def shellClient = new SshClient('localhost', shellPort, 'rhiot', 'rhiot')
 
     def file = uuid()
+
+    def configCommand(String command, String remaining) {
+        shellClient.command("${command} --host localhost --port ${device.port()} ${remaining}")
+    }
 
     @BeforeClass
     static void beforeClass() {
@@ -94,12 +100,25 @@ class ShellTest {
         assertThat(result.first()).contains("Parameter \'file\' is required")
     }
 
+    // kura-config-ini tests
+
+    @Test
+    void shouldEditKuraConfigIni() {
+        // When
+        configCommand('kura-config-ini', 'foo bar')
+
+        // Then
+        def properties = new Properties()
+        properties.load(new FileInputStream(Paths.get(device.root().absolutePath, 'opt', 'eclipse', 'kura', 'kura', 'config.ini').toFile()))
+        assertThat(properties.getProperty('foo')).isEqualTo('bar')
+    }
+
     // raspbian-config-boot tests
 
     @Test
     void shouldPropertyToRaspianBootConfig() {
         // When
-        def result = shellClient.command("raspbian-config-boot --host localhost --port ${device.port()} foo bar")
+        configCommand('raspbian-config-boot', 'foo bar')
 
         // Then
         def properties = new Properties()

@@ -87,6 +87,15 @@ Lists possible target devices. Performs simple TCP port scanning and SSH authent
 
 ===
 
+Command: kura-config-ini property value
+
+Example: kura-config-ini equinox.ds.debug true
+
+Sets property on a /opt/eclipse/kura/kura/config.ini file on a remote device. All the device-config command options are also available
+for this command.
+
+===
+
 Command: raspbian-install sdDevice
 
 Example: rhiot raspbian-install sdd1
@@ -118,11 +127,7 @@ Options:
     }
 
     String command() {
-        def command = args.find{!it.startsWith('-')}
-        if(!['device-scan', 'deploy-gateway', 'raspbian-install', 'shell-start', 'device-config', 'raspbian-config-boot'].contains(command)) {
-            throw new IllegalArgumentException("No such command - ${command}.")
-        }
-        command
+        args.find{!it.startsWith('-')}
     }
 
     Map<String, String> properties() {

@@ -125,25 +125,15 @@ class Deployer {
         }
 
         try {
-            switch(parser.command()) {
-                case 'shell-start':
-                    new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
-                    break;
-                case 'device-scan':
-                    new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
-                    break;
-                case 'raspbian-install':
-                    new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
-                    break;
-                case 'raspbian-config-boot':
-                    new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
-                    break;
-                case 'device-config':
-                    new SshClient('localhost', 2000, 'rhiot', 'rhiot').printCommand(args.join(' '))
-                    break;
-                case 'deploy-gateway':
-                    deployGateway(parser)
-                    break;
+            def command = parser.command()
+            if(command == 'deploy-gateway') {
+                deployGateway(parser)
+            } else {
+                def output = new SshClient('localhost', 2000, 'rhiot', 'rhiot').command(args.join(' '))
+                if(output.isEmpty()) {
+                    throw new ConsoleInformation("No such command. Execute 'rhiot --help' to see all the available commands.")
+                }
+                println output.join('\n')
             }
         } catch (Exception e) {
             if (!(e instanceof ConsoleInformation)) {
