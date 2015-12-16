@@ -18,6 +18,7 @@ package io.rhiot.gateway.gps
 
 import io.rhiot.component.gpsd.ClientGpsCoordinates
 import io.rhiot.gateway.Gateway
+import io.rhiot.gateway.test.GatewayTest
 import org.apache.camel.component.mock.MockEndpoint
 import org.junit.AfterClass
 import org.junit.Assert
@@ -31,17 +32,14 @@ import static io.rhiot.utils.Properties.restoreSystemProperties
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setStringProperty
 
-@Ignore
-public class GpsCloudletRoutesTest extends Assert {
+class GpsDataStreamSyncTest extends GatewayTest {
 
     static def gateway = new Gateway()
 
     static def gpsCoordinatesStore = createTempDir()
 
-    @BeforeClass
-    static void beforeClass() {
-        restoreSystemProperties()
-
+    @Override
+    protected void doBefore() {
         // Gateway GPS store fixtures
         setBooleanProperty('gps', true)
         setStringProperty('gps_endpoint', 'seda:gps')
@@ -50,27 +48,20 @@ public class GpsCloudletRoutesTest extends Assert {
         // Cloudlet synchronization fixtures
         setBooleanProperty('gps_cloudlet_sync', true)
         setStringProperty('gps_cloudlet_endpoint', 'mock:gps')
-
-        gateway.start()
-    }
-
-    @AfterClass
-    static void afterClass() {
-        gateway.stop()
     }
 
     @Test
     void shouldSendGpsData() {
         // Given
         def coordinates = new ClientGpsCoordinates(new Date(), 10.0, 20.0)
-        def cloudletMock = camelContext().getEndpoint('mock:gps', MockEndpoint.class)
-        cloudletMock.setExpectedMessageCount(1)
+        def dataStreamConsumerMock = camelContext().getEndpoint('mock:gps', MockEndpoint.class)
+        dataStreamConsumerMock.setExpectedMessageCount(1)
 
         // When
         camelContext().createProducerTemplate().sendBody('seda:gps', coordinates)
 
         // Then
-        cloudletMock.assertIsSatisfied()
+        dataStreamConsumerMock.assertIsSatisfied()
     }
 
 }
