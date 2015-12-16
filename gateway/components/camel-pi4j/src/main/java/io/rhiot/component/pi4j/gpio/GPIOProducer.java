@@ -35,7 +35,6 @@ import com.pi4j.io.gpio.PinMode;
  */
 public class GPIOProducer extends DefaultProducer {
 
-    private GPIOEndpoint endpoint;
     private GpioPin pin;
     private GPIOAction action;
     private ExecutorService pool;
@@ -53,7 +52,6 @@ public class GPIOProducer extends DefaultProducer {
     public GPIOProducer(GPIOEndpoint endpoint, GpioPin pin, GPIOAction action) {
         super(endpoint);
 
-        this.endpoint = endpoint;
         this.pin = pin;
         this.action = action;
         this.pool = this.getEndpoint().getCamelContext().getExecutorServiceManager().newSingleThreadExecutor(this,
@@ -145,9 +143,9 @@ public class GPIOProducer extends DefaultProducer {
                         @Override
                         public void run() {
                             try {
-                                Thread.sleep(endpoint.getDelay());
+                                Thread.sleep(getEndpoint().getDelay());
                                 ((GpioPinDigitalOutput) pin).toggle();
-                                Thread.sleep(endpoint.getDuration());
+                                Thread.sleep(getEndpoint().getDuration());
                                 ((GpioPinDigitalOutput) pin).toggle();
                             } catch (InterruptedException e) {
                                 log.error("Thread interruption into BLINK sequence", e);
@@ -177,4 +175,10 @@ public class GPIOProducer extends DefaultProducer {
     public void setPin(GpioPin pin) {
         this.pin = pin;
     }
+
+    @Override
+    public GPIOEndpoint getEndpoint() {
+        return (GPIOEndpoint) super.getEndpoint();
+    }
+
 }

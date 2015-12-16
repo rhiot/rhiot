@@ -17,6 +17,11 @@
 package io.rhiot.component.pi4j.gpio;
 
 import io.rhiot.component.pi4j.Pi4jConstants;
+
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.camel.impl.DefaultConsumer;
+
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.event.GpioPinAnalogValueChangeEvent;
@@ -24,16 +29,11 @@ import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerAnalog;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.impl.DefaultConsumer;
-
 /**
  * The Pin consumer.
  */
 public class GPIOConsumer extends DefaultConsumer implements GpioPinListenerDigital, GpioPinListenerAnalog {
 
-    private final GPIOEndpoint endpoint;
     private final GpioPin pin;
     private final PinState state;
 
@@ -51,7 +51,6 @@ public class GPIOConsumer extends DefaultConsumer implements GpioPinListenerDigi
      */
     public GPIOConsumer(GPIOEndpoint endpoint, Processor processor, GpioPin pin, PinState state) {
         super(endpoint, processor);
-        this.endpoint = endpoint;
         this.pin = pin;
         this.state = state;
     }
@@ -78,7 +77,7 @@ public class GPIOConsumer extends DefaultConsumer implements GpioPinListenerDigi
 
     @Override
     public void handleGpioPinAnalogValueChangeEvent(GpioPinAnalogValueChangeEvent event) {
-        Exchange exchange = endpoint.createExchange();
+        Exchange exchange = getEndpoint().createExchange();
 
         exchange.getIn().setBody(event);
 
@@ -92,6 +91,7 @@ public class GPIOConsumer extends DefaultConsumer implements GpioPinListenerDigi
         sendEvent(exchange);
     }
 
+    @Override
     public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 
         log.debug("GpioEvent pin {}, event {}, state {} ",
@@ -103,7 +103,7 @@ public class GPIOConsumer extends DefaultConsumer implements GpioPinListenerDigi
             return;
         }
 
-        Exchange exchange = endpoint.createExchange();
+        Exchange exchange = getEndpoint().createExchange();
 
         exchange.getIn().setBody(event);
 
@@ -127,5 +127,10 @@ public class GPIOConsumer extends DefaultConsumer implements GpioPinListenerDigi
                 getExceptionHandler().handleException("Error processing exchange", exchange, exchange.getException());
             }
         }
+    }
+
+    @Override
+    public GPIOEndpoint getEndpoint() {
+        return (GPIOEndpoint) super.getEndpoint();
     }
 }

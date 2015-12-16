@@ -120,9 +120,9 @@ public class KuraGPIOProducer extends DefaultProducer {
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(((KuraGPIOEndpoint) getEndpoint()).getDelay());
+                            Thread.sleep(getEndpoint().getDelay());
                             pin.setValue(!pin.getValue());
-                            Thread.sleep(((KuraGPIOEndpoint) getEndpoint()).getDuration());
+                            Thread.sleep(getEndpoint().getDuration());
                             pin.setValue(!pin.getValue());
                         } catch (Exception e) {
                             log.error("Thread interruption into BLINK sequence", e);
@@ -142,11 +142,10 @@ public class KuraGPIOProducer extends DefaultProducer {
     @Override
     protected void doShutdown() throws Exception {
         // 2 x (delay + timeout) + 5s
-        long timeToWait = (((KuraGPIOEndpoint) getEndpoint()).getDelay()
-                + ((KuraGPIOEndpoint) getEndpoint()).getDuration()) * 2 + 5000;
+        long timeToWait = (getEndpoint().getDelay() + getEndpoint().getDuration()) * 2 + 5000;
         log.debug("Wait for {} ms", timeToWait);
         pool.awaitTermination(timeToWait, TimeUnit.MILLISECONDS);
-        pin.setValue(((KuraGPIOEndpoint) getEndpoint()).isShutdownState());
+        pin.setValue(getEndpoint().isShutdownState());
         pin.close();
         log.debug("Pin {} {}", pin.getIndex(), pin.getValue());
     }
@@ -155,7 +154,7 @@ public class KuraGPIOProducer extends DefaultProducer {
     protected void doStart() throws Exception {
         super.doStart();
         pin.open();
-        pin.setValue(((KuraGPIOEndpoint) getEndpoint()).isState());
+        pin.setValue(getEndpoint().isState());
     }
 
     public KuraGPIOPin getPin() {
@@ -174,4 +173,8 @@ public class KuraGPIOProducer extends DefaultProducer {
         this.action = action;
     }
 
+    @Override
+    public KuraGPIOEndpoint getEndpoint() {
+        return (KuraGPIOEndpoint) super.getEndpoint();
+    }
 }
