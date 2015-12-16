@@ -32,7 +32,7 @@ import static org.apache.camel.model.dataformat.JsonLibrary.Jackson;
  */
 @Route
 @PropertyCondition(property = 'gps_cloudlet_sync')
-class GpsCloudletRoutes extends RouteBuilder {
+class GpsDataStreamSyncRoutes extends RouteBuilder {
 
     def storeDirectory = stringProperty('gps_store_directory', '/var/rhiot/gps')
 
