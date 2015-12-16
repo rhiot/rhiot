@@ -23,11 +23,6 @@ import org.junit.Test
 
 class ConsoleInputParserTest extends Assert {
 
-    @Test(expected = IllegalArgumentException.class)
-    void shouldValidateInvalidCommand() {
-        new ConsoleInputParser('someCommand').command()
-    }
-
     @Test
     void shouldReturnHelpForNoCommand() {
         assertThat(new ConsoleInputParser('-someOption=foo').help).isEqualTo(true)
