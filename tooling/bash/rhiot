@@ -31,7 +31,19 @@ fi
 
 ### Rhiot setup
 
-RHIOT_HOME=~/.rhiot
+DEFAULT_RHIOT_HOME=~/.rhiot
+
+#### user could change its RHIOT_HOME 
+if [ "${RHIOT_HOME}x" == "x" ]; then
+	RHIOT_HOME=${DEFAULT_RHIOT_HOME}
+fi
+
+if [ ! -d ${RHIOT_HOME} ]; then 
+	mkdir -p ${RHIOT_HOME}
+	echo "INFO : use RHIOT_HOME=${RHIOT_HOME}"	
+	echo "INFO : create RHIOT_HOME=${RHIOT_HOME}"
+fi
+
 DOWNLOADS="${RHIOT_HOME}/downloads"
 
 if [ -z "$RHIOT_VERSION" ]; then
