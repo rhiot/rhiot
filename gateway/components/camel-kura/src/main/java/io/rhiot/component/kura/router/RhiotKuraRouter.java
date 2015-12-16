@@ -27,6 +27,8 @@ import org.eclipse.kura.configuration.ConfigurableComponent;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 
+import static io.rhiot.component.kura.router.RhiotKuraConstants.PROPERTIES_COMPONENT;
+
 /**
  * Base class for Camel routers deployable into Eclipse Kura. All
  * RhiotKuraRouters are configurable components managable from the Everyware
@@ -103,7 +105,10 @@ public abstract class RhiotKuraRouter extends KuraRouter implements Configurable
 
     @Override
     protected void beforeStart(CamelContext camelContext) {
-        PropertiesComponent pc = camelContext.getComponent(RhiotKuraConstants.PROPERTIES_COMPONENT,
+        if(camelContext.hasComponent(PROPERTIES_COMPONENT) == null) {
+            camelContext.addComponent("properties", new PropertiesComponent());
+        }
+        PropertiesComponent pc = camelContext.getComponent(PROPERTIES_COMPONENT,
                 PropertiesComponent.class);
         pc.addFunction(new RhiotKuraMetatypePropertiesFunction(m_properties));
     }
