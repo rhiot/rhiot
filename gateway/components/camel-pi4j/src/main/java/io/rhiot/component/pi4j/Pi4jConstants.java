@@ -25,11 +25,13 @@ public final class Pi4jConstants {
     public static final String CAMEL_ID_ROUTE = "raspberry-pi";
     public static final String PROVIDER_NAME = "RaspberryPi GPIO Provider Mock";
     public static final String CAMEL_RBPI = "CamelPi4j";
-    public static final String CAMEL_RBPI_PIN = CAMEL_RBPI + ".pin";
-    public static final String CAMEL_RBPI_PIN_ACTION = CAMEL_RBPI + ".pinAction";
-    public static final String CAMEL_RBPI_PIN_STATE = CAMEL_RBPI + ".pinState";
-    public static final String CAMEL_RBPI_PIN_TYPE = CAMEL_RBPI + ".pinType";
-    public static final String CAMEL_RBPI_PIN_VALUE = CAMEL_RBPI + ".pinValue";
+    public static final String CAMEL_RBPI_PIN = CAMEL_RBPI + "Pin";
+    public static final String CAMEL_RBPI_PIN_ACTION = CAMEL_RBPI + "PinAction";
+    public static final String CAMEL_RBPI_PIN_STATE = CAMEL_RBPI + "PinState";
+    public static final String CAMEL_RBPI_PIN_TYPE = CAMEL_RBPI + "PinType";
+    public static final String CAMEL_RBPI_PIN_VALUE = CAMEL_RBPI + "PinValue";
+    public static final String CAMEL_RBPI_PIN_NAME = CAMEL_RBPI + "PinName";
+
     public static final String CAMEL_RBPI_URL_PATTERN = "((?<scheme>raspberrypi):(//)?)?(?<type>gpio|i2c|serial|spi)/(?<id>[a-zA-Z0-9_-]+)(/(?<device>[a-zA-Z0-9_-]+))?";
     public static final String CAMEL_GPIO_URL_PATTERN = "((?<scheme>pi4j-gpio)://)?(?<gpioId>[0-9A-Z_]+)";
     public static final String CAMEL_I2C_URL_PATTERN = "((?<scheme>pi4j-i2c)://)?(?<busId>(0x)?[0-9a-f]+)/(?<deviceId>(0x)?[0-9a-f]+)";
