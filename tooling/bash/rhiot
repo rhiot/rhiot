@@ -17,15 +17,22 @@
 
 ### Docker server setup
 
-if ! type "docker" > /dev/null; then
-  echo 'Docker not found - installing...'
-  wget -qO- https://get.docker.com/ | sh
-else
-  REQUIRED_DOCKER_VERSION=1.8.2
-  DOCKER_VERSION=`docker version --format '{{.Server.Version}}'`
-  if [ "$DOCKER_VERSION" \< "$REQUIRED_DOCKER_VERSION" ]; then
-    echo "Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot. Version ${DOCKER_VERSION} found - upgrading..."
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  if ! type "docker" > /dev/null; then
+    echo "INFO : Docker not found - installing..."
     wget -qO- https://get.docker.com/ | sh
+  else
+    REQUIRED_DOCKER_VERSION=1.8.2
+    DOCKER_VERSION=`docker version --format '{{.Server.Version}}'`
+    if [ "$DOCKER_VERSION" \< "$REQUIRED_DOCKER_VERSION" ]; then
+      echo "INFO : Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot. Version ${DOCKER_VERSION} found - upgrading..."
+      wget -qO- https://get.docker.com/ | sh
+    fi
+  fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  if ! type "docker-machine" > /dev/null; then
+    echo "ERROR : Please install docker for MacOS X"
+    exit 1
   fi
 fi
 
@@ -33,14 +40,14 @@ fi
 
 DEFAULT_RHIOT_HOME=~/.rhiot
 
-#### user could change its RHIOT_HOME 
-if [ "${RHIOT_HOME}x" == "x" ]; then
+#### user could change its RHIOT_HOME
+if [ -z "${RHIOT_HOME}" ]; then
 	RHIOT_HOME=${DEFAULT_RHIOT_HOME}
 fi
 
-if [ ! -d ${RHIOT_HOME} ]; then 
+if [ ! -d ${RHIOT_HOME} ]; then
 	mkdir -p ${RHIOT_HOME}
-	echo "INFO : use RHIOT_HOME=${RHIOT_HOME}"	
+	echo "INFO : use RHIOT_HOME=${RHIOT_HOME}"
 	echo "INFO : create RHIOT_HOME=${RHIOT_HOME}"
 fi
 
@@ -55,7 +62,7 @@ fi
 
 SHELL_CONTAINER_STARTED=`docker ps | grep rhiot-shell`
 if [ -z "${SHELL_CONTAINER_STARTED}" ]; then
-    docker rm rhiot-shell >> ~/.rhiot/rhiot-cmd.log 2>&1
+    docker rm rhiot-shell >> ${RHIOT_HOME}/rhiot-cmd.log 2>&1
     docker run -d --name rhiot-shell --privileged=true --net=host -p 2000:2000 \
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
     -v $DOWNLOADS:/root/.rhiot/downloads \
