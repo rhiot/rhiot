@@ -46,7 +46,9 @@ public abstract class GatewayTest extends Assert {
     @AfterClass
     public static void after() {
         try {
-            gateway.stop();
+            if(gateway != null) {
+                gateway.stop();
+            }
         } finally {
             gateway = null;
             restoreSystemProperties();
