@@ -24,7 +24,7 @@ _rhiot()
     case "$prev" in
         rhiot)
 
-            COMPREPLY=( $(compgen -W "--help raspbian-install scan deploy-gateway shell-start" -- $cur) )
+            COMPREPLY=( $(compgen -W "shell-start device-config device-scan device-send kura-config-bootdelegation kura-config-ini raspbian-install deploy-gateway" -- $cur) )
 
         return 0
         ;;
