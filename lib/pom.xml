@@ -26,4 +26,13 @@
         <module>scanner</module>
     </modules>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.bluetrainsoftware.maven</groupId>
+                <artifactId>groovydoc-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
