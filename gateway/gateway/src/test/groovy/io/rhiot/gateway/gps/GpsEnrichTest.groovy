@@ -32,6 +32,8 @@ import static io.rhiot.utils.Properties.setBooleanProperty;
 
 public class GpsEnrichTest extends GatewayTest {
 
+    // Fixtures
+
     static def gpsCoordinatesStore = createTempDir()
 
     @Override
@@ -43,6 +45,8 @@ public class GpsEnrichTest extends GatewayTest {
         setStringProperty("gps_store_directory", gpsCoordinatesStore.getAbsolutePath());
     }
 
+    // Tests
+
     @Test
     public void shouldSaveEnrichedGpsData() {
         def coordinates = new ClientGpsCoordinates(new Date(), 10.0, 20.0)
@@ -51,7 +55,7 @@ public class GpsEnrichTest extends GatewayTest {
 
         // Then
         await().until((Callable<Boolean>) {gpsCoordinatesStore.listFiles().length > 0})
-        def savedCoordinates = new ObjectMapper().readValue(gpsCoordinatesStore.listFiles().first(), Map.class)
+        def savedCoordinates = new ObjectMapper().readValue(gpsCoordinatesStore.listFiles().find{ it.file }, Map.class)
         assertThat(savedCoordinates.enriched.extraData).isEqualTo('foo')
         assertThat(savedCoordinates.lat).isEqualTo(coordinates.lat())
         assertThat(savedCoordinates.lng).isEqualTo(coordinates.lng())
