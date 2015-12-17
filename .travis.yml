@@ -17,3 +17,6 @@ language: java
 script: ./travis.sh
 jdk:
   - oraclejdk8
+
+env:
+- IS_TRAVIS=true

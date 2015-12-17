@@ -28,7 +28,10 @@ import static com.jayway.awaitility.Awaitility.await
 import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
 import static io.rhiot.utils.Properties.setStringProperty;
 import static com.google.common.io.Files.createTempDir;
-import static io.rhiot.utils.Properties.setBooleanProperty;
+import static io.rhiot.utils.Properties.setBooleanProperty
+import static java.lang.Boolean.parseBoolean
+import static java.lang.System.getenv
+import static org.junit.Assume.assumeFalse;
 
 public class GpsEnrichTest extends GatewayTest {
 
@@ -38,6 +41,8 @@ public class GpsEnrichTest extends GatewayTest {
 
     @Override
     protected void doBefore() {
+        assumeFalse(parseBoolean(getenv('IS_TRAVIS')))
+
         // Gateway GPS store fixtures
         setBooleanProperty('gps', true)
         setStringProperty('gps_endpoint', 'seda:gps')
