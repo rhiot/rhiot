@@ -44,7 +44,9 @@ Commands:
 shell-start                  Starts background shell process.
 device-config                Edits configuration file on a device.
 device-scan                  Lists possible target devices.
-kura-config-bootdelegation   Enables OSGi boot delegation for Sun packages on a target device.
+device-send                  Transfers file to a remote device.
+kura-config-bootdelegation   Enables OSGi boot delegation for Sun packages on a remote device.
+kura-config-ini              Sets property on a /opt/eclipse/kura/kura/config.ini file on a remote device.
 raspbian-install             Installs Raspbian to a target SD card.
 deploy-gateway               Deploys gateway to a detected device.
 
@@ -72,12 +74,24 @@ Example: device-config /etc/config delay 1000
 
 Sets property on a given configuration file on a remote device. Configuration file will be created if doesn't exists.
 
-Options:
+SSH options:
 --host (-ho) host    Address of the target device. The device will be automatically detected if this option is not specified.
 --port (-p)          Port of the SSH server on a target device. Defaults to 22.
 --username (-u)      SSH username of the device. Defaults to 'root'.
 --password (-pa)     SSH password of the device. Defaults to 'raspberry'.
+
+Other options:
 --append (-a)         Appends to the given property instead of overriding it.
+
+===
+
+Command: device-send source target
+
+Example: device-send /etc/localfile /etc/remotefile
+
+Sends file from a local file system to a remote device.
+
+All the device-config command SSH options are also available for this command.
 
 ===
 

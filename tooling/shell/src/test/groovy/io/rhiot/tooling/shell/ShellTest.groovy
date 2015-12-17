@@ -118,6 +118,18 @@ class ShellTest {
         assertThat(result.first()).contains("Parameter \'file\' is required")
     }
 
+    // device-send tests
+
+    @Test
+    void shouldSendFile() {
+        // When
+        def result = configCommand("device-send", "pom.xml /foo/${file}")
+
+        // Then
+        assertThat(Paths.get(device.root().absolutePath, 'foo', file).toFile().exists()).isTrue()
+        assertThat(result.first()).startsWith('Sent')
+    }
+
     // kura-config-bootdelegation tests
 
     @Test
