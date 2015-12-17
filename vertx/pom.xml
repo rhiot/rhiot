@@ -6,7 +6,7 @@
     <parent>
         <artifactId>rhiot-bom</artifactId>
         <groupId>io.rhiot</groupId>
-        <version>0.1.3</version>
+        <version>0.1.4-SNAPSHOT</version>
         <relativePath>../bom</relativePath>
     </parent>
 
