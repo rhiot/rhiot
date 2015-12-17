@@ -16,37 +16,18 @@
  */
 package io.rhiot.tooling.shell.commands
 
-import io.rhiot.scanner.DeviceDetector
-import io.rhiot.tooling.shell.CommandSupport
-import io.rhiot.utils.ssh.client.SshClient
-import org.springframework.beans.factory.annotation.Autowired
+import io.rhiot.tooling.shell.SshCommandSupport
 import org.springframework.stereotype.Component
 
-import static org.apache.commons.lang3.StringUtils.isBlank
-
 @Component
-class DeviceSendCommand extends CommandSupport {
-
-    private final DeviceDetector deviceDetector
-
-    @Autowired
-    DeviceSendCommand(DeviceDetector deviceDetector) {
-        this.deviceDetector = deviceDetector
-    }
+class DeviceSendCommand extends SshCommandSupport {
 
     @Override
     protected void doExecute(List<String> output, String... command) {
-        def deviceAddress = parameter(command[0]){
-            deviceDetector.detectDevices().first().address().hostAddress
-        }
-        String portString = command[1]
-        int port = isBlank(portString) ? 22 : portString.toInteger()
-        def username = parameter(command[2], 'root')
-        def password = parameter(command[3], 'raspberry')
+        super.doExecute(output, command)
         def source = requiredParameter('source', command[4])
         def target = requiredParameter('target', command[5])
 
-        def sshClient = new SshClient(deviceAddress, port, username, password)
         sshClient.scp(new FileInputStream(source), new File(target))
 
         output << "Sent ${source} to ${target} on a target device ${deviceAddress}."

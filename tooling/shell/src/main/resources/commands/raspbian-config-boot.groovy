@@ -24,6 +24,8 @@ import org.crsh.cli.Usage
 import org.crsh.command.InvocationContext
 import org.springframework.beans.factory.BeanFactory
 
+import static io.rhiot.tooling.shell.CommandSupport.optionalBoolean
+
 class raspbian_config_boot {
 
     @Usage("raspbian-config-boot property key")
@@ -33,7 +35,7 @@ class raspbian_config_boot {
              @Option(names = ['username', 'u']) String username, @Option(names = ['password', 'pa']) String password,
              @Option(names = ['append', 'a']) Boolean append) {
         BeanFactory beanFactory = context.attributes['spring.beanfactory']
-        beanFactory.getBean(DeviceConfigCommand.class).execute(host, port, username, password, '/boot/config.txt', property, value, append ? 'true' : 'false')
+        beanFactory.getBean(DeviceConfigCommand.class).execute(host, port, username, password, '/boot/config.txt', property, value, optionalBoolean(append))
     }
 
 }

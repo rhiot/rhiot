@@ -16,42 +16,23 @@
  */
 package io.rhiot.tooling.shell.commands
 
-import io.rhiot.scanner.DeviceDetector
-import io.rhiot.tooling.shell.CommandSupport
+import io.rhiot.tooling.shell.SshCommandSupport
 import io.rhiot.utils.ssh.client.SshClient
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 import static java.lang.Boolean.parseBoolean
-import static org.apache.commons.lang3.StringUtils.isBlank
 
 @Component
-class DeviceConfigCommand extends CommandSupport {
-
-    private final DeviceDetector deviceDetector
-
-    @Autowired
-    DeviceConfigCommand(DeviceDetector deviceDetector) {
-        this.deviceDetector = deviceDetector
-    }
+class DeviceConfigCommand extends SshCommandSupport {
 
     @Override
     protected void doExecute(List<String> output, String... command) {
-        def deviceAddress = parameter(command[0]){
-            deviceDetector.detectDevices().first().address().hostAddress
-        }
+        super.doExecute(output, command)
 
-        String portString = command[1]
-        int port = isBlank(portString) ? 22 : portString.toInteger()
-
-        String username = parameter(command[2], 'root')
-        String password = parameter(command[3], 'raspberry')
         String file = requiredParameter('file', command[4])
         String property = command[5]
         String value = command[6]
         boolean append = parseBoolean(command[7])
-
-        def sshClient = new SshClient(deviceAddress, port, username, password)
 
         def properties = new Properties()
         def originalFile = sshClient.scp(new File(file))
