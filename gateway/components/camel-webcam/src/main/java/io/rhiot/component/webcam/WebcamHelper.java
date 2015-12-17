@@ -23,7 +23,6 @@ import org.apache.camel.*;
 import org.apache.camel.spi.ExceptionHandler;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -51,7 +50,7 @@ public class WebcamHelper {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             ImageIO.write(image, endpoint.getFormat(), output);
             message.setBody(new BufferedInputStream(new ByteArrayInputStream(output.toByteArray())));
-            message.setHeader(Exchange.FILE_NAME, message.getMessageId() + "." + endpoint.getFormat());
+            message.setHeader(Exchange.FILE_NAME, message.getMessageId() + "" + endpoint.getFormat());
         } 
 
         return exchange;
