@@ -99,6 +99,20 @@ class ShellTest {
     }
 
     @Test
+    void shouldAppendProperty() {
+        // Given
+        configCommand('device-config', "/${file} foo bar")
+
+        // When
+        configCommand('device-config', "-a /${file} foo baz")
+        def properties = new Properties()
+        properties.load(new FileInputStream(new File(device.root(), file)))
+
+        // Then
+        assertThat(properties.getProperty('foo')).isEqualTo('barbaz')
+    }
+
+    @Test
     void shouldHandleMissingFile() {
         def result = shellClient.command("device-config --host localhost --port ${device.port()}")
         assertThat(result.first()).contains("Parameter \'file\' is required")

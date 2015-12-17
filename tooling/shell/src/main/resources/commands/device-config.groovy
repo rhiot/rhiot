@@ -20,6 +20,7 @@ import io.rhiot.tooling.shell.commands.DeviceConfigCommand
 import org.crsh.cli.Argument
 import org.crsh.cli.Command
 import org.crsh.cli.Option
+import org.crsh.cli.Required
 import org.crsh.cli.Usage
 import org.crsh.command.InvocationContext
 import org.springframework.beans.factory.BeanFactory
@@ -30,9 +31,10 @@ class device_config {
     @Command
     def main(InvocationContext context, @Argument String file, @Argument String property, @Argument String value,
              @Option(names = ['host', 'ho']) String host, @Option(names = ['port', 'p']) String port,
-             @Option(names = ['username', 'u']) String username, @Option(names = ['password', 'pa']) String password) {
+             @Option(names = ['username', 'u']) String username, @Option(names = ['password', 'pa']) String password,
+             @Option(names = ['append', 'a']) Boolean append) {
         BeanFactory beanFactory = context.attributes['spring.beanfactory']
-        beanFactory.getBean(DeviceConfigCommand.class).execute(host, port, username, password, file, property, value)
+        beanFactory.getBean(DeviceConfigCommand.class).execute(host, port, username, password, file, property, value, append ? 'true' : 'false')
     }
 
 }

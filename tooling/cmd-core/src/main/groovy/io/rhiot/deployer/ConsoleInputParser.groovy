@@ -42,8 +42,9 @@ Usage: rhiot [OPTIONS] [deploy-gateway|scan]
 
 Commands:
 shell-start                  Starts background shell process.
-device-config                Edit configuration file on a device.
+device-config                Edits configuration file on a device.
 device-scan                  Lists possible target devices.
+kura-config-bootdelegation   Enables OSGi boot delegation for Sun packages on a target device.
 raspbian-install             Installs Raspbian to a target SD card.
 deploy-gateway               Deploys gateway to a detected device.
 
@@ -76,6 +77,7 @@ Options:
 --port (-p)          Port of the SSH server on a target device. Defaults to 22.
 --username (-u)      SSH username of the device. Defaults to 'root'.
 --password (-pa)     SSH password of the device. Defaults to 'raspberry'.
+--append (-a)         Appends to the given property instead of overriding it.
 
 ===
 

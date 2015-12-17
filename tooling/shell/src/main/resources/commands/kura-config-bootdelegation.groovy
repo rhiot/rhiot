@@ -29,10 +29,11 @@ class kura_config_bootdelegation {
     @Command
     def main(InvocationContext context,
              @Option(names = ['host', 'ho']) String host, @Option(names = ['port', 'p']) String port,
-             @Option(names = ['username', 'u']) String username, @Option(names = ['password', 'pa']) String password) {
+             @Option(names = ['username', 'u']) String username, @Option(names = ['password', 'pa']) String password,
+             @Option(names = ['append', 'a']) Boolean append) {
         BeanFactory beanFactory = context.attributes['spring.beanfactory']
         beanFactory.getBean(DeviceConfigCommand.class).execute(host, port, username, password,
-                '/opt/eclipse/kura/kura/config.ini', 'org.osgi.framework.bootdelegation', 'sun.*,com.sun.*')
+                '/opt/eclipse/kura/kura/config.ini', 'org.osgi.framework.bootdelegation', 'sun.*,com.sun.*', append ? 'true' : 'false')
     }
 
 }

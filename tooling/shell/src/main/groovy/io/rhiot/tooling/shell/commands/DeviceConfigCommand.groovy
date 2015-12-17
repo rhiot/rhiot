@@ -22,6 +22,7 @@ import io.rhiot.utils.ssh.client.SshClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
+import static java.lang.Boolean.parseBoolean
 import static org.apache.commons.lang3.StringUtils.isBlank
 
 @Component
@@ -48,6 +49,7 @@ class DeviceConfigCommand extends CommandSupport {
         String file = requiredParameter('file', command[4])
         String property = command[5]
         String value = command[6]
+        boolean append = parseBoolean(command[7])
 
         def sshClient = new SshClient(deviceAddress, port, username, password)
 
@@ -56,7 +58,11 @@ class DeviceConfigCommand extends CommandSupport {
         if(originalFile != null) {
             properties.load(new ByteArrayInputStream(originalFile))
         }
-        properties.put(property, value)
+        if(append && properties.getProperty(property)) {
+            properties.put(property, properties.get(property) + value)
+        } else {
+            properties.put(property, value)
+        }
         def result = new ByteArrayOutputStream()
         properties.store(result, 'Updated by Rhiot')
         result.close()
