@@ -43,7 +43,7 @@ class GpsSyncTest extends GatewayTest {
         // Gateway GPS store fixtures
         setBooleanProperty('gps', true)
         setStringProperty('gps_endpoint', 'seda:gps')
-        setStringProperty("gps_store_directory", gpsCoordinatesStore.getAbsolutePath());
+        setStringProperty('gps_store_directory', gpsCoordinatesStore.getAbsolutePath());
 
         // Cloudlet synchronization fixtures
         setBooleanProperty('gps_cloudlet_sync', true)

@@ -11,11 +11,17 @@
     OR CONDITIONS OF ANY KIND, either express or implied. See the License for
     the specific language governing permissions and limitations under the License. -->
 <configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/var/camel-labs-iot-gateway/logs/gateway.log</file>
+        <file>/var/log/rhiot.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>tests.%i.log.zip</fileNamePattern>
+            <fileNamePattern>rhiot.%i.log.zip</fileNamePattern>
             <minIndex>1</minIndex>
             <maxIndex>10</maxIndex>
         </rollingPolicy>
@@ -25,11 +31,11 @@
         </triggeringPolicy>
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>%d [%thread] %level %logger - %m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="${camellabs_iot_gateway_log_root_level:-INFO}">
-        <appender-ref ref="FILE"/>
+    <root level="${log_level:-INFO}">
+        <appender-ref ref="${log_appender:-FILE}"/>
     </root>
 </configuration>
