@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 
 import jdk.dio.ClosedDeviceException;
@@ -47,15 +46,6 @@ public class GPIOProducer extends DefaultProducer {
                 DeviceIOConstants.CAMEL_DEVICE_IO_THREADPOOL + pin.getDescriptor().getID());
     }
 
-    protected GPIOAction resolveAction(Message message) {
-        if (message.getHeaders().containsKey(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION)) {
-            // Exchange Action
-            return message.getHeader(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION, GPIOAction.class);
-        } else {
-            return getEndpoint().getAction(); // Endpoint Action
-        }
-    }
-
     @Override
     protected void doShutdown() throws Exception {
         // 2 x (delay + timeout) + 5s
@@ -76,7 +66,8 @@ public class GPIOProducer extends DefaultProducer {
 
         if (pin instanceof GPIOPin) {
 
-            GPIOAction messageAction = resolveAction(exchange.getIn());
+            GPIOAction messageAction = exchange.getIn().getHeader(DeviceIOConstants.CAMEL_DEVICE_IO_ACTION,
+                    getEndpoint().getAction(), GPIOAction.class);
 
             if (messageAction != null) {
                 switch (messageAction) {
