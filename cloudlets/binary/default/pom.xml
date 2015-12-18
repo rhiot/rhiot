@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-cloudlet-binary-parent</artifactId>
-        <version>0.1.4-SNAPSHOT</version>
+        <version>0.1.3-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <name>RHIOT :: Cloudlets :: Binary :: Default</name>
