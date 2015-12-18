@@ -41,7 +41,7 @@ fi
 
 ### Docker boot init
 
-if [ "$OSTYPE" == "linux-gnu" ]; then
+if [ "$OSTYPE"=="linux-gnu" ]; then
   if ! type "docker" > /dev/null; then
     echo "INFO : Docker not found - installing..."
     wget -qO- https://get.docker.com/ | sh
@@ -53,7 +53,7 @@ if [ "$OSTYPE" == "linux-gnu" ]; then
       wget -qO- https://get.docker.com/ | sh
     fi
   fi
-elif [ "$OSTYPE" == "darwin"* ]; then
+elif [ "$OSTYPE"=="darwin"* ]; then
   if ! type "docker-machine" 2> /dev/null > /dev/null; then
     echo "ERROR : Please install docker for MacOS X"
     exit 1
