@@ -41,46 +41,50 @@ fi
 
 ### Docker boot init
 
-if [ "$OSTYPE"=="linux-gnu" ]; then
-  if ! type "docker" > /dev/null; then
-    echo "INFO : Docker not found - installing..."
-    wget -qO- https://get.docker.com/ | sh
-  else
-    REQUIRED_DOCKER_VERSION=1.8.2
-    DOCKER_VERSION=`docker version --format '{{.Server.Version}}'`
-    if [ "$DOCKER_VERSION" \< "$REQUIRED_DOCKER_VERSION" ]; then
-      echo "INFO : Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot. Version ${DOCKER_VERSION} found - upgrading..."
-      wget -qO- https://get.docker.com/ | sh
-    fi
-  fi
-elif [ "$OSTYPE"=="darwin"* ]; then
-  if ! type "docker-machine" 2> /dev/null > /dev/null; then
-    echo "ERROR : Please install docker for MacOS X"
-    exit 1
-  fi
+case "$OSTYPE" in 
 
-  if [ -z "$RHIOT_DOCKER_MACHINE_ENV" ]; then
-      RHIOT_DOCKER_MACHINE_ENV=$DEFAULT_RHIOT_DOCKER_MACHINE_ENV
-  fi
-
-  docker-machine env $RHIOT_DOCKER_MACHINE_ENV 2> /dev/null > /dev/null
-  if [ $? -ne 0 ]; then
-    echo "INFO :  docker-machine start $RHIOT_DOCKER_MACHINE_ENV"
-    docker-machine start $RHIOT_DOCKER_MACHINE_ENV 2> /dev/null > /dev/null
-  fi
-   eval $(docker-machine env $RHIOT_DOCKER_MACHINE_ENV)
-fi
+	linux-gnu)
+      if ! type "docker" 2&>1 /dev/null; then
+        echo "INFO : Docker not found - installing..."
+        wget -qO- https://get.docker.com/ | sh
+      else
+        REQUIRED_DOCKER_VERSION=1.8.2
+        DOCKER_VERSION=`docker version --format '{{.Server.Version}}'`
+        if [ "$DOCKER_VERSION" \< "$REQUIRED_DOCKER_VERSION" ]; then
+          echo "INFO : Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot. Version ${DOCKER_VERSION} found - upgrading..."
+          wget -qO- https://get.docker.com/ | sh
+        fi
+      fi
+  ;;
+  
+	darwin*)
+      if ! type "docker-machine" 2> /dev/null > /dev/null; then
+        echo "ERROR : Please install docker for MacOS X"
+        exit 1
+      fi
+      if [ -z "$RHIOT_DOCKER_MACHINE_ENV" ]; then
+          RHIOT_DOCKER_MACHINE_ENV=$DEFAULT_RHIOT_DOCKER_MACHINE_ENV
+      fi
+					
+      docker-machine env $RHIOT_DOCKER_MACHINE_ENV 2> /dev/null > /dev/null
+      if [ $? -ne 0 ]; then
+        echo "INFO :  docker-machine start $RHIOT_DOCKER_MACHINE_ENV"
+        docker-machine start $RHIOT_DOCKER_MACHINE_ENV 2> /dev/null > /dev/null
+      fi
+      eval $(docker-machine env $RHIOT_DOCKER_MACHINE_ENV)
+  ;;
+esac
 
 ### Shell startup
 
 SHELL_CONTAINER_STARTED=`docker ps | grep rhiot-shell`
 
 if [ -z "${SHELL_CONTAINER_STARTED}" ]; then
-    docker rm rhiot-shell >> ${RHIOT_HOME}/rhiot-cmd.log 2>&1
+    docker rm rhiot-shell >> ${RHIOT_HOME}/rhiot-cmd.log 2>&1 > /dev/null
     docker run -d --name rhiot-shell --privileged=true --net=host -p 2000:2000 \
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
     -v ${RHIOT_DOWNLOADS}:/root/.rhiot/downloads \
-    -it rhiot/shell:${RHIOT_VERSION}  >> /dev/null
+    -it rhiot/shell:${RHIOT_VERSION}  2>&1 > /dev/null
     sleep 10 # Give SSHD time to start
 fi
 
