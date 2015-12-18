@@ -130,6 +130,16 @@ class ShellTest {
         assertThat(result.first()).startsWith('Sent')
     }
 
+    @Test
+    void shouldSendFileFromHttp() {
+        // When
+        def result = configCommand("device-send", "https://raw.githubusercontent.com/rhiot/rhiot/master/readme.md /foo/${file}")
+
+        // Then
+        assertThat(Paths.get(device.root().absolutePath, 'foo', file).toFile().exists()).isTrue()
+        assertThat(result.first()).startsWith('Sent')
+    }
+
     // kura-config-bootdelegation tests
 
     @Test

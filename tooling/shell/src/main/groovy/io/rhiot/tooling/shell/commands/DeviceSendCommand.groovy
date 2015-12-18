@@ -18,19 +18,35 @@ package io.rhiot.tooling.shell.commands
 
 import io.rhiot.tooling.shell.SshCommandSupport
 import org.springframework.stereotype.Component
+import org.springframework.util.Assert
+
+import static org.springframework.util.Assert.notNull
 
 @Component
 class DeviceSendCommand extends SshCommandSupport {
 
     @Override
     protected void doExecute(List<String> output, String... command) {
+        notNull(output)
+        notNull(command)
+
         super.doExecute(output, command)
         def source = requiredParameter('source', command[4])
         def target = requiredParameter('target', command[5])
 
-        sshClient.scp(new FileInputStream(source), new File(target))
+        log().debug('About to send {} to {}:{}.', source, deviceAddress, target)
+        sshClient.scp(sourceStream(source), new File(target))
+        log().debug('Sent {} to {}:{}.', source, deviceAddress, target)
 
         output << "Sent ${source} to ${target} on a target device ${deviceAddress}."
+    }
+
+    private sourceStream(String source){
+        if(source =~ /.+:.+/) {
+            new URL(source).openStream()
+        } else {
+            new FileInputStream(source)
+        }
     }
 
 }
