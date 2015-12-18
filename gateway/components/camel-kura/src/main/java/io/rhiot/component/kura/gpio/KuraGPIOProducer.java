@@ -21,7 +21,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 import org.eclipse.kura.gpio.KuraClosedDeviceException;
 import org.eclipse.kura.gpio.KuraGPIODirection;
@@ -74,15 +73,6 @@ public class KuraGPIOProducer extends DefaultProducer {
 
     }
 
-    protected KuraGPIOAction resolveAction(Message message) {
-        if (message.getHeaders().containsKey(KuraGPIOConstants.CAMEL_KURA_GPIO_ACTION)) {
-            // Exchange Action
-            return message.getHeader(KuraGPIOConstants.CAMEL_KURA_GPIO_ACTION, KuraGPIOAction.class);
-        } else {
-            return getAction(); // Endpoint Action
-        }
-    }
-
     /**
      * Process the message
      */
@@ -92,7 +82,8 @@ public class KuraGPIOProducer extends DefaultProducer {
             log.trace(exchange.toString());
         }
 
-        KuraGPIOAction messageAction = resolveAction(exchange.getIn());
+        KuraGPIOAction messageAction = exchange.getIn().getHeader(KuraGPIOConstants.CAMEL_KURA_GPIO_ACTION, getAction(),
+                KuraGPIOAction.class);
 
         if (messageAction == null) {
             log.trace("No action pick up body");

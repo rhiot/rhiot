@@ -21,7 +21,6 @@ import io.rhiot.component.pi4j.Pi4jConstants;
 import java.util.concurrent.ExecutorService;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 
 import com.pi4j.io.gpio.GpioPin;
@@ -108,7 +107,8 @@ public class GPIOProducer extends DefaultProducer {
             log.trace(exchange.toString());
         }
 
-        GPIOAction messageAction = resolveAction(exchange.getIn());
+        GPIOAction messageAction = exchange.getIn().getHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, action,
+                GPIOAction.class);
 
         if (messageAction == null) {
             log.trace("No action pick up body");
@@ -160,15 +160,6 @@ public class GPIOProducer extends DefaultProducer {
                 log.error("Any action set found");
                 break;
             }
-        }
-    }
-
-    protected GPIOAction resolveAction(Message message) {
-        if (message.getHeaders().containsKey(Pi4jConstants.CAMEL_RBPI_PIN_ACTION)) {
-            // Exchange Action
-            return message.getHeader(Pi4jConstants.CAMEL_RBPI_PIN_ACTION, GPIOAction.class);
-        } else {
-            return action; // Endpoint Action
         }
     }
 
