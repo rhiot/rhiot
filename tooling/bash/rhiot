@@ -17,12 +17,12 @@
 
 ### Rhiot setup
 
-DEFAULT_RHIOT_HOME=~/.rhiot
 DEFAULT_RHIOT_VERSION=0.1.3
+DEFAULT_RHIOT_HOME=~/.rhiot
 DEFAULT_RHIOT_DOCKER_MACHINE_ENV=default
 
 
-#### user could change its RHIOT_HOME
+# User can configure her RHIOT_HOME
 if [ -z "${RHIOT_HOME}" ]; then
 	RHIOT_HOME=${DEFAULT_RHIOT_HOME}
 fi
