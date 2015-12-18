@@ -22,6 +22,7 @@
 
     <modules>
         <module>utils</module>
+        <module>utils-maven</module>
         <module>utils-ssh</module>
         <module>scanner</module>
     </modules>

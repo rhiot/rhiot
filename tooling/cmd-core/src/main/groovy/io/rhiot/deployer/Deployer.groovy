@@ -17,10 +17,9 @@
 package io.rhiot.deployer
 
 import groovy.transform.PackageScope
-import io.rhiot.deployer.maven.JcabiMavenArtifactResolver
 import io.rhiot.scanner.Device
 import io.rhiot.scanner.DeviceDetector
-import io.rhiot.scanner.SimplePortScanningDeviceDetector
+import io.rhiot.utils.maven.JcabiMavenArtifactResolver
 import io.rhiot.utils.ssh.client.SshClient
 
 import java.util.concurrent.Future

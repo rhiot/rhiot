@@ -26,40 +26,7 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-utils-ssh</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jcabi</groupId>
-            <artifactId>jcabi-aether</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-core</artifactId>
-            <version>${maven.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>aether-impl</artifactId>
-                    <groupId>org.sonatype.aether</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>sisu-inject-plexus</artifactId>
-                    <groupId>org.sonatype.sisu</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-model</artifactId>
-            <version>${maven.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-settings-builder</artifactId>
-            <version>${maven.version}</version>
+            <artifactId>rhiot-utils-maven</artifactId>
         </dependency>
 
         <!-- Testing -->

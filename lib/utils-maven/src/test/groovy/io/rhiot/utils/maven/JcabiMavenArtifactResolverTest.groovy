@@ -14,16 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.deployer.maven
+package io.rhiot.utils.maven
 
-import java.util.concurrent.Future;
+import org.junit.Assert
+import org.junit.Test
 
-interface MavenArtifactResolver {
+class JcabiMavenArtifactResolverTest extends Assert {
 
-    Future<InputStream> artifactStream(String groupId, String artifactId, String version, String extension)
+    def resolver = new JcabiMavenArtifactResolver()
 
-    Future<InputStream> artifactStream(String groupId, String artifactId, String version)
+    @Test
+    void shouldDownloadGuava() {
+        // When
+        def artifact = resolver.artifactStream('com.google.guava', 'guava', '18.0')
 
-    void close()
+        // Then
+        assertTrue(artifact.get().available() > 0)
+    }
+
+    @Test
+    void shouldShutdownExecutor() {
+        // When
+        resolver.close()
+
+        // Then
+        assertTrue(resolver.@executor.isShutdown())
+    }
 
 }

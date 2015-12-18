@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.deployer.maven
+package io.rhiot.utils.maven
 
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
 
-import static io.rhiot.deployer.maven.Repository.standardRepositories
+import static io.rhiot.utils.maven.Repository.standardRepositories
 import static java.util.concurrent.Executors.newSingleThreadExecutor
 
 abstract class ConfigurableMavenArtifactResolver implements MavenArtifactResolver {
