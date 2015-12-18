@@ -87,11 +87,15 @@ Other options:
 
 Command: device-send source target
 
-Example: device-send /etc/localfile /etc/remotefile
+Sends file to a remote device. For example:
 
-Sends file from a local file system to a remote device.
+    device-send /etc/localfile /etc/remotefile
 
 All the device-config command SSH options are also available for this command.
+
+Using URL as a file source is accepted as well. For example to read file from HTTP and send it to a remot device:
+
+    device-send http://example.com/file /etc/remotefile
 
 ===
 
