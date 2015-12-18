@@ -54,7 +54,7 @@ class GpsDataStreamSyncRoutes extends RouteBuilder {
                     if(serverCoordinates.enrich != null) {
                         serverCoordinates.enrich = clientCoordinates.enrich
                     }
-                    serverCoordinates
+                    [payload: serverCoordinates]
                 }.
                 marshal().json(Jackson).
                 to(cloudletEndpoint);

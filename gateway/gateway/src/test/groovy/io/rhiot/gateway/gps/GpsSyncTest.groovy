@@ -79,7 +79,7 @@ class GpsSyncTest extends GatewayTest {
         // Then
         dataStreamConsumerMock.assertIsSatisfied()
         def rawCoordinates = dataStreamConsumerMock.exchanges.first().in.getBody(String.class)
-        Truth.assertThat(Json.decodeValue(rawCoordinates, Map.class).clientId).isNotNull()
+        Truth.assertThat(Json.decodeValue(rawCoordinates, Map.class).payload.clientId).isNotNull()
     }
 
 }
