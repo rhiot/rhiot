@@ -202,12 +202,6 @@
 						<artifactId>aws-java-sdk</artifactId>
 						<groupId>com.amazonaws</groupId>
 					</exclusion>
-					<exclusion>
-						<!-- Optional dependency. Excluding as it writes to STDERR and pollutes 
-							the application output. -->
-						<groupId>org.hibernate</groupId>
-						<artifactId>hibernate-validator</artifactId>
-					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>

@@ -131,9 +131,19 @@ class ShellTest {
     }
 
     @Test
-    void shouldSendFileFromHttp() {
+    void shouldSendHttpFile() {
         // When
         def result = configCommand("device-send", "https://raw.githubusercontent.com/rhiot/rhiot/master/readme.md /foo/${file}")
+
+        // Then
+        assertThat(Paths.get(device.root().absolutePath, 'foo', file).toFile().exists()).isTrue()
+        assertThat(result.first()).startsWith('Sent')
+    }
+
+    @Test
+    void shouldSendMavenFile() {
+        // When
+        def result = configCommand("device-send", "mvn:com.google.guava/guava/18.0 /foo/${file}")
 
         // Then
         assertThat(Paths.get(device.root().absolutePath, 'foo', file).toFile().exists()).isTrue()

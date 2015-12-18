@@ -17,13 +17,24 @@
 package io.rhiot.tooling.shell.commands
 
 import io.rhiot.tooling.shell.SshCommandSupport
+import io.rhiot.utils.Mavens
+import io.rhiot.utils.maven.MavenArtifactResolver
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.util.Assert
 
+import static io.rhiot.utils.Mavens.MavenCoordinates.parseMavenCoordinates
 import static org.springframework.util.Assert.notNull
 
 @Component
 class DeviceSendCommand extends SshCommandSupport {
+
+    MavenArtifactResolver mavenArtifactResolver
+
+    @Autowired
+    DeviceSendCommand(MavenArtifactResolver mavenArtifactResolver) {
+        this.mavenArtifactResolver = mavenArtifactResolver
+    }
 
     @Override
     protected void doExecute(List<String> output, String... command) {
@@ -42,7 +53,11 @@ class DeviceSendCommand extends SshCommandSupport {
     }
 
     private sourceStream(String source){
-        if(source =~ /.+:.+/) {
+        if(source.startsWith('mvn:')) {
+            def coordinates = parseMavenCoordinates(source.substring(4), '/')
+            def x = mavenArtifactResolver.artifactStream(coordinates.groupId, coordinates.artifactId, coordinates.version).get()
+            x
+        } else if(source =~ /.+:.+/) {
             new URL(source).openStream()
         } else {
             new FileInputStream(source)

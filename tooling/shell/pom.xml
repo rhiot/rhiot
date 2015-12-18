@@ -27,6 +27,10 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-utils-maven</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-utils-ssh</artifactId>
         </dependency>
         <dependency>
