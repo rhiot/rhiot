@@ -57,16 +57,18 @@ public final class Mavens {
      * 
      * @return {@link java.io.File} pointing to the local Maven repository.
      */
-    public static File localMavenRepository() {
+    static File localMavenRepository() {
         return Paths.get(USER_HOME, ".m2", "repository").toFile();
     }
 
-    public static String artifactVersionFromDependenciesProperties(String groupId, String artifactId) {
+    static String artifactVersionFromDependenciesProperties(String groupId, String artifactId) {
         return VERSIONS.getProperty(format("%s/%s/version", groupId, artifactId));
     }
 
     @Immutable
-    public static class MavenCoordinates {
+    static class MavenCoordinates {
+
+        public static final def DEFAULT_COORDINATES_SEPARATOR = ':'
 
         String groupId
 
@@ -75,7 +77,11 @@ public final class Mavens {
         String version
 
         static MavenCoordinates parseMavenCoordinates(String coordinates) {
-            def parsedCoordinates = coordinates.split(':')
+            parseMavenCoordinates(coordinates, DEFAULT_COORDINATES_SEPARATOR)
+        }
+
+        static MavenCoordinates parseMavenCoordinates(String coordinates, String separator) {
+            def parsedCoordinates = coordinates.split(separator)
             new MavenCoordinates(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
         }
 
