@@ -22,6 +22,9 @@ import org.apache.sshd.server.command.ScpCommandFactory
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.apache.sshd.server.sftp.SftpSubsystem
 
+import java.nio.file.Path
+import java.nio.file.Paths
+
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static java.io.File.createTempFile
 
@@ -61,6 +64,13 @@ class SshServer {
 
     SshClient client(String username, String password) {
         new SshClient('localhost', port, username, password)
+    }
+
+    Properties config(String path) {
+        def properties = new Properties()
+        def absolutePath = new File(root, path).absolutePath
+        properties.load(new FileInputStream(Paths.get(absolutePath).toFile()))
+        properties
     }
 
     // Accessors

@@ -18,6 +18,7 @@ package io.rhiot.tooling.shell
 
 import io.rhiot.utils.ssh.client.SshClient
 import io.rhiot.utils.ssh.server.SshServer
+import org.apache.commons.io.IOUtils
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,14 +45,6 @@ class ShellTest {
     static def shellClient = new SshClient('localhost', shellPort, 'rhiot', 'rhiot')
 
     def file = uuid()
-
-    def configCommand(String command, String remaining) {
-        shellClient.command("${command} --host localhost --port ${device.port()} ${remaining}")
-    }
-
-    def configCommand(String command) {
-        configCommand(command, '')
-    }
 
     @BeforeClass
     static void beforeClass() {
@@ -89,13 +82,25 @@ class ShellTest {
     @Test
     void shouldAddConfigurationFile() {
         // When
-        def result = shellClient.command("device-config --host localhost --port ${device.port()} /${file} foo bar")
-        def properties = new Properties()
-        properties.load(new FileInputStream(new File(device.root(), file)))
+        def result = configCommand("device-config","/${file} foo bar")
 
         // Then
-        assertThat(properties.getProperty('foo')).isEqualTo('bar')
+        def property = device.config(file).getProperty('foo')
+        assertThat(property).isEqualTo('bar')
         assertThat(result.first()).startsWith('Updated')
+    }
+
+    @Test
+    void shouldOverrideProperty() {
+        // Given
+        configCommand('device-config', "/${file} foo bar")
+
+        // When
+        configCommand('device-config', "/${file} foo baz")
+
+        // Then
+        def property = device.config(file).getProperty('foo')
+        assertThat(property).isEqualTo('baz')
     }
 
     @Test
@@ -176,6 +181,20 @@ class ShellTest {
         assertThat(properties.getProperty('foo')).isEqualTo('bar')
     }
 
+    // kura-install-felix-fileinstall
+
+    @Test
+    void shouldInstallFelixFileinstallIntoKura() {
+        // When
+        configCommand('kura-install-felix-fileinstall')
+
+        // Then
+        assertThat(Paths.get(device.root().absolutePath, 'opt', 'eclipse', 'kura', 'plugins', 'org.apache.felix.fileinstall-3.5.0.jar').toFile().exists()).isTrue()
+        def properties = new Properties()
+        properties.load(new FileInputStream(Paths.get(device.root().absolutePath, 'opt', 'eclipse', 'kura', 'kura', 'config.ini').toFile()))
+        assertThat(properties.getProperty('osgi.bundles')).contains('org.apache.felix.fileinstall-3.5.0.jar')
+    }
+
     // raspbian-config-boot tests
 
     @Test
@@ -187,6 +206,16 @@ class ShellTest {
         def properties = new Properties()
         properties.load(new FileInputStream(Paths.get(device.root().absolutePath, 'boot', 'config.txt').toFile()))
         assertThat(properties.getProperty('foo')).isEqualTo('bar')
+    }
+
+    // Helpers
+
+    def configCommand(String command, String remaining) {
+        shellClient.command("${command} --host localhost --port ${device.port()} ${remaining}")
+    }
+
+    def configCommand(String command) {
+        configCommand(command, '')
     }
 
 }

@@ -39,18 +39,26 @@ class DeviceConfigCommand extends SshCommandSupport {
         if(originalFile != null) {
             properties.load(new ByteArrayInputStream(originalFile))
         }
-        if(append && properties.getProperty(property)) {
+
+        boolean shouldAppend = append && properties.getProperty(property)
+        if(shouldAppend) {
             properties.put(property, properties.get(property) + value)
         } else {
             properties.put(property, value)
         }
         def result = new ByteArrayOutputStream()
-        properties.store(result, 'Updated by Rhiot')
+        def pw = new PrintWriter(result)
+        properties.each { pw.println("${it.key} = ${it.value}") }
+        pw.flush()
         result.close()
 
         sshClient.scp(new ByteArrayInputStream(result.toByteArray()), new File(file))
 
-        output << "Updated ${file} - set property '${property}' to value '${value}'."
+        if(shouldAppend) {
+            output << "Appended '${value}' to property '${property}' in file ${file}."
+        } else {
+            output << "Updated ${file} - set property '${property}' to value '${value}'."
+        }
     }
 
 }

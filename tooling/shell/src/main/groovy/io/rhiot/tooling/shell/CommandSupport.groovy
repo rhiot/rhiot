@@ -50,7 +50,7 @@ abstract class CommandSupport implements WithLogger {
     abstract protected void doExecute(List<String> output, String... command)
 
     static String optionalBoolean(Boolean value) {
-        value != null ? 'true' : 'false'
+        value != null && value ? 'true' : 'false'
     }
 
 }
