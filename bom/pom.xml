@@ -339,11 +339,6 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-cloudlet-webcam</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-gateway</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>

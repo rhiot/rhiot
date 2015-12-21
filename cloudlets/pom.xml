@@ -24,7 +24,6 @@
         <module>binary</module>
         <module>device</module>
         <module>geofencing</module>
-        <module>webcam</module>
     </modules>
 
 </project>
