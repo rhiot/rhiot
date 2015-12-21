@@ -5,11 +5,11 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-datastream</artifactId>
+        <artifactId>rhiot-datastream-consumer</artifactId>
         <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: DataStream :: Document</name>
+    <name>Rhiot :: DataStream :: Consumer :: Document</name>
     <artifactId>rhiot-datastream-document</artifactId>
 
     <licenses>
