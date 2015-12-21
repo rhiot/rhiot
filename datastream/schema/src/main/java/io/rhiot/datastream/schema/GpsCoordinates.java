@@ -56,6 +56,10 @@ public class GpsCoordinates {
         return coordinates;
     }
 
+    public static GpsCoordinates gpsCoordinates(double lat, double lng) {
+        return gpsCoordinates(new Date(), lat, lng);
+    }
+
     public String getId() {
         return id;
     }

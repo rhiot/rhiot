@@ -22,6 +22,7 @@
 	<modules>
 		<module>camel-bluetooth</module>
 		<module>camel-gpsd</module>
+		<module>camel-gpsmock</module>
 		<module>camel-kura</module>
 		<module>camel-lwm2m</module>
 		<module>camel-pi4j</module>

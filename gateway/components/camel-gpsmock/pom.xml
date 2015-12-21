@@ -10,8 +10,8 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <name>Rhiot :: Gateway :: Camel components :: GPSD</name>
-    <artifactId>camel-gpsd</artifactId>
+    <name>Rhiot :: Gateway :: Camel components :: Mock GPS</name>
+    <artifactId>camel-gpsmock</artifactId>
     <packaging>bundle</packaging>
     <description>Camel GPSD Component</description>
 
@@ -23,19 +23,11 @@
     </licenses>
 
     <properties>
-        <camel.osgi.export.pkg>io.rhiot.component.gpsd</camel.osgi.export.pkg>
-        <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=gpsd</camel.osgi.export.service>
+        <camel.osgi.export.pkg>io.rhiot.component.gpsmock</camel.osgi.export.pkg>
+        <camel.osgi.export.service>org.apache.camel.spi.ComponentResolver;component=gps-mock</camel.osgi.export.service>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.taimos</groupId>
-            <artifactId>gpsd4java</artifactId>
-        </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-datastream-schema</artifactId>
@@ -56,8 +48,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-scanner</artifactId>
+            <groupId>com.google.truth</groupId>
+            <artifactId>truth</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
