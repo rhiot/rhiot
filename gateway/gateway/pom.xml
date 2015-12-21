@@ -38,6 +38,10 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>camel-gpsmock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>camel-pi4j</artifactId>
         </dependency>
         <dependency>
