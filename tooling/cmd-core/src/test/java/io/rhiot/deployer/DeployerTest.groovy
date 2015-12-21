@@ -66,7 +66,7 @@ class DeployerTest extends Assert {
 
     @Test
     void shouldDownloadGivenGatewayArtifact() {
-        def artifact =  deployer.gatewayArtifact(Optional.of('io.rhiot:rhiot-gateway-app:0.1.3-SNAPSHOT')).get()
+        def artifact =  deployer.gatewayArtifact(Optional.of('io.rhiot:rhiot-gateway-app:0.1.4-SNAPSHOT')).get()
         assertThat(artifact.available()).isGreaterThan(0)
     }
 
