@@ -272,11 +272,6 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-datastream-engine-camel</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-datastream-schema</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>

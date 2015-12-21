@@ -9,7 +9,7 @@
         <artifactId>rhiot-bom</artifactId>
         <relativePath>../bom</relativePath>
     </parent>
-    <name>RHIOT :: DataStream</name>
+    <name>Rhiot :: DataStream</name>
     <artifactId>rhiot-datastream</artifactId>
     <packaging>pom</packaging>
 
@@ -24,7 +24,6 @@
         <module>schema</module>
         <module>bootstrap</module>
         <module>engine</module>
-        <module>engine-camel</module>
         <module>source</module>
         <module>document</module>
         <module>document-mongodb</module>
