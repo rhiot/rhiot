@@ -24,9 +24,9 @@ MAINTAINER Greg AUTRIC <gautric@redhat.com>
 ## sudo docker run -d rpi-kura
 
 ## Variable ENV
-ENV JAVA_VERSION java7
-ENV KURA_VERSION 1.3.0
-ENV RPI_VERSION  raspberry-pi-bplus
+ENV JAVA_VERSION=java7
+ENV KURA_VERSION=1.3.0
+ENV RPI_VERSION=raspberry-pi-bplus
 
 ## Debian/Raspbian package installation
 RUN apt-get update && \
