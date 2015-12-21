@@ -17,7 +17,7 @@
 package io.rhiot.gateway.gps
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.component.gpsd.ClientGpsCoordinates;
+import io.rhiot.datastream.schema.GpsCoordinates
 import io.rhiot.gateway.test.GatewayTest
 import org.junit.Test
 
@@ -25,6 +25,7 @@ import java.util.concurrent.Callable
 
 import static com.google.common.truth.Truth.assertThat
 import static com.jayway.awaitility.Awaitility.await
+import static io.rhiot.datastream.schema.GpsCoordinates.gpsCoordinates
 import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
 import static io.rhiot.utils.Properties.setStringProperty;
 import static com.google.common.io.Files.createTempDir;
@@ -54,7 +55,7 @@ public class GpsEnrichTest extends GatewayTest {
 
     @Test
     public void shouldSaveEnrichedGpsData() {
-        def coordinates = new ClientGpsCoordinates(new Date(), 10.0, 20.0)
+        def coordinates = gpsCoordinates(new Date(), 10.0, 20.0)
         camelContext().createProducerTemplate().sendBody('seda:gps', coordinates)
         camelContext().createProducerTemplate().sendBody('seda:enrich', new EnrichingData(extraData: 'foo'))
 
@@ -62,8 +63,8 @@ public class GpsEnrichTest extends GatewayTest {
         await().until((Callable<Boolean>) {gpsCoordinatesStore.listFiles().length > 0})
         def savedCoordinates = new ObjectMapper().readValue(gpsCoordinatesStore.listFiles().find{ it.file }, Map.class)
         assertThat(savedCoordinates.enriched.extraData).isEqualTo('foo')
-        assertThat(savedCoordinates.lat).isEqualTo(coordinates.lat())
-        assertThat(savedCoordinates.lng).isEqualTo(coordinates.lng())
+        assertThat(savedCoordinates.lat).isEqualTo(coordinates.lat)
+        assertThat(savedCoordinates.lng).isEqualTo(coordinates.lng)
     }
 
     // Class fixtures

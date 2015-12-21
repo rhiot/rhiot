@@ -26,6 +26,10 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-datastream-schema</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>camel-gps-bu353</artifactId>
         </dependency>
         <dependency>

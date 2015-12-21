@@ -18,27 +18,26 @@
 package io.rhiot.component.gpsd;
 
 import de.taimos.gpsd4java.types.TPVObject;
+import io.rhiot.datastream.schema.GpsCoordinates;
 import org.apache.camel.*;
 import org.apache.camel.spi.ExceptionHandler;
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+
+import static io.rhiot.component.gpsd.GpsdConstants.TPV_HEADER;
+import static io.rhiot.datastream.schema.GpsCoordinates.gpsCoordinates;
+import static org.apache.camel.ExchangePattern.OutOnly;
+import static org.apache.camel.builder.ExchangeBuilder.anExchange;
 
 /**
  * Commonly used Gpsd utilities.
  */
 public class GpsdHelper {
 
-    /**
-     * Creates an OutOnly exchange with the ClientGpsCoordinates as message body and TPVObject as header.
-     */
-    static Exchange createOutOnlyExchangeWithBodyAndHeaders(org.apache.camel.Endpoint endpoint, ClientGpsCoordinates messageBody, TPVObject tpvObject) {
-        Exchange exchange = endpoint.createExchange(ExchangePattern.OutOnly);
-        Message message = exchange.getIn();
-        message.setHeader(GpsdConstants.TPV_HEADER, tpvObject);
-        message.setBody(messageBody);
-        return exchange;
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(GpsdHelper.class);
 
     /**
      * Process the TPVObject, all params required.
@@ -48,12 +47,17 @@ public class GpsdHelper {
      * @param endpoint GpsdEndpoint receiving the exchange.
      */
     public static void consumeTPVObject(TPVObject tpv, Processor processor, GpsdEndpoint endpoint, ExceptionHandler exceptionHandler) {
+        // Simplify logging when https://github.com/taimos/GPSd4Java/pull/19 is merged into upstream.
+        LOG.debug("About to consume TPV object {},{} from {}", tpv.getLatitude(), tpv.getLongitude(), endpoint);
+
         Validate.notNull(tpv);
         Validate.notNull(processor);
         Validate.notNull(endpoint);
-        
-        Exchange exchange = createOutOnlyExchangeWithBodyAndHeaders(endpoint,
-                new ClientGpsCoordinates(new Date(new Double(tpv.getTimestamp()).longValue()), tpv.getLatitude(), tpv.getLongitude()), tpv);
+
+        GpsCoordinates coordinates = gpsCoordinates(new Date(new Double(tpv.getTimestamp()).longValue()), tpv.getLatitude(), tpv.getLongitude());
+        Exchange exchange = anExchange(endpoint.getCamelContext()).withPattern(OutOnly).
+                withHeader(TPV_HEADER, tpv).withBody(coordinates).build();
+
         try {
             processor.process(exchange);
         } catch (Exception e) {

@@ -18,6 +18,7 @@ package io.rhiot.gateway.gps
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.bootstrap.classpath.PropertyCondition
+import io.rhiot.datastream.schema.GpsCoordinates
 import io.rhiot.steroids.camel.Route
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder;
@@ -44,13 +45,13 @@ class GpsDataStreamSyncRoutes extends RouteBuilder {
         from("file://${storeDirectory}?sortBy=file:modified").
                 onException(Exception.class).maximumRedeliveries(100000).useExponentialBackOff().end().
                 transform { Exchange exc ->
-                    def clientCoordinates = new ObjectMapper().readValue(exc.in.getBody(String.class), Map.class)
-                    def serverCoordinates = [:]
+                    def clientCoordinates = new ObjectMapper().readValue(exc.in.getBody(String.class), GpsCoordinates.class)
+                    def serverCoordinates = new GpsCoordinates()
                     serverCoordinates.client = getLocalHost().getHostName()
                     serverCoordinates.clientId = uuid()
                     serverCoordinates.timestamp = clientCoordinates.timestamp
-                    serverCoordinates.latitude = clientCoordinates.lat
-                    serverCoordinates.longitude = clientCoordinates.lng
+                    serverCoordinates.lat = clientCoordinates.lat
+                    serverCoordinates.lng = clientCoordinates.lng
                     if(serverCoordinates.enrich != null) {
                         serverCoordinates.enrich = clientCoordinates.enrich
                     }

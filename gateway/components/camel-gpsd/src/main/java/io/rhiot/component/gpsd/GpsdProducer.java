@@ -24,6 +24,8 @@ import org.apache.camel.impl.DefaultProducer;
 
 import java.util.Date;
 
+import static io.rhiot.datastream.schema.GpsCoordinates.gpsCoordinates;
+
 public class GpsdProducer extends DefaultProducer {
 
     public GpsdProducer(GpsdEndpoint endpoint) {
@@ -38,7 +40,7 @@ public class GpsdProducer extends DefaultProducer {
         
         if (pollObject != null && pollObject.getFixes().size() > 0 && pollObject.getFixes().get(0) instanceof TPVObject) {
             TPVObject tpv = pollObject.getFixes().get(0);
-            exchange.getIn().setBody(new ClientGpsCoordinates(new Date(new Double(tpv.getTimestamp()).longValue()), tpv.getLatitude(), tpv.getLongitude()));
+            exchange.getIn().setBody(gpsCoordinates(new Date(new Double(tpv.getTimestamp()).longValue()), tpv.getLatitude(), tpv.getLongitude()));
             exchange.getIn().setHeader(GpsdConstants.TPV_HEADER, tpv);
         }
     }

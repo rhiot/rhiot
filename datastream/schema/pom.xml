@@ -5,13 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-datastream</artifactId>
         <version>0.1.4-SNAPSHOT</version>
-        <artifactId>rhiot-bom</artifactId>
-        <relativePath>../bom</relativePath>
+        <relativePath>..</relativePath>
     </parent>
-    <name>RHIOT :: DataStream</name>
-    <artifactId>rhiot-datastream</artifactId>
-    <packaging>pom</packaging>
+    <name>Rhiot :: DataStream :: Schema</name>
+    <artifactId>rhiot-datastream-schema</artifactId>
 
     <licenses>
         <license>
@@ -19,17 +18,5 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
-
-    <modules>
-        <module>schema</module>
-        <module>bootstrap</module>
-        <module>engine</module>
-        <module>engine-camel</module>
-        <module>source</module>
-        <module>document</module>
-        <module>document-mongodb</module>
-        <module>spark</module>
-        <module>node</module>
-    </modules>
 
 </project>
