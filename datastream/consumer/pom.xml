@@ -9,7 +9,7 @@
         <artifactId>rhiot-datastream</artifactId>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: DataStream :: Consumers</name>
+    <name>Rhiot :: DataStream :: Consumer</name>
     <artifactId>rhiot-datastream-consumer</artifactId>
     <packaging>pom</packaging>
 
