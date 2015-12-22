@@ -16,7 +16,6 @@
  */
 package com.github.camellabs.iot.cloudlet.geofencing.service;
 
-import com.github.camellabs.iot.cloudlet.geofencing.GeofencingCloudlet;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.GpsCoordinates;
 import com.github.camellabs.iot.cloudlet.geofencing.domain.RouteComment;
 import com.github.camellabs.iot.cloudlet.geofencing.googlemaps.StaticMaps;
@@ -61,7 +60,7 @@ import static java.util.Collections.singletonList;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {GeofencingCloudlet.class, DefaultRouteServiceTest.class})
+@SpringApplicationConfiguration(classes = {DefaultRouteServiceTest.class})
 @Ignore
 public class DefaultRouteServiceTest extends Assert {
 

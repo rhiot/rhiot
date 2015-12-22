@@ -60,7 +60,6 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.util.Assert.isTrue;
 
-@Component("routeService")
 public class DefaultRouteService implements RouteService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRouteService.class);

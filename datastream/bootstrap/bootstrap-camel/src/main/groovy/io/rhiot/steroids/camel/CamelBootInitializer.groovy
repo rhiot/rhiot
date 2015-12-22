@@ -17,12 +17,15 @@
 package io.rhiot.steroids.camel
 
 import io.rhiot.bootstrap.AbstractBootInitializer
+import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.bootstrap.BootstrapAware
 import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.component.vertx.VertxComponent
+import org.apache.camel.impl.CompositeRegistry
 import org.apache.camel.impl.DefaultCamelContext
+import org.apache.camel.spring.spi.ApplicationContextRegistry
 
 import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 
@@ -34,7 +37,7 @@ class CamelBootInitializer extends AbstractBootInitializer {
 
     @Override
     public void start() {
-        camelContext = new DefaultCamelContext(new BootstrapRegistry(bootstrap.beanRegistry()))
+        camelContext = new DefaultCamelContext(new CompositeRegistry([new ApplicationContextRegistry(Bootstrap.applicationContext), new BootstrapRegistry(bootstrap.beanRegistry())]))
         camelContext.streamCaching = true
         vertx = Vertx.vertx()
         def vertxComponent = new VertxComponent(vertx: vertx)

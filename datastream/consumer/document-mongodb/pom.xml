@@ -28,6 +28,10 @@
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-mongodb</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+        </dependency>
 
         <!-- Testing -->
         <dependency>

@@ -18,6 +18,9 @@ package io.rhiot.bootstrap
 
 import io.rhiot.bootstrap.classpath.ClasspathMapBeanRegistry
 import io.rhiot.utils.WithLogger
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.ConfigurableApplicationContext
 
 import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 import static java.lang.Runtime.runtime;
@@ -25,9 +28,12 @@ import static java.lang.Runtime.runtime;
 /**
  * Starts up Steroids framework, scans the classpath for the initializers and runs the latter.
  */
+@SpringBootApplication
 class Bootstrap implements WithLogger {
 
     public static Bootstrap bootstrap
+
+    public static ConfigurableApplicationContext applicationContext
 
     // Members
 
@@ -48,7 +54,8 @@ class Bootstrap implements WithLogger {
 
     // Lifecycle
 
-    Bootstrap start() {
+    Bootstrap start(String... args) {
+        applicationContext = new SpringApplication(Bootstrap.class).run(args)
         log().debug('Starting Steroids Bootstrap: {}', getClass().name)
         initializers.each {
             if(it instanceof BootstrapAware) {
@@ -62,6 +69,7 @@ class Bootstrap implements WithLogger {
     Bootstrap stop() {
         log().debug('Stopping Steroids Bootstrap: {}', getClass().name)
         initializers.reverse().each { it.stop() }
+        applicationContext.close()
         this
     }
 
@@ -85,7 +93,7 @@ class Bootstrap implements WithLogger {
     // Main entry point
 
     public static void main(String[] args) {
-        bootstrap = new Bootstrap().start()
+        bootstrap = new Bootstrap().start(args)
         runtime.addShutdownHook(new Thread(){
             @Override
             void run() {

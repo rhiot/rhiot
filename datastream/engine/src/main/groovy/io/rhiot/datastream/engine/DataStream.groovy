@@ -17,14 +17,10 @@
 package io.rhiot.datastream.engine
 
 import io.rhiot.bootstrap.Bootstrap
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.SpringBootApplication
 
-@SpringBootApplication
 class DataStream extends Bootstrap {
 
     public static void main(String[] args) {
-        new SpringApplication(DataStream.class).run(args)
         Bootstrap.main(args)
     }
 

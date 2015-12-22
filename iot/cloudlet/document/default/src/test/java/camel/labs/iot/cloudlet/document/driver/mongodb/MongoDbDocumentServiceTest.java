@@ -16,7 +16,6 @@
  */
 package camel.labs.iot.cloudlet.document.driver.mongodb;
 
-import com.github.camellabs.iot.cloudlet.document.driver.DriverDocumentCloudlet;
 import com.github.camellabs.iot.cloudlet.document.sdk.DocumentService;
 import com.github.camellabs.iot.cloudlet.document.sdk.QueryBuilder;
 import com.github.camellabs.iot.cloudlet.document.sdk.RestDocumentService;
@@ -50,7 +49,7 @@ import static org.joda.time.DateTime.now;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {DriverDocumentCloudlet.class, MongoDocumentServiceTestConfiguration.class})
+@SpringApplicationConfiguration(classes = {MongoDocumentServiceTestConfiguration.class})
 @IntegrationTest("camel.labs.iot.cloudlet.rest.endpoint.options=connectTimeout=20000:requestTimeout=1000")
 @Ignore
 public class MongoDbDocumentServiceTest extends Assert {
