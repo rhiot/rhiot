@@ -24,7 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 class DataStream extends Bootstrap {
 
     public static void main(String[] args) {
-        new SpringApplication().run(args)
+        new SpringApplication(DataStream.class).run(args)
         Bootstrap.main(args)
     }
 
