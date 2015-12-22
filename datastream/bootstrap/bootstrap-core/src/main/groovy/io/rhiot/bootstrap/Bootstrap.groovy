@@ -27,6 +27,8 @@ import static java.lang.Runtime.runtime;
  */
 class Bootstrap implements WithLogger {
 
+    public static Bootstrap bootstrap
+
     // Members
 
     private final BeanRegistry beanRegistry
@@ -83,7 +85,7 @@ class Bootstrap implements WithLogger {
     // Main entry point
 
     public static void main(String[] args) {
-        def bootstrap = new Bootstrap().start()
+        bootstrap = new Bootstrap().start()
         runtime.addShutdownHook(new Thread(){
             @Override
             void run() {

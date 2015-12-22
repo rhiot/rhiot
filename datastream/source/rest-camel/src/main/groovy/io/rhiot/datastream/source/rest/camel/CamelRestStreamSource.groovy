@@ -22,6 +22,7 @@ import io.vertx.core.json.Json
 
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
 import static io.rhiot.utils.Properties.intProperty
+import static java.lang.String.format
 import static org.apache.camel.Exchange.CONTENT_TYPE
 import static org.apache.camel.Exchange.EXCEPTION_CAUGHT
 import static org.apache.camel.Exchange.HTTP_URI
@@ -33,7 +34,7 @@ class CamelRestStreamSource extends AbstractCamelStreamSource {
 
     // Constants
 
-    static final def URI_TOO_SHORT_MESSAGE = 'URI too short. The proper request format is /service/operation[/argument1/argument2/...]'
+    static final def URI_TOO_SHORT_MESSAGE = 'URI %s is too short. The proper request format is /service/operation[/argument1/argument2/...]'
 
     // Routes
 
@@ -51,7 +52,7 @@ class CamelRestStreamSource extends AbstractCamelStreamSource {
                     def requestUri = it.in.getHeader(HTTP_URI, String.class)
                     def trimmedUri = removeEnd(requestUri, '/')
                     if(countMatches(trimmedUri, '/') < 2) {
-                        throw new IllegalArgumentException(URI_TOO_SHORT_MESSAGE)
+                        throw new IllegalArgumentException(format(URI_TOO_SHORT_MESSAGE, trimmedUri))
                     }
                     def busChannel = trimmedUri.substring(1).replaceAll(/\//, '.')
                     it.setProperty('target', amqp(busChannel))
