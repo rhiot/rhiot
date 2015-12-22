@@ -50,25 +50,25 @@ class CamelRestServiceStreamSourceTest extends DataStreamTest {
     @Test
     void shouldDetectTooShortUri_none() {
         def response = Json.mapper.readValue(new URL('http://localhost:8080'), Map.class)
-        assertThat(response.error).isEqualTo(CamelRestStreamSource.URI_TOO_SHORT_MESSAGE)
+        assertThat(response.error.toString()).contains('is too short. The proper request format is')
     }
 
     @Test
     void shouldDetectTooShortUri_rootOnly() {
         def response = Json.mapper.readValue(new URL('http://localhost:8080/'), Map.class)
-        assertThat(response.error).isEqualTo(CamelRestStreamSource.URI_TOO_SHORT_MESSAGE)
+        assertThat(response.error.toString()).contains('is too short. The proper request format is')
     }
 
     @Test
     void shouldDetectTooShortUri_serviceOnly() {
         def response = Json.mapper.readValue(new URL('http://localhost:8080/service'), Map.class)
-        assertThat(response.error).isEqualTo(CamelRestStreamSource.URI_TOO_SHORT_MESSAGE)
+        assertThat(response.error.toString()).contains('is too short. The proper request format is')
     }
 
     @Test
     void shouldDetectTooShortUri_serviceWithEmptyOperation() {
         def response = Json.mapper.readValue(new URL('http://localhost:8080/service/'), Map.class)
-        assertThat(response.error).isEqualTo(CamelRestStreamSource.URI_TOO_SHORT_MESSAGE)
+        assertThat(response.error.toString()).contains('is too short. The proper request format is')
     }
 
     // Beans fixtures
