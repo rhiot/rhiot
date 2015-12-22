@@ -18,17 +18,10 @@ package io.rhiot.datastream.node
 
 import com.mongodb.BasicDBObject
 import com.mongodb.Mongo
-import io.rhiot.datastream.engine.DataStream
-import io.rhiot.datastream.engine.JsonWithHeaders
-import io.rhiot.datastream.engine.TypeConverter
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.mongodb.EmbeddedMongo
 import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.steroids.camel.CamelBootInitializer
-import io.vertx.core.AsyncResult
-import io.vertx.core.Handler
-import io.vertx.core.Vertx
-import io.vertx.core.eventbus.Message
 import io.vertx.core.json.Json
 import org.apache.camel.component.spark.RddCallback
 import org.apache.spark.api.java.AbstractJavaRDDLike
@@ -36,10 +29,7 @@ import org.apache.spark.api.java.JavaSparkContext
 import org.junit.AfterClass
 import org.junit.Test
 
-import java.util.concurrent.Callable
-
 import static com.google.common.truth.Truth.assertThat
-import static com.jayway.awaitility.Awaitility.await
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
 import static org.apache.camel.component.spark.SparkMongos.mongoRdd
 
@@ -77,15 +67,6 @@ class DataStreamNodeTest extends DataStreamTest {
         def encodedResult = CamelBootInitializer.camelContext().createProducerTemplate().requestBody(amqp('spark.execute.rdd.callback'), Json.encode([payload: 10]), String.class)
         def result = Json.decodeValue(encodedResult, Map.class).payload
         assertThat(result).isEqualTo(10)
-    }
-
-    @Bean
-    static class MockTypeConverter implements TypeConverter {
-
-        @Override
-        def <T> T convert(Object object, Class<T> targetType) {
-            object
-        }
     }
 
 }
