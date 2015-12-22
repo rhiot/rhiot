@@ -10,7 +10,7 @@
         <relativePath>..</relativePath>
     </parent>
     <name>Rhiot :: DataStream :: Node</name>
-    <artifactId>rhiot-datasteam-node</artifactId>
+    <artifactId>rhiot-datastream-node</artifactId>
 
     <licenses>
         <license>

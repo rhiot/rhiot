@@ -10,7 +10,7 @@
         <relativePath>..</relativePath>
     </parent>
     <name>Rhiot :: DataStream :: Node app</name>
-    <artifactId>rhiot-datasteam-node-app</artifactId>
+    <artifactId>rhiot-datastream-node-app</artifactId>
 
     <licenses>
         <license>
@@ -27,7 +27,7 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-datasteam-node</artifactId>
+            <artifactId>rhiot-datastream-node</artifactId>
         </dependency>
     </dependencies>
 

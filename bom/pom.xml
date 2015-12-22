@@ -272,7 +272,7 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-datasteam-node</artifactId>
+				<artifactId>rhiot-datastream-node</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
 			<dependency>
