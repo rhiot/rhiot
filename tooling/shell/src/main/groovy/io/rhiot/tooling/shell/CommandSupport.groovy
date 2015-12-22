@@ -18,6 +18,7 @@ package io.rhiot.tooling.shell
 
 import io.rhiot.utils.WithLogger
 
+import static java.lang.Boolean.parseBoolean
 import static org.apache.commons.lang3.StringUtils.isBlank
 
 abstract class CommandSupport implements WithLogger {
@@ -35,6 +36,15 @@ abstract class CommandSupport implements WithLogger {
 
     protected String parameter(String parameter, Closure<String> closure) {
         isBlank(parameter) ? closure() : parameter
+    }
+
+    protected int parameter(String parameterName, String parameter, int defaultValue) {
+        try {
+            isBlank(parameter) ? defaultValue : parameter.toInteger()
+        } catch(NumberFormatException e) {
+            throw new IllegalArgumentException(
+                    "Cannot parse option ${parameterName} with value ${parameter}. Expected integer number.", e)
+        }
     }
 
     String execute(String... command) {

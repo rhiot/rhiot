@@ -168,6 +168,16 @@ class ShellTest {
         assertThat(properties.getProperty('org.osgi.framework.bootdelegation')).isEqualTo('sun.*,com.sun.*')
     }
 
+    @Test
+    void shouldNotFindDevicesForBootDelegationConfiguration() {
+        // When
+        def output = shellClient.command("kura-config-bootdelegation")
+
+        // Then
+        assertThat(output.size()).isEqualTo(1)
+        assertThat(output.first()).contains('No supported device detected')
+    }
+
     // kura-config-ini tests
 
     @Test

@@ -20,8 +20,6 @@ import io.rhiot.scanner.DeviceDetector
 import io.rhiot.utils.ssh.client.SshClient
 import org.springframework.beans.factory.annotation.Autowired
 
-import static org.apache.commons.lang3.StringUtils.isBlank
-
 abstract class SshCommandSupport extends CommandSupport  {
 
     @Autowired
@@ -37,13 +35,23 @@ abstract class SshCommandSupport extends CommandSupport  {
 
     protected SshClient sshClient
 
+    // Overridden
+
     @Override
     protected void doExecute(List<String> output, String... command) {
+        log().debug('About to execute command: {}', command.toList())
+
         deviceAddress = parameter(command[0]) {
-            deviceDetector.detectDevices().first().address().hostAddress
+            def devices = deviceDetector.detectDevices()
+            if(devices.isEmpty()) {
+                throw new IllegalStateException('No supported device detected.')
+            } else if(devices.size() > 1) {
+                throw new IllegalStateException("Expected single device. Found ${devices.size()}.")
+            } else {
+                devices.first().address().hostAddress
+            }
         }
-        String portString = command[1]
-        port = isBlank(portString) ? 22 : portString.toInteger()
+        port =  parameter('SSH port', command[1], 22)
         username = parameter(command[2], 'root')
         password = parameter(command[3], 'raspberry')
         sshClient = new SshClient(deviceAddress, port, username, password)
