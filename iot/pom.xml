@@ -21,7 +21,6 @@
     </licenses>
 
     <modules>
-        <module>components</module>
         <module>cloudlet</module>
     </modules>
 

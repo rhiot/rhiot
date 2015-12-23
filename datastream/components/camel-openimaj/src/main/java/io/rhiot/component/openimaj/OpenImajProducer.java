@@ -25,8 +25,6 @@ import org.openimaj.image.processing.face.detection.DetectedFace;
 import org.openimaj.image.processing.face.detection.FaceDetector;
 import org.openimaj.image.processing.face.detection.HaarCascadeDetector;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;

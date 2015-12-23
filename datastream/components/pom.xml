@@ -25,6 +25,7 @@
 		<module>camel-gps-bu353</module>
 		<module>camel-device-io</module>
 		<module>camel-framebuffer</module>
+		<module>camel-openimaj</module>
 		<module>camel-pubnub</module>
 		<module>camel-pubnub-feature</module>
 	</modules>

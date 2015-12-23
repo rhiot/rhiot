@@ -6,10 +6,11 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-iot-components</artifactId>
+        <artifactId>rhiot-datastream-components</artifactId>
         <version>0.1.4-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
-    <name>RHIOT :: IoT :: Components :: OpenIMAJ</name>
+    <name>Rhiot :: DataStream :: Camel components :: OpenIMAJ</name>
     <artifactId>camel-openimaj</artifactId>
     <packaging>bundle</packaging>
     <description>Camel OpenIMAJ Component</description>
