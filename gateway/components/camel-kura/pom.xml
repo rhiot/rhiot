@@ -20,7 +20,6 @@
 	<name>Rhiot :: Gateway :: Camel components :: Kura</name>
 	<packaging>bundle</packaging>
 	<artifactId>camel-kura</artifactId>
-	<description>Camel Kura Components</description>
 
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>
@@ -31,9 +30,10 @@
 
 		<camel.osgi.export.pkg>
 			io.rhiot.component.kura.*,
+			io.rhiot.component.kura.cloud.*,
+			io.rhiot.component.kura.datatransport.*,
 			io.rhiot.component.kura.router.*,
 			io.rhiot.component.kura.gpio.*,
-			io.rhiot.component.kura.cloud.*,
 			io.rhiot.component.kura.wifi.*
 		</camel.osgi.export.pkg>
 		<camel.osgi.export.service>
