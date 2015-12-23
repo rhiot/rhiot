@@ -15,13 +15,14 @@
 # limitations under the License.
 #
 
-FROM hypriot/rpi-java
+FROM debian
+
 MAINTAINER Greg AUTRIC <gautric@redhat.com>
 
 ## to build it
 ## sudo docker build -t rpi-kura .
 ## to run it
-## sudo docker run -d rpi-kura
+## sudo docker run -i -t rpi-kura -p 80:80
 
 ## Variable ENV
 ENV JAVA_VERSION=java7
@@ -37,7 +38,11 @@ RUN apt-get update && \
 RUN wget https://s3.amazonaws.com/kura_downloads/raspbian/release/${KURA_VERSION}/kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
 RUN dpkg -i kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
 
+## Hack for ubuntu
+RUN [ -f /lib/$(arch)-linux-gnu/libudev.so.0 ] || ln -sf /lib/$(arch)-linux-gnu/libudev.so.1 /lib/$(arch)-linux-gnu/libudev.so.0
+
 ## Web and telnet
-EXPOSE 80 5002
+EXPOSE 80
+EXPOSE 5002
 
 CMD /opt/eclipse/kura/bin/start_kura.sh
