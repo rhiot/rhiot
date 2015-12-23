@@ -39,7 +39,7 @@ RUN wget https://s3.amazonaws.com/kura_downloads/raspbian/release/${KURA_VERSION
 RUN dpkg -i kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
 
 ## Hack for ubuntu
-RUN [ -f /lib/$(arch)-linux-gnu/libudev.so.0 ] || ln -sf /lib/$(arch)-linux-gnu/libudev.so.1 /lib/$(arch)-linux-gnu/libudev.so.0
+RUN if [ -d /lib/$(arch)-linux-gnu ] && [ ! -f /lib/$(arch)-linux-gnu/libudev.so.0 ] ; then ln -sf /lib/$(arch)-linux-gnu/libudev.so.1 /lib/$(arch)-linux-gnu/libudev.so.0; fi
 
 ## Web and telnet
 EXPOSE 80
