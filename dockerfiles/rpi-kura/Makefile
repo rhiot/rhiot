@@ -17,7 +17,7 @@
 
 ARCH=$(arch)
 RPI_OS=hypriot/rpi-java
-RPI_DOCKER_IMAGE_NAME=makefilerpi-kura
+RPI_DOCKER_IMAGE_NAME=rpi-kura
 
 ifneq (`arch`,arm)
 	RPI_OS=debian
