@@ -19,4 +19,11 @@ jdk:
   - oraclejdk8
 
 env:
-- IS_TRAVIS=true
+  global:
+    - IS_TRAVIS=true
+    - SONATYPE_USERNAME=hekonsek
+    - secure: "HAuVwSq7I7y692F7OrZvznU3tTMGj7JXlHlnmRT8ilYshJvgwtV/f0gDV4O4Ekj/9SqFTtC0PAwJoLTzHCxfkiWsNmI8lshGD92zx45zuyvGYMcbhfx5lPFvIHeg2BrivE5m3P2r6Lxr/w5f1X9Hif7BPyVydcOFtqsh0FaUOe0="
+
+after_success:
+  - python addServer.py
+  - mvn clean deploy --settings ~/.m2/mySettings.xml
