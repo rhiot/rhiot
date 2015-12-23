@@ -22,7 +22,7 @@ env:
   global:
     - IS_TRAVIS=true
     - SONATYPE_USERNAME=hekonsek
-    - secure: "HAuVwSq7I7y692F7OrZvznU3tTMGj7JXlHlnmRT8ilYshJvgwtV/f0gDV4O4Ekj/9SqFTtC0PAwJoLTzHCxfkiWsNmI8lshGD92zx45zuyvGYMcbhfx5lPFvIHeg2BrivE5m3P2r6Lxr/w5f1X9Hif7BPyVydcOFtqsh0FaUOe0="
+    - secure: "KRg4Rl4tXs+JVdPPkwXSWH6rw8v5+//zUN6XSFHN1LuCeK2kF+6cwXiLrAPSeC675L6D4PFKa5Ko+SgGhFXMDSwG/NLHzKoImysNLiIDeDi/u/FMK2DA52U771TI05y6lKjW2uDn2Bhp5TPuQlXOUcOLrE+DL9s+DVm5jpjEZbA="
 
 after_success:
   - python addServer.py
