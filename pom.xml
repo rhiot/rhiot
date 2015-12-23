@@ -17,7 +17,6 @@
         <module>steroids-vertx</module>
         <module>datastream</module>
         <module>vertx</module>
-        <module>components</module>
         <module>gateway</module>
         <module>cloudlets</module>
         <module>iot</module>

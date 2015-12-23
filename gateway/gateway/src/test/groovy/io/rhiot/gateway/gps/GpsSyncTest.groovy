@@ -17,8 +17,6 @@
 package io.rhiot.gateway.gps
 
 import com.google.common.truth.Truth
-import io.rhiot.component.gps.bu353.ClientGpsCoordinates
-import io.rhiot.datastream.schema.GpsCoordinates
 import io.rhiot.gateway.test.GatewayTest
 import io.vertx.core.json.Json
 import org.apache.camel.component.mock.MockEndpoint

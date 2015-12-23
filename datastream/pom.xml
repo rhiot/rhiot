@@ -22,6 +22,7 @@
 
     <modules>
         <module>schema</module>
+        <module>components</module>
         <module>bootstrap</module>
         <module>engine</module>
         <module>source</module>
