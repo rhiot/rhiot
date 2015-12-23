@@ -20,10 +20,12 @@ import io.rhiot.gateway.GatewayVerticle
 import io.rhiot.gateway.test.GatewayTest
 import io.rhiot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.component.mock.MockEndpoint
+import org.junit.Ignore
 import org.junit.Test
 
 import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
 
+@Ignore
 class CustomCamelVerticleTest extends GatewayTest {
 
     // Tests
