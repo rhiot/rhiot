@@ -23,13 +23,15 @@ import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.eclipse.kura.data.DataTransportService;
 
+import static io.rhiot.component.kura.datatransport.DataTransportConstants.DEFAULT_QOS;
+
 public class DataTransportEndpoint extends DefaultEndpoint {
 
     private DataTransportService dataTransportService;
 
     private String topic;
 
-    private int qos = 0;
+    private int qos = DEFAULT_QOS;
 
     private boolean retain = false;
 

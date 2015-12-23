@@ -20,6 +20,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.eclipse.kura.data.DataTransportService;
 
+import java.util.Set;
+
 import static io.rhiot.component.kura.datatransport.DataTransportConstants.CAMEL_KURA_DATATRANSPORT_TOPIC;
 
 public class DataTransportProducer extends DefaultProducer {
@@ -30,13 +32,24 @@ public class DataTransportProducer extends DefaultProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+        DataTransportService dataTransportService = getEndpoint().getDataTransportService();
+        if(dataTransportService == null) {
+            Set<DataTransportService> dataTransportServices =
+                    getEndpoint().getCamelContext().getRegistry().findByType(DataTransportService.class);
+            if(dataTransportServices.size() == 1) {
+                dataTransportService = dataTransportServices.iterator().next();
+            } else {
+                throw new IllegalStateException("No DataTransportService found in a registry.");
+            }
+        }
+
         byte[] payload = exchange.getIn().getBody(byte[].class);
+
         String topic = exchange.getIn().getHeader(CAMEL_KURA_DATATRANSPORT_TOPIC, String.class);
         if(topic == null) {
             topic = getEndpoint().getTopic();
         }
 
-        DataTransportService dataTransportService = getEndpoint().getDataTransportService();
         dataTransportService.publish(topic, payload, getEndpoint().getQos(), getEndpoint().isRetain());
     }
 

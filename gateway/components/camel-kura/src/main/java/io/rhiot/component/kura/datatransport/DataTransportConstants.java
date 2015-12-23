@@ -16,10 +16,15 @@
  */
 package io.rhiot.component.kura.datatransport;
 
-public class DataTransportConstants {
+public final class DataTransportConstants {
 
-    public static String CAMEL_KURA_DATATRANSPORT = "CamelKuraDataTransport";
+    public static final int DEFAULT_QOS = 0;
 
-    public static String CAMEL_KURA_DATATRANSPORT_TOPIC = CAMEL_KURA_DATATRANSPORT + ".topic";
+    public static final String CAMEL_KURA_DATATRANSPORT = "CamelKuraDataTransport";
+
+    public static final String CAMEL_KURA_DATATRANSPORT_TOPIC = CAMEL_KURA_DATATRANSPORT + ".topic";
+
+    private DataTransportConstants() {
+    }
 
 }
