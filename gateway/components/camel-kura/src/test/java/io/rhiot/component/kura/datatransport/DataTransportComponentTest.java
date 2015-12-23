@@ -22,6 +22,7 @@ import org.eclipse.kura.KuraException;
 import org.eclipse.kura.data.DataTransportService;
 import org.junit.Test;
 
+import static io.rhiot.component.kura.datatransport.DataTransportConstants.CAMEL_KURA_DATATRANSPORT_QOS;
 import static io.rhiot.component.kura.datatransport.DataTransportConstants.DEFAULT_QOS;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
@@ -56,6 +57,13 @@ public class DataTransportComponentTest extends CamelTestSupport {
     public void shouldSendWithDefaultQos() throws KuraException {
         sendBody("kura-datatransport:topic", payload);
         verify(dataTransportService).publish(anyString(), any(byte[].class), eq(DEFAULT_QOS), anyBoolean());
+    }
+
+    @Test
+    public void shouldUseQosFromHeader() throws KuraException {
+        int qos = 2;
+        template.sendBodyAndHeader("kura-datatransport:topic", payload, CAMEL_KURA_DATATRANSPORT_QOS, qos);
+        verify(dataTransportService).publish(anyString(), any(byte[].class), eq(qos), anyBoolean());
     }
 
 }
