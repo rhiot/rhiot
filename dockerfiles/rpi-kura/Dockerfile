@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-FROM debian
+FROM hypriot/rpi-java
 
 MAINTAINER Greg AUTRIC <gautric@redhat.com>
 
