@@ -10,7 +10,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<name>Rhiot :: DataStream :: Camel Components</name>
-	<artifactId>rhiot-components</artifactId>
+	<artifactId>rhiot-datastream-components</artifactId>
 	<packaging>pom</packaging>
 
 	<licenses>
@@ -25,6 +25,8 @@
 		<module>camel-gps-bu353</module>
 		<module>camel-device-io</module>
 		<module>camel-framebuffer</module>
+		<module>camel-pubnub</module>
+		<module>camel-pubnub-feature</module>
 	</modules>
 
 	<build>

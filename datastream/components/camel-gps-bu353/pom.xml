@@ -5,8 +5,9 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-components</artifactId>
+        <artifactId>rhiot-datastream-components</artifactId>
         <version>0.1.4-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
 
     <name>RHIOT :: Components :: GPS bu353</name>

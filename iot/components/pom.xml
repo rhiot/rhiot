@@ -22,8 +22,6 @@
 
 	<modules>
 		<module>camel-openimaj</module>
-		<module>camel-pubnub</module>
-		<module>camel-pubnub-feature</module>
     </modules>
 
 	<build>
