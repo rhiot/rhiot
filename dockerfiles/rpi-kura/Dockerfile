@@ -25,9 +25,9 @@ MAINTAINER Greg AUTRIC <gautric@redhat.com>
 ## sudo docker run -i -t rpi-kura -p 80:80
 
 ## Variable ENV
-ENV JAVA_VERSION=java7
-ENV KURA_VERSION=1.3.0
-ENV RPI_VERSION=raspberry-pi-bplus
+ENV JAVA_VERSION=java${JAVA_VERSION:-7}
+ENV KURA_VERSION=${KURA_VERSION:-1.3.0}
+ENV RPI_VERSION=${RPI_VERSION:-raspberry-pi-bplus}
 
 ## Debian/Raspbian package installation
 RUN apt-get update && \
@@ -37,6 +37,7 @@ RUN apt-get update && \
 ## Kura installation
 RUN wget https://s3.amazonaws.com/kura_downloads/raspbian/release/${KURA_VERSION}/kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
 RUN dpkg -i kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
+RUN rm kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
 
 ## Hack for ubuntu
 RUN if [ -d /lib/$(arch)-linux-gnu ] && [ ! -f /lib/$(arch)-linux-gnu/libudev.so.0 ] ; then ln -sf /lib/$(arch)-linux-gnu/libudev.so.1 /lib/$(arch)-linux-gnu/libudev.so.0; fi
