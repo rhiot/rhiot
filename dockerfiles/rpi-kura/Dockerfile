@@ -31,7 +31,7 @@ ENV RPI_VERSION=${RPI_VERSION:-raspberry-pi-bplus-nn}
 
 ## Debian/Raspbian package installation
 RUN apt-get update && \
-    apt-get install -y apt-utils unzip ethtool dos2unix telnet bind9 hostapd isc-dhcp-server iw monit wget openjdk-${JAVA_VERSION}-jdk && \
+    apt-get install -y apt-utils unzip ethtool dos2unix telnet bind9 hostapd isc-dhcp-server iw monit wget openjdk-${JAVA_VERSION}-jdk --no-install-recommends  && \
     rm -rf /var/lib/apt/lists/*
 
 ## Kura installation

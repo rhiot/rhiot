@@ -19,7 +19,7 @@ FROM rpi-kura
 
 MAINTAINER Greg AUTRIC <gautric@redhat.com>
 
-LABEL version="1.0"
+LABEL version="0.1.4-SNAPSHOT"
 LABEL project="Rhiot"
 LABEL projectURL="http://rhiot.io"
 LABEL description="Rhiot docker image"
@@ -37,10 +37,8 @@ ENV RHIOT_FOLDER=/opt/rhiot
 ENV RHIOT_PLUGINS_FOLDER=${RHIOT_FOLDER}/plugins-embedded
 ENV RHIOT_BIN_FOLDER=${RHIOT_FOLDER}/bin
 
-
 RUN mkdir -p ${RHIOT_PLUGINS_FOLDER}
 RUN mkdir -p ${RHIOT_BIN_FOLDER}
-
 
 ## Kura installation
 RUN wget -P ${RHIOT_PLUGINS_FOLDER} https://repo1.maven.org/maven2/org/apache/camel/camel-core/${CAMEL_VERSION}/camel-core-${CAMEL_VERSION}.jar
