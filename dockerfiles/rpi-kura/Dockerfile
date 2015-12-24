@@ -25,13 +25,13 @@ MAINTAINER Greg AUTRIC <gautric@redhat.com>
 ## sudo docker run -i -t rpi-kura -p 80:80
 
 ## Variable ENV
-ENV JAVA_VERSION=java${JAVA_VERSION:-7}
+ENV JAVA_VERSION=${JAVA_VERSION:-7}
 ENV KURA_VERSION=${KURA_VERSION:-1.3.0}
-ENV RPI_VERSION=${RPI_VERSION:-raspberry-pi-bplus}
+ENV RPI_VERSION=${RPI_VERSION:-raspberry-pi-bplus-nn}
 
 ## Debian/Raspbian package installation
 RUN apt-get update && \
-    apt-get install -y apt-utils unzip ethtool dos2unix telnet bind9 hostapd isc-dhcp-server iw monit wget openjdk-7-jdk && \
+    apt-get install -y apt-utils unzip ethtool dos2unix telnet bind9 hostapd isc-dhcp-server iw monit wget openjdk-${JAVA_VERSION}-jdk && \
     rm -rf /var/lib/apt/lists/*
 
 ## Kura installation
