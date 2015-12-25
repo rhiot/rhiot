@@ -93,6 +93,8 @@ public class GpsdComponent extends UriEndpointComponent {
 
     protected void restartGpsDaemon() {
 
+        gpsdRestartAttempts = 0;
+
         installer = resolveInstaller();
 
         try {
