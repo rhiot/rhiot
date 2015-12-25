@@ -22,7 +22,10 @@ MAINTAINER Greg AUTRIC <gautric@redhat.com>
 ## to build it
 ## sudo docker build -t rpi-kura .
 ## to run it
-## sudo docker run -i -t rpi-kura -p 80:80
+## sudo docker run -i -p 80:80 -p 5002:5002 -t rpi-kura
+## or
+## sudo docker run -i -P -t rpi-kura
+
 
 ## Variable ENV
 ENV JAVA_VERSION=${JAVA_VERSION:-7}
