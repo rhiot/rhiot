@@ -93,8 +93,6 @@ public class GpsdComponent extends UriEndpointComponent {
 
     protected void restartGpsDaemon() {
 
-        gpsdRestartAttempts = 0;
-
         installer = resolveInstaller();
 
         try {
@@ -126,6 +124,7 @@ public class GpsdComponent extends UriEndpointComponent {
             }
             
             processManager = resolveProcessManager();
+            gpsdRestartAttempts = 0;
             List<String> gpsctlResult;
             do {
                 LOG.info("(Re)starting GPS daemon.");
