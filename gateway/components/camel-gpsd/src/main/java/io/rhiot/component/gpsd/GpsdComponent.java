@@ -40,6 +40,10 @@ public class GpsdComponent extends UriEndpointComponent {
     
     private static final Logger LOG = getLogger(GpsdComponent.class);
 
+    private static final int GPSD_MAX_RESTART_DEFAULT = -1;
+
+    private int gpsdMaxRestartAttempts = GPSD_MAX_RESTART_DEFAULT;
+    private int gpsdRestartAttempts = 0;
     private int gpsdRestartInterval = 5000;
 
     private ProcessManager processManager;
@@ -120,6 +124,7 @@ public class GpsdComponent extends UriEndpointComponent {
             }
             
             processManager = resolveProcessManager();
+            gpsdRestartAttempts = 0;
             List<String> gpsctlResult;
             do {
                 LOG.info("(Re)starting GPS daemon.");
@@ -132,12 +137,24 @@ public class GpsdComponent extends UriEndpointComponent {
                     gpsdStarted = true;
                     isLocalGpsdStarted.countDown();
                 }
-            } while (!gpsdStarted);
+            } while (canRestartGpsd());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * GPSD can be restarted when it's not already started, and when the maximum number of restarts has not been
+     * exhausted.
+     * Default behaviour is unlimited, {@value #GPSD_MAX_RESTART_DEFAULT}.
+     *
+     * @return true if gpsd can be restarted.
+     */
+    protected boolean canRestartGpsd(){
+        return !gpsdStarted &&
+                (GPSD_MAX_RESTART_DEFAULT == gpsdMaxRestartAttempts ||
+                        (++gpsdRestartAttempts <= gpsdMaxRestartAttempts));
+    }
 
     protected Installer resolveInstaller() {
         LOG.debug("Started resolving Installer...");
@@ -187,5 +204,17 @@ public class GpsdComponent extends UriEndpointComponent {
 
     public void setIgnoreInstallerProblems(boolean ignoreInstallerProblems) {
         this.ignoreInstallerProblems = ignoreInstallerProblems;
+    }
+
+    public int getGpsdRestartInterval() {
+        return gpsdRestartInterval;
+    }
+
+    public void setGpsdRestartInterval(int gpsdRestartInterval) {
+        this.gpsdRestartInterval = gpsdRestartInterval;
+    }
+
+    public void setGpsdMaxRestartAttempts(int gpsdMaxRestartAttempts) {
+        this.gpsdMaxRestartAttempts = gpsdMaxRestartAttempts;
     }
 }

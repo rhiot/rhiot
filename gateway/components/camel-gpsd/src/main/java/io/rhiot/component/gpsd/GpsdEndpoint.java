@@ -35,8 +35,6 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     private static final Logger LOG = LoggerFactory.getLogger(GpsdEndpoint.class);
 
-    private int gpsdRestartInterval = 5000;
-
     @UriParam(defaultValue = "false", description = "Whether the consumer is scheduled or not")
     private boolean scheduled = false;
     @UriParam(defaultValue = "2947")
@@ -150,15 +148,6 @@ public class GpsdEndpoint extends DefaultEndpoint {
 
     public void setDistance(double distance) {
         this.distance = distance;
-    }
-
-
-    public int getGpsdRestartInterval() {
-        return gpsdRestartInterval;
-    }
-
-    public void setGpsdRestartInterval(int gpsdRestartInterval) {
-        this.gpsdRestartInterval = gpsdRestartInterval;
     }
 
     public boolean isScheduled() {

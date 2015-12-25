@@ -31,6 +31,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import static java.util.Collections.singletonList;
 import static org.mockito.BDDMockito.given;
@@ -54,6 +55,22 @@ public class GpsdComponentTest extends CamelTestSupport {
     @Test
     public void smokeTest() throws Exception {
         Thread.sleep(2000);
+    }
+
+    @Test
+    public void testCanRestartByDefault() throws Exception {
+        GpsdComponent gpsdComponent = new GpsdComponent();
+
+        assertTrue(gpsdComponent.canRestartGpsd());
+    }
+
+    @Test
+    public void testCanRestartGpsdOnlyTenTimes() throws Exception {
+        GpsdComponent gpsdComponent = new GpsdComponent();
+        gpsdComponent.setGpsdMaxRestartAttempts(10);
+        IntStream.rangeClosed(1, 10).forEach(i -> assertTrue(gpsdComponent.canRestartGpsd()));
+
+        assertFalse(gpsdComponent.canRestartGpsd());
     }
     
     @Test
