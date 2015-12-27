@@ -137,8 +137,8 @@ public class KuraGPIOProducer extends DefaultProducer {
         log.debug("Wait for {} ms", timeToWait);
         pool.awaitTermination(timeToWait, TimeUnit.MILLISECONDS);
         pin.setValue(getEndpoint().isShutdownState());
-        pin.close();
         log.debug("Pin {} {}", pin.getIndex(), pin.getValue());
+        pin.close();
     }
 
     @Override
