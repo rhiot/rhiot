@@ -16,7 +16,7 @@
 #
 
 ARCH=$(arch)
-RPI_OS=hypriot/rpi-java
+RPI_OS=resin/rpi-raspbian:jessie
 RPI_DOCKER_IMAGE_NAME=rpi-kura
 
 ifneq (`arch`,arm)
