@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-FROM hypriot/rpi-java
+FROM resin/rpi-raspbian:jessie
 
 MAINTAINER Greg AUTRIC <gautric@redhat.com>
 
@@ -26,10 +26,12 @@ MAINTAINER Greg AUTRIC <gautric@redhat.com>
 ## or
 ## sudo docker run -i -P -t rpi-kura
 
-
 ## Variable ENV
 ENV JAVA_VERSION=${JAVA_VERSION:-7}
+ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}-openjdk-armhf
 ENV KURA_VERSION=${KURA_VERSION:-1.3.0}
+ENV KURA_HOME=/opt/eclipse/kura
+
 ENV RPI_VERSION=${RPI_VERSION:-raspberry-pi-bplus-nn}
 
 ## Debian/Raspbian package installation
@@ -42,8 +44,10 @@ RUN wget https://s3.amazonaws.com/kura_downloads/raspbian/release/${KURA_VERSION
 RUN dpkg -i kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
 RUN rm kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
 
-## Hack for ubuntu
-RUN if [ -d /lib/$(arch)-linux-gnu ] && [ ! -f /lib/$(arch)-linux-gnu/libudev.so.0 ] ; then ln -sf /lib/$(arch)-linux-gnu/libudev.so.1 /lib/$(arch)-linux-gnu/libudev.so.0; fi
+## Hack for debian/jessie
+##RUN if [ -d /lib/$(arch)-linux-gnu ] && [ ! -f /lib/$(arch)-linux-gnu/libudev.so.0 ] ; then ln -sf `find /lib -name libudev.so.1` $(dirname `find /lib -name libudev.so.1`)/libudev.so.0; fi
+RUN if [ -d $(dirname `find /lib -name libudev.so.1`) ] && [ ! -f $(dirname `find /lib -name libudev.so.1`)/libudev.so.0 ] ; then ln -sf `find /lib -name libudev.so.1` $(dirname `find /lib -name libudev.so.1`)/libudev.so.0; fi
+
 
 ## Web and telnet
 EXPOSE 80
