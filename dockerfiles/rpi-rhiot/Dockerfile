@@ -27,35 +27,37 @@ LABEL description="Rhiot docker image"
 ## to build it
 ## sudo docker build -t rpi-rhiot .
 ## to run it
-## sudo docker run -e KURA_HTTP_PORT=8080 -p 8080:8080 -t rpi-rhiot
+## sudo docker run -t rpi-rhiot
 
 ## Variable ENV
 ENV CAMEL_VERSION=2.16.1
 ENV KURA_VERSION=0.1.3
 
 ENV RHIOT_FOLDER=/opt/rhiot
-ENV RHIOT_PLUGINS_FOLDER=${RHIOT_FOLDER}/plugins-embedded
+ENV RHIOT_EMBEDDED_PLUGINS_FOLDER=${RHIOT_FOLDER}/plugins-embedded
 ENV RHIOT_BIN_FOLDER=${RHIOT_FOLDER}/bin
 
 RUN mkdir -p ${RHIOT_PLUGINS_FOLDER}
 RUN mkdir -p ${RHIOT_BIN_FOLDER}
 
 ## Kura installation
-RUN wget -P ${RHIOT_PLUGINS_FOLDER} https://repo1.maven.org/maven2/org/apache/camel/camel-core/${CAMEL_VERSION}/camel-core-${CAMEL_VERSION}.jar
-RUN wget -P ${RHIOT_PLUGINS_FOLDER} https://repo1.maven.org/maven2/org/apache/camel/camel-core-osgi/${CAMEL_VERSION}/camel-core-osgi-${CAMEL_VERSION}.jar
-RUN wget -P ${RHIOT_PLUGINS_FOLDER} https://repo1.maven.org/maven2/org/apache/camel/camel-kura/${CAMEL_VERSION}/camel-kura-${CAMEL_VERSION}.jar
-RUN wget -P ${RHIOT_PLUGINS_FOLDER} https://repo1.maven.org/maven2/io/rhiot/camel-kura/${KURA_VERSION}/camel-kura-${KURA_VERSION}.jar
+RUN wget -P ${RHIOT_EMBEDDED_PLUGINS_FOLDER} https://repo1.maven.org/maven2/org/apache/camel/camel-core/${CAMEL_VERSION}/camel-core-${CAMEL_VERSION}.jar
+RUN wget -P ${RHIOT_EMBEDDED_PLUGINS_FOLDER} https://repo1.maven.org/maven2/org/apache/camel/camel-core-osgi/${CAMEL_VERSION}/camel-core-osgi-${CAMEL_VERSION}.jar
+RUN wget -P ${RHIOT_EMBEDDED_PLUGINS_FOLDER} https://repo1.maven.org/maven2/org/apache/camel/camel-kura/${CAMEL_VERSION}/camel-kura-${CAMEL_VERSION}.jar
+RUN wget -P ${RHIOT_EMBEDDED_PLUGINS_FOLDER} https://repo1.maven.org/maven2/io/rhiot/camel-kura/${KURA_VERSION}/camel-kura-${KURA_VERSION}.jar
 
-ADD ./config.ini.sh ${RHIOT_BIN_FOLDER}/
+## Add file
+ADD ./config.ini.sh       ${RHIOT_BIN_FOLDER}/
 ADD ./start_kura_rhiot.sh ${RHIOT_BIN_FOLDER}/
-ADD log4j.properties /opt/eclipse/kura/kura
+ADD ./log4j.properties    /opt/eclipse/kura/kura
 
-
-RUN chmod 755 ${RHIOT_BIN_FOLDER}/config.ini.sh
+## Custom Kura installation
+RUN chmod 755 ${RHIOT_BIN_FOLDER}/*.sh
 RUN ${RHIOT_BIN_FOLDER}/config.ini.sh
-RUN chmod 755 ${RHIOT_BIN_FOLDER}/start_kura_rhiot.sh
 
 ## Web and telnet
-EXPOSE 80 5002
+EXPOSE 80
+EXPOSE 5002
 
+## Main start
 CMD ${RHIOT_BIN_FOLDER}/start_kura_rhiot.sh
