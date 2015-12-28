@@ -31,7 +31,6 @@ ENV JAVA_VERSION=${JAVA_VERSION:-7}
 ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}-openjdk-armhf
 ENV KURA_VERSION=${KURA_VERSION:-1.3.0}
 ENV KURA_HOME=/opt/eclipse/kura
-
 ENV RPI_VERSION=${RPI_VERSION:-raspberry-pi-bplus-nn}
 
 ## Debian/Raspbian package installation
