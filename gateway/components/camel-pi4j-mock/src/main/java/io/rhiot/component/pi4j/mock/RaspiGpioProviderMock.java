@@ -16,16 +16,11 @@
  */
 package io.rhiot.component.pi4j.mock;
 
-import io.rhiot.component.pi4j.Pi4jConstants;
-import com.pi4j.io.gpio.GpioProvider;
-import com.pi4j.io.gpio.GpioProviderBase;
-import com.pi4j.io.gpio.Pin;
-import com.pi4j.io.gpio.PinMode;
-import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.exception.InvalidPinException;
 import com.pi4j.wiringpi.GpioInterruptEvent;
 import com.pi4j.wiringpi.GpioInterruptListener;
-
+import io.rhiot.component.pi4j.Pi4jMockConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +67,7 @@ public class RaspiGpioProviderMock extends GpioProviderBase implements GpioProvi
 
     @Override
     public String getName() {
-        return Pi4jConstants.PROVIDER_NAME;
+        return Pi4jMockConstants.PROVIDER_NAME;
     }
 
     @Override

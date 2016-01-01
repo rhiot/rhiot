@@ -17,9 +17,9 @@
 
 package io.rhiot.component.pi4j.mock;
 
-import java.io.IOException;
-
 import com.pi4j.io.i2c.I2CDevice;
+
+import java.io.IOException;
 
 /**
  * 
