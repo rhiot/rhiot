@@ -16,4 +16,4 @@
 #  limitations under the License.
 
 docker build -t rhiot/spark-standalone:0.1.4-SNAPSHOT .
-docker tag rhiot/spark-standalone:0.1.4-SNAPSHOT rhiot/spark-standalone:latest
+docker tag -f rhiot/spark-standalone:0.1.4-SNAPSHOT rhiot/spark-standalone:latest
