@@ -16,20 +16,35 @@
  */
 package io.rhiot.datastream.consumer.device
 
-import com.google.common.truth.Truth
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.datastream.schema.Device
 import org.junit.Test
 
-class LeshanDataStreamSourceTest extends DataStreamTest {
+import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.utils.Uuids.uuid
+
+class DeviceDataStreamConsumerTest extends DataStreamTest {
 
     def device = new Device('foo')
 
     @Test
     void shouldRegisterDevice() {
-        fromBus('device.register', device, Object.class)
+        toBusAndWait('device.register', device)
         def devices = fromBus('device.list', List.class)
-        Truth.assertThat(devices).hasSize(1)
+        assertThat(devices).isNotEmpty()
+    }
+
+    @Test
+    void shouldGetDevice() {
+        toBusAndWait('device.register', device)
+        def device = fromBus('device.get.' + device.deviceId, Device.class)
+        assertThat(device.deviceId).isEqualTo(device.deviceId)
+    }
+
+    @Test
+    void shouldNotGetDevice() {
+        def device = fromBus('device.get.' + uuid(), Device.class)
+        assertThat(device).isNull()
     }
 
 }

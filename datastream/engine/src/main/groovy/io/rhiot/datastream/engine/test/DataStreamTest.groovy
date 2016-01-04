@@ -20,6 +20,7 @@ import io.rhiot.bootstrap.BeanRegistry
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
 import org.apache.camel.CamelContext
+import org.apache.camel.ProducerTemplate
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
@@ -37,6 +38,8 @@ abstract class DataStreamTest extends Assert {
 
     protected static CamelContext camelContext
 
+    protected static ProducerTemplate producerTemplate
+
     protected static PayloadEncoding payloadEncoding
 
 
@@ -47,6 +50,7 @@ abstract class DataStreamTest extends Assert {
             dataStream = dataStream.start().asType(DataStream.class)
             beanRegistry = dataStream.beanRegistry()
             camelContext = beanRegistry.bean(CamelContext.class).get()
+            producerTemplate = camelContext.createProducerTemplate()
             payloadEncoding = beanRegistry.bean(PayloadEncoding.class).get()
             dataStreamStarted = true
         }
@@ -68,21 +72,28 @@ abstract class DataStreamTest extends Assert {
         }
     }
 
+    // Bus communication helpers
+
     protected def void toBus(String channel) {
-        camelContext.createProducerTemplate().sendBody(amqp(channel), null)
+        producerTemplate.sendBody(amqp(channel), null)
     }
 
     protected def void toBus(String channel, Object payload) {
-        camelContext.createProducerTemplate().sendBody(amqp(channel), payloadEncoding.encode(payload))
+        producerTemplate.sendBody(amqp(channel), payloadEncoding.encode(payload))
+    }
+
+    protected def void toBusAndWait(String channel, Object payload) {
+        def busResponse = producerTemplate.requestBody(amqp(channel), payloadEncoding.encode(payload), byte[].class)
+        payloadEncoding.decode(busResponse)
     }
 
     protected def <T> T fromBus(String channel, Class<T> responseType) {
-        def busResponse = camelContext.createProducerTemplate().requestBody(amqp(channel), null, byte[].class)
+        def busResponse = producerTemplate.requestBody(amqp(channel), null, byte[].class)
         payloadEncoding.decode(busResponse) as T
     }
 
     protected def <T> T fromBus(String channel, Object payload, Class<T> responseType) {
-        def busResponse = camelContext.createProducerTemplate().requestBody(amqp(channel), payloadEncoding.encode(payload), byte[].class)
+        def busResponse = producerTemplate.requestBody(amqp(channel), payloadEncoding.encode(payload), byte[].class)
         payloadEncoding.decode(busResponse) as T
     }
 
