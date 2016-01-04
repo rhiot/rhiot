@@ -17,10 +17,13 @@
 package io.rhiot.datastream.consumer.device
 
 import io.rhiot.datastream.engine.test.DataStreamTest
-import io.rhiot.datastream.schema.Device
+import io.rhiot.datastream.schema.device.Device
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_GET
+import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_LIST
+import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_REGISTER
 import static io.rhiot.utils.Uuids.uuid
 
 class DeviceDataStreamConsumerTest extends DataStreamTest {
@@ -29,21 +32,21 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
 
     @Test
     void shouldRegisterDevice() {
-        toBusAndWait('device.register', device)
-        def devices = fromBus('device.list', List.class)
+        toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
+        def devices = fromBus(CHANNEL_DEVICE_LIST, List.class)
         assertThat(devices).isNotEmpty()
     }
 
     @Test
     void shouldGetDevice() {
-        toBusAndWait('device.register', device)
-        def device = fromBus('device.get.' + device.deviceId, Device.class)
+        toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
+        def device = fromBus("${CHANNEL_DEVICE_GET}.${device.deviceId}", Device.class)
         assertThat(device.deviceId).isEqualTo(device.deviceId)
     }
 
     @Test
     void shouldNotGetDevice() {
-        def device = fromBus('device.get.' + uuid(), Device.class)
+        def device = fromBus("${CHANNEL_DEVICE_GET}.${uuid()}", Device.class)
         assertThat(device).isNull()
     }
 

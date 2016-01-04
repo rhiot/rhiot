@@ -17,13 +17,6 @@
 package io.rhiot.datastream.consumer.device;
 
 import io.rhiot.datastream.engine.AbstractServiceRouteStreamConsumer;
-import io.rhiot.datastream.schema.Device;
-import io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer;
-import org.apache.camel.builder.RouteBuilder;
-
-import java.util.Arrays;
-
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpByPrefix;
 
 public class DeviceDataStreamConsumer extends AbstractServiceRouteStreamConsumer {
 

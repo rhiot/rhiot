@@ -14,8 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.schema;
+package io.rhiot.datastream.schema.device;
 
-public class DeviceListCommand {
+public class DeviceGetCommand {
+
+    String deviceId;
+
+    public DeviceGetCommand(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public DeviceGetCommand() {
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
 
 }

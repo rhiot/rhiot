@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.consumer.device;
 
-import io.rhiot.datastream.schema.Device;
+import io.rhiot.datastream.schema.device.Device;
 
 import java.util.ArrayList;
 import java.util.HashMap;

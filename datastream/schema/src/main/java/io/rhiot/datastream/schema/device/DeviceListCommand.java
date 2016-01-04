@@ -14,18 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.consumer.device;
+package io.rhiot.datastream.schema.device;
 
-import io.rhiot.datastream.schema.device.Device;
-
-import java.util.List;
-
-public interface DeviceRegistry {
-
-    Device get(String deviceId);
-
-    List<Device> list();
-
-    void register(Device device);
+public class DeviceListCommand {
 
 }

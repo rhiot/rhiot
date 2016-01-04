@@ -14,25 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.schema;
+package io.rhiot.datastream.schema.device;
 
-public class DeviceGetCommand {
+public class DeviceConstants {
 
-    String deviceId;
+    public static final String CHANNEL_DEVICE_GET = "device.get";
 
-    public DeviceGetCommand(String deviceId) {
-        this.deviceId = deviceId;
-    }
+    public static final String CHANNEL_DEVICE_LIST = "device.list";
 
-    public DeviceGetCommand() {
-    }
-
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
+    public static final String CHANNEL_DEVICE_REGISTER = "device.register";
 
 }

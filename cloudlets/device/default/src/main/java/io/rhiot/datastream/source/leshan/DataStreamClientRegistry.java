@@ -17,8 +17,8 @@
 package io.rhiot.datastream.source.leshan;
 
 import io.rhiot.datastream.engine.encoding.PayloadEncoding;
-import io.rhiot.datastream.schema.Device;
-import io.rhiot.datastream.schema.DeviceListCommand;
+import io.rhiot.datastream.schema.device.Device;
+import io.rhiot.datastream.schema.device.DeviceListCommand;
 import org.apache.camel.ProducerTemplate;
 import org.eclipse.leshan.server.client.Client;
 import org.eclipse.leshan.server.client.ClientRegistry;
