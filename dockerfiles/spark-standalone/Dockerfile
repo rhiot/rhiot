@@ -25,7 +25,6 @@ ADD scripts/start-master.sh /start-master.sh
 ADD scripts/start-worker /start-worker.sh
 ADD scripts/spark-submit.sh /spark-submit.sh
 
-ADD scripts/spark-shell.sh  /spark-shell.sh
 ADD scripts/spark-defaults.conf /spark-defaults.conf
 ADD scripts/remove_alias.sh /remove_alias.sh
 ENV SPARK_HOME /usr/local/spark
