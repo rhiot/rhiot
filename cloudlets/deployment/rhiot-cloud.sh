@@ -15,6 +15,12 @@
 
 #!/usr/bin/env bash
 
+### Configuration
+
+if [ -z "${RHIOT_VERSION}" ]; then
+    RHIOT_VERSION=0.1.3
+fi
+
 ### Docker server setup
 
 echo Checking Docker setup...
@@ -50,6 +56,7 @@ docker rm mongodb
 docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 
 ### Device Management Cloudlet
+
 docker rm cloudlet-device
 docker pull rhiot/cloudlet-device
 if [ ! -z "$lwm2m_port" ]; then
@@ -61,9 +68,20 @@ fi
 docker run --name cloudlet-device -d --link mongodb:mongodb -p 15000:15000 ${lwm2m_port} rhiot/cloudlet-device
 
 ### Data stream node
+
 docker rm datastream-node
 docker pull rhiot/datastream-node
 docker run -d --name datastream-node --link mongodb:mongodb -p 8080:8080 -p 5672:5672 rhiot/datastream-node
+
+### Spark standalone cluster
+
+docker rm spark_master
+docker pull rhiot/spark-standalone:${RHIOT_VERSION}
+
+docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"
+SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4`
+docker run -d -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} -v /tmp/jobs:/tmp/jobs --link spark_master:spark_master -P \
+  -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh
 
 if [ -z "$HTTP_PORT" ]; then
     echo 'HTTP port not set, running Cloudlet Console using the default development port 9000.'
