@@ -15,13 +15,15 @@
 
 #!/usr/bin/env bash
 
-### Configuration
+### General configuration
 
 if [ -z "${RHIOT_VERSION}" ]; then
     RHIOT_VERSION=0.1.3
 fi
 
-### Docker server setup
+REQUIRED_DOCKER_VERSION=1.8.2
+
+### Docker
 
 echo Checking Docker setup...
 
@@ -30,7 +32,6 @@ if ! type "docker" > /dev/null; then
   wget -qO- https://get.docker.com/ | sh
 fi
 
-REQUIRED_DOCKER_VERSION=1.8.2
 DOCKER_VERSION=`docker version --format '{{.Server.Version}}'`
 if [ "$DOCKER_VERSION" \< "$REQUIRED_DOCKER_VERSION" ]; then
   echo "Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot Cloud. Version ${DOCKER_VERSION} found - upgrading..."
@@ -41,11 +42,11 @@ fi
 
 echo Docker is properly installed.
 
-### Docker server setup ends
-
 service docker start
 
 docker stop $(docker ps -q)
+
+### MongoDB
 
 MONGODB_DATA_VOLUMES=`docker ps -a | grep mongodb_data | wc -l`
 if [ "$MONGODB_DATA_VOLUMES" \< 1 ]; then
@@ -82,16 +83,3 @@ docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RH
 SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4`
 docker run -d -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} -v /tmp/jobs:/tmp/jobs --link spark_master:spark_master -P \
   -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh
-
-if [ -z "$HTTP_PORT" ]; then
-    echo 'HTTP port not set, running Cloudlet Console using the default development port 9000.'
-    HTTP_PORT=9000
-fi
-if [ -z "$GOOGLE_OAUTH_REDIRECT_URI" ]; then
-    GOOGLE_OAUTH_REDIRECT_URI=http://localhost:${HTTP_PORT}
-fi
-docker pull rhiot/cloudlet-console
-docker run -d -p ${HTTP_PORT}:${HTTP_PORT} -e HTTP_PORT=${HTTP_PORT} -e LIVE_RELOAD=false \
-  -e GOOGLE_OAUTH_CLIENT_ID=$GOOGLE_OAUTH_CLIENT_ID -e GOOGLE_OAUTH_CLIENT_SECRET=$GOOGLE_OAUTH_CLIENT_SECRET \
-  -e GOOGLE_OAUTH_REDIRECT_URI=$GOOGLE_OAUTH_REDIRECT_URI \
-  rhiot/cloudlet-console
