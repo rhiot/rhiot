@@ -16,7 +16,9 @@
  */
 package io.rhiot.cloudlets.device
 
+import io.rhiot.cloudlets.device.verticles.LeshanServerVerticle
 import io.rhiot.mongodb.EmbeddedMongo
+import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
@@ -56,6 +58,11 @@ class DeviceCloudletTest extends Assert {
         setIntProperty('disconnectionPeriod', 5000)
         setIntProperty('lwm2m_port', lwm2mPort)
         new DeviceCloudlet().start().waitFor()
+    }
+
+    @AfterClass
+    static void afterClass() {
+        LeshanServerVerticle.leshanServer.stop()
     }
 
     // Tests

@@ -18,9 +18,10 @@ package io.rhiot.bootstrap
 
 import io.rhiot.bootstrap.classpath.ClasspathMapBeanRegistry
 import io.rhiot.utils.WithLogger
-import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.ConfigurableApplicationContext
+import org.springframework.context.annotation.ComponentScan
 
 import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 import static java.lang.Runtime.runtime;
@@ -29,6 +30,7 @@ import static java.lang.Runtime.runtime;
  * Starts up Steroids framework, scans the classpath for the initializers and runs the latter.
  */
 @SpringBootApplication
+@ComponentScan("io.rhiot")
 class Bootstrap implements WithLogger {
 
     public static Bootstrap bootstrap
@@ -55,7 +57,8 @@ class Bootstrap implements WithLogger {
     // Lifecycle
 
     Bootstrap start(String... args) {
-        applicationContext = new SpringApplication(Bootstrap.class).run(args)
+        System.setProperty("camel.springboot.typeConversion", "false")
+        applicationContext = new SpringApplicationBuilder(Bootstrap.class).web(false).build().run(args)
         log().debug('Starting Steroids Bootstrap: {}', getClass().name)
         initializers.each {
             if(it instanceof BootstrapAware) {

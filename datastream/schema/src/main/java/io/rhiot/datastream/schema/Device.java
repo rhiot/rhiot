@@ -14,27 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.engine
+package io.rhiot.datastream.schema;
 
-import io.rhiot.bootstrap.Bootstrap
-import io.rhiot.datastream.engine.encoding.JsonPayloadEncoding
-import io.rhiot.datastream.engine.encoding.PayloadEncoding
-import io.rhiot.steroids.camel.CamelBootInitializer
-import org.apache.camel.CamelContext
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
+public class Device {
 
-@SpringBootApplication
-class DataStream extends Bootstrap {
+    private String deviceId;
 
-    public static void main(String[] args) {
-        Bootstrap.main(args)
+    public Device() {
     }
 
-    @Bean
-    PayloadEncoding payloadEncoding() {
-        new JsonPayloadEncoding()
+    public Device(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
 }

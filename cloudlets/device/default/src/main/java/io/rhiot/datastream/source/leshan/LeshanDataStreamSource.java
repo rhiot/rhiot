@@ -14,39 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.camel
+package io.rhiot.datastream.source.leshan;
 
-import io.rhiot.bootstrap.Bootstrap
-import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.component.mock.MockEndpoint
-import org.junit.Ignore
-import org.junit.Test
+import org.eclipse.leshan.server.californium.LeshanServerBuilder;
+import org.eclipse.leshan.server.californium.impl.LeshanServer;
+import org.eclipse.leshan.server.client.ClientRegistry;
 
-import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
+public class LeshanDataStreamSource {
 
-class CamelBootInitializerTest {
+    private final ClientRegistry clientRegistry;
 
-    @Test
-    void shouldStartCamelRoute() {
-        new Bootstrap().start()
-        def mock = camelContext().getEndpoint('mock:test', MockEndpoint.class)
-        mock.setExpectedMessageCount(1)
+    private final LeshanServer leshanServer;
 
-        // When
-        camelContext().createProducerTemplate().sendBody('event-bus:mock', 'foo')
-
-        // Then
-        mock.assertIsSatisfied()
+    public LeshanDataStreamSource(ClientRegistry clientRegistry) {
+        this.clientRegistry = clientRegistry;
+        LeshanServerBuilder leshanServerBuilder = new LeshanServerBuilder();
+        leshanServerBuilder.setLocalAddress("0.0.0.0", LeshanServerBuilder.PORT);
+        leshanServer = leshanServerBuilder.setClientRegistry(clientRegistry).build();
     }
 
-}
-
-@Route
-class MyRoute extends RouteBuilder {
-
-    @Override
-    void configure() {
-        from('event-bus:mock').to('mock:test')
+    public void start() {
+        leshanServer.start();
     }
 
 }

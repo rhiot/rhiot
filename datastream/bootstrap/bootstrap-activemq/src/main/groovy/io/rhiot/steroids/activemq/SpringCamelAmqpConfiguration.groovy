@@ -23,36 +23,24 @@ import org.apache.activemq.ActiveMQConnectionFactory
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.amqp.AMQPComponent
 import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.jms.connection.CachingConnectionFactory
+import org.springframework.stereotype.Component
 
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.DEFAULT_BROKER_NAME
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpPort
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.externalBrokerUrl
+import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.*
 
-@Route
-class CamelAmqpConfiguration extends RouteBuilder implements BootstrapAware {
+@Configuration
+class SpringCamelAmqpConfiguration {
 
-    private Bootstrap bootstrap
-
-    @Override
-    void configure() {
+    @Bean
+    AMQPComponent amqp() {
         // Starting from Camel 2.16.1 (due to the CAMEL-9204) replace the code below with:
         // AMQPComponent.amqp10Component(uri)
         def amqpBrokerUrl = externalBrokerUrl() ?: 'localhost'
         def connectionFactory = ConnectionFactoryImpl.createFromURL("amqp://guest:guest@${amqpBrokerUrl}:${amqpPort()}")
         connectionFactory.topicPrefix = 'topic://'
-        def amqpComponent = new AMQPComponent(connectionFactory)
-        context.removeComponent('amqp')
-        context.addComponent('amqp', amqpComponent)
-
-        def jmsBrokerUrl = externalBrokerUrl() ?: "vm:${DEFAULT_BROKER_NAME}"
-        def jmsConnectionFactory = new CachingConnectionFactory(new ActiveMQConnectionFactory(jmsBrokerUrl))
-        bootstrap.beanRegistry().register('jmsConnectionFactory', jmsConnectionFactory)
-    }
-
-    @Override
-    void bootstrap(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap
+        new AMQPComponent(connectionFactory)
     }
 
 }

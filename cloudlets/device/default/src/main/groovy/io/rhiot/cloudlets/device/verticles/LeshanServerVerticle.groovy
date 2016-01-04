@@ -83,7 +83,7 @@ class LeshanServerVerticle extends GroovyVerticle {
 
     // Collaborators
 
-    final def LeshanServer leshanServer
+    static def LeshanServer leshanServer
 
     final def deviceMetricsStore = bean(DeviceMetricsStore.class).get()
 

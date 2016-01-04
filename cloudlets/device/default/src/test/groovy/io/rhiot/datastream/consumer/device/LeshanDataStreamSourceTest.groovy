@@ -14,39 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.camel
+package io.rhiot.datastream.consumer.device
 
-import io.rhiot.bootstrap.Bootstrap
-import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.component.mock.MockEndpoint
-import org.junit.Ignore
+import com.google.common.truth.Truth
+import io.rhiot.datastream.engine.test.DataStreamTest
+import io.rhiot.datastream.schema.Device
 import org.junit.Test
 
-import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
+class LeshanDataStreamSourceTest extends DataStreamTest {
 
-class CamelBootInitializerTest {
+    def device = new Device('foo')
 
     @Test
-    void shouldStartCamelRoute() {
-        new Bootstrap().start()
-        def mock = camelContext().getEndpoint('mock:test', MockEndpoint.class)
-        mock.setExpectedMessageCount(1)
-
-        // When
-        camelContext().createProducerTemplate().sendBody('event-bus:mock', 'foo')
-
-        // Then
-        mock.assertIsSatisfied()
-    }
-
-}
-
-@Route
-class MyRoute extends RouteBuilder {
-
-    @Override
-    void configure() {
-        from('event-bus:mock').to('mock:test')
+    void shouldRegisterDevice() {
+        fromBus('device.register', device, Object.class)
+        def devices = fromBus('device.list', List.class)
+        Truth.assertThat(devices).hasSize(1)
     }
 
 }

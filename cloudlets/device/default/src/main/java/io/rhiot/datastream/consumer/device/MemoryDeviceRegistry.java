@@ -14,39 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.camel
+package io.rhiot.datastream.consumer.device;
 
-import io.rhiot.bootstrap.Bootstrap
-import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.component.mock.MockEndpoint
-import org.junit.Ignore
-import org.junit.Test
+import io.rhiot.datastream.schema.Device;
 
-import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-class CamelBootInitializerTest {
+public class MemoryDeviceRegistry implements DeviceRegistry {
 
-    @Test
-    void shouldStartCamelRoute() {
-        new Bootstrap().start()
-        def mock = camelContext().getEndpoint('mock:test', MockEndpoint.class)
-        mock.setExpectedMessageCount(1)
-
-        // When
-        camelContext().createProducerTemplate().sendBody('event-bus:mock', 'foo')
-
-        // Then
-        mock.assertIsSatisfied()
-    }
-
-}
-
-@Route
-class MyRoute extends RouteBuilder {
+    Map<String, Device> devices = new HashMap<>();
 
     @Override
-    void configure() {
-        from('event-bus:mock').to('mock:test')
+    public Device get(String deviceId) {
+        return devices.get(deviceId);
+    }
+
+    @Override
+    public List<Device> list() {
+        return new ArrayList<>(devices.values());
+    }
+
+    @Override
+    public void register(Device device) {
+        devices.put(device.getDeviceId(), device);
     }
 
 }

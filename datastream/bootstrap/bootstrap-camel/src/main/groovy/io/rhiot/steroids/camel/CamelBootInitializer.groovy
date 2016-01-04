@@ -19,6 +19,7 @@ package io.rhiot.steroids.camel
 import io.rhiot.bootstrap.AbstractBootInitializer
 import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.bootstrap.BootstrapAware
+import io.rhiot.utils.Reflections
 import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;
 import org.apache.camel.RoutesBuilder;
@@ -37,7 +38,8 @@ class CamelBootInitializer extends AbstractBootInitializer {
 
     @Override
     public void start() {
-        camelContext = new DefaultCamelContext(new CompositeRegistry([new ApplicationContextRegistry(Bootstrap.applicationContext), new BootstrapRegistry(bootstrap.beanRegistry())]))
+        camelContext = Bootstrap.applicationContext.getBean(CamelContext.class)
+        Reflections.writeField(camelContext, 'registry', new CompositeRegistry([new ApplicationContextRegistry(Bootstrap.applicationContext), new BootstrapRegistry(bootstrap.beanRegistry())]))
         camelContext.streamCaching = true
         vertx = Vertx.vertx()
         def vertxComponent = new VertxComponent(vertx: vertx)
@@ -46,8 +48,6 @@ class CamelBootInitializer extends AbstractBootInitializer {
         bootstrap.beanRegistry().register(camelContext)
 
         beans(RoutesBuilder.class, Route.class).each { if(it instanceof BootstrapAware) it.bootstrap(bootstrap) }.each { camelContext.addRoutes(it) }
-
-        camelContext.start()
     }
 
     @Override

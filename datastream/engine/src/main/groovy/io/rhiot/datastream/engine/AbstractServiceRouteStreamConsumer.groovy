@@ -16,11 +16,14 @@
  */
 package io.rhiot.datastream.engine
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
 import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.bootstrap.BootstrapAware
+import org.apache.camel.NoTypeConversionAvailableException
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.jms.JmsMessage
+import org.springframework.beans.factory.annotation.Autowired
 
 import java.lang.reflect.Method
 
@@ -32,13 +35,18 @@ abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implement
 
     protected Bootstrap bootstrap
 
+    @Autowired
+    PayloadEncoding payloadEncoding
+
     AbstractServiceRouteStreamConsumer(String serviceChannel) {
         this.serviceChannel = serviceChannel
     }
 
     @Override
     void configure() {
-        def encoding = bootstrap.beanRegistry().bean(PayloadEncoding.class).get()
+        if(payloadEncoding == null) {
+            payloadEncoding = bootstrap.beanRegistry().bean(PayloadEncoding.class).get()
+        }
 
         from(amqpByPrefix(serviceChannel)).
                 process {
@@ -55,15 +63,15 @@ abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implement
                     }
                     def incomingPayload = it.in.getBody(byte[].class)
                     if(incomingPayload != null && incomingPayload.length > 0) {
-                        def payload = encoding.decode(incomingPayload)
+                        def payload = payloadEncoding.decode(incomingPayload)
                         arguments.add(payload)
                     }
 
                     def beanType = context.registry.lookupByName(service).getClass()
                     def beanOperation = beanType.declaredMethods.find{ it.name == operation }
-                    it.in.body = convertArguments(arguments, beanOperation)
+                    it.in.body = convertArguments(arguments, beanOperation).toArray()
                 }.recipientList().exchangeProperty('target').
-                process{ it.in.body = encoding.encode(it.in.body) }
+                process{ it.in.body = payloadEncoding.encode(it.in.body) }
     }
 
     @Override
@@ -76,7 +84,11 @@ abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implement
     protected List<?> convertArguments(List<?> arguments, Method operation) {
         def convertedArguments = []
         arguments.eachWithIndex{ argument, i ->
-            convertedArguments << context.typeConverter.convertTo(operation.parameterTypes[i], arguments[i])
+            try {
+                convertedArguments << context.typeConverter.mandatoryConvertTo(operation.parameterTypes[i], arguments[i])
+            } catch (NoTypeConversionAvailableException e) {
+                convertedArguments << new ObjectMapper().convertValue(arguments[i], operation.parameterTypes[i])
+            }
         }
         convertedArguments.asImmutable()
     }

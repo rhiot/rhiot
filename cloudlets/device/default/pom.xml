@@ -30,6 +30,14 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-datastream-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-datastream-schema</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-bootstrap-core</artifactId>
         </dependency>
         <dependency>
