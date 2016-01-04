@@ -80,6 +80,7 @@ docker pull rhiot/spark-standalone:${RHIOT_VERSION}
 
 docker rm spark_master
 docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"
+sleep 5
 SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4`
 
 docker rm spark_worker
