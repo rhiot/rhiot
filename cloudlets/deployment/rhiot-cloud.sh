@@ -76,10 +76,12 @@ docker run -d --name datastream-node --link mongodb:mongodb -p 8080:8080 -p 5672
 
 ### Spark standalone cluster
 
-docker rm spark_master
 docker pull rhiot/spark-standalone:${RHIOT_VERSION}
 
+docker rm spark_master
 docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"
 SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4`
-docker run -d -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} -v /tmp/jobs:/tmp/jobs --link spark_master:spark_master -P \
+
+docker rm spark_worker
+docker run -d --name spark_worker -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} -v /tmp/jobs:/tmp/jobs --link spark_master:spark_master -P \
   -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh
