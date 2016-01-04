@@ -15,4 +15,5 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-docker run -d --name spark_master -p 7077:7077 -p 8081:8080 -P -t rhiot/spark-standalone:0.1.4-SNAPSHOT /start-master.sh "$@"
+SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4`
+docker run -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} --net=host -v /tmp/jobs:/tmp/jobs -it rhiot/spark-standalone:0.1.4-SNAPSHOT /spark-submit.sh "$@"
