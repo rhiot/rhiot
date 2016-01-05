@@ -80,19 +80,6 @@ class DeviceCloudletTest extends Assert {
     }
 
     @Test
-    void shouldListDeregisteredDevice() {
-        // Given
-        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
-
-        // When
-        rest.delete("${apiBase}/device/${deviceId}")
-
-        // Then
-        def client = rest.getForObject("${apiBase}/device/${deviceId}", Map.class)
-        assertThat(client.client).isNull()
-    }
-
-    @Test
     void shouldNotListDisconnectedClient() {
         // Given
         rest.delete("${apiBase}/device")
