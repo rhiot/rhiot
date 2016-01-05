@@ -27,7 +27,6 @@ import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_R
 import static io.rhiot.datastream.schema.device.DeviceConstants.deviceHeartbeat
 import static io.rhiot.datastream.schema.device.DeviceConstants.disconnected
 import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
-import static io.rhiot.datastream.schema.device.DeviceConstants.heartbeat
 import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices
 import static io.rhiot.datastream.schema.device.DeviceConstants.registerDevice
 import static io.rhiot.utils.Uuids.uuid
