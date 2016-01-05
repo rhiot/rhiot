@@ -24,4 +24,6 @@ public class DeviceConstants {
 
     public static final String CHANNEL_DEVICE_REGISTER = "device.register";
 
+    public static final String CHANNEL_DEVICE_DEREGISTER = "device.deregister";
+
 }

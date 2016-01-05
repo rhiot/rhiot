@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MemoryDeviceRegistry implements DeviceRegistry {
 
@@ -40,6 +41,12 @@ public class MemoryDeviceRegistry implements DeviceRegistry {
     @Override
     public void register(Device device) {
         devices.put(device.getDeviceId(), device);
+    }
+
+    @Override
+    public void deregister(String registrationId) {
+        List<Device> matchingDevices = devices.values().stream().filter(device -> registrationId.equals(device.getRegistrationId())).collect(Collectors.toList());
+        devices.remove(matchingDevices.get(0).getDeviceId());
     }
 
 }

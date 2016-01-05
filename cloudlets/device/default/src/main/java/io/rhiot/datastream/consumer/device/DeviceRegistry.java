@@ -28,4 +28,6 @@ public interface DeviceRegistry {
 
     void register(Device device);
 
+    void deregister(String registrationId);
+
 }

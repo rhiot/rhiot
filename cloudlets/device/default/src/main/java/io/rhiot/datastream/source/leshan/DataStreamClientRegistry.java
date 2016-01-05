@@ -18,7 +18,6 @@ package io.rhiot.datastream.source.leshan;
 
 import io.rhiot.datastream.engine.encoding.PayloadEncoding;
 import io.rhiot.datastream.schema.device.Device;
-import io.rhiot.datastream.schema.device.DeviceListCommand;
 import org.apache.camel.ProducerTemplate;
 import org.eclipse.leshan.server.client.Client;
 import org.eclipse.leshan.server.client.ClientRegistry;
@@ -49,8 +48,7 @@ public class DataStreamClientRegistry implements ClientRegistry {
 
     @Override
     public Collection<Client> allClients() {
-        byte[] payload = payloadEncoding.encode(new DeviceListCommand());
-        byte[] response = producerTemplate.requestBody("amqp:device.list", payload, byte[].class);
+        byte[] response = producerTemplate.requestBody("amqp:device.list", null, byte[].class);
         List<Device> devices = (List<Device>) payloadEncoding.decode(response);
         return devices.stream().map(device -> new Client(null, device.getDeviceId(), null, 0, null)).collect(Collectors.toList());
     }
@@ -84,7 +82,9 @@ public class DataStreamClientRegistry implements ClientRegistry {
 
     @Override
     public Client deregisterClient(String registrationId) {
-        return null;
+        byte[] response = producerTemplate.requestBody("amqp:device.deregister." + registrationId, null, byte[].class);
+        Device device = (Device) payloadEncoding.decode(response);
+        return new Client(null, device.getDeviceId(), null, 0, null);
     }
 
 }

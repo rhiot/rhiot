@@ -21,6 +21,7 @@ import io.rhiot.datastream.schema.device.Device
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_DEREGISTER
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_GET
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_LIST
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_REGISTER
@@ -28,13 +29,26 @@ import static io.rhiot.utils.Uuids.uuid
 
 class DeviceDataStreamConsumerTest extends DataStreamTest {
 
-    def device = new Device(uuid())
+    def device = new Device(uuid(), uuid())
 
     @Test
     void shouldRegisterDevice() {
         toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
         def devices = fromBus(CHANNEL_DEVICE_LIST, List.class)
         assertThat(devices).isNotEmpty()
+    }
+
+    @Test
+    void shouldDeregisterDevice() {
+        // Given
+        toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
+
+        // When
+        toBusAndWait("${CHANNEL_DEVICE_DEREGISTER}.${device.registrationId}")
+
+        // Then
+        def device = fromBus("${CHANNEL_DEVICE_GET}.${device.deviceId}", Device.class)
+        assertThat(device).isNull()
     }
 
     @Test

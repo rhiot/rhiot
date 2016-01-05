@@ -82,6 +82,11 @@ abstract class DataStreamTest extends Assert {
         producerTemplate.sendBody(amqp(channel), payloadEncoding.encode(payload))
     }
 
+    protected def void toBusAndWait(String channel) {
+        def busResponse = producerTemplate.requestBody(amqp(channel), null, byte[].class)
+        payloadEncoding.decode(busResponse)
+    }
+
     protected def void toBusAndWait(String channel, Object payload) {
         def busResponse = producerTemplate.requestBody(amqp(channel), payloadEncoding.encode(payload), byte[].class)
         payloadEncoding.decode(busResponse)

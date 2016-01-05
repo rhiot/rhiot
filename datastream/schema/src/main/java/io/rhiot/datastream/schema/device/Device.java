@@ -20,11 +20,14 @@ public class Device {
 
     private String deviceId;
 
+    private String registrationId;
+
     public Device() {
     }
 
-    public Device(String deviceId) {
+    public Device(String deviceId, String registrationId) {
         this.deviceId = deviceId;
+        this.registrationId = registrationId;
     }
 
     public String getDeviceId() {
@@ -33,6 +36,14 @@ public class Device {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId;
     }
 
 }
