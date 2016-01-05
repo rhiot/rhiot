@@ -24,8 +24,10 @@ import org.junit.Test
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_DEREGISTER
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_REGISTER
+import static io.rhiot.datastream.schema.device.DeviceConstants.deviceHeartbeat
 import static io.rhiot.datastream.schema.device.DeviceConstants.disconnected
 import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
+import static io.rhiot.datastream.schema.device.DeviceConstants.heartbeat
 import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices
 import static io.rhiot.datastream.schema.device.DeviceConstants.registerDevice
 import static io.rhiot.utils.Uuids.uuid
@@ -79,7 +81,7 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
         List<String> disconnected = fromBus(disconnected(), List.class)
 
         // Then
-        assertThat(disconnected).isEqualTo([device.deviceId])
+        assertThat(disconnected).contains(device.deviceId)
     }
 
     @Test
@@ -106,6 +108,20 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
     void shouldNotGetDevice() {
         def device = fromBus(getDevice(device.deviceId), Device.class)
         assertThat(device).isNull()
+    }
+
+    @Test
+    void shouldSendHeartbeatDisconnected() {
+        // Given
+        device.lastUpdate = new DateTime(device.lastUpdate).minusMinutes(2).toDate()
+        toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
+
+        // When
+        toBusAndWait(deviceHeartbeat(device.deviceId))
+
+        // Then
+        List<String> disconnected = fromBus(disconnected(), List.class)
+        assertThat(disconnected).doesNotContain(device.deviceId)
     }
 
 }

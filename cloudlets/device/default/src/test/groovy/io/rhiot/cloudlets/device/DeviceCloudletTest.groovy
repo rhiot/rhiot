@@ -55,7 +55,6 @@ class DeviceCloudletTest extends Assert {
         new EmbeddedMongo().start()
 
         setIntProperty('api_rest_port', restApiPort)
-        setIntProperty('disconnectionPeriod', 5000)
         setIntProperty('lwm2m_port', lwm2mPort)
         new DeviceCloudlet().start().waitFor()
     }
@@ -78,21 +77,6 @@ class DeviceCloudletTest extends Assert {
 
         // Then
         assertThat(response.devices.asType(List.class)).hasSize(1)
-    }
-
-    @Test
-    void shouldSendHeartbeatToVirtualDevice() {
-        // Given
-        rest.delete("${apiBase}/device")
-        rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: deviceId))
-        sleep(5000)
-
-        // When
-        rest.getForEntity(apiBase + "/device/${deviceId}/heartbeat", Map.class)
-
-        // Then
-        def response = rest.getForObject(apiBase + '/device/disconnected', Map.class)
-        assertEquals(0, response['disconnectedDevices'].asType(List.class).size())
     }
 
     @Test

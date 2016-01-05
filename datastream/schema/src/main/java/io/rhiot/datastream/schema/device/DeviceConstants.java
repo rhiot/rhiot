@@ -18,6 +18,9 @@ package io.rhiot.datastream.schema.device;
 
 import static java.lang.String.format;
 
+/**
+ * Provides device-related constants, in particular AMQP channel helpers.
+ */
 public final class DeviceConstants {
 
     public static final String CHANNEL_DEVICE_GET = "device.get";
@@ -30,8 +33,14 @@ public final class DeviceConstants {
 
     public static final String CHANNEL_DEVICE_DEREGISTER = "device.deregister";
 
+    public static final String CHANNEL_DEVICE_HEARTBEAT = "device.heartbeat";
+
+    // Constructors
+
     private DeviceConstants() {
     }
+
+    // Channel helpers
 
     public static String getDevice(String deviceId) {
         return format("%s.%s", CHANNEL_DEVICE_GET, deviceId);
@@ -47,6 +56,10 @@ public final class DeviceConstants {
 
     public static String registerDevice() {
         return CHANNEL_DEVICE_REGISTER;
+    }
+
+    public static String deviceHeartbeat(String deviceId) {
+        return format("%s.%s", CHANNEL_DEVICE_HEARTBEAT, deviceId);
     }
 
 }

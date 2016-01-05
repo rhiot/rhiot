@@ -67,4 +67,9 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
         devices.remove(matchingDevices.get(0).getDeviceId());
     }
 
+    @Override
+    public void heartbeat(String deviceId) {
+        devices.get(deviceId).setLastUpdate(new Date());
+    }
+
 }

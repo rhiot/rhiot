@@ -35,4 +35,6 @@ public interface DeviceRegistry {
 
     void deregister(String registrationId);
 
+    void heartbeat(String deviceId);
+
 }
