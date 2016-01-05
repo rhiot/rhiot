@@ -346,11 +346,6 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-cloudlet-binary</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-cloudlet-device</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>

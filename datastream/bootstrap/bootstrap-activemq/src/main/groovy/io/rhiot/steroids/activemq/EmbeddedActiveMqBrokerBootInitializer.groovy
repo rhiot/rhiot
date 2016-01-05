@@ -73,20 +73,12 @@ public class EmbeddedActiveMqBrokerBootInitializer {
         "paho:${topic}?brokerUrl=tcp://localhost:${mqttPort()}"
     }
 
-    static String mqttJmsBridge(String topic) {
-        "jms:topic:${topic}?connectionFactory=#jmsConnectionFactory"
-    }
-
     static String amqp(String channel) {
         "amqp:${channel}"
     }
 
     static String amqpByPrefix(String channelPrefix) {
         "amqp:${channelPrefix}.>"
-    }
-
-    static String amqpJmsBridge(String channel) {
-        "jms:${channel}?connectionFactory=#jmsConnectionFactory"
     }
 
     // Helpers

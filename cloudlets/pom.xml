@@ -21,7 +21,6 @@
     </licenses>
 
     <modules>
-        <module>binary</module>
         <module>device</module>
         <module>geofencing</module>
     </modules>
