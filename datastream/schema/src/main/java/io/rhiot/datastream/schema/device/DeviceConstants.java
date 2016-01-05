@@ -16,7 +16,9 @@
  */
 package io.rhiot.datastream.schema.device;
 
-public class DeviceConstants {
+import static java.lang.String.format;
+
+public final class DeviceConstants {
 
     public static final String CHANNEL_DEVICE_GET = "device.get";
 
@@ -25,5 +27,12 @@ public class DeviceConstants {
     public static final String CHANNEL_DEVICE_REGISTER = "device.register";
 
     public static final String CHANNEL_DEVICE_DEREGISTER = "device.deregister";
+
+    private DeviceConstants() {
+    }
+
+    public static String deviceGet(String deviceId) {
+        return format("%s.%s", CHANNEL_DEVICE_GET, deviceId);
+    }
 
 }

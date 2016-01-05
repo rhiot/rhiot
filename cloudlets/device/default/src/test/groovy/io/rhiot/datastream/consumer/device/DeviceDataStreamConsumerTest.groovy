@@ -18,6 +18,7 @@ package io.rhiot.datastream.consumer.device
 
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.datastream.schema.device.Device
+import io.rhiot.datastream.schema.device.DeviceConstants
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
@@ -25,6 +26,7 @@ import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_D
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_GET
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_LIST
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_REGISTER
+import static io.rhiot.datastream.schema.device.DeviceConstants.deviceGet
 import static io.rhiot.utils.Uuids.uuid
 
 class DeviceDataStreamConsumerTest extends DataStreamTest {
@@ -47,7 +49,7 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
         toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
 
         // Then
-        def device = fromBus("${CHANNEL_DEVICE_GET}.${device.deviceId}", Device.class)
+        def device = fromBus(deviceGet(device.deviceId), Device.class)
         assertThat(device.registrationId).isNotEmpty()
     }
 
