@@ -38,7 +38,7 @@ class LeshanDataStreamSourceTest extends DataStreamTest {
     }
 
     @After
-    void after() {
+    void afterDataStream() {
         leshanClient.disconnect()
     }
 
