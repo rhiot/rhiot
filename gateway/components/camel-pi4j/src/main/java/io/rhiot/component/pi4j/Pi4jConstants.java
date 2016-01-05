@@ -37,8 +37,8 @@ public final class Pi4jConstants {
     public static final String CAMEL_URL_ID = "id";
     public static final String CAMEL_URL_TYPE = "type";
     public static final String CAMEL_URL_DEVICE = "device";
-    public static final String CAMEL_DEVICE_ID = "deviceId";
-    public static final String CAMEL_BUS_ID = "busId";
+    public static final String CAMEL_I2C_DEVICE_ID = "deviceId";
+    public static final String CAMEL_I2C_BUS_ID = "busId";
     public static final String CAMEL_GPIO_ID = "gpioId";
     public static final String CAMEL_GPIO_CLAZZ = "com.pi4j.io.gpio.RaspiPin";
     public static final boolean CAMEL_PI4j_LENIENT = true;

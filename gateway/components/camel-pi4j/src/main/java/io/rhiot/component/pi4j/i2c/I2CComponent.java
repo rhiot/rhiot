@@ -16,20 +16,21 @@
  */
 package io.rhiot.component.pi4j.i2c;
 
+import io.rhiot.component.pi4j.Pi4jConstants;
+import io.rhiot.component.pi4j.gpio.GPIOEndpoint;
+
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import io.rhiot.component.pi4j.Pi4jConstants;
-import io.rhiot.component.pi4j.gpio.GPIOEndpoint;
-import com.pi4j.io.i2c.I2CFactory;
-import com.pi4j.io.i2c.I2CFactoryProvider;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pi4j.io.i2c.I2CFactory;
+import com.pi4j.io.i2c.I2CFactoryProvider;
 
 /**
  * Represents the component that manages {@link GPIOEndpoint}.
@@ -46,6 +47,7 @@ public class I2CComponent extends UriEndpointComponent {
         super(context, I2CEndpoint.class);
     }
 
+    @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         Endpoint endpoint = null;
         Pattern regexPattern = Pattern.compile(Pi4jConstants.CAMEL_I2C_URL_PATTERN);
@@ -53,12 +55,12 @@ public class I2CComponent extends UriEndpointComponent {
         Matcher match = regexPattern.matcher(remaining);
         if (match.matches()) {
 
-            int busId = Integer.decode(match.group(Pi4jConstants.CAMEL_BUS_ID));
-            int deviceId = Integer.decode(match.group(Pi4jConstants.CAMEL_DEVICE_ID));
+            int busId = Integer.decode(match.group(Pi4jConstants.CAMEL_I2C_BUS_ID));
+            int deviceId = Integer.decode(match.group(Pi4jConstants.CAMEL_I2C_DEVICE_ID));
 
             endpoint = new I2CEndpoint(uri, this, remaining, I2CFactory.getInstance(busId), parameters);
-            parameters.put(Pi4jConstants.CAMEL_BUS_ID, busId);
-            parameters.put(Pi4jConstants.CAMEL_DEVICE_ID, deviceId);
+            parameters.put(Pi4jConstants.CAMEL_I2C_BUS_ID, busId);
+            parameters.put(Pi4jConstants.CAMEL_I2C_DEVICE_ID, deviceId);
 
             setProperties(endpoint, parameters);
         }
