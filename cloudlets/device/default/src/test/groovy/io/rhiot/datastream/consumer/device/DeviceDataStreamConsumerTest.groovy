@@ -29,11 +29,20 @@ import static io.rhiot.datastream.schema.device.DeviceConstants.disconnected
 import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
 import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices
 import static io.rhiot.datastream.schema.device.DeviceConstants.registerDevice
+import static io.rhiot.utils.Networks.findAvailableTcpPort
+import static io.rhiot.utils.Properties.setBooleanProperty
+import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 
 class DeviceDataStreamConsumerTest extends DataStreamTest {
 
     def device = new Device(uuid(), uuid(), new Date(), new Date())
+
+    @Override
+    protected void beforeDataStreamStarted() {
+        setIntProperty('AMQP_PORT', findAvailableTcpPort())
+        setBooleanProperty('MQTT_ENABLED', false)
+    }
 
     @Test
     void shouldRegisterDevice() {

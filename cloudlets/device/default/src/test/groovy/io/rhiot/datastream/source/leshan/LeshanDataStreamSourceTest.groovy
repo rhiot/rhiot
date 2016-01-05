@@ -26,6 +26,9 @@ import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.datastream.schema.device.DeviceConstants.deregisterDevice
 import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
 import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices
+import static io.rhiot.utils.Networks.findAvailableTcpPort
+import static io.rhiot.utils.Properties.setBooleanProperty
+import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 
 class LeshanDataStreamSourceTest extends DataStreamTest {
@@ -37,6 +40,12 @@ class LeshanDataStreamSourceTest extends DataStreamTest {
     // Collaborators fixtures
 
     def leshanClient = createVirtualLeshanClientTemplate(deviceId)
+
+    @Override
+    protected void beforeDataStreamStarted() {
+        setIntProperty('AMQP_PORT', findAvailableTcpPort())
+        setBooleanProperty('MQTT_ENABLED', false)
+    }
 
     @Override
     protected void afterDataStreamStarted() {

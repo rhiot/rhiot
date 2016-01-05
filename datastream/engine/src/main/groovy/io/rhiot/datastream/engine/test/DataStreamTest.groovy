@@ -45,8 +45,8 @@ abstract class DataStreamTest extends Assert {
 
     @Before
     public void before() {
-        beforeDataStreamStarted()
         if(!dataStreamStarted) {
+            beforeDataStreamStarted()
             dataStream = dataStream.start().asType(DataStream.class)
             beanRegistry = dataStream.beanRegistry()
             camelContext = beanRegistry.bean(CamelContext.class).get()
@@ -68,6 +68,7 @@ abstract class DataStreamTest extends Assert {
         try {
             dataStream.stop()
         } finally {
+            dataStreamStarted = false
             restoreSystemProperties()
         }
     }

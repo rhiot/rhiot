@@ -20,21 +20,27 @@ import org.eclipse.leshan.server.californium.LeshanServerBuilder;
 import org.eclipse.leshan.server.californium.impl.LeshanServer;
 import org.eclipse.leshan.server.client.ClientRegistry;
 
+/**
+ * Data stream source connecting Leshan LWM2M events with a data stream.
+ */
 public class LeshanDataStreamSource {
-
-    private final ClientRegistry clientRegistry;
 
     private final LeshanServer leshanServer;
 
     public LeshanDataStreamSource(ClientRegistry clientRegistry) {
-        this.clientRegistry = clientRegistry;
         LeshanServerBuilder leshanServerBuilder = new LeshanServerBuilder();
         leshanServerBuilder.setLocalAddress("0.0.0.0", LeshanServerBuilder.PORT);
         leshanServer = leshanServerBuilder.setClientRegistry(clientRegistry).build();
     }
 
+    // Lifecycle
+
     public void start() {
         leshanServer.start();
+    }
+
+    public void stop() {
+        leshanServer.stop();
     }
 
 }

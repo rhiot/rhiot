@@ -30,7 +30,7 @@ public class LeshanDataStreamSourceConfiguration {
         return new DataStreamClientRegistry(payloadEncoding, producerTemplate);
     }
 
-    @Bean(initMethod = "start")
+    @Bean(initMethod = "start", destroyMethod = "stop")
     LeshanDataStreamSource leshanDataStreamSource(ClientRegistry clientRegistry) {
         return new LeshanDataStreamSource(clientRegistry);
     }

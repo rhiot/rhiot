@@ -19,6 +19,7 @@ package io.rhiot.steroids.camel
 import io.rhiot.bootstrap.AbstractBootInitializer
 import io.rhiot.bootstrap.Bootstrap
 import io.rhiot.bootstrap.BootstrapAware
+import io.rhiot.bootstrap.MapBeanRegistry
 import io.rhiot.utils.Reflections
 import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;
@@ -54,6 +55,10 @@ class CamelBootInitializer extends AbstractBootInitializer {
     void stop() {
         vertx.close()
         camelContext.stop()
+        if(bootstrap.beanRegistry().bean(CamelContext.class).isPresent()) {
+            def contextKey = bootstrap.beanRegistry().asType(MapBeanRegistry.class).registry.entrySet().find{ it.value instanceof CamelContext }.key
+            bootstrap.beanRegistry().asType(MapBeanRegistry.class).registry.remove(contextKey)
+        }
     }
 
     @Override
