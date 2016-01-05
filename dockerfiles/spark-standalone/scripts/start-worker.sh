@@ -15,7 +15,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-cd /usr/local/spark
+cd /opt/spark
 export SPARK_LOCAL_IP=`awk 'NR==1 {print $1}' /etc/hosts`
 ./bin/spark-class org.apache.spark.deploy.worker.Worker \
 	spark://${SPARK_MASTER_PORT_7077_TCP_ADDR}:${SPARK_MASTER_ENV_SPARK_MASTER_PORT} \
