@@ -39,6 +39,19 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
     }
 
     @Test
+    void shouldGenerateRegistrationId() {
+        // Given
+        device.registrationId = null
+
+        // When
+        toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
+
+        // Then
+        def device = fromBus("${CHANNEL_DEVICE_GET}.${device.deviceId}", Device.class)
+        assertThat(device.registrationId).isNotEmpty()
+    }
+
+    @Test
     void shouldDeregisterDevice() {
         // Given
         toBusAndWait(CHANNEL_DEVICE_REGISTER, device)

@@ -24,7 +24,7 @@ public class DeviceDataStreamConsumerConfiguration {
 
     @Bean(name = "device")
     DeviceRegistry deviceRegistry() {
-        return new MemoryDeviceRegistry();
+        return new InMemoryDeviceRegistry();
     }
 
     @Bean

@@ -24,7 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MemoryDeviceRegistry implements DeviceRegistry {
+import static io.rhiot.utils.Uuids.uuid;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
+public class InMemoryDeviceRegistry implements DeviceRegistry {
 
     Map<String, Device> devices = new HashMap<>();
 
@@ -40,6 +43,9 @@ public class MemoryDeviceRegistry implements DeviceRegistry {
 
     @Override
     public void register(Device device) {
+        if(isBlank(device.getRegistrationId())) {
+            device.setRegistrationId(uuid());
+        }
         devices.put(device.getDeviceId(), device);
     }
 
