@@ -18,12 +18,15 @@ package io.rhiot.datastream.source.leshan
 
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.datastream.schema.device.Device
+import io.rhiot.datastream.schema.device.DeviceConstants
 import org.junit.After
 import org.junit.Test
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.datastream.schema.device.DeviceConstants.deregisterDevice
 import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
+import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices
 import static io.rhiot.utils.Uuids.uuid
 
 class LeshanDataStreamSourceTest extends DataStreamTest {
@@ -52,6 +55,25 @@ class LeshanDataStreamSourceTest extends DataStreamTest {
     void shouldRegisterDeviceWithId() {
         def device = fromBus(getDevice(deviceId), Device.class)
         assertThat(device.deviceId).isEqualTo(deviceId)
+    }
+
+    @Test
+    void shouldListDevices() {
+        List<Device> devices = fromBus(listDevices(), List.class)
+        assertThat(devices).isNotEmpty()
+    }
+
+    @Test
+    void shouldDeregisterDevice() {
+        // Given
+        def device = fromBus(getDevice(deviceId), Device.class)
+
+        // When
+        toBusAndWait(deregisterDevice(device.registrationId))
+
+        // Then
+        device = fromBus(getDevice(deviceId), Device.class)
+        assertThat(device).isNull()
     }
 
 }

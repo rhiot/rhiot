@@ -26,13 +26,16 @@ import org.eclipse.leshan.server.client.ClientUpdate;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice;
 import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices;
 import static io.rhiot.datastream.schema.device.DeviceConstants.registerDevice;
+import static java.util.stream.Collectors.toList;
 
 public class DataStreamClientRegistry implements ClientRegistry {
+
+    private final List<ClientRegistryListener> listeners = new CopyOnWriteArrayList<>();
 
     private final PayloadEncoding payloadEncoding;
 
@@ -54,7 +57,7 @@ public class DataStreamClientRegistry implements ClientRegistry {
     public Collection<Client> allClients() {
         byte[] response = producerTemplate.requestBody("amqp:" + listDevices(), null, byte[].class);
         List<Device> devices = (List<Device>) payloadEncoding.decode(response);
-        return devices.stream().map(device -> new Client(null, device.getDeviceId(), null, 0, null)).collect(Collectors.toList());
+        return devices.stream().map(DataStreamClientRegistry::deviceToClient).collect(toList());
     }
 
     @Override
@@ -69,10 +72,18 @@ public class DataStreamClientRegistry implements ClientRegistry {
 
     @Override
     public boolean registerClient(Client client) {
+        byte[] existingDeviceResponse = producerTemplate.requestBody("amqp:" + getDevice(client.getEndpoint()), null, byte[].class);
+        Device existingDevice = (Device) payloadEncoding.decode(existingDeviceResponse);
+
         byte[] payload = payloadEncoding.encode(new Device(client.getEndpoint(), client.getRegistrationId(), client.getRegistrationDate(), client.getLastUpdate()));
         byte[] response = producerTemplate.requestBody("amqp:" + registerDevice(), payload, byte[].class);
         try {
             payloadEncoding.decode(response);
+            if(existingDevice != null) {
+                Client existingClient = deviceToClient(existingDevice);
+                listeners.stream().forEach(listener -> listener.unregistered(existingClient));
+            }
+            listeners.stream().forEach(listener -> listener.registered(client));
             return true;
         } catch (Exception e) {
             return false;
@@ -88,7 +99,19 @@ public class DataStreamClientRegistry implements ClientRegistry {
     public Client deregisterClient(String registrationId) {
         byte[] response = producerTemplate.requestBody("amqp:device.deregister." + registrationId, null, byte[].class);
         Device device = (Device) payloadEncoding.decode(response);
-        return new Client(null, device.getDeviceId(), null, 0, null);
+        Client client = new Client(null, device.getDeviceId(), null, 0, null);
+        listeners.stream().forEach(listener -> listener.unregistered(client));
+        return client;
+    }
+
+    // Helpers
+
+    private static Client deviceToClient(Device device) {
+        return new Client(
+                device.getRegistrationId(), device.getDeviceId(),
+                null, 0, null, 0L, null, null, null, null,
+                device.getRegistrationDate(), device.getLastUpdate()
+        );
     }
 
 }

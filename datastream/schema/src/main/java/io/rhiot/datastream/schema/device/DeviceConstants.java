@@ -58,6 +58,11 @@ public final class DeviceConstants {
         return CHANNEL_DEVICE_REGISTER;
     }
 
+    public static String deregisterDevice(String deviceId) {
+        return format("%s.%s", CHANNEL_DEVICE_DEREGISTER, deviceId);
+    }
+
+
     public static String deviceHeartbeat(String deviceId) {
         return format("%s.%s", CHANNEL_DEVICE_HEARTBEAT, deviceId);
     }
