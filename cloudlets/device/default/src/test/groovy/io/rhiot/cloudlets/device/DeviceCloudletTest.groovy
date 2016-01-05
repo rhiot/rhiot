@@ -68,18 +68,6 @@ class DeviceCloudletTest extends Assert {
     // Tests
 
     @Test
-    void shouldReturnNoClients() {
-        // Given
-        rest.delete("${apiBase}/device")
-
-        // When
-        def response = rest.getForObject("${apiBase}/device", Map.class)
-
-        // Then
-        assertThat(response.devices.asType(List.class)).isEmpty()
-    }
-
-    @Test
     void shouldReturnVirtualClient() {
         // Given
         rest.delete("${apiBase}/device")
@@ -105,35 +93,6 @@ class DeviceCloudletTest extends Assert {
         // Then
         def response = rest.getForObject(apiBase + '/device/disconnected', Map.class)
         assertEquals(0, response['disconnectedDevices'].asType(List.class).size())
-    }
-
-    @Test
-    void shouldNotRegisterClientTwice() {
-        // Given
-        rest.delete("${apiBase}/device")
-        def firstClient = 'foo'
-        def secondClient = 'bar'
-
-        // When
-        createGenericLeshanClientTemplate(firstClient, lwm2mPort).connect()
-        createGenericLeshanClientTemplate(firstClient, lwm2mPort).connect()
-        createGenericLeshanClientTemplate(secondClient, lwm2mPort).connect()
-
-        // Then
-        def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/device"), Map.class)
-        assertEquals(2, clients['devices'].asType(List.class).size())
-    }
-
-    @Test
-    void shouldListRegisteredDevices() {
-        // Given
-        createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
-
-        // When
-        def device = rest.getForObject("${apiBase}/device/${deviceId}", Map.class)
-
-        // Then
-        assertThat(deviceId).isEqualTo(device['device']['endpoint'])
     }
 
     @Test

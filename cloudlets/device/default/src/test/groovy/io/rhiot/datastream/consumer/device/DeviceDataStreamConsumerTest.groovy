@@ -40,6 +40,21 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
     }
 
     @Test
+    void shouldNotRegisterDeviceTwice() {
+        // Given
+        device.registrationId = null
+        toBusAndWait(registerDevice(), device)
+
+        // When
+        def initialDevicesCount = fromBus(listDevices(), List.class).size()
+        toBusAndWait(registerDevice(), device)
+        def finalDevicesCount = fromBus(listDevices(), List.class).size()
+
+        // When
+        assertThat(finalDevicesCount).isEqualTo(initialDevicesCount)
+    }
+
+    @Test
     void shouldGenerateRegistrationId() {
         // Given
         device.registrationId = null
