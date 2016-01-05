@@ -28,7 +28,7 @@ import static io.rhiot.utils.Uuids.uuid
 
 class DeviceDataStreamConsumerTest extends DataStreamTest {
 
-    def device = new Device('foo')
+    def device = new Device(uuid())
 
     @Test
     void shouldRegisterDevice() {

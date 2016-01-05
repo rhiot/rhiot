@@ -16,16 +16,18 @@
  */
 package io.rhiot.steroids.activemq
 
-import io.rhiot.bootstrap.BootModule
-import io.rhiot.bootstrap.Bootstrap
-import io.rhiot.bootstrap.BootstrapAware
 import org.apache.activemq.broker.BrokerService
+import org.springframework.stereotype.Component
+
+import javax.annotation.PostConstruct
+import javax.annotation.PreDestroy
 
 import static io.rhiot.utils.Properties.booleanProperty
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.stringProperty
 
-public class EmbeddedActiveMqBrokerBootInitializer implements BootModule, BootstrapAware {
+@Component
+public class EmbeddedActiveMqBrokerBootInitializer {
 
     // Constants
 
@@ -33,13 +35,11 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootModule, Bootst
 
     // Collaborators
 
-    private Bootstrap bootstrap
-
     private BrokerService brokerService
 
     // Life-cycle
 
-    @Override
+    @PostConstruct
     void start() {
         def brokerUrl = externalBrokerUrl()
         if(brokerUrl == null) {
@@ -60,16 +60,11 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootModule, Bootst
         }
     }
 
-    @Override
+    @PreDestroy
     void stop() {
         if(brokerService != null) {
             brokerService.stop()
         }
-    }
-
-    @Override
-    int order() {
-        1000
     }
 
     // Camel DSL
@@ -106,11 +101,6 @@ public class EmbeddedActiveMqBrokerBootInitializer implements BootModule, Bootst
 
     static int amqpPort() {
         intProperty('AMQP_PORT', 5672)
-    }
-
-    @Override
-    void bootstrap(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap
     }
 
 }
