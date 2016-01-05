@@ -18,7 +18,6 @@ package io.rhiot.datastream.source.leshan
 
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.datastream.schema.device.Device
-import io.rhiot.datastream.schema.device.DeviceConstants
 import org.junit.After
 import org.junit.Test
 
@@ -31,7 +30,11 @@ import static io.rhiot.utils.Uuids.uuid
 
 class LeshanDataStreamSourceTest extends DataStreamTest {
 
+    // Data fixtures
+
     def deviceId = uuid()
+
+    // Collaborators fixtures
 
     def leshanClient = createVirtualLeshanClientTemplate(deviceId)
 
@@ -44,6 +47,8 @@ class LeshanDataStreamSourceTest extends DataStreamTest {
     void afterDataStream() {
         leshanClient.disconnect()
     }
+
+    // Tests
 
     @Test
     void shouldRegisterDevice() {
