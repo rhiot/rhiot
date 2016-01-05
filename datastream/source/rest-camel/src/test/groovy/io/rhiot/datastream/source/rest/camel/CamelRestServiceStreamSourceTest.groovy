@@ -17,10 +17,9 @@
 package io.rhiot.datastream.source.rest.camel
 
 import io.rhiot.bootstrap.classpath.Named
-import io.rhiot.datastream.engine.AbstractServiceRouteStreamConsumer
+import io.rhiot.datastream.engine.ServiceDataStreamConsumer
 import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.datastream.engine.test.DataStreamTest
-import io.rhiot.datastream.source.rest.camel.CamelRestStreamSource
 import io.rhiot.steroids.camel.Route
 import io.vertx.core.json.Json
 import org.junit.Test
@@ -98,9 +97,9 @@ class CamelRestServiceStreamSourceTest extends DataStreamTest {
     }
 
     @Route
-    static class TestInterfaceStreamConsumer extends AbstractServiceRouteStreamConsumer {
+    static class TestInterfaceDataStreamConsumer extends ServiceDataStreamConsumer {
 
-        TestInterfaceStreamConsumer() {
+        TestInterfaceDataStreamConsumer() {
             super('test')
         }
     }

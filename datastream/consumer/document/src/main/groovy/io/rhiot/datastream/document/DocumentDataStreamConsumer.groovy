@@ -14,14 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.consumer.device;
+package io.rhiot.datastream.document
 
-import io.rhiot.datastream.engine.AbstractServiceRouteStreamConsumer;
+import io.rhiot.datastream.engine.ServiceDataStreamConsumer
+import io.rhiot.steroids.camel.Route
 
-public class DeviceDataStreamConsumer extends AbstractServiceRouteStreamConsumer {
+@Route
+class DocumentDataStreamConsumer extends ServiceDataStreamConsumer {
 
-    public DeviceDataStreamConsumer() {
-        super("device");
+    DocumentDataStreamConsumer() {
+        super('document')
     }
 
 }

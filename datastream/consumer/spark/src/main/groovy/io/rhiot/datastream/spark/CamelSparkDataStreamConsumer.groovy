@@ -16,13 +16,13 @@
  */
 package io.rhiot.datastream.spark
 
-import io.rhiot.datastream.engine.AbstractServiceRouteStreamConsumer
+import io.rhiot.datastream.engine.ServiceDataStreamConsumer
 import io.rhiot.steroids.camel.Route
 
 @Route
-class CamelSparkStreamConsumer extends AbstractServiceRouteStreamConsumer {
+class CamelSparkDataStreamConsumer extends ServiceDataStreamConsumer {
 
-    CamelSparkStreamConsumer() {
+    CamelSparkDataStreamConsumer() {
         super('spark')
     }
 

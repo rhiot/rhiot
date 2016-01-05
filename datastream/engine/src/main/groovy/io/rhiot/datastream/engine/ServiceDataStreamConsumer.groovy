@@ -29,7 +29,7 @@ import java.lang.reflect.Method
 
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpByPrefix
 
-abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implements BootstrapAware {
+class ServiceDataStreamConsumer extends RouteBuilder implements BootstrapAware {
 
     protected final String serviceChannel
 
@@ -38,7 +38,7 @@ abstract class AbstractServiceRouteStreamConsumer extends RouteBuilder implement
     @Autowired
     PayloadEncoding payloadEncoding
 
-    AbstractServiceRouteStreamConsumer(String serviceChannel) {
+    ServiceDataStreamConsumer(String serviceChannel) {
         this.serviceChannel = serviceChannel
     }
 

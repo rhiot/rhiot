@@ -24,7 +24,7 @@ import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
 
-class AbstractServiceRouteStreamConsumerTest extends DataStreamTest {
+class ServiceDataStreamConsumerTest extends DataStreamTest {
 
     // Tests
 
@@ -53,9 +53,9 @@ class AbstractServiceRouteStreamConsumerTest extends DataStreamTest {
     // Beans fixtures
 
     @Route
-    static class EchoStreamConsumer extends AbstractServiceRouteStreamConsumer {
+    static class EchoDataStreamConsumer extends ServiceDataStreamConsumer {
 
-        EchoStreamConsumer() {
+        EchoDataStreamConsumer() {
             super('echo')
         }
 

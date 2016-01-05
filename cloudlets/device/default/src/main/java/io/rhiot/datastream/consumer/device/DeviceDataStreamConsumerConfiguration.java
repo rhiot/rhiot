@@ -16,6 +16,7 @@
  */
 package io.rhiot.datastream.consumer.device;
 
+import io.rhiot.datastream.engine.ServiceDataStreamConsumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,8 +29,8 @@ public class DeviceDataStreamConsumerConfiguration {
     }
 
     @Bean
-    DeviceDataStreamConsumer deviceDataStreamConsumer() {
-        return new DeviceDataStreamConsumer();
+    ServiceDataStreamConsumer deviceDataStreamConsumer() {
+        return new ServiceDataStreamConsumer("device");
     }
 
 }
