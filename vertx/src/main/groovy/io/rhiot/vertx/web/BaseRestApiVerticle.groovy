@@ -55,7 +55,6 @@ abstract class BaseRestApiVerticle extends GroovyVerticle {
             http = vertx.createHttpServer()
             router = router(vertx)
 
-            router.route().handler(new HttpExchangeInterceptorHandler())
             router.route().handler(CorsHandler.create('*').
                     allowedMethod(OPTIONS).allowedMethod(GET).allowedMethod(POST).allowedMethod(DELETE).
                     allowedHeaders(['Origin', 'Accept', 'X-Requested-With', 'Content-Type', 'Access-Control-Request-Method', 'Access-Control-Request-Headers', 'Authorization'].toSet()))

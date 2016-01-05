@@ -22,7 +22,6 @@
 
     <modules>
         <module>default</module>
-        <module>app</module>
     </modules>
 
 </project>
