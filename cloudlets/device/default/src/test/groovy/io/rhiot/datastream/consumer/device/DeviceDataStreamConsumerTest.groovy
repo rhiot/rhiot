@@ -18,11 +18,13 @@ package io.rhiot.datastream.consumer.device
 
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.datastream.schema.device.Device
+import org.joda.time.DateTime
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_DEREGISTER
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_REGISTER
+import static io.rhiot.datastream.schema.device.DeviceConstants.disconnected
 import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
 import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices
 import static io.rhiot.datastream.schema.device.DeviceConstants.registerDevice
@@ -30,7 +32,7 @@ import static io.rhiot.utils.Uuids.uuid
 
 class DeviceDataStreamConsumerTest extends DataStreamTest {
 
-    def device = new Device(uuid(), uuid())
+    def device = new Device(uuid(), uuid(), new Date(), new Date())
 
     @Test
     void shouldRegisterDevice() {
@@ -65,6 +67,19 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
         // Then
         def device = fromBus(getDevice(device.deviceId), Device.class)
         assertThat(device.registrationId).isNotEmpty()
+    }
+
+    @Test
+    void shouldListDisconnected() {
+        // Given
+        device.lastUpdate = new DateTime(device.lastUpdate).minusMinutes(2).toDate()
+        toBusAndWait(registerDevice(), device)
+
+        // When
+        List<String> disconnected = fromBus(disconnected(), List.class)
+
+        // Then
+        assertThat(disconnected).isEqualTo([device.deviceId])
     }
 
     @Test

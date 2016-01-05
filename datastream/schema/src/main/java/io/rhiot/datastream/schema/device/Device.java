@@ -16,18 +16,26 @@
  */
 package io.rhiot.datastream.schema.device;
 
+import java.util.Date;
+
 public class Device {
 
     private String deviceId;
 
     private String registrationId;
 
+    private Date registrationDate;
+
+    private Date lastUpdate;
+
     public Device() {
     }
 
-    public Device(String deviceId, String registrationId) {
+    public Device(String deviceId, String registrationId, Date registrationDate, Date lastUpdate) {
         this.deviceId = deviceId;
         this.registrationId = registrationId;
+        this.registrationDate = registrationDate;
+        this.lastUpdate = lastUpdate;
     }
 
     public String getDeviceId() {
@@ -44,6 +52,22 @@ public class Device {
 
     public void setRegistrationId(String registrationId) {
         this.registrationId = registrationId;
+    }
+
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
 }

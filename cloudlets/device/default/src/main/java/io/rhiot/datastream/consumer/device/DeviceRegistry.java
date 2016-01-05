@@ -20,11 +20,16 @@ import io.rhiot.datastream.schema.device.Device;
 
 import java.util.List;
 
+/**
+ * Backend service used to manage devices connecting to the system.
+ */
 public interface DeviceRegistry {
 
     Device get(String deviceId);
 
     List<Device> list();
+
+    List<String> disconnected();
 
     void register(Device device);
 

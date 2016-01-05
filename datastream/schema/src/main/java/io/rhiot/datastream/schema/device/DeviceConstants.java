@@ -24,6 +24,8 @@ public final class DeviceConstants {
 
     public static final String CHANNEL_DEVICE_LIST = "device.list";
 
+    public static final String CHANNEL_DEVICE_DISCONNECTED = "device.disconnected";
+
     public static final String CHANNEL_DEVICE_REGISTER = "device.register";
 
     public static final String CHANNEL_DEVICE_DEREGISTER = "device.deregister";
@@ -37,6 +39,10 @@ public final class DeviceConstants {
 
     public static String listDevices() {
         return CHANNEL_DEVICE_LIST;
+    }
+
+    public static String disconnected() {
+        return CHANNEL_DEVICE_DISCONNECTED;
     }
 
     public static String registerDevice() {

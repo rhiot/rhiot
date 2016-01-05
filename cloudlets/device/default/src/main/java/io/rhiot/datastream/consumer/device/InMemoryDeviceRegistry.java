@@ -18,13 +18,17 @@ package io.rhiot.datastream.consumer.device;
 
 import io.rhiot.datastream.schema.device.Device;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static io.rhiot.utils.Uuids.uuid;
+import static java.time.Instant.ofEpochMilli;
+import static java.time.LocalDateTime.ofInstant;
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class InMemoryDeviceRegistry implements DeviceRegistry {
@@ -42,6 +46,14 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
     }
 
     @Override
+    public List<String> disconnected() {
+        return devices.values().stream().filter(device -> {
+            LocalTime updated = ofInstant(ofEpochMilli(device.getLastUpdate().getTime()), ZoneId.systemDefault()).toLocalTime();
+            return updated.plus(MINUTES.toMillis(1), ChronoUnit.MILLIS).isBefore(LocalTime.now());
+        }).map(Device::getDeviceId).collect(toList());
+    }
+
+    @Override
     public void register(Device device) {
         if(isBlank(device.getRegistrationId())) {
             device.setRegistrationId(uuid());
@@ -51,7 +63,7 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
 
     @Override
     public void deregister(String registrationId) {
-        List<Device> matchingDevices = devices.values().stream().filter(device -> registrationId.equals(device.getRegistrationId())).collect(Collectors.toList());
+        List<Device> matchingDevices = devices.values().stream().filter(device -> registrationId.equals(device.getRegistrationId())).collect(toList());
         devices.remove(matchingDevices.get(0).getDeviceId());
     }
 

@@ -69,7 +69,7 @@ public class DataStreamClientRegistry implements ClientRegistry {
 
     @Override
     public boolean registerClient(Client client) {
-        byte[] payload = payloadEncoding.encode(new Device(client.getEndpoint(), client.getRegistrationId()));
+        byte[] payload = payloadEncoding.encode(new Device(client.getEndpoint(), client.getRegistrationId(), client.getRegistrationDate(), client.getLastUpdate()));
         byte[] response = producerTemplate.requestBody("amqp:" + registerDevice(), payload, byte[].class);
         try {
             payloadEncoding.decode(response);
