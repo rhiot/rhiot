@@ -39,6 +39,10 @@ public final class DeviceIOConstants {
     public static final String CAMEL_SPLIT_REGEX = "[A-Z_]+(\\|[A-Z_]+)*";
     public static final String CAMEL_SPLIT = "\\|";
 
+    public static final String CAMEL_I2C_DEVICE_ID = "deviceId";
+    public static final String CAMEL_I2C_BUS_ID = "busId";
+    public static final String CAMEL_I2C_DRIVER_LOCATION = "/META-INF/services/io/rhiot/component/deviceio/i2c/";
+
     private DeviceIOConstants() {
         // Constants class
     }
