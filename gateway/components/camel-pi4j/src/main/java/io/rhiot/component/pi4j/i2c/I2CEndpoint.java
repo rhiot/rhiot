@@ -16,16 +16,14 @@
  */
 package io.rhiot.component.pi4j.i2c;
 
+import io.rhiot.component.pi4j.Pi4jConstants;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.util.Map;
-
-import io.rhiot.component.pi4j.Pi4jConstants;
-import com.pi4j.io.i2c.I2CBus;
-import com.pi4j.io.i2c.I2CDevice;
 
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
@@ -38,6 +36,9 @@ import org.apache.camel.spi.UriPath;
 import org.apache.camel.util.EndpointHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pi4j.io.i2c.I2CBus;
+import com.pi4j.io.i2c.I2CDevice;
 
 /**
  * Represents a I2C endpoint.
@@ -76,14 +77,14 @@ public class I2CEndpoint extends DefaultEndpoint {
     private String driver;
 
     // DO NOT EXPORT IT OUTSIDE, NO GETTER, NO SETTER
-    private Class driverClass;
+    private transient Class driverClass;
 
     // DO NOT EXPORT IT OUTSIDE, NO GETTER, NO SETTER
-    private Map<String, Object> parameters;
+    private transient Map<String, Object> parameters;
 
-    private I2CDevice device;
+    private transient I2CDevice device;
 
-    private I2CBus bus;
+    private transient I2CBus bus;
 
     public I2CEndpoint(String uri, I2CComponent i2cComponent, String remaining, I2CBus bus,
             Map<String, Object> parameters) {
@@ -94,6 +95,7 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     }
 
+    @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         Consumer ret = null;
 
@@ -119,6 +121,7 @@ public class I2CEndpoint extends DefaultEndpoint {
         return ret;
     }
 
+    @Override
     public Producer createProducer() throws Exception {
         Producer ret = null;
 
@@ -223,6 +226,7 @@ public class I2CEndpoint extends DefaultEndpoint {
         return Pi4jConstants.CAMEL_PI4j_LENIENT;
     }
 
+    @Override
     public boolean isSingleton() {
         return true;
     }
