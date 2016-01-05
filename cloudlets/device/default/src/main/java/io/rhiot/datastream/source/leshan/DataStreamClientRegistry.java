@@ -28,7 +28,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.rhiot.datastream.schema.device.DeviceConstants.deviceGet;
+import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice;
+import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices;
+import static io.rhiot.datastream.schema.device.DeviceConstants.registerDevice;
 
 public class DataStreamClientRegistry implements ClientRegistry {
 
@@ -43,14 +45,14 @@ public class DataStreamClientRegistry implements ClientRegistry {
 
     @Override
     public Client get(String endpoint) {
-        byte[] response = producerTemplate.requestBody("amqp:" + deviceGet(endpoint), null, byte[].class);
+        byte[] response = producerTemplate.requestBody("amqp:" + getDevice(endpoint), null, byte[].class);
         Device device = (Device) payloadEncoding.decode(response);
         return new Client(null, device.getDeviceId(), null, 0, null);
     }
 
     @Override
     public Collection<Client> allClients() {
-        byte[] response = producerTemplate.requestBody("amqp:device.list", null, byte[].class);
+        byte[] response = producerTemplate.requestBody("amqp:" + listDevices(), null, byte[].class);
         List<Device> devices = (List<Device>) payloadEncoding.decode(response);
         return devices.stream().map(device -> new Client(null, device.getDeviceId(), null, 0, null)).collect(Collectors.toList());
     }
@@ -68,7 +70,7 @@ public class DataStreamClientRegistry implements ClientRegistry {
     @Override
     public boolean registerClient(Client client) {
         byte[] payload = payloadEncoding.encode(new Device(client.getEndpoint(), client.getRegistrationId()));
-        byte[] response = producerTemplate.requestBody("amqp:device.register", payload, byte[].class);
+        byte[] response = producerTemplate.requestBody("amqp:" + registerDevice(), payload, byte[].class);
         try {
             payloadEncoding.decode(response);
             return true;

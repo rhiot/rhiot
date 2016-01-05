@@ -18,15 +18,14 @@ package io.rhiot.datastream.consumer.device
 
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.datastream.schema.device.Device
-import io.rhiot.datastream.schema.device.DeviceConstants
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_DEREGISTER
-import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_GET
-import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_LIST
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_REGISTER
-import static io.rhiot.datastream.schema.device.DeviceConstants.deviceGet
+import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
+import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices
+import static io.rhiot.datastream.schema.device.DeviceConstants.registerDevice
 import static io.rhiot.utils.Uuids.uuid
 
 class DeviceDataStreamConsumerTest extends DataStreamTest {
@@ -35,8 +34,8 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
 
     @Test
     void shouldRegisterDevice() {
-        toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
-        def devices = fromBus(CHANNEL_DEVICE_LIST, List.class)
+        toBusAndWait(registerDevice(), device)
+        def devices = fromBus(listDevices(), List.class)
         assertThat(devices).isNotEmpty()
     }
 
@@ -46,36 +45,36 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
         device.registrationId = null
 
         // When
-        toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
+        toBusAndWait(registerDevice(), device)
 
         // Then
-        def device = fromBus(deviceGet(device.deviceId), Device.class)
+        def device = fromBus(getDevice(device.deviceId), Device.class)
         assertThat(device.registrationId).isNotEmpty()
     }
 
     @Test
     void shouldDeregisterDevice() {
         // Given
-        toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
+        toBusAndWait(registerDevice(), device)
 
         // When
         toBusAndWait("${CHANNEL_DEVICE_DEREGISTER}.${device.registrationId}")
 
         // Then
-        def device = fromBus("${CHANNEL_DEVICE_GET}.${device.deviceId}", Device.class)
+        def device = fromBus(getDevice(device.deviceId), Device.class)
         assertThat(device).isNull()
     }
 
     @Test
     void shouldGetDevice() {
         toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
-        def device = fromBus("${CHANNEL_DEVICE_GET}.${device.deviceId}", Device.class)
+        def device = fromBus(getDevice(device.deviceId), Device.class)
         assertThat(device.deviceId).isEqualTo(device.deviceId)
     }
 
     @Test
     void shouldNotGetDevice() {
-        def device = fromBus("${CHANNEL_DEVICE_GET}.${uuid()}", Device.class)
+        def device = fromBus(getDevice(device.deviceId), Device.class)
         assertThat(device).isNull()
     }
 

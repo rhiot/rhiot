@@ -31,8 +31,16 @@ public final class DeviceConstants {
     private DeviceConstants() {
     }
 
-    public static String deviceGet(String deviceId) {
+    public static String getDevice(String deviceId) {
         return format("%s.%s", CHANNEL_DEVICE_GET, deviceId);
+    }
+
+    public static String listDevices() {
+        return CHANNEL_DEVICE_LIST;
+    }
+
+    public static String registerDevice() {
+        return CHANNEL_DEVICE_REGISTER;
     }
 
 }

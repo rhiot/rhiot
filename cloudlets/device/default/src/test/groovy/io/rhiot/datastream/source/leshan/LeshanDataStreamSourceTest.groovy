@@ -23,7 +23,7 @@ import org.junit.Test
 
 import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.datastream.schema.device.DeviceConstants.deviceGet
+import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
 import static io.rhiot.utils.Uuids.uuid
 
 class LeshanDataStreamSourceTest extends DataStreamTest {
@@ -44,13 +44,13 @@ class LeshanDataStreamSourceTest extends DataStreamTest {
 
     @Test
     void shouldRegisterDevice() {
-        def device = fromBus(deviceGet(deviceId), Device.class)
+        def device = fromBus(getDevice(deviceId), Device.class)
         assertThat(device.registrationId).isNotEmpty()
     }
 
     @Test
     void shouldRegisterDeviceWithId() {
-        def device = fromBus(deviceGet(deviceId), Device.class)
+        def device = fromBus(getDevice(deviceId), Device.class)
         assertThat(device.deviceId).isEqualTo(deviceId)
     }
 
