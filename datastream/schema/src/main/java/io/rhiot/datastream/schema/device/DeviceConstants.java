@@ -23,6 +23,8 @@ import static java.lang.String.format;
  */
 public final class DeviceConstants {
 
+    // Constants
+
     public static final String CHANNEL_DEVICE_GET = "device.get";
 
     public static final String CHANNEL_DEVICE_LIST = "device.list";
@@ -34,6 +36,12 @@ public final class DeviceConstants {
     public static final String CHANNEL_DEVICE_DEREGISTER = "device.deregister";
 
     public static final String CHANNEL_DEVICE_HEARTBEAT = "device.heartbeat";
+
+    // Device metrics constants
+
+    public static final String CHANNEL_DEVICE_METRICS_READ = "device-metrics.read";
+
+    public static final String CHANNEL_DEVICE_METRICS_WRITE = "device-metrics.write";
 
     // Constructors
 
@@ -62,9 +70,18 @@ public final class DeviceConstants {
         return format("%s.%s", CHANNEL_DEVICE_DEREGISTER, deviceId);
     }
 
-
     public static String deviceHeartbeat(String deviceId) {
         return format("%s.%s", CHANNEL_DEVICE_HEARTBEAT, deviceId);
+    }
+
+    // Device metrics channel helpers
+
+    public static String readDeviceMetric(String deviceId, String metric) {
+        return format("%s.%s.%s", CHANNEL_DEVICE_METRICS_READ, deviceId, metric);
+    }
+
+    public static String writeDeviceMetric(String deviceId, String metric) {
+        return format("%s.%s.%s", CHANNEL_DEVICE_METRICS_WRITE, deviceId, metric);
     }
 
 }

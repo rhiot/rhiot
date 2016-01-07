@@ -16,11 +16,9 @@
  */
 package io.rhiot.cloudlets.device
 
-import io.rhiot.cloudlets.device.verticles.LeshanServerVerticle
-import io.rhiot.mongodb.EmbeddedMongo
-import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 import org.springframework.web.client.RestTemplate
 
@@ -31,6 +29,7 @@ import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 
+@Ignore
 class DeviceCloudletTest extends Assert {
 
     // Collaborators fixtures
@@ -52,16 +51,8 @@ class DeviceCloudletTest extends Assert {
 
     @BeforeClass
     static void beforeClass() {
-        new EmbeddedMongo().start()
-
         setIntProperty('api_rest_port', restApiPort)
         setIntProperty('lwm2m_port', lwm2mPort)
-        new DeviceCloudlet().start().waitFor()
-    }
-
-    @AfterClass
-    static void afterClass() {
-        LeshanServerVerticle.leshanServer.stop()
     }
 
     // Tests

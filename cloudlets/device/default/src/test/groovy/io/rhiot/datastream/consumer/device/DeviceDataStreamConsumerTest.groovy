@@ -23,12 +23,17 @@ import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_DEREGISTER
+import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_METRICS_WRITE
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_REGISTER
 import static io.rhiot.datastream.schema.device.DeviceConstants.deviceHeartbeat
 import static io.rhiot.datastream.schema.device.DeviceConstants.disconnected
 import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
 import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices
+import static io.rhiot.datastream.schema.device.DeviceConstants.readDeviceMetric
+import static io.rhiot.datastream.schema.device.DeviceConstants.readDeviceMetrics
 import static io.rhiot.datastream.schema.device.DeviceConstants.registerDevice
+import static io.rhiot.datastream.schema.device.DeviceConstants.writeDeviceMetric
+import static io.rhiot.datastream.schema.device.DeviceConstants.writeDeviceMetrics
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
@@ -130,6 +135,44 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
         // Then
         List<String> disconnected = fromBus(disconnected(), List.class)
         assertThat(disconnected).doesNotContain(device.deviceId)
+    }
+
+    // Device metrics tests
+
+    @Test
+    void shouldReadEmptyMetric() {
+        def metric = fromBus(readDeviceMetric(device.deviceId, uuid()), String.class)
+
+        // Then
+        assertThat(metric).isNull()
+    }
+
+    @Test
+    void shouldReadStringMetric() {
+        // Given
+        def metric = uuid()
+        def value = uuid()
+        toBusAndWait(writeDeviceMetric(device.deviceId, metric), value)
+
+        // When
+        def metricRead = fromBus(readDeviceMetric(device.deviceId, metric), String.class)
+
+        // Then
+        assertThat(metricRead).isEqualTo(value)
+    }
+
+    @Test
+    void shouldReadIntegerMetric() {
+        // Given
+        def metric = uuid()
+        def value = 666
+        toBusAndWait(writeDeviceMetric(device.deviceId, metric), value)
+
+        // When
+        def metricRead = fromBus(readDeviceMetric(device.deviceId, metric), int.class)
+
+        // Then
+        assertThat(metricRead).isEqualTo(value)
     }
 
 }

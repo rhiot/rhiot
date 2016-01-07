@@ -16,6 +16,9 @@
  */
 package io.rhiot.datastream.consumer.device;
 
+import com.mongodb.Mongo;
+import io.rhiot.datastream.consumer.device.metrics.DeviceMetricsStore;
+import io.rhiot.datastream.consumer.device.metrics.MongoDbDeviceMetricsStore;
 import io.rhiot.datastream.engine.ServiceDataStreamConsumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,14 +26,26 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DeviceDataStreamConsumerConfiguration {
 
+    @Bean
+    ServiceDataStreamConsumer deviceDataStreamConsumer() {
+        return new ServiceDataStreamConsumer("device");
+    }
+
     @Bean(name = "device")
     DeviceRegistry deviceRegistry() {
         return new InMemoryDeviceRegistry();
     }
 
+    // Device metrics
+
     @Bean
-    ServiceDataStreamConsumer deviceDataStreamConsumer() {
-        return new ServiceDataStreamConsumer("device");
+    ServiceDataStreamConsumer deviceMetricsDataStreamConsumer() {
+        return new ServiceDataStreamConsumer("device-metrics");
+    }
+
+    @Bean(name = "device-metrics")
+    DeviceMetricsStore deviceMetricsStore(Mongo mongo) {
+        return new MongoDbDeviceMetricsStore(mongo);
     }
 
 }

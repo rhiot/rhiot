@@ -16,12 +16,10 @@
  */
 package io.rhiot.cloudlets.device.verticles
 
-import com.github.camellabs.iot.cloudlet.device.client.VirtualDevice
 import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
 import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
 import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
-import io.rhiot.cloudlets.device.DeviceCloudlet
-import io.rhiot.cloudlets.device.analytics.DeviceMetricsStore
+
 import io.vertx.core.Future
 import io.vertx.groovy.core.eventbus.Message
 import io.vertx.lang.groovy.GroovyVerticle
@@ -43,16 +41,13 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.ConcurrentHashMap
 
-import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 import static com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail.allDeviceDetails
-import static io.rhiot.bootstrap.classpath.ClasspathBeans.bean
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.longProperty
 import static io.rhiot.vertx.Vertxes.assertStringBody
 import static io.rhiot.vertx.jackson.Jacksons.json
 import static java.time.Instant.ofEpochMilli
 import static java.time.LocalDateTime.ofInstant
-import static java.util.concurrent.TimeUnit.DAYS
 import static java.util.concurrent.TimeUnit.MINUTES
 import static org.eclipse.leshan.ResponseCode.CONTENT
 import static org.infinispan.configuration.cache.CacheMode.INVALIDATION_ASYNC
@@ -84,8 +79,6 @@ class LeshanServerVerticle extends GroovyVerticle {
     // Collaborators
 
     static def LeshanServer leshanServer
-
-    final def deviceMetricsStore = bean(DeviceMetricsStore.class).get()
 
     // Configuration
 
@@ -181,20 +174,6 @@ class LeshanServerVerticle extends GroovyVerticle {
                 }
             }
 
-            vertx.eventBus().consumer(CHANNEL_DEVICE_CREATE_VIRTUAL) { msg ->
-                def device = msg.body().asType(Map.class)
-                createVirtualLeshanClientTemplate(device.clientId, lwm2mPort).connect().disconnect()
-                def devicePrototype = new VirtualDevice()
-                deviceMetricsStore.saveDeviceMetric(device.clientId, 'manufacturer', devicePrototype.manufacturer())
-                deviceMetricsStore.saveDeviceMetric(device.clientId, 'modelNumber', devicePrototype.modelNumber())
-                deviceMetricsStore.saveDeviceMetric(device.clientId, 'serialNumber', devicePrototype.serialNumber())
-                deviceMetricsStore.saveDeviceMetric(device.clientId, 'firmwareVersion', devicePrototype.firmwareVersion())
-                def client = leshanServer.clientRegistry.get(device.clientId)
-                leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, DAYS.toSeconds(365), client.smsNumber,
-                        client.bindingMode, client.objectLinks))
-                wrapIntoJsonResponse(msg, 'status', 'success')
-            }
-
             DeviceCloudlet.@isStarted.countDown()
             startFuture.complete()
         }
@@ -204,14 +183,6 @@ class LeshanServerVerticle extends GroovyVerticle {
 
     String readFromAnalytics(Client client, String resource, String metric) {
         def value = stringResponse(leshanServer.send(client, new ReadRequest(resource), 1000))
-        if (value == null) {
-            value = deviceMetricsStore.readDeviceMetric(client.endpoint, metric, String.class)
-            if (value == null) {
-                value = UNKNOWN_DISCONNECTED
-            }
-        } else {
-            deviceMetricsStore.saveDeviceMetric(client.endpoint, metric, value)
-        }
         value
     }
 

@@ -14,15 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudlets.device.analytics
+package io.rhiot.datastream.consumer.device.metrics;
 
-import io.rhiot.bootstrap.classpath.Bean
+public interface DeviceMetricsStore {
 
-@Bean
-interface DeviceMetricsStore {
+    Object read(String deviceId, String metric);
 
-    void saveDeviceMetric(String deviceId, String metric, Object value)
-
-    def <T> T readDeviceMetric(String deviceId, String metric, Class<T> type)
+    void write(String deviceId, String metric, Object value);
 
 }
