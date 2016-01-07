@@ -22,15 +22,69 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-bootstrap-activemq</artifactId>
+            <artifactId>rhiot-utils</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-bootstrap-camel</artifactId>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jackson</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-steroids-vertx</artifactId>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-vertx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-broker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-amqp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-mqtt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-kahadb-store</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-amqp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-paho</artifactId>
+        </dependency>
+        <!-- Can be removed from Camel 2.16.1 due to CAMEL-9203: camel-amqp should provide qpid dependencies -->
+        <dependency>
+            <groupId>org.apache.qpid</groupId>
+            <artifactId>qpid-amqp-1-0-client-jms</artifactId>
+        </dependency>
+        <!-- Can be removed from Camel 2.16.1 due to CAMEL-9203: camel-amqp should provide qpid dependencies -->
+        <dependency>
+            <groupId>org.apache.qpid</groupId>
+            <artifactId>qpid-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-boot</artifactId>
         </dependency>
 
         <!-- Testing API -->

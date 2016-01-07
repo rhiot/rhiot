@@ -14,14 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids
+package io.rhiot.bootstrap
 
-import io.rhiot.bootstrap.classpath.Bean
+import io.rhiot.datastream.engine.Bootstrap
 
-@Bean
-class MyConfigurationCallback implements ConfigurationCallback {
+interface BootstrapAware {
 
-    @Override
-    void configureMe() {}
+    void bootstrap(Bootstrap bootstrap)
 
 }

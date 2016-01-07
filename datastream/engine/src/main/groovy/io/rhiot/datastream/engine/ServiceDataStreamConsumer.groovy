@@ -18,7 +18,7 @@ package io.rhiot.datastream.engine
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
-import io.rhiot.bootstrap.Bootstrap
+
 import io.rhiot.bootstrap.BootstrapAware
 import org.apache.camel.NoTypeConversionAvailableException
 import org.apache.camel.builder.RouteBuilder

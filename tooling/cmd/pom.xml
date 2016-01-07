@@ -30,10 +30,6 @@
             <artifactId>rhiot-tooling-cmd-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-bootstrap-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>

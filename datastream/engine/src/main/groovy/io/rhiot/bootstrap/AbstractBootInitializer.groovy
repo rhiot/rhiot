@@ -14,39 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.steroids.camel
+package io.rhiot.bootstrap
 
-import io.rhiot.bootstrap.Bootstrap
-import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.component.mock.MockEndpoint
-import org.junit.Ignore
-import org.junit.Test
+import io.rhiot.datastream.engine.Bootstrap
+import io.rhiot.utils.WithLogger
 
-import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
+abstract class AbstractBootInitializer implements BootModule, BootstrapAware, WithLogger  {
 
-class CamelBootInitializerTest {
-
-    @Test
-    void shouldStartCamelRoute() {
-        new Bootstrap().start()
-        def mock = camelContext().getEndpoint('mock:test', MockEndpoint.class)
-        mock.setExpectedMessageCount(1)
-
-        // When
-        camelContext().createProducerTemplate().sendBody('event-bus:mock', 'foo')
-
-        // Then
-        mock.assertIsSatisfied()
-    }
-
-}
-
-@Route
-class MyRoute extends RouteBuilder {
+    protected Bootstrap bootstrap
 
     @Override
-    void configure() {
-        from('event-bus:mock').to('mock:test')
+    void bootstrap(Bootstrap bootstrap) {
+        this.bootstrap = bootstrap
+    }
+
+    @Override
+    void start() {
+    }
+
+    @Override
+    void stop() {
     }
 
 }

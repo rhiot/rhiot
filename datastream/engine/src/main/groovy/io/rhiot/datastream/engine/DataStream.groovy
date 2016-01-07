@@ -16,14 +16,11 @@
  */
 package io.rhiot.datastream.engine
 
-import io.rhiot.bootstrap.Bootstrap
+
 import io.rhiot.datastream.engine.encoding.JsonPayloadEncoding
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
-import io.rhiot.steroids.camel.CamelBootInitializer
-import org.apache.camel.CamelContext
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 
 @SpringBootApplication
 class DataStream extends Bootstrap {

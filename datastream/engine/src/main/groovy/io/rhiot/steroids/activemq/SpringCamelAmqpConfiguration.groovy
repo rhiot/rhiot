@@ -16,17 +16,10 @@
  */
 package io.rhiot.steroids.activemq
 
-import io.rhiot.bootstrap.Bootstrap
-import io.rhiot.bootstrap.BootstrapAware
-import io.rhiot.steroids.camel.Route
-import org.apache.activemq.ActiveMQConnectionFactory
-import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.amqp.AMQPComponent
 import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.jms.connection.CachingConnectionFactory
-import org.springframework.stereotype.Component
 
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.*
 

@@ -28,7 +28,7 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-bootstrap-core</artifactId>
+            <artifactId>rhiot-datastream-engine</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>

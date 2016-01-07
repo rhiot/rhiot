@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.engine
 
-import io.rhiot.bootstrap.Bootstrap
+
 import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.utils.WithLogger
 import org.apache.camel.builder.RouteBuilder

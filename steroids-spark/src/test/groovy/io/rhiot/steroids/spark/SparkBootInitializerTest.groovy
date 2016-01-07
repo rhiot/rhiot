@@ -16,7 +16,7 @@
  */
 package io.rhiot.steroids.spark
 
-import io.rhiot.bootstrap.Bootstrap
+import io.rhiot.datastream.engine.Bootstrap
 import org.apache.spark.api.java.JavaSparkContext
 import org.junit.AfterClass
 import org.junit.Test

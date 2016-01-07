@@ -33,10 +33,6 @@
             <artifactId>rhiot-cloudplatform-adapter-rest</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-bootstrap-camel</artifactId>
-        </dependency>
-        <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
         </dependency>

@@ -30,10 +30,6 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-bootstrap-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-vertx</artifactId>
         </dependency>
         <dependency>
@@ -47,6 +43,14 @@
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
         </dependency>
 
         <!-- Testing -->

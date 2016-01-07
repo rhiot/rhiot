@@ -14,8 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.bootstrap
+package io.rhiot.datastream.engine
 
+import io.rhiot.bootstrap.BeanRegistry
+import io.rhiot.bootstrap.BootModule
+import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.bootstrap.classpath.ClasspathMapBeanRegistry
 import io.rhiot.utils.WithLogger
 import org.springframework.boot.autoconfigure.SpringBootApplication

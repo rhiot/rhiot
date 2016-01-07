@@ -376,21 +376,6 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-bootstrap-core</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-bootstrap-activemq</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-bootstrap-camel</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-scanner</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>

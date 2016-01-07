@@ -17,7 +17,7 @@
 package io.rhiot.gateway
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.bootstrap.Bootstrap
+import io.rhiot.datastream.engine.Bootstrap
 import org.jolokia.jvmagent.JvmAgent
 import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
