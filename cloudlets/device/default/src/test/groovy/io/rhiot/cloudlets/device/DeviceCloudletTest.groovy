@@ -67,32 +67,6 @@ class DeviceCloudletTest extends Assert {
     // Tests
 
     @Test
-    void shouldReturnVirtualClient() {
-        // Given
-        rest.delete("${apiBase}/device")
-
-        // When
-        rest.postForLocation("${apiBase}/device", new TestVirtualDevice(clientId: deviceId))
-        def response = rest.getForObject(apiBase + '/device', Map.class)
-
-        // Then
-        assertThat(response.devices.asType(List.class)).hasSize(1)
-    }
-
-    @Test
-    void shouldNotListDisconnectedClient() {
-        // Given
-        rest.delete("${apiBase}/device")
-        createGenericLeshanClientTemplate(uuid(), lwm2mPort).connect()
-
-        // When
-        def clients = rest.getForObject(new URI("http://localhost:${restApiPort}/device/disconnected"), Map.class)
-
-        // Then
-        assertEquals(0, clients['disconnectedDevices'].asType(List.class).size())
-    }
-
-    @Test
     void shouldReadClientManufacturer() {
         // Given
         createGenericLeshanClientTemplate(deviceId, lwm2mPort).connect()
