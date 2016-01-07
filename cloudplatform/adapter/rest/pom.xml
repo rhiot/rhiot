@@ -21,24 +21,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-datastream-engine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-bootstrap-camel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-bootstrap-activemq</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-groovy</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-netty4-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <!-- Optional runtime -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- Testing -->
@@ -53,8 +48,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.jayway.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-datastream-engine</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -63,14 +58,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.bluetrainsoftware.maven</groupId>
-                <artifactId>groovydoc-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
