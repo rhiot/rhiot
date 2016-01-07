@@ -91,10 +91,9 @@ class LeshanServerVerticle extends GroovyVerticle {
         Configuration builder = new ConfigurationBuilder().clustering().cacheMode(INVALIDATION_ASYNC).build();
         cacheManager.defineConfiguration("clients", builder);
 
-        def clientRegistry = new CachingClientRegistry(new MongoDbClientRegistry(), new InfinispanCacheProvider(cacheManager))
         def leshanServerBuilder = new LeshanServerBuilder()
         leshanServerBuilder.setLocalAddress('0.0.0.0', lwm2mPort)
-        leshanServer = leshanServerBuilder.setClientRegistry(clientRegistry).build()
+        leshanServer = leshanServerBuilder.build()
     }
 
     @Override
