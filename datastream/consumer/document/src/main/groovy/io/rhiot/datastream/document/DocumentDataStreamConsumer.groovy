@@ -17,9 +17,9 @@
 package io.rhiot.datastream.document
 
 import io.rhiot.datastream.engine.ServiceDataStreamConsumer
-import io.rhiot.steroids.camel.Route
+import org.springframework.stereotype.Component
 
-@Route
+@Component
 class DocumentDataStreamConsumer extends ServiceDataStreamConsumer {
 
     DocumentDataStreamConsumer() {

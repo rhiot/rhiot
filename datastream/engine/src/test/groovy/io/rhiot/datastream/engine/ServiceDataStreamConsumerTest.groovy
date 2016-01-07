@@ -16,11 +16,9 @@
  */
 package io.rhiot.datastream.engine
 
-import io.rhiot.bootstrap.classpath.Bean
-import io.rhiot.bootstrap.classpath.Named
 import io.rhiot.datastream.engine.test.DataStreamTest
-import io.rhiot.steroids.camel.Route
 import org.junit.Test
+import org.springframework.stereotype.Component
 
 import static com.google.common.truth.Truth.assertThat
 
@@ -52,7 +50,7 @@ class ServiceDataStreamConsumerTest extends DataStreamTest {
 
     // Beans fixtures
 
-    @Route
+    @Component
     static class EchoDataStreamConsumer extends ServiceDataStreamConsumer {
 
         EchoDataStreamConsumer() {
@@ -71,8 +69,7 @@ class ServiceDataStreamConsumerTest extends DataStreamTest {
 
     }
 
-    @Bean
-    @Named(name = 'echo')
+    @Component("echo")
     static class DefaultEchoService implements EchoService {
 
         @Override
