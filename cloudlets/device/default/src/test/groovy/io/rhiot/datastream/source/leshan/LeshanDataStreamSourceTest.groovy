@@ -43,6 +43,7 @@ class LeshanDataStreamSourceTest extends DataStreamTest {
 
     @Override
     protected void beforeDataStreamStarted() {
+        setIntProperty('spring.data.mongodb', findAvailableTcpPort())
         setIntProperty('AMQP_PORT', findAvailableTcpPort())
         setBooleanProperty('MQTT_ENABLED', false)
     }
