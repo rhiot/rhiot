@@ -19,19 +19,17 @@ package io.rhiot.datastream.spark
 import io.rhiot.datastream.engine.test.DataStreamTest
 import org.apache.camel.component.spark.RddCallback
 import org.apache.spark.api.java.AbstractJavaRDDLike
+import org.apache.spark.api.java.JavaRDD
 import org.apache.spark.api.java.JavaSparkContext
 import org.junit.Test
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.stereotype.Component
 
 import static com.google.common.truth.Truth.assertThat
 
+@Configuration
 class CamelSparkStreamConsumerTest extends DataStreamTest {
-
-    @Override
-    protected void afterDataStreamStarted() {
-        def sparkContext = beanRegistry.bean(JavaSparkContext.class).get()
-        beanRegistry.register('rdd', sparkContext.textFile('src/test/resources/testrdd.txt'))
-        beanRegistry.register('callback', new LinesXPayload())
-    }
 
     @Test
     void shouldExecuteTaskViaAmqpApi() {
@@ -39,12 +37,18 @@ class CamelSparkStreamConsumerTest extends DataStreamTest {
         assertThat(result).isEqualTo(170)
     }
 
+    @Component("callback")
     static class LinesXPayload implements RddCallback<Long> {
 
         @Override
         Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
             (long) payloads[0] * rdd.count()
         }
+    }
+
+    @Bean
+    JavaRDD rdd(JavaSparkContext sparkContext) {
+        sparkContext.textFile('src/test/resources/testrdd.txt')
     }
 
 }

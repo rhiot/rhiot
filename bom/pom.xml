@@ -381,7 +381,7 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-steroids-spark</artifactId>
+				<artifactId>rhiot-spring-spark</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
 			<dependency>

@@ -11,10 +11,10 @@
 
     <modules>
         <module>bom</module>
+        <module>spring</module>
         <module>cloudplatform</module>
         <module>lib</module>
         <module>mongodb</module>
-        <module>steroids-spark</module>
         <module>datastream</module>
         <module>vertx</module>
         <module>gateway</module>

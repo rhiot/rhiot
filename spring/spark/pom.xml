@@ -5,13 +5,13 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-bom</artifactId>
+        <artifactId>rhiot-spring</artifactId>
         <version>0.1.4-SNAPSHOT</version>
-        <relativePath>../bom</relativePath>
+        <relativePath>..</relativePath>
     </parent>
 
-    <name>RHIOT :: Steroids :: Spark</name>
-    <artifactId>rhiot-steroids-spark</artifactId>
+    <name>Rhiot :: Spring :: Spark</name>
+    <artifactId>rhiot-spring-spark</artifactId>
 
     <licenses>
         <license>
@@ -27,12 +27,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-datastream-engine</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.11</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
         </dependency>
 
         <!-- Testing -->
@@ -47,19 +47,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.bluetrainsoftware.maven</groupId>
-                <artifactId>groovydoc-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
