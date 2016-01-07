@@ -17,12 +17,12 @@
 package io.rhiot.gateway.gps
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.bootstrap.classpath.PropertyCondition
-import io.rhiot.steroids.camel.Route
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.jackson.JacksonDataFormat
 import org.apache.camel.processor.aggregate.AggregationStrategy
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.stereotype.Component
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY
 import static io.rhiot.utils.Properties.stringProperty
@@ -30,8 +30,8 @@ import static io.rhiot.utils.Properties.stringProperty
 /**
  * Camel route reading current position data from the GPSD socket.
  */
-@Route
-@PropertyCondition(property = 'gps')
+@Component
+@ConditionalOnProperty(name = 'gps', havingValue = 'true')
 public class GpsdRoutes extends RouteBuilder {
 
     // Configuration

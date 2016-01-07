@@ -17,11 +17,11 @@
 package io.rhiot.gateway.gps
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.bootstrap.classpath.PropertyCondition
 import io.rhiot.datastream.schema.GpsCoordinates
-import io.rhiot.steroids.camel.Route
 import org.apache.camel.Exchange
-import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.builder.RouteBuilder
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.stereotype.Component;
 
 import static io.rhiot.utils.Properties.stringProperty
 import static io.rhiot.utils.Uuids.uuid
@@ -31,8 +31,8 @@ import static org.apache.camel.model.dataformat.JsonLibrary.Jackson;
 /**
  * Camel route reading the current position data from a GPSD-compatible device.
  */
-@Route
-@PropertyCondition(property = 'gps_cloudlet_sync')
+@Component
+@ConditionalOnProperty(name = 'gps_cloudlet_sync', havingValue = 'true')
 class GpsDataStreamSyncRoutes extends RouteBuilder {
 
     def storeDirectory = stringProperty('gps_store_directory', '/var/rhiot/gps')
