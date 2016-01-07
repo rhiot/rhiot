@@ -110,7 +110,7 @@ final class ClasspathBeans {
     }
 
     private static List<Object> createdByFactories(String name) {
-        def factories = classpath.getMethodsAnnotatedWith(Bean.class).findAll{ it.getAnnotation(Named.class) != null && it.getAnnotation(Named.class).name() == name }.toList()
+        def factories = classpath.getMethodsAnnotatedWith(Bean.class).toList()
         factories.collect {
             def instance = instantiate(it.declaringClass)
             if(!instance.isPresent()) {
@@ -126,18 +126,13 @@ final class ClasspathBeans {
             beansClasses.add(type)
         }
         beansClasses = instantiableOnly(beansClasses)
-        if(name != null) {
-            beansClasses = beansClasses.findAll { it.getAnnotation(Named.class).name() == name }
-        }
         def beans = beansClasses.collect{ instantiate(it) }.findAll{ it.isPresent() }.collect{ it.get() }
 
         beans + createdByFactories(type)
     }
 
     private static List<Object> scanForNamedBeans(String name) {
-        def beansClasses = instantiableOnly(classpath.getTypesAnnotatedWith(Named.class).toList())
-        beansClasses = beansClasses.findAll { it.getAnnotation(Named.class).name() == name }
-        beansClasses.collect{ instantiate(it) }.findAll{ it.isPresent() }.collect{ it.get() } + createdByFactories(name)
+        []
     }
 
     private static List<Class> instantiableOnly(List<Class> classes) {

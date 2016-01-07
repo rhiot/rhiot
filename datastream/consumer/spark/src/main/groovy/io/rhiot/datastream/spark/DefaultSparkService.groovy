@@ -16,28 +16,20 @@
  */
 package io.rhiot.datastream.spark
 
-import io.rhiot.bootstrap.classpath.Bean
-import io.rhiot.bootstrap.classpath.Named
+import org.apache.camel.ProducerTemplate
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
-import io.rhiot.bootstrap.BootstrapAware
-import io.rhiot.datastream.engine.Bootstrap
-import org.apache.camel.CamelContext
+@Component('spark')
+class DefaultSparkService implements SparkService {
 
-@Bean
-@Named(name = 'spark')
-class DefaultSparkService implements SparkService, BootstrapAware {
-
-    private Bootstrap bootstrap
+    @Autowired
+    ProducerTemplate producerTemplate
 
     @Override
     Object execute(String rdd, String rddCallback, Object payload) {
-        def template = bootstrap.beanRegistry().bean(CamelContext.class).get().createProducerTemplate()
-        template.requestBody("spark:rdd?rdd=#${rdd}&rddCallback=#${rddCallback}", payload)
+        producerTemplate.requestBody("spark:rdd?rdd=#${rdd}&rddCallback=#${rddCallback}", payload)
     }
 
-    @Override
-    void bootstrap(Bootstrap bootstrap) {
-        this.bootstrap = bootstrap
-    }
 
 }

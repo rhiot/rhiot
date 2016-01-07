@@ -17,16 +17,16 @@
 package io.rhiot.datastream.document.mongodb
 
 import com.mongodb.Mongo
-import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.bootstrap.classpath.ClasspathBeans
-import io.rhiot.bootstrap.classpath.Named
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
 import static io.rhiot.utils.Properties.stringProperty
 
+@Configuration
 class MongodbDocumentStoreFactory {
 
-    @Bean
-    @Named(name = 'document')
+    @Bean(name = 'document')
     MongodbDocumentStore mongodbDocumentStore() {
         new MongodbDocumentStore(
                 ClasspathBeans.bean(Mongo.class).get(),
