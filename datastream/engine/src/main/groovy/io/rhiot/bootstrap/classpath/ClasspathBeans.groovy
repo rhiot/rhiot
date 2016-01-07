@@ -126,7 +126,6 @@ final class ClasspathBeans {
             beansClasses.add(type)
         }
         beansClasses = instantiableOnly(beansClasses)
-        beansClasses = classesMatchingConditions(beansClasses)
         if(name != null) {
             beansClasses = beansClasses.findAll { it.getAnnotation(Named.class).name() == name }
         }
@@ -137,19 +136,12 @@ final class ClasspathBeans {
 
     private static List<Object> scanForNamedBeans(String name) {
         def beansClasses = instantiableOnly(classpath.getTypesAnnotatedWith(Named.class).toList())
-        beansClasses = classesMatchingConditions(beansClasses)
         beansClasses = beansClasses.findAll { it.getAnnotation(Named.class).name() == name }
         beansClasses.collect{ instantiate(it) }.findAll{ it.isPresent() }.collect{ it.get() } + createdByFactories(name)
     }
 
     private static List<Class> instantiableOnly(List<Class> classes) {
         classes.findAll{ !isAbstract(it.getModifiers()) && !it.interface }
-    }
-
-    private static List<Class<?>> classesMatchingConditions(List<Class<?>> classes) {
-        classes.findAll{ cls ->
-            !cls.isAnnotationPresent(PropertyCondition.class) ||
-                    booleanProperty(cls.getAnnotation(PropertyCondition.class).property()) }
     }
 
     private static Optional<?> instantiate(Class<?> type) {

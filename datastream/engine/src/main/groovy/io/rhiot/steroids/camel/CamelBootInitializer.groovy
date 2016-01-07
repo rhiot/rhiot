@@ -18,18 +18,14 @@ package io.rhiot.steroids.camel
 
 import io.rhiot.bootstrap.AbstractBootInitializer
 
-import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.bootstrap.MapBeanRegistry
 import io.rhiot.datastream.engine.Bootstrap
 import io.rhiot.utils.Reflections
 import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;
-import org.apache.camel.RoutesBuilder;
 import org.apache.camel.component.vertx.VertxComponent
 import org.apache.camel.impl.CompositeRegistry
 import org.apache.camel.spring.spi.ApplicationContextRegistry
-
-import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 
 class CamelBootInitializer extends AbstractBootInitializer {
 
@@ -47,8 +43,6 @@ class CamelBootInitializer extends AbstractBootInitializer {
         camelContext.addComponent('event-bus', vertxComponent)
 
         bootstrap.beanRegistry().register(camelContext)
-
-        beans(RoutesBuilder.class, Route.class).each { if(it instanceof BootstrapAware) it.bootstrap(bootstrap) }.each { camelContext.addRoutes(it) }
     }
 
     @Override
