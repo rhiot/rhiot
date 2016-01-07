@@ -6,11 +6,11 @@
     <parent>
         <groupId>io.rhiot</groupId>
         <version>0.1.4-SNAPSHOT</version>
-        <artifactId>rhiot-bom</artifactId>
-        <relativePath>../bom</relativePath>
+        <artifactId>rhiot-cloudplatform</artifactId>
+        <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: DataStream</name>
-    <artifactId>rhiot-datastream</artifactId>
+    <name>Rhiot :: Cloud platform :: Protocol adapter</name>
+    <artifactId>rhiot-cloudplatform-adapter</artifactId>
     <packaging>pom</packaging>
 
     <licenses>
@@ -21,13 +21,7 @@
     </licenses>
 
     <modules>
-        <module>schema</module>
-        <module>components</module>
-        <module>bootstrap</module>
-        <module>engine</module>
-        <module>consumer</module>
-        <module>node</module>
-        <module>node-app</module>
+        <module>rest</module>
     </modules>
 
 </project>

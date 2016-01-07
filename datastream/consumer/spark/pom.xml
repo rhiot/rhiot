@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-datastream-source-rest-camel</artifactId>
+            <artifactId>rhiot-cloudplatform-adapter-rest</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
