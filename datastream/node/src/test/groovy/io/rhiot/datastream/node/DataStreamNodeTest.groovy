@@ -20,7 +20,6 @@ import com.mongodb.BasicDBObject
 import com.mongodb.Mongo
 import io.rhiot.datastream.engine.test.DataStreamTest
 import io.rhiot.mongodb.EmbeddedMongo
-import io.rhiot.bootstrap.classpath.Bean
 import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.core.json.Json
 import org.apache.camel.component.spark.RddCallback
@@ -28,11 +27,14 @@ import org.apache.spark.api.java.AbstractJavaRDDLike
 import org.apache.spark.api.java.JavaSparkContext
 import org.junit.AfterClass
 import org.junit.Test
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
 import static org.apache.camel.component.spark.SparkMongos.mongoRdd
 
+@Configuration
 class DataStreamNodeTest extends DataStreamTest {
 
     static def mongo = new EmbeddedMongo().start()
@@ -51,22 +53,25 @@ class DataStreamNodeTest extends DataStreamTest {
 
     @Test
     void smokeTestMongoSparkTask() {
-        dataStream.beanRegistry().register('callback', new RddCallback<Long>() {
-            @Override
-            Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
-                rdd.count() * (int) payloads[0]
-            }
-        })
-
         def mongoClient = new Mongo('localhost', mongo.port())
         mongoClient.getDB('db').getCollection('collection').save(new BasicDBObject([foo: 'bar']))
 
-        def sparkContext = dataStream.beanRegistry().bean(JavaSparkContext.class).get()
+        def sparkContext = dataStream.applicationContext.getBean(JavaSparkContext.class)
         dataStream.beanRegistry().register('rdd', mongoRdd(sparkContext, 'localhost', mongo.port(), 'db', 'collection'))
 
         def encodedResult = CamelBootInitializer.camelContext().createProducerTemplate().requestBody(amqp('spark.execute.rdd.callback'), Json.encode([payload: 10]), String.class)
         def result = Json.decodeValue(encodedResult, Map.class).payload
         assertThat(result).isEqualTo(10)
+    }
+
+    @Bean
+    RddCallback callback() {
+        new RddCallback<Long>() {
+            @Override
+            Long onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
+                rdd.count() * (int) payloads[0]
+            }
+        }
     }
 
 }
