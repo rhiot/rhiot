@@ -16,10 +16,6 @@
  */
 package io.rhiot.cloudlets.device.verticles
 
-import com.github.camellabs.iot.cloudlet.device.leshan.CachingClientRegistry
-import com.github.camellabs.iot.cloudlet.device.leshan.InfinispanCacheProvider
-import com.github.camellabs.iot.cloudlet.device.leshan.MongoDbClientRegistry
-
 import io.vertx.core.Future
 import io.vertx.groovy.core.eventbus.Message
 import io.vertx.lang.groovy.GroovyVerticle
@@ -36,9 +32,6 @@ import org.infinispan.configuration.cache.ConfigurationBuilder
 import org.infinispan.configuration.global.GlobalConfigurationBuilder
 import org.infinispan.manager.DefaultCacheManager
 
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.temporal.ChronoUnit
 import java.util.concurrent.ConcurrentHashMap
 
 import static com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail.allDeviceDetails
@@ -46,8 +39,6 @@ import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.longProperty
 import static io.rhiot.vertx.Vertxes.assertStringBody
 import static io.rhiot.vertx.jackson.Jacksons.json
-import static java.time.Instant.ofEpochMilli
-import static java.time.LocalDateTime.ofInstant
 import static java.util.concurrent.TimeUnit.MINUTES
 import static org.eclipse.leshan.ResponseCode.CONTENT
 import static org.infinispan.configuration.cache.CacheMode.INVALIDATION_ASYNC
@@ -101,26 +92,6 @@ class LeshanServerVerticle extends GroovyVerticle {
         vertx.runOnContext {
             leshanServer.start()
 
-            vertx.eventBus().consumer(CHANNEL_DEVICES_LIST) { msg ->
-                wrapIntoJsonResponse(msg, 'devices', leshanServer.clientRegistry.allClients())
-            }
-
-            vertx.eventBus().consumer(CHANNEL_DEVICE_GET) { msg ->
-                def deviceId = assertStringBody(msg, 'Expected device identifier.')
-                deviceId.isPresent() && wrapIntoJsonResponse(msg, 'device', leshanServer.clientRegistry.get(deviceId.get()))
-            }
-
-            vertx.eventBus().consumer(CHANNEL_DEVICES_DISCONNECTED) { msg ->
-                wrapIntoJsonResponse(msg, 'disconnectedDevices', disconnectedClients())
-            }
-
-            vertx.eventBus().consumer(CHANNEL_DEVICES_DEREGISTER) { msg ->
-                leshanServer.clientRegistry.allClients().each {
-                    client -> leshanServer.clientRegistry.deregisterClient(client.registrationId)
-                }
-                wrapIntoJsonResponse(msg, 'status', 'success')
-            }
-
             vertx.eventBus().consumer(CHANNEL_DEVICE_DEREGISTER) { msg ->
                 def deviceId = assertStringBody(msg, 'Expected device identifier.')
                 if(deviceId.isPresent()) {
@@ -144,22 +115,6 @@ class LeshanServerVerticle extends GroovyVerticle {
                 }
             }
 
-            vertx.eventBus().consumer(CHANNEL_DEVICE_DETAILS) { msg ->
-                def deviceId = assertStringBody(msg, 'Expected device identifier.')
-                if(deviceId.isPresent()) {
-                    def client = leshanServer.clientRegistry.get(deviceId.get())
-                    if (client == null) {
-                        msg.fail(0, "No client with ID ${deviceId.get()}.")
-                    } else {
-                        def results = new ConcurrentHashMap()
-                        allDeviceDetails().parallelStream().each { detail ->
-                            results[detail.metric()] = readFromAnalytics(client, detail.resource(), detail.metric())
-                        }
-                        wrapIntoJsonResponse(msg, 'deviceDetails', results)
-                    }
-                }
-            }
-
             allDeviceDetails().parallelStream().each { details ->
                 vertx.eventBus().consumer("client.${details.metric()}") { msg ->
                     def clientId = msg.body().toString()
@@ -173,7 +128,6 @@ class LeshanServerVerticle extends GroovyVerticle {
                 }
             }
 
-            DeviceCloudlet.@isStarted.countDown()
             startFuture.complete()
         }
     }
@@ -197,13 +151,6 @@ class LeshanServerVerticle extends GroovyVerticle {
             return null
         }
         content.asType(LwM2mResource).value.value
-    }
-
-    private List<String> disconnectedClients() {
-        leshanServer.clientRegistry.allClients().findAll { client ->
-            def updated = ofInstant(ofEpochMilli(client.lastUpdate.time), ZoneId.systemDefault()).toLocalTime()
-            updated.plus(disconnectionPeriod, ChronoUnit.MILLIS).isBefore(LocalTime.now())
-        }.collect { client -> client.endpoint }
     }
 
     def wrapIntoJsonResponse(Message message, String root, Object pojo) {
