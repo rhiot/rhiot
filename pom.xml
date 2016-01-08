@@ -23,6 +23,7 @@
         <module>tooling</module>
         <module>performance</module>
         <module>feature</module>
+        <module>activemq</module>
     </modules>
 
     <properties>
