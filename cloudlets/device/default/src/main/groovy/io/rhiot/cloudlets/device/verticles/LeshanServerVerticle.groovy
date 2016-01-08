@@ -17,8 +17,6 @@
 package io.rhiot.cloudlets.device.verticles
 
 import io.vertx.core.Future
-import io.vertx.groovy.core.eventbus.Message
-import io.vertx.lang.groovy.GroovyVerticle
 import org.eclipse.leshan.core.node.LwM2mResource
 import org.eclipse.leshan.core.request.ReadRequest
 import org.eclipse.leshan.core.response.LwM2mResponse
@@ -32,18 +30,14 @@ import org.infinispan.configuration.cache.ConfigurationBuilder
 import org.infinispan.configuration.global.GlobalConfigurationBuilder
 import org.infinispan.manager.DefaultCacheManager
 
-import java.util.concurrent.ConcurrentHashMap
-
 import static com.github.camellabs.iot.cloudlet.device.leshan.DeviceDetail.allDeviceDetails
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.longProperty
-import static io.rhiot.vertx.Vertxes.assertStringBody
-import static io.rhiot.vertx.jackson.Jacksons.json
 import static java.util.concurrent.TimeUnit.MINUTES
 import static org.eclipse.leshan.ResponseCode.CONTENT
 import static org.infinispan.configuration.cache.CacheMode.INVALIDATION_ASYNC
 
-class LeshanServerVerticle extends GroovyVerticle {
+class LeshanServerVerticle {
 
     // Constants
 
@@ -87,19 +81,9 @@ class LeshanServerVerticle extends GroovyVerticle {
         leshanServer = leshanServerBuilder.build()
     }
 
-    @Override
     void start(Future<Void> startFuture) throws Exception {
         vertx.runOnContext {
             leshanServer.start()
-
-            vertx.eventBus().consumer(CHANNEL_DEVICE_DEREGISTER) { msg ->
-                def deviceId = assertStringBody(msg, 'Expected device identifier.')
-                if(deviceId.isPresent()) {
-                    def client = leshanServer.clientRegistry.get(deviceId.get())
-                    leshanServer.clientRegistry.deregisterClient(client.registrationId)
-                    wrapIntoJsonResponse(msg, 'status', 'success')
-                }
-            }
 
             vertx.eventBus().consumer(CHANNEL_DEVICE_HEARTBEAT_SEND) { msg ->
                 def deviceId = assertStringBody(msg, 'Expected device identifier.')
@@ -111,19 +95,6 @@ class LeshanServerVerticle extends GroovyVerticle {
                         leshanServer.clientRegistry.updateClient(new ClientUpdate(client.registrationId, client.address, client.port, client.lifeTimeInSec, client.smsNumber,
                                 client.bindingMode, client.objectLinks))
                         wrapIntoJsonResponse(msg, 'status', 'success')
-                    }
-                }
-            }
-
-            allDeviceDetails().parallelStream().each { details ->
-                vertx.eventBus().consumer("client.${details.metric()}") { msg ->
-                    def clientId = msg.body().toString()
-                    def client = leshanServer.clientRegistry.get(clientId)
-                    if (client == null) {
-                        msg.fail(0, "No client with ID ${clientId}.")
-                    } else {
-                        def value = readFromAnalytics(client, details.resource(), details.metric())
-                        wrapIntoJsonResponse(msg, details.metric(), value)
                     }
                 }
             }
@@ -153,7 +124,7 @@ class LeshanServerVerticle extends GroovyVerticle {
         content.asType(LwM2mResource).value.value
     }
 
-    def wrapIntoJsonResponse(Message message, String root, Object pojo) {
+    def wrapIntoJsonResponse(message, String root, Object pojo) {
         def json = json().writeValueAsString(["${root}": pojo])
         message.reply(json)
     }
