@@ -19,13 +19,13 @@ package io.rhiot.bootstrap.classpath
 
 import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.bootstrap.MapBeanRegistry
-import io.rhiot.datastream.engine.Bootstrap
+import io.rhiot.datastream.engine.CloudPlatform
 
 import static io.rhiot.utils.Uuids.uuid
 
 class ClasspathMapBeanRegistry extends MapBeanRegistry implements BootstrapAware {
 
-    private Bootstrap bootstrap
+    private CloudPlatform bootstrap
 
     @Override
     def <T> Optional<T> bean(Class<T> type) {
@@ -73,7 +73,7 @@ class ClasspathMapBeanRegistry extends MapBeanRegistry implements BootstrapAware
     }
 
     @Override
-    void bootstrap(Bootstrap bootstrap) {
+    void bootstrap(CloudPlatform bootstrap) {
         this.bootstrap = bootstrap
     }
 

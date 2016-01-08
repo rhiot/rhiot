@@ -19,7 +19,7 @@ package io.rhiot.steroids.camel
 import io.rhiot.bootstrap.AbstractBootInitializer
 
 import io.rhiot.bootstrap.MapBeanRegistry
-import io.rhiot.datastream.engine.Bootstrap
+import io.rhiot.datastream.engine.CloudPlatform
 import io.rhiot.utils.Reflections
 import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;
@@ -35,8 +35,8 @@ class CamelBootInitializer extends AbstractBootInitializer {
 
     @Override
     public void start() {
-        camelContext = Bootstrap.applicationContext.getBean(CamelContext.class)
-        Reflections.writeField(camelContext, 'registry', new CompositeRegistry([new ApplicationContextRegistry(Bootstrap.applicationContext), new BootstrapRegistry(bootstrap.beanRegistry())]))
+        camelContext = CloudPlatform.applicationContext.getBean(CamelContext.class)
+        Reflections.writeField(camelContext, 'registry', new CompositeRegistry([new ApplicationContextRegistry(CloudPlatform.applicationContext), new BootstrapRegistry(bootstrap.beanRegistry())]))
         camelContext.streamCaching = true
         vertx = Vertx.vertx()
         def vertxComponent = new VertxComponent(vertx: vertx)

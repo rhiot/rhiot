@@ -23,10 +23,10 @@ import org.apache.camel.builder.RouteBuilder
 
 abstract class AbstractCamelStreamSource extends RouteBuilder implements WithLogger, BootstrapAware {
 
-    protected Bootstrap bootstrap
+    protected CloudPlatform bootstrap
 
     @Override
-    void bootstrap(Bootstrap bootstrap) {
+    void bootstrap(CloudPlatform bootstrap) {
         this.bootstrap = bootstrap
     }
 

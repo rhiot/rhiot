@@ -33,7 +33,7 @@ class ServiceDataStreamConsumer extends RouteBuilder implements BootstrapAware {
 
     protected final String serviceChannel
 
-    protected Bootstrap bootstrap
+    protected CloudPlatform bootstrap
 
     @Autowired
     PayloadEncoding payloadEncoding
@@ -75,7 +75,7 @@ class ServiceDataStreamConsumer extends RouteBuilder implements BootstrapAware {
     }
 
     @Override
-    void bootstrap(Bootstrap bootstrap) {
+    void bootstrap(CloudPlatform bootstrap) {
         this.bootstrap = bootstrap
     }
 

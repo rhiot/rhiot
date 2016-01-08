@@ -34,9 +34,9 @@ import static java.lang.Runtime.runtime;
  */
 @SpringBootApplication
 @ComponentScan("io.rhiot")
-class Bootstrap implements WithLogger {
+class CloudPlatform implements WithLogger {
 
-    public static Bootstrap bootstrap
+    public static CloudPlatform bootstrap
 
     public static ConfigurableApplicationContext applicationContext
 
@@ -49,19 +49,19 @@ class Bootstrap implements WithLogger {
 
     // Constructors
 
-    Bootstrap(BeanRegistry beanRegistry) {
+    CloudPlatform(BeanRegistry beanRegistry) {
         this.beanRegistry = makeBootstrapAware(beanRegistry)
     }
 
-    Bootstrap() {
+    CloudPlatform() {
         this(new ClasspathMapBeanRegistry())
     }
 
     // Lifecycle
 
-    Bootstrap start(String... args) {
+    CloudPlatform start(String... args) {
         System.setProperty("camel.springboot.typeConversion", "false")
-        applicationContext = new SpringApplicationBuilder(Bootstrap.class).web(false).build().run(args)
+        applicationContext = new SpringApplicationBuilder(CloudPlatform.class).web(false).build().run(args)
         log().debug('Starting Steroids Bootstrap: {}', getClass().name)
         initializers.each {
             if(it instanceof BootstrapAware) {
@@ -72,7 +72,7 @@ class Bootstrap implements WithLogger {
         this
     }
 
-    Bootstrap stop() {
+    CloudPlatform stop() {
         log().debug('Stopping Steroids Bootstrap: {}', getClass().name)
         initializers.reverse().each { it.stop() }
         applicationContext.close()
@@ -99,7 +99,7 @@ class Bootstrap implements WithLogger {
     // Main entry point
 
     public static void main(String[] args) {
-        bootstrap = new Bootstrap().start(args)
+        bootstrap = new CloudPlatform().start(args)
         runtime.addShutdownHook(new Thread(){
             @Override
             void run() {

@@ -56,8 +56,8 @@ class DataStreamNodeTest extends DataStreamTest {
         def mongoClient = new Mongo('localhost', mongo.port())
         mongoClient.getDB('db').getCollection('collection').save(new BasicDBObject([foo: 'bar']))
 
-        def sparkContext = dataStream.applicationContext.getBean(JavaSparkContext.class)
-        dataStream.beanRegistry().register('rdd', mongoRdd(sparkContext, 'localhost', mongo.port(), 'db', 'collection'))
+        def sparkContext = cloudPlatform.applicationContext.getBean(JavaSparkContext.class)
+        cloudPlatform.beanRegistry().register('rdd', mongoRdd(sparkContext, 'localhost', mongo.port(), 'db', 'collection'))
 
         def encodedResult = CamelBootInitializer.camelContext().createProducerTemplate().requestBody(amqp('spark.execute.rdd.callback'), Json.encode([payload: 10]), String.class)
         def result = Json.decodeValue(encodedResult, Map.class).payload

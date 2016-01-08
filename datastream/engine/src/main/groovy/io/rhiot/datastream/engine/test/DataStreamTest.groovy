@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.engine.test
 
-import io.rhiot.datastream.engine.DataStream
+import io.rhiot.datastream.engine.CloudPlatform
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
 import org.apache.camel.CamelContext
 import org.apache.camel.ProducerTemplate
@@ -31,7 +31,7 @@ abstract class DataStreamTest extends Assert {
 
     static private boolean dataStreamStarted
 
-    protected static DataStream dataStream = new DataStream()
+    protected static CloudPlatform cloudPlatform = new CloudPlatform()
 
     protected static CamelContext camelContext
 
@@ -44,10 +44,10 @@ abstract class DataStreamTest extends Assert {
     public void before() {
         if(!dataStreamStarted) {
             beforeDataStreamStarted()
-            dataStream = dataStream.start().asType(DataStream.class)
-            camelContext = dataStream.applicationContext.getBean(CamelContext.class)
+            cloudPlatform = cloudPlatform.start().asType(CloudPlatform.class)
+            camelContext = cloudPlatform.applicationContext.getBean(CamelContext.class)
             producerTemplate = camelContext.createProducerTemplate()
-            payloadEncoding = dataStream.applicationContext.getBean(PayloadEncoding.class)
+            payloadEncoding = cloudPlatform.applicationContext.getBean(PayloadEncoding.class)
             dataStreamStarted = true
         }
         afterDataStreamStarted()
@@ -62,7 +62,7 @@ abstract class DataStreamTest extends Assert {
     @AfterClass
     public static void after() {
         try {
-            dataStream.stop()
+            cloudPlatform.stop()
         } finally {
             dataStreamStarted = false
             restoreSystemProperties()
