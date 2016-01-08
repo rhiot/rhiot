@@ -16,7 +16,6 @@
  */
 package io.rhiot.datastream.engine.test
 
-import io.rhiot.bootstrap.BeanRegistry
 import io.rhiot.datastream.engine.DataStream
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
 import org.apache.camel.CamelContext
@@ -34,8 +33,6 @@ abstract class DataStreamTest extends Assert {
 
     protected static DataStream dataStream = new DataStream()
 
-    protected static BeanRegistry beanRegistry
-
     protected static CamelContext camelContext
 
     protected static ProducerTemplate producerTemplate
@@ -48,10 +45,9 @@ abstract class DataStreamTest extends Assert {
         if(!dataStreamStarted) {
             beforeDataStreamStarted()
             dataStream = dataStream.start().asType(DataStream.class)
-            beanRegistry = dataStream.beanRegistry()
-            camelContext = beanRegistry.bean(CamelContext.class).get()
+            camelContext = dataStream.applicationContext.getBean(CamelContext.class)
             producerTemplate = camelContext.createProducerTemplate()
-            payloadEncoding = beanRegistry.bean(PayloadEncoding.class).get()
+            payloadEncoding = dataStream.applicationContext.getBean(PayloadEncoding.class)
             dataStreamStarted = true
         }
         afterDataStreamStarted()

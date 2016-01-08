@@ -16,22 +16,15 @@
  */
 package io.rhiot.datastream.engine.encoding
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
+@Configuration
+class EncodingConfiguration {
 
-class JsonPayloadEncoding implements PayloadEncoding {
-
-    private final ObjectMapper objectMapper = new ObjectMapper().setSerializationInclusion(NON_NULL)
-
-    @Override
-    byte[] encode(Object payload) {
-        objectMapper.writeValueAsBytes([payload: payload])
-    }
-
-    @Override
-    Object decode(byte[] payload) {
-        objectMapper.readValue(payload, Map.class).payload
+    @Bean
+    PayloadEncoding payloadEncoding() {
+        new JsonPayloadEncoding()
     }
 
 }
