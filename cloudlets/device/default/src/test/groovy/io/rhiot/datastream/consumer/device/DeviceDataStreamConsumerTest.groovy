@@ -29,6 +29,7 @@ import static io.rhiot.datastream.schema.device.DeviceConstants.deviceHeartbeat
 import static io.rhiot.datastream.schema.device.DeviceConstants.disconnected
 import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
 import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices
+import static io.rhiot.datastream.schema.device.DeviceConstants.readAllDeviceMetrics
 import static io.rhiot.datastream.schema.device.DeviceConstants.readDeviceMetric
 import static io.rhiot.datastream.schema.device.DeviceConstants.readDeviceMetrics
 import static io.rhiot.datastream.schema.device.DeviceConstants.registerDevice
@@ -174,6 +175,26 @@ class DeviceDataStreamConsumerTest extends DataStreamTest {
 
         // Then
         assertThat(metricRead).isEqualTo(value)
+    }
+
+    @Test
+    void shouldReadAllMetrics() {
+        // Given
+        def metric1 = uuid()
+        def value1 = uuid()
+        def metric2 = uuid()
+        def value2 = uuid()
+        toBusAndWait(writeDeviceMetric(device.deviceId, metric1), value1)
+        toBusAndWait(writeDeviceMetric(device.deviceId, metric2), value2)
+
+
+        // When
+        def metrics = fromBus(readAllDeviceMetrics(device.deviceId), Map.class)
+
+        // Then
+        assertThat(metrics).hasSize(2)
+        assertThat(metrics.keySet()).containsAllIn([metric1, metric2])
+        assertThat(metrics.values()).containsAllIn([value1, value2])
     }
 
 }

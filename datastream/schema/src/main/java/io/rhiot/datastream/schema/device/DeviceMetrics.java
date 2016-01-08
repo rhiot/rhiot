@@ -14,16 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.consumer.device.metrics;
+package io.rhiot.datastream.schema.device;
 
-import java.util.Map;
+public enum DeviceMetrics {
 
-public interface DeviceMetricsStore {
-
-    Object read(String deviceId, String metric);
-
-    Map<String, Object> readAll(String deviceId);
-
-    void write(String deviceId, String metric, Object value);
+    manufacturer,
+    modelNumber,
+    serialNumber,
+    firmwareVersion
 
 }

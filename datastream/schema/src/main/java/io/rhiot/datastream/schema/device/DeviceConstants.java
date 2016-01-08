@@ -41,6 +41,8 @@ public final class DeviceConstants {
 
     public static final String CHANNEL_DEVICE_METRICS_READ = "device-metrics.read";
 
+    public static final String CHANNEL_DEVICE_METRICS_READ_ALL = "device-metrics.readAll";
+
     public static final String CHANNEL_DEVICE_METRICS_WRITE = "device-metrics.write";
 
     // Constructors
@@ -78,6 +80,10 @@ public final class DeviceConstants {
 
     public static String readDeviceMetric(String deviceId, String metric) {
         return format("%s.%s.%s", CHANNEL_DEVICE_METRICS_READ, deviceId, metric);
+    }
+
+    public static String readAllDeviceMetrics(String deviceId) {
+        return format("%s.%s", CHANNEL_DEVICE_METRICS_READ_ALL, deviceId);
     }
 
     public static String writeDeviceMetric(String deviceId, String metric) {

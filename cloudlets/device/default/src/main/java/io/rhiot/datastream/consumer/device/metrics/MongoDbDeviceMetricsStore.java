@@ -21,14 +21,25 @@ import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
 
 import java.util.Date;
+import java.util.Map;
+
+import static com.google.common.collect.ImmutableMap.of;
+import static java.util.stream.Collectors.toMap;
 
 public class MongoDbDeviceMetricsStore implements DeviceMetricsStore {
+
+    public static final String FIELD_DEVICE_ID = "deviceId";
+
+    public static final String FIELD_METRIC = "metric";
+
 
     private final Mongo mongo;
 
     private final String db;
 
     private final String collection;
+
+    // Constructors
 
     public MongoDbDeviceMetricsStore(Mongo mongo, String db, String collection) {
         this.mongo = mongo;
@@ -40,21 +51,28 @@ public class MongoDbDeviceMetricsStore implements DeviceMetricsStore {
         this(mongo, "rhiot", "DeviceMetrics");
     }
 
+    // Realizations
+
     @Override
     public void write(String deviceId, String metric, Object value) {
-        BasicDBObject metricRecord = new BasicDBObject();
-        metricRecord.put("deviceId", deviceId);
-        metricRecord.put("metric", metric);
-        metricRecord.put("value", value);
-        metricRecord.put("timestamp", new Date());
+        BasicDBObject metricRecord = new BasicDBObject(of(
+                FIELD_DEVICE_ID, deviceId, FIELD_METRIC, metric, "value", value, "timestamp", new Date()
+        ));
         mongo.getDB(db).getCollection(collection).save(metricRecord);
     }
 
     @Override
+    public Map<String, Object> readAll(String deviceId) {
+        BasicDBObject metricsQuery = new BasicDBObject();
+        metricsQuery.put(FIELD_DEVICE_ID, deviceId);
+        return mongo.getDB(db).getCollection(collection).find(metricsQuery).toArray().stream().collect(
+                toMap(metric -> (String )metric.get(FIELD_METRIC), metric -> metric.get("value"))
+        );
+    }
+
+    @Override
     public Object read(String deviceId, String metric) {
-        BasicDBObject metricQuery = new BasicDBObject();
-        metricQuery.put("deviceId", deviceId);
-        metricQuery.put("metric", metric);
+        BasicDBObject metricQuery = new BasicDBObject(of(FIELD_DEVICE_ID, deviceId, FIELD_METRIC, metric));
         DBCursor cursor = mongo.getDB(db).getCollection(collection).find(metricQuery).sort(new BasicDBObject("_id",-1)).limit(1);
         return cursor.hasNext() ? cursor.next().get("value") : null;
     }
