@@ -18,11 +18,13 @@ package io.rhiot.gateway
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.rhiot.datastream.engine.CloudPlatform
+import io.rhiot.utils.Properties
 import org.jolokia.jvmagent.JvmAgent
 import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder
 
 import static io.rhiot.steroids.camel.CamelBootInitializer.vertx
+import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.stringProperty
 import static java.lang.Boolean.parseBoolean
 import static org.reflections.util.ClasspathHelper.forJavaClassPath
@@ -42,6 +44,9 @@ class Gateway extends CloudPlatform {
     // Life-cycle
 
     Gateway start() {
+        setBooleanProperty('MQTT_ENABLED', false)
+        setBooleanProperty('AMQP_ENABLED', false)
+
         def gateway = super.start() as Gateway
         classpath.getTypesAnnotatedWith(GatewayVerticle.class).each {
             LOG.debug('Classpath scanner found gateway verticle {}.', it.name)
