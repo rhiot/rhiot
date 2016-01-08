@@ -18,14 +18,19 @@ package io.rhiot.datastream.engine.test
 
 import io.rhiot.datastream.engine.CloudPlatform
 import io.rhiot.datastream.engine.encoding.PayloadEncoding
+import io.rhiot.utils.Networks
+import io.rhiot.utils.Properties
 import org.apache.camel.CamelContext
 import org.apache.camel.ProducerTemplate
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
 
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
+import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.restoreSystemProperties
+import static io.rhiot.utils.Properties.setBooleanProperty
+import static io.rhiot.utils.Properties.setIntProperty
+import static io.rhiot.utils.Properties.setStringProperty
 
 abstract class DataStreamTest extends Assert {
 
@@ -42,6 +47,12 @@ abstract class DataStreamTest extends Assert {
 
     @Before
     public void before() {
+        setBooleanProperty('spring.activemq.broker.enabled', true)
+        setBooleanProperty('spring.activemq.broker.amqpEnabled', true)
+        def amqpPort = findAvailableTcpPort()
+        setIntProperty('spring.activemq.broker.amqpPort', amqpPort)
+        setIntProperty('AMQP_SERVICE_PORT', amqpPort)
+
         if(!dataStreamStarted) {
             beforeDataStreamStarted()
             cloudPlatform = cloudPlatform.start().asType(CloudPlatform.class)
@@ -72,30 +83,30 @@ abstract class DataStreamTest extends Assert {
     // Bus communication helpers
 
     protected def void toBus(String channel) {
-        producerTemplate.sendBody(amqp(channel), null)
+        producerTemplate.sendBody("amqp:${channel}", null)
     }
 
     protected def void toBus(String channel, Object payload) {
-        producerTemplate.sendBody(amqp(channel), payloadEncoding.encode(payload))
+        producerTemplate.sendBody("amqp:${channel}", payloadEncoding.encode(payload))
     }
 
     protected def void toBusAndWait(String channel) {
-        def busResponse = producerTemplate.requestBody(amqp(channel), null, byte[].class)
+        def busResponse = producerTemplate.requestBody("amqp:${channel}", null, byte[].class)
         payloadEncoding.decode(busResponse)
     }
 
     protected def void toBusAndWait(String channel, Object payload) {
-        def busResponse = producerTemplate.requestBody(amqp(channel), payloadEncoding.encode(payload), byte[].class)
+        def busResponse = producerTemplate.requestBody("amqp:${channel}", payloadEncoding.encode(payload), byte[].class)
         payloadEncoding.decode(busResponse)
     }
 
     protected def <T> T fromBus(String channel, Class<T> responseType) {
-        def busResponse = producerTemplate.requestBody(amqp(channel), null, byte[].class)
+        def busResponse = producerTemplate.requestBody("amqp:${channel}", null, byte[].class)
         payloadEncoding.decode(busResponse) as T
     }
 
     protected def <T> T fromBus(String channel, Object payload, Class<T> responseType) {
-        def busResponse = producerTemplate.requestBody(amqp(channel), payloadEncoding.encode(payload), byte[].class)
+        def busResponse = producerTemplate.requestBody("amqp:${channel}", payloadEncoding.encode(payload), byte[].class)
         payloadEncoding.decode(busResponse) as T
     }
 

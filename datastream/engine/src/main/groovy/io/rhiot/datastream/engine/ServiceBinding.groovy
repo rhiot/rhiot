@@ -27,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired
 
 import java.lang.reflect.Method
 
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqpByPrefix
-
 class ServiceBinding extends RouteBuilder implements BootstrapAware {
 
     protected final String serviceChannel
@@ -48,7 +46,7 @@ class ServiceBinding extends RouteBuilder implements BootstrapAware {
             payloadEncoding = bootstrap.beanRegistry().bean(PayloadEncoding.class).get()
         }
 
-        from(amqpByPrefix(serviceChannel)).
+        from("amqp:${serviceChannel}.>").
                 process {
                     def channel = it.getIn(JmsMessage.class).jmsMessage.properties._to.toString()
                     def rawChannel = channel.substring(channel.lastIndexOf('/') + 1)

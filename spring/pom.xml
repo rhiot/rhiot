@@ -21,6 +21,7 @@
     </licenses>
 
     <modules>
+        <module>activemq</module>
         <module>spark</module>
     </modules>
 

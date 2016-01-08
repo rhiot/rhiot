@@ -20,13 +20,19 @@ import io.rhiot.bootstrap.BeanRegistry
 import io.rhiot.bootstrap.BootModule
 import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.bootstrap.classpath.ClasspathMapBeanRegistry
+import io.rhiot.utils.Properties
 import io.rhiot.utils.WithLogger
+import org.apache.camel.component.amqp.AMQPComponent
+import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.ConfigurableApplicationContext
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 
 import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
+import static io.rhiot.utils.Properties.intProperty
+import static io.rhiot.utils.Properties.stringProperty
 import static java.lang.Runtime.runtime;
 
 /**
@@ -106,6 +112,17 @@ class CloudPlatform implements WithLogger {
                 bootstrap.stop()
             }
         })
+    }
+
+    @Bean
+    AMQPComponent amqp() {
+        // Starting from Camel 2.16.1 (due to the CAMEL-9204) replace the code below with:
+        // AMQPComponent.amqp10Component(uri)
+        def amqpBrokerUrl = stringProperty('AMQP_SERVICE_HOST', 'localhost')
+        def amqpBrokerPort = intProperty('AMQP_SERVICE_PORT', 5672)
+        def connectionFactory = ConnectionFactoryImpl.createFromURL("amqp://guest:guest@${amqpBrokerUrl}:${amqpBrokerPort}")
+        connectionFactory.topicPrefix = 'topic://'
+        new AMQPComponent(connectionFactory)
     }
 
 }

@@ -31,7 +31,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.steroids.activemq.EmbeddedActiveMqBrokerBootInitializer.amqp
 import static org.apache.camel.component.spark.SparkMongos.mongoRdd
 
 @Configuration
@@ -59,7 +58,7 @@ class DataStreamNodeTest extends DataStreamTest {
         def sparkContext = cloudPlatform.applicationContext.getBean(JavaSparkContext.class)
         cloudPlatform.beanRegistry().register('rdd', mongoRdd(sparkContext, 'localhost', mongo.port(), 'db', 'collection'))
 
-        def encodedResult = CamelBootInitializer.camelContext().createProducerTemplate().requestBody(amqp('spark.execute.rdd.callback'), Json.encode([payload: 10]), String.class)
+        def encodedResult = CamelBootInitializer.camelContext().createProducerTemplate().requestBody("amqp:spark.execute.rdd.callback", Json.encode([payload: 10]), String.class)
         def result = Json.decodeValue(encodedResult, Map.class).payload
         assertThat(result).isEqualTo(10)
     }
