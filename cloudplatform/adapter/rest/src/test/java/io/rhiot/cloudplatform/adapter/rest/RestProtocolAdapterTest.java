@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.adapter.rest;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
-import io.rhiot.datastream.engine.ServiceDataStreamConsumer;
+import io.rhiot.datastream.engine.ServiceBinding;
 import io.rhiot.datastream.engine.test.DataStreamTest;
 import io.vertx.core.json.Json;
 import org.junit.Test;
@@ -73,9 +73,9 @@ public class RestProtocolAdapterTest extends DataStreamTest {
     }
 
     @Component
-    public static class TestInterfaceDataStreamConsumer extends ServiceDataStreamConsumer {
+    public static class TestInterfaceServiceBinding extends ServiceBinding {
 
-        TestInterfaceDataStreamConsumer() {
+        TestInterfaceServiceBinding() {
             super("test");
         }
 

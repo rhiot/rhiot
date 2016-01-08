@@ -16,13 +16,13 @@
  */
 package io.rhiot.datastream.spark
 
-import io.rhiot.datastream.engine.ServiceDataStreamConsumer
+import io.rhiot.datastream.engine.ServiceBinding
 import org.springframework.stereotype.Component
 
 @Component
-class CamelSparkDataStreamConsumer extends ServiceDataStreamConsumer {
+class SparkServiceBinding extends ServiceBinding {
 
-    CamelSparkDataStreamConsumer() {
+    SparkServiceBinding() {
         super('spark')
     }
 

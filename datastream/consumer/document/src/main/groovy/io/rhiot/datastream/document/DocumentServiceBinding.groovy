@@ -16,13 +16,13 @@
  */
 package io.rhiot.datastream.document
 
-import io.rhiot.datastream.engine.ServiceDataStreamConsumer
+import io.rhiot.datastream.engine.ServiceBinding
 import org.springframework.stereotype.Component
 
 @Component
-class DocumentDataStreamConsumer extends ServiceDataStreamConsumer {
+class DocumentServiceBinding extends ServiceBinding {
 
-    DocumentDataStreamConsumer() {
+    DocumentServiceBinding() {
         super('document')
     }
 

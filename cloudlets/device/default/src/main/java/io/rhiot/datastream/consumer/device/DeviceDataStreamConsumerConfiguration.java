@@ -19,7 +19,7 @@ package io.rhiot.datastream.consumer.device;
 import com.mongodb.Mongo;
 import io.rhiot.datastream.consumer.device.metrics.DeviceMetricsStore;
 import io.rhiot.datastream.consumer.device.metrics.MongoDbDeviceMetricsStore;
-import io.rhiot.datastream.engine.ServiceDataStreamConsumer;
+import io.rhiot.datastream.engine.ServiceBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,8 +27,8 @@ import org.springframework.context.annotation.Configuration;
 public class DeviceDataStreamConsumerConfiguration {
 
     @Bean
-    ServiceDataStreamConsumer deviceDataStreamConsumer() {
-        return new ServiceDataStreamConsumer("device");
+    ServiceBinding deviceServiceBinding() {
+        return new ServiceBinding("device");
     }
 
     @Bean(name = "device")
@@ -39,8 +39,8 @@ public class DeviceDataStreamConsumerConfiguration {
     // Device metrics
 
     @Bean
-    ServiceDataStreamConsumer deviceMetricsDataStreamConsumer() {
-        return new ServiceDataStreamConsumer("device-metrics");
+    ServiceBinding deviceMetricsServiceBinding() {
+        return new ServiceBinding("device-metrics");
     }
 
     @Bean(name = "device-metrics")

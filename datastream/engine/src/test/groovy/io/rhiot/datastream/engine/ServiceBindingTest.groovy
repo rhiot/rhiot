@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component
 
 import static com.google.common.truth.Truth.assertThat
 
-class ServiceDataStreamConsumerTest extends DataStreamTest {
+class ServiceBindingTest extends DataStreamTest {
 
     // Tests
 
@@ -51,9 +51,9 @@ class ServiceDataStreamConsumerTest extends DataStreamTest {
     // Beans fixtures
 
     @Component
-    static class EchoDataStreamConsumer extends ServiceDataStreamConsumer {
+    static class EchoServiceBinding extends ServiceBinding {
 
-        EchoDataStreamConsumer() {
+        EchoServiceBinding() {
             super('echo')
         }
 
