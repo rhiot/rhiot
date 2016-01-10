@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.engine
+package io.rhiot.cloudplatform.service.binding
 
-import io.rhiot.datastream.engine.test.DataStreamTest
+import io.rhiot.cloudplatform.test.DataStreamTest
 import org.junit.Test
 import org.springframework.stereotype.Component
 

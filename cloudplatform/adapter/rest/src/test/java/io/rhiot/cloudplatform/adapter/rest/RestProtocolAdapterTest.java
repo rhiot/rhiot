@@ -18,8 +18,8 @@ package io.rhiot.cloudplatform.adapter.rest;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
-import io.rhiot.datastream.engine.ServiceBinding;
-import io.rhiot.datastream.engine.test.DataStreamTest;
+import io.rhiot.cloudplatform.service.binding.ServiceBinding;
+import io.rhiot.cloudplatform.test.DataStreamTest;
 import io.vertx.core.json.Json;
 import org.junit.Test;
 import org.springframework.stereotype.Component;

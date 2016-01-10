@@ -14,17 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.engine.encoding
+package io.rhiot.cloudplatform.encoding
 
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
+interface PayloadEncoding {
 
-@Configuration
-class EncodingConfiguration {
+    byte[] encode(Object payload)
 
-    @Bean
-    PayloadEncoding payloadEncoding() {
-        new JsonPayloadEncoding()
-    }
+    def Object decode(byte[] payload)
 
 }

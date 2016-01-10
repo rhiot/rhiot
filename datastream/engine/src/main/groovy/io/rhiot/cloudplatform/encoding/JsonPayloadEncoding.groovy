@@ -14,12 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.engine.encoding
+package io.rhiot.cloudplatform.encoding
 
-interface PayloadEncoding {
+import com.fasterxml.jackson.databind.ObjectMapper
 
-    byte[] encode(Object payload)
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 
-    def Object decode(byte[] payload)
+class JsonPayloadEncoding implements PayloadEncoding {
+
+    private final ObjectMapper objectMapper = new ObjectMapper().setSerializationInclusion(NON_NULL)
+
+    @Override
+    byte[] encode(Object payload) {
+        objectMapper.writeValueAsBytes([payload: payload])
+    }
+
+    @Override
+    Object decode(byte[] payload) {
+        objectMapper.readValue(payload, Map.class).payload
+    }
 
 }

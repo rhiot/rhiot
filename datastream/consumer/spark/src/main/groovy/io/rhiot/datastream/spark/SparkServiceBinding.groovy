@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.spark
 
-import io.rhiot.datastream.engine.ServiceBinding
+import io.rhiot.cloudplatform.service.binding.ServiceBinding
 import org.springframework.stereotype.Component
 
 @Component

@@ -19,7 +19,7 @@ package io.rhiot.steroids.camel
 import io.rhiot.bootstrap.AbstractBootInitializer
 
 import io.rhiot.bootstrap.MapBeanRegistry
-import io.rhiot.datastream.engine.CloudPlatform
+import io.rhiot.cloudplatform.CloudPlatform
 import io.rhiot.utils.Reflections
 import io.vertx.core.Vertx;
 import org.apache.camel.CamelContext;

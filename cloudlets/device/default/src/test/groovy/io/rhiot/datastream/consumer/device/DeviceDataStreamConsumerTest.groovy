@@ -16,14 +16,13 @@
  */
 package io.rhiot.datastream.consumer.device
 
-import io.rhiot.datastream.engine.test.DataStreamTest
+import io.rhiot.cloudplatform.test.DataStreamTest
 import io.rhiot.datastream.schema.device.Device
 import org.joda.time.DateTime
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_DEREGISTER
-import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_METRICS_WRITE
 import static io.rhiot.datastream.schema.device.DeviceConstants.CHANNEL_DEVICE_REGISTER
 import static io.rhiot.datastream.schema.device.DeviceConstants.deviceHeartbeat
 import static io.rhiot.datastream.schema.device.DeviceConstants.disconnected
@@ -31,10 +30,8 @@ import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
 import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices
 import static io.rhiot.datastream.schema.device.DeviceConstants.readAllDeviceMetrics
 import static io.rhiot.datastream.schema.device.DeviceConstants.readDeviceMetric
-import static io.rhiot.datastream.schema.device.DeviceConstants.readDeviceMetrics
 import static io.rhiot.datastream.schema.device.DeviceConstants.registerDevice
 import static io.rhiot.datastream.schema.device.DeviceConstants.writeDeviceMetric
-import static io.rhiot.datastream.schema.device.DeviceConstants.writeDeviceMetrics
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty

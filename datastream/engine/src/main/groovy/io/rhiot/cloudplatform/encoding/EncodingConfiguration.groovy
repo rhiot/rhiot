@@ -14,18 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.mongodb
+package io.rhiot.cloudplatform.encoding
 
-import com.mongodb.Mongo
-import io.rhiot.bootstrap.classpath.Bean
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
-import static io.rhiot.mongodb.Mongos.discoverMongo
-
-class MongoFactory {
+@Configuration
+class EncodingConfiguration {
 
     @Bean
-    Mongo mongo() {
-        discoverMongo()
+    PayloadEncoding payloadEncoding() {
+        new JsonPayloadEncoding()
     }
 
 }

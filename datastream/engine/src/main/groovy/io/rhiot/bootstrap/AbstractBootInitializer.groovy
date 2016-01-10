@@ -16,7 +16,7 @@
  */
 package io.rhiot.bootstrap
 
-import io.rhiot.datastream.engine.CloudPlatform
+import io.rhiot.cloudplatform.CloudPlatform
 import io.rhiot.utils.WithLogger
 
 abstract class AbstractBootInitializer implements BootModule, BootstrapAware, WithLogger  {

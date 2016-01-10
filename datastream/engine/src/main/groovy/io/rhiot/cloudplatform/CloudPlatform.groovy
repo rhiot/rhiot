@@ -14,13 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.engine
+package io.rhiot.cloudplatform
 
 import io.rhiot.bootstrap.BeanRegistry
 import io.rhiot.bootstrap.BootModule
 import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.bootstrap.classpath.ClasspathMapBeanRegistry
-import io.rhiot.utils.Properties
 import io.rhiot.utils.WithLogger
 import org.apache.camel.component.amqp.AMQPComponent
 import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl

@@ -19,7 +19,7 @@ package io.rhiot.datastream.consumer.device;
 import com.mongodb.Mongo;
 import io.rhiot.datastream.consumer.device.metrics.DeviceMetricsStore;
 import io.rhiot.datastream.consumer.device.metrics.MongoDbDeviceMetricsStore;
-import io.rhiot.datastream.engine.ServiceBinding;
+import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

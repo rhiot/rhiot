@@ -14,12 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.engine.test
+package io.rhiot.cloudplatform.test
 
-import io.rhiot.datastream.engine.CloudPlatform
-import io.rhiot.datastream.engine.encoding.PayloadEncoding
-import io.rhiot.utils.Networks
-import io.rhiot.utils.Properties
+import io.rhiot.cloudplatform.CloudPlatform
+import io.rhiot.cloudplatform.encoding.PayloadEncoding
 import org.apache.camel.CamelContext
 import org.apache.camel.ProducerTemplate
 import org.junit.AfterClass
@@ -30,7 +28,6 @@ import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.restoreSystemProperties
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
-import static io.rhiot.utils.Properties.setStringProperty
 
 abstract class DataStreamTest extends Assert {
 

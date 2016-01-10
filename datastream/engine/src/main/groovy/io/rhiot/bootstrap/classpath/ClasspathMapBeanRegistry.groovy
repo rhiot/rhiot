@@ -19,7 +19,7 @@ package io.rhiot.bootstrap.classpath
 
 import io.rhiot.bootstrap.BootstrapAware
 import io.rhiot.bootstrap.MapBeanRegistry
-import io.rhiot.datastream.engine.CloudPlatform
+import io.rhiot.cloudplatform.CloudPlatform
 
 import static io.rhiot.utils.Uuids.uuid
 

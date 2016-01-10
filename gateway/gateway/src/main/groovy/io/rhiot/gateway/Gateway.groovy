@@ -17,8 +17,7 @@
 package io.rhiot.gateway
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.datastream.engine.CloudPlatform
-import io.rhiot.utils.Properties
+import io.rhiot.cloudplatform.CloudPlatform
 import org.jolokia.jvmagent.JvmAgent
 import org.reflections.Reflections
 import org.reflections.util.ConfigurationBuilder

@@ -18,7 +18,7 @@ package io.rhiot.datastream.node
 
 import com.mongodb.BasicDBObject
 import com.mongodb.Mongo
-import io.rhiot.datastream.engine.test.DataStreamTest
+import io.rhiot.cloudplatform.test.DataStreamTest
 import io.rhiot.mongodb.EmbeddedMongo
 import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.core.json.Json

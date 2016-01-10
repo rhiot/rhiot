@@ -16,7 +16,7 @@
  */
 package io.rhiot.bootstrap
 
-import io.rhiot.datastream.engine.CloudPlatform
+import io.rhiot.cloudplatform.CloudPlatform
 
 interface BootstrapAware {
 
