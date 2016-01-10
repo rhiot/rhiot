@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Represents the component that manages {@link I2CEndpoint}.
+ * Represents the component that manages {@code I2CEndpoint}.
  */
 public class I2CComponent extends UriEndpointComponent {
 
