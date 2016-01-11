@@ -5,13 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
+        <artifactId>rhiot-cloudplatform-encoding</artifactId>
         <version>0.1.4-SNAPSHOT</version>
-        <artifactId>rhiot-bom</artifactId>
-        <relativePath>../bom</relativePath>
+        <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: Cloud platform</name>
-    <artifactId>rhiot-cloudplatform</artifactId>
-    <packaging>pom</packaging>
+    <name>Rhiot :: Cloud platform :: Encoding :: SPI</name>
+    <artifactId>rhiot-cloudplatform-encoding-spi</artifactId>
 
     <licenses>
         <license>
@@ -19,10 +18,5 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
-
-    <modules>
-        <module>encoding</module>
-        <module>adapter</module>
-    </modules>
 
 </project>

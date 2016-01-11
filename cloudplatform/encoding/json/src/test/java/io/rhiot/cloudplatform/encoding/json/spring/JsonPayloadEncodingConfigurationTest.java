@@ -14,24 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.encoding
+package io.rhiot.cloudplatform.encoding.json.spring;
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.truth.Truth;
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import io.rhiot.cloudplatform.test.DataStreamTest;
+import org.junit.Test;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
+public class JsonPayloadEncodingConfigurationTest extends DataStreamTest {
 
-class JsonPayloadEncoding implements PayloadEncoding {
+    @Test
+    public void shouldDecodePayload() {
+        // Given
+        PayloadEncoding payloadEncoding = cloudPlatform.applicationContext.getBean(PayloadEncoding.class);
+        String payload = "payload";
+        byte[] encodedPayload = payloadEncoding.encode(payload);
 
-    private final ObjectMapper objectMapper = new ObjectMapper().setSerializationInclusion(NON_NULL)
+        // When
+        String decodedPayload = (String) payloadEncoding.decode(encodedPayload);
 
-    @Override
-    byte[] encode(Object payload) {
-        objectMapper.writeValueAsBytes([payload: payload])
-    }
-
-    @Override
-    Object decode(byte[] payload) {
-        objectMapper.readValue(payload, Map.class).payload
+        // Then
+        Truth.assertThat(decodedPayload).isEqualTo(payload);
     }
 
 }

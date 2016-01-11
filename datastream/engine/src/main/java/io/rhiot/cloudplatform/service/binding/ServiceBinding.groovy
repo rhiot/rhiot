@@ -17,9 +17,7 @@
 package io.rhiot.cloudplatform.service.binding
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.cloudplatform.CloudPlatform
-import io.rhiot.cloudplatform.encoding.PayloadEncoding
-
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding
 import org.apache.camel.NoTypeConversionAvailableException
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.jms.JmsMessage
@@ -31,10 +29,8 @@ class ServiceBinding extends RouteBuilder {
 
     protected final String serviceChannel
 
-    protected CloudPlatform bootstrap
-
     @Autowired
-    PayloadEncoding payloadEncoding
+    protected PayloadEncoding payloadEncoding
 
     ServiceBinding(String serviceChannel) {
         this.serviceChannel = serviceChannel

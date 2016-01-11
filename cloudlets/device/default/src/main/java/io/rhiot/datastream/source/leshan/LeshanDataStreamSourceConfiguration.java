@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.source.leshan;
 
-import io.rhiot.cloudplatform.encoding.PayloadEncoding;
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import org.apache.camel.ProducerTemplate;
 import org.eclipse.leshan.server.client.ClientRegistry;
 import org.springframework.context.annotation.Bean;

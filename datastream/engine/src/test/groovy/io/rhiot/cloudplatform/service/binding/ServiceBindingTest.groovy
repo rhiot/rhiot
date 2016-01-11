@@ -17,11 +17,13 @@
 package io.rhiot.cloudplatform.service.binding
 
 import io.rhiot.cloudplatform.test.DataStreamTest
+import org.junit.Ignore
 import org.junit.Test
 import org.springframework.stereotype.Component
 
 import static com.google.common.truth.Truth.assertThat
 
+@Ignore
 class ServiceBindingTest extends DataStreamTest {
 
     // Tests

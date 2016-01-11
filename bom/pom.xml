@@ -264,6 +264,16 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
+				<artifactId>rhiot-cloudplatform-encoding-spi</artifactId>
+				<version>${rhiot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.rhiot</groupId>
+				<artifactId>rhiot-cloudplatform-encoding-json</artifactId>
+				<version>${rhiot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-datastream-document</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>

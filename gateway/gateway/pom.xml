@@ -81,6 +81,11 @@
             <artifactId>camel-vertx</artifactId>
         </dependency>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.jolokia</groupId>
             <artifactId>jolokia-jvm</artifactId>
         </dependency>

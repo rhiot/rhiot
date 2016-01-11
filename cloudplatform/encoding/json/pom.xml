@@ -5,12 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-cloudplatform-adapter</artifactId>
+        <artifactId>rhiot-cloudplatform-encoding</artifactId>
         <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: Cloud platform :: Protocol adapter :: REST</name>
-    <artifactId>rhiot-cloudplatform-adapter-rest</artifactId>
+    <name>Rhiot :: Cloud platform :: Encoding :: JSON</name>
+    <artifactId>rhiot-cloudplatform-encoding-json</artifactId>
 
     <licenses>
         <license>
@@ -21,12 +21,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-netty4-http</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-cloudplatform-encoding-spi</artifactId>
         </dependency>
 
         <!-- Optional runtime -->
@@ -49,17 +53,7 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-encoding-json</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-datastream-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

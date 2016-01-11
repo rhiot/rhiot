@@ -17,7 +17,7 @@
 package io.rhiot.cloudplatform.test
 
 import io.rhiot.cloudplatform.CloudPlatform
-import io.rhiot.cloudplatform.encoding.PayloadEncoding
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding
 import org.apache.camel.CamelContext
 import org.apache.camel.ProducerTemplate
 import org.junit.AfterClass
