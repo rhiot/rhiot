@@ -17,7 +17,6 @@
 package io.rhiot.datastream.document.mongodb
 
 import com.mongodb.Mongo
-import io.rhiot.bootstrap.classpath.ClasspathBeans
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -27,9 +26,9 @@ import static io.rhiot.utils.Properties.stringProperty
 class MongodbDocumentStoreFactory {
 
     @Bean(name = 'document')
-    MongodbDocumentStore mongodbDocumentStore() {
+    MongodbDocumentStore mongodbDocumentStore(Mongo mongo) {
         new MongodbDocumentStore(
-                ClasspathBeans.bean(Mongo.class).get(),
+                mongo,
                 stringProperty('cloudlet.document.driver.mongodb.db', 'cloudlet_document')
         )
     }

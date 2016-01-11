@@ -18,7 +18,6 @@ package io.rhiot.datastream.document.mongodb
 
 import com.google.common.collect.ImmutableMap
 import io.rhiot.cloudplatform.test.DataStreamTest
-import io.rhiot.mongodb.EmbeddedMongo
 import org.junit.Test
 import org.springframework.web.client.RestTemplate
 
@@ -30,8 +29,6 @@ import static io.rhiot.utils.Uuids.uuid
 
 class MongodbDocumentStoreTest extends DataStreamTest {
 
-    static mongo = new EmbeddedMongo().start()
-
     static def httpPort = findAvailableTcpPort()
 
     def collection = uuid()
@@ -40,6 +37,7 @@ class MongodbDocumentStoreTest extends DataStreamTest {
 
     @Override
     protected void beforeDataStreamStarted() {
+        System.setProperty("spring.data.mongodb.port", findAvailableTcpPort() + '');
         setBooleanProperty('MQTT_ENABLED', false)
         setIntProperty('AMQP_PORT', findAvailableTcpPort())
         setIntProperty('http_port', httpPort)
