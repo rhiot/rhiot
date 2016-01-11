@@ -24,7 +24,6 @@ import org.junit.Test
 
 import static com.google.common.io.Files.createTempDir
 import static io.rhiot.datastream.schema.GpsCoordinates.gpsCoordinates
-import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setStringProperty
 import static java.lang.Boolean.parseBoolean
@@ -53,12 +52,12 @@ class GpsSyncTest extends GatewayTest {
     void shouldSendGpsData() {
         // Given
         def coordinates = gpsCoordinates(new Date(), 10.0, 20.0)
-        def dataStreamConsumerMock = camelContext().getEndpoint('mock:gps', MockEndpoint.class)
+        def dataStreamConsumerMock = camelContext.getEndpoint('mock:gps', MockEndpoint.class)
         dataStreamConsumerMock.reset()
         dataStreamConsumerMock.setExpectedMessageCount(1)
 
         // When
-        camelContext().createProducerTemplate().sendBody('seda:gps', coordinates)
+        camelContext.createProducerTemplate().sendBody('seda:gps', coordinates)
 
         // Then
         dataStreamConsumerMock.assertIsSatisfied()
@@ -68,12 +67,12 @@ class GpsSyncTest extends GatewayTest {
     void shouldSendClientId() {
         // Given
         def coordinates = gpsCoordinates(new Date(), 10.0, 20.0)
-        def dataStreamConsumerMock = camelContext().getEndpoint('mock:gps', MockEndpoint.class)
+        def dataStreamConsumerMock = camelContext.getEndpoint('mock:gps', MockEndpoint.class)
         dataStreamConsumerMock.reset()
         dataStreamConsumerMock.setExpectedMessageCount(1)
 
         // When
-        camelContext().createProducerTemplate().sendBody('seda:gps', coordinates)
+        camelContext.createProducerTemplate().sendBody('seda:gps', coordinates)
 
         // Then
         dataStreamConsumerMock.assertIsSatisfied()

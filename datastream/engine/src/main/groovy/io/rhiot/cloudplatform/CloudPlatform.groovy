@@ -37,11 +37,8 @@ import static java.lang.Runtime.runtime;
 /**
  * Starts up Steroids framework, scans the classpath for the initializers and runs the latter.
  */
-@SpringBootApplication
-@ComponentScan("io.rhiot")
+@SpringBootApplication(scanBasePackages = "io.rhiot")
 class CloudPlatform implements WithLogger {
-
-    public static CloudPlatform bootstrap
 
     public static ConfigurableApplicationContext applicationContext
 
@@ -104,7 +101,7 @@ class CloudPlatform implements WithLogger {
     // Main entry point
 
     public static void main(String[] args) {
-        bootstrap = new CloudPlatform().start(args)
+        def bootstrap = new CloudPlatform().start(args)
         runtime.addShutdownHook(new Thread(){
             @Override
             void run() {

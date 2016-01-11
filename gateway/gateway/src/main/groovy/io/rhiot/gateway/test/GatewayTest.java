@@ -22,7 +22,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 
-import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext;
 import static io.rhiot.utils.Properties.restoreSystemProperties;
 
 public abstract class GatewayTest extends Assert {
@@ -36,7 +35,7 @@ public abstract class GatewayTest extends Assert {
         doBefore();
         if(gateway == null) {
             gateway = new Gateway().start();
-            camelContext = camelContext();
+            camelContext = gateway.applicationContext.getBean(CamelContext.class);
         }
     }
 

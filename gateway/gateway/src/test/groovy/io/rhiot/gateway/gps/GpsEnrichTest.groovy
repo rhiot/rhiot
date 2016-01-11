@@ -17,7 +17,6 @@
 package io.rhiot.gateway.gps
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.datastream.schema.GpsCoordinates
 import io.rhiot.gateway.test.GatewayTest
 import org.junit.Test
 
@@ -26,7 +25,6 @@ import java.util.concurrent.Callable
 import static com.google.common.truth.Truth.assertThat
 import static com.jayway.awaitility.Awaitility.await
 import static io.rhiot.datastream.schema.GpsCoordinates.gpsCoordinates
-import static io.rhiot.steroids.camel.CamelBootInitializer.camelContext
 import static io.rhiot.utils.Properties.setStringProperty;
 import static com.google.common.io.Files.createTempDir;
 import static io.rhiot.utils.Properties.setBooleanProperty
@@ -56,8 +54,8 @@ public class GpsEnrichTest extends GatewayTest {
     @Test
     public void shouldSaveEnrichedGpsData() {
         def coordinates = gpsCoordinates(new Date(), 10.0, 20.0)
-        camelContext().createProducerTemplate().sendBody('seda:gps', coordinates)
-        camelContext().createProducerTemplate().sendBody('seda:enrich', new EnrichingData(extraData: 'foo'))
+        camelContext.createProducerTemplate().sendBody('seda:gps', coordinates)
+        camelContext.createProducerTemplate().sendBody('seda:enrich', new EnrichingData(extraData: 'foo'))
 
         // Then
         await().until((Callable<Boolean>) {gpsCoordinatesStore.listFiles().length > 0})
