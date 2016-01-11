@@ -41,10 +41,6 @@
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-datastream-document-mongodb</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-datastream-spark</artifactId>
-        </dependency>
 
         <!-- Testing -->
         <dependency>
@@ -53,18 +49,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.jayway.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
