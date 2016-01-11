@@ -16,10 +16,11 @@
  */
 package io.rhiot.gateway.webcam
 
-import io.rhiot.gateway.GatewayVerticle
-import io.rhiot.steroids.camel.CamelBootInitializer
-import io.rhiot.vertx.camel.GroovyCamelVerticle
+import org.apache.camel.CamelContext
 import org.apache.camel.builder.RouteBuilder
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.stereotype.Component
 
 import static io.rhiot.utils.Properties.stringProperty
 
@@ -27,20 +28,18 @@ import static io.rhiot.utils.Properties.stringProperty
  * Camel route to take an image every minute
  *
  */
-@GatewayVerticle(conditionProperty = 'camellabs_iot_gateway_webcam')
-public class WebcamVerticle extends GroovyCamelVerticle {
+@Component
+@ConditionalOnProperty(name = 'camellabs_iot_gateway_webcam', havingValue = 'true')
+public class WebcamVerticle extends RouteBuilder {
+
+    @Autowired
+    CamelContext camelContext
 
     def storeDirectory = stringProperty('camellabs_iot_gateway_webcam_store_directory', '/var/camel-labs-iot-gateway/webcam')
 
-
     @Override
-    void start() {
-        CamelBootInitializer.camelContext().addRoutes(new RouteBuilder() {
-            @Override
-            void configure() {
-                from("webcam:cam").routeId("webcam").to("file://${storeDirectory}");
-            }
-        })
+    void configure() throws Exception {
+        from("webcam:cam").routeId("webcam").to("file://${storeDirectory}");
     }
 
 }

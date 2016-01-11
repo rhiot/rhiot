@@ -18,8 +18,10 @@ package io.rhiot.gateway.heartbeat
 
 import io.rhiot.gateway.test.GatewayTest
 import org.apache.camel.component.mock.MockEndpoint
+import org.junit.Ignore
 import org.junit.Test
 
+@Ignore
 class LedHeartbeatVerticleTest extends GatewayTest {
 
     @Override

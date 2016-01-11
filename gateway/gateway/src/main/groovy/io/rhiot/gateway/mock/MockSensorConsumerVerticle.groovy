@@ -16,14 +16,16 @@
  */
 package io.rhiot.gateway.mock
 
-import io.rhiot.gateway.GatewayVerticle
-import io.rhiot.vertx.camel.GroovyCamelVerticle
+import org.apache.camel.builder.RouteBuilder
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.stereotype.Component
 
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.stringProperty
 
-@GatewayVerticle(conditionProperty = 'camellabs_iot_gateway_mock_sensor_consumer')
-class MockSensorConsumerVerticle extends GroovyCamelVerticle {
+@Component
+@ConditionalOnProperty(name = 'camellabs_iot_gateway_mock_sensor_consumer', havingValue = 'true')
+class MockSensorConsumerVerticle extends RouteBuilder {
 
     def target = stringProperty('camellabs_iot_gateway_mock_sensor_consumer_target')
 
@@ -32,10 +34,9 @@ class MockSensorConsumerVerticle extends GroovyCamelVerticle {
     def mqttBrokerUrl = stringProperty('camellabs_iot_gateway_mock_sensor_consumer_mqtt_broker_url')
 
     @Override
-    void start() {
-        fromEventBus('mockSensor') {
-            it.routeId("mockSensorConsumer").to("${target ?: "paho:mock?qos=${mqttQos}&brokerUrl=${mqttBrokerUrl}"}")
-        }
+    void configure() throws Exception {
+        from("seda:mockSensor?multipleConsumers=true").
+                routeId("mockSensorConsumer").to("${target ?: "paho:mock?qos=${mqttQos}&brokerUrl=${mqttBrokerUrl}"}")
     }
 
 }

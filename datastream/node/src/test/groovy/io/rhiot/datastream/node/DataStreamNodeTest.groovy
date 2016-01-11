@@ -20,10 +20,11 @@ import com.mongodb.BasicDBObject
 import com.mongodb.Mongo
 import io.rhiot.cloudplatform.test.DataStreamTest
 import io.rhiot.mongodb.EmbeddedMongo
-import io.rhiot.steroids.camel.CamelBootInitializer
 import io.vertx.core.json.Json
 import org.apache.camel.component.spark.RddCallback
 import org.apache.spark.api.java.AbstractJavaRDDLike
+import org.apache.spark.api.java.JavaPairRDD
+import org.apache.spark.api.java.JavaRDD
 import org.apache.spark.api.java.JavaSparkContext
 import org.junit.AfterClass
 import org.junit.Test
@@ -55,10 +56,7 @@ class DataStreamNodeTest extends DataStreamTest {
         def mongoClient = new Mongo('localhost', mongo.port())
         mongoClient.getDB('db').getCollection('collection').save(new BasicDBObject([foo: 'bar']))
 
-        def sparkContext = cloudPlatform.applicationContext.getBean(JavaSparkContext.class)
-        cloudPlatform.beanRegistry().register('rdd', mongoRdd(sparkContext, 'localhost', mongo.port(), 'db', 'collection'))
-
-        def encodedResult = CamelBootInitializer.camelContext().createProducerTemplate().requestBody("amqp:spark.execute.rdd.callback", Json.encode([payload: 10]), String.class)
+        def encodedResult = producerTemplate.requestBody("amqp:spark.execute.rdd.callback", Json.encode([payload: 10]), String.class)
         def result = Json.decodeValue(encodedResult, Map.class).payload
         assertThat(result).isEqualTo(10)
     }
@@ -71,6 +69,11 @@ class DataStreamNodeTest extends DataStreamTest {
                 rdd.count() * (int) payloads[0]
             }
         }
+    }
+
+    @Bean
+    JavaPairRDD rdd(JavaSparkContext sparkContext) {
+        mongoRdd(sparkContext, 'localhost', mongo.port(), 'db', 'collection')
     }
 
 }

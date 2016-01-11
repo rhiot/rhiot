@@ -16,29 +16,22 @@
  */
 package io.rhiot.gateway.heartbeat
 
-import io.rhiot.gateway.GatewayVerticle
-import io.rhiot.vertx.camel.GroovyCamelVerticle
+import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.stereotype.Component
 
 import static io.rhiot.utils.Properties.stringProperty
 import static java.lang.System.currentTimeMillis
 import static java.net.InetAddress.getLocalHost
 
-@GatewayVerticle(conditionProperty = 'camellabs.iot.gateway.heartbeat.mqtt')
-class MqttHeartbeatVerticle extends GroovyCamelVerticle {
+@Component
+@ConditionalOnProperty(name = 'camellabs.iot.gateway.heartbeat.mqtt', havingValue = 'true')
+class MqttHeartbeatVerticle extends RouteBuilder {
 
     def topic = stringProperty('camellabs.iot.gateway.heartbeat.mqtt.topic', 'heartbeat')
 
     def brokerUrl = stringProperty('camellabs.iot.gateway.heartbeat.mqtt.broker.url')
-
-    @Override
-    void start() {
-        super.start()
-        fromEventBus('heartbeat') { RouteDefinition route ->
-            route.transform().simple(generateHeartBeatMessage()).
-                    to("paho:${topic}?brokerUrl=${brokerUrl}")
-        }
-    }
 
     // Private helpers
 
@@ -48,6 +41,12 @@ class MqttHeartbeatVerticle extends GroovyCamelVerticle {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    void configure() throws Exception {
+        from('heartbeat?multipleConsumers=true').transform().simple(generateHeartBeatMessage()).
+                to("paho:${topic}?brokerUrl=${brokerUrl}")
     }
 
 }

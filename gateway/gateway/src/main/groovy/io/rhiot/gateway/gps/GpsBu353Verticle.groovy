@@ -17,9 +17,9 @@
 package io.rhiot.gateway.gps
 
 import io.rhiot.component.gps.bu353.ClientGpsCoordinates
-import io.rhiot.gateway.GatewayVerticle
-import io.rhiot.vertx.camel.GroovyCamelVerticle
 import org.apache.camel.builder.RouteBuilder
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.stereotype.Component
 
 import static io.rhiot.utils.Properties.stringProperty
 
@@ -29,22 +29,18 @@ import static io.rhiot.utils.Properties.stringProperty
  * @deprecated Use @GpsdVericle instead.
  */
 @Deprecated
-@GatewayVerticle(conditionProperty = 'camellabs_iot_gateway_gps_bu353')
-public class GpsBu353Verticle extends GroovyCamelVerticle {
+@Component
+@ConditionalOnProperty(name = 'camellabs_iot_gateway_gps_bu353', havingValue = 'true')
+public class GpsBu353Verticle extends RouteBuilder {
 
     def storeDirectory = stringProperty('camellabs_iot_gateway_gps_store_directory', '/var/camel-labs-iot-gateway/gps')
 
     @Override
-    void start() {
-        camelContext.addRoutes(new RouteBuilder() {
-            @Override
-            void configure() {
-                from('gps-bu353://gps').routeId("gps-bu353").process { exchange ->
-                    def coordinates = exchange.in.getBody(ClientGpsCoordinates.class)
-                    exchange.getIn().setBody(coordinates.serialize());
-                }.to("file://${storeDirectory}")
-            }
-        })
+    void configure() throws Exception {
+        from('gps-bu353://gps').routeId("gps-bu353").process { exchange ->
+            def coordinates = exchange.in.getBody(ClientGpsCoordinates.class)
+            exchange.getIn().setBody(coordinates.serialize());
+        }.to("file://${storeDirectory}")
     }
 
 }

@@ -16,8 +16,9 @@
  */
 package io.rhiot.gateway.mock
 
-import io.rhiot.gateway.GatewayVerticle
-import io.rhiot.vertx.camel.GroovyCamelVerticle
+import org.apache.camel.builder.RouteBuilder
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.stereotype.Component
 
 import static io.rhiot.utils.Uuids.uuid
 import static io.rhiot.utils.Properties.intProperty
@@ -25,19 +26,18 @@ import static io.rhiot.utils.Properties.intProperty
 /**
  * Verticle emulating device sensor. It generate random UUID events on the given basis.
  */
-@GatewayVerticle(conditionProperty = 'camellabs_iot_gateway_mock_sensor')
-class MockSensorVerticle extends GroovyCamelVerticle {
+@Component
+@ConditionalOnProperty(name = 'camellabs_iot_gateway_mock_sensor', havingValue = 'true')
+class MockSensorVerticle extends RouteBuilder {
 
     def sourcesNumber = intProperty('camellabs_iot_gateway_mock_sensor_number', 10)
 
     def period = intProperty('camellabs_iot_gateway_mock_sensor_period', 10)
 
     @Override
-    void start() {
+    void configure() throws Exception {
         for (int i = 1; i <= sourcesNumber; i++) {
-            vertx.setPeriodic(period) {
-                vertx.eventBus().publish('mockSensor', uuid())
-            }
+            from("timer:mock${i}?delay=${period}" + i).transform{uuid()}.to("seda:mockSensor?multipleConsumers")
         }
     }
 

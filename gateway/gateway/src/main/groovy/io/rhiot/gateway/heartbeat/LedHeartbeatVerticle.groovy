@@ -16,24 +16,24 @@
  */
 package io.rhiot.gateway.heartbeat
 
-import io.rhiot.gateway.GatewayVerticle
-import io.rhiot.vertx.camel.GroovyCamelVerticle
+import org.apache.camel.builder.RouteBuilder
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.stereotype.Component
 
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.stringProperty
 
-@GatewayVerticle(conditionProperty = 'camellabs.iot.gateway.heartbeat.led')
-class LedHeartbeatVerticle extends GroovyCamelVerticle {
+@Component
+@ConditionalOnProperty(name = 'camellabs.iot.gateway.heartbeat.led', havingValue = 'true')
+class LedHeartbeatVerticle extends RouteBuilder {
 
     private final def ledComponent = stringProperty('camellabs.iot.gateway.heartbeat.led.component', 'pi4j-gpio')
 
     private final def ledGppioId = intProperty('camellabs.iot.gateway.heartbeat.led.gpioId', 0)
 
     @Override
-    void start() {
-        fromEventBus('heartbeat') {
-            it.to("${ledComponent}:${ledGppioId}?mode=DIGITAL_OUTPUT&state=LOW&action=BLINK")
-        }
+    void configure() throws Exception {
+        from("seda:heartbeat?multipleConsumers=true").to("${ledComponent}:${ledGppioId}?mode=DIGITAL_OUTPUT&state=LOW&action=BLINK")
     }
 
 }

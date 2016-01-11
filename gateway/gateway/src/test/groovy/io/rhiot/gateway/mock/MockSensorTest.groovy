@@ -17,7 +17,6 @@
 package io.rhiot.gateway.mock
 
 import io.rhiot.gateway.Gateway
-import io.rhiot.steroids.camel.CamelBootInitializer
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.mock.MockEndpoint;
@@ -54,7 +53,7 @@ class MockSensorTest extends Assert {
 
         gateway.start()
 
-        CamelBootInitializer.camelContext().addRoutes(new RouteBuilder() {
+       camelContext().addRoutes(new RouteBuilder() {
             @Override
             public void configure() throws Exception {
                 from("paho:mock?brokerUrl=tcp://localhost:" + mqttPort).

@@ -17,7 +17,6 @@
 package io.rhiot.gateway.heartbeat;
 
 import io.rhiot.gateway.Gateway;
-import io.rhiot.steroids.camel.CamelBootInitializer
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.ConsumerTemplate;
 import org.junit.AfterClass;

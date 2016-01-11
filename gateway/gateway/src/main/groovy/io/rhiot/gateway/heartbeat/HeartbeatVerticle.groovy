@@ -17,13 +17,13 @@
 package io.rhiot.gateway.heartbeat
 
 import io.rhiot.gateway.Gateway
-import io.rhiot.gateway.GatewayVerticle
 import io.vertx.lang.groovy.GroovyVerticle
+import org.springframework.stereotype.Component
 
 import static io.rhiot.gateway.GatewayConstants.BUS_HEARTBEAT
 import static io.rhiot.utils.Properties.intProperty
 
-@GatewayVerticle
+@Component
 class HeartbeatVerticle extends GroovyVerticle {
 
     @Override
