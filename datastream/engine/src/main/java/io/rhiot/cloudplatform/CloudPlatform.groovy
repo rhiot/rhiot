@@ -16,7 +16,6 @@
  */
 package io.rhiot.cloudplatform
 
-import io.rhiot.utils.WithLogger
 import org.apache.camel.component.amqp.AMQPComponent
 import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -26,15 +25,14 @@ import org.springframework.context.annotation.Bean
 
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.stringProperty
-import static java.lang.Runtime.runtime;
 
 /**
  * Starts up Steroids framework, scans the classpath for the initializers and runs the latter.
  */
 @SpringBootApplication(scanBasePackages = "io.rhiot")
-class CloudPlatform implements WithLogger {
+class CloudPlatform {
 
-    public static ConfigurableApplicationContext applicationContext
+    private ConfigurableApplicationContext applicationContext
 
     // Lifecycle
 
@@ -45,21 +43,20 @@ class CloudPlatform implements WithLogger {
     }
 
     CloudPlatform stop() {
-        log().debug('Stopping Steroids Bootstrap: {}', getClass().name)
         applicationContext.close()
         this
+    }
+
+    // Getters
+
+    ConfigurableApplicationContext applicationContext() {
+        return applicationContext
     }
 
     // Main entry point
 
     public static void main(String[] args) {
-        def bootstrap = new CloudPlatform().start(args)
-        runtime.addShutdownHook(new Thread(){
-            @Override
-            void run() {
-                bootstrap.stop()
-            }
-        })
+        new CloudPlatform().start(args)
     }
 
     @Bean

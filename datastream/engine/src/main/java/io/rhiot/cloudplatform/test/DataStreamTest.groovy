@@ -53,9 +53,9 @@ abstract class DataStreamTest extends Assert {
         if(!dataStreamStarted) {
             beforeDataStreamStarted()
             cloudPlatform = cloudPlatform.start().asType(CloudPlatform.class)
-            camelContext = cloudPlatform.applicationContext.getBean(CamelContext.class)
+            camelContext = cloudPlatform.applicationContext().getBean(CamelContext.class)
             producerTemplate = camelContext.createProducerTemplate()
-            payloadEncoding = cloudPlatform.applicationContext.getBean(PayloadEncoding.class)
+            payloadEncoding = cloudPlatform.applicationContext().getBean(PayloadEncoding.class)
             dataStreamStarted = true
         }
         afterDataStreamStarted()

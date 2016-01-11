@@ -26,7 +26,7 @@ public class JsonPayloadEncodingConfigurationTest extends DataStreamTest {
     @Test
     public void shouldDecodePayload() {
         // Given
-        PayloadEncoding payloadEncoding = cloudPlatform.applicationContext.getBean(PayloadEncoding.class);
+        PayloadEncoding payloadEncoding = cloudPlatform.applicationContext().getBean(PayloadEncoding.class);
         String payload = "payload";
         byte[] encodedPayload = payloadEncoding.encode(payload);
 
@@ -40,7 +40,7 @@ public class JsonPayloadEncodingConfigurationTest extends DataStreamTest {
     @Test
     public void shouldDecodeNullPayload() {
         // Given
-        PayloadEncoding payloadEncoding = cloudPlatform.applicationContext.getBean(PayloadEncoding.class);
+        PayloadEncoding payloadEncoding = cloudPlatform.applicationContext().getBean(PayloadEncoding.class);
         byte[] encodedPayload = payloadEncoding.encode(null);
 
         // When
