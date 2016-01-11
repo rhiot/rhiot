@@ -97,16 +97,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudlet-geofencing</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-broker</artifactId>
             <scope>test</scope>
