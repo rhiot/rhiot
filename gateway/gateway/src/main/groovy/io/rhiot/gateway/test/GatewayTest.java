@@ -35,7 +35,7 @@ public abstract class GatewayTest extends Assert {
         doBefore();
         if(gateway == null) {
             gateway = new Gateway().start();
-            camelContext = gateway.applicationContext.getBean(CamelContext.class);
+            camelContext = gateway.applicationContext().getBean(CamelContext.class);
         }
     }
 
