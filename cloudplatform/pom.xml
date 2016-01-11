@@ -23,6 +23,7 @@
     <modules>
         <module>encoding</module>
         <module>adapter</module>
+        <module>service</module>
     </modules>
 
 </project>

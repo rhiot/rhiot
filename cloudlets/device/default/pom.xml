@@ -22,6 +22,10 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-cloudplatform-service-binding</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-datastream-engine</artifactId>
         </dependency>
         <dependency>
