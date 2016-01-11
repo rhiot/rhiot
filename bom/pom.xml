@@ -23,6 +23,7 @@
 		<rhiot.version>0.1.4-SNAPSHOT</rhiot.version>
 
 		<activemq.version>5.13.0</activemq.version>
+		<apache-commons-io.version>1.3.2</apache-commons-io.version>
 		<apache-commons-lang3.version>3.4</apache-commons-lang3.version>
 		<apache-commons-math3.version>3.5</apache-commons-math3.version>
 		<apache-poi.version>3.13</apache-poi.version>
@@ -516,6 +517,11 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-exec</artifactId>
 				<version>${commons-exec.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${apache-commons-io.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
