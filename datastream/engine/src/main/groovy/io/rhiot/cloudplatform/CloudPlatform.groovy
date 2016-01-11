@@ -16,10 +16,6 @@
  */
 package io.rhiot.cloudplatform
 
-import io.rhiot.bootstrap.BeanRegistry
-import io.rhiot.bootstrap.BootModule
-import io.rhiot.bootstrap.BootstrapAware
-import io.rhiot.bootstrap.classpath.ClasspathMapBeanRegistry
 import io.rhiot.utils.WithLogger
 import org.apache.camel.component.amqp.AMQPComponent
 import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl
@@ -27,9 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.ComponentScan
 
-import static io.rhiot.bootstrap.classpath.ClasspathBeans.beans
 import static io.rhiot.utils.Properties.intProperty
 import static io.rhiot.utils.Properties.stringProperty
 import static java.lang.Runtime.runtime;
@@ -42,60 +36,18 @@ class CloudPlatform implements WithLogger {
 
     public static ConfigurableApplicationContext applicationContext
 
-    // Members
-
-    private final BeanRegistry beanRegistry
-
-    private final def initializers = beans(BootModule.class).
-            sort{ first, second -> first.order() - second.order()}.asImmutable()
-
-    // Constructors
-
-    CloudPlatform(BeanRegistry beanRegistry) {
-        this.beanRegistry = makeBootstrapAware(beanRegistry)
-    }
-
-    CloudPlatform() {
-        this(new ClasspathMapBeanRegistry())
-    }
-
     // Lifecycle
 
     CloudPlatform start(String... args) {
         System.setProperty("camel.springboot.typeConversion", "false")
         applicationContext = new SpringApplicationBuilder(CloudPlatform.class).web(false).build().run(args)
-        log().debug('Starting Steroids Bootstrap: {}', getClass().name)
-        initializers.each {
-            if(it instanceof BootstrapAware) {
-                it.bootstrap(this)
-            }
-        }
-        initializers.each { it.start() }
         this
     }
 
     CloudPlatform stop() {
         log().debug('Stopping Steroids Bootstrap: {}', getClass().name)
-        initializers.reverse().each { it.stop() }
         applicationContext.close()
         this
-    }
-
-    BeanRegistry beanRegistry() {
-        beanRegistry
-    }
-
-    def <T extends BootModule> T initializer(Class<T> type) {
-        initializers.find { type.isAssignableFrom(it.class) }
-    }
-
-    // Bootstrap awareness
-
-    def <T> T makeBootstrapAware(T object) {
-        if(object instanceof BootstrapAware) {
-            object.asType(BootstrapAware.class).bootstrap(this)
-        }
-        object
     }
 
     // Main entry point
