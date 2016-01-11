@@ -20,13 +20,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import org.apache.camel.NoTypeConversionAvailableException;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.qpid.amqp_1_0.jms.Destination;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.lang.String.format;
+
 public class ServiceBinding extends RouteBuilder {
+
+    // Static collaborators
+
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceBinding.class);
+
+    // Constants
+
+    private static final String TARGET_PROPERTY = "target";
 
     protected final String serviceChannel;
 
@@ -39,43 +52,44 @@ public class ServiceBinding extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("amqp:" + serviceChannel + ".>").
-                process( it -> {
-                    String  channel = it.getIn().getHeader("JMSDestination", org.apache.qpid.amqp_1_0.jms.Destination.class).getAddress();
-                    String rawChannel = channel.substring(channel.lastIndexOf('/') + 1);
-                    String[] channelParts = rawChannel.split("\\.");
-                    String service = channelParts[0];
-                    String operation = channelParts[1];
-                    it.setProperty("target", "bean:" + service + "?method=" + operation + "&multiParameterArray=true");
+        String fromChannel = format("amqp:%s.>", serviceChannel);
+        LOG.debug("Starting route consuming from channel: {}", fromChannel);
+        from(fromChannel).process(exchange -> {
+            String channel = exchange.getIn().getHeader("JMSDestination", Destination.class).getAddress();
+            String rawChannel = channel.substring(channel.lastIndexOf('/') + 1);
+            String[] channelParts = rawChannel.split("\\.");
+            String service = channelParts[0];
+            String operation = channelParts[1];
+            exchange.setProperty(TARGET_PROPERTY, "bean:" + service + "?method=" + operation + "&multiParameterArray=true");
 
-                    List<Object> arguments = new LinkedList<>();
-                    for (int i = 2; i < channelParts.length; i++) {
-                        arguments.add(channelParts[i]);
-                    }
-                    byte[] incomingPayload = it.getIn().getBody(byte[].class);
-                    if (incomingPayload != null && incomingPayload.length > 0) {
-                        Object payload = payloadEncoding.decode(incomingPayload);
-                        arguments.add(payload);
-                    }
+            List<Object> arguments = new LinkedList<>();
+            for (int i = 2; i < channelParts.length; i++) {
+                arguments.add(channelParts[i]);
+            }
+            byte[] incomingPayload = exchange.getIn().getBody(byte[].class);
+            if (incomingPayload != null && incomingPayload.length > 0) {
+                Object payload = payloadEncoding.decode(incomingPayload);
+                arguments.add(payload);
+            }
 
-                    Class beanType = getContext().getRegistry().lookupByName(service).getClass();
-                    Method method = null;
-                    for(Method m : beanType.getDeclaredMethods()) {
-                        if(m.getName().equals(operation)) {
-                            method = m;
-                            break;
-                        }
-                    }
-                    it.getIn().setBody(convertArguments(arguments, method));
-                }).recipientList().exchangeProperty("target").
-                process( it -> it.getIn().setBody(payloadEncoding.encode(it.getIn().getBody())));
+            Class beanType = getContext().getRegistry().lookupByName(service).getClass();
+            Method operationMethod = null;
+            for (Method m : beanType.getDeclaredMethods()) {
+                if (m.getName().equals(operation)) {
+                    operationMethod = m;
+                    break;
+                }
+            }
+            exchange.getIn().setBody(convertArguments(arguments, operationMethod));
+        }).recipientList().exchangeProperty(TARGET_PROPERTY).
+                process(it -> it.getIn().setBody(payloadEncoding.encode(it.getIn().getBody())));
     }
 
     // Helpers
 
     protected List<?> convertArguments(List<?> arguments, Method operation) {
-        List convertedArguments = new LinkedList<>();
-        for(int i = 0; i < arguments.size(); i++) {
+        List<Object> convertedArguments = new LinkedList<>();
+        for (int i = 0; i < arguments.size(); i++) {
             try {
                 convertedArguments.add(getContext().getTypeConverter().mandatoryConvertTo(operation.getParameterTypes()[i], arguments.get(i)));
             } catch (NoTypeConversionAvailableException e) {

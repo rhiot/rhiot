@@ -32,6 +32,13 @@ public class ServiceBindingTest extends DataStreamTest {
     @Test
     public void shouldBindServiceToChannel() {
         long payload = 100;
+        int response = fromBus("echo.echo", payload, int.class);
+        Truth.assertThat(response).isEqualTo(payload);
+    }
+
+    @Test
+    public void shouldBindServiceToChannelUsingDestinationOnly() {
+        long payload = 100;
         int response = fromBus("echo.echo." + payload, int.class);
         Truth.assertThat(response).isEqualTo(payload);
     }
