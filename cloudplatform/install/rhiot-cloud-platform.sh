@@ -56,6 +56,14 @@ fi
 docker rm mongodb
 docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 
+### IoT Connector
+
+docker rm AMQP_SERVICE_HOST
+docker pull rhiot/activemq:${RHIOT_VERSION}
+docker run -d --name AMQP_SERVICE_HOST \
+  -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true \
+  -it rhiot/activemq:${RHIOT_VERSION}
+
 ### Data stream node
 
 docker rm datastream-node

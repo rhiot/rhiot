@@ -21,7 +21,7 @@
     </licenses>
 
     <properties>
-        <fatjar.mainClass></fatjar.mainClass>
+        <fatjar.mainClass>io.rhiot.activemq.Broker</fatjar.mainClass>
         <docker.image.target>activemq</docker.image.target>
     </properties>
 
@@ -41,6 +41,28 @@
             <plugin>
                 <groupId>org.jolokia</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker-maven-plugin.version}</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>rhiot/${docker.image.target}</name>
+                            <build>
+                                <from>rhiot/fatjar:0.1.2-SNAPSHOT</from>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${project.version}</tag>
+                                </tags>
+                                <ports>
+                                    <port>5672</port>
+                                </ports>
+                                <assembly>
+                                    <basedir>/jars</basedir>
+                                    <descriptorRef>artifact</descriptorRef>
+                                </assembly>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
