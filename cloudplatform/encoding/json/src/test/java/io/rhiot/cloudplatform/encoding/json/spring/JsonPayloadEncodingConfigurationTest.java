@@ -37,4 +37,17 @@ public class JsonPayloadEncodingConfigurationTest extends DataStreamTest {
         Truth.assertThat(decodedPayload).isEqualTo(payload);
     }
 
+    @Test
+    public void shouldDecodeNullPayload() {
+        // Given
+        PayloadEncoding payloadEncoding = cloudPlatform.applicationContext.getBean(PayloadEncoding.class);
+        byte[] encodedPayload = payloadEncoding.encode(null);
+
+        // When
+        String decodedPayload = (String) payloadEncoding.decode(encodedPayload);
+
+        // Then
+        Truth.assertThat(decodedPayload).isNull();
+    }
+
 }
