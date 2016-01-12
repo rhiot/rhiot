@@ -83,7 +83,7 @@ if [ -z "${SHELL_CONTAINER_STARTED}" ]; then
     docker rm rhiot-shell >> ${RHIOT_HOME}/rhiot-cmd.log > /dev/null 2>&1
     docker run -d --name rhiot-shell --privileged=true --net=host -p 2000:2000 \
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
-    -v ${RHIOT_DOWNLOADS}:/root/.rhiot/downloads -v ~/.m2/repository:/var/maven/repository \
+    -v ${RHIOT_DOWNLOADS}:/root/.rhiot/downloads -v ~/.m2/repository:/var/maven/repository -v ${RHIOT_HOME}/maven/repository:/root/.m2/repository \
     -it rhiot/shell:${RHIOT_VERSION}  > /dev/null 2>&1
     sleep 10 # Give SSHD time to start
 fi
