@@ -44,6 +44,9 @@ public final class DeviceIOConstants {
     public static final String CAMEL_I2C_DRIVER_LOCATION = "/META-INF/services/io/rhiot/component/deviceio/i2c/";
     public static final boolean CAMEL_I2C_DIO_LENIENT = true;
 
+    public static final int CAMEL_I2C_DIO_SERIAL_CLOCK = 3400000; // 3.4MHz
+    public static final int CAMEL_I2C_DIO_ADDRESS_SIZE_BITS = 7;
+
     private DeviceIOConstants() {
         // Constants class
     }
