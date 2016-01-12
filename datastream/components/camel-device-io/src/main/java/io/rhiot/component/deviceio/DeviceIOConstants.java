@@ -41,6 +41,8 @@ public final class DeviceIOConstants {
 
     public static final String CAMEL_I2C_DEVICE_ID = "deviceId";
     public static final String CAMEL_I2C_BUS_ID = "busId";
+    public static final int CAMEL_I2C_DEFAULT_BUS_ID = 1;
+
     public static final String CAMEL_I2C_DRIVER_LOCATION = "/META-INF/services/io/rhiot/component/deviceio/i2c/";
     public static final boolean CAMEL_I2C_DIO_LENIENT = true;
 
