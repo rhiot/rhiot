@@ -31,7 +31,7 @@ import jdk.dio.i2cbus.I2CDevice;
 /**
  * The I2C consumer.
  */
-public class I2CConsumer extends ScheduledPollConsumer implements I2CDevice {
+public abstract class I2CConsumer extends ScheduledPollConsumer implements I2CDevice {
     private final I2CDevice device;
 
     public I2CConsumer(I2CEndpoint endpoint, Processor processor, I2CDevice device) {
@@ -39,35 +39,7 @@ public class I2CConsumer extends ScheduledPollConsumer implements I2CDevice {
         this.device = device;
     }
 
-    protected void createBody(Exchange exchange) throws IOException {
-        ByteBuffer buffer = null;
-        if (getEndpoint().getReadAction() != null) {
-            switch (getEndpoint().getReadAction()) {
-            case READ:
-                exchange.getIn().setBody(read(), Integer.class);
-                break;
-            case READ_ADDR:
-                buffer = ByteBuffer.allocate(1);
-                read(getEndpoint().getAddress(), 1, buffer);
-                exchange.getIn().setBody(buffer.asIntBuffer(), Integer.class);
-                break;
-            case READ_BUFFER:
-                buffer = ByteBuffer.allocate(getEndpoint().getBufferSize());
-                read(getEndpoint().getAddress(), getEndpoint().getSize(), buffer);
-                exchange.getIn().setBody(buffer.array(), byte[].class);
-                break;
-            case READ_ADDR_BUFFER:
-                buffer = ByteBuffer.allocate(getEndpoint().getBufferSize());
-                read(getEndpoint().getAddress(), getEndpoint().getSize(), getEndpoint().getOffset(), buffer);
-                exchange.getIn().setBody(buffer.array(), byte[].class);
-                break;
-            default:
-                break;
-            }
-        } else {
-            // to Impl
-        }
-    }
+    public abstract void createBody(Exchange exchange) throws IOException;
 
     public I2CDevice getDevice() {
         return device;

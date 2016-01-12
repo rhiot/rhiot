@@ -19,7 +19,6 @@ package io.rhiot.component.deviceio.i2c;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 
 import jdk.dio.ClosedDeviceException;
@@ -30,37 +29,13 @@ import jdk.dio.i2cbus.I2CDevice;
 /**
  * The I2C producer.
  */
-public class I2CProducer extends DefaultProducer implements I2CDevice {
+public abstract class I2CProducer extends DefaultProducer implements I2CDevice {
 
     protected I2CDevice device;
 
     public I2CProducer(I2CEndpoint endpoint, I2CDevice device) {
         super(endpoint);
         this.device = device;
-    }
-
-    @Override
-    public void process(Exchange exchange) throws Exception {
-        Object o = exchange.getIn().getBody();
-
-        if (o instanceof Byte) {
-            if (getEndpoint().getAddress() >= 0) {
-                ByteBuffer buffer = ByteBuffer.allocate(1);
-                buffer.put((Byte) o);
-                write(getEndpoint().getAddress(), 1, buffer);
-            } else {
-                write((Byte) o);
-            }
-        } else if (o instanceof Byte[]) {
-            ByteBuffer buffer = ByteBuffer.allocate(1);
-            buffer.put((byte[]) o);
-
-            if (getEndpoint().getAddress() >= 0) {
-                write(getEndpoint().getAddress(), getEndpoint().getSize(), buffer);
-            } else {
-                write(0, getEndpoint().getSize(), buffer);
-            }
-        }
     }
 
     public I2CDevice getDevice() {
