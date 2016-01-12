@@ -14,21 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.utils.maven;
+package io.rhiot.utils.maven
 
+import groovy.transform.Immutable
+
+@Immutable
 class Repository {
 
-    private final String id
+    final String id
 
-    private final String url
+    final String url
 
-    public Repository(String id, String url) {
-        this.id = id;
-        this.url = url;
+    static Repository localReadOnly() {
+        new Repository('localReadOnly', "file:///var/maven/repository");
     }
 
     static Repository mavenCentral() {
-        new Repository("mavenCentral", "https://repo1.maven.org/maven2");
+        new Repository('mavenCentral', "https://repo1.maven.org/maven2");
     }
 
     static Repository sonatypeSnapshots() {
@@ -40,15 +42,17 @@ class Repository {
     }
 
     static List<Repository> standardRepositories() {
-        [mavenCentral(), sonatypeSnapshots(), apacheSnapshots()].asImmutable()
+        [localReadOnly(), mavenCentral(), sonatypeSnapshots(), apacheSnapshots()].asImmutable()
     }
 
+    // Getters
+
     public String id() {
-        return id;
+        id;
     }
 
     public String url() {
-        return url;
+        url;
     }
 
 }
