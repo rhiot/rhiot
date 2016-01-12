@@ -20,10 +20,12 @@ import io.rhiot.scanner.DeviceDetector
 import io.rhiot.utils.ssh.client.SshClient
 import org.springframework.beans.factory.annotation.Autowired
 
-abstract class SshCommandSupport extends CommandSupport  {
+abstract class SshCommandSupport extends CommandSupport {
 
     @Autowired
     protected DeviceDetector deviceDetector
+
+    // Base SSH arguments members
 
     protected String deviceAddress
 

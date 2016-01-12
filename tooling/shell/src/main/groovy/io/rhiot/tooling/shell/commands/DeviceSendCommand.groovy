@@ -17,14 +17,12 @@
 package io.rhiot.tooling.shell.commands
 
 import io.rhiot.tooling.shell.SshCommandSupport
-import io.rhiot.utils.Mavens
 import io.rhiot.utils.maven.MavenArtifactResolver
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.util.Assert
 
 import static io.rhiot.utils.Mavens.MavenCoordinates.parseMavenCoordinates
-import static org.springframework.util.Assert.notNull
 
 @Component
 class DeviceSendCommand extends SshCommandSupport {
@@ -38,8 +36,8 @@ class DeviceSendCommand extends SshCommandSupport {
 
     @Override
     protected void doExecute(List<String> output, String... command) {
-        notNull(output)
-        notNull(command)
+        Assert.notNull(output)
+        Assert.notNull(command)
 
         super.doExecute(output, command)
         def source = requiredParameter('source', command[4])
@@ -50,13 +48,13 @@ class DeviceSendCommand extends SshCommandSupport {
         log().debug('Sent {} to {}:{}.', source, deviceAddress, target)
 
         output << "Sent ${source} to ${target} on a target device ${deviceAddress}."
+        log().debug('Output collected: {}', output)
     }
 
     private sourceStream(String source){
         if(source.startsWith('mvn:')) {
             def coordinates = parseMavenCoordinates(source.substring(4), '/')
-            def x = mavenArtifactResolver.artifactStream(coordinates.groupId, coordinates.artifactId, coordinates.version).get()
-            x
+            mavenArtifactResolver.artifactStream(coordinates.groupId, coordinates.artifactId, coordinates.version).get()
         } else if(source =~ /.+:.+/) {
             new URL(source).openStream()
         } else {
