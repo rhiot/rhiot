@@ -26,16 +26,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 
 public class ServiceBinding extends RouteBuilder {
 
     // Static collaborators
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceBinding.class);
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     // Constants
 
@@ -62,10 +66,7 @@ public class ServiceBinding extends RouteBuilder {
             String operation = channelParts[1];
             exchange.setProperty(TARGET_PROPERTY, "bean:" + service + "?method=" + operation + "&multiParameterArray=true");
 
-            List<Object> arguments = new LinkedList<>();
-            for (int i = 2; i < channelParts.length; i++) {
-                arguments.add(channelParts[i]);
-            }
+            List<Object> arguments = new LinkedList<>(asList(channelParts).subList(2, channelParts.length));
             byte[] incomingPayload = exchange.getIn().getBody(byte[].class);
             if (incomingPayload != null && incomingPayload.length > 0) {
                 Object payload = payloadEncoding.decode(incomingPayload);
@@ -88,12 +89,13 @@ public class ServiceBinding extends RouteBuilder {
     // Helpers
 
     protected List<?> convertArguments(List<?> arguments, Method operation) {
-        List<Object> convertedArguments = new LinkedList<>();
+        Class[] parameterTypes = operation.getParameterTypes();
+        List<Object> convertedArguments = new ArrayList<>(arguments.size());
         for (int i = 0; i < arguments.size(); i++) {
             try {
-                convertedArguments.add(getContext().getTypeConverter().mandatoryConvertTo(operation.getParameterTypes()[i], arguments.get(i)));
+                convertedArguments.add(getContext().getTypeConverter().mandatoryConvertTo(parameterTypes[i], arguments.get(i)));
             } catch (NoTypeConversionAvailableException e) {
-                convertedArguments.add(new ObjectMapper().convertValue(arguments.get(i), operation.getParameterTypes()[i]));
+                convertedArguments.add(OBJECT_MAPPER.convertValue(arguments.get(i), parameterTypes[i]));
             }
         }
         return convertedArguments;
