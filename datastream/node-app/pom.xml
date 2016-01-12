@@ -21,7 +21,7 @@
 
     <properties>
         <docker.image.target>datastream-node</docker.image.target>
-        <fatjar.mainClass>io.rhiot.cloudplatform.CloudPlatform</fatjar.mainClass>
+        <fatjar.mainClass>io.rhiot.cloudplatform.runtime.spring.CloudPlatform</fatjar.mainClass>
     </properties>
 
     <dependencies>

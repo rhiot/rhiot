@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform;
+package io.rhiot.cloudplatform.runtime.spring;
 
 import org.apache.camel.component.amqp.AMQPComponent;
 import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl;

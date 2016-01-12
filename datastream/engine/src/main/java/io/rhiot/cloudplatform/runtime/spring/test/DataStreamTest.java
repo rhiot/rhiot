@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.test;
+package io.rhiot.cloudplatform.runtime.spring.test;
 
-import io.rhiot.cloudplatform.CloudPlatform;
+import io.rhiot.cloudplatform.runtime.spring.CloudPlatform;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;

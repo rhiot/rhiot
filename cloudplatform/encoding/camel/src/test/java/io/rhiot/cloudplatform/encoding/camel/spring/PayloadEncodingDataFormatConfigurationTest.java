@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.encoding.camel.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.encoding.camel.PayloadEncodingDataFormat;
-import io.rhiot.cloudplatform.test.DataStreamTest;
+import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest;
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.junit.Test;

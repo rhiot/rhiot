@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.spark
 
-import io.rhiot.cloudplatform.test.DataStreamTest
+import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest
 import org.apache.camel.component.spark.RddCallback
 import org.apache.spark.api.java.AbstractJavaRDDLike
 import org.apache.spark.api.java.JavaRDD

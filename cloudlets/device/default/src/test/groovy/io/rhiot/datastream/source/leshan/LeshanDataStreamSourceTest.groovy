@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.source.leshan
 
-import io.rhiot.cloudplatform.test.DataStreamTest
+import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest
 import io.rhiot.datastream.schema.device.Device
 import org.junit.After
 import org.junit.Test

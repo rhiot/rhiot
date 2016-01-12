@@ -17,7 +17,7 @@
 package io.rhiot.datastream.document.mongodb
 
 import com.google.common.collect.ImmutableMap
-import io.rhiot.cloudplatform.test.DataStreamTest
+import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest
 import org.junit.Test
 import org.springframework.web.client.RestTemplate
 

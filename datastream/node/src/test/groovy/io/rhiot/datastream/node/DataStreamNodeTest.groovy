@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.node
 
-import io.rhiot.cloudplatform.test.DataStreamTest
+import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest
 import org.junit.Test
 import org.springframework.context.annotation.Configuration
 

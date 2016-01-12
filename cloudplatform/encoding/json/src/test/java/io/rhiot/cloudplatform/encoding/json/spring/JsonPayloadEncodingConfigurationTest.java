@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.encoding.json.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
-import io.rhiot.cloudplatform.test.DataStreamTest;
+import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest;
 import org.junit.Test;
 
 public class JsonPayloadEncodingConfigurationTest extends DataStreamTest {

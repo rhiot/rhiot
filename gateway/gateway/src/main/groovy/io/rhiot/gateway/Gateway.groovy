@@ -17,7 +17,7 @@
 package io.rhiot.gateway
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.cloudplatform.CloudPlatform
+import io.rhiot.cloudplatform.runtime.spring.CloudPlatform
 import org.jolokia.jvmagent.JvmAgent
 
 import static org.slf4j.LoggerFactory.getLogger
