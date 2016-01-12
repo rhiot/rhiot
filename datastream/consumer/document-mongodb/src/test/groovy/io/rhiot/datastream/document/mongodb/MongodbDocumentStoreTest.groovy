@@ -40,7 +40,7 @@ class MongodbDocumentStoreTest extends DataStreamTest {
         System.setProperty("spring.data.mongodb.port", findAvailableTcpPort() + '');
         setBooleanProperty('MQTT_ENABLED', false)
         setIntProperty('AMQP_PORT', findAvailableTcpPort())
-        setIntProperty('http_port', httpPort)
+        setIntProperty('rest.port', httpPort)
     }
 
     @Test
