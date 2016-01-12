@@ -16,6 +16,10 @@
  */
 package io.rhiot.component.pi4j.i2c.driver;
 
+import io.rhiot.component.pi4j.i2c.I2CConstants;
+import io.rhiot.component.pi4j.i2c.I2CConsumer;
+import io.rhiot.component.pi4j.i2c.I2CEndpoint;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -26,10 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pi4j.io.i2c.I2CDevice;
-
-import io.rhiot.component.pi4j.i2c.I2CConstants;
-import io.rhiot.component.pi4j.i2c.I2CConsumer;
-import io.rhiot.component.pi4j.i2c.I2CEndpoint;
 
 public class LPS25HConsumer extends I2CConsumer {
 
@@ -137,10 +137,10 @@ public class LPS25HConsumer extends I2CConsumer {
         read(PRESS_POUT_XL | I2CConstants.MULTI_BYTE_READ_MASK, buffer.array(), 0, 3);
         buffer.put(3, (byte) 0);
         int PRESS_OUT = buffer.getInt(0);
-        System.out.println("PRESS_OUT  : " + PRESS_OUT);
+        LOG.debug("PRESS_OUT  : " + PRESS_OUT);
 
         double press = (PRESS_OUT / DOUBLE_4096_0);
-        System.out.println("PRESS_OUT (hPa) : " + press);
+        LOG.debug("PRESS_OUT (hPa) : " + press);
         return press;
 
     }
@@ -148,10 +148,10 @@ public class LPS25HConsumer extends I2CConsumer {
     private double readTemperature() throws IOException {
         read(TEMP_OUT_L | I2CConstants.MULTI_BYTE_READ_MASK, buffer.array(), 0, 2);
         short TEMP_OUT = buffer.getShort(0);
-        System.out.println("TEMP_OUT  : " + TEMP_OUT);
+        LOG.debug("TEMP_OUT  : " + TEMP_OUT);
 
         double temp = (DOUBLE_42_5 + (TEMP_OUT / DOUBLE_480_0));
-        System.out.println("TEMP_OUT (C) : " + temp);
+        LOG.debug("TEMP_OUT (C) : " + temp);
         return temp;
     }
 
