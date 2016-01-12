@@ -28,8 +28,8 @@ public class RestAdapterConfiguration {
 
     @Bean
     RestProtocolAdapter camelRestStreamSource(
-            @Value("${http_port:8080}") int httpPort,
-            @Value("${rest_content_type:" + DEFAULT_CONTENT_TYPE + "}") String contentType) {
+            @Value("${http.port:8080}") int httpPort,
+            @Value("${rest.content.type:" + DEFAULT_CONTENT_TYPE + "}") String contentType) {
         return new RestProtocolAdapter(httpPort, contentType);
     }
 
