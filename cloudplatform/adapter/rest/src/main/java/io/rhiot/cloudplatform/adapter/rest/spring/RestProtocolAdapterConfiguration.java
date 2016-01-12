@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import static io.rhiot.cloudplatform.adapter.rest.RestProtocolAdapter.DEFAULT_CONTENT_TYPE;
 
 @Configuration
-public class RestAdapterConfiguration {
+public class RestProtocolAdapterConfiguration {
 
     @Bean
     RestProtocolAdapter camelRestStreamSource(
