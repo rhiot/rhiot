@@ -48,6 +48,7 @@ public final class DeviceIOConstants {
 
     public static final int CAMEL_I2C_DIO_SERIAL_CLOCK = 3400000; // 3.4MHz
     public static final int CAMEL_I2C_DIO_ADDRESS_SIZE_BITS = 7;
+    public static final int CAMEL_I2C_DIO_SUBADDRESS_SIZE_BITS = 1;
 
     private DeviceIOConstants() {
         // Constants class
