@@ -16,14 +16,17 @@
  */
 package io.rhiot.datastream.document
 
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding
 import io.rhiot.cloudplatform.service.binding.ServiceBinding
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class DocumentServiceBinding extends ServiceBinding {
 
-    DocumentServiceBinding() {
-        super('document')
+    @Autowired
+    DocumentServiceBinding(PayloadEncoding payloadEncoding) {
+        super(payloadEncoding, 'document')
     }
 
 }

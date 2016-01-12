@@ -45,13 +45,13 @@ public class ServiceBinding extends RouteBuilder {
 
     private static final String TARGET_PROPERTY = "target";
 
+    protected final PayloadEncoding payloadEncoding;
+
     protected final String serviceChannel;
 
-    @Autowired
-    protected PayloadEncoding payloadEncoding;
-
-    public ServiceBinding(String serviceChannel) {
+    public ServiceBinding(PayloadEncoding payloadEncoding, String serviceChannel) {
         this.serviceChannel = serviceChannel;
+        this.payloadEncoding = payloadEncoding;
     }
 
     @Override

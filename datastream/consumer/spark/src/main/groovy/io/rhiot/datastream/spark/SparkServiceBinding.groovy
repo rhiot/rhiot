@@ -16,14 +16,17 @@
  */
 package io.rhiot.datastream.spark
 
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding
 import io.rhiot.cloudplatform.service.binding.ServiceBinding
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class SparkServiceBinding extends ServiceBinding {
 
-    SparkServiceBinding() {
-        super('spark')
+    @Autowired
+    SparkServiceBinding(PayloadEncoding payloadEncoding) {
+        super(payloadEncoding, 'spark')
     }
 
 }

@@ -28,10 +28,21 @@ public class RestProtocolAdapter extends RouteBuilder {
 
     private static final Logger LOG = LoggerFactory.getLogger(RestProtocolAdapter.class);
 
-    int port;
+    public static final String DEFAULT_CONTENT_TYPE = "application/json";
+
+    private final int port;
+
+    private final String contentType;
+
+    // Constructors
+
+    public RestProtocolAdapter(int port, String contentType) {
+        this.port = port;
+        this.contentType = contentType;
+    }
 
     public RestProtocolAdapter(int port) {
-        this.port = port;
+        this(port, DEFAULT_CONTENT_TYPE);
     }
 
     // Routes
@@ -41,7 +52,7 @@ public class RestProtocolAdapter extends RouteBuilder {
         LOG.debug("Started REST data stream source at port {}.", port);
 
         from("netty4-http:http://0.0.0.0:" + port + "/?matchOnUriPrefix=true").
-                setHeader(CONTENT_TYPE).constant("application/json").
+                setHeader(CONTENT_TYPE).constant(contentType).
                 process( exc -> {
                     String requestUri = exc.getIn().getHeader(HTTP_URI, String.class);
                     String trimmedUri = removeEnd(requestUri, "/");

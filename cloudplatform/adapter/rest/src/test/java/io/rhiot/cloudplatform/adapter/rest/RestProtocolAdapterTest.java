@@ -18,10 +18,13 @@ package io.rhiot.cloudplatform.adapter.rest;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.test.DataStreamTest;
 import io.vertx.core.json.Json;
 import org.junit.Test;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,7 +32,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
-
+@Configuration
 public class RestProtocolAdapterTest extends DataStreamTest {
 
     RestTemplate rest = new RestTemplate();
@@ -47,6 +50,13 @@ public class RestProtocolAdapterTest extends DataStreamTest {
         Truth.assertThat(payload).isEqualTo(1);
     }
 
+    @Test
+    public void shouldPassUriAndBody() {
+        byte[] request = payloadEncoding.encode(ImmutableMap.of("foo", "bar"));
+        Object payload = rest.postForObject("http://localhost:8080/test/numberPlusSizeOf/1", request, Map.class).get("payload");
+        Truth.assertThat(payload).isEqualTo(2);
+    }
+
     // Beans fixtures
 
     public static interface TestService {
@@ -54,6 +64,8 @@ public class RestProtocolAdapterTest extends DataStreamTest {
         int count(int number);
 
         int sizeOf(Map map);
+
+        int numberPlusSizeOf(int number, Map map);
 
     }
 
@@ -70,15 +82,16 @@ public class RestProtocolAdapterTest extends DataStreamTest {
             return map.size();
         }
 
-    }
-
-    @Component
-    public static class TestInterfaceServiceBinding extends ServiceBinding {
-
-        TestInterfaceServiceBinding() {
-            super("test");
+        @Override
+        public int numberPlusSizeOf(int number, Map map) {
+            return number + map.size();
         }
 
+    }
+
+    @Bean
+    ServiceBinding testServiceBinding(PayloadEncoding payloadEncoding) {
+        return new ServiceBinding(payloadEncoding, "test");
     }
 
 }

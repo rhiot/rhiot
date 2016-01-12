@@ -21,12 +21,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static io.rhiot.cloudplatform.adapter.rest.RestProtocolAdapter.DEFAULT_CONTENT_TYPE;
+
 @Configuration
 public class RestAdapterConfiguration {
 
     @Bean
-    RestProtocolAdapter camelRestStreamSource(@Value("${http_port:8080}") int httpPort) {
-        return new RestProtocolAdapter(httpPort);
+    RestProtocolAdapter camelRestStreamSource(
+            @Value("${http_port:8080}") int httpPort,
+            @Value("${rest_content_type:" + DEFAULT_CONTENT_TYPE + "}") String contentType) {
+        return new RestProtocolAdapter(httpPort, contentType);
     }
 
 }

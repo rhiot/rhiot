@@ -17,6 +17,7 @@
 package io.rhiot.datastream.consumer.device;
 
 import com.mongodb.Mongo;
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.datastream.consumer.device.metrics.DeviceMetricsStore;
 import io.rhiot.datastream.consumer.device.metrics.MongoDbDeviceMetricsStore;
@@ -27,8 +28,8 @@ import org.springframework.context.annotation.Configuration;
 public class DeviceDataStreamConsumerConfiguration {
 
     @Bean
-    ServiceBinding deviceServiceBinding() {
-        return new ServiceBinding("device");
+    ServiceBinding deviceServiceBinding(PayloadEncoding payloadEncoding) {
+        return new ServiceBinding(payloadEncoding, "device");
     }
 
     @Bean(name = "device")
@@ -39,8 +40,8 @@ public class DeviceDataStreamConsumerConfiguration {
     // Device metrics
 
     @Bean
-    ServiceBinding deviceMetricsServiceBinding() {
-        return new ServiceBinding("device-metrics");
+    ServiceBinding deviceMetricsServiceBinding(PayloadEncoding payloadEncoding) {
+        return new ServiceBinding(payloadEncoding, "device-metrics");
     }
 
     @Bean(name = "device-metrics")
