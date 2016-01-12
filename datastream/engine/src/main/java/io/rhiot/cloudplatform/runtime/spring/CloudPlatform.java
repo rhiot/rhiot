@@ -17,7 +17,7 @@
 package io.rhiot.cloudplatform.runtime.spring;
 
 import org.apache.camel.component.amqp.AMQPComponent;
-import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -25,8 +25,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.net.MalformedURLException;
 
-import static io.rhiot.utils.Properties.intProperty;
-import static io.rhiot.utils.Properties.stringProperty;
+import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
 
 /**
  * Allows to communicate with the Cloud Platform by loading modules (protocol adapters, services, payload encodings and
@@ -62,15 +61,13 @@ public class CloudPlatform {
         new CloudPlatform().start(args);
     }
 
+    // IoT Connector configuration
+
     @Bean
-    AMQPComponent amqp() throws MalformedURLException {
-        // Starting from Camel 2.16.1 (due to the CAMEL-9204) replace the code below with:
-        // AMQPComponent.amqp10Component(uri)
-        String amqpBrokerUrl = stringProperty("AMQP_SERVICE_HOST", "localhost");
-        int amqpBrokerPort = intProperty("AMQP_SERVICE_PORT", 5672);
-        ConnectionFactoryImpl connectionFactory = ConnectionFactoryImpl.createFromURL("amqp://guest:guest@" + amqpBrokerUrl + ":" + amqpBrokerPort);
-        connectionFactory.setTopicPrefix("topic://");
-        return new AMQPComponent(connectionFactory);
+    AMQPComponent amqp(
+            @Value("${AMQP_SERVICE_HOST:localhost}") String amqpBrokerUrl,
+            @Value("${AMQP_SERVICE_PORT:5672}") int amqpBrokerPort) throws MalformedURLException {
+        return amqp10Component("amqp://guest:guest@" + amqpBrokerUrl + ":" + amqpBrokerPort);
     }
 
 }
