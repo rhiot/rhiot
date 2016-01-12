@@ -23,6 +23,10 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-datastream-engine</artifactId>
         </dependency>
         <dependency>
