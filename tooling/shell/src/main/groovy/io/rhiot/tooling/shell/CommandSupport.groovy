@@ -57,7 +57,21 @@ abstract class CommandSupport implements WithLogger {
         output.join('\n')
     }
 
+    String executeOrPrintHelp(Boolean help, String... command) {
+        if(help) {
+            printHelp()
+        } else {
+            execute(command)
+        }
+    }
+
+    protected String printHelp() {
+        ''
+    }
+
     abstract protected void doExecute(List<String> output, String... command)
+
+    // Helpers
 
     static String optionalBoolean(Boolean value) {
         value != null && value ? 'true' : 'false'

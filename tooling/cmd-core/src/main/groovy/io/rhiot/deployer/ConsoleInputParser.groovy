@@ -32,7 +32,7 @@ class ConsoleInputParser {
     }
 
     boolean isHelp() {
-        args.contains('--help') || args.contains('-h') || args.find{!it.startsWith('-')} == null
+        (args.contains('--help') || args.contains('-h') || args.find{!it.startsWith('-')} == null) && !args.find{ it == 'device-send' }
     }
 
     String helpText() {
@@ -83,27 +83,6 @@ SSH options:
 
 Other options:
 --append (-a)         Appends to the given property instead of overriding it.
-
-===
-
-Command: device-send source target
-
-Sends file to a remote device. For example:
-
-    device-send /etc/localfile /etc/remotefile
-
-All the device-config command SSH options are also available for this command.
-
-**Available since Rhiot 0.1.4.**
-
-Using URL as a file source is accepted as well. For example to read file from HTTP and send it to a remot device:
-
-    device-send http://example.com/file /etc/remotefile
-
-You can also transfer Maven artifacts. For example to copy Google Guava jar to a remote device, execute the following
-command:
-
-    device-send mvn:com.google.guava/guava/18.0 /opt/guava.jar
 
 ===
 

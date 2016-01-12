@@ -62,4 +62,26 @@ class DeviceSendCommand extends SshCommandSupport {
         }
     }
 
+    @Override
+    protected String printHelp() {
+        """Command: device-send source target
+
+Sends file to a remote device. For example:
+
+    device-send /etc/localfile /etc/remotefile
+
+All the device-config command SSH options are also available for this command.
+
+**Available since Rhiot 0.1.4.**
+
+Using URL as a file source is accepted as well. For example to read file from HTTP and send it to a remote device:
+
+    device-send http://example.com/file /etc/remotefile
+
+You can also transfer Maven artifacts. For example to copy Google Guava jar to a remote device, execute the following
+command:
+
+    device-send mvn:com.google.guava/guava/18.0 /opt/guava.jar"""
+    }
+
 }

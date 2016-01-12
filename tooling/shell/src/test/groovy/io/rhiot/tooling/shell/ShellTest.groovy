@@ -126,6 +126,15 @@ class ShellTest {
     // device-send tests
 
     @Test
+    void shouldDisplaySendFileHelp() {
+        // When
+        def result = configCommand("device-send", "--help")
+
+        // Then
+        assertThat(result).contains('Sends file to a remote device. For example:')
+    }
+
+    @Test
     void shouldSendFile() {
         // When
         def result = configCommand("device-send", "pom.xml /foo/${file}")

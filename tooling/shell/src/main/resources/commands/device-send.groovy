@@ -20,19 +20,18 @@ import io.rhiot.tooling.shell.commands.DeviceSendCommand
 import org.crsh.cli.Argument
 import org.crsh.cli.Command
 import org.crsh.cli.Option
-import org.crsh.cli.Usage
 import org.crsh.command.InvocationContext
 import org.springframework.beans.factory.BeanFactory
 
 class device_send {
 
-    @Usage("device-send source target")
     @Command
     def main(InvocationContext context, @Argument String source, @Argument String target,
              @Option(names = ['host', 'ho']) String host, @Option(names = ['port', 'p']) String port,
-             @Option(names = ['username', 'u']) String username, @Option(names = ['password', 'pa']) String password) {
+             @Option(names = ['username', 'u']) String username, @Option(names = ['password', 'pa']) String password,
+             @Option(names = ['help', 'h']) Boolean help) {
         BeanFactory beanFactory = context.attributes['spring.beanfactory']
-        beanFactory.getBean(DeviceSendCommand.class).execute(host, port, username, password, source, target)
+        beanFactory.getBean(DeviceSendCommand.class).executeOrPrintHelp(help, host, port, username, password, source, target)
     }
 
 }
