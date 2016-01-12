@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-datastream-engine</artifactId>
+            <artifactId>rhiot-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>

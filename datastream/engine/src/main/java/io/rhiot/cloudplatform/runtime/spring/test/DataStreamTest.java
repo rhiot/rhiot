@@ -24,10 +24,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 
-import static io.rhiot.utils.Networks.findAvailableTcpPort;
-import static io.rhiot.utils.Properties.restoreSystemProperties;
-import static io.rhiot.utils.Properties.setBooleanProperty;
-import static io.rhiot.utils.Properties.setIntProperty;
+import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 public abstract class DataStreamTest extends Assert {
 
@@ -44,11 +41,11 @@ public abstract class DataStreamTest extends Assert {
 
     @Before
     public void before() {
-        setBooleanProperty("spring.activemq.broker.enabled", true);
-        setBooleanProperty("spring.activemq.broker.amqpEnabled", true);
+        System.setProperty("spring.activemq.broker.enabled", true + "");
+        System.setProperty("spring.activemq.broker.amqpEnabled", true + "");
         int amqpPort = findAvailableTcpPort();
-        setIntProperty("spring.activemq.broker.amqpPort", amqpPort);
-        setIntProperty("AMQP_SERVICE_PORT", amqpPort);
+        System.setProperty("spring.activemq.broker.amqpPort", amqpPort + "");
+        System.setProperty("AMQP_SERVICE_PORT", amqpPort + "");
 
         if(!dataStreamStarted) {
             beforeDataStreamStarted();
@@ -73,7 +70,6 @@ public abstract class DataStreamTest extends Assert {
             cloudPlatform.stop();
         } finally {
             dataStreamStarted = false;
-            restoreSystemProperties();
         }
     }
 
