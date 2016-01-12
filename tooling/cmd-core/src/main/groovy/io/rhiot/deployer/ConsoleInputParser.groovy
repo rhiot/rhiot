@@ -38,17 +38,18 @@ class ConsoleInputParser {
     String helpText() {
         """Welcome to the Rhiot command line tool.
 
-Usage: rhiot [OPTIONS] [deploy-gateway|scan]
+Usage: rhiot [OPTIONS] command
 
 Commands:
-shell-start                  Starts background shell process.
-device-config                Edits configuration file on a device.
-device-scan                  Lists possible target devices.
-device-send                  Transfers file to a remote device.
-kura-config-bootdelegation   Enables OSGi boot delegation for Sun packages on a remote device.
-kura-config-ini              Sets property on a /opt/eclipse/kura/kura/config.ini file on a remote device.
-raspbian-install             Installs Raspbian to a target SD card.
-deploy-gateway               Deploys gateway to a detected device.
+shell-start                     Starts background shell process.
+device-config                   Edits configuration file on a device.
+device-scan                     Lists possible target devices.
+device-send                     Transfers file to a remote device.
+kura-config-bootdelegation      Enables OSGi boot delegation for Sun packages on a remote device.
+kura-config-ini                 Sets property on a /opt/eclipse/kura/kura/config.ini file on a remote device.
+kura-install-felix-fileinstall  Deploys Felix File Install into your Kura server.
+raspbian-install                Installs Raspbian to a target SD card.
+deploy-gateway                  Deploys gateway to a detected device.
 
 Global options:
  -h --help                                                      Prints this help page.
