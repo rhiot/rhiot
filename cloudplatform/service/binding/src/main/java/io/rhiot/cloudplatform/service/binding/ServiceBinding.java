@@ -23,7 +23,6 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.qpid.amqp_1_0.jms.Destination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -45,9 +44,15 @@ public class ServiceBinding extends RouteBuilder {
 
     private static final String TARGET_PROPERTY = "target";
 
+    // Member collaborators
+
     protected final PayloadEncoding payloadEncoding;
 
+    // Member configuration
+
     protected final String serviceChannel;
+
+    // Constructors
 
     public ServiceBinding(PayloadEncoding payloadEncoding, String serviceChannel) {
         this.serviceChannel = serviceChannel;
@@ -58,6 +63,7 @@ public class ServiceBinding extends RouteBuilder {
     public void configure() throws Exception {
         String fromChannel = format("amqp:%s.>", serviceChannel);
         LOG.debug("Starting route consuming from channel: {}", fromChannel);
+
         from(fromChannel).process(exchange -> {
             String channel = exchange.getIn().getHeader("JMSDestination", Destination.class).getAddress();
             String rawChannel = channel.substring(channel.lastIndexOf('/') + 1);
@@ -74,16 +80,11 @@ public class ServiceBinding extends RouteBuilder {
             }
 
             Class beanType = getContext().getRegistry().lookupByName(service).getClass();
-            Method operationMethod = null;
-            for (Method m : beanType.getDeclaredMethods()) {
-                if (m.getName().equals(operation)) {
-                    operationMethod = m;
-                    break;
-                }
-            }
+            Method operationMethod = asList(beanType.getDeclaredMethods()).stream().
+                    filter(method -> method.getName().equals(operation)).findAny().get();
+
             exchange.getIn().setBody(convertArguments(arguments, operationMethod));
-        }).recipientList().exchangeProperty(TARGET_PROPERTY).
-                process(it -> it.getIn().setBody(payloadEncoding.encode(it.getIn().getBody())));
+        }).toD(format("${property.%s}", TARGET_PROPERTY)).process(it -> it.getIn().setBody(payloadEncoding.encode(it.getIn().getBody())));
     }
 
     // Helpers
