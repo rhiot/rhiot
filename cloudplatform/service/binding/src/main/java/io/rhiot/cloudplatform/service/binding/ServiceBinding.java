@@ -18,6 +18,7 @@ package io.rhiot.cloudplatform.service.binding;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import org.apache.camel.Message;
 import org.apache.camel.NoTypeConversionAvailableException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.qpid.amqp_1_0.jms.Destination;
@@ -25,9 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
@@ -65,7 +64,9 @@ public class ServiceBinding extends RouteBuilder {
         LOG.debug("Starting route consuming from channel: {}", fromChannel);
 
         from(fromChannel).process(exchange -> {
-            String channel = exchange.getIn().getHeader("JMSDestination", Destination.class).getAddress();
+            Message message = exchange.getIn();
+
+            String channel = message.getHeader("JMSDestination", Destination.class).getAddress();
             String rawChannel = channel.substring(channel.lastIndexOf('/') + 1);
             String[] channelParts = rawChannel.split("\\.");
             String service = channelParts[0];
@@ -73,7 +74,14 @@ public class ServiceBinding extends RouteBuilder {
             exchange.setProperty(TARGET_PROPERTY, "bean:" + service + "?method=" + operation + "&multiParameterArray=true");
 
             List<Object> arguments = new LinkedList<>(asList(channelParts).subList(2, channelParts.length));
-            byte[] incomingPayload = exchange.getIn().getBody(byte[].class);
+
+            for(Map.Entry<String, Object> header : message.getHeaders().entrySet()) {
+                if(header.getKey().startsWith("RHIOT_ARG")) {
+                    arguments.add(header.getValue());
+                }
+            }
+
+            byte[] incomingPayload = message.getBody(byte[].class);
             if (incomingPayload != null && incomingPayload.length > 0) {
                 Object payload = payloadEncoding.decode(incomingPayload);
                 arguments.add(payload);
@@ -83,7 +91,7 @@ public class ServiceBinding extends RouteBuilder {
             Method operationMethod = asList(beanType.getDeclaredMethods()).stream().
                     filter(method -> method.getName().equals(operation)).findAny().get();
 
-            exchange.getIn().setBody(convertArguments(arguments, operationMethod));
+            message.setBody(convertArguments(arguments, operationMethod));
         }).toD(format("${property.%s}", TARGET_PROPERTY)).process(it -> it.getIn().setBody(payloadEncoding.encode(it.getIn().getBody())));
     }
 

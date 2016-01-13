@@ -25,6 +25,9 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 public abstract class CloudPlatformTest extends Assert {
@@ -96,13 +99,21 @@ public abstract class CloudPlatformTest extends Assert {
         payloadEncoding.decode(busResponse);
     }
 
-    protected <T> T fromBus(String channel, Class<T> responseType) {
-        byte[] busResponse = producerTemplate.requestBody("amqp:" + channel, null, byte[].class);
+    protected <T> T fromBus(String channel, Class<T> responseType, Header... headers) {
+        Map<String, Object> collectedHeaders = new HashMap<>();
+        for(Header header : headers) {
+            collectedHeaders.put(header.key(), header.value());
+        }
+        byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, null, collectedHeaders, byte[].class);
         return (T) payloadEncoding.decode(busResponse);
     }
 
-    protected <T> T fromBus(String channel, Object payload, Class<T> responseType) {
-        byte[] busResponse = producerTemplate.requestBody("amqp:" + channel, payloadEncoding.encode(payload), byte[].class);
+    protected <T> T fromBus(String channel, Object payload, Class<T> responseType, Header... headers) {
+        Map<String, Object> collectedHeaders = new HashMap<>();
+        for(Header header : headers) {
+            collectedHeaders.put(header.key(), header.value());
+        }
+        byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, payloadEncoding.encode(payload), collectedHeaders, byte[].class);
         return (T) payloadEncoding.decode(busResponse);
     }
 

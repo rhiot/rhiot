@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import static io.rhiot.cloudplatform.runtime.spring.test.Header.arguments;
+
 public class ServiceBindingTest extends CloudPlatformTest {
 
     // Tests
@@ -59,6 +61,26 @@ public class ServiceBindingTest extends CloudPlatformTest {
         Truth.assertThat(received).isEqualTo(stringPayload + mapPayload.size());
     }
 
+    @Test
+    public void shouldHandleHeaderArgumentAndPojo() {
+        String stringPayload = "foo";
+        Map mapPayload = ImmutableMap.of("foo", "foo", "bar", "bar");
+        String received = fromBus("echo.stringAndPojoToStringOperation", mapPayload, String.class, arguments("foo"));
+        Truth.assertThat(received).isEqualTo(stringPayload + mapPayload.size());
+    }
+
+    @Test
+    public void shouldHandleHeaderArguments() {
+        int received = fromBus("echo.multiply", int.class, arguments(1, 2, 3));
+        Truth.assertThat(received).isEqualTo(6);
+    }
+
+    @Test
+    public void shouldPreserveHeaderArguments() {
+        String received = fromBus("echo.concatenate", String.class, arguments(1, 2, 3));
+        Truth.assertThat(received).isEqualTo("123");
+    }
+
     // Beans fixtures
 
     @Component
@@ -75,6 +97,10 @@ public class ServiceBindingTest extends CloudPlatformTest {
 
         long echo(long value);
 
+        long multiply(int a, int b, int c);
+
+        String concatenate(int a, int b, int c);
+
         long sizeOfMap(Map map);
 
         String stringAndPojoToStringOperation(String string, Map<String, String> pojo);
@@ -87,6 +113,16 @@ public class ServiceBindingTest extends CloudPlatformTest {
         @Override
         public long echo(long value) {
             return value;
+        }
+
+        @Override
+        public long multiply(int a, int b, int c) {
+            return a * b * c;
+        }
+
+        @Override
+        public String concatenate(int a, int b, int c) {
+            return "" + a + b + c;
         }
 
         @Override
