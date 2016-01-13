@@ -21,7 +21,6 @@ import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
-import io.vertx.core.json.Json;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +38,7 @@ public class RestProtocolAdapterTest extends CloudPlatformTest {
 
     @Test
     public void shouldInvokeGetOperation() throws IOException {
-        Map response = Json.mapper.readValue(new URL("http://localhost:8080/test/count/1"), Map.class);
+        Map response = json.readValue(new URL("http://localhost:8080/test/count/1"), Map.class);
         Truth.assertThat(response.get("payload")).isEqualTo(1);
     }
 

@@ -16,6 +16,7 @@
  */
 package io.rhiot.cloudplatform.runtime.spring.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.rhiot.cloudplatform.runtime.spring.CloudPlatform;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import org.apache.camel.CamelContext;
@@ -27,6 +28,8 @@ import org.junit.Before;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 public abstract class CloudPlatformTest extends Assert {
+
+    protected ObjectMapper json = new ObjectMapper();
 
     static private boolean dataStreamStarted;
 
