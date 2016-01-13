@@ -16,14 +16,14 @@
  */
 package io.rhiot.datastream.node
 
-import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest
+import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import org.junit.Test
 import org.springframework.context.annotation.Configuration
 
 import static com.google.common.truth.Truth.assertThat
 
 @Configuration
-class DataStreamNodeTest extends DataStreamTest {
+class DataStreamNodeTest extends CloudPlatformTest {
 
     @Test
     void smokeTestMongoDocumentStreamConsumer() {

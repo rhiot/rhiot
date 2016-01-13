@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.source.leshan
 
-import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest
+import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import io.rhiot.datastream.schema.device.Device
 import org.junit.After
 import org.junit.Test
@@ -31,7 +31,7 @@ import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 
-class LeshanDataStreamSourceTest extends DataStreamTest {
+class LeshanDataStreamSourceTest extends CloudPlatformTest {
 
     // Data fixtures
 

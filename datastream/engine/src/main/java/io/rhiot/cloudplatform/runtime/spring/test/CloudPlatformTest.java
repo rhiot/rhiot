@@ -26,7 +26,7 @@ import org.junit.Before;
 
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
-public abstract class DataStreamTest extends Assert {
+public abstract class CloudPlatformTest extends Assert {
 
     static private boolean dataStreamStarted;
 

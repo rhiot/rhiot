@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.encoding.camel.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.encoding.camel.PayloadEncodingDataFormat;
-import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest;
+import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class PayloadEncodingDataFormatConfigurationTest extends DataStreamTest {
+public class PayloadEncodingDataFormatConfigurationTest extends CloudPlatformTest {
 
     @Bean
     RoutesBuilder routeBuilder(PayloadEncodingDataFormat dataFormat) {

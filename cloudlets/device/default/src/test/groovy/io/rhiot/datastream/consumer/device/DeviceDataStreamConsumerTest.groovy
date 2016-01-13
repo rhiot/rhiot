@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.consumer.device
 
-import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest
+import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import io.rhiot.datastream.schema.device.Device
 import org.joda.time.DateTime
 import org.junit.Test
@@ -37,7 +37,7 @@ import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 
-class DeviceDataStreamConsumerTest extends DataStreamTest {
+class DeviceDataStreamConsumerTest extends CloudPlatformTest {
 
     def device = new Device(uuid(), uuid(), new Date(), new Date())
 

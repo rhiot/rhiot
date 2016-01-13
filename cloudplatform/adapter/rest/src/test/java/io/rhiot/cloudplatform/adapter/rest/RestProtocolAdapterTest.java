@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
-import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest;
+import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 import io.vertx.core.json.Json;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +33,7 @@ import java.net.URL;
 import java.util.Map;
 
 @Configuration
-public class RestProtocolAdapterTest extends DataStreamTest {
+public class RestProtocolAdapterTest extends CloudPlatformTest {
 
     RestTemplate rest = new RestTemplate();
 

@@ -18,10 +18,10 @@ package io.rhiot.cloudplatform.encoding.json.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
-import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest;
+import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 import org.junit.Test;
 
-public class JsonPayloadEncodingConfigurationTest extends DataStreamTest {
+public class JsonPayloadEncodingConfigurationTest extends CloudPlatformTest {
 
     @Test
     public void shouldDecodePayload() {

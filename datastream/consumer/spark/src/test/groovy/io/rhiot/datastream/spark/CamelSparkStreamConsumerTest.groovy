@@ -16,7 +16,7 @@
  */
 package io.rhiot.datastream.spark
 
-import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest
+import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import org.apache.camel.component.spark.RddCallback
 import org.apache.spark.api.java.AbstractJavaRDDLike
 import org.apache.spark.api.java.JavaRDD
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component
 import static com.google.common.truth.Truth.assertThat
 
 @Configuration
-class CamelSparkStreamConsumerTest extends DataStreamTest {
+class CamelSparkStreamConsumerTest extends CloudPlatformTest {
 
     @Test
     void shouldExecuteTaskViaAmqpApi() {

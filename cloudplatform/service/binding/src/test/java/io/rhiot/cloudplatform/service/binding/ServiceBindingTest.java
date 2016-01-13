@@ -19,14 +19,14 @@ package io.rhiot.cloudplatform.service.binding;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
-import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest;
+import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-public class ServiceBindingTest extends DataStreamTest {
+public class ServiceBindingTest extends CloudPlatformTest {
 
     // Tests
 

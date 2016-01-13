@@ -17,7 +17,7 @@
 package io.rhiot.datastream.document.mongodb
 
 import com.google.common.collect.ImmutableMap
-import io.rhiot.cloudplatform.runtime.spring.test.DataStreamTest
+import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import org.junit.Test
 import org.springframework.web.client.RestTemplate
 
@@ -27,7 +27,7 @@ import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 
-class MongodbDocumentStoreTest extends DataStreamTest {
+class MongodbDocumentStoreTest extends CloudPlatformTest {
 
     static def httpPort = findAvailableTcpPort()
 
