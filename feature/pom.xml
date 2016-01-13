@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>io.rhiot</groupId>
-        <artifactId>rhiot-bom</artifactId>
-        <version>0.1.4-SNAPSHOT</version>
-        <relativePath>../bom</relativePath>
+		<artifactId>rhiot-bom</artifactId>
+		<version>0.1.4-SNAPSHOT</version>
+		<relativePath>../bom</relativePath>
 	</parent>
 	<name>RHIOT :: Feature</name>
 	<artifactId>rhiot-feature</artifactId>
@@ -25,7 +26,7 @@
 			<groupId>io.rhiot</groupId>
 			<artifactId>camel-pubnub-feature</artifactId>
 			<type>feature</type>
-            <classifier>features</classifier>
+			<classifier>features</classifier>
 		</dependency>
 		<dependency>
 			<groupId>io.rhiot</groupId>
@@ -36,15 +37,15 @@
 	</dependencies>
 
 	<build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.karaf.tooling</groupId>
-                <artifactId>karaf-maven-plugin</artifactId>
-                <configuration>
-                    <aggregateFeatures>true</aggregateFeatures>
-                </configuration>
-            </plugin>
-        </plugins>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.karaf.tooling</groupId>
+				<artifactId>karaf-maven-plugin</artifactId>
+				<configuration>
+					<aggregateFeatures>true</aggregateFeatures>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 </project>
