@@ -16,7 +16,6 @@
         <module>lib</module>
         <module>mongodb</module>
         <module>datastream</module>
-        <module>vertx</module>
         <module>gateway</module>
         <module>cloudlets</module>
         <module>iot</module>
