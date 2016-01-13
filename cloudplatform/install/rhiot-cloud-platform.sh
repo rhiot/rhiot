@@ -62,13 +62,16 @@ docker rm AMQP_SERVICE_HOST
 docker pull rhiot/activemq:${RHIOT_VERSION}
 docker run -d --name AMQP_SERVICE_HOST \
   -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -p 5672:5672 \
-  -it rhiot/activemq:${RHIOT_VERSION}
+  -t rhiot/activemq:${RHIOT_VERSION}
 
 ### Data stream node
 
 docker rm datastream-node
 docker pull rhiot/datastream-node
-docker run -d --name datastream-node --link mongodb:mongodb -p 8080:8080 -p 5672:5672 rhiot/datastream-node
+docker run -d --name datastream-node \
+  --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
+  --link mongodb:mongodb \
+  -p 8080:8080 -t rhiot/datastream-node
 
 ### Spark standalone cluster
 
@@ -80,5 +83,7 @@ sleep 5
 SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4`
 
 docker rm spark_worker
-docker run -d --name spark_worker -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} -v /tmp/jobs:/tmp/jobs --link spark_master:spark_master -P \
+docker run -d --name spark_worker \
+  --link spark_master:spark_master --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} \
+  -v /tmp/jobs:/tmp/jobs -P \
   -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh
