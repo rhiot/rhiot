@@ -61,7 +61,7 @@ docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 docker rm AMQP_SERVICE_HOST
 docker pull rhiot/activemq:${RHIOT_VERSION}
 docker run -d --name AMQP_SERVICE_HOST \
-  -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true \
+  -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -p 5672:5672 \
   -it rhiot/activemq:${RHIOT_VERSION}
 
 ### Data stream node
