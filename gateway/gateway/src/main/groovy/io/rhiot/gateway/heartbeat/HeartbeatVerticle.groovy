@@ -17,20 +17,18 @@
 package io.rhiot.gateway.heartbeat
 
 import io.rhiot.gateway.Gateway
-import io.vertx.lang.groovy.GroovyVerticle
 import org.springframework.stereotype.Component
 
 import static io.rhiot.gateway.GatewayConstants.BUS_HEARTBEAT
 import static io.rhiot.utils.Properties.intProperty
 
 @Component
-class HeartbeatVerticle extends GroovyVerticle {
+class HeartbeatVerticle {
 
-    @Override
     void start() throws Exception {
-        vertx.setPeriodic(intProperty('camellabs_iot_gateway_heartbeat_rate', 5000)) {
-            vertx.eventBus().publish(BUS_HEARTBEAT, Gateway.JSON.writeValueAsString(new HeartbeatEvent()))
-        }
+//        vertx.setPeriodic(intProperty('camellabs_iot_gateway_heartbeat_rate', 5000)) {
+//            vertx.eventBus().publish(BUS_HEARTBEAT, Gateway.JSON.writeValueAsString(new HeartbeatEvent()))
+//        }
     }
 
 }

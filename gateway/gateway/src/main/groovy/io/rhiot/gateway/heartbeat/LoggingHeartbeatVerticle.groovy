@@ -16,22 +16,20 @@
  */
 package io.rhiot.gateway.heartbeat
 
-import io.vertx.lang.groovy.GroovyVerticle
 import org.slf4j.Logger
 import org.springframework.stereotype.Component
 
 import static org.slf4j.LoggerFactory.getLogger
 
 @Component
-class LoggingHeartbeatVerticle extends GroovyVerticle {
+class LoggingHeartbeatVerticle {
 
     private static final Logger LOG = getLogger(LoggingHeartbeatVerticle.class)
 
-    @Override
     void start() throws Exception {
-        vertx.eventBus().consumer('heartbeat') {
-            LOG.info("Ping!")
-        }
+//        vertx.eventBus().consumer('heartbeat') {
+//            LOG.info("Ping!")
+//        }
     }
 
 }
