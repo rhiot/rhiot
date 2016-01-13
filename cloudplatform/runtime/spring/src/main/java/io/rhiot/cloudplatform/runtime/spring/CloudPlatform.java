@@ -17,6 +17,8 @@
 package io.rhiot.cloudplatform.runtime.spring;
 
 import org.apache.camel.component.amqp.AMQPComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -25,6 +27,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.net.MalformedURLException;
 
+import static java.util.Arrays.asList;
 import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
 
 /**
@@ -34,11 +37,19 @@ import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
 @SpringBootApplication(scanBasePackages = "io.rhiot")
 public class CloudPlatform {
 
+    // Static collaborators
+
+    private final static Logger LOG = LoggerFactory.getLogger(CloudPlatform.class);
+
+    // Collaborators
+
     private ConfigurableApplicationContext applicationContext;
 
     // Lifecycle
 
     public CloudPlatform start(String... args) {
+        LOG.debug("About to start CloudPlatform with arguments: {}", asList(args));
+
         System.setProperty("camel.springboot.typeConversion", "false");
         applicationContext = new SpringApplicationBuilder(CloudPlatform.class).web(false).build().run(args);
         return this;
@@ -67,6 +78,7 @@ public class CloudPlatform {
     AMQPComponent amqp(
             @Value("${AMQP_SERVICE_HOST:localhost}") String amqpBrokerUrl,
             @Value("${AMQP_SERVICE_PORT:5672}") int amqpBrokerPort) throws MalformedURLException {
+        LOG.debug("About to create AMQP component {}:{}", amqpBrokerUrl, amqpBrokerPort);
         return amqp10Component("amqp://guest:guest@" + amqpBrokerUrl + ":" + amqpBrokerPort);
     }
 
