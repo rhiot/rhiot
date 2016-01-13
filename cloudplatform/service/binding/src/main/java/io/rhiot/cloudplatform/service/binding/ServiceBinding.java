@@ -31,6 +31,10 @@ import java.util.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
+/**
+ * Service binding is a general purpose backend service which can be used to bind communication coming through IoT
+ * Connector to the POJO service bean.
+ */
 public class ServiceBinding extends RouteBuilder {
 
     // Static collaborators
@@ -98,6 +102,7 @@ public class ServiceBinding extends RouteBuilder {
     // Helpers
 
     protected List<?> convertArguments(List<?> arguments, Method operation) {
+        LOG.debug("About to convert those arguments: {}", arguments);
         Class[] parameterTypes = operation.getParameterTypes();
         List<Object> convertedArguments = new ArrayList<>(arguments.size());
         for (int i = 0; i < arguments.size(); i++) {
@@ -107,6 +112,7 @@ public class ServiceBinding extends RouteBuilder {
                 convertedArguments.add(OBJECT_MAPPER.convertValue(arguments.get(i), parameterTypes[i]));
             }
         }
+        LOG.debug("Converted arguments: {}", convertedArguments);
         return convertedArguments;
     }
 
