@@ -16,10 +16,8 @@
  */
 package io.rhiot.cloudplatform.service.binding;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import org.apache.camel.Message;
-import org.apache.camel.NoTypeConversionAvailableException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.qpid.amqp_1_0.jms.Destination;
 import org.slf4j.Logger;
@@ -28,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import static io.rhiot.cloudplatform.service.binding.Camels.convert;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
@@ -40,8 +39,6 @@ public class ServiceBinding extends RouteBuilder {
     // Static collaborators
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceBinding.class);
-
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     // Constants
 
@@ -95,25 +92,8 @@ public class ServiceBinding extends RouteBuilder {
             Method operationMethod = asList(beanType.getDeclaredMethods()).stream().
                     filter(method -> method.getName().equals(operation)).findAny().get();
 
-            message.setBody(convertArguments(arguments, operationMethod));
+            message.setBody(convert(getContext(), arguments, operationMethod.getParameterTypes()));
         }).toD(format("${property.%s}", TARGET_PROPERTY)).process(it -> it.getIn().setBody(payloadEncoding.encode(it.getIn().getBody())));
-    }
-
-    // Helpers
-
-    protected List<?> convertArguments(List<?> arguments, Method operation) {
-        LOG.debug("About to convert those arguments: {}", arguments);
-        Class[] parameterTypes = operation.getParameterTypes();
-        List<Object> convertedArguments = new ArrayList<>(arguments.size());
-        for (int i = 0; i < arguments.size(); i++) {
-            try {
-                convertedArguments.add(getContext().getTypeConverter().mandatoryConvertTo(parameterTypes[i], arguments.get(i)));
-            } catch (NoTypeConversionAvailableException e) {
-                convertedArguments.add(OBJECT_MAPPER.convertValue(arguments.get(i), parameterTypes[i]));
-            }
-        }
-        LOG.debug("Converted arguments: {}", convertedArguments);
-        return convertedArguments;
     }
 
 }
