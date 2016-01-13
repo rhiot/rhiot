@@ -23,7 +23,6 @@
     <modules>
         <module>schema</module>
         <module>components</module>
-        <module>engine</module>
         <module>consumer</module>
         <module>node</module>
         <module>node-app</module>

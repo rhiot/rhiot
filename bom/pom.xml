@@ -290,7 +290,7 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-datastream-engine</artifactId>
+				<artifactId>rhiot-cloudplatform-runtime-spring</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
 			<dependency>

@@ -5,12 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-datastream</artifactId>
+        <artifactId>rhiot-cloudplatform-runtime</artifactId>
         <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: DataStream :: Engine</name>
-    <artifactId>rhiot-datastream-engine</artifactId>
+    <name>Rhiot :: Cloud platform :: Runtime :: Spring</name>
+    <artifactId>rhiot-cloudplatform-runtime-spring</artifactId>
 
     <licenses>
         <license>
