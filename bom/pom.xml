@@ -443,31 +443,6 @@
 				<version>${rhiot.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>io.vertx</groupId>
-				<artifactId>vertx-codegen</artifactId>
-				<version>${vertx.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.vertx</groupId>
-				<artifactId>vertx-core</artifactId>
-				<version>${vertx.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.vertx</groupId>
-				<artifactId>vertx-service-proxy</artifactId>
-				<version>${vertx.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.vertx</groupId>
-				<artifactId>vertx-lang-groovy</artifactId>
-				<version>${vertx.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.vertx</groupId>
-				<artifactId>vertx-web</artifactId>
-				<version>${vertx.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
 				<version>${servlet-api.version}</version>
