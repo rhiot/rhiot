@@ -22,17 +22,23 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.rhiot.utils.Uuids.uuid;
 import static java.time.Instant.ofEpochMilli;
 import static java.time.LocalDateTime.ofInstant;
-import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class InMemoryDeviceRegistry implements DeviceRegistry {
 
-    Map<String, Device> devices = new HashMap<>();
+    private final Map<String, Device> devices = new ConcurrentHashMap<>();
+
+    private final long disconnectionPeriod;
+
+    public InMemoryDeviceRegistry(long disconnectionPeriod) {
+        this.disconnectionPeriod = disconnectionPeriod;
+    }
 
     @Override
     public Device get(String deviceId) {
@@ -53,7 +59,7 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
     public List<String> disconnected() {
         return devices.values().stream().filter(device -> {
             LocalTime updated = ofInstant(ofEpochMilli(device.getLastUpdate().getTime()), ZoneId.systemDefault()).toLocalTime();
-            return updated.plus(MINUTES.toMillis(1), ChronoUnit.MILLIS).isBefore(LocalTime.now());
+            return updated.plus(disconnectionPeriod, ChronoUnit.MILLIS).isBefore(LocalTime.now());
         }).map(Device::getDeviceId).collect(toList());
     }
 

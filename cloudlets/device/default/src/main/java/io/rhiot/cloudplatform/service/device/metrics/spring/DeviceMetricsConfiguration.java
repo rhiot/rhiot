@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.service.device.spring;
+package io.rhiot.cloudplatform.service.device.metrics.spring;
 
 import com.mongodb.Mongo;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
@@ -28,16 +28,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class DeviceServiceConfiguration {
+public class DeviceMetricsConfiguration {
 
     @Bean
-    ServiceBinding deviceServiceBinding(PayloadEncoding payloadEncoding) {
-        return new ServiceBinding(payloadEncoding, "device");
+    ServiceBinding deviceMetricsServiceBinding(PayloadEncoding payloadEncoding) {
+        return new ServiceBinding(payloadEncoding, "device-metrics");
     }
 
-    @Bean(name = "device")
-    DeviceRegistry deviceRegistry(@Value("${disconnectionPeriod:60000}") long disconnectionPeriod) {
-        return new InMemoryDeviceRegistry(disconnectionPeriod);
+    @Bean(name = "device-metrics")
+    DeviceMetricsStore deviceMetricsStore(Mongo mongo) {
+        return new MongoDbDeviceMetricsStore(mongo);
     }
 
 }
