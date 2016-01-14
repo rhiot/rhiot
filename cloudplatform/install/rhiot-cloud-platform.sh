@@ -17,19 +17,10 @@
 
 ### General configuration
 
-DEFAULT_RHIOT_VERSION=0.1.3
-DEFAULT_RHIOT_HOME=~/.rhiot
-DEFAULT_RHIOT_DOCKER_MACHINE_ENV=default
+RHIOT_VERSION=${RHIOT_VERSION:-0.1.3}
+RHIOT_HOME=${RHIOT_HOME:-~/.rhiot}
+RHIOT_DOCKER_MACHINE_ENV=${RHIOT_DOCKER_MACHINE_ENV:-default}
 REQUIRED_DOCKER_VERSION=1.8.2
-
-# User can configure her RHIOT_HOME
-if [ -z "${RHIOT_HOME}" ]; then
-	RHIOT_HOME=${DEFAULT_RHIOT_HOME}
-fi
-
-if [ -z "${RHIOT_VERSION}" ]; then
-    RHIOT_VERSION=${DEFAULT_RHIOT_VERSION}
-fi
 
 ### Docker boot init
 
@@ -53,9 +44,6 @@ case "$OSTYPE" in
         echo "ERROR : Please install docker for MacOS X"
         exit 1
       fi
-      if [ -z "$RHIOT_DOCKER_MACHINE_ENV" ]; then
-          RHIOT_DOCKER_MACHINE_ENV=$DEFAULT_RHIOT_DOCKER_MACHINE_ENV
-      fi
 					
       docker-machine env $RHIOT_DOCKER_MACHINE_ENV > /dev/null 2>&1
       if [ $? -ne 0 ]; then
@@ -66,7 +54,9 @@ case "$OSTYPE" in
   ;;
 esac
 
-docker stop $(docker ps -q)
+if [ $(docker ps | wc -l) -gt 1 ]; then
+	docker stop $(docker ps -q)
+fi
 
 ### MongoDB
 
