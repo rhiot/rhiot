@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.adapter.leshan;
+package io.rhiot.cloudplatform.adapter.leshan.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
@@ -33,7 +33,7 @@ import static io.rhiot.utils.Networks.findAvailableTcpPort;
 import static io.rhiot.utils.leshan.client.LeshanClientTemplate.createVirtualLeshanClientTemplate;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
-public class LeshanProtocolAdapterTest extends CloudPlatformTest {
+public class LeshanProtocolAdapterConfigurationTest extends CloudPlatformTest {
 
     // Data fixtures
 

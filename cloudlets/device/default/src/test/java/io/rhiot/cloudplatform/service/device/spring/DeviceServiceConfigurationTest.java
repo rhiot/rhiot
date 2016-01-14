@@ -106,7 +106,7 @@ public class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
     @Test
     public void shouldGetDevice() {
-        connector.toBusAndWait(CHANNEL_DEVICE_REGISTER, device);
+        connector.toBusAndWait(registerDevice(), device);
         Device loadedDevice = connector.fromBus(getDevice(device.getDeviceId()), Device.class);
         Truth.assertThat(loadedDevice.getDeviceId()).isEqualTo(device.getDeviceId());
     }
@@ -121,7 +121,7 @@ public class DeviceServiceConfigurationTest extends CloudPlatformTest {
     public void shouldSendHeartbeatDisconnected() {
         // Given
         device.setLastUpdate(new DateTime(device.getLastUpdate()).minusMinutes(2).toDate());
-        connector.toBusAndWait(CHANNEL_DEVICE_REGISTER, device);
+        connector.toBusAndWait(registerDevice(), device);
 
         // When
         connector.toBusAndWait(deviceHeartbeat(device.getDeviceId()));
