@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-encoding-spi</artifactId>
+            <artifactId>rhiot-cloudplatform-encoding-json</artifactId>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
