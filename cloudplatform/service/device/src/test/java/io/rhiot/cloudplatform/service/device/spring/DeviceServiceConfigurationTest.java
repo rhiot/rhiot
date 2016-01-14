@@ -27,9 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 import static io.rhiot.datastream.schema.device.DeviceConstants.*;
-import static io.rhiot.utils.Networks.findAvailableTcpPort;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 public class DeviceServiceConfigurationTest extends CloudPlatformTest {
 

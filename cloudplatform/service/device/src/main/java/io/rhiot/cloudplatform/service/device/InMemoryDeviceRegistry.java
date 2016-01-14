@@ -24,9 +24,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.rhiot.utils.Uuids.uuid;
 import static java.time.Instant.ofEpochMilli;
 import static java.time.LocalDateTime.ofInstant;
+import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -66,7 +66,7 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
     @Override
     public void register(Device device) {
         if(isBlank(device.getRegistrationId())) {
-            device.setRegistrationId(uuid());
+            device.setRegistrationId(randomUUID().toString());
         }
         devices.put(device.getDeviceId(), device);
     }
