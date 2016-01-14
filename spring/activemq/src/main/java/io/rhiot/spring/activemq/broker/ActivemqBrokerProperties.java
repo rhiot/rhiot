@@ -21,7 +21,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.activemq.broker")
 public class ActivemqBrokerProperties {
 
-    private String name  = "spring-boot-broker";
+    private String name = "spring-boot-broker";
 
     private boolean amqpEnabled = false;
 
@@ -30,6 +30,10 @@ public class ActivemqBrokerProperties {
     private boolean mqttEnabled = false;
 
     private int mqttPort = 1883;
+
+    private boolean websocketEnabled = false;
+
+    private int websocketPort = 9090;
 
     public String getName() {
         return name;
@@ -69,6 +73,22 @@ public class ActivemqBrokerProperties {
 
     public void setMqttPort(int mqttPort) {
         this.mqttPort = mqttPort;
+    }
+
+    public boolean isWebsocketEnabled() {
+        return websocketEnabled;
+    }
+
+    public void setWebsocketEnabled(boolean websocketEnabled) {
+        this.websocketEnabled = websocketEnabled;
+    }
+
+    public int getWebsocketPort() {
+        return websocketPort;
+    }
+
+    public void setWebsocketPort(int websocketPort) {
+        this.websocketPort = websocketPort;
     }
 
 }

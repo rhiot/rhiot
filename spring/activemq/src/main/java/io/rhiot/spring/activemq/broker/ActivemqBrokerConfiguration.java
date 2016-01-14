@@ -34,11 +34,14 @@ public class ActivemqBrokerConfiguration {
     BrokerService brokerService(ActivemqBrokerProperties brokerProperties) throws Exception {
         BrokerService broker = new BrokerService();
         broker.setBrokerName(brokerProperties.getName());
-        if(brokerProperties.isAmqpEnabled()) {
+        if (brokerProperties.isAmqpEnabled()) {
             broker.addConnector("amqp://0.0.0.0:" + brokerProperties.getAmqpPort() + "?transport.transformer=jms");
         }
-        if(brokerProperties.isMqttEnabled()) {
+        if (brokerProperties.isMqttEnabled()) {
             broker.addConnector("mqtt://0.0.0.0:" + brokerProperties.getMqttPort());
+        }
+        if (brokerProperties.isWebsocketEnabled()) {
+            broker.addConnector("ws://0.0.0.0:" + brokerProperties.getWebsocketPort());
         }
         return broker;
     }
