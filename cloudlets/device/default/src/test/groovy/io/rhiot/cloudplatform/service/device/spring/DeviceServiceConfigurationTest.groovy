@@ -39,7 +39,8 @@ import static io.rhiot.utils.Uuids.uuid
 
 class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
-    def device = new Device(uuid(), uuid(), new Date(), new Date())
+    def device = new Device(uuid(), uuid(), new Date(), new Date(),
+    null, 0, null, 0, uuid(), uuid(), null)
 
     @Override
     protected void beforeDataStreamStarted() {
