@@ -1,3 +1,4 @@
+package io.rhiot.utils.leshan.client
 /**
  * Licensed to the Rhiot under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -14,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.device.client
+
 
 import org.eclipse.leshan.ResponseCode
 import org.eclipse.leshan.core.node.LwM2mResource
@@ -39,7 +40,7 @@ class VirtualDevice extends GenericDevice {
                 fireResourceChange(resourceid);
                 return new LwM2mResponse(ResponseCode.CHANGED);
             default:
-                return super.write(resourceid, value);
+                return Object.write(resourceid, value);
         }
     }
 

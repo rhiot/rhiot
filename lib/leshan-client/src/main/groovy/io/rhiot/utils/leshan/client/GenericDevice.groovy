@@ -1,3 +1,4 @@
+package io.rhiot.utils.leshan.client
 /**
  * Licensed to the Rhiot under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -14,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.device.client
+
 
 import org.eclipse.leshan.ResponseCode
 import org.eclipse.leshan.client.resource.BaseInstanceEnabler
@@ -41,26 +42,26 @@ class GenericDevice extends BaseInstanceEnabler {
             case 2: return generateValueResponse(resourceid, serialNumber())
             case 3: return generateValueResponse(resourceid, firmwareVersion())
             case 9:
-                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
+                return new ValueResponse(org.eclipse.leshan.ResponseCode.CONTENT, new LwM2mResource(resourceid,
                         Value.newIntegerValue(getBatteryLevel())));
             case 10:
-                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
+                return new ValueResponse(org.eclipse.leshan.ResponseCode.CONTENT, new LwM2mResource(resourceid,
                         Value.newIntegerValue(getMemoryFree())));
             case 11:
-                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
+                return new ValueResponse(org.eclipse.leshan.ResponseCode.CONTENT, new LwM2mResource(resourceid,
                         [Value.newIntegerValue(getErrorCode())]));
             case 13:
-                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
+                return new ValueResponse(org.eclipse.leshan.ResponseCode.CONTENT, new LwM2mResource(resourceid,
                         Value.newDateValue(getCurrentTime())));
             case 14:
-                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
-                        newStringValue(getUtcOffset())));
+                return new ValueResponse(org.eclipse.leshan.ResponseCode.CONTENT, new LwM2mResource(resourceid,
+                        org.eclipse.leshan.core.node.Value.newStringValue(getUtcOffset())));
             case 15:
-                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
-                        newStringValue(getTimezone())));
+                return new ValueResponse(org.eclipse.leshan.ResponseCode.CONTENT, new LwM2mResource(resourceid,
+                        org.eclipse.leshan.core.node.Value.newStringValue(getTimezone())));
             case 16:
-                return new ValueResponse(CONTENT, new LwM2mResource(resourceid,
-                        newStringValue(getSupportedBinding())));
+                return new ValueResponse(org.eclipse.leshan.ResponseCode.CONTENT, new LwM2mResource(resourceid,
+                        org.eclipse.leshan.core.node.Value.newStringValue(getSupportedBinding())));
             default:
                 return super.read(resourceid);
         }
@@ -93,7 +94,7 @@ class GenericDevice extends BaseInstanceEnabler {
         if(value == null) {
             return super.read(resourceid)
         }
-        new ValueResponse(CONTENT, new LwM2mResource(resourceid, newStringValue(value)))
+        new ValueResponse(org.eclipse.leshan.ResponseCode.CONTENT, new LwM2mResource(resourceid, org.eclipse.leshan.core.node.Value.newStringValue(value)))
     }
 
     // Device parameters callbacks

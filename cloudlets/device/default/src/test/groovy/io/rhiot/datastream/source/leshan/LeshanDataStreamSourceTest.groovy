@@ -16,13 +16,12 @@
  */
 package io.rhiot.datastream.source.leshan
 
-import com.github.camellabs.iot.cloudlet.device.client.UpdateRequestBuilder
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import io.rhiot.datastream.schema.device.Device
+import io.rhiot.utils.leshan.client.UpdateRequestBuilder
 import org.junit.After
 import org.junit.Test
 
-import static com.github.camellabs.iot.cloudlet.device.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.datastream.schema.device.DeviceConstants.deregisterDevice
 import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice
@@ -31,6 +30,7 @@ import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
+import static io.rhiot.utils.leshan.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 
 class LeshanDataStreamSourceTest extends CloudPlatformTest {
 

@@ -24,6 +24,7 @@
         <module>utils</module>
         <module>utils-maven</module>
         <module>utils-ssh</module>
+        <module>leshan-client</module>
         <module>scanner</module>
     </modules>
 

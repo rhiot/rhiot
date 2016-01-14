@@ -1,3 +1,4 @@
+package io.rhiot.utils.leshan.client
 /**
  * Licensed to the Rhiot under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -14,15 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.camellabs.iot.cloudlet.device.client
+
 
 import org.eclipse.leshan.ResponseCode
 import org.eclipse.leshan.client.californium.LeshanClient
 import org.eclipse.leshan.client.resource.LwM2mInstanceEnabler
 import org.eclipse.leshan.client.resource.ObjectsInitializer
 import org.eclipse.leshan.core.request.RegisterRequest
-import org.eclipse.leshan.core.request.UpdateRequest
-import org.eclipse.leshan.server.californium.LeshanServerBuilder
 
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static org.slf4j.LoggerFactory.getLogger
@@ -30,6 +29,8 @@ import static org.slf4j.LoggerFactory.getLogger
 class LeshanClientTemplate {
 
     private static final def LOG = getLogger(LeshanClientTemplate.class)
+
+    public static final int PORT = 5683;
 
     private final String clientId
 
@@ -54,7 +55,7 @@ class LeshanClientTemplate {
     }
 
     static LeshanClientTemplate createGenericLeshanClientTemplate(String clientId) {
-        createGenericLeshanClientTemplate(clientId, LeshanServerBuilder.PORT)
+        createGenericLeshanClientTemplate(clientId, PORT)
     }
 
     static LeshanClientTemplate createVirtualLeshanClientTemplate(String clientId, int port) {
@@ -63,7 +64,7 @@ class LeshanClientTemplate {
 
     static LeshanClientTemplate createVirtualLeshanClientTemplate(String clientId) {
         LOG.debug("Creating virtual Leshan client template using default LWM2M port.")
-        createVirtualLeshanClientTemplate(clientId, LeshanServerBuilder.PORT)
+        createVirtualLeshanClientTemplate(clientId, PORT)
     }
 
     // Connection operations
