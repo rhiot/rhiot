@@ -24,9 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.*;
 
 import static io.rhiot.cloudplatform.service.binding.Camels.convert;
+import static io.rhiot.cloudplatform.service.binding.OperationBinding.operationBinding;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
@@ -66,33 +66,17 @@ public class ServiceBinding extends RouteBuilder {
 
         from(fromChannel).process(exchange -> {
             Message message = exchange.getIn();
-
             String channel = message.getHeader("JMSDestination", Destination.class).getAddress();
-            String rawChannel = channel.substring(channel.lastIndexOf('/') + 1);
-            String[] channelParts = rawChannel.split("\\.");
-            String service = channelParts[0];
-            String operation = channelParts[1];
-            exchange.setProperty(TARGET_PROPERTY, "bean:" + service + "?method=" + operation + "&multiParameterArray=true");
-
-            List<Object> arguments = new LinkedList<>(asList(channelParts).subList(2, channelParts.length));
-
-            for(Map.Entry<String, Object> header : message.getHeaders().entrySet()) {
-                if(header.getKey().startsWith("RHIOT_ARG")) {
-                    arguments.add(header.getValue());
-                }
-            }
-
             byte[] incomingPayload = message.getBody(byte[].class);
-            if (incomingPayload != null && incomingPayload.length > 0) {
-                Object payload = payloadEncoding.decode(incomingPayload);
-                arguments.add(payload);
-            }
+            OperationBinding operationBinding = operationBinding(payloadEncoding, channel, incomingPayload, message.getHeaders());
+            exchange.setProperty(TARGET_PROPERTY, "bean:" + operationBinding.service() + "?method=" + operationBinding.operation() + "&multiParameterArray=true");
 
-            Class beanType = getContext().getRegistry().lookupByName(service).getClass();
+            Class beanType = getContext().getRegistry().lookupByName(operationBinding.service()).getClass();
+            LOG.debug("Detected service bean type {} for operation: {}", beanType, operationBinding);
             Method operationMethod = asList(beanType.getDeclaredMethods()).stream().
-                    filter(method -> method.getName().equals(operation)).findAny().get();
+                    filter(method -> method.getName().equals(operationBinding.operation())).findAny().get();
 
-            message.setBody(convert(getContext(), arguments, operationMethod.getParameterTypes()));
+            message.setBody(convert(getContext(), operationBinding.arguments(), operationMethod.getParameterTypes()));
         }).toD(format("${property.%s}", TARGET_PROPERTY)).process(it -> it.getIn().setBody(payloadEncoding.encode(it.getIn().getBody())));
     }
 
