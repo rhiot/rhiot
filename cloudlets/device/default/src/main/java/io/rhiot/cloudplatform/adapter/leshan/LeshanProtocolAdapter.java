@@ -19,17 +19,24 @@ package io.rhiot.cloudplatform.adapter.leshan;
 import org.eclipse.leshan.server.californium.LeshanServerBuilder;
 import org.eclipse.leshan.server.californium.impl.LeshanServer;
 import org.eclipse.leshan.server.client.ClientRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Data stream source connecting Leshan LWM2M events with a data stream.
  */
 public class LeshanProtocolAdapter {
 
+    private static final Logger LOG = LoggerFactory.getLogger(LeshanProtocolAdapter.class);
+
     private final LeshanServer leshanServer;
 
-    public LeshanProtocolAdapter(ClientRegistry clientRegistry) {
+    // Constructor
+
+    public LeshanProtocolAdapter(ClientRegistry clientRegistry, int port) {
         LeshanServerBuilder leshanServerBuilder = new LeshanServerBuilder();
-        leshanServerBuilder.setLocalAddress("0.0.0.0", LeshanServerBuilder.PORT);
+        LOG.debug("Creating Leshan server using port {}.", port);
+        leshanServerBuilder.setLocalAddress("0.0.0.0", port);
         leshanServer = leshanServerBuilder.setClientRegistry(clientRegistry).build();
     }
 

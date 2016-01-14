@@ -14,26 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.adapter.leshan;
+package io.rhiot.cloudplatform.adapter.leshan.spring;
 
-import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import io.rhiot.cloudplatform.adapter.leshan.IoTConnectorClientRegistry;
+import io.rhiot.cloudplatform.adapter.leshan.LeshanProtocolAdapter;
 import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
-import org.apache.camel.ProducerTemplate;
 import org.eclipse.leshan.server.client.ClientRegistry;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class LeshanDataStreamSourceConfiguration {
+public class LeshanProtocolAdapterConfiguration {
 
     @Bean
-    ClientRegistry dataStreamClientRegistry(IoTConnector connector) {
-        return new DataStreamClientRegistry(connector);
+    ClientRegistry ioTConnectorClientRegistry(IoTConnector connector) {
+        return new IoTConnectorClientRegistry(connector);
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")
-    LeshanProtocolAdapter leshanDataStreamSource(ClientRegistry clientRegistry) {
-        return new LeshanProtocolAdapter(clientRegistry);
+    LeshanProtocolAdapter leshanDataStreamSource(ClientRegistry clientRegistry, @Value("${leshan.port:5683}") int port) {
+        return new LeshanProtocolAdapter(clientRegistry, port);
     }
 
 }
