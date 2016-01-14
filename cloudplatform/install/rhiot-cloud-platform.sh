@@ -17,32 +17,54 @@
 
 ### General configuration
 
-if [ -z "${RHIOT_VERSION}" ]; then
-    RHIOT_VERSION=0.1.3
-fi
-
+DEFAULT_RHIOT_VERSION=0.1.3
+DEFAULT_RHIOT_HOME=~/.rhiot
+DEFAULT_RHIOT_DOCKER_MACHINE_ENV=default
 REQUIRED_DOCKER_VERSION=1.8.2
 
-### Docker
-
-echo Checking Docker setup...
-
-if ! type "docker" > /dev/null; then
-  echo 'Docker not found - installing...'
-  wget -qO- https://get.docker.com/ | sh
+# User can configure her RHIOT_HOME
+if [ -z "${RHIOT_HOME}" ]; then
+	RHIOT_HOME=${DEFAULT_RHIOT_HOME}
 fi
 
-DOCKER_VERSION=`docker version --format '{{.Server.Version}}'`
-if [ "$DOCKER_VERSION" \< "$REQUIRED_DOCKER_VERSION" ]; then
-  echo "Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot Cloud. Version ${DOCKER_VERSION} found - upgrading..."
-  wget -qO- https://get.docker.com/ | sh
-else
-  echo "Docker v${DOCKER_VERSION} found. No need to upgrade."
+if [ -z "${RHIOT_VERSION}" ]; then
+    RHIOT_VERSION=${DEFAULT_RHIOT_VERSION}
 fi
 
-echo Docker is properly installed.
+### Docker boot init
 
-service docker start
+case "$OSTYPE" in 
+
+	linux-gnu)
+      if ! type "docker" > /dev/null 2>&1 ; then
+        echo "INFO : Docker not found - installing..."
+        wget -qO- https://get.docker.com/ | sh
+      else
+        DOCKER_VERSION=`docker version --format '{{.Server.Version}}'`
+        if [ "$DOCKER_VERSION" \< "$REQUIRED_DOCKER_VERSION" ]; then
+          echo "INFO : Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot. Version ${DOCKER_VERSION} found - upgrading..."
+          wget -qO- https://get.docker.com/ | sh
+        fi
+      fi
+  ;;
+  
+	darwin*)
+      if ! type "docker-machine" > /dev/null 2>&1; then
+        echo "ERROR : Please install docker for MacOS X"
+        exit 1
+      fi
+      if [ -z "$RHIOT_DOCKER_MACHINE_ENV" ]; then
+          RHIOT_DOCKER_MACHINE_ENV=$DEFAULT_RHIOT_DOCKER_MACHINE_ENV
+      fi
+					
+      docker-machine env $RHIOT_DOCKER_MACHINE_ENV > /dev/null 2>&1
+      if [ $? -ne 0 ]; then
+        echo "INFO :  docker-machine start $RHIOT_DOCKER_MACHINE_ENV"
+        docker-machine start $RHIOT_DOCKER_MACHINE_ENV > /dev/null 2>&1
+      fi
+      eval $(docker-machine env $RHIOT_DOCKER_MACHINE_ENV)
+  ;;
+esac
 
 docker stop $(docker ps -q)
 
@@ -61,7 +83,7 @@ docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 docker rm AMQP_SERVICE_HOST
 docker pull rhiot/activemq:${RHIOT_VERSION}
 docker run -d --name AMQP_SERVICE_HOST \
-  -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -p 5672:5672 \
+-e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -p 5672:5672 \
   -t rhiot/activemq:${RHIOT_VERSION}
 
 ### Data stream node
