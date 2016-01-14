@@ -21,6 +21,7 @@ import org.eclipse.leshan.client.californium.LeshanClient
 import org.eclipse.leshan.client.resource.LwM2mInstanceEnabler
 import org.eclipse.leshan.client.resource.ObjectsInitializer
 import org.eclipse.leshan.core.request.RegisterRequest
+import org.eclipse.leshan.core.request.UpdateRequest
 import org.eclipse.leshan.server.californium.LeshanServerBuilder
 
 import static io.rhiot.utils.Networks.findAvailableTcpPort
@@ -37,6 +38,8 @@ class LeshanClientTemplate {
     private final Class<? extends LwM2mInstanceEnabler> deviceClass
 
     private LeshanClient leshanClient
+
+    private String registrationId
 
     private int clientPort = findAvailableTcpPort()
 
@@ -84,11 +87,16 @@ class LeshanClientTemplate {
         // Report registration response.
         System.out.println("Device Registration (Success? " + response.getCode() + ")");
         if (response.getCode() == ResponseCode.CREATED) {
-            LOG.debug("Registered Leshan client. Registration ID: {}", response.registrationID)
+            registrationId = response.registrationID
+            LOG.debug("Registered Leshan client. Registration ID: {}", registrationId)
         } else {
             throw new RuntimeException("Device Registration Error. Server response code: ${response.getCode()}")
         }
         this
+    }
+
+    void update(UpdateRequestBuilder updateRequestBuilder) {
+        leshanClient.send(updateRequestBuilder.build(registrationId));
     }
 
     LeshanClientTemplate disconnect() {

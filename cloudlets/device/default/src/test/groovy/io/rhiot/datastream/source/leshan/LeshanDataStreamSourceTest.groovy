@@ -16,6 +16,7 @@
  */
 package io.rhiot.datastream.source.leshan
 
+import com.github.camellabs.iot.cloudlet.device.client.UpdateRequestBuilder
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import io.rhiot.datastream.schema.device.Device
 import org.junit.After
@@ -76,6 +77,13 @@ class LeshanDataStreamSourceTest extends CloudPlatformTest {
     void shouldListDevices() {
         List<Device> devices = fromBus(listDevices(), List.class)
         assertThat(devices).isNotEmpty()
+    }
+
+    @Test
+    void shouldUpdateDevice() {
+        leshanClient.update(new UpdateRequestBuilder().smsNumber('666'));
+        def updatedDevice = fromBus(getDevice(deviceId), Device.class);
+        assertThat(updatedDevice.smsNumber).isEqualTo('666')
     }
 
     @Test

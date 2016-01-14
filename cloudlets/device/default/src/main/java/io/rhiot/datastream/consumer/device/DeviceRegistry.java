@@ -27,11 +27,15 @@ public interface DeviceRegistry {
 
     Device get(String deviceId);
 
+    Device getByRegistrationId(String registrationId);
+
     List<Device> list();
 
     List<String> disconnected();
 
     void register(Device device);
+
+    void update(Device device);
 
     void deregister(String registrationId);
 

@@ -27,11 +27,15 @@ public final class DeviceConstants {
 
     public static final String CHANNEL_DEVICE_GET = "device.get";
 
+    public static final String CHANNEL_DEVICE_GET_BY_REGISTRATION_ID = "device.getByRegistrationId";
+
     public static final String CHANNEL_DEVICE_LIST = "device.list";
 
     public static final String CHANNEL_DEVICE_DISCONNECTED = "device.disconnected";
 
     public static final String CHANNEL_DEVICE_REGISTER = "device.register";
+
+    public static final String CHANNEL_DEVICE_UPDATE = "device.update";
 
     public static final String CHANNEL_DEVICE_DEREGISTER = "device.deregister";
 
@@ -56,6 +60,10 @@ public final class DeviceConstants {
         return format("%s.%s", CHANNEL_DEVICE_GET, deviceId);
     }
 
+    public static String getDeviceByRegistrationId(String registrationId) {
+        return format("%s.%s", CHANNEL_DEVICE_GET_BY_REGISTRATION_ID, registrationId);
+    }
+
     public static String listDevices() {
         return CHANNEL_DEVICE_LIST;
     }
@@ -66,6 +74,10 @@ public final class DeviceConstants {
 
     public static String registerDevice() {
         return CHANNEL_DEVICE_REGISTER;
+    }
+
+    public static String updateDevice() {
+        return CHANNEL_DEVICE_UPDATE;
     }
 
     public static String deregisterDevice(String deviceId) {

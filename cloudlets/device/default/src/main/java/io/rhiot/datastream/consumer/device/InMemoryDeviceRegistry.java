@@ -22,7 +22,6 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static io.rhiot.utils.Uuids.uuid;
 import static java.time.Instant.ofEpochMilli;
@@ -38,6 +37,11 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
     @Override
     public Device get(String deviceId) {
         return devices.get(deviceId);
+    }
+
+    @Override
+    public Device getByRegistrationId(String registrationId) {
+        return devices.values().stream().filter(device -> registrationId.equals(device.getRegistrationId())).findFirst().orElse(null);
     }
 
     @Override
@@ -62,9 +66,16 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
     }
 
     @Override
+    public void update(Device device) {
+        devices.put(device.getDeviceId(), device);
+    }
+
+    @Override
     public void deregister(String registrationId) {
-        List<Device> matchingDevices = devices.values().stream().filter(device -> registrationId.equals(device.getRegistrationId())).collect(toList());
-        devices.remove(matchingDevices.get(0).getDeviceId());
+        Device device = getByRegistrationId(registrationId);
+        if (device != null) {
+            devices.remove(device.getDeviceId());
+        }
     }
 
     @Override
