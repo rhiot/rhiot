@@ -14,18 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.consumer.device;
+package io.rhiot.cloudplatform.service.device.spring;
 
 import com.mongodb.Mongo;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
-import io.rhiot.datastream.consumer.device.metrics.DeviceMetricsStore;
-import io.rhiot.datastream.consumer.device.metrics.MongoDbDeviceMetricsStore;
+import io.rhiot.cloudplatform.service.device.DeviceRegistry;
+import io.rhiot.cloudplatform.service.device.InMemoryDeviceRegistry;
+import io.rhiot.cloudplatform.service.device.metrics.DeviceMetricsStore;
+import io.rhiot.cloudplatform.service.device.metrics.MongoDbDeviceMetricsStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class DeviceDataStreamConsumerConfiguration {
+public class DeviceServiceConfiguration {
 
     @Bean
     ServiceBinding deviceServiceBinding(PayloadEncoding payloadEncoding) {

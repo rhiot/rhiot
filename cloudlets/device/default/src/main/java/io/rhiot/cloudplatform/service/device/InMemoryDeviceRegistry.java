@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.consumer.device;
+package io.rhiot.cloudplatform.service.device;
 
 import io.rhiot.datastream.schema.device.Device;
 

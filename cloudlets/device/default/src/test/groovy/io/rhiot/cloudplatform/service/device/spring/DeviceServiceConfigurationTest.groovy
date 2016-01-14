@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.consumer.device
+package io.rhiot.cloudplatform.service.device.spring
 
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import io.rhiot.datastream.schema.device.Device
@@ -37,7 +37,7 @@ import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 
-class DeviceDataStreamConsumerTest extends CloudPlatformTest {
+class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
     def device = new Device(uuid(), uuid(), new Date(), new Date())
 

@@ -14,31 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.consumer.device;
+package io.rhiot.cloudplatform.service.device.metrics;
 
-import io.rhiot.datastream.schema.device.Device;
+import java.util.Map;
 
-import java.util.List;
+public interface DeviceMetricsStore {
 
-/**
- * Backend service used to manage devices connecting to the system.
- */
-public interface DeviceRegistry {
+    Object read(String deviceId, String metric);
 
-    Device get(String deviceId);
+    Map<String, Object> readAll(String deviceId);
 
-    Device getByRegistrationId(String registrationId);
-
-    List<Device> list();
-
-    List<String> disconnected();
-
-    void register(Device device);
-
-    void update(Device device);
-
-    void deregister(String registrationId);
-
-    void heartbeat(String deviceId);
+    void write(String deviceId, String metric, Object value);
 
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.source.leshan;
+package io.rhiot.cloudplatform.adapter.leshan;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import org.apache.camel.ProducerTemplate;
@@ -31,8 +31,8 @@ public class LeshanDataStreamSourceConfiguration {
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")
-    LeshanDataStreamSource leshanDataStreamSource(ClientRegistry clientRegistry) {
-        return new LeshanDataStreamSource(clientRegistry);
+    LeshanProtocolAdapter leshanDataStreamSource(ClientRegistry clientRegistry) {
+        return new LeshanProtocolAdapter(clientRegistry);
     }
 
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.source.leshan
+package io.rhiot.cloudplatform.adapter.leshan
 
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import io.rhiot.datastream.schema.device.Device
@@ -32,7 +32,7 @@ import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
 import static io.rhiot.utils.leshan.client.LeshanClientTemplate.createVirtualLeshanClientTemplate
 
-class LeshanDataStreamSourceTest extends CloudPlatformTest {
+class LeshanProtocolAdapterTest extends CloudPlatformTest {
 
     // Data fixtures
 
