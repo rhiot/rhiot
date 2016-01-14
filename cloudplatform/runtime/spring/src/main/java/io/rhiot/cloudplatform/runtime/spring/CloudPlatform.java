@@ -16,6 +16,8 @@
  */
 package io.rhiot.cloudplatform.runtime.spring;
 
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.amqp.AMQPComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +82,11 @@ public class CloudPlatform {
             @Value("${AMQP_SERVICE_PORT:5672}") int amqpBrokerPort) throws MalformedURLException {
         LOG.debug("About to create AMQP component {}:{}", amqpBrokerUrl, amqpBrokerPort);
         return amqp10Component("amqp://guest:guest@" + amqpBrokerUrl + ":" + amqpBrokerPort);
+    }
+
+    @Bean
+    IoTConnector ioTConnector(PayloadEncoding payloadEncoding, ProducerTemplate producerTemplate) {
+        return new IoTConnector(payloadEncoding, producerTemplate);
     }
 
 }

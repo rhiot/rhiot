@@ -63,39 +63,39 @@ class LeshanProtocolAdapterTest extends CloudPlatformTest {
 
     @Test
     void shouldRegisterDevice() {
-        def device = fromBus(getDevice(deviceId), Device.class)
+        def device = connector.fromBus(getDevice(deviceId), Device.class)
         assertThat(device.registrationId).isNotEmpty()
     }
 
     @Test
     void shouldRegisterDeviceWithId() {
-        def device = fromBus(getDevice(deviceId), Device.class)
+        def device = connector.fromBus(getDevice(deviceId), Device.class)
         assertThat(device.deviceId).isEqualTo(deviceId)
     }
 
     @Test
     void shouldListDevices() {
-        List<Device> devices = fromBus(listDevices(), List.class)
+        List<Device> devices = connector.fromBus(listDevices(), List.class)
         assertThat(devices).isNotEmpty()
     }
 
     @Test
     void shouldUpdateDevice() {
         leshanClient.update(new UpdateRequestBuilder().smsNumber('666'));
-        def updatedDevice = fromBus(getDevice(deviceId), Device.class);
+        def updatedDevice = connector.fromBus(getDevice(deviceId), Device.class);
         assertThat(updatedDevice.smsNumber).isEqualTo('666')
     }
 
     @Test
     void shouldDeregisterDevice() {
         // Given
-        def device = fromBus(getDevice(deviceId), Device.class)
+        def device = connector.fromBus(getDevice(deviceId), Device.class)
 
         // When
-        toBusAndWait(deregisterDevice(device.registrationId))
+        connector.toBusAndWait(deregisterDevice(device.registrationId))
 
         // Then
-        device = fromBus(getDevice(deviceId), Device.class)
+        device = connector.fromBus(getDevice(deviceId), Device.class)
         assertThat(device).isNull()
     }
 

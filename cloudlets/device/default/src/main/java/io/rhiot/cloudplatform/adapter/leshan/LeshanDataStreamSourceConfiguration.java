@@ -17,6 +17,7 @@
 package io.rhiot.cloudplatform.adapter.leshan;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
 import org.apache.camel.ProducerTemplate;
 import org.eclipse.leshan.server.client.ClientRegistry;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +27,8 @@ import org.springframework.context.annotation.Configuration;
 public class LeshanDataStreamSourceConfiguration {
 
     @Bean
-    ClientRegistry dataStreamClientRegistry(PayloadEncoding payloadEncoding, ProducerTemplate producerTemplate) {
-        return new DataStreamClientRegistry(payloadEncoding, producerTemplate);
+    ClientRegistry dataStreamClientRegistry(IoTConnector connector) {
+        return new DataStreamClientRegistry(connector);
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")

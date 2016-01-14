@@ -27,8 +27,8 @@ class DataStreamNodeTest extends CloudPlatformTest {
 
     @Test
     void smokeTestMongoDocumentStreamConsumer() {
-        fromBus('document.save.doc', [foo: 'bar'], String.class)
-        def count = fromBus('document.count.doc', int.class)
+        connector.fromBus('document.save.doc', [foo: 'bar'], String.class)
+        def count = connector.fromBus('document.count.doc', int.class)
         assertThat(count).isEqualTo(1)
     }
 

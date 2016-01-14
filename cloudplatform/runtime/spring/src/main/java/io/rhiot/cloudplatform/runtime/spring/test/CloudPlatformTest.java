@@ -19,14 +19,12 @@ package io.rhiot.cloudplatform.runtime.spring.test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.rhiot.cloudplatform.runtime.spring.CloudPlatform;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
@@ -44,6 +42,8 @@ public abstract class CloudPlatformTest extends Assert {
 
     protected static PayloadEncoding payloadEncoding;
 
+    protected static IoTConnector connector;
+
 
     @Before
     public void before() {
@@ -59,6 +59,7 @@ public abstract class CloudPlatformTest extends Assert {
             camelContext = cloudPlatform.applicationContext().getBean(CamelContext.class);
             producerTemplate = camelContext.createProducerTemplate();
             payloadEncoding = cloudPlatform.applicationContext().getBean(PayloadEncoding.class);
+            connector = cloudPlatform.applicationContext().getBean(IoTConnector.class);
             dataStreamStarted = true;
         }
         afterDataStreamStarted();
@@ -77,44 +78,6 @@ public abstract class CloudPlatformTest extends Assert {
         } finally {
             dataStreamStarted = false;
         }
-    }
-
-    // Bus communication helpers
-
-    protected void toBus(String channel) {
-        producerTemplate.sendBody("amqp:" + channel, null);
-    }
-
-    protected void toBus(String channel, Object payload) {
-        producerTemplate.sendBody("amqp:" + channel, payloadEncoding.encode(payload));
-    }
-
-    protected void toBusAndWait(String channel) {
-        byte[] busResponse = producerTemplate.requestBody("amqp:" + channel, null, byte[].class);
-        payloadEncoding.decode(busResponse);
-    }
-
-    protected void toBusAndWait(String channel, Object payload) {
-        byte[] busResponse = producerTemplate.requestBody("amqp:" + channel, payloadEncoding.encode(payload), byte[].class);
-        payloadEncoding.decode(busResponse);
-    }
-
-    protected <T> T fromBus(String channel, Class<T> responseType, Header... headers) {
-        Map<String, Object> collectedHeaders = new HashMap<>();
-        for(Header header : headers) {
-            collectedHeaders.put(header.key(), header.value());
-        }
-        byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, null, collectedHeaders, byte[].class);
-        return (T) payloadEncoding.decode(busResponse);
-    }
-
-    protected <T> T fromBus(String channel, Object payload, Class<T> responseType, Header... headers) {
-        Map<String, Object> collectedHeaders = new HashMap<>();
-        for(Header header : headers) {
-            collectedHeaders.put(header.key(), header.value());
-        }
-        byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, payloadEncoding.encode(payload), collectedHeaders, byte[].class);
-        return (T) payloadEncoding.decode(busResponse);
     }
 
 }

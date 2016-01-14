@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static io.rhiot.cloudplatform.runtime.spring.test.Header.arguments;
+import static io.rhiot.cloudplatform.runtime.spring.Header.arguments;
 
 public class ServiceBindingTest extends CloudPlatformTest {
 
@@ -35,21 +35,21 @@ public class ServiceBindingTest extends CloudPlatformTest {
     @Test
     public void shouldBindServiceToChannel() {
         long payload = 100;
-        int response = fromBus("echo.echo", payload, int.class);
+        int response = connector.fromBus("echo.echo", payload, int.class);
         Truth.assertThat(response).isEqualTo(payload);
     }
 
     @Test
     public void shouldBindServiceToChannelUsingDestinationOnly() {
         long payload = 100;
-        int response = fromBus("echo.echo." + payload, int.class);
+        int response = connector.fromBus("echo.echo." + payload, int.class);
         Truth.assertThat(response).isEqualTo(payload);
     }
 
     @Test
     public void shouldHandlePostedMap() {
         Map payload = ImmutableMap.of("foo", "foo",  "bar", "bar");
-        int receivedSize = fromBus("echo.sizeOfMap", payload, int.class);
+        int receivedSize = connector.fromBus("echo.sizeOfMap", payload, int.class);
         Truth.assertThat(receivedSize).isEqualTo(payload.size());
     }
 
@@ -57,7 +57,7 @@ public class ServiceBindingTest extends CloudPlatformTest {
     public void shouldHandleArgumentAndPojo() {
         String stringPayload = "foo";
         Map mapPayload = ImmutableMap.of("foo", "foo", "bar", "bar");
-        String received = fromBus("echo.stringAndPojoToStringOperation.foo", mapPayload, String.class);
+        String received = connector.fromBus("echo.stringAndPojoToStringOperation.foo", mapPayload, String.class);
         Truth.assertThat(received).isEqualTo(stringPayload + mapPayload.size());
     }
 
@@ -65,19 +65,19 @@ public class ServiceBindingTest extends CloudPlatformTest {
     public void shouldHandleHeaderArgumentAndPojo() {
         String stringPayload = "foo";
         Map mapPayload = ImmutableMap.of("foo", "foo", "bar", "bar");
-        String received = fromBus("echo.stringAndPojoToStringOperation", mapPayload, String.class, arguments("foo"));
+        String received = connector.fromBus("echo.stringAndPojoToStringOperation", mapPayload, String.class, arguments("foo"));
         Truth.assertThat(received).isEqualTo(stringPayload + mapPayload.size());
     }
 
     @Test
     public void shouldHandleHeaderArguments() {
-        int received = fromBus("echo.multiply", int.class, arguments(1, 2, 3));
+        int received = connector.fromBus("echo.multiply", int.class, arguments(1, 2, 3));
         Truth.assertThat(received).isEqualTo(6);
     }
 
     @Test
     public void shouldPreserveHeaderArguments() {
-        String received = fromBus("echo.concatenate", String.class, arguments(1, 2, 3));
+        String received = connector.fromBus("echo.concatenate", String.class, arguments(1, 2, 3));
         Truth.assertThat(received).isEqualTo("123");
     }
 

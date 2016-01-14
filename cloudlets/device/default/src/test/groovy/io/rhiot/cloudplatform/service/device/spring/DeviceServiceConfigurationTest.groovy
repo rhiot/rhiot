@@ -50,8 +50,8 @@ class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
     @Test
     void shouldRegisterDevice() {
-        toBusAndWait(registerDevice(), device)
-        def devices = fromBus(listDevices(), List.class)
+        connector.toBusAndWait(registerDevice(), device)
+        def devices = connector.fromBus(listDevices(), List.class)
         assertThat(devices).isNotEmpty()
     }
 
@@ -59,12 +59,12 @@ class DeviceServiceConfigurationTest extends CloudPlatformTest {
     void shouldNotRegisterDeviceTwice() {
         // Given
         device.registrationId = null
-        toBusAndWait(registerDevice(), device)
+        connector.toBusAndWait(registerDevice(), device)
 
         // When
-        def initialDevicesCount = fromBus(listDevices(), List.class).size()
-        toBusAndWait(registerDevice(), device)
-        def finalDevicesCount = fromBus(listDevices(), List.class).size()
+        def initialDevicesCount = connector.fromBus(listDevices(), List.class).size()
+        connector.toBusAndWait(registerDevice(), device)
+        def finalDevicesCount = connector.fromBus(listDevices(), List.class).size()
 
         // When
         assertThat(finalDevicesCount).isEqualTo(initialDevicesCount)
@@ -76,10 +76,10 @@ class DeviceServiceConfigurationTest extends CloudPlatformTest {
         device.registrationId = null
 
         // When
-        toBusAndWait(registerDevice(), device)
+        connector.toBusAndWait(registerDevice(), device)
 
         // Then
-        def device = fromBus(getDevice(device.deviceId), Device.class)
+        def device = connector.fromBus(getDevice(device.deviceId), Device.class)
         assertThat(device.registrationId).isNotEmpty()
     }
 
@@ -87,10 +87,10 @@ class DeviceServiceConfigurationTest extends CloudPlatformTest {
     void shouldListDisconnected() {
         // Given
         device.lastUpdate = new DateTime(device.lastUpdate).minusMinutes(2).toDate()
-        toBusAndWait(registerDevice(), device)
+        connector.toBusAndWait(registerDevice(), device)
 
         // When
-        List<String> disconnected = fromBus(disconnected(), List.class)
+        List<String> disconnected = connector.fromBus(disconnected(), List.class)
 
         // Then
         assertThat(disconnected).contains(device.deviceId)
@@ -99,26 +99,26 @@ class DeviceServiceConfigurationTest extends CloudPlatformTest {
     @Test
     void shouldDeregisterDevice() {
         // Given
-        toBusAndWait(registerDevice(), device)
+        connector.toBusAndWait(registerDevice(), device)
 
         // When
-        toBusAndWait("${CHANNEL_DEVICE_DEREGISTER}.${device.registrationId}")
+        connector.toBusAndWait("${CHANNEL_DEVICE_DEREGISTER}.${device.registrationId}")
 
         // Then
-        def device = fromBus(getDevice(device.deviceId), Device.class)
+        def device = connector.fromBus(getDevice(device.deviceId), Device.class)
         assertThat(device).isNull()
     }
 
     @Test
     void shouldGetDevice() {
-        toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
-        def device = fromBus(getDevice(device.deviceId), Device.class)
+        connector.toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
+        def device = connector.fromBus(getDevice(device.deviceId), Device.class)
         assertThat(device.deviceId).isEqualTo(device.deviceId)
     }
 
     @Test
     void shouldNotGetDevice() {
-        def device = fromBus(getDevice(device.deviceId), Device.class)
+        def device = connector.fromBus(getDevice(device.deviceId), Device.class)
         assertThat(device).isNull()
     }
 
@@ -126,13 +126,13 @@ class DeviceServiceConfigurationTest extends CloudPlatformTest {
     void shouldSendHeartbeatDisconnected() {
         // Given
         device.lastUpdate = new DateTime(device.lastUpdate).minusMinutes(2).toDate()
-        toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
+        connector.toBusAndWait(CHANNEL_DEVICE_REGISTER, device)
 
         // When
-        toBusAndWait(deviceHeartbeat(device.deviceId))
+        connector.toBusAndWait(deviceHeartbeat(device.deviceId))
 
         // Then
-        List<String> disconnected = fromBus(disconnected(), List.class)
+        List<String> disconnected = connector.fromBus(disconnected(), List.class)
         assertThat(disconnected).doesNotContain(device.deviceId)
     }
 
@@ -140,7 +140,7 @@ class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
     @Test
     void shouldReadEmptyMetric() {
-        def metric = fromBus(readDeviceMetric(device.deviceId, uuid()), String.class)
+        def metric = connector.fromBus(readDeviceMetric(device.deviceId, uuid()), String.class)
 
         // Then
         assertThat(metric).isNull()
@@ -151,10 +151,10 @@ class DeviceServiceConfigurationTest extends CloudPlatformTest {
         // Given
         def metric = uuid()
         def value = uuid()
-        toBusAndWait(writeDeviceMetric(device.deviceId, metric), value)
+        connector.toBusAndWait(writeDeviceMetric(device.deviceId, metric), value)
 
         // When
-        def metricRead = fromBus(readDeviceMetric(device.deviceId, metric), String.class)
+        def metricRead = connector.fromBus(readDeviceMetric(device.deviceId, metric), String.class)
 
         // Then
         assertThat(metricRead).isEqualTo(value)
@@ -165,10 +165,10 @@ class DeviceServiceConfigurationTest extends CloudPlatformTest {
         // Given
         def metric = uuid()
         def value = 666
-        toBusAndWait(writeDeviceMetric(device.deviceId, metric), value)
+        connector.toBusAndWait(writeDeviceMetric(device.deviceId, metric), value)
 
         // When
-        def metricRead = fromBus(readDeviceMetric(device.deviceId, metric), int.class)
+        def metricRead = connector.fromBus(readDeviceMetric(device.deviceId, metric), int.class)
 
         // Then
         assertThat(metricRead).isEqualTo(value)
@@ -181,12 +181,12 @@ class DeviceServiceConfigurationTest extends CloudPlatformTest {
         def value1 = uuid()
         def metric2 = uuid()
         def value2 = uuid()
-        toBusAndWait(writeDeviceMetric(device.deviceId, metric1), value1)
-        toBusAndWait(writeDeviceMetric(device.deviceId, metric2), value2)
+        connector.toBusAndWait(writeDeviceMetric(device.deviceId, metric1), value1)
+        connector.toBusAndWait(writeDeviceMetric(device.deviceId, metric2), value2)
 
 
         // When
-        def metrics = fromBus(readAllDeviceMetrics(device.deviceId), Map.class)
+        def metrics = connector.fromBus(readAllDeviceMetrics(device.deviceId), Map.class)
 
         // Then
         assertThat(metrics).hasSize(2)

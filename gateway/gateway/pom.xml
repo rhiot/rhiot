@@ -21,6 +21,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-cloudplatform-encoding-spi</artifactId>
+        </dependency>
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>

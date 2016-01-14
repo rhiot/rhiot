@@ -46,10 +46,10 @@ class MongodbDocumentStoreTest extends CloudPlatformTest {
     @Test
     void shouldCountInvoice() {
         // Given
-        toBus("document.save.${collection}", invoice)
+        connector.toBus("document.save.${collection}", invoice)
 
         // When
-        def count = fromBus("document.count.${collection}", int.class)
+        def count = connector.fromBus("document.count.${collection}", int.class)
 
         // Then
         assertThat(count).isEqualTo(1)
@@ -58,10 +58,10 @@ class MongodbDocumentStoreTest extends CloudPlatformTest {
     @Test
     public void shouldFindOne() {
         // Given
-        def id = fromBus("document.save.${collection}", invoice, String.class)
+        def id = connector.fromBus("document.save.${collection}", invoice, String.class)
 
         // When
-        def loadedInvoice = fromBus("document.findOne.${collection}.${id}", Map.class)
+        def loadedInvoice = connector.fromBus("document.findOne.${collection}.${id}", Map.class)
 
         // Then
         assertThat(loadedInvoice).isNotNull()
@@ -70,15 +70,15 @@ class MongodbDocumentStoreTest extends CloudPlatformTest {
     @Test
     public void shouldUpdateDocument() {
         // Given
-        def id = fromBus("document.save.${collection}", invoice, String.class)
+        def id = connector.fromBus("document.save.${collection}", invoice, String.class)
         invoice.id = id
         invoice.invoiceId = 'newValue'
 
         // When
-        toBus("document.save.${collection}", invoice)
+        connector.toBus("document.save.${collection}", invoice)
 
         // Then
-        def updatedInvoice = fromBus("document.findOne.${collection}.${id}", Map.class)
+        def updatedInvoice = connector.fromBus("document.findOne.${collection}.${id}", Map.class)
         assertThat(updatedInvoice.invoiceId).isEqualTo(invoice.invoiceId)
     }
 

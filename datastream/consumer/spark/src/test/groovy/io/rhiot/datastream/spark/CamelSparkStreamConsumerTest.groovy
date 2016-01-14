@@ -33,7 +33,7 @@ class CamelSparkStreamConsumerTest extends CloudPlatformTest {
 
     @Test
     void shouldExecuteTaskViaAmqpApi() {
-        def result = fromBus('spark.execute.rdd.callback', 10, int.class)
+        def result = connector.fromBus('spark.execute.rdd.callback', 10, int.class)
         assertThat(result).isEqualTo(170)
     }
 
