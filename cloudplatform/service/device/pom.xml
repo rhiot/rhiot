@@ -30,39 +30,15 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-runtime-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-datastream-schema</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.leshan</groupId>
-            <artifactId>leshan-client-cf</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.leshan</groupId>
             <artifactId>leshan-server-cf</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-datastream-schema</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-encoding-spi</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -72,11 +48,8 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jms_1.1_spec</artifactId>
-        </dependency>
 
+        <!-- Optional runtime -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -95,8 +68,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -110,8 +83,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
