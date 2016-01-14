@@ -16,34 +16,29 @@
  */
 package io.rhiot.cloudplatform.adapter.leshan;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
 import io.rhiot.datastream.schema.device.Device;
-import org.apache.camel.ProducerTemplate;
 import org.eclipse.leshan.core.request.BindingMode;
 import org.eclipse.leshan.server.client.Client;
 import org.eclipse.leshan.server.client.ClientRegistry;
 import org.eclipse.leshan.server.client.ClientRegistryListener;
 import org.eclipse.leshan.server.client.ClientUpdate;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static io.rhiot.datastream.schema.device.DeviceConstants.*;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
-public class DataStreamClientRegistry implements ClientRegistry {
+public class IoTConnectorClientRegistry implements ClientRegistry {
 
     private final List<ClientRegistryListener> listeners = new CopyOnWriteArrayList<>();
 
     private final IoTConnector connector;
 
-    public DataStreamClientRegistry(IoTConnector connector) {
+    public IoTConnectorClientRegistry(IoTConnector connector) {
         this.connector = connector;
     }
 
@@ -56,7 +51,7 @@ public class DataStreamClientRegistry implements ClientRegistry {
     @Override
     public Collection<Client> allClients() {
         Device[] devices = connector.fromBus(listDevices(), Device[].class);
-        return asList(devices).stream().map(DataStreamClientRegistry::deviceToClient).collect(toList());
+        return asList(devices).stream().map(IoTConnectorClientRegistry::deviceToClient).collect(toList());
     }
 
     @Override
