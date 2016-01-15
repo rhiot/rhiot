@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-datastream-schema</artifactId>
+            <artifactId>rhiot-cloudplatform-schema</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.leshan</groupId>

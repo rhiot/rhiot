@@ -21,6 +21,7 @@
     </licenses>
 
     <modules>
+        <module>schema</module>
         <module>runtime</module>
         <module>encoding</module>
         <module>adapter</module>

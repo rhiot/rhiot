@@ -9,8 +9,8 @@
         <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: DataStream :: Schema</name>
-    <artifactId>rhiot-datastream-schema</artifactId>
+    <name>Rhiot :: CloudPlatform :: Schema</name>
+    <artifactId>rhiot-cloudplatform-schema</artifactId>
 
     <licenses>
         <license>

@@ -21,7 +21,6 @@
     </licenses>
 
     <modules>
-        <module>schema</module>
         <module>components</module>
         <module>consumer</module>
         <module>node</module>
