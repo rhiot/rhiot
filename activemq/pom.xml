@@ -54,6 +54,7 @@
                                 </tags>
                                 <ports>
                                     <port>5672</port>
+                                    <port>9090</port>
                                 </ports>
                                 <assembly>
                                     <basedir>/jars</basedir>

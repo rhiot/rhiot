@@ -75,7 +75,8 @@ echo "INFO : ActiveMQ"
 docker rm AMQP_SERVICE_HOST
 docker pull rhiot/activemq:${RHIOT_VERSION}
 docker run -d --name AMQP_SERVICE_HOST \
--e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -p 5672:5672 \
+  -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -e spring_activemq_broker_websocketEnabled=true \
+  -p 5672:5672 -p 9090:9090 \
   -t rhiot/activemq:${RHIOT_VERSION}
 echo "INFO : ActiveMQ started"
 
