@@ -18,12 +18,14 @@ package io.rhiot.spring.spark;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "rhiot.spark")
+@ConfigurationProperties(prefix = "spark")
 public class SparkProperties {
 
     private String applicationName = "Spring Boot Spark Application";
 
     private String masterUrl = "local[*]";
+
+    private String sparkHome;
 
     public String getApplicationName() {
         return applicationName;
@@ -39,6 +41,14 @@ public class SparkProperties {
 
     public void setMasterUrl(String masterUrl) {
         this.masterUrl = masterUrl;
+    }
+
+    public String getSparkHome() {
+        return sparkHome;
+    }
+
+    public void setSparkHome(String sparkHome) {
+        this.sparkHome = sparkHome;
     }
 
 }

@@ -18,10 +18,15 @@ package io.rhiot.spring.spark;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@EnableConfigurationProperties(SparkProperties.class)
+/**
+ * Configuration for Spring Boot based Apache Spark driver application.
+ */
 public class SparkConfiguration {
 
     @Bean(destroyMethod = "stop")
@@ -29,11 +34,11 @@ public class SparkConfiguration {
         SparkConf config = new SparkConf().
                 setAppName(sparkProperties.getApplicationName()).
                 setMaster(sparkProperties.getMasterUrl());
-        return new JavaSparkContext(config);
-    }
+        if(sparkProperties.getSparkHome() != null) {
+            config.setSparkHome(sparkProperties.getSparkHome());
+        }
 
-    @Bean SparkProperties sparkProperties() {
-        return new SparkProperties();
+        return new JavaSparkContext(config);
     }
 
 }
