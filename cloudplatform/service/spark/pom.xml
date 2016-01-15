@@ -5,12 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-datastream-consumer</artifactId>
+        <artifactId>rhiot-cloudplatform-service</artifactId>
         <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: DataStream :: Spark</name>
-    <artifactId>rhiot-datastream-spark</artifactId>
+    <name>Rhiot :: Cloud platform :: Service :: Spark</name>
+    <artifactId>rhiot-cloudplatform-service-spark</artifactId>
 
     <licenses>
         <license>

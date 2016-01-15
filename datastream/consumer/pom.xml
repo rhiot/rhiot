@@ -23,7 +23,6 @@
     <modules>
         <module>document</module>
         <module>document-mongodb</module>
-        <module>spark</module>
     </modules>
 
 </project>

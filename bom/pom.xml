@@ -280,12 +280,27 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
+				<artifactId>rhiot-cloudplatform-schema</artifactId>
+				<version>${rhiot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-cloudplatform-service-binding</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-cloudplatform-service-device</artifactId>
+				<version>${rhiot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.rhiot</groupId>
+				<artifactId>rhiot-cloudplatform-service-spark</artifactId>
+				<version>${rhiot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.rhiot</groupId>
+				<artifactId>rhiot-cloudplatform-runtime-spring</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
 			<dependency>
@@ -300,22 +315,7 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-cloudplatform-runtime-spring</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-cloudplatform-schema</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-datastream-node</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-datastream-spark</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
 			<dependency>
