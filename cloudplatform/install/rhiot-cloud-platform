@@ -87,7 +87,7 @@ docker pull rhiot/datastream-node
 docker run -d --name datastream-node \
   --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
   --link mongodb:mongodb \
-  -p 8080:8080 -t rhiot/datastream-node
+  -p 8080:8080 -p 5683:5683 -t rhiot/datastream-node
 echo "INFO : Datastream started"
 
 ### Spark standalone cluster
