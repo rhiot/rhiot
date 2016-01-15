@@ -55,15 +55,14 @@ case "$OSTYPE" in
 esac
 
 if [ $(docker ps | wc -l) -gt 1 ]; then
-	docker stop $(docker ps -q)
+	docker stop $(docker ps -q) 
 fi
 
 docker rm mongodb AMQP_SERVICE_HOST datastream-node spark_master spark_worker
 
 ### MongoDB
 echo "INFO : MongoDB"
-MONGODB_DATA_VOLUMES=`docker ps -a | grep mongodb_data | wc -l`
-if [ "$MONGODB_DATA_VOLUMES" \< 1 ]; then
+if [ $(docker ps -a | grep mongodb_data | wc -l) -eq 0 ]; then
     echo "MongoDB data volume doesn't exist. Creating..."
     docker run -v /data/db --name mongodb_data busybox true
 fi
