@@ -22,10 +22,6 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-cloudplatform-service-binding</artifactId>
         </dependency>
         <dependency>
@@ -38,19 +34,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.leshan</groupId>
-            <artifactId>leshan-client-cf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.leshan</groupId>
             <artifactId>leshan-server-cf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
         </dependency>
 
         <!-- Testing -->
@@ -70,23 +54,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-cloudplatform-encoding-json</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-utils-leshan-client</artifactId>
+            <artifactId>rhiot-cloudplatform-service-device</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-service-device</artifactId>
+            <artifactId>rhiot-utils-leshan-client</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
