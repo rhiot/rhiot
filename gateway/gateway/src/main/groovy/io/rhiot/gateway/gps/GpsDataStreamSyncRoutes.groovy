@@ -17,7 +17,7 @@
 package io.rhiot.gateway.gps
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.rhiot.datastream.schema.GpsCoordinates
+import io.rhiot.cloudplatform.schema.gps.GpsCoordinates
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty

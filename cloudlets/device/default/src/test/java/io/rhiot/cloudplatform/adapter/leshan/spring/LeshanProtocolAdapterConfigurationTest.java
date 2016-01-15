@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.adapter.leshan.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
-import io.rhiot.datastream.schema.device.Device;
+import io.rhiot.cloudplatform.schema.device.Device;
 import io.rhiot.utils.leshan.client.LeshanClientTemplate;
 import io.rhiot.utils.leshan.client.UpdateRequestBuilder;
 import org.junit.After;
@@ -26,9 +26,9 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static io.rhiot.datastream.schema.device.DeviceConstants.deregisterDevice;
-import static io.rhiot.datastream.schema.device.DeviceConstants.getDevice;
-import static io.rhiot.datastream.schema.device.DeviceConstants.listDevices;
+import static io.rhiot.cloudplatform.schema.device.DeviceConstants.deregisterDevice;
+import static io.rhiot.cloudplatform.schema.device.DeviceConstants.getDevice;
+import static io.rhiot.cloudplatform.schema.device.DeviceConstants.listDevices;
 import static io.rhiot.utils.Networks.findAvailableTcpPort;
 import static io.rhiot.utils.leshan.client.LeshanClientTemplate.createVirtualLeshanClientTemplate;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;

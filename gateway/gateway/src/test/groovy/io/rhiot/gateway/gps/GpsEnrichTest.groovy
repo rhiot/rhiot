@@ -24,7 +24,7 @@ import java.util.concurrent.Callable
 
 import static com.google.common.truth.Truth.assertThat
 import static com.jayway.awaitility.Awaitility.await
-import static io.rhiot.datastream.schema.GpsCoordinates.gpsCoordinates
+import static io.rhiot.cloudplatform.schema.gps.GpsCoordinates.gpsCoordinates
 import static io.rhiot.utils.Properties.setStringProperty;
 import static com.google.common.io.Files.createTempDir;
 import static io.rhiot.utils.Properties.setBooleanProperty

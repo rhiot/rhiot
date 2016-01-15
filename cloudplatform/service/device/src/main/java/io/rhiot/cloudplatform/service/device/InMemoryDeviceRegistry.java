@@ -16,7 +16,7 @@
  */
 package io.rhiot.cloudplatform.service.device;
 
-import io.rhiot.datastream.schema.device.Device;
+import io.rhiot.cloudplatform.schema.device.Device;
 
 import java.time.LocalTime;
 import java.time.ZoneId;

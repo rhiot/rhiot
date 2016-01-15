@@ -24,7 +24,7 @@ import org.apache.camel.impl.DefaultProducer;
 
 import java.util.Date;
 
-import static io.rhiot.datastream.schema.GpsCoordinates.gpsCoordinates;
+import static io.rhiot.cloudplatform.schema.gps.GpsCoordinates.gpsCoordinates;
 
 public class GpsdProducer extends DefaultProducer {
 

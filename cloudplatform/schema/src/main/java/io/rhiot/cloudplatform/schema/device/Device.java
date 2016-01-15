@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.schema.device;
+package io.rhiot.cloudplatform.schema.device;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -44,10 +44,14 @@ public class Device {
 
     private BindingMode bindingMode;
 
+    // Constructors
+
     public Device() {
     }
 
-    public Device(String deviceId, String registrationId, Date registrationDate, Date lastUpdate, InetAddress address, int port, InetSocketAddress registrationEndpointAddress, long lifeTimeInSec, String smsNumber, String lwM2mVersion, BindingMode bindingMode) {
+    public Device(String deviceId, String registrationId, Date registrationDate, Date lastUpdate,
+                  InetAddress address, int port, InetSocketAddress registrationEndpointAddress,
+                  long lifeTimeInSec, String smsNumber, String lwM2mVersion, BindingMode bindingMode) {
         this.deviceId = deviceId;
         this.registrationId = registrationId;
         this.registrationDate = registrationDate;
@@ -60,6 +64,8 @@ public class Device {
         this.lwM2mVersion = lwM2mVersion;
         this.bindingMode = bindingMode;
     }
+
+    // Getters and setters
 
     public String getDeviceId() {
         return deviceId;

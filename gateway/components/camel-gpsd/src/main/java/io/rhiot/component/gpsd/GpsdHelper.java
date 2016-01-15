@@ -18,7 +18,7 @@
 package io.rhiot.component.gpsd;
 
 import de.taimos.gpsd4java.types.TPVObject;
-import io.rhiot.datastream.schema.GpsCoordinates;
+import io.rhiot.cloudplatform.schema.gps.GpsCoordinates;
 import org.apache.camel.*;
 import org.apache.camel.spi.ExceptionHandler;
 import org.apache.commons.lang3.Validate;
@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 import static io.rhiot.component.gpsd.GpsdConstants.TPV_HEADER;
-import static io.rhiot.datastream.schema.GpsCoordinates.gpsCoordinates;
+import static io.rhiot.cloudplatform.schema.gps.GpsCoordinates.gpsCoordinates;
 import static org.apache.camel.ExchangePattern.OutOnly;
 import static org.apache.camel.builder.ExchangeBuilder.anExchange;
 

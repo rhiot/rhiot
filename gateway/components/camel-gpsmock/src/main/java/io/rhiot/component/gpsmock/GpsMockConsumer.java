@@ -16,7 +16,7 @@
  */
 package io.rhiot.component.gpsmock;
 
-import io.rhiot.datastream.schema.GpsCoordinates;
+import io.rhiot.cloudplatform.schema.gps.GpsCoordinates;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultEndpoint;
@@ -24,7 +24,7 @@ import org.apache.camel.impl.DefaultScheduledPollConsumer;
 
 import java.util.Random;
 
-import static io.rhiot.datastream.schema.GpsCoordinates.gpsCoordinates;
+import static io.rhiot.cloudplatform.schema.gps.GpsCoordinates.gpsCoordinates;
 import static org.apache.camel.builder.ExchangeBuilder.anExchange;
 
 public class GpsMockConsumer extends DefaultScheduledPollConsumer {

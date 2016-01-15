@@ -23,7 +23,7 @@ import org.apache.camel.component.mock.MockEndpoint
 import org.junit.Test
 
 import static com.google.common.io.Files.createTempDir
-import static io.rhiot.datastream.schema.GpsCoordinates.gpsCoordinates
+import static io.rhiot.cloudplatform.schema.gps.GpsCoordinates.gpsCoordinates
 import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setStringProperty
 import static java.lang.Boolean.parseBoolean

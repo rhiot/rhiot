@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.service.device.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
-import io.rhiot.datastream.schema.device.Device;
+import io.rhiot.cloudplatform.schema.device.Device;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static io.rhiot.datastream.schema.device.DeviceConstants.*;
+import static io.rhiot.cloudplatform.schema.device.DeviceConstants.*;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;

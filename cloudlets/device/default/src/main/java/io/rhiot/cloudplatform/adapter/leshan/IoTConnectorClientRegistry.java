@@ -17,7 +17,7 @@
 package io.rhiot.cloudplatform.adapter.leshan;
 
 import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
-import io.rhiot.datastream.schema.device.Device;
+import io.rhiot.cloudplatform.schema.device.Device;
 import org.eclipse.leshan.core.request.BindingMode;
 import org.eclipse.leshan.server.client.Client;
 import org.eclipse.leshan.server.client.ClientRegistry;
@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static io.rhiot.datastream.schema.device.DeviceConstants.*;
+import static io.rhiot.cloudplatform.schema.device.DeviceConstants.*;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 

@@ -17,7 +17,7 @@
 package io.rhiot.component.gpsmock;
 
 import com.google.common.truth.Truth;
-import io.rhiot.datastream.schema.GpsCoordinates;
+import io.rhiot.cloudplatform.schema.gps.GpsCoordinates;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
