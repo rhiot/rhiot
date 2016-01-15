@@ -14,22 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.spark
+package io.rhiot.cloduplatform.service.spark;
 
-import org.apache.camel.ProducerTemplate
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
+public interface SparkService {
 
-@Component('spark')
-class DefaultSparkService implements SparkService {
-
-    @Autowired
-    ProducerTemplate producerTemplate
-
-    @Override
-    Object execute(String rdd, String rddCallback, Object payload) {
-        producerTemplate.requestBody("spark:rdd?rdd=#${rdd}&rddCallback=#${rddCallback}", payload)
-    }
-
+    Object execute(String rdd, String rddCallback, Object payload);
 
 }

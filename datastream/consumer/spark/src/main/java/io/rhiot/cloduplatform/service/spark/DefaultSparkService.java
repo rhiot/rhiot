@@ -14,19 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.spark
+package io.rhiot.cloduplatform.service.spark;
 
-import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding
-import io.rhiot.cloudplatform.service.binding.ServiceBinding
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
+import org.apache.camel.ProducerTemplate;
 
-@Component
-class SparkServiceBinding extends ServiceBinding {
+public class DefaultSparkService implements SparkService {
 
-    @Autowired
-    SparkServiceBinding(PayloadEncoding payloadEncoding) {
-        super(payloadEncoding, 'spark')
+    private final ProducerTemplate producerTemplate;
+
+    public DefaultSparkService(ProducerTemplate producerTemplate) {
+        this.producerTemplate = producerTemplate;
+    }
+
+    @Override
+    public Object execute(String rdd, String rddCallback, Object payload) {
+        return producerTemplate.requestBody(String.format("spark:rdd?rdd=#%s&rddCallback=#%s", rdd, rddCallback), payload);
     }
 
 }
