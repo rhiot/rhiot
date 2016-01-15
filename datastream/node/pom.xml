@@ -19,11 +19,6 @@
         </license>
     </licenses>
 
-    <properties>
-        <!-- Downgraded version of Jackson to match Spark 1.5.1. -->
-        <jackson.version>2.4.4</jackson.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>ch.qos.logback</groupId>
