@@ -260,6 +260,11 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
+				<artifactId>rhiot-cloudplatform-adapter-leshan</artifactId>
+				<version>${rhiot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-cloudplatform-adapter-rest</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
@@ -363,11 +368,6 @@
 			<dependency>
 				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-iot-cloudlet-document-sdk</artifactId>
-				<version>${rhiot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-cloudlet-device</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
 			<dependency>

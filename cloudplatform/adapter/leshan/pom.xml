@@ -5,12 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-cloudlet-device-parent</artifactId>
+        <artifactId>rhiot-cloudplatform-adapter</artifactId>
         <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: Cloudlets :: Device :: Default</name>
-    <artifactId>rhiot-cloudlet-device</artifactId>
+    <name>Rhiot :: Cloud platform :: Protocol adapter :: Leshan (LWM2M)</name>
+    <artifactId>rhiot-cloudplatform-adapter-leshan</artifactId>
 
     <licenses>
         <license>
