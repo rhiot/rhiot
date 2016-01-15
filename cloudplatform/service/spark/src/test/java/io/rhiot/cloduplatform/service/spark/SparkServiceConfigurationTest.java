@@ -18,14 +18,15 @@ package io.rhiot.cloduplatform.service.spark;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
-import org.apache.camel.component.spark.RddCallback;
+import org.apache.camel.component.spark.annotations.RddCallback;
 import org.apache.spark.api.java.AbstractJavaRDDLike;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
+
+import static org.apache.camel.component.spark.annotations.AnnotatedRddCallback.annotatedRddCallback;
 
 @Configuration
 public class SparkServiceConfigurationTest extends CloudPlatformTest {
@@ -36,17 +37,19 @@ public class SparkServiceConfigurationTest extends CloudPlatformTest {
         Truth.assertThat(result).isEqualTo(170);
     }
 
-    @Component("callback")
-    static class LinesXPayload implements RddCallback<Integer> {
-        @Override
-        public Integer onRdd(AbstractJavaRDDLike rdd, Object... payloads) {
-            return (int)((int) payloads[0] * rdd.count());
-        };
-    }
-
     @Bean
     JavaRDD rdd(JavaSparkContext sparkContext) {
         return sparkContext.textFile("src/test/resources/testrdd.txt");
+    }
+
+    @Bean
+    Object callback() {
+        return annotatedRddCallback(new Object(){
+            @RddCallback
+            public long onRdd(AbstractJavaRDDLike rdd, int multiplier) {
+                return multiplier * rdd.count();
+            };
+        });
     }
 
 }
