@@ -17,10 +17,14 @@
 package io.rhiot.datastream.node
 
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
+import io.rhiot.cloudplatform.schema.device.Device
+import io.rhiot.cloudplatform.schema.device.DeviceConstants
+import io.rhiot.utils.leshan.client.LeshanClientTemplate
 import org.junit.Test
 import org.springframework.context.annotation.Configuration
 
 import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.utils.Uuids.uuid
 
 @Configuration
 class DataStreamNodeTest extends CloudPlatformTest {
@@ -30,6 +34,18 @@ class DataStreamNodeTest extends CloudPlatformTest {
         connector.fromBus('document.save.doc', [foo: 'bar'], String.class)
         def count = connector.fromBus('document.count.doc', int.class)
         assertThat(count).isEqualTo(1)
+    }
+
+    @Test
+    void smokeTestLeshanProtocolAdapter() {
+        // Given
+        def device = LeshanClientTemplate.createVirtualLeshanClientTemplate(uuid()).connect()
+
+        // When
+        def loadedDevice = connector.fromBus(DeviceConstants.getDevice(device.clientId()), Device.class)
+
+        // Then
+        assertThat(loadedDevice.deviceId).isEqualTo(device.clientId())
     }
 
 }

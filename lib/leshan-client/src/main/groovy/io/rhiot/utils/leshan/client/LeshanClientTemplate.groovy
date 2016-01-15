@@ -96,13 +96,22 @@ class LeshanClientTemplate {
         this
     }
 
-    void update(UpdateRequestBuilder updateRequestBuilder) {
-        leshanClient.send(updateRequestBuilder.build(registrationId));
-    }
-
     LeshanClientTemplate disconnect() {
         leshanClient.stop()
         this
+    }
+
+    // Commands
+
+    LeshanClientTemplate update(UpdateRequestBuilder updateRequestBuilder) {
+        leshanClient.send(updateRequestBuilder.build(registrationId));
+        this
+    }
+
+    // Getters
+
+    String clientId() {
+        clientId
     }
 
 }

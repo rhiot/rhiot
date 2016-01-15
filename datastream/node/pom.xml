@@ -26,11 +26,19 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-cloudplatform-adapter-leshan</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-cloudplatform-adapter-rest</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-cloudplatform-encoding-json</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-cloudplatform-service-device</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
@@ -46,6 +54,11 @@
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-utils-leshan-client</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

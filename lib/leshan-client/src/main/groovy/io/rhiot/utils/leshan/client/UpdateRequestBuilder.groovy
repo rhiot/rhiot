@@ -59,20 +59,14 @@ class UpdateRequestBuilder {
         this
     }
 
-    BindingMode getBindingMode() {
-        return bindingMode
-    }
-
-    void setBindingMode(BindingMode bindingMode) {
+    UpdateRequestBuilder bindingMode(BindingMode bindingMode) {
         this.bindingMode = bindingMode
+        this
     }
 
-    LinkObject[] getObjectLinks() {
-        return objectLinks
-    }
-
-    void setObjectLinks(LinkObject[] objectLinks) {
+    UpdateRequestBuilder objectLinks(LinkObject[] objectLinks) {
         this.objectLinks = objectLinks
+        this
     }
 
 }
