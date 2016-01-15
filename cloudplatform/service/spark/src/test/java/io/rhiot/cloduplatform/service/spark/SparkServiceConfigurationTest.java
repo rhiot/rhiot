@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 @Configuration
-public class CamelSparkStreamConsumerTest extends CloudPlatformTest {
+public class SparkServiceConfigurationTest extends CloudPlatformTest {
 
     @Test
     public void shouldExecuteTaskViaAmqpApi() {
