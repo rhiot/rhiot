@@ -18,6 +18,7 @@ package io.rhiot.spring.spark;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,7 @@ import org.springframework.context.annotation.Configuration;
  */
 public class SparkConfiguration {
 
+    @ConditionalOnMissingBean(JavaSparkContext.class)
     @Bean(destroyMethod = "stop")
     JavaSparkContext sparkContext(SparkProperties sparkProperties) {
         SparkConf config = new SparkConf().
