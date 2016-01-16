@@ -22,7 +22,7 @@ if [ -z "${RHIOT_VERSION}" ]; then
 fi
 
 if [ -z "${RHIOT_HOME}" ]; then
-  RHIOT_HOME="~/.rhiot"
+  RHIOT_HOME="${HOME}/.rhiot"
 fi
 
 if [ -z "${RHIOT_DOCKER_MACHINE_ENV}" ]; then
