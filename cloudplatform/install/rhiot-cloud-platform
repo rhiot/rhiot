@@ -30,7 +30,7 @@ if [ ! -d ${RHIOT_HOME} ]; then
 	echo "INFO : create RHIOT_HOME=${RHIOT_HOME}"
 fi
 
-echo "INFO : Starting Rhiot Cloud Platform" | tee $RHIOT_RCP_LOG
+echo "INFO : Starting Rhiot Cloud Platform" | tee -a $RHIOT_RCP_LOG
 
 ### Docker boot init
 
@@ -55,9 +55,9 @@ case "$OSTYPE" in
         exit 1
       fi
 					
-      docker-machine env $RHIOT_DOCKER_MACHINE_ENV | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
+      docker-machine env $RHIOT_DOCKER_MACHINE_ENV > $RHIOT_RCP_LOG 2>&1
       if [ $? -ne 0 ]; then
-        echo "INFO :  docker-machine start $RHIOT_DOCKER_MACHINE_ENV"
+        echo "INFO : docker-machine start $RHIOT_DOCKER_MACHINE_ENV"
         docker-machine start $RHIOT_DOCKER_MACHINE_ENV > $RHIOT_RCP_LOG 2>&1
       fi
       eval $(docker-machine env $RHIOT_DOCKER_MACHINE_ENV)
@@ -71,46 +71,46 @@ fi
 docker rm mongodb AMQP_SERVICE_HOST datastream-node spark_master spark_worker | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
 
 ### MongoDB
-echo "INFO : MongoDB" | tee $RHIOT_RCP_LOG
+echo "INFO : MongoDB" | tee -a $RHIOT_RCP_LOG
 if [ $(docker ps -a | grep mongodb_data | wc -l) -eq 0 ]; then
     echo "MongoDB data volume doesn't exist. Creating..."
     docker run -v /data/db --name mongodb_data busybox true | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
 fi
 docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
-echo "INFO : MongoDB started" | tee $RHIOT_RCP_LOG
+echo "INFO : MongoDB started" | tee -a $RHIOT_RCP_LOG
 
 ### IoT Connector
 
-echo "INFO : ActiveMQ" | tee $RHIOT_RCP_LOG
+echo "INFO : ActiveMQ" | tee -a $RHIOT_RCP_LOG
 docker pull rhiot/activemq:${RHIOT_VERSION} | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
 docker run -d --name AMQP_SERVICE_HOST \
   -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -e spring_activemq_broker_websocketEnabled=true \
   -p 5672:5672 -p 9090:9090 \
   -t rhiot/activemq:${RHIOT_VERSION} | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
-echo "INFO : ActiveMQ started" | tee $RHIOT_RCP_LOG
+echo "INFO : ActiveMQ started" | tee -a $RHIOT_RCP_LOG
 
 ### Data stream node
 
-echo "INFO : Datastream" | tee $RHIOT_RCP_LOG
+echo "INFO : Datastream" | tee -a $RHIOT_RCP_LOG
 docker pull rhiot/datastream-node | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
 docker run -d --name datastream-node \
   --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
   --link mongodb:mongodb \
   -p 8080:8080 -p 5683:5683 -t rhiot/datastream-node | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
-echo "INFO : Datastream started" | tee $RHIOT_RCP_LOG
+echo "INFO : Datastream started" | tee -a $RHIOT_RCP_LOG
 
 ### Spark standalone cluster
 
-echo "INFO : Spark" | tee $RHIOT_RCP_LOG
+echo "INFO : Spark" | tee -a $RHIOT_RCP_LOG
 docker pull rhiot/spark-standalone:${RHIOT_VERSION} | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
 docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@" | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
 sleep 5
 SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4 | uniq`
-echo "INFO : Spark master started" | tee $RHIOT_RCP_LOG
+echo "INFO : Spark master started" | tee -a $RHIOT_RCP_LOG
 
 docker run -d --name spark_worker \
   --link spark_master:spark_master --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} \
   -v /tmp/jobs:/tmp/jobs -P \
   -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh | sed -e 's/^/ECHO : /' > $RHIOT_RCP_LOG 2>&1
-echo "INFO : Spark worker started" | tee $RHIOT_RCP_LOG
+echo "INFO : Spark worker started" | tee -a $RHIOT_RCP_LOG
 
