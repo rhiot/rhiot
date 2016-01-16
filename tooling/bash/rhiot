@@ -17,11 +17,21 @@
 
 ### Rhiot setup
 
-RHIOT_VERSION=${RHIOT_VERSION:0.1.3}
-RHIOT_HOME=${RHIOT_HOME:~/.rhiot}
-RHIOT_DOCKER_MACHINE_ENV=${RHIOT_DOCKER_MACHINE_ENV:-default}
+if [ -z "${RHIOT_VERSION}" ]; then
+  RHIOT_VERSION=0.1.3
+fi
 
-SHELL_LOG_LEVEL=${SHELL_LOG_LEVEL:INFO}
+if [ -z "${RHIOT_HOME}" ]; then
+  RHIOT_HOME="~/.rhiot"
+fi
+
+if [ -z "${RHIOT_DOCKER_MACHINE_ENV}" ]; then
+  RHIOT_DOCKER_MACHINE_ENV="-default"
+fi
+
+if [ -z "${SHELL_LOG_LEVEL}" ]; then
+  SHELL_LOG_LEVEL="INFO"
+fi
 
 if [ ! -d ${RHIOT_HOME} ]; then
 	mkdir -p ${RHIOT_HOME}
