@@ -20,18 +20,20 @@ FROM resin/rpi-raspbian:jessie
 MAINTAINER Greg AUTRIC <gautric@redhat.com>
 
 ## to build it
-## sudo docker build -t rpi-kura .
+## sudo docker build -t ${USER}/kura-${RPI_VERSION}:${KURA_VERSION} --build-arg  KURA_VERSION=${KURA_VERSION} --build-arg RPI_VERSION=${RPI_VERSION} .
 ## to run it
-## sudo docker run -i -p 80:80 -p 5002:5002 -t rpi-kura
+## sudo docker run -i -p 80:80 -p 5002:5002 -t ${USER}/kura-${RPI_VERSION}:${KURA_VERSION}
 ## or
-## sudo docker run -i -P -t rpi-kura
+## sudo docker run -i -P -t ${USER}/kura-${RPI_VERSION}:${KURA_VERSION} 
 
 ## Variable ENV
 ENV JAVA_VERSION=${JAVA_VERSION:-7}
 ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}-openjdk-armhf
+ARG KURA_VERSION
 ENV KURA_VERSION=${KURA_VERSION:-1.3.0}
 ENV KURA_HOME=/opt/eclipse/kura
-ENV RPI_VERSION=${RPI_VERSION:-raspberry-pi-bplus-nn}
+ARG RPI_VERSION
+ENV RPI_VERSION=${RPI_VERSION:-raspberry-pi}
 
 ## Debian/Raspbian package installation
 RUN apt-get update && \
