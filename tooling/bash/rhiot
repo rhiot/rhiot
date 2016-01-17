@@ -26,7 +26,7 @@ if [ -z "${RHIOT_HOME}" ]; then
 fi
 
 if [ -z "${RHIOT_DOCKER_MACHINE_ENV}" ]; then
-  RHIOT_DOCKER_MACHINE_ENV="-default"
+  RHIOT_DOCKER_MACHINE_ENV="default"
 fi
 
 if [ -z "${SHELL_LOG_LEVEL}" ]; then
