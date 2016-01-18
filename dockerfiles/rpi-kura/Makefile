@@ -43,9 +43,9 @@ push:
 all:
 	for version in ${RPI_VERSION_LIST} ; do \
 		make build RPI_VERSION=$$version ; \
-  	done
+	done
 
 pushall: buildall
 	for version in ${RPI_VERSION_LIST} ; do \
 		make push RPI_VERSION=$$version ; \
-  	done
+	done
