@@ -16,17 +16,22 @@
  */
 package io.rhiot.cloudplatform.adapter.leshan;
 
+import com.google.common.net.InetAddresses;
 import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
 import io.rhiot.cloudplatform.schema.device.Device;
+import org.eclipse.leshan.LinkObject;
 import org.eclipse.leshan.core.request.BindingMode;
 import org.eclipse.leshan.server.client.Client;
 import org.eclipse.leshan.server.client.ClientRegistry;
 import org.eclipse.leshan.server.client.ClientRegistryListener;
 import org.eclipse.leshan.server.client.ClientUpdate;
 
+import java.net.Inet4Address;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 import static io.rhiot.cloudplatform.schema.device.DeviceConstants.*;
 import static java.util.Arrays.asList;
@@ -111,18 +116,26 @@ public class IoTConnectorClientRegistry implements ClientRegistry {
     // Helpers
 
     private static Client deviceToClient(Device device) {
+        LinkObject[] linkObjects = device.getObjectLinks().stream().map(
+                link -> new LinkObject(link.getUrl(), link.getAttributes())).collect(Collectors.toList()
+        ).toArray(new LinkObject[device.getObjectLinks().size()]);
         return new Client(
                 device.getRegistrationId(), device.getDeviceId(),
-                device.getAddress(), device.getPort(), device.getLwM2mVersion(), device.getLifeTimeInSec(), device.getSmsNumber(), BindingMode.valueOf(device.getBindingMode().name()), null, device.getRegistrationEndpointAddress(),
+                InetAddresses.forString(device.getAddress()), device.getPort(), device.getLwM2mVersion(), device.getLifeTimeInSec(), device.getSmsNumber(), BindingMode.valueOf(device.getBindingMode().name()), linkObjects, device.getRegistrationEndpointAddress(),
                 device.getRegistrationDate(), device.getLastUpdate()
         );
     }
 
     private static Device clientToDevice(Client client) {
+        List<io.rhiot.cloudplatform.schema.device.LinkObject> linkObjects = asList(client.getObjectLinks()).stream().map(
+            link -> new io.rhiot.cloudplatform.schema.device.LinkObject(
+                    link.getUrl(), link.getAttributes(), link.getObjectId(), link.getObjectInstanceId(), link.getResourceId()
+            )
+        ).collect(toList());
         return new Device(
                 client.getEndpoint(), client.getRegistrationId(),
                 client.getRegistrationDate(), client.getLastUpdate(),
-                client.getAddress(), client.getPort(), client.getRegistrationEndpointAddress(),
+                client.getAddress().getHostAddress(), client.getPort(), client.getRegistrationEndpointAddress(),
                 client.getLifeTimeInSec(), client.getSmsNumber(), client.getLwM2mVersion(), Device.BindingMode.valueOf(client.getBindingMode().name())
         );
     }

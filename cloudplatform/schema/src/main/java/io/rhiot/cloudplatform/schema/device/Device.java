@@ -16,9 +16,10 @@
  */
 package io.rhiot.cloudplatform.schema.device;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Device {
 
@@ -30,7 +31,7 @@ public class Device {
 
     private Date lastUpdate;
 
-    private InetAddress address;
+    private String address;
 
     private int port;
 
@@ -44,13 +45,17 @@ public class Device {
 
     private BindingMode bindingMode;
 
+    private List<LinkObject> objectLinks = new LinkedList<>();
+
+    private String rootPath;
+
     // Constructors
 
     public Device() {
     }
 
     public Device(String deviceId, String registrationId, Date registrationDate, Date lastUpdate,
-                  InetAddress address, int port, InetSocketAddress registrationEndpointAddress,
+                  String address, int port, InetSocketAddress registrationEndpointAddress,
                   long lifeTimeInSec, String smsNumber, String lwM2mVersion, BindingMode bindingMode) {
         this.deviceId = deviceId;
         this.registrationId = registrationId;
@@ -99,11 +104,11 @@ public class Device {
         this.lastUpdate = lastUpdate;
     }
 
-    public InetAddress getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(InetAddress address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
@@ -153,6 +158,22 @@ public class Device {
 
     public void setBindingMode(BindingMode bindingMode) {
         this.bindingMode = bindingMode;
+    }
+
+    public List<LinkObject> getObjectLinks() {
+        return objectLinks;
+    }
+
+    public void setObjectLinks(List<LinkObject> objectLinks) {
+        this.objectLinks = objectLinks;
+    }
+
+    public String getRootPath() {
+        return rootPath;
+    }
+
+    public void setRootPath(String rootPath) {
+        this.rootPath = rootPath;
     }
 
     public static enum BindingMode {
