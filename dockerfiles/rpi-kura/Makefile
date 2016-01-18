@@ -29,16 +29,12 @@ endif
 
 default: build
 
-grep: Dockerfile
-	echo "Create a specific Dockerfile depending on "`arch`
-	sed -i "" -e "s/FROM.*/FROM ${RPI_OS}/" "Dockerfile"
-
-build: grep
+build: 
 	docker build -t $(DOCKER_IMAGE_TAGNAME) --build-arg  KURA_VERSION=${KURA_VERSION} --build-arg RPI_VERSION=${RPI_VERSION} .
 	docker tag -f $(DOCKER_IMAGE_TAGNAME) $(DOCKER_IMAGE_NAME):latest
 
 push:
-	#docker push $(DOCKER_IMAGE_NAME)
+	docker push $(DOCKER_IMAGE_NAME)
 
 all:
 	for version in ${RPI_VERSION_LIST} ; do \
