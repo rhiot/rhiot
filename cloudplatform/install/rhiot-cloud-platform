@@ -48,12 +48,12 @@ case "$OSTYPE" in
 	linux-gnu)
       if ! type "docker" ; then
         echo "INFO : Docker not found - installing..."
-        wget -qO- https://get.docker.com/ | sh
+        curl -sSL https://get.docker.com/ | sh
       else
         DOCKER_VERSION=`docker version --format '{{.Server.Version}}'`
         if [ "$DOCKER_VERSION" \< "$REQUIRED_DOCKER_VERSION" ]; then
           echo "INFO : Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot. Version ${DOCKER_VERSION} found - upgrading..."
-          wget -qO- https://get.docker.com/ | sh
+          curl -sSL https://get.docker.com/ | sh
         fi
       fi
   ;;
