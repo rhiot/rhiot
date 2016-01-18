@@ -16,13 +16,16 @@
  */
 package io.rhiot.tooling.shell
 
+import io.rhiot.utils.process.EchoMockProcessManager
+import io.rhiot.utils.process.ProcessManager
 import io.rhiot.utils.ssh.client.SshClient
 import io.rhiot.utils.ssh.server.SshServer
-import org.apache.commons.io.IOUtils
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.boot.test.SpringApplicationConfiguration
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
 import java.nio.file.Paths
@@ -34,6 +37,7 @@ import static io.rhiot.utils.Uuids.uuid
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Shell.class)
+@Configuration
 class ShellTest {
 
     // Fixtures
@@ -49,6 +53,11 @@ class ShellTest {
     @BeforeClass
     static void beforeClass() {
         setIntProperty('shell.ssh.port', shellPort)
+    }
+
+    @Bean
+    ProcessManager processManager() {
+        new EchoMockProcessManager()
     }
 
     // Commands core tests

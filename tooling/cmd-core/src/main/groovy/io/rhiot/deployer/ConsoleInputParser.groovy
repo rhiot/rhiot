@@ -32,7 +32,7 @@ class ConsoleInputParser {
     }
 
     boolean isHelp() {
-        (args.contains('--help') || args.contains('-h') || args.find{!it.startsWith('-')} == null) && !args.find{ it == 'device-send' }
+        (args.contains('--help') || args.contains('-h') || args.find{!it.startsWith('-')} == null) && !args.find{ ['device-send', 'kura-install'].contains(it) }
     }
 
     String helpText() {

@@ -17,8 +17,10 @@
 package io.rhiot.tooling.shell
 
 import io.rhiot.utils.WithLogger
+import org.apache.commons.lang3.StringUtils
 
 import static java.lang.Boolean.parseBoolean
+import static org.apache.commons.lang3.StringUtils.isBlank
 import static org.apache.commons.lang3.StringUtils.isBlank
 
 abstract class CommandSupport implements WithLogger {
@@ -50,10 +52,16 @@ abstract class CommandSupport implements WithLogger {
     String execute(String... command) {
         def output = []
         try {
-            doExecute(output, command)
+            output = doExecute(output, command)
         } catch (Exception e) {
-            output += e.message
+            log().warn('Error occurred when processing the command: {}', command)
+            if(isBlank(e.message)) {
+                output << "Error ${e.class.simpleName} occurred when processing the command."
+            } else {
+                output << e.message
+            }
         }
+        log().debug('Output collected: {}', output)
         output.join('\n')
     }
 
@@ -69,7 +77,7 @@ abstract class CommandSupport implements WithLogger {
         ''
     }
 
-    abstract protected void doExecute(List<String> output, String... command)
+    abstract protected List<String> doExecute(List<String> output, String... command)
 
     // Helpers
 

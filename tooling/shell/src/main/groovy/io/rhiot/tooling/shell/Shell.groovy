@@ -24,6 +24,7 @@ import io.rhiot.utils.process.DefaultProcessManager
 import io.rhiot.utils.process.ProcessManager
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 
 @SpringBootApplication
@@ -33,6 +34,7 @@ class Shell {
         new SpringApplication(Shell.class).run(args)
     }
 
+    @ConditionalOnMissingBean
     @Bean
     ProcessManager processManager() {
         new DefaultProcessManager()
@@ -46,6 +48,11 @@ class Shell {
     @Bean(destroyMethod = "close")
     MavenArtifactResolver mavenArtifactResolver() {
         new JcabiMavenArtifactResolver()
+    }
+
+    @Bean
+    DownloadManager downloadManager() {
+        new DownloadManager()
     }
 
 }

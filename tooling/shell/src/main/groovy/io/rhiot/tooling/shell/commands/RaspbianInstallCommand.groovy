@@ -16,15 +16,14 @@
  */
 package io.rhiot.tooling.shell.commands
 
+import io.rhiot.tooling.shell.DownloadManager
 import io.rhiot.utils.WithLogger
 import io.rhiot.utils.process.ProcessManager
 import org.apache.commons.io.IOUtils
-import org.apache.commons.lang3.SystemUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
-import java.nio.file.Paths
 import java.util.zip.ZipInputStream
 
 @Component
@@ -32,27 +31,25 @@ class RaspbianInstallCommand implements WithLogger {
 
     private final String devicesDirectory
 
+    private final DownloadManager downloadManager
+
     private final ProcessManager processManager
 
     @Autowired
     RaspbianInstallCommand(@Value('${devices.directory:/dev}') String devicesDirectory,
-                           ProcessManager processManager) {
+                           DownloadManager downloadManager, ProcessManager processManager) {
         this.devicesDirectory = devicesDirectory
+        this.downloadManager = downloadManager
         this.processManager = processManager
     }
 
     List<String> execute(String device) {
-        def downloadDirectory = Paths.get(SystemUtils.userHome.absolutePath, '.rhiot', 'downloads').toFile()
-        def imageZip = new File(downloadDirectory, '2015-11-21-raspbian-jessie.zip')
+        downloadManager.download(
+                new URL('http://director.downloads.raspberrypi.org/raspbian/images/raspbian-2015-11-24/2015-11-21-raspbian-jessie.zip'),
+                '2015-11-21-raspbian-jessie.zip')
 
-        if(!imageZip.exists()) {
-            def tmpImageFile = File.createTempFile('rhiot', 'raspbian')
-            IOUtils.copyLarge(new URL('http://director.downloads.raspberrypi.org/raspbian/images/raspbian-2015-11-24/2015-11-21-raspbian-jessie.zip').openStream(), new FileOutputStream(tmpImageFile))
-            imageZip.parentFile.mkdirs()
-            tmpImageFile.renameTo(imageZip)
-        }
-
-        def image = new File(downloadDirectory, '2015-11-21-raspbian-jessie.img')
+        def imageZip = downloadManager.downloadedFile('2015-11-21-raspbian-jessie.zip')
+        def image = downloadManager.downloadedFile('2015-11-21-raspbian-jessie.img')
         if(!image.exists()) {
             def tmpImageFile = File.createTempFile('rhiot', 'raspbian')
             def zip = new ZipInputStream(new FileInputStream(imageZip))

@@ -19,6 +19,7 @@ package io.rhiot.tooling.shell
 import io.rhiot.scanner.DeviceDetector
 import io.rhiot.utils.ssh.client.SshClient
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.util.Assert
 
 abstract class SshCommandSupport extends CommandSupport {
 
@@ -40,7 +41,10 @@ abstract class SshCommandSupport extends CommandSupport {
     // Overridden
 
     @Override
-    protected void doExecute(List<String> output, String... command) {
+    protected List<String> doExecute(List<String> output, String... command) {
+        Assert.notNull(output)
+        Assert.notNull(command)
+
         log().debug('About to execute command: {}', command.toList())
 
         deviceAddress = parameter(command[0]) {
@@ -57,6 +61,7 @@ abstract class SshCommandSupport extends CommandSupport {
         username = parameter(command[2], 'root')
         password = parameter(command[3], 'raspberry')
         sshClient = new SshClient(deviceAddress, port, username, password)
+        output
     }
 
 }

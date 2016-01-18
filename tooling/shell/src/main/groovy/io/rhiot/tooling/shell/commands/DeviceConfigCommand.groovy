@@ -26,7 +26,7 @@ import static java.lang.Boolean.parseBoolean
 class DeviceConfigCommand extends SshCommandSupport {
 
     @Override
-    protected void doExecute(List<String> output, String... command) {
+    protected List<String> doExecute(List<String> output, String... command) {
         super.doExecute(output, command)
 
         String file = requiredParameter('file', command[4])
@@ -59,6 +59,7 @@ class DeviceConfigCommand extends SshCommandSupport {
         } else {
             output << "Updated ${file} - set property '${property}' to value '${value}'."
         }
+        output
     }
 
 }

@@ -32,7 +32,7 @@ class DeviceScanCommand extends CommandSupport {
     }
 
     @Override
-    protected void doExecute(List<String> output, String... command) {
+    protected List<String> doExecute(List<String> output, String... command) {
         output << 'Scanning local networks for devices...'
         output << ''
         output << '======================================'
@@ -41,6 +41,7 @@ class DeviceScanCommand extends CommandSupport {
         deviceDetector.detectDevices().each {
             output << "${it.type()}\t\t${it.address()}"
         }
+        output
     }
 
 }

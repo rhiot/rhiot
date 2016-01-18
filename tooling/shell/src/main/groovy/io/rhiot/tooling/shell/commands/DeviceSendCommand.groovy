@@ -35,11 +35,8 @@ class DeviceSendCommand extends SshCommandSupport {
     }
 
     @Override
-    protected void doExecute(List<String> output, String... command) {
-        Assert.notNull(output)
-        Assert.notNull(command)
-
-        super.doExecute(output, command)
+    protected List<String> doExecute(List<String> output, String... command) {
+        output = super.doExecute(output, command)
         def source = requiredParameter('source', command[4])
         def target = requiredParameter('target', command[5])
 
@@ -49,6 +46,7 @@ class DeviceSendCommand extends SshCommandSupport {
 
         output << "Sent ${source} to ${target} on a target device ${deviceAddress}."
         log().debug('Output collected: {}', output)
+        output
     }
 
     private sourceStream(String source){
