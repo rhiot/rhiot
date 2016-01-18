@@ -20,7 +20,6 @@ import io.rhiot.tooling.shell.commands.KuraInstallCommand
 import org.crsh.cli.Command
 import org.crsh.cli.Option
 import org.crsh.command.InvocationContext
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.BeanFactory
 
 class kura_install {
@@ -31,9 +30,7 @@ class kura_install {
              @Option(names = ['username', 'u']) String username, @Option(names = ['password', 'pa']) String password,
              @Option(names = ['help', 'h']) Boolean help) {
         BeanFactory beanFactory = context.attributes['spring.beanfactory']
-        def xxx = beanFactory.getBean(KuraInstallCommand.class).executeOrPrintHelp(help, host, port, username, password)
-        LoggerFactory.getLogger(getClass()).debug("XXXXXXXXXXX:" + xxx)
-        xxx
+        beanFactory.getBean(KuraInstallCommand.class).executeOrPrintHelp(help, host, port, username, password)
     }
 
 }
