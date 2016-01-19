@@ -20,8 +20,8 @@
 
 
 exec() {
-	echo "CMD  : $@" > $RHIOT_RCP_LOG
-	$@  > $RHIOT_RCP_LOG 2>&1
+	echo "EXEC : $@" >> $RHIOT_RCP_LOG
+	$@  >> $RHIOT_RCP_LOG 2>&1
 	# check docker cmd and ignore "rm"
 	if [ $? -ne 0 ] && [ $2 != "rm" ] ; then
         log_error "Command = docker $@ = failed "
