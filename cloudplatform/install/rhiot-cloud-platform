@@ -15,6 +15,41 @@
 
 #!/usr/bin/env bash
 
+
+### Common function
+
+
+exec() {
+	echo "CMD  : $@" > $RHIOT_RCP_LOG
+	$@  > $RHIOT_RCP_LOG 2>&1
+	# check docker cmd and ignore "rm"
+	if [ $? -ne 0 ] && [ $2 != "rm" ] ; then
+        log_error "Command = docker $@ = failed "
+        log_info "Please check $RHIOT_RCP_LOG"
+        exit -1
+  fi
+}
+
+output_log() {
+	tee -a $RHIOT_RCP_LOG
+}
+
+log() {
+	echo "$@" | tee -a $RHIOT_RCP_LOG
+}
+
+log_cmd() {
+	log "CMD  : $@"
+}
+
+log_info() {
+	log "INFO : $@"
+}
+
+log_error() {
+	log "ERROR: $@"
+}
+
 ### General configuration
 
 if [ -z "${RHIOT_VERSION}" ]; then
@@ -35,24 +70,23 @@ REQUIRED_DOCKER_VERSION=1.8.2
 
 if [ ! -d ${RHIOT_HOME} ]; then
 	mkdir -p ${RHIOT_HOME}
-	echo "INFO : use RHIOT_HOME=${RHIOT_HOME}" 
-	echo "INFO : create RHIOT_HOME=${RHIOT_HOME}" 
+	log_info "create RHIOT_HOME=${RHIOT_HOME}" 
 fi
 
-echo "INFO : Starting Rhiot Cloud Platform" 
+log_info "Starting Rhiot Cloud Platform" 
 
 ### Docker boot init
 
 case "$OSTYPE" in 
 
 	linux-gnu)
-      if ! type "docker" ; then
-        echo "INFO : Docker not found - installing..."
+      if ! type "docker" > /dev/null 2>&1 ; then
+        log_info "Docker not found - installing..."
         curl -sSL https://get.docker.com/ | sh
       else
         DOCKER_VERSION=`docker version --format '{{.Server.Version}}'`
         if [ "$DOCKER_VERSION" \< "$REQUIRED_DOCKER_VERSION" ]; then
-          echo "INFO : Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot. Version ${DOCKER_VERSION} found - upgrading..."
+          log_info "Docker ${REQUIRED_DOCKER_VERSION} is required to run Rhiot. Version ${DOCKER_VERSION} found - upgrading..."
           curl -sSL https://get.docker.com/ | sh
         fi
       fi
@@ -60,13 +94,13 @@ case "$OSTYPE" in
   
 	darwin*)
       if ! type "docker-machine" > /dev/null 2>&1 ; then
-        echo "ERROR : Please install docker for MacOS X"
+        log_error "Please install docker for MacOS X"
         exit 1
       fi
 					
       docker-machine env $RHIOT_DOCKER_MACHINE_ENV > /dev/null 2>&1
       if [ $? -ne 0 ]; then
-        echo "INFO : docker-machine start $RHIOT_DOCKER_MACHINE_ENV"
+        log_info "docker-machine start $RHIOT_DOCKER_MACHINE_ENV"
         docker-machine start $RHIOT_DOCKER_MACHINE_ENV > /dev/null 2>&1
       fi
       eval $(docker-machine env $RHIOT_DOCKER_MACHINE_ENV)
@@ -74,52 +108,54 @@ case "$OSTYPE" in
 esac
 
 if [ $(docker ps | wc -l) -gt 1 ]; then
-	docker stop $(docker ps -q)
+	log_info "Stop previous container"
+	exec docker stop $(docker ps -q)
 fi
 
-docker rm mongodb AMQP_SERVICE_HOST datastream-node spark_master spark_worker 
+log_info "Remove previoexec dockerr"
+exec docker rm -f mongodb AMQP_SERVICE_HOST datastream-node spark_master spark_worker
 
 ### MongoDB
-echo "INFO : MongoDB" 
+log_info "MongoDB" 
 if [ $(docker ps -a | grep mongodb_data | wc -l) -eq 0 ]; then
-    echo "MongoDB data volume doesn't exist. Creating..."
-    docker run -v /data/db --name mongodb_data busybox true 
+    log_info "MongoDB data volume doesn't exist. Creating..."
+    exec docker run -v /data/db --name mongodb_data busybox true 
 fi
-docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo 
-echo "INFO : MongoDB started" 
+exec docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
+log_info "MongoDB started" 
 
 ### IoT Connector
 
-echo "INFO : ActiveMQ" 
-docker pull rhiot/activemq:${RHIOT_VERSION} 
-docker run -d --name AMQP_SERVICE_HOST \
+log_info "ActiveMQ" 
+exec docker pull rhiot/activemq:${RHIOT_VERSION} 
+exec docker run -d --name AMQP_SERVICE_HOST \
   -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -e spring_activemq_broker_websocketEnabled=true \
   -p 5672:5672 -p 9090:9090 \
   -t rhiot/activemq:${RHIOT_VERSION} 
-echo "INFO : ActiveMQ started"
+log_info "ActiveMQ started"
 
 ### Data stream node
 
-echo "INFO : Datastream" 
-docker pull rhiot/datastream-node 
-docker run -d --name datastream-node \
+log_info "Datastream" 
+exec docker pull rhiot/datastream-node 
+exec docker run -d --name datastream-node \
   --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
   --link mongodb:mongodb \
   -p 8080:8080 -p 5683:5683 -t rhiot/datastream-node 
-echo "INFO : Datastream started" 
+log_info "Datastream started" 
 
 ### Spark standalone cluster
 
-echo "INFO : Spark" 
-docker pull rhiot/spark-standalone:${RHIOT_VERSION}  
-docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"  
+log_info "Spark" 
+exec docker pull rhiot/spark-standalone:${RHIOT_VERSION}  
+exec docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"  
 sleep 5
 SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4 | uniq`
-echo "INFO : Spark master started" 
+log_info "Spark master started" 
 
-docker run -d --name spark_worker \
+exec docker run -d --name spark_worker \
   --link spark_master:spark_master --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} \
   -v /tmp/jobs:/tmp/jobs -P \
   -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh 
-echo "INFO : Spark worker started"
+log_info "Spark worker started"
 
