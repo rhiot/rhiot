@@ -46,6 +46,8 @@ public class ServiceBinding extends RouteBuilder {
 
     // Member collaborators
 
+    protected final DestinationBinding destinationBinding;
+
     protected final PayloadEncoding payloadEncoding;
 
     // Member configuration
@@ -54,14 +56,15 @@ public class ServiceBinding extends RouteBuilder {
 
     // Constructors
 
-    public ServiceBinding(PayloadEncoding payloadEncoding, String serviceChannel) {
-        this.serviceChannel = serviceChannel;
+    public ServiceBinding(DestinationBinding destinationBinding, PayloadEncoding payloadEncoding, String serviceChannel) {
+        this.destinationBinding = destinationBinding;
         this.payloadEncoding = payloadEncoding;
+        this.serviceChannel = serviceChannel;
     }
 
     @Override
     public void configure() throws Exception {
-        String fromChannel = format("amqp:%s.>", serviceChannel);
+        String fromChannel = destinationBinding.destination(serviceChannel);
         LOG.debug("Starting route consuming from channel: {}", fromChannel);
 
         from(fromChannel).process(exchange -> {

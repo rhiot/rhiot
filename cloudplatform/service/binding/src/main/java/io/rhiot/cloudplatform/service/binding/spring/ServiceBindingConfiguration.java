@@ -14,31 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloduplatform.service.spark.spring;
+package io.rhiot.cloudplatform.service.binding.spring;
 
-import io.rhiot.cloduplatform.service.spark.DefaultSparkService;
-import io.rhiot.cloduplatform.service.spark.SparkService;
-import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.DestinationBinding;
-import io.rhiot.cloudplatform.service.binding.ServiceBinding;
-import org.apache.camel.ProducerTemplate;
+import io.rhiot.cloudplatform.service.binding.PropertyResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
-/**
- * Spring configuration for components needed to properly start Spark service.
- */
 @Configuration
-public class SparkServiceConfiguration {
+public class ServiceBindingConfiguration {
 
-    @Bean(name = "spark")
-    SparkService sparkService(ProducerTemplate producerTemplate) {
-        return new DefaultSparkService(producerTemplate);
+    @Bean
+    DestinationBinding destinationBinding(PropertyResolver propertyResolver) {
+        return new DestinationBinding(propertyResolver);
     }
 
     @Bean
-    ServiceBinding sparkServiceBinding(DestinationBinding destinationBinding, PayloadEncoding payloadEncoding) {
-        return new ServiceBinding(destinationBinding, payloadEncoding, "spark");
+    PropertyResolver propertyResolver(Environment environment) {
+        return new SpringPropertyResolver(environment);
     }
 
 }

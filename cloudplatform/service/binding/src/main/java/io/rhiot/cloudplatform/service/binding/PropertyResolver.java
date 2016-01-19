@@ -14,20 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.document
+package io.rhiot.cloudplatform.service.binding;
 
-import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding
-import io.rhiot.cloudplatform.service.binding.DestinationBinding
-import io.rhiot.cloudplatform.service.binding.ServiceBinding
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
+public interface PropertyResolver {
 
-@Component
-class DocumentServiceBinding extends ServiceBinding {
-
-    @Autowired
-    DocumentServiceBinding(DestinationBinding destinationBinding, PayloadEncoding payloadEncoding) {
-        super(destinationBinding, payloadEncoding, 'document')
-    }
+    String resolveProperty(String property);
 
 }

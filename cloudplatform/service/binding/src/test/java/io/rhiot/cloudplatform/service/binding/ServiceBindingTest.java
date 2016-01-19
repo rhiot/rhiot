@@ -87,8 +87,8 @@ public class ServiceBindingTest extends CloudPlatformTest {
     public static class EchoServiceBinding extends ServiceBinding {
 
         @Autowired
-        public EchoServiceBinding(PayloadEncoding payloadEncoding) {
-            super(payloadEncoding, "echo");
+        public EchoServiceBinding(DestinationBinding destinationBinding, PayloadEncoding payloadEncoding) {
+            super(destinationBinding, payloadEncoding, "echo");
         }
 
     }

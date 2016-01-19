@@ -19,6 +19,7 @@ package io.rhiot.cloudplatform.adapter.rest;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import io.rhiot.cloudplatform.service.binding.DestinationBinding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 import org.junit.Test;
@@ -89,8 +90,8 @@ public class RestProtocolAdapterTest extends CloudPlatformTest {
     }
 
     @Bean
-    ServiceBinding testServiceBinding(PayloadEncoding payloadEncoding) {
-        return new ServiceBinding(payloadEncoding, "test");
+    ServiceBinding testServiceBinding(DestinationBinding destinationBinding, PayloadEncoding payloadEncoding) {
+        return new ServiceBinding(destinationBinding, payloadEncoding, "test");
     }
 
 }
