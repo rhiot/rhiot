@@ -16,6 +16,10 @@
  */
 package io.rhiot.cloduplatform.service.spark;
 
+/**
+ * Spark Service allows to send input data to the given Spark job definition and execute it against the given RDD. The
+ * results of the job execution are sent back to the IoT Connector.
+ */
 public interface SparkService {
 
     Object execute(String rdd, String rddCallback, Object payload);

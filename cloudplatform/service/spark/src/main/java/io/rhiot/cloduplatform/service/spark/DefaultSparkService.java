@@ -18,6 +18,8 @@ package io.rhiot.cloduplatform.service.spark;
 
 import org.apache.camel.ProducerTemplate;
 
+import static java.lang.String.format;
+
 public class DefaultSparkService implements SparkService {
 
     private final ProducerTemplate producerTemplate;
@@ -28,7 +30,7 @@ public class DefaultSparkService implements SparkService {
 
     @Override
     public Object execute(String rdd, String rddCallback, Object payload) {
-        return producerTemplate.requestBody(String.format("spark:rdd?rdd=#%s&rddCallback=#%s", rdd, rddCallback), payload);
+        return producerTemplate.requestBody(format("spark:rdd?rdd=#%s&rddCallback=#%s", rdd, rddCallback), payload);
     }
 
 }
