@@ -17,7 +17,6 @@
 package io.rhiot.cloudplatform.service.device.spring;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
-import io.rhiot.cloudplatform.service.binding.DestinationBinding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.service.device.DeviceRegistry;
 import io.rhiot.cloudplatform.service.device.InMemoryDeviceRegistry;
@@ -29,8 +28,8 @@ import org.springframework.context.annotation.Configuration;
 public class DeviceServiceConfiguration {
 
     @Bean
-    ServiceBinding deviceServiceBinding(DestinationBinding destinationBinding, PayloadEncoding payloadEncoding) {
-        return new ServiceBinding(destinationBinding, payloadEncoding, "device");
+    ServiceBinding deviceServiceBinding(PayloadEncoding payloadEncoding) {
+        return new ServiceBinding(payloadEncoding, "device");
     }
 
     @Bean(name = "device")

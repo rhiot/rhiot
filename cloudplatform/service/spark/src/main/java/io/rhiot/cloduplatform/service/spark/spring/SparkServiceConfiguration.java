@@ -19,9 +19,9 @@ package io.rhiot.cloduplatform.service.spark.spring;
 import io.rhiot.cloduplatform.service.spark.DefaultSparkService;
 import io.rhiot.cloduplatform.service.spark.SparkService;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
-import io.rhiot.cloudplatform.service.binding.DestinationBinding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import org.apache.camel.ProducerTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,8 +37,10 @@ public class SparkServiceConfiguration {
     }
 
     @Bean
-    ServiceBinding sparkServiceBinding(DestinationBinding destinationBinding, PayloadEncoding payloadEncoding) {
-        return new ServiceBinding(destinationBinding, payloadEncoding, "spark");
+    ServiceBinding sparkServiceBinding(
+            PayloadEncoding payloadEncoding,
+            @Value("${spark.serviceChannel:spark}") String serviceChannel) {
+        return new ServiceBinding(payloadEncoding, serviceChannel);
     }
 
 }

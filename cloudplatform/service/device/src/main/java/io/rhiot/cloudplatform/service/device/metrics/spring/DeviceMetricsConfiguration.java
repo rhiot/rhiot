@@ -18,7 +18,6 @@ package io.rhiot.cloudplatform.service.device.metrics.spring;
 
 import com.mongodb.Mongo;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
-import io.rhiot.cloudplatform.service.binding.DestinationBinding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.service.device.metrics.DeviceMetricsStore;
 import io.rhiot.cloudplatform.service.device.metrics.MongoDbDeviceMetricsStore;
@@ -29,8 +28,8 @@ import org.springframework.context.annotation.Configuration;
 public class DeviceMetricsConfiguration {
 
     @Bean
-    ServiceBinding deviceMetricsServiceBinding(DestinationBinding destinationBinding, PayloadEncoding payloadEncoding) {
-        return new ServiceBinding(destinationBinding, payloadEncoding, "device-metrics");
+    ServiceBinding deviceMetricsServiceBinding(PayloadEncoding payloadEncoding) {
+        return new ServiceBinding(payloadEncoding, "device-metrics");
     }
 
     @Bean(name = "device-metrics")
