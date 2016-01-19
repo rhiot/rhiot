@@ -32,15 +32,12 @@ public class DestinationBinding {
     }
 
     public String destination(String pattern) {
-        if(PROPERTY_PATTERN.matcher(pattern).find()) {
-            Matcher matcher = PROPERTY_PATTERN.matcher(pattern);
-            while (matcher.find()) {
-                String rawPropertyKey = matcher.group();
-                String propertyKey = rawPropertyKey.substring(2, rawPropertyKey.length() - 1);
-                String propertyValue = propertyResolver.resolveProperty(propertyKey);
-                pattern = pattern.replace(rawPropertyKey, propertyValue);
-            }
-            return pattern;
+        Matcher matcher = PROPERTY_PATTERN.matcher(pattern);
+        while (matcher.find()) {
+            String rawPropertyKey = matcher.group();
+            String propertyKey = rawPropertyKey.substring(2, rawPropertyKey.length() - 1);
+            String propertyValue = propertyResolver.resolveProperty(propertyKey);
+            pattern = pattern.replace(rawPropertyKey, propertyValue);
         }
         return format("amqp:%s.>", pattern);
     }

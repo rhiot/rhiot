@@ -34,7 +34,7 @@ public class DestinationBindingTest extends CloudPlatformTest {
         System.setProperty("arg2", "foo");
         DestinationBinding destinationBinding = cloudPlatform.applicationContext().getBean(DestinationBinding.class);
         String destination = destinationBinding.destination("service.operation.arg1.${arg2}");
-        Truth.assertThat(destination).isEqualTo("service.operation.arg1.foo");
+        Truth.assertThat(destination).isEqualTo("amqp:service.operation.arg1.foo.>");
     }
 
     @Test
@@ -43,7 +43,7 @@ public class DestinationBindingTest extends CloudPlatformTest {
         System.setProperty("arg2", "bar");
         DestinationBinding destinationBinding = cloudPlatform.applicationContext().getBean(DestinationBinding.class);
         String destination = destinationBinding.destination("service.operation.${arg1}.${arg2}");
-        Truth.assertThat(destination).isEqualTo("service.operation.foo.bar");
+        Truth.assertThat(destination).isEqualTo("amqp:service.operation.foo.bar.>");
     }
 
 }
