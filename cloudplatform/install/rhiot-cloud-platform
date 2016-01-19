@@ -59,15 +59,15 @@ case "$OSTYPE" in
   ;;
   
 	darwin*)
-      if ! type "docker-machine"  ; then
+      if ! type "docker-machine" > /dev/null 2>&1 ; then
         echo "ERROR : Please install docker for MacOS X"
         exit 1
       fi
 					
-      docker-machine env $RHIOT_DOCKER_MACHINE_ENV 
+      docker-machine env $RHIOT_DOCKER_MACHINE_ENV > /dev/null 2>&1
       if [ $? -ne 0 ]; then
         echo "INFO : docker-machine start $RHIOT_DOCKER_MACHINE_ENV"
-        docker-machine start $RHIOT_DOCKER_MACHINE_ENV 
+        docker-machine start $RHIOT_DOCKER_MACHINE_ENV > /dev/null 2>&1
       fi
       eval $(docker-machine env $RHIOT_DOCKER_MACHINE_ENV)
   ;;
