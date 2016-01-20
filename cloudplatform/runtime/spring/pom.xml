@@ -38,6 +38,10 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-cloudplatform-encoding-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-spring-activemq</artifactId>
         </dependency>
 
@@ -45,11 +49,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-encoding-spi</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
