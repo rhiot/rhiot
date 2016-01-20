@@ -79,6 +79,8 @@ esac
 SHELL_CONTAINER_STARTED=`docker ps | grep rhiot-shell`
 
 if [ -z "${SHELL_CONTAINER_STARTED}" ]; then
+    echo 'Pulling and starting shell server image...'
+    docker pull rhiot/shell:${RHIOT_VERSION} >> ${RHIOT_HOME}/rhiot-cmd.log 2>&1
     docker rm rhiot-shell >> ${RHIOT_HOME}/rhiot-cmd.log > /dev/null 2>&1
     docker run -d --name rhiot-shell --privileged=true --net=host -p 2000:2000 \
     -v /dev:/root/hostdev -e devices_directory=/root/hostdev \
@@ -86,6 +88,7 @@ if [ -z "${SHELL_CONTAINER_STARTED}" ]; then
     -e logging.level.root=${SHELL_LOG_LEVEL} \
     -it rhiot/shell:${RHIOT_VERSION}  > /dev/null 2>&1
     sleep 10 # Give SSHD time to start
+    echo 'Shell server started.'
 fi
 
 ### Command execution
