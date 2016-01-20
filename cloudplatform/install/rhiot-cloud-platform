@@ -22,7 +22,7 @@
 exec() {
 	echo "EXEC : $@" >> $RHIOT_RCP_LOG
 	$@  >> $RHIOT_RCP_LOG 2>&1
-	# check docker cmd and ignore "rm"
+	# check docker cmd and ignore "rm" failed
 	if [ $? -ne 0 ] && [ $2 != "rm" ] ; then
         log_error "Command = docker $@ = failed "
         log_info "Please check $RHIOT_RCP_LOG"
@@ -98,10 +98,10 @@ case "$OSTYPE" in
         exit 1
       fi
 					
-      docker-machine env $RHIOT_DOCKER_MACHINE_ENV > /dev/null 2>&1
+      docker-machine env $RHIOT_DOCKER_MACHINE_ENV >> $RHIOT_RCP_LOG 2>&1
       if [ $? -ne 0 ]; then
         log_info "docker-machine start $RHIOT_DOCKER_MACHINE_ENV"
-        docker-machine start $RHIOT_DOCKER_MACHINE_ENV > /dev/null 2>&1
+        docker-machine start $RHIOT_DOCKER_MACHINE_ENV >> $RHIOT_RCP_LOG 2>&1
       fi
       eval $(docker-machine env $RHIOT_DOCKER_MACHINE_ENV)
   ;;
