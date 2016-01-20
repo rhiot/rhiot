@@ -89,6 +89,7 @@ if [ -z "${SHELL_CONTAINER_STARTED}" ]; then
     -it rhiot/shell:${RHIOT_VERSION}  > /dev/null 2>&1
     sleep 10 # Give SSHD time to start
     echo 'Shell server started.'
+    echo
 fi
 
 ### Command execution
