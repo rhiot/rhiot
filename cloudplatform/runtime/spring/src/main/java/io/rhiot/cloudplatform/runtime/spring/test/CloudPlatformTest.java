@@ -16,21 +16,27 @@
  */
 package io.rhiot.cloudplatform.runtime.spring.test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.rhiot.cloudplatform.runtime.spring.CloudPlatform;
+import static org.springframework.util.SocketUtils.findAvailableTcpPort;
+
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import io.rhiot.cloudplatform.runtime.spring.CloudPlatform;
 import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 
-import static org.springframework.util.SocketUtils.findAvailableTcpPort;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class CloudPlatformTest extends Assert {
 
     protected ObjectMapper json = new ObjectMapper();
+
+    protected int amqpPort;
+
+    protected int websocketPort;
 
     static private boolean dataStreamStarted;
 
@@ -44,16 +50,19 @@ public abstract class CloudPlatformTest extends Assert {
 
     protected static IoTConnector connector;
 
-
     @Before
     public void before() {
         System.setProperty("spring.activemq.broker.enabled", true + "");
         System.setProperty("spring.activemq.broker.amqpEnabled", true + "");
-        int amqpPort = findAvailableTcpPort();
+        amqpPort = findAvailableTcpPort();
         System.setProperty("spring.activemq.broker.amqpPort", amqpPort + "");
         System.setProperty("AMQP_SERVICE_PORT", amqpPort + "");
 
-        if(!dataStreamStarted) {
+        System.setProperty("spring.activemq.broker.websocketEnabled", true + "");
+        websocketPort = findAvailableTcpPort();
+        System.setProperty("spring.activemq.broker.websocketPort", websocketPort + "");
+
+        if (!dataStreamStarted) {
             beforeDataStreamStarted();
             cloudPlatform = cloudPlatform.start();
             camelContext = cloudPlatform.applicationContext().getBean(CamelContext.class);
