@@ -231,6 +231,7 @@ class ShellTest {
         configCommand('raspbian-config-boot', 'foo bar')
 
         // Then
+        sleep(5000) // Verify if that makes test more stable
         def properties = new Properties()
         properties.load(new FileInputStream(Paths.get(device.root().absolutePath, 'boot', 'config.txt').toFile()))
         assertThat(properties.getProperty('foo')).isEqualTo('bar')
