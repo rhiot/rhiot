@@ -5,12 +5,12 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-datastream</artifactId>
+        <artifactId>rhiot-cloudplatform-paas</artifactId>
         <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: DataStream :: Node</name>
-    <artifactId>rhiot-datastream-node</artifactId>
+    <name>Rhiot :: Cloud platform :: PaaS :: Services</name>
+    <artifactId>rhiot-cloudplatform-paas-services</artifactId>
 
     <licenses>
         <license>
@@ -19,18 +19,15 @@
         </license>
     </licenses>
 
+    <properties>
+        <docker.image.target>paas-services</docker.image.target>
+        <fatjar.mainClass>io.rhiot.cloudplatform.runtime.spring.CloudPlatform</fatjar.mainClass>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-adapter-leshan</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-adapter-rest</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
@@ -58,9 +55,27 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-cloudplatform-adapter-leshan</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-utils-leshan-client</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jolokia</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

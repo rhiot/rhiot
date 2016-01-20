@@ -15,16 +15,14 @@
 
 #!/usr/bin/env bash
 
-
 ### Common function
 
-
-exec() {
+exe() {
 	echo "EXEC : $@" >> $RHIOT_RCP_LOG
 	$@  >> $RHIOT_RCP_LOG 2>&1
 	# check docker cmd and ignore "rm" failed
 	if [ $? -ne 0 ] && [ $2 != "rm" ] ; then
-        log_error "Command = docker $@ = failed "
+        log_error "Command 'docker $@' failed."
         log_info "Please check $RHIOT_RCP_LOG"
         exit -1
   fi
@@ -62,6 +60,10 @@ fi
 
 if [ -z "${RHIOT_DOCKER_MACHINE_ENV}" ]; then
   RHIOT_DOCKER_MACHINE_ENV="default"
+fi
+
+if [ -z "${CONTAINERS_LOG_LEVEL}" ]; then
+  CONTAINERS_LOG_LEVEL="INFO"
 fi
 
 RHIOT_RCP_LOG=$RHIOT_HOME/rcp.log
@@ -109,51 +111,61 @@ esac
 
 if [ $(docker ps | wc -l) -gt 1 ]; then
 	log_info "Stop previous container"
-	exec docker stop $(docker ps -q)
+	exe docker stop $(docker ps -q)
 fi
 
-log_info "Remove previoexec dockerr"
-exec docker rm -f mongodb AMQP_SERVICE_HOST datastream-node spark_master spark_worker
+log_info "Removing old containers..."
+exe docker rm -f mongodb AMQP_SERVICE_HOST paas-adapters paas-services spark_master spark_worker
 
 ### MongoDB
 log_info "MongoDB" 
 if [ $(docker ps -a | grep mongodb_data | wc -l) -eq 0 ]; then
     log_info "MongoDB data volume doesn't exist. Creating..."
-    exec docker run -v /data/db --name mongodb_data busybox true 
+    exe docker run -v /data/db --name mongodb_data busybox true
 fi
-exec docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
+exe docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 log_info "MongoDB started" 
 
 ### IoT Connector
 
 log_info "ActiveMQ" 
-exec docker pull rhiot/activemq:${RHIOT_VERSION} 
-exec docker run -d --name AMQP_SERVICE_HOST \
+exe docker pull rhiot/activemq:${RHIOT_VERSION}
+exe docker run -d --name AMQP_SERVICE_HOST \
   -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -e spring_activemq_broker_websocketEnabled=true \
   -p 5672:5672 -p 9090:9090 \
   -t rhiot/activemq:${RHIOT_VERSION} 
 log_info "ActiveMQ started"
 
-### Data stream node
+### Protocol adapters
 
-log_info "Datastream" 
-exec docker pull rhiot/datastream-node 
-exec docker run -d --name datastream-node \
+log_info "Starting protocol adapters..."
+exe docker pull rhiot/paas-adapters:${RHIOT_VERSION}
+exe docker run -d --name paas-adapters \
+  --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
+  -p 8080:8080 -p 5683:5683 -t rhiot/paas-adapters
+log_info "Protocol adapters started."
+
+### Services
+
+log_info "Starting services..."
+exe docker pull rhiot/paas-services:${RHIOT_VERSION}
+exe docker run -d --name paas-services \
+  -e logging.level.root=${CONTAINERS_LOG_LEVEL} \
   --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
   --link mongodb:mongodb \
-  -p 8080:8080 -p 5683:5683 -t rhiot/datastream-node 
-log_info "Datastream started" 
+  -t rhiot/paas-services
+log_info "Services started."
 
 ### Spark standalone cluster
 
 log_info "Spark" 
-exec docker pull rhiot/spark-standalone:${RHIOT_VERSION}  
-exec docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"  
+exe docker pull rhiot/spark-standalone:${RHIOT_VERSION}
+exe docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"
 sleep 5
 SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4 | uniq`
 log_info "Spark master started" 
 
-exec docker run -d --name spark_worker \
+exe docker run -d --name spark_worker \
   --link spark_master:spark_master --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} \
   -v /tmp/jobs:/tmp/jobs -P \
   -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh 

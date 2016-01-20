@@ -27,7 +27,7 @@ import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.utils.Uuids.uuid
 
 @Configuration
-class DataStreamNodeTest extends CloudPlatformTest {
+class PaasServicesTest extends CloudPlatformTest {
 
     @Test
     void smokeTestMongoDocumentStreamConsumer() {
