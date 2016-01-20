@@ -204,6 +204,7 @@ class ShellTest {
         configCommand('kura-config-ini', 'foo bar')
 
         // Then
+        sleep(5000) // Verify if that makes test more stable
         def properties = new Properties()
         properties.load(new FileInputStream(Paths.get(device.root().absolutePath, 'opt', 'eclipse', 'kura', 'kura', 'config.ini').toFile()))
         assertThat(properties.getProperty('foo')).isEqualTo('bar')
