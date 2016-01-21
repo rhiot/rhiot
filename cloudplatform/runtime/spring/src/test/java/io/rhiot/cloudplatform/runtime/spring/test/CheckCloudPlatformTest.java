@@ -1,3 +1,4 @@
+package io.rhiot.cloudplatform.runtime.spring.test;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 
 import org.junit.Ignore;
