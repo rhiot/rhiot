@@ -16,7 +16,6 @@
  */
 package io.rhiot.cloudplatform.runtime.spring;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -25,9 +24,10 @@ import org.junit.Test;
 public class CloudPlatformStartStopTest {
 
     @Test
-    @Ignore
-    public void testCloudPlaformTestClassTest() {
+    public void testCloudPlaformTestClassTest() throws InterruptedException {
         CloudPlatform cloudPlatform = new CloudPlatform().start();
+
+        Thread.sleep(1000l);
 
         cloudPlatform.stop();
     }
