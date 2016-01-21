@@ -66,6 +66,16 @@ public class IoTConnector {
         }
     }
 
+    public <T> T pollChannel(String channel, Class<T> responseType) {
+        byte[] busResponse = producerTemplate.getCamelContext().createConsumerTemplate().receiveBody("amqp:" + channel, byte[].class);
+        Object decodedResponse = payloadEncoding.decode(busResponse);
+        if(decodedResponse != null && responseType.isAssignableFrom(decodedResponse.getClass())) {
+            return (T) decodedResponse;
+        } else {
+            return new ObjectMapper().convertValue(decodedResponse, responseType);
+        }
+    }
+
     public  <T> T fromBus(String channel, Object payload, Class<T> responseType, Header... headers) {
         Map<String, Object> collectedHeaders = new HashMap<>();
         for(Header header : headers) {

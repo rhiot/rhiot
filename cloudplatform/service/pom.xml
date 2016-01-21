@@ -23,6 +23,7 @@
     <modules>
         <module>binding</module>
         <module>device</module>
+        <module>mailbox</module>
         <module>spark</module>
     </modules>
 
