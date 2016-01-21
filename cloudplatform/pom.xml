@@ -26,7 +26,7 @@
         <module>encoding</module>
         <module>adapter</module>
         <module>service</module>
-        <module>pass</module>
+        <module>paas</module>
     </modules>
 
 </project>
