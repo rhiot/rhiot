@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.runtime.spring.test;
+package io.rhiot.cloudplatform.runtime.spring;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.context.annotation.Configuration;
 
 /**
- * To test JUnit integration
+ * To test standalone integration
  */
-@Configuration
-public class CheckCloudPlatformTest extends CloudPlatformTest {
+public class CloudPlatformStartStopTest {
 
     @Test
     @Ignore
     public void testCloudPlaformTestClassTest() {
-        assertTrue(true);
+        CloudPlatform cloudPlatform = new CloudPlatform().start();
+
+        cloudPlatform.stop();
     }
 }
