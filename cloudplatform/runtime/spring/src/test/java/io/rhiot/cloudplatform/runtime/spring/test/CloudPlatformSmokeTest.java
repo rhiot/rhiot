@@ -16,6 +16,7 @@
  */
 package io.rhiot.cloudplatform.runtime.spring.test;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 public class CloudPlatformSmokeTest extends CloudPlatformTest {
 
     @Test
+    @Ignore
     public void testCloudPlaformTestClassTest() {
         assertTrue(true);
     }
