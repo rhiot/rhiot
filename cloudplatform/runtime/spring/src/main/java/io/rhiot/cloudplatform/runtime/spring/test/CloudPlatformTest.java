@@ -27,18 +27,19 @@ import org.apache.camel.ProducerTemplate;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class CloudPlatformTest extends Assert {
 
+    private static boolean dataStreamStarted;
+
     protected ObjectMapper json = new ObjectMapper();
 
-    protected int amqpPort;
+    protected static int amqpPort;
 
-    protected int websocketPort;
-
-    static private boolean dataStreamStarted;
+    protected static int websocketPort;
 
     protected static CloudPlatform cloudPlatform = new CloudPlatform();
 
@@ -50,18 +51,20 @@ public abstract class CloudPlatformTest extends Assert {
 
     protected static IoTConnector connector;
 
-    @Before
-    public void before() {
+    @BeforeClass
+    public static void beforeClass() {
         System.setProperty("spring.activemq.broker.enabled", true + "");
         System.setProperty("spring.activemq.broker.amqpEnabled", true + "");
         amqpPort = findAvailableTcpPort();
         System.setProperty("spring.activemq.broker.amqpPort", amqpPort + "");
         System.setProperty("AMQP_SERVICE_PORT", amqpPort + "");
-
         System.setProperty("spring.activemq.broker.websocketEnabled", true + "");
         websocketPort = findAvailableTcpPort();
         System.setProperty("spring.activemq.broker.websocketPort", websocketPort + "");
+    }
 
+    @Before
+    public void before() {
         if (!dataStreamStarted) {
             beforeDataStreamStarted();
             cloudPlatform = cloudPlatform.start();
@@ -81,7 +84,7 @@ public abstract class CloudPlatformTest extends Assert {
     }
 
     @AfterClass
-    public static void after() {
+    public static void afterClass() {
         try {
             cloudPlatform.stop();
         } finally {
