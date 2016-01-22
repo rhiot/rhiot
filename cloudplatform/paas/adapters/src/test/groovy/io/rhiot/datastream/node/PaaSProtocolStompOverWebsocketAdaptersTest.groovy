@@ -16,7 +16,14 @@
  */
 package io.rhiot.datastream.node
 
+import static com.google.common.truth.Truth.assertThat
+import static org.mockito.Matchers.any
+import static org.mockito.Matchers.eq
+import static org.mockito.Mockito.verify
+import static org.mockito.Mockito.when
+
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
+
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -30,11 +37,6 @@ import org.springframework.util.concurrent.ListenableFuture
 import org.springframework.web.socket.client.WebSocketClient
 import org.springframework.web.socket.client.standard.StandardWebSocketClient
 import org.springframework.web.socket.messaging.WebSocketStompClient
-
-import static org.mockito.Matchers.any
-import static org.mockito.Matchers.eq
-import static org.mockito.Mockito.verify
-import static org.mockito.Mockito.when
 
 @Configuration
 class PaaSProtocolStompOverWebsocketAdaptersTest extends CloudPlatformTest {
@@ -82,17 +84,19 @@ class PaaSProtocolStompOverWebsocketAdaptersTest extends CloudPlatformTest {
         ListenableFuture<StompSession> listenable = stompClient.connect(getWebsocketUrl(), mockHandler);
         stompSession = listenable.get();
 
-        stompSession.subscribe("/topic/foo", mockFrameHandler);
+        sleep(1000L);
+
+        stompSession.send("document.save.WsDoc", payloadEncoding.encode([foo: 'bar']));
 
         sleep(1000L);
 
-        stompSession.send("/topic/foo", "payload");
-
-        sleep(1000L);
+        // When
+        def count = connector.fromBus("document.count.WsDoc", int.class)
 
         verify(mockHandler).afterConnected(any(),any());
 
-        verify(mockFrameHandler).handleFrame(any(),eq("payload"));
+        // Then
+        assertThat(count).isEqualTo(1)
 
     }
 
