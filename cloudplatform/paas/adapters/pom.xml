@@ -1,91 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-cloudplatform-paas</artifactId>
-        <version>0.1.4-SNAPSHOT</version>
-        <relativePath>..</relativePath>
-    </parent>
-    <name>Rhiot :: Cloud platform :: PaaS :: Adapters</name>
-    <artifactId>rhiot-cloudplatform-paas-adapters</artifactId>
+	<parent>
+		<groupId>io.rhiot</groupId>
+		<artifactId>rhiot-cloudplatform-paas</artifactId>
+		<version>0.1.4-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<name>Rhiot :: Cloud platform :: PaaS :: Adapters</name>
+	<artifactId>rhiot-cloudplatform-paas-adapters</artifactId>
 
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 
-    <properties>
-        <docker.image.target>paas-adapters</docker.image.target>
-        <fatjar.mainClass>io.rhiot.cloudplatform.runtime.spring.CloudPlatform</fatjar.mainClass>
-    </properties>
+	<properties>
+		<docker.image.target>paas-adapters</docker.image.target>
+		<fatjar.mainClass>io.rhiot.cloudplatform.runtime.spring.CloudPlatform</fatjar.mainClass>
+	</properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-adapter-leshan</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-adapter-rest</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-encoding-json</artifactId>
-        </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-cloudplatform-adapter-leshan</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-cloudplatform-adapter-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-cloudplatform-encoding-json</artifactId>
+		</dependency>
 
-        <!-- Testing -->
-        <dependency>
-            <groupId>com.google.truth</groupId>
-            <artifactId>truth</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-service-device</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-datastream-document-mongodb</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-utils-leshan-client</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+		<!-- Testing -->
+		<dependency>
+			<groupId>com.google.truth</groupId>
+			<artifactId>truth</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-cloudplatform-service-device</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-datastream-document-mongodb</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-utils-leshan-client</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.undertow</groupId>
+			<artifactId>undertow-websockets-jsr</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jolokia</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.jolokia</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
