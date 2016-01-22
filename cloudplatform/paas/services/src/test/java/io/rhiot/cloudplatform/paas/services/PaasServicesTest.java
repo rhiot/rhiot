@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.node;
+package io.rhiot.cloudplatform.paas.services;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
@@ -36,14 +36,14 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 public class PaasServicesTest extends CloudPlatformTest {
 
     @Test
-    public void smokeTestMongoDocumentStreamConsumer() {
+    public void smokeTestMongoDocumentService() {
         connector.fromBus("document.save.doc", ImmutableMap.of("foo", "bar"), String.class);
         int count = connector.fromBus("document.count.doc", int.class);
         Truth.assertThat(count).isEqualTo(1);
     }
 
     @Test
-    public void smokeTestLeshanProtocolAdapter() {
+    public void smokeTestDeviceService() {
         // Given
         LeshanClientTemplate device = LeshanClientTemplate.createVirtualLeshanClientTemplate(uuid()).connect();
 
