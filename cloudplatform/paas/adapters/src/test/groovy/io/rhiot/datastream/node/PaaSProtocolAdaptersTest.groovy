@@ -20,9 +20,7 @@ import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import io.rhiot.cloudplatform.schema.device.Device
 import io.rhiot.cloudplatform.schema.device.DeviceConstants
 import io.rhiot.utils.leshan.client.LeshanClientTemplate
-import org.apache.commons.io.IOUtils
 import org.junit.Test
-import org.springframework.boot.test.TestRestTemplate
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
 
