@@ -64,7 +64,7 @@ class PaaSProtocolStompOverWebsocketAdaptersTest extends CloudPlatformTest {
     }
 
     // WebSocket tests
-    @Test(timeout = 10000L)
+    @Test(timeout = 5000L)
     void smokeTestWebsocketConnectionStreamConsumer() {
 
         StompSessionHandlerAdapter mock = Mockito.mock(StompSessionHandlerAdapter.class);
@@ -74,7 +74,7 @@ class PaaSProtocolStompOverWebsocketAdaptersTest extends CloudPlatformTest {
         verify(mock).afterConnected(any(),any());
     }
 
-    @Test(timeout = 10000L)
+    @Test(timeout = 5000L)
     void smokeTestWebsocketSubscribeStreamConsumer() {
 
         StompSessionHandlerAdapter mockHandler = Mockito.mock(StompSessionHandlerAdapter.class);
