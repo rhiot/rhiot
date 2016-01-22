@@ -47,7 +47,7 @@ class PaaSProtocolStompOverWebsocketAdaptersTest extends CloudPlatformTest {
     StompSession stompSession = null;
 
     static String getWebsocketUrl() {
-        "ws://127.0.0.1:" + websocketPort + "/endpoint";
+        "ws://127.0.0.1:" + websocketPort;
     }
 
     @Before
