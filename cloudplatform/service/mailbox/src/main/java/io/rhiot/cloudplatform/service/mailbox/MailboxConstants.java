@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.service.mailbox.spring;
+package io.rhiot.cloudplatform.service.mailbox;
 
 import static java.lang.String.format;
 
@@ -22,11 +22,21 @@ public final class MailboxConstants {
 
     public static final String CHANNEL_INBOX = "inbox";
 
+    public static final String CHANNEL_OUTBOX = "mailbox.outbox";
+
+    // Constructors
+
     private MailboxConstants() {
     }
 
+    // Channel constant helpers
+
     public static String inbox(String deviceId) {
         return format("%s.%s", CHANNEL_INBOX, deviceId);
+    }
+
+    public static String outbox(String deviceId) {
+        return format("%s.%s", CHANNEL_OUTBOX, deviceId);
     }
 
 }

@@ -21,7 +21,7 @@ import org.apache.camel.ProducerTemplate;
 
 import java.util.Map;
 
-import static io.rhiot.cloudplatform.service.mailbox.spring.MailboxConstants.inbox;
+import static io.rhiot.cloudplatform.service.mailbox.MailboxConstants.inbox;
 
 public class DefaultMailboxService implements MailboxService {
 

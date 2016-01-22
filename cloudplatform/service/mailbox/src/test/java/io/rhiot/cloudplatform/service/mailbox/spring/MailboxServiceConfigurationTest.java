@@ -24,7 +24,8 @@ import org.junit.Test;
 
 import java.util.Map;
 
-import static io.rhiot.cloudplatform.service.mailbox.spring.MailboxConstants.inbox;
+import static io.rhiot.cloudplatform.service.mailbox.MailboxConstants.inbox;
+import static io.rhiot.cloudplatform.service.mailbox.MailboxConstants.outbox;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 public class MailboxServiceConfigurationTest extends CloudPlatformTest {
@@ -33,14 +34,14 @@ public class MailboxServiceConfigurationTest extends CloudPlatformTest {
 
     @Test
     public void shouldReceiveMail() {
-        connector.toBusAndWait("mailbox.outbox." + deviceId, ImmutableMap.of("foo", "bar"));
+        connector.toBusAndWait(outbox(deviceId), ImmutableMap.of("foo", "bar"));
         Map<String, Object> mail = connector.pollChannel(inbox(deviceId), Map.class);
         Truth.assertThat(mail.get("foo")).isEqualTo("bar");
     }
 
     @Test
     public void shouldSaveMail() {
-        connector.toBusAndWait("mailbox.outbox." + deviceId, ImmutableMap.of("foo", "bar"));
+        connector.toBusAndWait(outbox(deviceId), ImmutableMap.of("foo", "bar"));
         Map<String, Map<String, Object>> mails = cloudPlatform.applicationContext().getBean(InMemoryMailStore.class).mails();
         Truth.assertThat(mails.size()).isGreaterThan(0);
     }
