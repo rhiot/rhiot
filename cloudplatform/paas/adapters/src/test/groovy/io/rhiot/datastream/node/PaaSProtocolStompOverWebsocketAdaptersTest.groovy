@@ -36,9 +36,6 @@ import static org.mockito.Matchers.eq
 import static org.mockito.Mockito.verify
 import static org.mockito.Mockito.when
 
-import static com.google.common.truth.Truth.assertThat
-
-
 @Configuration
 class PaaSProtocolStompOverWebsocketAdaptersTest extends CloudPlatformTest {
 
@@ -48,7 +45,7 @@ class PaaSProtocolStompOverWebsocketAdaptersTest extends CloudPlatformTest {
     StompSession stompSession = null;
 
     static String getWebsocketUrl() {
-        "ws://127.0.0.1:" + websocketPort;
+        "ws://127.0.0.1:" + websocketPort + "/endpoint";
     }
 
     @Before
@@ -75,7 +72,7 @@ class PaaSProtocolStompOverWebsocketAdaptersTest extends CloudPlatformTest {
         verify(mock).afterConnected(any(),any());
     }
 
-    @Test(timeout = 1000000L)
+    @Test(timeout = 10000L)
     void smokeTestWebsocketSubscribeStreamConsumer() {
 
         StompSessionHandlerAdapter mockHandler = Mockito.mock(StompSessionHandlerAdapter.class);
@@ -85,20 +82,17 @@ class PaaSProtocolStompOverWebsocketAdaptersTest extends CloudPlatformTest {
         ListenableFuture<StompSession> listenable = stompClient.connect(getWebsocketUrl(), mockHandler);
         stompSession = listenable.get();
 
-        sleep(1000L);
-
-        stompSession.send("document.save.WsDoc", payloadEncoding.encode([foo: 'bar']));
+        stompSession.subscribe("/topic/foo", mockFrameHandler);
 
         sleep(1000L);
 
-        // When
-        def count = connector.fromBus("document.count.WsDoc", int.class)
+        stompSession.send("/topic/foo", "payload");
+
+        sleep(1000L);
 
         verify(mockHandler).afterConnected(any(),any());
 
-        // Then
-        assertThat(count).isEqualTo(1)
-
+        verify(mockFrameHandler).handleFrame(any(),eq("payload"));
 
     }
 
