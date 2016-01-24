@@ -5,7 +5,7 @@
 
     <parent>
         <groupId>io.rhiot</groupId>
-        <artifactId>rhiot-datastream</artifactId>
+        <artifactId>rhiot-cloudplatform</artifactId>
         <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
