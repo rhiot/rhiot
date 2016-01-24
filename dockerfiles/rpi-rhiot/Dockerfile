@@ -20,9 +20,11 @@ FROM resin/rpi-raspbian:jessie
 MAINTAINER Greg AUTRIC <gautric@redhat.com>
 
 ## to build it
-## sudo docker build -t rpi-rhiot .
+## sudo docker build -t ${USER}/rpi-rhiot-${RPI_VERSION}:${RHIOT_VERSION} --build-arg  RHIOT_VERSION=${RHIOT_VERSION} --build-arg  KURA_VERSION=${KURA_VERSION} --build-arg RPI_VERSION=${RPI_VERSION} .
 ## to run it
-## sudo docker run -t rpi-rhiot
+## sudo docker run -i -p 80:80 -p 5002:5002 -t ${USER}/rpi-rhiot-${RPI_VERSION}:${RHIOT_VERSION}
+## or
+## sudo docker run -i -P -t ${USER}/rpi-rhiot -${RPI_VERSION}:${RHIOT_VERSION} 
 
 ## Variable ENV
 ENV CAMEL_VERSION=${CAMEL_VERSION:-2.16.1}
