@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-FROM rpi-kura
+FROM resin/rpi-raspbian:jessie
 
 MAINTAINER Greg AUTRIC <gautric@redhat.com>
 
@@ -25,9 +25,17 @@ MAINTAINER Greg AUTRIC <gautric@redhat.com>
 ## sudo docker run -t rpi-rhiot
 
 ## Variable ENV
-ENV CAMEL_VERSION=2.16.1
-ENV RHIOT_VERSION=0.1.3
+ENV CAMEL_VERSION=${CAMEL_VERSION:-2.16.1}
+ENV RHIOT_VERSION=${RHIOT_VERSION:-0.1.3}
+ENV JAVA_VERSION=${JAVA_VERSION:-7}
 
+ARG KURA_VERSION
+ENV KURA_VERSION=${KURA_VERSION:-1.3.0}
+ARG RPI_VERSION
+ENV RPI_VERSION=${RPI_VERSION:-raspberry-pi}
+
+ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}-openjdk-armhf
+ENV KURA_HOME=/opt/eclipse/kura
 ENV RHIOT_FOLDER=/opt/rhiot
 ENV RHIOT_EMBEDDED_PLUGINS_FOLDER=${RHIOT_FOLDER}/plugins-embedded
 ENV RHIOT_BIN_FOLDER=${RHIOT_FOLDER}/bin
@@ -37,10 +45,23 @@ LABEL project="Rhiot"
 LABEL projectURL="http://rhiot.io"
 LABEL description="Rhiot docker image"
 
+## Debian/Raspbian package installation
+RUN apt-get update && \
+    apt-get install -y apt-utils unzip ethtool dos2unix telnet bind9 hostapd isc-dhcp-server iw monit wget openjdk-${JAVA_VERSION}-jdk --no-install-recommends  && \
+    rm -rf /var/lib/apt/lists/*
+
+## Kura installation
+RUN wget https://s3.amazonaws.com/kura_downloads/raspbian/release/${KURA_VERSION}/kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
+RUN dpkg -i kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
+RUN rm kura_${KURA_VERSION}_${RPI_VERSION}_installer.deb
+
+## Hack for debian/jessie
+RUN if [ -d $(dirname `find /lib -name libudev.so.1`) ] && [ ! -f $(dirname `find /lib -name libudev.so.1`)/libudev.so.0 ] ; then ln -sf `find /lib -name libudev.so.1` $(dirname `find /lib -name libudev.so.1`)/libudev.so.0; fi
+
 RUN mkdir -p ${RHIOT_EMBEDDED_PLUGINS_FOLDER}
 RUN mkdir -p ${RHIOT_BIN_FOLDER}
 
-## Kura installation
+## Rhiot installation
 RUN wget -P ${RHIOT_EMBEDDED_PLUGINS_FOLDER} https://repo1.maven.org/maven2/org/apache/camel/camel-core/${CAMEL_VERSION}/camel-core-${CAMEL_VERSION}.jar
 RUN wget -P ${RHIOT_EMBEDDED_PLUGINS_FOLDER} https://repo1.maven.org/maven2/org/apache/camel/camel-core-osgi/${CAMEL_VERSION}/camel-core-osgi-${CAMEL_VERSION}.jar
 RUN wget -P ${RHIOT_EMBEDDED_PLUGINS_FOLDER} https://repo1.maven.org/maven2/org/apache/camel/camel-kura/${CAMEL_VERSION}/camel-kura-${CAMEL_VERSION}.jar
