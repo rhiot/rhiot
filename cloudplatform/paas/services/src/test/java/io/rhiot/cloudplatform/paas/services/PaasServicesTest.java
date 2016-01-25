@@ -19,9 +19,8 @@ package io.rhiot.cloudplatform.paas.services;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
-import io.rhiot.cloudplatform.schema.device.Device;
-import io.rhiot.cloudplatform.schema.device.DeviceConstants;
 import io.rhiot.utils.leshan.client.LeshanClientTemplate;
+import org.eclipse.hono.service.device.api.Device;
 import org.junit.Test;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,6 +30,7 @@ import static io.rhiot.cloudplatform.service.mailbox.MailboxConstants.inbox;
 import static io.rhiot.cloudplatform.service.mailbox.MailboxConstants.outbox;
 import static io.rhiot.utils.Uuids.uuid;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.eclipse.hono.service.device.api.DeviceConstants.getDevice;
 
 @Configuration
 public class PaasServicesTest extends CloudPlatformTest {
@@ -48,7 +48,7 @@ public class PaasServicesTest extends CloudPlatformTest {
         LeshanClientTemplate device = LeshanClientTemplate.createVirtualLeshanClientTemplate(uuid()).connect();
 
         // When
-        Device loadedDevice = connector.fromBus(DeviceConstants.getDevice(device.clientId()), Device.class);
+        Device loadedDevice = connector.fromBus(getDevice(device.clientId()), Device.class);
 
         // Then
         Truth.assertThat(loadedDevice.getDeviceId()).isEqualTo(device.clientId());

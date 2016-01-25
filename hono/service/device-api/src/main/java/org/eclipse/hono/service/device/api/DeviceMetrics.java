@@ -1,5 +1,5 @@
 /**
- * Licensed to the Rhiot under one or more
+ * Licensed to the Eclipse Foundation under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The licenses this file to You under the Apache License, Version 2.0
@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.schema.device;
+package org.eclipse.hono.service.device.api;
 
 public enum DeviceMetrics {
 

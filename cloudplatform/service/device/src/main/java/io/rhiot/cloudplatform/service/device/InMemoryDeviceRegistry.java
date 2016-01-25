@@ -16,7 +16,8 @@
  */
 package io.rhiot.cloudplatform.service.device;
 
-import io.rhiot.cloudplatform.schema.device.Device;
+import org.eclipse.hono.service.device.api.Device;
+import org.eclipse.hono.service.device.api.DeviceRegistry;
 
 import java.time.LocalTime;
 import java.time.ZoneId;

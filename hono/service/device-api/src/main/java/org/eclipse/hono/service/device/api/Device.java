@@ -1,5 +1,5 @@
 /**
- * Licensed to the Rhiot under one or more
+ * Licensed to the Eclipse Foundation under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The licenses this file to You under the Apache License, Version 2.0
@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.schema.device;
+package org.eclipse.hono.service.device.api;
 
 import java.net.InetSocketAddress;
 import java.util.Date;
@@ -56,7 +56,8 @@ public class Device {
 
     public Device(String deviceId, String registrationId, Date registrationDate, Date lastUpdate,
                   String address, int port, InetSocketAddress registrationEndpointAddress,
-                  long lifeTimeInSec, String smsNumber, String lwM2mVersion, BindingMode bindingMode) {
+                  long lifeTimeInSec, String smsNumber, String lwM2mVersion, BindingMode bindingMode,
+                  List<LinkObject> objectLinks) {
         this.deviceId = deviceId;
         this.registrationId = registrationId;
         this.registrationDate = registrationDate;
@@ -68,6 +69,7 @@ public class Device {
         this.smsNumber = smsNumber;
         this.lwM2mVersion = lwM2mVersion;
         this.bindingMode = bindingMode;
+        this.objectLinks = objectLinks;
     }
 
     // Getters and setters

@@ -260,6 +260,11 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
+				<artifactId>hono-service-device-api</artifactId>
+				<version>${rhiot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-cloudplatform-adapter-leshan</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>

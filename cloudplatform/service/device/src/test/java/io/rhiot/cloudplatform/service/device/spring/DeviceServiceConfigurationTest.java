@@ -18,23 +18,24 @@ package io.rhiot.cloudplatform.service.device.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
-import io.rhiot.cloudplatform.schema.device.Device;
+import org.eclipse.hono.service.device.api.Device;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static io.rhiot.cloudplatform.schema.device.DeviceConstants.*;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.eclipse.hono.service.device.api.DeviceConstants.*;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 public class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
     Device device = new Device(randomAlphabetic(10), randomAlphabetic(10), new Date(), new Date(),
-    null, 0, null, 0, randomAlphabetic(10), randomAlphabetic(10), null);
+    null, 0, null, 0, randomAlphabetic(10), randomAlphabetic(10), null, new ArrayList<>());
 
     @Override
     protected void beforeDataStreamStarted() {

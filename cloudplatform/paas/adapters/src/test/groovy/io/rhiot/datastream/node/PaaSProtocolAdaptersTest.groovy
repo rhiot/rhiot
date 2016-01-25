@@ -17,15 +17,15 @@
 package io.rhiot.datastream.node
 
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
-import io.rhiot.cloudplatform.schema.device.Device
-import io.rhiot.cloudplatform.schema.device.DeviceConstants
 import io.rhiot.utils.leshan.client.LeshanClientTemplate
+import org.eclipse.hono.service.device.api.Device
 import org.junit.Test
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
 
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.utils.Uuids.uuid
+import static org.eclipse.hono.service.device.api.DeviceConstants.*
 
 @Configuration
 class PaaSProtocolAdaptersTest extends CloudPlatformTest {
@@ -63,7 +63,7 @@ class PaaSProtocolAdaptersTest extends CloudPlatformTest {
         def device = LeshanClientTemplate.createVirtualLeshanClientTemplate(uuid()).connect()
 
         // When
-        def loadedDevice = connector.fromBus(DeviceConstants.getDevice(device.clientId()), Device.class)
+        def loadedDevice = connector.fromBus(getDevice(device.clientId()), Device.class)
 
         // Then
         assertThat(loadedDevice.deviceId).isEqualTo(device.clientId())

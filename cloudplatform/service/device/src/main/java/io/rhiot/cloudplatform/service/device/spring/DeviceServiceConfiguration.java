@@ -18,8 +18,8 @@ package io.rhiot.cloudplatform.service.device.spring;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
-import io.rhiot.cloudplatform.service.device.DeviceRegistry;
 import io.rhiot.cloudplatform.service.device.InMemoryDeviceRegistry;
+import org.eclipse.hono.service.device.api.DeviceRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

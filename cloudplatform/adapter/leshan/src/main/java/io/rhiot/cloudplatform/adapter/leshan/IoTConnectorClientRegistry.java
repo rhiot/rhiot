@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.adapter.leshan;
 
 import com.google.common.net.InetAddresses;
 import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
-import io.rhiot.cloudplatform.schema.device.Device;
+import org.eclipse.hono.service.device.api.Device;
 import org.eclipse.leshan.LinkObject;
 import org.eclipse.leshan.core.request.BindingMode;
 import org.eclipse.leshan.server.client.Client;
@@ -33,9 +33,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-import static io.rhiot.cloudplatform.schema.device.DeviceConstants.*;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
+import static org.eclipse.hono.service.device.api.DeviceConstants.*;
 
 public class IoTConnectorClientRegistry implements ClientRegistry {
 
@@ -127,8 +127,8 @@ public class IoTConnectorClientRegistry implements ClientRegistry {
     }
 
     private static Device clientToDevice(Client client) {
-        List<io.rhiot.cloudplatform.schema.device.LinkObject> linkObjects = asList(client.getObjectLinks()).stream().map(
-            link -> new io.rhiot.cloudplatform.schema.device.LinkObject(
+        List<org.eclipse.hono.service.device.api.LinkObject> linkObjects = asList(client.getObjectLinks()).stream().map(
+            link -> new org.eclipse.hono.service.device.api.LinkObject(
                     link.getUrl(), link.getAttributes(), link.getObjectId(), link.getObjectInstanceId(), link.getResourceId()
             )
         ).collect(toList());
@@ -136,7 +136,8 @@ public class IoTConnectorClientRegistry implements ClientRegistry {
                 client.getEndpoint(), client.getRegistrationId(),
                 client.getRegistrationDate(), client.getLastUpdate(),
                 client.getAddress().getHostAddress(), client.getPort(), client.getRegistrationEndpointAddress(),
-                client.getLifeTimeInSec(), client.getSmsNumber(), client.getLwM2mVersion(), Device.BindingMode.valueOf(client.getBindingMode().name())
+                client.getLifeTimeInSec(), client.getSmsNumber(), client.getLwM2mVersion(), Device.BindingMode.valueOf(client.getBindingMode().name()),
+                linkObjects
         );
     }
 

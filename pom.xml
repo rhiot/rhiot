@@ -12,6 +12,7 @@
     <modules>
         <module>bom</module>
         <module>spring</module>
+        <module>hono</module>
         <module>cloudplatform</module>
         <module>lib</module>
         <module>mongodb</module>
