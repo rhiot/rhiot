@@ -140,9 +140,7 @@ log_info "ActiveMQ started"
 
 log_info "Starting protocol adapters..."
 exe docker pull rhiot/paas-adapters:${RHIOT_VERSION}
-exe docker run -d --name paas-adapters \
-  --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
-  -p 8080:8080 -p 5683:5683 -t rhiot/paas-adapters
+exe docker run -d --name paas-adapters --net=host -t rhiot/paas-adapters
 log_info "Protocol adapters started."
 
 ### Services
