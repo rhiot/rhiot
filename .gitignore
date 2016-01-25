@@ -25,11 +25,11 @@ soapui-errors.log
 
 # Californium
 **/data/security.data
-Californium.properties
+**/Californium.properties
 
 # ActiveMQ
-activemq-data/
+**/activemq-data/
 
 # Apache Spark
-metastore_db/
-derby.log
+**/metastore_db/
+**/derby.log
