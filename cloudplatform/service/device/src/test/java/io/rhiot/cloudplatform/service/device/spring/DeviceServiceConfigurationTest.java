@@ -17,10 +17,15 @@
 package io.rhiot.cloudplatform.service.device.spring;
 
 import com.google.common.truth.Truth;
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
+import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import org.eclipse.hono.service.device.api.Device;
+import org.eclipse.hono.service.device.api.DeviceMetricsPollService;
 import org.joda.time.DateTime;
 import org.junit.Test;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.*;
 
@@ -29,6 +34,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.eclipse.hono.service.device.api.DeviceConstants.*;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
+@Configuration
 public class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
     Device device = new Device(randomAlphabetic(10), randomAlphabetic(10), new Date(), new Date(),
@@ -142,6 +148,7 @@ public class DeviceServiceConfigurationTest extends CloudPlatformTest {
     @Test
     public void shouldReadStringMetric() {
         // Given
+        connector.toBusAndWait(registerDevice(), device);
         String metric = randomAlphabetic(10);
         String value = randomAlphabetic(10);
         connector.toBusAndWait(writeDeviceMetric(device.getDeviceId(), metric), value);
@@ -156,6 +163,7 @@ public class DeviceServiceConfigurationTest extends CloudPlatformTest {
     @Test
     public void shouldReadIntegerMetric() {
         // Given
+        connector.toBusAndWait(registerDevice(), device);
         String metric = randomAlphabetic(10);
         int value = 666;
         connector.toBusAndWait(writeDeviceMetric(device.getDeviceId(), metric), value);
@@ -185,6 +193,30 @@ public class DeviceServiceConfigurationTest extends CloudPlatformTest {
         Truth.assertThat(metrics).hasSize(2);
         Truth.assertThat(metrics.keySet()).containsAllIn(asList(metric1, metric2));
         Truth.assertThat(metrics.values()).containsAllIn(asList(value1, value2));
+    }
+
+    @Test
+    public void shouldPollStringMetric() {
+        // Given
+        device.setAddress("non empty");
+        connector.toBusAndWait(registerDevice(), device);
+        String metric = randomAlphabetic(10);
+
+        // When
+        String metricRead = connector.fromBus(readDeviceMetric(device.getDeviceId(), metric), String.class);
+
+        // Then
+        Truth.assertThat(metricRead).isEqualTo(metric);
+    }
+
+    @Bean
+    DeviceMetricsPollService deviceMetricsPoll() {
+        return (deviceId, metric) -> metric;
+    }
+
+    @Bean
+    ServiceBinding deviceMetricsPollServiceBinding(PayloadEncoding payloadEncoding) {
+        return new ServiceBinding(payloadEncoding, "deviceMetricsPoll");
     }
 
 }

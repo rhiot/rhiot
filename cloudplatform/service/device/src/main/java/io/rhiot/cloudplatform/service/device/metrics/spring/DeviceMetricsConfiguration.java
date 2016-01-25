@@ -18,9 +18,12 @@ package io.rhiot.cloudplatform.service.device.metrics.spring;
 
 import com.mongodb.Mongo;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.service.device.metrics.DeviceMetricsStore;
 import io.rhiot.cloudplatform.service.device.metrics.MongoDbDeviceMetricsStore;
+import org.eclipse.hono.service.device.api.DeviceRegistry;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,8 +36,12 @@ public class DeviceMetricsConfiguration {
     }
 
     @Bean(name = "device-metrics")
-    DeviceMetricsStore deviceMetricsStore(Mongo mongo) {
-        return new MongoDbDeviceMetricsStore(mongo);
+    DeviceMetricsStore deviceMetricsStore(IoTConnector connector,
+                                          DeviceRegistry deviceRegistry,
+                                          Mongo mongo,
+                                          @Value("${device.metrics.mongodb.db:rhiot}") String db,
+                                          @Value("${device.metrics.mongodb.db:DeviceMetrics}") String collection) {
+        return new MongoDbDeviceMetricsStore(connector, deviceRegistry, mongo, db, collection);
     }
 
 }

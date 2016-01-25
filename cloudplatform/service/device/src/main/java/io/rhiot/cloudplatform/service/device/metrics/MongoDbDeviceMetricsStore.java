@@ -19,6 +19,8 @@ package io.rhiot.cloudplatform.service.device.metrics;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
+import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
+import org.eclipse.hono.service.device.api.DeviceRegistry;
 
 import java.util.Date;
 import java.util.Map;
@@ -26,7 +28,7 @@ import java.util.Map;
 import static com.google.common.collect.ImmutableMap.of;
 import static java.util.stream.Collectors.toMap;
 
-public class MongoDbDeviceMetricsStore implements DeviceMetricsStore {
+public class MongoDbDeviceMetricsStore extends PollingDeviceMetricsStore {
 
     public static final String FIELD_DEVICE_ID = "deviceId";
 
@@ -41,14 +43,12 @@ public class MongoDbDeviceMetricsStore implements DeviceMetricsStore {
 
     // Constructors
 
-    public MongoDbDeviceMetricsStore(Mongo mongo, String db, String collection) {
+
+    public MongoDbDeviceMetricsStore(IoTConnector connector, DeviceRegistry deviceRegistry, Mongo mongo, String db, String collection) {
+        super(connector, deviceRegistry);
         this.mongo = mongo;
         this.db = db;
         this.collection = collection;
-    }
-
-    public MongoDbDeviceMetricsStore(Mongo mongo) {
-        this(mongo, "rhiot", "DeviceMetrics");
     }
 
     // Realizations
@@ -71,7 +71,7 @@ public class MongoDbDeviceMetricsStore implements DeviceMetricsStore {
     }
 
     @Override
-    public Object read(String deviceId, String metric) {
+    public Object doRead(String deviceId, String metric) {
         BasicDBObject metricQuery = new BasicDBObject(of(FIELD_DEVICE_ID, deviceId, FIELD_METRIC, metric));
         DBCursor cursor = mongo.getDB(db).getCollection(collection).find(metricQuery).sort(new BasicDBObject("_id",-1)).limit(1);
         return cursor.hasNext() ? cursor.next().get("value") : null;

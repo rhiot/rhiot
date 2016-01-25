@@ -24,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import static io.rhiot.cloudplatform.service.binding.Camels.convert;
 import static io.rhiot.cloudplatform.service.binding.OperationBinding.operationBinding;
@@ -73,7 +75,9 @@ public class ServiceBinding extends RouteBuilder {
 
             Class beanType = getContext().getRegistry().lookupByName(operationBinding.service()).getClass();
             LOG.debug("Detected service bean type {} for operation: {}", beanType, operationBinding);
-            Method operationMethod = asList(beanType.getDeclaredMethods()).stream().
+            List<Method> beanMethods = new ArrayList<>(asList(beanType.getDeclaredMethods()));
+            beanMethods.addAll(asList(beanType.getMethods()));
+            Method operationMethod = beanMethods.stream().
                     filter(method -> method.getName().equals(operationBinding.operation())).findAny().get();
 
             message.setBody(convert(getContext(), operationBinding.arguments(), operationMethod.getParameterTypes()));
