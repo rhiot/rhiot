@@ -22,12 +22,18 @@ import org.eclipse.leshan.server.client.ClientRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
- * Data stream source connecting Leshan LWM2M events with a data stream.
+ * Protocol adapter connecting Leshan LWM2M events with an IoT Connector.
  */
 public class LeshanProtocolAdapter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LeshanProtocolAdapter.class);
+    // Static collaborators
+
+    private static final Logger LOG = getLogger(LeshanProtocolAdapter.class);
+
+    // Collaborators
 
     private final LeshanServer leshanServer;
 
