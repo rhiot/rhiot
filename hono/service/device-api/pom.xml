@@ -9,8 +9,8 @@
         <artifactId>hono-service</artifactId>
         <relativePath>..</relativePath>
     </parent>
-    <name>Hono :: Service :: Device :: API</name>
     <artifactId>hono-service-device-api</artifactId>
+    <name>Hono :: Service :: Device :: API</name>
 
     <licenses>
         <license>

@@ -17,7 +17,7 @@
 package io.rhiot.cloudplatform.adapter.leshan;
 
 import com.google.common.net.InetAddresses;
-import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
+import io.rhiot.hono.connector.IoTConnector;
 import org.eclipse.hono.service.device.api.Device;
 import org.eclipse.leshan.LinkObject;
 import org.eclipse.leshan.core.request.BindingMode;
@@ -26,7 +26,6 @@ import org.eclipse.leshan.server.client.ClientRegistry;
 import org.eclipse.leshan.server.client.ClientRegistryListener;
 import org.eclipse.leshan.server.client.ClientUpdate;
 
-import java.net.Inet4Address;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;

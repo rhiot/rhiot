@@ -17,6 +17,7 @@
 package io.rhiot.cloudplatform.runtime.spring;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import io.rhiot.hono.connector.IoTConnector;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.amqp.AMQPComponent;
 import org.slf4j.Logger;

@@ -39,7 +39,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.rhiot</groupId>
-			<artifactId>rhiot-cloudplatform-encoding-spi</artifactId>
+			<artifactId>rhiot-hono-connector</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.rhiot</groupId>

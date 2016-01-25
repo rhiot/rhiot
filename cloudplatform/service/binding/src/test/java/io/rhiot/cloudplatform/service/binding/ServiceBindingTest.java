@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static io.rhiot.cloudplatform.runtime.spring.Header.arguments;
+import static io.rhiot.hono.connector.Header.arguments;
 
 public class ServiceBindingTest extends CloudPlatformTest {
 

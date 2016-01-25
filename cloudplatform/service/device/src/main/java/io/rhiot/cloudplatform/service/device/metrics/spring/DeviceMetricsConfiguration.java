@@ -18,10 +18,10 @@ package io.rhiot.cloudplatform.service.device.metrics.spring;
 
 import com.mongodb.Mongo;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
-import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.service.device.metrics.DeviceMetricsStore;
 import io.rhiot.cloudplatform.service.device.metrics.MongoDbDeviceMetricsStore;
+import io.rhiot.hono.connector.IoTConnector;
 import org.eclipse.hono.service.device.api.DeviceRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

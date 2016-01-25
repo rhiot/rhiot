@@ -19,7 +19,7 @@ package io.rhiot.cloudplatform.service.device.metrics;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
-import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
+import io.rhiot.hono.connector.IoTConnector;
 import org.eclipse.hono.service.device.api.DeviceRegistry;
 
 import java.util.Date;

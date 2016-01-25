@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.adapter.leshan.spring;
 
 import io.rhiot.cloudplatform.adapter.leshan.IoTConnectorClientRegistry;
 import io.rhiot.cloudplatform.adapter.leshan.LeshanProtocolAdapter;
-import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
+import io.rhiot.hono.connector.IoTConnector;
 import org.eclipse.leshan.server.client.ClientRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

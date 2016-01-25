@@ -20,8 +20,8 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.runtime.spring.CloudPlatform;
-import io.rhiot.cloudplatform.runtime.spring.IoTConnector;
 
+import io.rhiot.hono.connector.IoTConnector;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.junit.AfterClass;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.runtime.spring;
+package io.rhiot.hono.connector;
 
 public class Header {
 
