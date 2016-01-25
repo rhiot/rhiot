@@ -18,6 +18,7 @@ package io.rhiot.cloudplatform.adapter.leshan.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
+import io.rhiot.hono.connector.Header;
 import io.rhiot.utils.leshan.client.LeshanClientTemplate;
 import io.rhiot.utils.leshan.client.UpdateRequestBuilder;
 import org.eclipse.hono.service.device.api.Device;
@@ -26,6 +27,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static io.rhiot.hono.connector.Header.arguments;
 import static io.rhiot.utils.Networks.findAvailableTcpPort;
 import static io.rhiot.utils.leshan.client.LeshanClientTemplate.createVirtualLeshanClientTemplate;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
@@ -96,6 +98,12 @@ public class LeshanProtocolAdapterConfigurationTest extends CloudPlatformTest {
         // Then
         device = connector.fromBus(getDevice(deviceId), Device.class);
         Truth.assertThat(device).isNull();
+    }
+
+    @Test
+    public void shouldPollFirmwareVersion() {
+        String firmwareVersion = connector.fromBus("deviceMetricsPoll.read", String.class, arguments(deviceId, "/3/0/3"));
+        Truth.assertThat(firmwareVersion).isEqualTo("1.0.0");
     }
 
 }

@@ -47,7 +47,7 @@ public class IoTConnectorClientRegistry implements ClientRegistry {
     @Override
     public Client get(String endpoint) {
         Device device = connector.fromBus(getDevice(endpoint), Device.class);
-        return new Client(null, device.getDeviceId(), null, 0, null);
+        return deviceToClient(device);
     }
 
     @Override

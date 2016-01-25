@@ -17,15 +17,24 @@
 package io.rhiot.cloudplatform.adapter.leshan.spring;
 
 import io.rhiot.cloudplatform.adapter.leshan.IoTConnectorClientRegistry;
-import io.rhiot.cloudplatform.adapter.leshan.LeshanProtocolAdapter;
+import io.rhiot.cloudplatform.adapter.leshan.LeshanDeviceMetricsPollService;
+import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.hono.connector.IoTConnector;
+import org.eclipse.leshan.server.californium.LeshanServerBuilder;
+import org.eclipse.leshan.server.californium.impl.LeshanServer;
 import org.eclipse.leshan.server.client.ClientRegistry;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 @Configuration
 public class LeshanProtocolAdapterConfiguration {
+
+    private static final Logger LOG = getLogger(LeshanProtocolAdapterConfiguration.class);
 
     @Bean
     ClientRegistry ioTConnectorClientRegistry(IoTConnector connector) {
@@ -33,8 +42,21 @@ public class LeshanProtocolAdapterConfiguration {
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")
-    LeshanProtocolAdapter leshanDataStreamSource(ClientRegistry clientRegistry, @Value("${leshan.port:5683}") int port) {
-        return new LeshanProtocolAdapter(clientRegistry, port);
+    LeshanServer leshanServer(ClientRegistry clientRegistry, @Value("${leshan.port:5683}") int port) {
+        LeshanServerBuilder leshanServerBuilder = new LeshanServerBuilder();
+        LOG.debug("Creating Leshan server using port {}.", port);
+        leshanServerBuilder.setLocalAddress("0.0.0.0", port);
+        return leshanServerBuilder.setClientRegistry(clientRegistry).build();
+    }
+
+    @Bean(name = "deviceMetricsPoll")
+    LeshanDeviceMetricsPollService leshanDeviceMetricsPollService(LeshanServer leshanServer) {
+        return new LeshanDeviceMetricsPollService(leshanServer);
+    }
+
+    @Bean
+    ServiceBinding serviceBinding(PayloadEncoding payloadEncoding) {
+        return new ServiceBinding(payloadEncoding, "deviceMetricsPoll");
     }
 
 }
