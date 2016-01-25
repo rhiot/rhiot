@@ -82,7 +82,7 @@ public class LeshanProtocolAdapterConfigurationTest extends CloudPlatformTest {
     public void shouldUpdateDevice() {
         leshanClient.update(new UpdateRequestBuilder().smsNumber("666"));
         Device updatedDevice = connector.fromBus(getDevice(deviceId), Device.class);
-        Truth.assertThat(updatedDevice.getSmsNumber()).isEqualTo("666");
+        Truth.assertThat(updatedDevice.getProperties().get("smsNumber")).isEqualTo("666");
     }
 
     @Test

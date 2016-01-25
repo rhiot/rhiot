@@ -22,10 +22,7 @@ import org.eclipse.hono.service.device.api.Device;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
@@ -35,7 +32,7 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 public class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
     Device device = new Device(randomAlphabetic(10), randomAlphabetic(10), new Date(), new Date(),
-    null, 0, null, 0, randomAlphabetic(10), randomAlphabetic(10), null, new ArrayList<>());
+    null, 0, null, 0, randomAlphabetic(10), null, new ArrayList<>(), new HashMap<>());
 
     @Override
     protected void beforeDataStreamStarted() {

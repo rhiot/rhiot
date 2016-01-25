@@ -17,10 +17,11 @@
 package org.eclipse.hono.service.device.api;
 
 import java.net.InetSocketAddress;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
+/**
+ * Represents information about device registered in a cloud service.
+ */
 public class Device {
 
     private String deviceId;
@@ -39,8 +40,6 @@ public class Device {
 
     private long lifeTimeInSec;
 
-    private String smsNumber;
-
     private String lwM2mVersion;
 
     private BindingMode bindingMode;
@@ -49,6 +48,8 @@ public class Device {
 
     private String rootPath;
 
+    private Map<String, Object> properties = new HashMap<>();
+
     // Constructors
 
     public Device() {
@@ -56,8 +57,9 @@ public class Device {
 
     public Device(String deviceId, String registrationId, Date registrationDate, Date lastUpdate,
                   String address, int port, InetSocketAddress registrationEndpointAddress,
-                  long lifeTimeInSec, String smsNumber, String lwM2mVersion, BindingMode bindingMode,
-                  List<LinkObject> objectLinks) {
+                  long lifeTimeInSec, String lwM2mVersion, BindingMode bindingMode,
+                  List<LinkObject> objectLinks,
+                  Map<String, Object> properties) {
         this.deviceId = deviceId;
         this.registrationId = registrationId;
         this.registrationDate = registrationDate;
@@ -66,10 +68,10 @@ public class Device {
         this.port = port;
         this.registrationEndpointAddress = registrationEndpointAddress;
         this.lifeTimeInSec = lifeTimeInSec;
-        this.smsNumber = smsNumber;
         this.lwM2mVersion = lwM2mVersion;
         this.bindingMode = bindingMode;
         this.objectLinks = objectLinks;
+        this.properties = properties;
     }
 
     // Getters and setters
@@ -138,14 +140,6 @@ public class Device {
         this.lifeTimeInSec = lifeTimeInSec;
     }
 
-    public String getSmsNumber() {
-        return smsNumber;
-    }
-
-    public void setSmsNumber(String smsNumber) {
-        this.smsNumber = smsNumber;
-    }
-
     public String getLwM2mVersion() {
         return lwM2mVersion;
     }
@@ -176,6 +170,14 @@ public class Device {
 
     public void setRootPath(String rootPath) {
         this.rootPath = rootPath;
+    }
+
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<String, Object> properties) {
+        this.properties = properties;
     }
 
     public static enum BindingMode {
