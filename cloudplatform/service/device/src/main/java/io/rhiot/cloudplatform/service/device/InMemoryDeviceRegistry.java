@@ -66,6 +66,9 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
 
     @Override
     public void register(Device device) {
+        if(device.getLastUpdate() == null) {
+            device.setLastUpdate(new Date());
+        }
         if(isBlank(device.getRegistrationId())) {
             device.setRegistrationId(randomUUID().toString());
         }
