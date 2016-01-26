@@ -156,16 +156,19 @@ log_info "Services started."
 
 ### Spark standalone cluster
 
-log_info "Spark" 
-exe docker pull rhiot/spark-standalone:${RHIOT_VERSION}
-exe docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"
-sleep 5
-SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4 | uniq`
-log_info "Spark master started" 
+if [ "${SPARK_ENABLED}" != 'false' ]; then
 
-exe docker run -d --name spark_worker \
-  --link spark_master:spark_master --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} \
-  -v /tmp/jobs:/tmp/jobs -P \
-  -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh 
-log_info "Spark worker started"
+    log_info "Spark"
+    exe docker pull rhiot/spark-standalone:${RHIOT_VERSION}
+    exe docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"
+    sleep 5
+    SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4 | uniq`
+    log_info "Spark master started"
 
+    exe docker run -d --name spark_worker \
+      --link spark_master:spark_master --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} \
+      -v /tmp/jobs:/tmp/jobs -P \
+      -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh
+    log_info "Spark worker started"
+
+fi
