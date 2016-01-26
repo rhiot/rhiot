@@ -18,10 +18,10 @@ package io.rhiot.cloudplatform.adapter.leshan.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
-import io.rhiot.hono.connector.Header;
 import io.rhiot.utils.leshan.client.LeshanClientTemplate;
 import io.rhiot.utils.leshan.client.UpdateRequestBuilder;
 import org.eclipse.hono.service.device.api.Device;
+import org.eclipse.hono.service.device.api.DeviceMetrics;
 import org.junit.After;
 import org.junit.Test;
 
@@ -102,7 +102,7 @@ public class LeshanProtocolAdapterConfigurationTest extends CloudPlatformTest {
 
     @Test
     public void shouldPollFirmwareVersion() {
-        String firmwareVersion = connector.fromBus("deviceMetricsPoll.read", String.class, arguments(deviceId, "/3/0/3"));
+        String firmwareVersion = connector.fromBus("deviceMetricsPoll.read", String.class, arguments(deviceId, DeviceMetrics.firmwareVersion.toString()));
         Truth.assertThat(firmwareVersion).isEqualTo("1.0.0");
     }
 

@@ -17,7 +17,9 @@
 package io.rhiot.cloudplatform.adapter.leshan.spring;
 
 import io.rhiot.cloudplatform.adapter.leshan.IoTConnectorClientRegistry;
+import io.rhiot.cloudplatform.adapter.leshan.Lwm2mMetricResolver;
 import io.rhiot.cloudplatform.adapter.leshan.LeshanDeviceMetricsPollService;
+import io.rhiot.cloudplatform.adapter.leshan.MetricResolver;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.hono.connector.IoTConnector;
@@ -50,13 +52,18 @@ public class LeshanProtocolAdapterConfiguration {
     }
 
     @Bean(name = "deviceMetricsPoll")
-    LeshanDeviceMetricsPollService leshanDeviceMetricsPollService(LeshanServer leshanServer) {
-        return new LeshanDeviceMetricsPollService(leshanServer);
+    LeshanDeviceMetricsPollService leshanDeviceMetricsPollService(LeshanServer leshanServer, MetricResolver metricResolver) {
+        return new LeshanDeviceMetricsPollService(leshanServer, metricResolver);
     }
 
     @Bean
     ServiceBinding serviceBinding(PayloadEncoding payloadEncoding) {
         return new ServiceBinding(payloadEncoding, "deviceMetricsPoll");
+    }
+
+    @Bean
+    MetricResolver metricResolver() {
+        return new Lwm2mMetricResolver();
     }
 
 }

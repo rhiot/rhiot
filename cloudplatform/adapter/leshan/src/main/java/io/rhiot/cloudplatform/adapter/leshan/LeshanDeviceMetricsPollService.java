@@ -27,14 +27,19 @@ public class LeshanDeviceMetricsPollService implements DeviceMetricsPollService 
 
     private final LeshanServer leshanServer;
 
-    public LeshanDeviceMetricsPollService(LeshanServer leshanServer) {
+    private final MetricResolver metricResolver;
+
+    public LeshanDeviceMetricsPollService(LeshanServer leshanServer, MetricResolver metricResolver) {
         this.leshanServer = leshanServer;
+        this.metricResolver = metricResolver;
     }
 
     @Override
     public Object read(String deviceId, String metric) {
+        String translatedMetric = metricResolver.resolveMetric(metric);
+
         Client client = leshanServer.getClientRegistry().get(deviceId);
-        Value response = ((LwM2mResource) leshanServer.send(client, new ReadRequest(metric)).getContent()).getValue();
+        Value response = ((LwM2mResource) leshanServer.send(client, new ReadRequest(translatedMetric)).getContent()).getValue();
         return response.value;
     }
 
