@@ -36,14 +36,16 @@ public abstract class PollingDeviceMetricsStore implements DeviceMetricsStore {
     @Override
     public Object read(String deviceId, String metric) {
         Device device = deviceRegistry.get(deviceId);
-        if(device == null) {
+        if (device == null) {
             return null;
         }
 
-        if(device.getAddress() != null) {
+        if (device.getAddress() != null) {
             Object metricValue = connector.fromBus("deviceMetricsPoll.read", Object.class, arguments(deviceId, metric));
-            write(deviceId, metric, metricValue);
-            return metricValue;
+            if (metricValue != null) {
+                write(deviceId, metric, metricValue);
+                return metricValue;
+            }
         }
         return doRead(deviceId, metric);
     }
