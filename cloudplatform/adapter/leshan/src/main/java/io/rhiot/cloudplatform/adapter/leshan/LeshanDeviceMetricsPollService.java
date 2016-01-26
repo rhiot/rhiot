@@ -18,8 +18,8 @@ package io.rhiot.cloudplatform.adapter.leshan;
 
 import org.eclipse.hono.service.device.api.DeviceMetricsPollService;
 import org.eclipse.leshan.core.node.LwM2mResource;
-import org.eclipse.leshan.core.node.Value;
 import org.eclipse.leshan.core.request.ReadRequest;
+import org.eclipse.leshan.core.response.ValueResponse;
 import org.eclipse.leshan.server.californium.impl.LeshanServer;
 import org.eclipse.leshan.server.client.Client;
 
@@ -34,13 +34,18 @@ public class LeshanDeviceMetricsPollService implements DeviceMetricsPollService 
         this.metricResolver = metricResolver;
     }
 
+    // Overridden
+
     @Override
     public Object read(String deviceId, String metric) {
         String translatedMetric = metricResolver.resolveMetric(metric);
 
         Client client = leshanServer.getClientRegistry().get(deviceId);
-        Value response = ((LwM2mResource) leshanServer.send(client, new ReadRequest(translatedMetric)).getContent()).getValue();
-        return response.value;
+        ValueResponse leshanResponse = leshanServer.send(client, new ReadRequest(translatedMetric), 5000);
+        if(leshanResponse == null) {
+            return null;
+        }
+        return  ((LwM2mResource) leshanResponse.getContent()).getValue().value;
     }
 
 }
