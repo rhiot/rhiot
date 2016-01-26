@@ -16,23 +16,27 @@
  */
 package io.rhiot.component.kura.datatransport;
 
+import static io.rhiot.component.kura.datatransport.DataTransportConstants.DEFAULT_QOS;
+
 import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.spi.UriParam;
 import org.eclipse.kura.data.DataTransportService;
-
-import static io.rhiot.component.kura.datatransport.DataTransportConstants.DEFAULT_QOS;
 
 public class DataTransportEndpoint extends DefaultEndpoint {
 
-    private DataTransportService dataTransportService;
+    private transient DataTransportService dataTransportService;
 
+    @UriParam(defaultValue = "")
     private String topic;
 
+    @UriParam(defaultValue = "0", description = "QoS of the message, per Uri or per Message")
     private int qos = DEFAULT_QOS;
 
+    @UriParam(defaultValue = "false", description = "Message retain, per Uri or per Message")
     private boolean retain = false;
 
     public DataTransportEndpoint(String endpointUri, Component component, String topic) {
