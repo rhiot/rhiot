@@ -44,14 +44,14 @@ public class LeshanProtocolAdapterConfigurationTest extends CloudPlatformTest {
     LeshanClientTemplate leshanClient = createVirtualLeshanClientTemplate(deviceId);
 
     @Override
-    protected void beforeDataStreamStarted() {
+    protected void beforeCloudPlatformStarted() {
         System.setProperty("spring.data.mongodb", findAvailableTcpPort() + "");
         System.setProperty("AMQP_PORT", findAvailableTcpPort() + "");
         System.setProperty("MQTT_ENABLED", false + "");
     }
 
     @Override
-    protected void afterDataStreamStarted() {
+    protected void afterCloudPlatformStarted() {
         leshanClient.connect();
     }
 

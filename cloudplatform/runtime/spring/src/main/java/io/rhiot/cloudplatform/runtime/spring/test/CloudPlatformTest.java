@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class CloudPlatformTest extends Assert {
 
-    private static boolean dataStreamStarted;
+    private static boolean cloudPlatformStarted;
 
     protected ObjectMapper json = new ObjectMapper();
 
@@ -65,22 +65,22 @@ public abstract class CloudPlatformTest extends Assert {
 
     @Before
     public void before() {
-        if (!dataStreamStarted) {
-            beforeDataStreamStarted();
+        if (!cloudPlatformStarted) {
+            beforeCloudPlatformStarted();
             cloudPlatform = cloudPlatform.start();
             camelContext = cloudPlatform.applicationContext().getBean(CamelContext.class);
             producerTemplate = camelContext.createProducerTemplate();
             payloadEncoding = cloudPlatform.applicationContext().getBean(PayloadEncoding.class);
             connector = cloudPlatform.applicationContext().getBean(IoTConnector.class);
-            dataStreamStarted = true;
+            cloudPlatformStarted = true;
         }
-        afterDataStreamStarted();
+        afterCloudPlatformStarted();
     }
 
-    protected void beforeDataStreamStarted() {
+    protected void beforeCloudPlatformStarted() {
     }
 
-    protected void afterDataStreamStarted() {
+    protected void afterCloudPlatformStarted() {
     }
 
     @AfterClass
@@ -88,7 +88,7 @@ public abstract class CloudPlatformTest extends Assert {
         try {
             cloudPlatform.stop();
         } finally {
-            dataStreamStarted = false;
+            cloudPlatformStarted = false;
         }
     }
 

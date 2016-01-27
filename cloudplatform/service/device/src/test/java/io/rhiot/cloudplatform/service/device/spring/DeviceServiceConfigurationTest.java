@@ -41,7 +41,7 @@ public class DeviceServiceConfigurationTest extends CloudPlatformTest {
     null, 0, null, 0, randomAlphabetic(10), null, new ArrayList<>(), new HashMap<>());
 
     @Override
-    protected void beforeDataStreamStarted() {
+    protected void beforeCloudPlatformStarted() {
         System.setProperty("spring.data.mongodb", findAvailableTcpPort() + "");
         System.setProperty("AMQP_PORT", findAvailableTcpPort() + "");
         System.setProperty("MQTT_ENABLED", false + "");
