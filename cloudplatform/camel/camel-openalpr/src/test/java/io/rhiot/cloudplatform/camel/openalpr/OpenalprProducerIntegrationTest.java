@@ -36,7 +36,7 @@ public class OpenalprProducerIntegrationTest extends CamelTestSupport {
     @Test
     public void shouldFindPlate() {
         List<PlateMatch> plateMatches = template.requestBody("openalpr:plateReader", getClass().getResourceAsStream("/h786poj.jpg"), List.class);
-        Truth.assertThat(plateMatches.get(0).plateNumber).isEqualTo("H786P0J");
+        Truth.assertThat(plateMatches.get(0).getPlateNumber()).isEqualTo("H786P0J");
     }
 
 }
