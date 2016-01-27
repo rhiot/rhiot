@@ -18,9 +18,9 @@ package io.rhiot.cloudplatform.camel.openalpr;
 
 public class PlateMatch {
 
-    String plateNumber;
+    private String plateNumber;
 
-    double confidence;
+    private double confidence;
 
     public PlateMatch(String plateNumber, double confidence) {
         this.plateNumber = plateNumber;

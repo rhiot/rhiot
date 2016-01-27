@@ -53,7 +53,7 @@ public class OpenalprEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        return null;
+        throw new UnsupportedOperationException("Openalpr component supports only producer endpoints.");
     }
 
     @Override
