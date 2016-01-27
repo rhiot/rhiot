@@ -58,7 +58,7 @@ public class OpenalprProducer extends DefaultProducer {
         return new String[]{
                 "docker", "run", "-t",
                 "-v", openalprEndpoint.getWorkDir().getAbsolutePath() +  ":/data:ro",
-                "rhiot/openalpr", "-c", openalprEndpoint.getCountry(), imageFile.getName()};
+                getEndpoint().getDockerImage(), "-c", openalprEndpoint.getCountry(), imageFile.getName()};
     }
 
 }

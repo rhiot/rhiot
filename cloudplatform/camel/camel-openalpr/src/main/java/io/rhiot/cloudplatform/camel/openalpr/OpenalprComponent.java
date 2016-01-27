@@ -16,12 +16,22 @@
  */
 package io.rhiot.cloudplatform.camel.openalpr;
 
+import io.rhiot.utils.process.ProcessManager;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
 
+import java.io.File;
 import java.util.Map;
 
 public class OpenalprComponent extends UriEndpointComponent {
+
+    private String country;
+
+    private File workDir;
+
+    private ProcessManager processManager;
+
+    private String dockerImage;
 
     public OpenalprComponent() {
         super(OpenalprEndpoint.class);
@@ -30,6 +40,38 @@ public class OpenalprComponent extends UriEndpointComponent {
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new OpenalprEndpoint(uri, this);
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public File getWorkDir() {
+        return workDir;
+    }
+
+    public void setWorkDir(File workDir) {
+        this.workDir = workDir;
+    }
+
+    public ProcessManager getProcessManager() {
+        return processManager;
+    }
+
+    public void setProcessManager(ProcessManager processManager) {
+        this.processManager = processManager;
+    }
+
+    public String getDockerImage() {
+        return dockerImage;
+    }
+
+    public void setDockerImage(String dockerImage) {
+        this.dockerImage = dockerImage;
     }
 
 }

@@ -34,6 +34,8 @@ public class OpenalprEndpoint extends DefaultEndpoint {
 
     private ProcessManager processManager = new DefaultProcessManager();
 
+    private String dockerImage = "rhiot/openalpr:0.1.4-SNAPSHOT";
+
     public OpenalprEndpoint(String endpointUri, Component component) {
         super(endpointUri, component);
     }
@@ -61,7 +63,16 @@ public class OpenalprEndpoint extends DefaultEndpoint {
 
     // Getters and setters
 
+
+    @Override
+    public OpenalprComponent getComponent() {
+        return (OpenalprComponent) super.getComponent();
+    }
+
     public String getCountry() {
+        if(getComponent().getCountry() != null) {
+            return getComponent().getCountry();
+        }
         return country;
     }
 
@@ -70,6 +81,9 @@ public class OpenalprEndpoint extends DefaultEndpoint {
     }
 
     public File getWorkDir() {
+        if(getComponent().getWorkDir() != null) {
+            return getComponent().getWorkDir();
+        }
         return workDir;
     }
 
@@ -78,11 +92,25 @@ public class OpenalprEndpoint extends DefaultEndpoint {
     }
 
     public ProcessManager getProcessManager() {
+        if(getComponent().getProcessManager() != null) {
+            return getComponent().getProcessManager();
+        }
         return processManager;
     }
 
     public void setProcessManager(ProcessManager processManager) {
         this.processManager = processManager;
+    }
+
+    public String getDockerImage() {
+        if(getComponent().getDockerImage() != null) {
+            return getComponent().getDockerImage();
+        }
+        return dockerImage;
+    }
+
+    public void setDockerImage(String dockerImage) {
+        this.dockerImage = dockerImage;
     }
 
 }
