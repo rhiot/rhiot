@@ -36,7 +36,7 @@ class MongodbDocumentStoreTest extends CloudPlatformTest {
     def invoice = new Invoice(invoiceId: 'foo')
 
     @Override
-    protected void beforeDataStreamStarted() {
+    protected void beforeCloudPlatformStarted() {
         System.setProperty("spring.data.mongodb.port", findAvailableTcpPort() + '');
         setBooleanProperty('MQTT_ENABLED', false)
         setIntProperty('AMQP_PORT', findAvailableTcpPort())
