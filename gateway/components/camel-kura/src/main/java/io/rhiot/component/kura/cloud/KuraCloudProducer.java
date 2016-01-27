@@ -37,43 +37,43 @@ public class KuraCloudProducer extends DefaultProducer {
     }
 
     protected String resolveTopic(Message message) {
-        if (message.getHeaders().containsKey(KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC)) {
-            return message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC, String.class);
-        } else {
-            return endpoint.getTopic();
+        String ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC, String.class);
+        if (ret == null) {
+            ret = endpoint.getTopic();
         }
+        return ret;
     }
 
     protected int resolveQos(Message message) {
-        if (message.getHeaders().containsKey(KuraCloudConstants.CAMEL_KURA_CLOUD_QOS)) {
-            return message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_QOS, Integer.class);
-        } else {
-            return endpoint.getQos();
+        Integer ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_QOS, Integer.class);
+        if (ret == null) {
+            ret = endpoint.getQos();
         }
+        return ret;
     }
 
     protected boolean resolveRetain(Message message) {
-        if (message.getHeaders().containsKey(KuraCloudConstants.CAMEL_KURA_CLOUD_RETAIN)) {
-            return message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_RETAIN, Boolean.class);
-        } else {
-            return endpoint.isRetain();
+        Boolean ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_RETAIN, Boolean.class);
+        if (ret == null) {
+            ret = endpoint.isRetain();
         }
+        return ret;
     }
 
     protected boolean resolveControl(Message message) {
-        if (message.getHeaders().containsKey(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL)) {
-            return message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL, Boolean.class);
-        } else {
-            return endpoint.isControl();
+        Boolean ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL, Boolean.class);
+        if (ret == null) {
+            ret = endpoint.isControl();
         }
+        return ret;
     }
 
     protected boolean resolveIncludeDeviceId(Message message) {
-        if (message.getHeaders().containsKey(KuraCloudConstants.CAMEL_KURA_CLOUD_INCLUDE_DEVICEID)) {
-            return message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_INCLUDE_DEVICEID, Boolean.class);
-        } else {
-            return endpoint.isControl();
+        Boolean ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_INCLUDE_DEVICEID, Boolean.class);
+        if (ret == null) {
+            ret = endpoint.isControl();
         }
+        return ret;
     }
 
     protected String resolveDeviceId(Exchange exchange, boolean includedeviceId) {
