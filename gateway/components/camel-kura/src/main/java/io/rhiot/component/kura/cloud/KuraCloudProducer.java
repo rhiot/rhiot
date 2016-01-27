@@ -16,7 +16,7 @@
  */
 package io.rhiot.component.kura.cloud;
 
-import java.util.Set;
+import io.rhiot.component.kura.utils.KuraServiceFactory;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -80,16 +80,10 @@ public class KuraCloudProducer extends DefaultProducer {
         String ret = null;
 
         if (includedeviceId) {
-            Set<SystemService> systemServiceSet = exchange.getContext().getRegistry().findByType(SystemService.class);
 
-            SystemService systemService = null;
-            if (systemServiceSet.size() == 1) {
-                for (SystemService systemServiceIt : systemServiceSet) {
-                    systemService = systemServiceIt;
-                }
-            } else {
-                throw new IllegalArgumentException("Unable to retrieve a SystemService");
-            }
+            SystemService systemService = KuraServiceFactory.retrieveService(SystemService.class,
+                    getEndpoint().getCamelContext().getRegistry());
+
             ret = systemService.getSerialNumber();
 
             if (ret == null || ret.length() == 0) {
