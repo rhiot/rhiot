@@ -72,7 +72,7 @@ REQUIRED_DOCKER_VERSION=1.8.2
 
 if [ ! -d ${RHIOT_HOME} ]; then
 	mkdir -p ${RHIOT_HOME}
-	log_info "create RHIOT_HOME=${RHIOT_HOME}" 
+	log_info "Creating Rhiot home directory at ${RHIOT_HOME} ..."
 fi
 
 log_info "Starting Rhiot Cloud Platform" 
