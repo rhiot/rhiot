@@ -16,14 +16,14 @@
  */
 package io.rhiot.component.kura.datatransport;
 
+import static io.rhiot.component.kura.datatransport.DataTransportConstants.CAMEL_KURA_DATATRANSPORT_QOS;
+import static io.rhiot.component.kura.datatransport.DataTransportConstants.CAMEL_KURA_DATATRANSPORT_TOPIC;
+
+import io.rhiot.component.kura.utils.KuraServiceFactory;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.eclipse.kura.data.DataTransportService;
-
-import java.util.Set;
-
-import static io.rhiot.component.kura.datatransport.DataTransportConstants.CAMEL_KURA_DATATRANSPORT_QOS;
-import static io.rhiot.component.kura.datatransport.DataTransportConstants.CAMEL_KURA_DATATRANSPORT_TOPIC;
 
 public class DataTransportProducer extends DefaultProducer {
 
@@ -33,26 +33,19 @@ public class DataTransportProducer extends DefaultProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        DataTransportService dataTransportService = getEndpoint().getDataTransportService();
-        if(dataTransportService == null) {
-            Set<DataTransportService> dataTransportServices =
-                    getEndpoint().getCamelContext().getRegistry().findByType(DataTransportService.class);
-            if(dataTransportServices.size() == 1) {
-                dataTransportService = dataTransportServices.iterator().next();
-            } else {
-                throw new IllegalStateException("No DataTransportService found in a registry.");
-            }
-        }
+
+        DataTransportService dataTransportService = KuraServiceFactory.retrieveService(DataTransportService.class,
+                getEndpoint().getCamelContext().getRegistry());
 
         byte[] payload = exchange.getIn().getBody(byte[].class);
 
         String topic = exchange.getIn().getHeader(CAMEL_KURA_DATATRANSPORT_TOPIC, String.class);
-        if(topic == null) {
+        if (topic == null) {
             topic = getEndpoint().getTopic();
         }
 
         Integer qos = exchange.getIn().getHeader(CAMEL_KURA_DATATRANSPORT_QOS, Integer.class);
-        if(qos == null) {
+        if (qos == null) {
             qos = getEndpoint().getQos();
         }
 
