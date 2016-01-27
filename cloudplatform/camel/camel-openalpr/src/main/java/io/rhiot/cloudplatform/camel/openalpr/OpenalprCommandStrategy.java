@@ -16,29 +16,10 @@
  */
 package io.rhiot.cloudplatform.camel.openalpr;
 
-import com.google.common.truth.Truth;
-import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import java.io.File;
 
-import java.io.InputStream;
-import java.util.List;
+public interface OpenalprCommandStrategy {
 
-import static io.rhiot.utils.process.Processes.canExecuteCommand;
-import static org.junit.Assume.assumeTrue;
-
-public class OpenalprProducerIntegrationTest extends CamelTestSupport {
-
-    @BeforeClass
-    public static void beforeClass() {
-        assumeTrue(canExecuteCommand("docker", "version"));
-    }
-
-    @Test
-    public void shouldFindPlate() {
-        InputStream image = getClass().getResourceAsStream("/h786poj.jpg");
-        List<PlateMatch> plateMatches = template.requestBody("openalpr:plateReader", image , List.class);
-        Truth.assertThat(plateMatches.get(0).getPlateNumber()).isEqualTo("H786P0J");
-    }
+    String[] openalprCommand(OpenalprEndpoint openalprEndpoint, File imageFile);
 
 }

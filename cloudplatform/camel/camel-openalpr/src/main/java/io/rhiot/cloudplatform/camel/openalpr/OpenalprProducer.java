@@ -19,7 +19,6 @@ package io.rhiot.cloudplatform.camel.openalpr;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
-import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,6 +26,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.rhiot.utils.Uuids.uuid;
+import static java.lang.Double.parseDouble;
+import static org.apache.commons.io.IOUtils.write;
 
 public class OpenalprProducer extends DefaultProducer {
 
@@ -38,11 +39,12 @@ public class OpenalprProducer extends DefaultProducer {
     public void process(Exchange exchange) throws Exception {
         File imageFile = new File(getEndpoint().getWorkDir(), uuid() + ".jpg");
         try {
-            byte[] image = exchange.getIn().getBody(byte[].class);
-            IOUtils.write(image, new FileOutputStream(imageFile));
-            List<String> output = getEndpoint().getProcessManager().executeAndJoinOutput(openalprCommand(getEndpoint(), imageFile));
+            byte[] imageData = exchange.getIn().getBody(byte[].class);
+            write(imageData, new FileOutputStream(imageFile));
+            String[] command = getEndpoint().getCommandStrategy().openalprCommand(getEndpoint(), imageFile);
+            List<String> output = getEndpoint().getProcessManager().executeAndJoinOutput(command);
             List<PlateMatch> plates = output.stream().filter(line -> line.contains("confidence:")).map(line -> line.replaceAll("- ", "").split("confidence:")).
-                    map(pair -> new PlateMatch(pair[0].trim(), Double.parseDouble(pair[1].trim()))).collect(Collectors.toList());
+                    map(pair -> new PlateMatch(pair[0].trim(), parseDouble(pair[1].trim()))).collect(Collectors.toList());
             exchange.getIn().setBody(plates);
         } finally {
             imageFile.delete();
@@ -52,13 +54,6 @@ public class OpenalprProducer extends DefaultProducer {
     @Override
     public OpenalprEndpoint getEndpoint() {
         return (OpenalprEndpoint) super.getEndpoint();
-    }
-
-    private String[] openalprCommand(OpenalprEndpoint openalprEndpoint, File imageFile) {
-        return new String[]{
-                "docker", "run", "-t",
-                "-v", openalprEndpoint.getWorkDir().getAbsolutePath() +  ":/data:ro",
-                getEndpoint().getDockerImage(), "-c", openalprEndpoint.getCountry(), imageFile.getName()};
     }
 
 }

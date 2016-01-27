@@ -33,6 +33,8 @@ public class OpenalprComponent extends UriEndpointComponent {
 
     private String dockerImage;
 
+    private OpenalprCommandStrategy commandStrategy = new DockerizedOpenalprCommandStrategy();
+
     public OpenalprComponent() {
         super(OpenalprEndpoint.class);
     }
@@ -41,6 +43,8 @@ public class OpenalprComponent extends UriEndpointComponent {
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new OpenalprEndpoint(uri, this);
     }
+
+    // Getters and setters
 
     public String getCountry() {
         return country;
@@ -72,6 +76,14 @@ public class OpenalprComponent extends UriEndpointComponent {
 
     public void setDockerImage(String dockerImage) {
         this.dockerImage = dockerImage;
+    }
+
+    public OpenalprCommandStrategy getCommandStrategy() {
+        return commandStrategy;
+    }
+
+    public void setCommandStrategy(OpenalprCommandStrategy commandStrategy) {
+        this.commandStrategy = commandStrategy;
     }
 
 }

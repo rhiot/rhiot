@@ -36,6 +36,8 @@ public class OpenalprEndpoint extends DefaultEndpoint {
 
     private String dockerImage = "rhiot/openalpr:0.1.4-SNAPSHOT";
 
+    private OpenalprCommandStrategy commandStrategy = new DockerizedOpenalprCommandStrategy();
+
     public OpenalprEndpoint(String endpointUri, Component component) {
         super(endpointUri, component);
     }
@@ -111,6 +113,17 @@ public class OpenalprEndpoint extends DefaultEndpoint {
 
     public void setDockerImage(String dockerImage) {
         this.dockerImage = dockerImage;
+    }
+
+    public OpenalprCommandStrategy getCommandStrategy() {
+        if(getComponent().getCommandStrategy() != null) {
+            return getComponent().getCommandStrategy();
+        }
+        return commandStrategy;
+    }
+
+    public void setCommandStrategy(OpenalprCommandStrategy commandStrategy) {
+        this.commandStrategy = commandStrategy;
     }
 
 }
