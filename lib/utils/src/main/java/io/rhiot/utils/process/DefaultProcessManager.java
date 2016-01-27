@@ -29,7 +29,7 @@ public class DefaultProcessManager implements ProcessManager {
             Process process = new ProcessBuilder().redirectErrorStream(true).command(command).start();
             return IOUtils.readLines(process.getInputStream());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ProcessExecutionException(e);
         }
     }
 

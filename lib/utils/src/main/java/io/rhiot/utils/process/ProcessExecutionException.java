@@ -16,20 +16,10 @@
  */
 package io.rhiot.utils.process;
 
-import java.util.List;
+public class ProcessExecutionException extends RuntimeException {
 
-/**
- * Executes and manages system processes.
- */
-public interface ProcessManager {
-
-    /**
-     * Executes command and returns output.
-     *
-     * @param command command to execute, where each command segment is separated by space.
-     * @return standard output and standard error combined into a single list. Each line of collected output is
-     * represented as a line of returned list.
-     */
-    List<String> executeAndJoinOutput(String... command);
+    public ProcessExecutionException(Throwable cause) {
+        super(cause);
+    }
 
 }
