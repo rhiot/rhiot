@@ -148,6 +148,7 @@ log_info "Protocol adapters started."
 log_info "Starting services..."
 exe docker pull rhiot/paas-services:${RHIOT_VERSION}
 exe docker run -d --name paas-services \
+  --privileged -v /var/run/docker.sock:/run/docker.sock \
   -e logging.level.root=${CONTAINERS_LOG_LEVEL} \
   --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
   --link mongodb:mongodb \
