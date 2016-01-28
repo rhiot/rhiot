@@ -16,8 +16,18 @@
  */
 package io.rhiot.cloudplatform.runtime.spring;
 
+import static io.rhiot.cloudplatform.runtime.RhiotConstants.BANNER_LOCATION;
+import static io.rhiot.cloudplatform.runtime.RhiotConstants.CAMEL_SPRINGBOOT_TYPE_CONVERSION;
+import static io.rhiot.cloudplatform.runtime.RhiotConstants.FALSE;
+import static io.rhiot.cloudplatform.runtime.RhiotConstants.META_INF_RHIOT_BANNER_TXT;
+import static java.util.Arrays.asList;
+import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
+
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.hono.connector.IoTConnector;
+
+import java.net.MalformedURLException;
+
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.amqp.AMQPComponent;
 import org.slf4j.Logger;
@@ -28,14 +38,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import java.net.MalformedURLException;
-
-import static java.util.Arrays.asList;
-import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
-
 /**
- * Allows to communicate with the Cloud Platform by loading modules (protocol adapters, services, payload encodings and
- * so forth).
+ * Allows to communicate with the Cloud Platform by loading modules (protocol
+ * adapters, services, payload encodings and so forth).
  */
 @SpringBootApplication(scanBasePackages = "io.rhiot")
 public class CloudPlatform {
@@ -53,7 +58,8 @@ public class CloudPlatform {
     public CloudPlatform start(String... args) {
         LOG.debug("About to start CloudPlatform with arguments: {}", asList(args));
 
-        System.setProperty("camel.springboot.typeConversion", "false");
+        System.setProperty(CAMEL_SPRINGBOOT_TYPE_CONVERSION, FALSE);
+        System.setProperty(BANNER_LOCATION, META_INF_RHIOT_BANNER_TXT);
         applicationContext = new SpringApplicationBuilder(CloudPlatform.class).web(false).build().run(args);
         return this;
     }
@@ -78,8 +84,7 @@ public class CloudPlatform {
     // IoT Connector configuration
 
     @Bean
-    AMQPComponent amqp(
-            @Value("${AMQP_SERVICE_HOST:localhost}") String amqpBrokerUrl,
+    AMQPComponent amqp(@Value("${AMQP_SERVICE_HOST:localhost}") String amqpBrokerUrl,
             @Value("${AMQP_SERVICE_PORT:5672}") int amqpBrokerPort) throws MalformedURLException {
         LOG.debug("About to create AMQP component {}:{}", amqpBrokerUrl, amqpBrokerPort);
         return amqp10Component("amqp://guest:guest@" + amqpBrokerUrl + ":" + amqpBrokerPort);
