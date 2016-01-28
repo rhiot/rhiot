@@ -18,6 +18,7 @@ package io.rhiot.cloudplatform.service.camera.spring;
 
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -25,8 +26,15 @@ import java.util.List;
 import java.util.Map;
 
 import static io.rhiot.cloudplatform.connector.Header.arguments;
+import static io.rhiot.utils.process.Processes.canExecuteCommand;
+import static org.junit.Assume.assumeTrue;
 
 public class CameraServiceConfigurationTest extends CloudPlatformTest {
+
+    @BeforeClass
+    public static void beforeClass() {
+        assumeTrue(canExecuteCommand("docker", "version"));
+    }
 
     @Test
     public void shouldRecognizePlate() {
