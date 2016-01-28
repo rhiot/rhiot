@@ -23,7 +23,6 @@
     </licenses>
 
     <modules>
-        <module>connector</module>
         <module>service</module>
     </modules>
 

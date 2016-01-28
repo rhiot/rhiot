@@ -22,7 +22,7 @@ import io.rhiot.cloudplatform.adapter.leshan.LeshanDeviceMetricsPollService;
 import io.rhiot.cloudplatform.adapter.leshan.MetricResolver;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
-import io.rhiot.hono.connector.IoTConnector;
+import io.rhiot.cloudplatform.connector.IoTConnector;
 import org.eclipse.leshan.server.californium.LeshanServerBuilder;
 import org.eclipse.leshan.server.californium.impl.LeshanServer;
 import org.eclipse.leshan.server.client.ClientRegistry;

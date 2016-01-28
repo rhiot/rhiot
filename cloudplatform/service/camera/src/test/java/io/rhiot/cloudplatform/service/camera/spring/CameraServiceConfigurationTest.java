@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import static io.rhiot.hono.connector.Header.arguments;
+import static io.rhiot.cloudplatform.connector.Header.arguments;
 
 public class CameraServiceConfigurationTest extends CloudPlatformTest {
 

@@ -325,7 +325,7 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
-				<artifactId>rhiot-hono-connector</artifactId>
+				<artifactId>rhiot-cloudplatform-connector</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>
 			<dependency>

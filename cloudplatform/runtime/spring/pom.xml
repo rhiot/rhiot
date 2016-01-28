@@ -39,7 +39,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.rhiot</groupId>
-			<artifactId>rhiot-hono-connector</artifactId>
+			<artifactId>rhiot-cloudplatform-connector</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.rhiot</groupId>

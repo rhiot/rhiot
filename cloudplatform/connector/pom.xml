@@ -6,11 +6,11 @@
     <parent>
         <groupId>io.rhiot</groupId>
         <version>0.1.4-SNAPSHOT</version>
-        <artifactId>rhiot-hono</artifactId>
+        <artifactId>rhiot-cloudplatform</artifactId>
         <relativePath>..</relativePath>
     </parent>
-    <artifactId>rhiot-hono-connector</artifactId>
-    <name>Rhiot :: Hono :: Connector</name>
+    <artifactId>rhiot-cloudplatform-connector</artifactId>
+    <name>Rhiot :: Cloud platform :: Connector</name>
 
     <licenses>
         <license>

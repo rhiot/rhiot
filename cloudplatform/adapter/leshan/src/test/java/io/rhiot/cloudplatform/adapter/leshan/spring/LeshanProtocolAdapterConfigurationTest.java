@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static io.rhiot.hono.connector.Header.arguments;
+import static io.rhiot.cloudplatform.connector.Header.arguments;
 import static io.rhiot.utils.Networks.findAvailableTcpPort;
 import static io.rhiot.utils.leshan.client.LeshanClientTemplate.createVirtualLeshanClientTemplate;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;

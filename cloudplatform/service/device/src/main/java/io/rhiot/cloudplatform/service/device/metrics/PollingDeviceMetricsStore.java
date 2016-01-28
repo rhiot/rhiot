@@ -16,11 +16,11 @@
  */
 package io.rhiot.cloudplatform.service.device.metrics;
 
-import io.rhiot.hono.connector.IoTConnector;
+import io.rhiot.cloudplatform.connector.IoTConnector;
 import org.eclipse.hono.service.device.api.Device;
 import org.eclipse.hono.service.device.api.DeviceRegistry;
 
-import static io.rhiot.hono.connector.Header.arguments;
+import static io.rhiot.cloudplatform.connector.Header.arguments;
 
 public abstract class PollingDeviceMetricsStore implements DeviceMetricsStore {
 

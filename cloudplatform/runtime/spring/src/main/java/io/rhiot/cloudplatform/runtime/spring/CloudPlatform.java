@@ -24,7 +24,7 @@ import static java.util.Arrays.asList;
 import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
-import io.rhiot.hono.connector.IoTConnector;
+import io.rhiot.cloudplatform.connector.IoTConnector;
 
 import java.net.MalformedURLException;
 
