@@ -31,6 +31,7 @@ error_handler() {
   [ -e target/rat.txt ] && cat target/rat.txt
   echo ERROR: An error was encountered with the build.
   dump_output
+  cat /home/travis/build/rhiot/rhiot/cloudplatform/runtime/spring/target/rat.txt
   exit 1
 }
 # If an error occurs, run our error handler to output a tail of the build
@@ -49,7 +50,6 @@ fi
 
 # The build finished without returning an error so dump a tail of the output
 dump_output
-cat /home/travis/build/rhiot/rhiot/cloudplatform/runtime/spring/target/rat.txt
 
 # nicely terminate the ping output loop
 kill $PING_LOOP_PID
