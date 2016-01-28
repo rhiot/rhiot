@@ -16,12 +16,25 @@
  */
 package io.rhiot.utils.process;
 
-public class Processes {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+
+import static java.util.Arrays.asList;
+
+public final class Processes {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Processes.class);
+
+    private Processes() {
+    }
 
     public static boolean canExecuteCommand(String... command) {
         try {
             new DefaultProcessManager().executeAndJoinOutput(command);
         } catch (ProcessExecutionException e) {
+            LOG.debug("Cannot execute command " + asList(command) + " because of:", e);
             return false;
         }
         return true;
