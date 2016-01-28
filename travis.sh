@@ -49,6 +49,7 @@ fi
 
 # The build finished without returning an error so dump a tail of the output
 dump_output
+cat /home/travis/build/rhiot/rhiot/cloudplatform/runtime/spring/target/rat.txt
 
 # nicely terminate the ping output loop
 kill $PING_LOOP_PID
