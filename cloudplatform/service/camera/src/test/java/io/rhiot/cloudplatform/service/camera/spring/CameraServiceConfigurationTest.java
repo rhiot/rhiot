@@ -31,15 +31,12 @@ import static org.junit.Assume.assumeTrue;
 
 public class CameraServiceConfigurationTest extends CloudPlatformTest {
 
-    @BeforeClass
-    public static void beforeClass() {
-        assumeTrue(canExecuteCommand("docker", "version"));
-    }
-
     // Tests
 
     @Test
     public void shouldRecognizePlate() {
+        assumeTrue(canExecuteCommand("docker", "version"));
+
         InputStream image = getClass().getResourceAsStream("/h786poj.jpg");
         @SuppressWarnings("unchecked") // We deserialize binary data here, so type safety warnings can be ignored.
         List<Map<String, Object>> plateMatches = connector.fromBus("camera.recognizePlate", image, List.class, arguments("eu"));
