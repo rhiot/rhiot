@@ -36,9 +36,12 @@ public class CameraServiceConfigurationTest extends CloudPlatformTest {
         assumeTrue(canExecuteCommand("docker", "version"));
     }
 
+    // Tests
+
     @Test
     public void shouldRecognizePlate() {
         InputStream image = getClass().getResourceAsStream("/h786poj.jpg");
+        @SuppressWarnings("unchecked") // We deserialize binary data here, so type safety warnings can be ignored.
         List<Map<String, Object>> plateMatches = connector.fromBus("camera.recognizePlate", image, List.class, arguments("eu"));
         Truth.assertThat(plateMatches.get(0).get("plateNumber")).isEqualTo("H786P0J");
     }
