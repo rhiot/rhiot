@@ -352,7 +352,7 @@
                             <image>
                                 <name>rhiot/${docker.image.target}</name>
                                 <build>
-                                    <from>rhiot/fatjar:0.1.2-SNAPSHOT</from>
+                                    <from>rhiot/fatjar-dockerclient:0.1.4-SNAPSHOT</from>
                                     <tags>
                                         <tag>latest</tag>
                                         <tag>${project.version}</tag>
