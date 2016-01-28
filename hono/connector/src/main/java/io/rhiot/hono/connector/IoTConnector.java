@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import org.apache.camel.ProducerTemplate;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +82,11 @@ public class IoTConnector {
         for(Header header : headers) {
             collectedHeaders.put(header.key(), header.value());
         }
-        byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, payloadEncoding.encode(payload), collectedHeaders, byte[].class);
+        Object encodedPayload = payload;
+        if(!(payload instanceof InputStream)) {
+            encodedPayload = payloadEncoding.encode(payload);
+        }
+        byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, encodedPayload, collectedHeaders, byte[].class);
         return (T) payloadEncoding.decode(busResponse);
     }
 
