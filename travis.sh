@@ -28,10 +28,8 @@ dump_output() {
    tail -500 $BUILD_OUTPUT
 }
 error_handler() {
-  [ -e target/rat.txt ] && cat target/rat.txt
   echo ERROR: An error was encountered with the build.
   dump_output
-  cat /home/travis/build/rhiot/rhiot/cloudplatform/runtime/spring/target/rat.txt
   exit 1
 }
 # If an error occurs, run our error handler to output a tail of the build
