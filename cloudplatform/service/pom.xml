@@ -24,6 +24,7 @@
         <module>binding</module>
         <module>device</module>
         <module>mailbox</module>
+        <module>camera</module>
         <module>spark</module>
     </modules>
 
