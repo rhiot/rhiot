@@ -18,9 +18,12 @@ package io.rhiot.cloudplatform.service.camera;
 
 import java.util.List;
 
+/**
+ * Service for storing and analysing images taken by video cameras.
+ */
 public interface CameraService {
 
-    List<PlateMatch> recognizePlate(byte[] imageData);
+    List<PlateMatch> recognizePlate(String country, byte[] imageData);
 
     void process(String deviceId, byte[] imageData);
 

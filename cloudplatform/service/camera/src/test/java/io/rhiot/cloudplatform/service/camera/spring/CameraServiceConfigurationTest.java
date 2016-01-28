@@ -24,12 +24,14 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import static io.rhiot.hono.connector.Header.arguments;
+
 public class CameraServiceConfigurationTest extends CloudPlatformTest {
 
     @Test
     public void shouldRecognizePlate() {
         InputStream image = getClass().getResourceAsStream("/h786poj.jpg");
-        List<Map<String, Object>> plateMatches = connector.fromBus("camera.recognizePlate", image, List.class);
+        List<Map<String, Object>> plateMatches = connector.fromBus("camera.recognizePlate", image, List.class, arguments("eu"));
         Truth.assertThat(plateMatches.get(0).get("plateNumber")).isEqualTo("H786P0J");
     }
 

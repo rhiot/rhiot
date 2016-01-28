@@ -30,8 +30,8 @@ public class DefaultCameraService implements CameraService {
     }
 
     @Override
-    public List<PlateMatch> recognizePlate(byte[] imageData) {
-        return ((List<io.rhiot.cloudplatform.camel.openalpr.PlateMatch>) producerTemplate.requestBody("openalpr:recognize", imageData, List.class)).stream().
+    public List<PlateMatch> recognizePlate(String country, byte[] imageData) {
+        return ((List<io.rhiot.cloudplatform.camel.openalpr.PlateMatch>) producerTemplate.requestBody("openalpr:recognize?country=" + country, imageData, List.class)).stream().
                 map(match -> new PlateMatch(match.getPlateNumber(), match.getConfidence())).collect(Collectors.toList());
     }
 
