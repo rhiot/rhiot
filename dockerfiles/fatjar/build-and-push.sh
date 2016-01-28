@@ -12,12 +12,10 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-FROM java:8u72
 
-MAINTAINER hekonsek@gmail.com
+#!/bin/sh
 
-RUN mkdir /jars
-ADD fatjar.sh /opt/
-RUN chmod +x /opt/fatjar.sh
-
-ENTRYPOINT ["/opt/fatjar.sh"]
+docker build -t rhiot/fatjar:0.1.4-SNAPSHOT .
+docker tag -f rhiot/fatjar:0.1.4-SNAPSHOT rhiot/fatjar:latest
+docker push rhiot/fatjar:0.1.4-SNAPSHOT
+docker push rhiot/fatjar:latest
