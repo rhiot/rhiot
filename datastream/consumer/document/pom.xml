@@ -22,10 +22,6 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-adapter-rest</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
             <artifactId>rhiot-cloudplatform-service-binding</artifactId>
         </dependency>
         <dependency>
