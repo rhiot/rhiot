@@ -16,6 +16,8 @@
  */
 package io.rhiot.cloudplatform.service.camera;
 
+import io.rhiot.cloudplatform.service.camera.api.CameraService;
+import io.rhiot.cloudplatform.service.camera.api.PlateMatch;
 import org.apache.camel.ProducerTemplate;
 
 import java.util.List;

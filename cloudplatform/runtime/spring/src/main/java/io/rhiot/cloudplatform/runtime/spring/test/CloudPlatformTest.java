@@ -52,7 +52,7 @@ public abstract class CloudPlatformTest extends Assert {
     protected static IoTConnector connector;
 
     @BeforeClass
-    public static void beforeClass() {
+    public static void beforeCloudPlatformTestClass() {
         System.setProperty("spring.activemq.broker.enabled", true + "");
         System.setProperty("spring.activemq.broker.amqpEnabled", true + "");
         amqpPort = findAvailableTcpPort();

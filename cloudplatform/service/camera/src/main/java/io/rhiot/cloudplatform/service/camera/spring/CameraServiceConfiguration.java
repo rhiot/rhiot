@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.service.camera.spring;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
-import io.rhiot.cloudplatform.service.camera.CameraService;
+import io.rhiot.cloudplatform.service.camera.api.CameraService;
 import io.rhiot.cloudplatform.service.camera.DefaultCameraService;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.context.annotation.Bean;
