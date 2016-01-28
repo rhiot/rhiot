@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 import static io.rhiot.utils.Uuids.uuid;
 import static java.lang.Double.parseDouble;
+import static java.util.Arrays.asList;
 import static org.apache.commons.io.IOUtils.write;
 
 public class OpenalprProducer extends DefaultProducer {
@@ -38,18 +39,24 @@ public class OpenalprProducer extends DefaultProducer {
     @Override
     public void process(Exchange exchange) throws Exception {
         File imageFile = new File(getEndpoint().getWorkDir(), uuid() + ".jpg");
+        log.debug("About to process image file: {}", imageFile.getAbsolutePath());
         try {
             byte[] imageData = exchange.getIn().getBody(byte[].class);
             write(imageData, new FileOutputStream(imageFile));
             String[] command = getEndpoint().getCommandStrategy().openalprCommand(getEndpoint(), imageFile);
+            log.debug("About to execute command: {}", asList(command));
             List<String> output = getEndpoint().getProcessManager().executeAndJoinOutput(command);
+            log.debug("Raw output of the alpr command: {}", output);
             List<PlateMatch> plates = output.stream().filter(line -> line.contains("confidence:")).map(line -> line.replaceAll("- ", "").split("confidence:")).
                     map(pair -> new PlateMatch(pair[0].trim(), parseDouble(pair[1].trim()))).collect(Collectors.toList());
             exchange.getIn().setBody(plates);
         } finally {
+            log.debug("Deleting image file: {}", imageFile.getAbsolutePath());
             imageFile.delete();
         }
     }
+
+    // Getters
 
     @Override
     public OpenalprEndpoint getEndpoint() {

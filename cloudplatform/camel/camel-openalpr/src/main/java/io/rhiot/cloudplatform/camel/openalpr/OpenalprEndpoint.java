@@ -30,7 +30,7 @@ public class OpenalprEndpoint extends DefaultEndpoint {
 
     private String country = "eu";
 
-    private File workDir = new File("openalpr-workdir");
+    private File workDir = new File("/tmp/openalpr-workdir");
 
     private ProcessManager processManager = new DefaultProcessManager();
 
