@@ -70,17 +70,10 @@ public class ServiceBinding extends RouteBuilder {
             Message message = exchange.getIn();
             String channel = message.getHeader("JMSDestination", Destination.class).getAddress();
             byte[] incomingPayload = message.getBody(byte[].class);
-            OperationBinding operationBinding = operationBinding(payloadEncoding, channel, incomingPayload, message.getHeaders());
+            OperationBinding operationBinding = operationBinding(payloadEncoding, channel, incomingPayload, message.getHeaders(), getContext().getRegistry());
             exchange.setProperty(TARGET_PROPERTY, "bean:" + operationBinding.service() + "?method=" + operationBinding.operation() + "&multiParameterArray=true");
 
-            Class beanType = getContext().getRegistry().lookupByName(operationBinding.service()).getClass();
-            LOG.debug("Detected service bean type {} for operation: {}", beanType, operationBinding);
-            List<Method> beanMethods = new ArrayList<>(asList(beanType.getDeclaredMethods()));
-            beanMethods.addAll(asList(beanType.getMethods()));
-            Method operationMethod = beanMethods.stream().
-                    filter(method -> method.getName().equals(operationBinding.operation())).findAny().get();
-
-            message.setBody(convert(getContext(), operationBinding.arguments(), operationMethod.getParameterTypes()));
+            message.setBody(convert(getContext(), operationBinding.arguments(), operationBinding.operationMethod().getParameterTypes()));
         }).toD(format("${property.%s}", TARGET_PROPERTY)).process(it -> it.getIn().setBody(payloadEncoding.encode(it.getIn().getBody())));
     }
 

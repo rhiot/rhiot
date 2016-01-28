@@ -17,8 +17,13 @@
 package io.rhiot.cloudplatform.service.binding;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
+import org.apache.camel.spi.Registry;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,19 +32,24 @@ import static java.util.Arrays.asList;
 
 class OperationBinding {
 
+    private static final Logger LOG = LoggerFactory.getLogger(OperationBinding.class);
+
     private final String service;
 
     private final String operation;
 
     private final List<?> arguments;
 
-    private OperationBinding(String service, String operation, List<?> arguments) {
+    private final Method operationMethod;
+
+    public OperationBinding(String service, String operation, List<?> arguments, Method operationMethod) {
         this.service = service;
         this.operation = operation;
         this.arguments = arguments;
+        this.operationMethod = operationMethod;
     }
 
-    static OperationBinding operationBinding(PayloadEncoding payloadEncoding, String channel, byte[] incomingPayload, Map<String, Object> headers) {
+    static OperationBinding operationBinding(PayloadEncoding payloadEncoding, String channel, byte[] incomingPayload, Map<String, Object> headers, Registry registry) {
         String rawChannel = channel.substring(channel.lastIndexOf('/') + 1);
         String[] channelParts = rawChannel.split("\\.");
         String service = channelParts[0];
@@ -53,11 +63,21 @@ class OperationBinding {
             }
         }
 
+        Class beanType = registry.lookupByName(service).getClass();
+        LOG.debug("Detected service bean type {} for operation: {}", beanType, operation);
+        List<Method> beanMethods = new ArrayList<>(asList(beanType.getDeclaredMethods()));
+        beanMethods.addAll(asList(beanType.getMethods()));
+        Method operationMethod = beanMethods.stream().
+                filter(method -> method.getName().equals(operation)).findAny().get();
+
         if (incomingPayload != null && incomingPayload.length > 0) {
-            Object payload = payloadEncoding.decode(incomingPayload);
+            Object payload = incomingPayload;
+            if(operationMethod.getParameterTypes()[operationMethod.getParameterTypes().length - 1] != byte[].class) {
+                payload = payloadEncoding.decode(incomingPayload);
+            }
             arguments.add(payload);
         }
-        return new OperationBinding(service, operation, arguments);
+        return new OperationBinding(service, operation, arguments, operationMethod);
     }
 
     public String service() {
@@ -70,6 +90,10 @@ class OperationBinding {
 
     public List<?> arguments() {
         return arguments;
+    }
+
+    public Method operationMethod() {
+        return operationMethod;
     }
 
     @Override
