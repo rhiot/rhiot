@@ -16,10 +16,9 @@
  */
 package io.rhiot.cloudplatform.runtime.spring;
 
-import static io.rhiot.cloudplatform.runtime.RhiotConstants.BANNER_LOCATION;
-import static io.rhiot.cloudplatform.runtime.RhiotConstants.CAMEL_SPRINGBOOT_TYPE_CONVERSION;
-import static io.rhiot.cloudplatform.runtime.RhiotConstants.FALSE;
-import static io.rhiot.cloudplatform.runtime.RhiotConstants.META_INF_RHIOT_BANNER_TXT;
+import static io.rhiot.cloudplatform.runtime.spring.RhiotConstants.BANNER_LOCATION;
+import static io.rhiot.cloudplatform.runtime.spring.RhiotConstants.CAMEL_SPRINGBOOT_TYPE_CONVERSION;
+import static io.rhiot.cloudplatform.runtime.spring.RhiotConstants.META_INF_RHIOT_BANNER_TXT;
 import static java.util.Arrays.asList;
 import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
 
@@ -58,7 +57,7 @@ public class CloudPlatform {
     public CloudPlatform start(String... args) {
         LOG.debug("About to start CloudPlatform with arguments: {}", asList(args));
 
-        System.setProperty(CAMEL_SPRINGBOOT_TYPE_CONVERSION, FALSE);
+        System.setProperty(CAMEL_SPRINGBOOT_TYPE_CONVERSION, false + "");
         System.setProperty(BANNER_LOCATION, META_INF_RHIOT_BANNER_TXT);
         applicationContext = new SpringApplicationBuilder(CloudPlatform.class).web(false).build().run(args);
         return this;
