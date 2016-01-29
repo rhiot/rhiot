@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>hono-service-device-api</artifactId>
+            <artifactId>rhiot-cloudplatform-service-device-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.leshan</groupId>

@@ -22,6 +22,7 @@
 
     <modules>
         <module>binding</module>
+        <module>device-api</module>
         <module>device</module>
         <module>mailbox</module>
         <module>camera</module>
