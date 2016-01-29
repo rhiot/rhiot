@@ -16,8 +16,8 @@
  */
 package io.rhiot.component.kura.datatransport;
 
-import static io.rhiot.component.kura.datatransport.DataTransportConstants.CAMEL_KURA_DATATRANSPORT_QOS;
-import static io.rhiot.component.kura.datatransport.DataTransportConstants.CAMEL_KURA_DATATRANSPORT_TOPIC;
+import static io.rhiot.component.kura.datatransport.KuraDataTransportConstants.CAMEL_KURA_DATATRANSPORT_QOS;
+import static io.rhiot.component.kura.datatransport.KuraDataTransportConstants.CAMEL_KURA_DATATRANSPORT_TOPIC;
 
 import io.rhiot.component.kura.utils.KuraServiceFactory;
 
@@ -25,9 +25,9 @@ import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.eclipse.kura.data.DataTransportService;
 
-public class DataTransportProducer extends DefaultProducer {
+public class KuraDataTransportProducer extends DefaultProducer {
 
-    public DataTransportProducer(DataTransportEndpoint endpoint) {
+    public KuraDataTransportProducer(KuraDataTransportEndpoint endpoint) {
         super(endpoint);
     }
 
@@ -53,8 +53,8 @@ public class DataTransportProducer extends DefaultProducer {
     }
 
     @Override
-    public DataTransportEndpoint getEndpoint() {
-        return (DataTransportEndpoint) super.getEndpoint();
+    public KuraDataTransportEndpoint getEndpoint() {
+        return (KuraDataTransportEndpoint) super.getEndpoint();
     }
 
 }

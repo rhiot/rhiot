@@ -16,7 +16,7 @@
  */
 package io.rhiot.component.kura.datatransport;
 
-import static io.rhiot.component.kura.datatransport.DataTransportConstants.DEFAULT_QOS;
+import static io.rhiot.component.kura.datatransport.KuraDataTransportConstants.DEFAULT_QOS;
 
 import org.apache.camel.Component;
 import org.apache.camel.Consumer;
@@ -25,7 +25,7 @@ import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriParam;
 
-public class DataTransportEndpoint extends DefaultEndpoint {
+public class KuraDataTransportEndpoint extends DefaultEndpoint {
 
     @UriParam(defaultValue = "")
     private String topic;
@@ -36,14 +36,14 @@ public class DataTransportEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "false", description = "Message retain, per Uri or per Message")
     private boolean retain = false;
 
-    public DataTransportEndpoint(String endpointUri, Component component, String topic) {
+    public KuraDataTransportEndpoint(String endpointUri, Component component, String topic) {
         super(endpointUri, component);
         this.topic = topic;
     }
 
     @Override
     public Producer createProducer() throws Exception {
-        return new DataTransportProducer(this);
+        return new KuraDataTransportProducer(this);
     }
 
     @Override

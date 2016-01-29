@@ -22,8 +22,8 @@ import org.eclipse.kura.KuraException;
 import org.eclipse.kura.data.DataTransportService;
 import org.junit.Test;
 
-import static io.rhiot.component.kura.datatransport.DataTransportConstants.CAMEL_KURA_DATATRANSPORT_QOS;
-import static io.rhiot.component.kura.datatransport.DataTransportConstants.DEFAULT_QOS;
+import static io.rhiot.component.kura.datatransport.KuraDataTransportConstants.CAMEL_KURA_DATATRANSPORT_QOS;
+import static io.rhiot.component.kura.datatransport.KuraDataTransportConstants.DEFAULT_QOS;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
