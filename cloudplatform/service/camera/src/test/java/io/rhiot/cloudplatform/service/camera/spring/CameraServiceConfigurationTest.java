@@ -59,7 +59,7 @@ public class CameraServiceConfigurationTest extends CloudPlatformTest {
         Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
 
         // Then
-        List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("WebcamImage"));
+        List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
         Truth.assertThat(imageMetadata).hasSize(1);
         Truth.assertThat(((List<Map<String, Object>>)imageMetadata.get(0).get("plateMatches")).get(0).get("plateNumber")).isEqualTo("H786P0J");
     }

@@ -58,7 +58,7 @@ public class DefaultCameraService implements CameraService {
     public void process(String deviceId, String country, byte[] imageData) {
         List<PlateMatch> matches = recognizePlate(country, imageData);
         Map<String, Object> imageMetadata = ImmutableMap.of("deviceId", deviceId, "plateMatches", matches);
-        String imageId = connector.fromBus("document.save", imageMetadata, String.class, arguments("WebcamImage"));
+        String imageId = connector.fromBus("document.save", imageMetadata, String.class, arguments("CameraImage"));
 
         try {
             write(imageData, new FileOutputStream(new File(imagesDirectory, imageId + ".jpg")));
