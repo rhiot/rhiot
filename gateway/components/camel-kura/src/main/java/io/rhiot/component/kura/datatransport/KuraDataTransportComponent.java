@@ -16,20 +16,22 @@
  */
 package io.rhiot.component.kura.datatransport;
 
-/**
- * Kura DataTransport component related constants.
- */
-public final class DataTransportConstants {
+import org.apache.camel.Endpoint;
+import org.apache.camel.impl.UriEndpointComponent;
 
-    public static final String CAMEL_KURA_DATATRANSPORT = "CamelKuraDataTransport";
+import java.util.Map;
 
-    public static final String CAMEL_KURA_DATATRANSPORT_TOPIC = CAMEL_KURA_DATATRANSPORT + ".topic";
+public class KuraDataTransportComponent extends UriEndpointComponent {
 
-    public static final String CAMEL_KURA_DATATRANSPORT_QOS = CAMEL_KURA_DATATRANSPORT + ".qos";
+    public KuraDataTransportComponent() {
+        super(KuraDataTransportEndpoint.class);
+    }
 
-    public static final int DEFAULT_QOS = 0;
-
-    private DataTransportConstants() {
+    @Override
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+        KuraDataTransportEndpoint endpoint = new KuraDataTransportEndpoint(uri, this, remaining);
+        setProperties(endpoint, parameters);
+        return endpoint;
     }
 
 }
