@@ -33,7 +33,7 @@ public class CameraServiceConfiguration {
 
     @Bean(name = "camera")
     CameraService cameraService(IoTConnector connector, ProducerTemplate producerTemplate,
-                                @Value("camera.imagesDirectory:/tmp/rhiot/camera") File imagesDirectory) {
+                                @Value("${camera.imagesDirectory:/tmp/rhiot/camera}") File imagesDirectory) {
         return new DefaultCameraService(connector, producerTemplate, imagesDirectory);
     }
 
