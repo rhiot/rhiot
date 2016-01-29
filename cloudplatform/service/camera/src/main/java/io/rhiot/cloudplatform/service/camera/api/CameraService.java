@@ -25,6 +25,6 @@ public interface CameraService {
 
     List<PlateMatch> recognizePlate(String country, byte[] imageData);
 
-    void process(String deviceId, byte[] imageData);
+    void process(String deviceId, String country, byte[] imageData);
 
 }

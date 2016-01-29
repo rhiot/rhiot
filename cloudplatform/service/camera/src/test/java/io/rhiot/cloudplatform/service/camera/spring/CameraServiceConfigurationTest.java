@@ -16,8 +16,10 @@
  */
 package io.rhiot.cloudplatform.service.camera.spring;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
+import io.rhiot.utils.Uuids;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import static io.rhiot.cloudplatform.connector.Header.arguments;
+import static io.rhiot.utils.Uuids.uuid;
 import static io.rhiot.utils.process.Processes.canExecuteCommand;
 import static org.junit.Assume.assumeTrue;
 
@@ -41,6 +44,24 @@ public class CameraServiceConfigurationTest extends CloudPlatformTest {
         @SuppressWarnings("unchecked") // We deserialize binary data here, so type safety warnings can be ignored.
         List<Map<String, Object>> plateMatches = connector.fromBus("camera.recognizePlate", image, List.class, arguments("eu"));
         Truth.assertThat(plateMatches.get(0).get("plateNumber")).isEqualTo("H786P0J");
+    }
+
+    @Test
+    public void shouldProcessImagePlate() {
+        assumeTrue(canExecuteCommand("docker", "version"));
+
+        // Given
+        String deviceId = uuid();
+        InputStream image = getClass().getResourceAsStream("/h786poj.jpg");
+
+        // When
+        connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
+        Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
+
+        // Then
+        List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("WebcamImage"));
+        Truth.assertThat(imageMetadata).hasSize(1);
+        Truth.assertThat(((List<Map<String, Object>>)imageMetadata.get(0).get("plateMatches")).get(0).get("plateNumber")).isEqualTo("H786P0J");
     }
 
 }

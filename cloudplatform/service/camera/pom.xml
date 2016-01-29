@@ -30,11 +30,7 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-runtime-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-service-device-api</artifactId>
+            <artifactId>rhiot-cloudplatform-connector</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -74,8 +70,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-datastream-document-mongodb</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
