@@ -34,10 +34,14 @@ public class KuraDataTransportProducer extends DefaultProducer {
     @Override
     public void process(Exchange exchange) throws Exception {
 
-        DataTransportService dataTransportService = KuraServiceFactory.retrieveService(DataTransportService.class,
-                getEndpoint().getCamelContext().getRegistry());
-
         byte[] payload = exchange.getIn().getBody(byte[].class);
+
+        DataTransportService dataTransportService = getEndpoint().getDataTransportService();
+
+        if (dataTransportService == null) {
+            dataTransportService = KuraServiceFactory.retrieveService(DataTransportService.class,
+                    getEndpoint().getCamelContext().getRegistry());
+        }
 
         String topic = exchange.getIn().getHeader(CAMEL_KURA_DATATRANSPORT_TOPIC, String.class);
         if (topic == null) {

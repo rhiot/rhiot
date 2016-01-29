@@ -24,6 +24,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriParam;
+import org.eclipse.kura.data.DataTransportService;
 
 public class KuraDataTransportEndpoint extends DefaultEndpoint {
 
@@ -35,6 +36,9 @@ public class KuraDataTransportEndpoint extends DefaultEndpoint {
 
     @UriParam(defaultValue = "false", description = "Message retain, per Uri or per Message")
     private boolean retain = false;
+
+    @UriParam(description = "From URI or OSGi registry")
+    private DataTransportService dataTransportService;
 
     public KuraDataTransportEndpoint(String endpointUri, Component component, String topic) {
         super(endpointUri, component);
@@ -78,6 +82,14 @@ public class KuraDataTransportEndpoint extends DefaultEndpoint {
 
     public void setRetain(boolean retain) {
         this.retain = retain;
+    }
+
+    public DataTransportService getDataTransportService() {
+        return dataTransportService;
+    }
+
+    public void setDataTransportService(DataTransportService dataTransportService) {
+        this.dataTransportService = dataTransportService;
     }
 
 }
