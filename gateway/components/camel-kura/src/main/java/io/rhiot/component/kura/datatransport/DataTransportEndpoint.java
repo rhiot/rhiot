@@ -24,11 +24,8 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriParam;
-import org.eclipse.kura.data.DataTransportService;
 
 public class DataTransportEndpoint extends DefaultEndpoint {
-
-    private transient DataTransportService dataTransportService;
 
     @UriParam(defaultValue = "")
     private String topic;
@@ -57,14 +54,6 @@ public class DataTransportEndpoint extends DefaultEndpoint {
     @Override
     public boolean isSingleton() {
         return true;
-    }
-
-    public DataTransportService getDataTransportService() {
-        return dataTransportService;
-    }
-
-    public void setDataTransportService(DataTransportService dataTransportService) {
-        this.dataTransportService = dataTransportService;
     }
 
     public String getTopic() {
