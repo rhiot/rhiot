@@ -133,17 +133,17 @@
 			<dependency>
 				<groupId>br.com.criativasoft.opendevice.ext</groupId>
 				<artifactId>bluecove</artifactId>
-				<version>2.1.1-SNAPSHOT</version>
+				<version>${bluecove.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>br.com.criativasoft.opendevice.ext</groupId>
 				<artifactId>bluecove-gpl</artifactId>
-				<version>2.1.1-SNAPSHOT</version>
+				<version>${bluecove.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>br.com.criativasoft.opendevice.ext</groupId>
 				<artifactId>bluecove-gpl-arm</artifactId>
-				<version>2.1.1-SNAPSHOT</version>
+				<version>${bluecove.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
