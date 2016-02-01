@@ -22,23 +22,19 @@ import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.service.camera.api.CameraService;
 import io.rhiot.cloudplatform.service.camera.DefaultCameraService;
 import org.apache.camel.ProducerTemplate;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.io.File;
 
 @Configuration
 public class CameraServiceConfiguration {
 
     @Bean(name = "camera")
-    CameraService cameraService(IoTConnector connector, ProducerTemplate producerTemplate,
-                                @Value("${camera.imagesDirectory:/tmp/rhiot/camera}") File imagesDirectory) {
-        return new DefaultCameraService(connector, producerTemplate, imagesDirectory);
+    CameraService cameraService(IoTConnector connector, ProducerTemplate producerTemplate) {
+        return new DefaultCameraService(connector, producerTemplate);
     }
 
     @Bean
-    ServiceBinding serviceBinding(PayloadEncoding payloadEncoding) {
+    ServiceBinding cameraServiceBinding(PayloadEncoding payloadEncoding) {
         return new ServiceBinding(payloadEncoding, "camera");
     }
 

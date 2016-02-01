@@ -22,15 +22,11 @@ import io.rhiot.cloudplatform.service.camera.api.CameraService;
 import io.rhiot.cloudplatform.service.camera.api.PlateMatch;
 import org.apache.camel.ProducerTemplate;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.rhiot.cloudplatform.connector.Header.arguments;
-import static org.apache.commons.io.IOUtils.write;
 
 public class DefaultCameraService implements CameraService {
 
@@ -38,14 +34,9 @@ public class DefaultCameraService implements CameraService {
 
     private final ProducerTemplate producerTemplate;
 
-    private final File imagesDirectory;
-
-    public DefaultCameraService(IoTConnector connector, ProducerTemplate producerTemplate, File imagesDirectory) {
+    public DefaultCameraService(IoTConnector connector, ProducerTemplate producerTemplate) {
         this.connector = connector;
         this.producerTemplate = producerTemplate;
-        this.imagesDirectory = imagesDirectory;
-
-        imagesDirectory.mkdirs();
     }
 
     @Override
@@ -59,12 +50,7 @@ public class DefaultCameraService implements CameraService {
         List<PlateMatch> matches = recognizePlate(country, imageData);
         Map<String, Object> imageMetadata = ImmutableMap.of("deviceId", deviceId, "plateMatches", matches);
         String imageId = connector.fromBus("document.save", imageMetadata, String.class, arguments("CameraImage"));
-
-        try {
-            write(imageData, new FileOutputStream(new File(imagesDirectory, imageId + ".jpg")));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        connector.toBus("binary.store", imageData, arguments(imageId));
     }
 
 }

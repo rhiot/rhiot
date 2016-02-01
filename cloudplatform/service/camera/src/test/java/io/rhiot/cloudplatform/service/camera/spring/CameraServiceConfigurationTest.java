@@ -20,10 +20,13 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 import io.rhiot.utils.Uuids;
+import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -34,13 +37,17 @@ import static org.junit.Assume.assumeTrue;
 
 public class CameraServiceConfigurationTest extends CloudPlatformTest {
 
+    String deviceId = uuid();
+
+    InputStream image = getClass().getResourceAsStream("/h786poj.jpg");
+
+
     // Tests
 
     @Test
     public void shouldRecognizePlate() {
         assumeTrue(canExecuteCommand("docker", "version"));
 
-        InputStream image = getClass().getResourceAsStream("/h786poj.jpg");
         @SuppressWarnings("unchecked") // We deserialize binary data here, so type safety warnings can be ignored.
         List<Map<String, Object>> plateMatches = connector.fromBus("camera.recognizePlate", image, List.class, arguments("eu"));
         Truth.assertThat(plateMatches.get(0).get("plateNumber")).isEqualTo("H786P0J");
@@ -50,18 +57,28 @@ public class CameraServiceConfigurationTest extends CloudPlatformTest {
     public void shouldProcessImagePlate() {
         assumeTrue(canExecuteCommand("docker", "version"));
 
-        // Given
-        String deviceId = uuid();
-        InputStream image = getClass().getResourceAsStream("/h786poj.jpg");
-
         // When
         connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
-        Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
 
         // Then
+        Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
         List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
         Truth.assertThat(imageMetadata).hasSize(1);
         Truth.assertThat(((List<Map<String, Object>>)imageMetadata.get(0).get("plateMatches")).get(0).get("plateNumber")).isEqualTo("H786P0J");
+    }
+
+    @Test
+    public void shouldStoreProcessedPlateImage() {
+        assumeTrue(canExecuteCommand("docker", "version"));
+
+        // When
+        connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
+
+        // Then
+        Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
+        List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
+        Truth.assertThat(imageMetadata).hasSize(1);
+        Truth.assertThat(new File("/tmp/rhiot/binary").list()).asList().contains(imageMetadata.get(0).get("id"));
     }
 
 }

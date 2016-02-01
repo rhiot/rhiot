@@ -57,7 +57,7 @@ public class LeshanProtocolAdapterConfiguration {
     }
 
     @Bean
-    ServiceBinding serviceBinding(PayloadEncoding payloadEncoding) {
+    ServiceBinding leshanServiceBinding(PayloadEncoding payloadEncoding) {
         return new ServiceBinding(payloadEncoding, "deviceMetricsPoll");
     }
 

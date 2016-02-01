@@ -30,12 +30,12 @@ import java.io.File;
 public class BinaryServiceConfiguration {
 
     @Bean(name = "binary")
-    BinaryService cameraService(@Value("${camera.imagesDirectory:/tmp/rhiot/binary}") File imagesDirectory) {
+    BinaryService binaryService(@Value("${camera.imagesDirectory:/tmp/rhiot/binary}") File imagesDirectory) {
         return new DefaultBinaryService(imagesDirectory);
     }
 
     @Bean
-    ServiceBinding serviceBinding(PayloadEncoding payloadEncoding) {
+    ServiceBinding binaryServiceBinding(PayloadEncoding payloadEncoding) {
         return new ServiceBinding(payloadEncoding, "binary");
     }
 
