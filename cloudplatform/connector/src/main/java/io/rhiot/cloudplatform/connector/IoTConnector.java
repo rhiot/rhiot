@@ -32,21 +32,21 @@ public class IoTConnector {
 
     private final ProducerTemplate producerTemplate;
 
+    // Constructors
+
     public IoTConnector(PayloadEncoding payloadEncoding, ProducerTemplate producerTemplate) {
         this.payloadEncoding = payloadEncoding;
         this.producerTemplate = producerTemplate;
     }
 
-    public void toBus(String channel, Header... headers) {
-        producerTemplate.sendBodyAndHeaders("amqp:" + channel, null, arguments(headers));
-    }
+    // Connector channels API
 
     public void toBus(String channel, Object payload, Header... headers) {
-        Object encodedPayload = payload;
-        if(!(payload instanceof InputStream)) {
-            encodedPayload = payloadEncoding.encode(payload);
-        }
-        producerTemplate.sendBodyAndHeaders("amqp:" + channel, encodedPayload, arguments(headers));
+        producerTemplate.sendBodyAndHeaders("amqp:" + channel, encodedPayload(payload), arguments(headers));
+    }
+
+    public void toBus(String channel, Header... headers) {
+        toBus(channel, null, headers);
     }
 
     public void toBusAndWait(String channel) {
@@ -59,17 +59,16 @@ public class IoTConnector {
         for(Header header : headers) {
             collectedHeaders.put(header.key(), header.value());
         }
-        Object encodedPayload = payload;
-        if(!(payload instanceof InputStream)) {
-            encodedPayload = payloadEncoding.encode(payload);
-        }
-        byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, encodedPayload, collectedHeaders, byte[].class);
+        byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, encodedPayload(payload), collectedHeaders, byte[].class);
         payloadEncoding.decode(busResponse);
     }
 
     public <T> T fromBus(String channel, Class<T> responseType, Header... headers) {
         byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, null, arguments(headers), byte[].class);
-        Object decodedResponse = payloadEncoding.decode(busResponse);
+        Object decodedResponse = busResponse;
+        if(responseType != byte[].class) {
+            decodedResponse = payloadEncoding.decode(busResponse);
+        }
         if(decodedResponse != null && responseType.isAssignableFrom(decodedResponse.getClass())) {
            return (T) decodedResponse;
         } else {
@@ -88,12 +87,17 @@ public class IoTConnector {
     }
 
     public  <T> T fromBus(String channel, Object payload, Class<T> responseType, Header... headers) {
-        Object encodedPayload = payload;
-        if(!(payload instanceof InputStream)) {
-            encodedPayload = payloadEncoding.encode(payload);
-        }
-        byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, encodedPayload, arguments(headers), byte[].class);
+        byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, encodedPayload(payload), arguments(headers), byte[].class);
         return (T) payloadEncoding.decode(busResponse);
+    }
+
+    // Helpers
+
+    private Object encodedPayload(Object payload) {
+        if(payload == null || payload instanceof InputStream || payload.getClass() == byte[].class) {
+            return payload;
+        }
+        return payloadEncoding.encode(payload);
     }
 
 }
