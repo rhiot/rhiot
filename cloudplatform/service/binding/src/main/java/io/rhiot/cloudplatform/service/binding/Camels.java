@@ -27,11 +27,15 @@ import java.util.List;
 
 public class Camels {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ServiceBinding.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Camels.class);
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    // Collaborators
 
-    public static List<?> convert(CamelContext camelContext, List<?> values, Class[] targetTypes) {
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    // Operations
+
+    public List<?> convert(CamelContext camelContext, List<?> values, Class[] targetTypes) {
         LOG.debug("About to convert those arguments: {}", values);
         List<Object> convertedArguments = new ArrayList<>(values.size());
         for (int i = 0; i < values.size(); i++) {
@@ -40,7 +44,7 @@ public class Camels {
             } catch (NoTypeConversionAvailableException e) {
                 LOG.debug("Failed to convert {} to type {}. Falling back to Jackson conversion.",
                         values.get(i), targetTypes[i]);
-                convertedArguments.add(OBJECT_MAPPER.convertValue(values.get(i), targetTypes[i]));
+                convertedArguments.add(objectMapper.convertValue(values.get(i), targetTypes[i]));
             }
         }
         LOG.debug("Converted arguments: {}", convertedArguments);

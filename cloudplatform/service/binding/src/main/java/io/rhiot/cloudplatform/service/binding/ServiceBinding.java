@@ -23,14 +23,8 @@ import org.apache.qpid.amqp_1_0.jms.Destination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
-import static io.rhiot.cloudplatform.service.binding.Camels.convert;
 import static io.rhiot.cloudplatform.service.binding.OperationBinding.operationBinding;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 
 /**
  * Service binding is a general purpose backend service which can be used to bind communication coming through IoT
@@ -74,7 +68,7 @@ public class ServiceBinding extends RouteBuilder {
             exchange.setProperty(TARGET_PROPERTY, "bean:" + operationBinding.service() + "?method=" + operationBinding.operation() + "&multiParameterArray=true");
             exchange.setProperty("RETURN_TYPE", operationBinding.operationMethod().getReturnType());
 
-            message.setBody(convert(getContext(), operationBinding.arguments(), operationBinding.operationMethod().getParameterTypes()));
+            message.setBody(new Camels().convert(getContext(), operationBinding.arguments(), operationBinding.operationMethod().getParameterTypes()));
         }).toD(format("${property.%s}", TARGET_PROPERTY)).process(it -> {
             Class returnType = it.getProperty("RETURN_TYPE", Class.class);
             if(Void.TYPE == returnType) {
