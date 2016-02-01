@@ -140,7 +140,7 @@ log_info "ActiveMQ started"
 
 log_info "Starting protocol adapters..."
 exe docker pull rhiot/paas-adapters:${RHIOT_VERSION}
-exe docker run -d --name paas-adapters --net=host -t rhiot/paas-adapters
+exe docker run -d --name paas-adapters --net=host -t rhiot/paas-adapters:${RHIOT_VERSION}
 log_info "Protocol adapters started."
 
 ### Services
@@ -153,7 +153,7 @@ exe docker run -d --name paas-services \
   -e logging.level.root=${CONTAINERS_LOG_LEVEL} \
   --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
   --link mongodb:mongodb \
-  -t rhiot/paas-services
+  -t rhiot/paas-services:${RHIOT_VERSION}
 log_info "Services started."
 
 ### Spark standalone cluster
