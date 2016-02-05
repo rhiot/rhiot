@@ -71,18 +71,6 @@ public class KuraCloudProducerTest extends CamelTestSupport {
     }
 
     @Test
-    public void shouldSendKuraPayloadToTopicAddDeviceId() throws KuraException {
-        // Given
-        KuraPayload kuraPayload = new KuraPayload();
-
-        // When
-        template.sendBody("kura-cloud:app/topic?includeDeviceId=true", kuraPayload);
-
-        // Then
-        verify(systemService).getSerialNumber();
-    }
-
-    @Test
     public void shouldReuseCacheClient() throws Exception {
         CloudClient firstCloudClient = context.getEndpoint("kura-cloud:app/topic1", KuraCloudEndpoint.class)
                 .createProducer().cloudClient;
@@ -90,5 +78,4 @@ public class KuraCloudProducerTest extends CamelTestSupport {
                 .createProducer().cloudClient;
         Truth.assertThat(firstCloudClient).isSameAs(secondCloudClient);
     }
-
 }
