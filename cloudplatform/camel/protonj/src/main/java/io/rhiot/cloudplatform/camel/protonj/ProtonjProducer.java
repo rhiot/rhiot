@@ -22,7 +22,6 @@ import org.apache.qpid.proton.amqp.messaging.AmqpValue;
 import org.apache.qpid.proton.message.Message;
 import org.apache.qpid.proton.message.impl.MessageImpl;
 import org.apache.qpid.proton.messenger.Messenger;
-import org.apache.qpid.proton.messenger.impl.MessengerImpl;
 
 public class ProtonjProducer extends DefaultProducer {
 
@@ -34,8 +33,7 @@ public class ProtonjProducer extends DefaultProducer {
     public void process(Exchange exchange) throws Exception {
         Object body = exchange.getIn().getBody();
 
-        Messenger mng = new MessengerImpl();
-        mng.start();
+        Messenger mng = getEndpoint().getMessenger();
         Message msg = new MessageImpl();
         msg.setAddress(getEndpoint().getAddress());
         msg.setBody(new AmqpValue(body));

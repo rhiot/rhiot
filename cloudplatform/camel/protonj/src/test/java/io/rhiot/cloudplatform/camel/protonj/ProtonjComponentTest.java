@@ -75,6 +75,14 @@ public class ProtonjComponentTest extends CamelTestSupport {
     }
 
     @Test
+    public void shouldReceivePeer2PeerMessages() throws InterruptedException {
+        mockEndpoint.expectedBodiesReceived(message, message);
+        template.sendBody("protonj:amqp://0.0.0.0:" + peerConsumerPort, message);
+        template.sendBody("protonj:amqp://0.0.0.0:" + peerConsumerPort, message);
+        mockEndpoint.assertIsSatisfied();
+    }
+
+    @Test
     public void shouldReceivePeer2PeerMapMessage() throws InterruptedException {
         Map<String, String> payload = new LinkedHashMap<>();
         payload.put(message, message);
