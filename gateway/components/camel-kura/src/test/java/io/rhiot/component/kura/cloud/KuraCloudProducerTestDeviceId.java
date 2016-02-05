@@ -34,9 +34,7 @@ import org.eclipse.kura.system.SystemService;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.truth.Truth;
-
-public class KuraCloudProducerTest extends CamelTestSupport {
+public class KuraCloudProducerTestDeviceId extends CamelTestSupport {
 
     CloudService cloudService = mock(CloudService.class);
 
@@ -59,23 +57,21 @@ public class KuraCloudProducerTest extends CamelTestSupport {
     }
 
     @Test
-    public void shouldSendKuraPayloadToTopic() throws KuraException {
+    public void shouldSendKuraPayloadToTopicAddDeviceId() throws KuraException {
         // Given
         KuraPayload kuraPayload = new KuraPayload();
 
+        System.out.println(cloudClient);
         // When
-        template.sendBody("kura-cloud:app/topic", kuraPayload);
+        template.sendBody("kura-cloud:app/topic?includeDeviceId=true&control=true", kuraPayload);
 
         // Then
-        verify(cloudClient).publish(eq("topic"), eq(kuraPayload), anyInt(), anyBoolean(), anyInt());
+        verify(systemService).getSerialNumber();
+        verify(cloudClient).controlPublish(eq("SerialNumber-XYZ"), eq("topic"), eq(kuraPayload), anyInt(), anyBoolean(),
+                anyInt());
+
+        System.out.println(cloudClient);
+
     }
 
-    @Test
-    public void shouldReuseCacheClient() throws Exception {
-        CloudClient firstCloudClient = context.getEndpoint("kura-cloud:app/topic1", KuraCloudEndpoint.class)
-                .createProducer().cloudClient;
-        CloudClient secondCloudClient = context.getEndpoint("kura-cloud:app/topic2", KuraCloudEndpoint.class)
-                .createProducer().cloudClient;
-        Truth.assertThat(firstCloudClient).isSameAs(secondCloudClient);
-    }
 }
