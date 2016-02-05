@@ -16,6 +16,7 @@
  */
 package io.rhiot.component.kura.cloud;
 
+import com.google.common.truth.Truth;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.eclipse.kura.KuraException;
@@ -44,6 +45,13 @@ public class KuraCloudProducerTest extends CamelTestSupport {
         given(cloudService.newCloudClient(anyString())).willReturn(cloudClient);
     }
 
+    @Override
+    protected JndiRegistry createRegistry() throws Exception {
+        JndiRegistry registry = super.createRegistry();
+        registry.bind("cloudService", cloudService);
+        return registry;
+    }
+
     @Test
     public void shouldSendKuraPayloadToTopic() throws KuraException {
         // Given
@@ -56,11 +64,11 @@ public class KuraCloudProducerTest extends CamelTestSupport {
         verify(cloudClient).publish(eq("topic"), eq(kuraPayload), anyInt(), anyBoolean(), anyInt());
     }
 
-    @Override
-    protected JndiRegistry createRegistry() throws Exception {
-        JndiRegistry registry = super.createRegistry();
-        registry.bind("cloudService", cloudService);
-        return registry;
+    @Test
+    public void shouldReuseCacheClient() throws Exception {
+        CloudClient firstCloudClient = context.getEndpoint("kura-cloud:app/topic1", KuraCloudEndpoint.class).createProducer().cloudClient;
+        CloudClient secondCloudClient = context.getEndpoint("kura-cloud:app/topic2", KuraCloudEndpoint.class).createProducer().cloudClient;
+        Truth.assertThat(firstCloudClient).isSameAs(secondCloudClient);
     }
 
 }

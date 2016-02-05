@@ -25,31 +25,21 @@ import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.message.KuraPayload;
 import org.eclipse.kura.system.SystemService;
 
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_PRIORITY;
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_QOS;
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC;
+
 public class KuraCloudProducer extends DefaultProducer {
 
-    private KuraCloudEndpoint endpoint = null;
-    private CloudClient cloudClient = null;
+    private KuraCloudEndpoint endpoint;
+
+    // Visible for testing
+    CloudClient cloudClient;
 
     public KuraCloudProducer(KuraCloudEndpoint endpoint, CloudClient cloudClient) {
         super(endpoint);
         this.endpoint = endpoint;
         this.cloudClient = cloudClient;
-    }
-
-    protected String resolveTopic(Message message) {
-        String ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC, String.class);
-        if (ret == null) {
-            ret = endpoint.getTopic();
-        }
-        return ret;
-    }
-
-    protected int resolveQos(Message message) {
-        Integer ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_QOS, Integer.class);
-        if (ret == null) {
-            ret = endpoint.getQos();
-        }
-        return ret;
     }
 
     protected boolean resolveRetain(Message message) {
@@ -96,20 +86,18 @@ public class KuraCloudProducer extends DefaultProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-
         Message in = exchange.getIn();
         Object body = in.getBody();
 
-        String topic = resolveTopic(in);
-        int qos = resolveQos(in);
-        int priority = resolveQos(in);
+        String topic = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_TOPIC, String.class), getEndpoint().getTopic());
+        int qos = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_QOS, Integer.class), getEndpoint().getQos());
+        int priority = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_PRIORITY, Integer.class), getEndpoint().getPriority());;
         boolean retain = resolveRetain(in);
         boolean control = resolveControl(in);
         boolean includedeviceId = resolveIncludeDeviceId(in);
         String deviceId = resolveDeviceId(exchange, includedeviceId);
 
         if (body != null) {
-
             if (control) {
                 if (deviceId == null) {
                     cloudClient.controlPublish(topic, (KuraPayload) body, qos, retain, priority);
@@ -137,6 +125,12 @@ public class KuraCloudProducer extends DefaultProducer {
     @Override
     public KuraCloudEndpoint getEndpoint() {
         return (KuraCloudEndpoint) super.getEndpoint();
+    }
+
+    // Helpers
+
+    private <T> T firstNotNull(T first, T second) {
+        return first != null ? first : second;
     }
 
 }

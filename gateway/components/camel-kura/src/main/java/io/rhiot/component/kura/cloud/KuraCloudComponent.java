@@ -27,13 +27,19 @@ import org.eclipse.kura.cloud.CloudService;
 
 public class KuraCloudComponent extends UriEndpointComponent {
 
+    private final static CloudClientCache clientCache = new ConcurrentHashMapCloudClientCache();
+
     public KuraCloudComponent() {
         super(KuraCloudEndpoint.class);
     }
 
+    // Constructors
+
     public KuraCloudComponent(CamelContext context, Class<? extends Endpoint> endpointClass) {
         super(context, endpointClass);
     }
+
+    // Operations
 
     @Override
     protected Endpoint createEndpoint(String uri, String remain, Map<String, Object> parameters) throws Exception {
@@ -52,6 +58,10 @@ public class KuraCloudComponent extends UriEndpointComponent {
         setProperties(kuraCloudEndpoint, parameters);
 
         return kuraCloudEndpoint;
+    }
+
+    public static CloudClientCache clientCache() {
+        return clientCache;
     }
 
 }

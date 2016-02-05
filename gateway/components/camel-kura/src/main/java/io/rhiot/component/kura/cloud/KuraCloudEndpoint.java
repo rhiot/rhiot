@@ -18,12 +18,13 @@ package io.rhiot.component.kura.cloud;
 
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
-import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudService;
+
+import static io.rhiot.component.kura.cloud.KuraCloudComponent.clientCache;
 
 @UriEndpoint(scheme = "kura-cloud", title = "Kura Cloud", label = "iot,kura,cloud", syntax = "kura-cloud:applicationId/appTopic")
 public class KuraCloudEndpoint extends DefaultEndpoint {
@@ -58,13 +59,22 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        CloudClient cloudClient = this.cloudService.newCloudClient(applicationId);
+        CloudClient cloudClient = clientCache().get(applicationId);
+        if(cloudClient == null) {
+            cloudClient = this.cloudService.newCloudClient(applicationId);
+            clientCache().put(applicationId, cloudClient);
+        }
         return new KuraCloudConsumer(this, processor, cloudClient);
     }
 
     @Override
-    public Producer createProducer() throws Exception {
-        CloudClient cloudClient = this.cloudService.newCloudClient(applicationId);
+    public KuraCloudProducer createProducer() throws Exception {
+        CloudClient cloudClient = clientCache().get(applicationId);
+        if(cloudClient == null) {
+            cloudClient = this.cloudService.newCloudClient(applicationId);
+            clientCache().put(applicationId, cloudClient);
+        }
+
         return new KuraCloudProducer(this, cloudClient);
     }
 
