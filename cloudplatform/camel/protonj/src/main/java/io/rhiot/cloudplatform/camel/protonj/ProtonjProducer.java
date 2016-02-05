@@ -20,7 +20,6 @@ import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.qpid.proton.amqp.messaging.AmqpValue;
 import org.apache.qpid.proton.message.Message;
-import org.apache.qpid.proton.message.impl.MessageImpl;
 import org.apache.qpid.proton.messenger.Messenger;
 
 public class ProtonjProducer extends DefaultProducer {
@@ -34,7 +33,7 @@ public class ProtonjProducer extends DefaultProducer {
         Object body = exchange.getIn().getBody();
 
         Messenger mng = getEndpoint().getMessenger();
-        Message msg = new MessageImpl();
+        Message msg = Message.Factory.create();
         msg.setAddress(getEndpoint().getAddress());
         msg.setBody(new AmqpValue(body));
         mng.put(msg);
