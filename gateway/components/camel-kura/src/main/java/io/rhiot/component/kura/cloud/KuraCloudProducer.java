@@ -16,6 +16,10 @@
  */
 package io.rhiot.component.kura.cloud;
 
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_PRIORITY;
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_QOS;
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC;
+
 import io.rhiot.component.kura.utils.KuraServiceFactory;
 
 import org.apache.camel.Exchange;
@@ -24,10 +28,6 @@ import org.apache.camel.impl.DefaultProducer;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.message.KuraPayload;
 import org.eclipse.kura.system.SystemService;
-
-import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_PRIORITY;
-import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_QOS;
-import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC;
 
 public class KuraCloudProducer extends DefaultProducer {
 
@@ -61,7 +61,7 @@ public class KuraCloudProducer extends DefaultProducer {
     protected boolean resolveIncludeDeviceId(Message message) {
         Boolean ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_INCLUDE_DEVICEID, Boolean.class);
         if (ret == null) {
-            ret = endpoint.isControl();
+            ret = endpoint.isIncludeDeviceId();
         }
         return ret;
     }
@@ -91,7 +91,9 @@ public class KuraCloudProducer extends DefaultProducer {
 
         String topic = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_TOPIC, String.class), getEndpoint().getTopic());
         int qos = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_QOS, Integer.class), getEndpoint().getQos());
-        int priority = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_PRIORITY, Integer.class), getEndpoint().getPriority());;
+        int priority = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_PRIORITY, Integer.class),
+                getEndpoint().getPriority());
+        ;
         boolean retain = resolveRetain(in);
         boolean control = resolveControl(in);
         boolean includedeviceId = resolveIncludeDeviceId(in);
