@@ -72,7 +72,7 @@ public class RestProtocolAdapter extends RouteBuilder {
                 end().
                 process(exc -> {
                     exc.getIn().setHeader("Access-Control-Allow-Origin", "*");
-                    exc.getIn().setHeader("Access-Control-Allow-Headers", "*");
+                    exc.getIn().setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                 });
     }
 
