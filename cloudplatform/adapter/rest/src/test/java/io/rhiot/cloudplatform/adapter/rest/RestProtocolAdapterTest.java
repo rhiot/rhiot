@@ -24,12 +24,14 @@ import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+import java.util.Set;
 
 @Configuration
 public class RestProtocolAdapterTest extends CloudPlatformTest {
@@ -54,6 +56,12 @@ public class RestProtocolAdapterTest extends CloudPlatformTest {
         byte[] request = payloadEncoding.encode(ImmutableMap.of("foo", "bar"));
         Object payload = rest.postForObject("http://localhost:8080/test/numberPlusSizeOf/1", request, Map.class).get("payload");
         Truth.assertThat(payload).isEqualTo(2);
+    }
+
+    @Test
+    public void shouldHandleOptions() {
+        Set<HttpMethod> options = rest.optionsForAllow("http://localhost:8080/test/count/1");
+        Truth.assertThat(options).isNotEmpty();
     }
 
     // Beans fixtures

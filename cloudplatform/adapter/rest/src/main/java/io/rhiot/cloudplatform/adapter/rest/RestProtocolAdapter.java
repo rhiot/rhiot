@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.apache.camel.Exchange.CONTENT_TYPE;
+import static org.apache.camel.Exchange.HTTP_METHOD;
 import static org.apache.camel.Exchange.HTTP_URI;
 import static org.apache.commons.lang3.StringUtils.removeEnd;
 
@@ -28,7 +29,11 @@ public class RestProtocolAdapter extends RouteBuilder {
 
     private static final Logger LOG = LoggerFactory.getLogger(RestProtocolAdapter.class);
 
+    // Constants
+
     public static final String DEFAULT_CONTENT_TYPE = "application/json";
+
+    // Members
 
     private final int port;
 
@@ -52,13 +57,21 @@ public class RestProtocolAdapter extends RouteBuilder {
         LOG.debug("Started REST data stream source at port {}.", port);
 
         from("netty4-http:http://0.0.0.0:" + port + "/?matchOnUriPrefix=true").
-                setHeader(CONTENT_TYPE).constant(contentType).
-                process( exc -> {
-                    String requestUri = exc.getIn().getHeader(HTTP_URI, String.class);
-                    String trimmedUri = removeEnd(requestUri, "/");
-                    String busChannel = trimmedUri.substring(1).replaceAll("\\/", ".");
-                    exc.setProperty("target", "amqp:" + busChannel);
-                }).toD("${property.target}");
+                choice().
+                    when(header(HTTP_METHOD).isEqualTo("OPTIONS")).setBody().constant("").endChoice().
+                otherwise().
+                    setHeader(CONTENT_TYPE).constant(contentType).
+                    process( exc -> {
+                        exc.getIn().setHeader("Access-Control-Allow-Origin", "*");
+                        exc.getIn().setHeader("Access-Control-Allow-Headers", "*");
+
+                        String requestUri = exc.getIn().getHeader(HTTP_URI, String.class);
+                        LOG.debug("Processing request URI: {}", requestUri);
+                        String trimmedUri = removeEnd(requestUri, "/");
+                        LOG.debug("Trimmed request URI: {}", trimmedUri);
+                        String busChannel = trimmedUri.substring(1).replaceAll("\\/", ".");
+                        exc.setProperty("target", "amqp:" + busChannel);
+                    }).toD("${property.target}").endChoice();
     }
 
 }
