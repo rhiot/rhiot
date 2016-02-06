@@ -56,7 +56,7 @@ public class RestProtocolAdapter extends RouteBuilder {
     public void configure() throws Exception {
         LOG.debug("Started REST data stream source at port {}.", port);
 
-        from("netty4-http:http://0.0.0.0:" + port + "/?matchOnUriPrefix=true").
+        from("netty4-http:http://0.0.0.0:" + port + "/?matchOnUriPrefix=true&httpMethodRestrict=OPTIONS,GET,POST,PUT,DELETE").
                 choice().
                     when(header(HTTP_METHOD).isEqualTo("OPTIONS")).setBody().constant("").endChoice().
                 otherwise().

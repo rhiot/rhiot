@@ -61,7 +61,7 @@ public class RestProtocolAdapterTest extends CloudPlatformTest {
     @Test
     public void shouldHandleOptions() {
         Set<HttpMethod> options = rest.optionsForAllow("http://localhost:8080/test/count/1");
-        Truth.assertThat(options).isNotEmpty();
+        Truth.assertThat(options).isEmpty();
     }
 
     // Beans fixtures
