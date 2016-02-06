@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+import org.springframework.util.SocketUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -33,40 +34,54 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Set;
 
+import static java.lang.System.setProperty;
+import static org.springframework.util.SocketUtils.findAvailableTcpPort;
+
 @Configuration
 public class RestProtocolAdapterTest extends CloudPlatformTest {
 
     RestTemplate rest = new RestTemplate();
 
+    static int restPort = findAvailableTcpPort();
+
+    String baseURL = "http://localhost:" + restPort + "/test/";
+
+    @Override
+    protected void beforeCloudPlatformStarted() {
+        setProperty("rest.port", restPort + "");
+    }
+
+    // Tests
+
     @Test
     public void shouldInvokeGetOperation() throws IOException {
-        Map response = json.readValue(new URL("http://localhost:8080/test/count/1"), Map.class);
+        Map response = json.readValue(new URL(baseURL + "count/1"), Map.class);
         Truth.assertThat(response.get("payload")).isEqualTo(1);
     }
 
     @Test
     public void shouldInvokePostOperation() {
         byte[] request = payloadEncoding.encode(ImmutableMap.of("foo", "bar"));
-        Object payload = rest.postForObject("http://localhost:8080/test/sizeOf", request, Map.class).get("payload");
+        Object payload = rest.postForObject(baseURL + "sizeOf", request, Map.class).get("payload");
         Truth.assertThat(payload).isEqualTo(1);
     }
 
     @Test
     public void shouldPassUriAndBody() {
         byte[] request = payloadEncoding.encode(ImmutableMap.of("foo", "bar"));
-        Object payload = rest.postForObject("http://localhost:8080/test/numberPlusSizeOf/1", request, Map.class).get("payload");
+        Object payload = rest.postForObject(baseURL + "numberPlusSizeOf/1", request, Map.class).get("payload");
         Truth.assertThat(payload).isEqualTo(2);
     }
 
     @Test
     public void shouldHandleOptions() {
-        Set<HttpMethod> options = rest.optionsForAllow("http://localhost:8080/test/count/1");
+        Set<HttpMethod> options = rest.optionsForAllow(baseURL + "count/1");
         Truth.assertThat(options).isEmpty();
     }
 
     // Beans fixtures
 
-    public static interface TestService {
+    public interface TestService {
 
         int count(int number);
 
