@@ -16,6 +16,8 @@
  */
 package io.rhiot.component.kura.cloud;
 
+import static io.rhiot.component.kura.cloud.KuraCloudComponent.clientCache;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultEndpoint;
@@ -23,8 +25,6 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudService;
-
-import static io.rhiot.component.kura.cloud.KuraCloudComponent.clientCache;
 
 @UriEndpoint(scheme = "kura-cloud", title = "Kura Cloud", label = "iot,kura,cloud", syntax = "kura-cloud:applicationId/appTopic")
 public class KuraCloudEndpoint extends DefaultEndpoint {
@@ -47,8 +47,8 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "false")
     private boolean control = false;
 
-    @UriParam(defaultValue = "false")
-    private boolean includeDeviceId = false;
+    @UriParam(defaultValue = "")
+    private String deviceId;
 
     private CloudService cloudService = null;
 
@@ -60,7 +60,7 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         CloudClient cloudClient = clientCache().get(applicationId);
-        if(cloudClient == null) {
+        if (cloudClient == null) {
             cloudClient = this.cloudService.newCloudClient(applicationId);
             clientCache().put(applicationId, cloudClient);
         }
@@ -70,7 +70,7 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
     @Override
     public KuraCloudProducer createProducer() throws Exception {
         CloudClient cloudClient = clientCache().get(applicationId);
-        if(cloudClient == null) {
+        if (cloudClient == null) {
             cloudClient = this.cloudService.newCloudClient(applicationId);
             clientCache().put(applicationId, cloudClient);
         }
@@ -131,12 +131,12 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
         this.applicationId = applicationId;
     }
 
-    public boolean isIncludeDeviceId() {
-        return includeDeviceId;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setIncludeDeviceId(boolean includeDeviceId) {
-        this.includeDeviceId = includeDeviceId;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
 }

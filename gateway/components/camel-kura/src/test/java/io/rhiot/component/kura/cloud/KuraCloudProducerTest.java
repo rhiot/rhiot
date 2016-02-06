@@ -30,7 +30,6 @@ import org.eclipse.kura.KuraException;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudService;
 import org.eclipse.kura.message.KuraPayload;
-import org.eclipse.kura.system.SystemService;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,19 +41,15 @@ public class KuraCloudProducerTest extends CamelTestSupport {
 
     CloudClient cloudClient = mock(CloudClient.class);
 
-    SystemService systemService = mock(SystemService.class);
-
     @Before
     public void before() throws KuraException {
         given(cloudService.newCloudClient(anyString())).willReturn(cloudClient);
-        given(systemService.getSerialNumber()).willReturn("SerialNumber-XYZ");
     }
 
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = super.createRegistry();
         registry.bind("cloudService", cloudService);
-        registry.bind("systemService", systemService);
         return registry;
     }
 

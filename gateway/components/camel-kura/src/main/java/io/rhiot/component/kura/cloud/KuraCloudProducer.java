@@ -20,14 +20,11 @@ import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_
 import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_QOS;
 import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC;
 
-import io.rhiot.component.kura.utils.KuraServiceFactory;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.message.KuraPayload;
-import org.eclipse.kura.system.SystemService;
 
 public class KuraCloudProducer extends DefaultProducer {
 
@@ -58,28 +55,10 @@ public class KuraCloudProducer extends DefaultProducer {
         return ret;
     }
 
-    protected boolean resolveIncludeDeviceId(Message message) {
-        Boolean ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_INCLUDE_DEVICEID, Boolean.class);
+    protected String resolveDeviceId(Message message) {
+        String ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID, String.class);
         if (ret == null) {
-            ret = endpoint.isIncludeDeviceId();
-        }
-        return ret;
-    }
-
-    protected String resolveDeviceId(Exchange exchange, boolean includedeviceId) {
-        String ret = null;
-
-        if (includedeviceId) {
-
-            SystemService systemService = KuraServiceFactory.retrieveService(SystemService.class,
-                    getEndpoint().getCamelContext().getRegistry());
-
-            ret = systemService.getSerialNumber();
-
-            if (ret == null || ret.length() == 0) {
-                throw new IllegalArgumentException("deviceId must be non-null and non-empty");
-            }
-
+            ret = endpoint.getDeviceId();
         }
         return ret;
     }
@@ -96,12 +75,11 @@ public class KuraCloudProducer extends DefaultProducer {
         ;
         boolean retain = resolveRetain(in);
         boolean control = resolveControl(in);
-        boolean includedeviceId = resolveIncludeDeviceId(in);
-        String deviceId = resolveDeviceId(exchange, includedeviceId);
+        String deviceId = resolveDeviceId(in);
 
         if (body != null) {
             if (control) {
-                if (includedeviceId) {
+                if (deviceId != null) {
                     if (body instanceof KuraPayload) {
                         cloudClient.controlPublish(deviceId, topic, (KuraPayload) body, qos, retain, priority);
                     } else if (body instanceof byte[]) {

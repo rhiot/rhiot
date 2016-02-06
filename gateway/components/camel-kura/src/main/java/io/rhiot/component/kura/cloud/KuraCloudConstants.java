@@ -27,7 +27,6 @@ public final class KuraCloudConstants {
     public static final String CAMEL_KURA_CLOUD_PRIORITY = CAMEL_KURA_CLOUD + ".priority";
     public static final String CAMEL_KURA_CLOUD_CONTROL = CAMEL_KURA_CLOUD + ".control";
     public static final String CAMEL_KURA_CLOUD_DEVICEID = CAMEL_KURA_CLOUD + ".deviceId";
-    public static final String CAMEL_KURA_CLOUD_INCLUDE_DEVICEID = CAMEL_KURA_CLOUD + ".includeDeviceId";
 
     private KuraCloudConstants() {
     }

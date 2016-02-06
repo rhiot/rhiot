@@ -30,47 +30,52 @@ import org.eclipse.kura.KuraException;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudService;
 import org.eclipse.kura.message.KuraPayload;
-import org.eclipse.kura.system.SystemService;
 import org.junit.Before;
 import org.junit.Test;
 
 public class KuraCloudProducerTestDeviceId extends CamelTestSupport {
 
-    CloudService cloudService = mock(CloudService.class);
-
-    CloudClient cloudClient = mock(CloudClient.class);
-
-    SystemService systemService = mock(SystemService.class);
+    static CloudService cloudService = mock(CloudService.class);
+    static CloudClient cloudClient = mock(CloudClient.class);
 
     @Before
     public void before() throws KuraException {
         given(cloudService.newCloudClient(anyString())).willReturn(cloudClient);
-        given(systemService.getSerialNumber()).willReturn("SerialNumber-XYZ");
     }
 
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = super.createRegistry();
         registry.bind("cloudService", cloudService);
-        registry.bind("systemService", systemService);
         return registry;
     }
 
     @Test
-    public void shouldSendKuraPayloadToTopicAddDeviceId() throws KuraException {
+    public void shouldSendKuraPayloadToTopicURLDeviceId() throws KuraException {
         // Given
         KuraPayload kuraPayload = new KuraPayload();
 
-        System.out.println(cloudClient);
         // When
-        template.sendBody("kura-cloud:app/topic?includeDeviceId=true&control=true", kuraPayload);
+        template.sendBody("kura-cloud:app/topic?deviceId=SerialNumber-XYZ&control=true", kuraPayload);
 
         // Then
-        verify(systemService).getSerialNumber();
         verify(cloudClient).controlPublish(eq("SerialNumber-XYZ"), eq("topic"), eq(kuraPayload), anyInt(), anyBoolean(),
                 anyInt());
 
-        System.out.println(cloudClient);
+    }
+
+    @Test
+    public void shouldSendKuraPayloadToTopicHeaderDeviceId() throws KuraException {
+        // Given
+        KuraPayload kuraPayload = new KuraPayload();
+
+        // When
+        template.sendBodyAndHeader("kura-cloud:app/topic?control=true", kuraPayload,
+                KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID, "SerialNumber-XYZ");
+
+        // Then
+        verify(cloudClient).controlPublish(eq("SerialNumber-XYZ"), eq("topic"), eq(kuraPayload), anyInt(), anyBoolean(),
+                anyInt());
 
     }
 
