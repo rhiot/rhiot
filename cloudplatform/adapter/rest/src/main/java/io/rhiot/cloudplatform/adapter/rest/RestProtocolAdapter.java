@@ -68,10 +68,10 @@ public class RestProtocolAdapter extends RouteBuilder {
                         LOG.debug("Trimmed request URI: {}", trimmedUri);
                         String busChannel = trimmedUri.substring(1).replaceAll("\\/", ".");
                         exc.setProperty("target", "amqp:" + busChannel);
-                    }).toD("${property.target}").endChoice().process(exc ->{
+                    }).toD("${property.target}").process(exc ->{
                         exc.getIn().setHeader("Access-Control-Allow-Origin", "*");
                         exc.getIn().setHeader("Access-Control-Allow-Headers", "*");
-        });
+        }).endChoice();
     }
 
 }
