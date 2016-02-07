@@ -71,10 +71,10 @@ public class KuraCloudProducerTestDeviceId extends CamelTestSupport {
 
         // When
         template.sendBodyAndHeader("kura-cloud:app/topic?control=true", kuraPayload,
-                KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID, "SerialNumber-XYZ");
+                KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID, "SerialNumber-ABC");
 
         // Then
-        verify(cloudClient).controlPublish(eq("SerialNumber-XYZ"), eq("topic"), eq(kuraPayload), anyInt(), anyBoolean(),
+        verify(cloudClient).controlPublish(eq("SerialNumber-ABC"), eq("topic"), eq(kuraPayload), anyInt(), anyBoolean(),
                 anyInt());
 
     }
