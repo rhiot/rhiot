@@ -18,22 +18,22 @@
 ### Common function
 
 exe() {
-	echo "EXEC : $@" >> $RHIOT_RCP_LOG
-	$@  >> $RHIOT_RCP_LOG 2>&1
+	echo "EXEC : $@" >> $PAAS_LOG
+	$@  >> $PAAS_LOG 2>&1
 	# check docker cmd and ignore "rm" failed
 	if [ $? -ne 0 ] && [ $2 != "rm" ] ; then
         log_error "Command 'docker $@' failed."
-        log_info "Please check $RHIOT_RCP_LOG"
+        log_info "Please check $PAAS_LOG"
         exit -1
   fi
 }
 
 output_log() {
-	tee -a $RHIOT_RCP_LOG
+	tee -a $PAAS_LOG
 }
 
 log() {
-	echo "$@" | tee -a $RHIOT_RCP_LOG
+	echo "$@" | tee -a $PAAS_LOG
 }
 
 log_cmd() {
@@ -46,6 +46,10 @@ log_info() {
 
 log_error() {
 	log "ERROR: $@"
+}
+
+log_debug() {
+    echo "$@" >> $PAAS_LOG
 }
 
 ### General configuration
@@ -66,7 +70,7 @@ if [ -z "${CONTAINERS_LOG_LEVEL}" ]; then
   CONTAINERS_LOG_LEVEL="INFO"
 fi
 
-RHIOT_RCP_LOG=$RHIOT_HOME/rcp.log
+PAAS_LOG=$RHIOT_HOME/rcp.log
 REQUIRED_DOCKER_VERSION=1.8.2
 
 
@@ -100,10 +104,10 @@ case "$OSTYPE" in
         exit 1
       fi
 					
-      docker-machine env $RHIOT_DOCKER_MACHINE_ENV >> $RHIOT_RCP_LOG 2>&1
+      docker-machine env $RHIOT_DOCKER_MACHINE_ENV >> $PAAS_LOG 2>&1
       if [ $? -ne 0 ]; then
         log_info "docker-machine start $RHIOT_DOCKER_MACHINE_ENV"
-        docker-machine start $RHIOT_DOCKER_MACHINE_ENV >> $RHIOT_RCP_LOG 2>&1
+        docker-machine start $RHIOT_DOCKER_MACHINE_ENV >> $PAAS_LOG 2>&1
       fi
       eval $(docker-machine env $RHIOT_DOCKER_MACHINE_ENV)
   ;;
@@ -173,4 +177,12 @@ if [ "${SPARK_ENABLED}" != 'false' ]; then
       -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh
     log_info "Spark worker started"
 
+fi
+
+### Custom scripts
+
+if [ -e ${RHIOT_HOME}/paas.config ]; then
+    exe . ${RHIOT_HOME}/paas.config
+else
+    log_debug "No ${RHIOT_HOME}/paas.config file. Skipping loading of a custom script."
 fi
