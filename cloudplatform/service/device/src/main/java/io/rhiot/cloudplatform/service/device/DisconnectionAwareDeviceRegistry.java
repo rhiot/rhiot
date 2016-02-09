@@ -2,6 +2,8 @@ package io.rhiot.cloudplatform.service.device;
 
 import org.eclipse.cloudplatform.service.device.api.Device;
 import org.eclipse.cloudplatform.service.device.api.DeviceRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -13,6 +15,8 @@ import static java.time.LocalDateTime.ofInstant;
 import static java.util.stream.Collectors.toList;
 
 public abstract class DisconnectionAwareDeviceRegistry implements DeviceRegistry {
+
+    protected Logger log = LoggerFactory.getLogger(getClass());
 
     protected final long disconnectionPeriod;
 

@@ -1,7 +1,6 @@
 package io.rhiot.cloudplatform.service.device;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.*;
@@ -10,12 +9,15 @@ import org.eclipse.cloudplatform.service.device.api.Device;
 
 import java.util.*;
 
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static java.util.UUID.randomUUID;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class MongoDbDeviceRegistry extends DisconnectionAwareDeviceRegistry {
 
-    private final ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    private final ObjectMapper objectMapper = new ObjectMapper().
+            configure(FAIL_ON_UNKNOWN_PROPERTIES, false).
+            setSerializationInclusion(Include.NON_NULL);
 
     private final Mongo mongo;
 
@@ -23,12 +25,16 @@ public class MongoDbDeviceRegistry extends DisconnectionAwareDeviceRegistry {
 
     private final String collection;
 
+    // Constructors
+
     public MongoDbDeviceRegistry(Mongo mongo, String db, String collection, long disconnectionPeriod) {
         super(disconnectionPeriod);
         this.mongo = mongo;
         this.db = db;
         this.collection = collection;
     }
+
+    // API operations
 
     @Override
     public Device get(String deviceId) {
@@ -87,6 +93,7 @@ public class MongoDbDeviceRegistry extends DisconnectionAwareDeviceRegistry {
 
     @Override
     public void heartbeat(String deviceId) {
+        log.debug("About to send heartbeat to device: {}", deviceId);
         Device device = get(deviceId);
         if(device != null) {
             device.setLastUpdate(new Date());
