@@ -46,8 +46,6 @@ public class Device {
 
     private List<LinkObject> objectLinks = new LinkedList<>();
 
-    private String rootPath;
-
     private Map<String, Object> properties = new HashMap<>();
 
     // Constructors
@@ -69,7 +67,6 @@ public class Device {
         this.objectLinks = objectLinks;
         this.properties = properties;
     }
-
 
     // Getters and setters
 
@@ -160,14 +157,6 @@ public class Device {
 
     public void setObjectLinks(List<LinkObject> objectLinks) {
         this.objectLinks = objectLinks;
-    }
-
-    public String getRootPath() {
-        return rootPath;
-    }
-
-    public void setRootPath(String rootPath) {
-        this.rootPath = rootPath;
     }
 
     public Map<String, Object> getProperties() {
