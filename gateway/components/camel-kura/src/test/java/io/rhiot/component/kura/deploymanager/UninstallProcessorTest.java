@@ -54,11 +54,12 @@ public class UninstallProcessorTest extends CamelTestSupport {
     @Test
     public void shouldUninstallBundle() throws IOException {
         // Given
-        File bundle = new File(deployDirectory, UUID.randomUUID().toString());
+        String bundleName = UUID.randomUUID().toString();
+        File bundle = new File(deployDirectory, bundleName + ".jar");
         bundle.createNewFile();
 
         // When
-        template.sendBody("direct:test", bundle.getName());
+        template.sendBody("direct:test", bundleName);
 
         // Then
         Truth.assertThat(bundle.exists()).isFalse();

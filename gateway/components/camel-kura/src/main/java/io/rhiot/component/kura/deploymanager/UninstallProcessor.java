@@ -33,7 +33,7 @@ public class UninstallProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String bundleName = exchange.getIn().getBody(String.class);
+        String bundleName = exchange.getIn().getBody(String.class) + ".jar";
         File bundle = new File(deployDirectory, bundleName);
         LOG.debug("About to remove bundle ", bundle.getAbsolutePath());
         bundle.delete();
