@@ -58,7 +58,7 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
 
     @Override
     public List<String> disconnected() {
-        return devices.values().stream().filter(device -> {
+        return list().stream().filter(device -> {
             LocalTime updated = ofInstant(ofEpochMilli(device.getLastUpdate().getTime()), ZoneId.systemDefault()).toLocalTime();
             return updated.plus(disconnectionPeriod, ChronoUnit.MILLIS).isBefore(LocalTime.now());
         }).map(Device::getDeviceId).collect(toList());
@@ -81,8 +81,8 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
     }
 
     @Override
-    public void deregister(String registrationId) {
-        Device device = getByRegistrationId(registrationId);
+    public void deregister(String deviceId) {
+        Device device = get(deviceId);
         if (device != null) {
             devices.remove(device.getDeviceId());
         }

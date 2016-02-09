@@ -37,8 +37,8 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 @Configuration
 public class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
-    Device device = new Device(randomAlphabetic(10), randomAlphabetic(10), new Date(), new Date(),
-    null, 0, null, 0, randomAlphabetic(10), null, new ArrayList<>(), new HashMap<>());
+    Device device = new Device(null, randomAlphabetic(10), randomAlphabetic(10), new Date(), new Date(),
+    null, 0, null, 0, randomAlphabetic(10), new ArrayList<>(), new HashMap<>());
 
     @Override
     protected void beforeCloudPlatformStarted() {
@@ -46,6 +46,8 @@ public class DeviceServiceConfigurationTest extends CloudPlatformTest {
         System.setProperty("AMQP_PORT", findAvailableTcpPort() + "");
         System.setProperty("MQTT_ENABLED", false + "");
     }
+
+
 
     @Test
     public void shouldRegisterDevice() {
@@ -101,7 +103,7 @@ public class DeviceServiceConfigurationTest extends CloudPlatformTest {
         connector.toBusAndWait(registerDevice(), device);
 
         // When
-        connector.toBusAndWait(deregisterDevice(device.getRegistrationId()));
+        connector.toBusAndWait(deregisterDevice(device.getDeviceId()));
 
         // Then
         Device loadedDevice = connector.fromBus(getDevice(device.getDeviceId()), Device.class);

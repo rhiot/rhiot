@@ -30,15 +30,11 @@
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-runtime-spring</artifactId>
+            <artifactId>rhiot-cloudplatform-connector</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-cloudplatform-service-device-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.leshan</groupId>
-            <artifactId>leshan-server-cf</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -80,6 +76,10 @@
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-cloudplatform-encoding-json</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-cloudplatform-runtime-spring</artifactId>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>

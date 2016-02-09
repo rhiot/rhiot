@@ -93,7 +93,7 @@ public class LeshanProtocolAdapterConfigurationTest extends CloudPlatformTest {
         Device device = connector.fromBus(getDevice(deviceId), Device.class);
 
         // When
-        connector.toBusAndWait(deregisterDevice(device.getRegistrationId()));
+        connector.toBusAndWait(deregisterDevice(device.getDeviceId()));
 
         // Then
         device = connector.fromBus(getDevice(deviceId), Device.class);

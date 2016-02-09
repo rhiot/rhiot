@@ -26,6 +26,7 @@ import org.eclipse.leshan.server.client.ClientRegistry;
 import org.eclipse.leshan.server.client.ClientRegistryListener;
 import org.eclipse.leshan.server.client.ClientUpdate;
 
+import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -116,9 +117,15 @@ public class IoTConnectorClientRegistry implements ClientRegistry {
         LinkObject[] linkObjects = device.getObjectLinks().stream().map(
                 link -> new LinkObject(link.getUrl(), link.getAttributes())).collect(Collectors.toList()
         ).toArray(new LinkObject[device.getObjectLinks().size()]);
+
+        String bindingModeValue = (String) device.getProperties().get("bindingMode");
+        BindingMode bindingMode = bindingModeValue == null ? null : BindingMode.valueOf(bindingModeValue);
+
+        InetAddress address = InetAddresses.forString(device.getAddress());
+
         return new Client(
                 device.getRegistrationId(), device.getDeviceId(),
-                InetAddresses.forString(device.getAddress()), device.getPort(), device.getLwM2mVersion(), device.getLifeTimeInSec(), (String) device.getProperties().get("smsNumber"), BindingMode.valueOf(device.getBindingMode().name()), linkObjects, device.getRegistrationEndpointAddress(),
+                address, device.getPort(), device.getLwM2mVersion(), device.getLifeTimeInSec(), (String) device.getProperties().get("smsNumber"), bindingMode, linkObjects, device.getRegistrationEndpointAddress(),
                 device.getRegistrationDate(), device.getLastUpdate()
         );
     }
@@ -131,11 +138,13 @@ public class IoTConnectorClientRegistry implements ClientRegistry {
         ).collect(toList());
         Map<String, Object> deviceProperties = new HashMap<>();
         deviceProperties.put("smsNumber", client.getSmsNumber());
+        deviceProperties.put("bindingMode", client.getBindingMode().name());
         return new Device(
+                null,
                 client.getEndpoint(), client.getRegistrationId(),
                 client.getRegistrationDate(), client.getLastUpdate(),
                 client.getAddress().getHostAddress(), client.getPort(), client.getRegistrationEndpointAddress(),
-                client.getLifeTimeInSec(), client.getLwM2mVersion(), Device.BindingMode.valueOf(client.getBindingMode().name()),
+                client.getLifeTimeInSec(), client.getLwM2mVersion(),
                 linkObjects, deviceProperties
         );
     }

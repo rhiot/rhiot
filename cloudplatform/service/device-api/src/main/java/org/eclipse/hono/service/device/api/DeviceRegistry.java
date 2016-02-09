@@ -35,7 +35,7 @@ public interface DeviceRegistry {
 
     void update(Device device);
 
-    void deregister(String registrationId);
+    void deregister(String deviceId);
 
     void heartbeat(String deviceId);
 

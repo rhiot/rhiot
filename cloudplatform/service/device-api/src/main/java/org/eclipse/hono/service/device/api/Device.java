@@ -24,6 +24,8 @@ import java.util.*;
  */
 public class Device {
 
+    private String id;
+
     private String deviceId;
 
     private String registrationId;
@@ -42,8 +44,6 @@ public class Device {
 
     private String lwM2mVersion;
 
-    private BindingMode bindingMode;
-
     private List<LinkObject> objectLinks = new LinkedList<>();
 
     private String rootPath;
@@ -55,11 +55,8 @@ public class Device {
     public Device() {
     }
 
-    public Device(String deviceId, String registrationId, Date registrationDate, Date lastUpdate,
-                  String address, int port, InetSocketAddress registrationEndpointAddress,
-                  long lifeTimeInSec, String lwM2mVersion, BindingMode bindingMode,
-                  List<LinkObject> objectLinks,
-                  Map<String, Object> properties) {
+    public Device(String id, String deviceId, String registrationId, Date registrationDate, Date lastUpdate, String address, int port, InetSocketAddress registrationEndpointAddress, long lifeTimeInSec, String lwM2mVersion, List<LinkObject> objectLinks, Map<String, Object> properties) {
+        this.id = id;
         this.deviceId = deviceId;
         this.registrationId = registrationId;
         this.registrationDate = registrationDate;
@@ -69,12 +66,21 @@ public class Device {
         this.registrationEndpointAddress = registrationEndpointAddress;
         this.lifeTimeInSec = lifeTimeInSec;
         this.lwM2mVersion = lwM2mVersion;
-        this.bindingMode = bindingMode;
         this.objectLinks = objectLinks;
         this.properties = properties;
     }
 
+
     // Getters and setters
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getDeviceId() {
         return deviceId;
@@ -148,14 +154,6 @@ public class Device {
         this.lwM2mVersion = lwM2mVersion;
     }
 
-    public BindingMode getBindingMode() {
-        return bindingMode;
-    }
-
-    public void setBindingMode(BindingMode bindingMode) {
-        this.bindingMode = bindingMode;
-    }
-
     public List<LinkObject> getObjectLinks() {
         return objectLinks;
     }
@@ -178,15 +176,6 @@ public class Device {
 
     public void setProperties(Map<String, Object> properties) {
         this.properties = properties;
-    }
-
-    public static enum BindingMode {
-        U,
-        UQ,
-        S,
-        SQ,
-        US,
-        UQS;
     }
 
 }

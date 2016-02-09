@@ -16,9 +16,11 @@
  */
 package io.rhiot.cloudplatform.service.device.spring;
 
+import com.mongodb.Mongo;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.service.device.InMemoryDeviceRegistry;
+import io.rhiot.cloudplatform.service.device.MongoDbDeviceRegistry;
 import org.eclipse.hono.service.device.api.DeviceRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,8 +35,8 @@ public class DeviceServiceConfiguration {
     }
 
     @Bean(name = "device")
-    DeviceRegistry deviceRegistry(@Value("${disconnectionPeriod:60000}") long disconnectionPeriod) {
-        return new InMemoryDeviceRegistry(disconnectionPeriod);
+    DeviceRegistry deviceRegistry(Mongo mongo, @Value("${disconnectionPeriod:60000}") long disconnectionPeriod) {
+        return new MongoDbDeviceRegistry(mongo, disconnectionPeriod);
     }
 
 }
