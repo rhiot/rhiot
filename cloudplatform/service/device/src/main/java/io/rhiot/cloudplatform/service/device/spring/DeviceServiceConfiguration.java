@@ -34,8 +34,11 @@ public class DeviceServiceConfiguration {
     }
 
     @Bean(name = "device")
-    DeviceRegistry deviceRegistry(Mongo mongo, @Value("${disconnectionPeriod:60000}") long disconnectionPeriod) {
-        return new MongoDbDeviceRegistry(mongo, disconnectionPeriod);
+    DeviceRegistry deviceRegistry(Mongo mongo,
+                                  @Value("${device.metrics.mongodb.db:rhiot}") String db,
+                                  @Value("${device.metrics.mongodb.db:device}") String collection,
+                                  @Value("${disconnectionPeriod:60000}") long disconnectionPeriod) {
+        return new MongoDbDeviceRegistry(mongo, db, collection, disconnectionPeriod);
     }
 
 }

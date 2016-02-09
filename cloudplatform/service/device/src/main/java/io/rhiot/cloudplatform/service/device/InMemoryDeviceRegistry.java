@@ -31,14 +31,12 @@ import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-public class InMemoryDeviceRegistry implements DeviceRegistry {
+public class InMemoryDeviceRegistry extends DisconnectionAwareDeviceRegistry {
 
     private final Map<String, Device> devices = new ConcurrentHashMap<>();
 
-    private final long disconnectionPeriod;
-
     public InMemoryDeviceRegistry(long disconnectionPeriod) {
-        this.disconnectionPeriod = disconnectionPeriod;
+        super(disconnectionPeriod);
     }
 
     @Override
@@ -54,14 +52,6 @@ public class InMemoryDeviceRegistry implements DeviceRegistry {
     @Override
     public List<Device> list() {
         return new ArrayList<>(devices.values());
-    }
-
-    @Override
-    public List<String> disconnected() {
-        return list().stream().filter(device -> {
-            LocalTime updated = ofInstant(ofEpochMilli(device.getLastUpdate().getTime()), ZoneId.systemDefault()).toLocalTime();
-            return updated.plus(disconnectionPeriod, ChronoUnit.MILLIS).isBefore(LocalTime.now());
-        }).map(Device::getDeviceId).collect(toList());
     }
 
     @Override

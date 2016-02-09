@@ -7,30 +7,27 @@ import com.google.common.collect.ImmutableMap;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
 import org.eclipse.cloudplatform.service.device.api.Device;
-import org.eclipse.cloudplatform.service.device.api.DeviceRegistry;
 
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import static java.time.Instant.ofEpochMilli;
-import static java.time.LocalDateTime.ofInstant;
 import static java.util.UUID.randomUUID;
-import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-public class MongoDbDeviceRegistry implements DeviceRegistry {
+public class MongoDbDeviceRegistry extends DisconnectionAwareDeviceRegistry {
 
     private final ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
     private final Mongo mongo;
 
-    private final long disconnectionPeriod;
+    private final String db;
 
-    public MongoDbDeviceRegistry(Mongo mongo, long disconnectionPeriod) {
+    private final String collection;
+
+    public MongoDbDeviceRegistry(Mongo mongo, String db, String collection, long disconnectionPeriod) {
+        super(disconnectionPeriod);
         this.mongo = mongo;
-        this.disconnectionPeriod = disconnectionPeriod;
+        this.db = db;
+        this.collection = collection;
     }
 
     @Override
@@ -57,14 +54,6 @@ public class MongoDbDeviceRegistry implements DeviceRegistry {
             devices.add(dbObjectToDevice(devicesRecords.next()));
         }
         return devices;
-    }
-
-    @Override
-    public List<String> disconnected() {
-        return list().stream().filter(device -> {
-            LocalTime updated = ofInstant(ofEpochMilli(device.getLastUpdate().getTime()), ZoneId.systemDefault()).toLocalTime();
-            return updated.plus(disconnectionPeriod, ChronoUnit.MILLIS).isBefore(LocalTime.now());
-        }).map(Device::getDeviceId).collect(toList());
     }
 
     @Override
@@ -108,7 +97,7 @@ public class MongoDbDeviceRegistry implements DeviceRegistry {
     // Helpers
 
     private DBCollection devicesCollection() {
-        return mongo.getDB("rhiot").getCollection("device");
+        return mongo.getDB(db).getCollection(collection);
     }
 
     private Device dbObjectToDevice(DBObject dbObject) {
