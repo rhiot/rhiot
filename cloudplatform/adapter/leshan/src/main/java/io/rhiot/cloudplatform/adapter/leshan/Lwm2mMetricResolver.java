@@ -16,7 +16,7 @@
  */
 package io.rhiot.cloudplatform.adapter.leshan;
 
-import org.eclipse.hono.service.device.api.DeviceMetrics;
+import org.eclipse.cloudplatform.service.device.api.DeviceMetrics;
 
 public class Lwm2mMetricResolver implements MetricResolver {
 

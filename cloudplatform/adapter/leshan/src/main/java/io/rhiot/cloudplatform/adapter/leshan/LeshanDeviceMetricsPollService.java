@@ -16,7 +16,7 @@
  */
 package io.rhiot.cloudplatform.adapter.leshan;
 
-import org.eclipse.hono.service.device.api.DeviceMetricsPollService;
+import org.eclipse.cloudplatform.service.device.api.DeviceMetricsPollService;
 import org.eclipse.leshan.core.node.LwM2mResource;
 import org.eclipse.leshan.core.request.ReadRequest;
 import org.eclipse.leshan.core.response.ValueResponse;

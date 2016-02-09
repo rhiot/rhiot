@@ -3,14 +3,11 @@ package io.rhiot.cloudplatform.service.device;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
-import org.eclipse.hono.service.device.api.Device;
-import org.eclipse.hono.service.device.api.DeviceRegistry;
-import org.springframework.beans.BeanUtils;
-import org.springframework.cglib.beans.BeanMap;
+import org.eclipse.cloudplatform.service.device.api.Device;
+import org.eclipse.cloudplatform.service.device.api.DeviceRegistry;
 
 import java.time.LocalTime;
 import java.time.ZoneId;

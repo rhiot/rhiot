@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.adapter.leshan;
 
 import com.google.common.net.InetAddresses;
 import io.rhiot.cloudplatform.connector.IoTConnector;
-import org.eclipse.hono.service.device.api.Device;
+import org.eclipse.cloudplatform.service.device.api.Device;
 import org.eclipse.leshan.LinkObject;
 import org.eclipse.leshan.core.request.BindingMode;
 import org.eclipse.leshan.server.client.Client;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
-import static org.eclipse.hono.service.device.api.DeviceConstants.*;
+import static org.eclipse.cloudplatform.service.device.api.DeviceConstants.*;
 
 public class IoTConnectorClientRegistry implements ClientRegistry {
 
@@ -123,16 +123,20 @@ public class IoTConnectorClientRegistry implements ClientRegistry {
 
         InetAddress address = InetAddresses.forString(device.getAddress());
 
+        String lwM2mVersion = (String) device.getProperties().get("lwM2mVersion");
+
+        String smsNumber = (String) device.getProperties().get("smsNumber");
+
         return new Client(
                 device.getRegistrationId(), device.getDeviceId(),
-                address, device.getPort(), device.getLwM2mVersion(), device.getLifeTimeInSec(), (String) device.getProperties().get("smsNumber"), bindingMode, linkObjects, device.getRegistrationEndpointAddress(),
+                address, device.getPort(), lwM2mVersion, device.getLifeTimeInSec(), smsNumber, bindingMode, linkObjects, device.getRegistrationEndpointAddress(),
                 device.getRegistrationDate(), device.getLastUpdate()
         );
     }
 
     private static Device clientToDevice(Client client) {
-        List<org.eclipse.hono.service.device.api.LinkObject> linkObjects = asList(client.getObjectLinks()).stream().map(
-            link -> new org.eclipse.hono.service.device.api.LinkObject(
+        List<org.eclipse.cloudplatform.service.device.api.LinkObject> linkObjects = asList(client.getObjectLinks()).stream().map(
+            link -> new org.eclipse.cloudplatform.service.device.api.LinkObject(
                     link.getUrl(), link.getAttributes(), link.getObjectId(), link.getObjectInstanceId(), link.getResourceId()
             )
         ).collect(toList());
@@ -144,7 +148,7 @@ public class IoTConnectorClientRegistry implements ClientRegistry {
                 client.getEndpoint(), client.getRegistrationId(),
                 client.getRegistrationDate(), client.getLastUpdate(),
                 client.getAddress().getHostAddress(), client.getPort(), client.getRegistrationEndpointAddress(),
-                client.getLifeTimeInSec(), client.getLwM2mVersion(),
+                client.getLifeTimeInSec(),
                 linkObjects, deviceProperties
         );
     }

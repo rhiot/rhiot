@@ -14,13 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.hono.service.device.api;
+package org.eclipse.cloudplatform.service.device.api;
 
-public enum DeviceMetrics {
+import java.util.List;
 
-    manufacturer,
-    modelNumber,
-    serialNumber,
-    firmwareVersion
+/**
+ * Backend service used to manage devices connecting to the system.
+ */
+public interface DeviceRegistry {
+
+    Device get(String deviceId);
+
+    Device getByRegistrationId(String registrationId);
+
+    List<Device> list();
+
+    List<String> disconnected();
+
+    void register(Device device);
+
+    void update(Device device);
+
+    void deregister(String deviceId);
+
+    void heartbeat(String deviceId);
 
 }

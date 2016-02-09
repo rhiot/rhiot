@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.hono.service.device.api;
+package org.eclipse.cloudplatform.service.device.api;
 
 import java.net.InetSocketAddress;
 import java.util.*;
@@ -42,8 +42,6 @@ public class Device {
 
     private long lifeTimeInSec;
 
-    private String lwM2mVersion;
-
     private List<LinkObject> objectLinks = new LinkedList<>();
 
     private Map<String, Object> properties = new HashMap<>();
@@ -53,7 +51,7 @@ public class Device {
     public Device() {
     }
 
-    public Device(String id, String deviceId, String registrationId, Date registrationDate, Date lastUpdate, String address, int port, InetSocketAddress registrationEndpointAddress, long lifeTimeInSec, String lwM2mVersion, List<LinkObject> objectLinks, Map<String, Object> properties) {
+    public Device(String id, String deviceId, String registrationId, Date registrationDate, Date lastUpdate, String address, int port, InetSocketAddress registrationEndpointAddress, long lifeTimeInSec, List<LinkObject> objectLinks, Map<String, Object> properties) {
         this.id = id;
         this.deviceId = deviceId;
         this.registrationId = registrationId;
@@ -63,7 +61,6 @@ public class Device {
         this.port = port;
         this.registrationEndpointAddress = registrationEndpointAddress;
         this.lifeTimeInSec = lifeTimeInSec;
-        this.lwM2mVersion = lwM2mVersion;
         this.objectLinks = objectLinks;
         this.properties = properties;
     }
@@ -141,14 +138,6 @@ public class Device {
 
     public void setLifeTimeInSec(long lifeTimeInSec) {
         this.lifeTimeInSec = lifeTimeInSec;
-    }
-
-    public String getLwM2mVersion() {
-        return lwM2mVersion;
-    }
-
-    public void setLwM2mVersion(String lwM2mVersion) {
-        this.lwM2mVersion = lwM2mVersion;
     }
 
     public List<LinkObject> getObjectLinks() {

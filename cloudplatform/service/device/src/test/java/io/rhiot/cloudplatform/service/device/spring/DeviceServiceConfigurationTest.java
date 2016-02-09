@@ -20,8 +20,8 @@ import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
-import org.eclipse.hono.service.device.api.Device;
-import org.eclipse.hono.service.device.api.DeviceMetricsPollService;
+import org.eclipse.cloudplatform.service.device.api.Device;
+import org.eclipse.cloudplatform.service.device.api.DeviceMetricsPollService;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
@@ -31,14 +31,14 @@ import java.util.*;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static org.eclipse.hono.service.device.api.DeviceConstants.*;
+import static org.eclipse.cloudplatform.service.device.api.DeviceConstants.*;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @Configuration
 public class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
     Device device = new Device(null, randomAlphabetic(10), randomAlphabetic(10), new Date(), new Date(),
-    null, 0, null, 0, randomAlphabetic(10), new ArrayList<>(), new HashMap<>());
+    null, 0, null, 0, new ArrayList<>(), new HashMap<>());
 
     @Override
     protected void beforeCloudPlatformStarted() {
