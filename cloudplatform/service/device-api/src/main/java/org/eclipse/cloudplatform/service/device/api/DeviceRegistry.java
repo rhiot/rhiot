@@ -31,6 +31,12 @@ public interface DeviceRegistry {
 
     List<String> disconnected();
 
+    /**
+     * Registers a given device. Registering device with the same `deviceId` twice should update the device, instead
+     * of registering two devices.
+     *
+     * @param device device to be registered.
+     */
     void register(Device device);
 
     void update(Device device);
