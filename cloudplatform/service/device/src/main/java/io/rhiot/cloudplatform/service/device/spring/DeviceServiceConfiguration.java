@@ -22,17 +22,20 @@ import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.service.device.MongoDbDeviceRegistry;
 import org.eclipse.cloudplatform.service.device.api.DeviceRegistry;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DeviceServiceConfiguration {
 
+    @ConditionalOnBean
     @Bean
     ServiceBinding deviceServiceBinding(PayloadEncoding payloadEncoding) {
         return new ServiceBinding(payloadEncoding, "device");
     }
 
+    @ConditionalOnBean
     @Bean(name = "device")
     DeviceRegistry deviceRegistry(Mongo mongo,
                                   @Value("${device.metrics.mongodb.db:rhiot}") String db,
