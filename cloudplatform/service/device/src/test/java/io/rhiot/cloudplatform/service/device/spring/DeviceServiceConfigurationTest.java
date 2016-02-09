@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.*;
 
+import static java.lang.System.setProperty;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.eclipse.cloudplatform.service.device.api.DeviceConstants.*;
@@ -37,17 +38,14 @@ import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 @Configuration
 public class DeviceServiceConfigurationTest extends CloudPlatformTest {
 
-    Device device = new Device(null, randomAlphabetic(10), randomAlphabetic(10), new Date(), new Date(),
-    null, 0, null, 0, new ArrayList<>(), new HashMap<>());
+    Device device = Device.minimalDevice(randomAlphabetic(10));
 
     @Override
     protected void beforeCloudPlatformStarted() {
-        System.setProperty("spring.data.mongodb", findAvailableTcpPort() + "");
-        System.setProperty("AMQP_PORT", findAvailableTcpPort() + "");
-        System.setProperty("MQTT_ENABLED", false + "");
+        setProperty("spring.data.mongodb", findAvailableTcpPort() + "");
     }
 
-
+    // Tests
 
     @Test
     public void shouldRegisterDevice() {

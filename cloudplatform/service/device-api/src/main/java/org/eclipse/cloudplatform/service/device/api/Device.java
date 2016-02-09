@@ -65,6 +65,12 @@ public class Device {
         this.properties = properties;
     }
 
+    public static Device minimalDevice(String deviceId) {
+        Device device = new Device();
+        device.setDeviceId(deviceId);
+        return device;
+    }
+
     // Getters and setters
 
 
