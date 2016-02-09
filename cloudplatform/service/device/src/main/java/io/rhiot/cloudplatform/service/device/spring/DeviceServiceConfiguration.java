@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DeviceServiceConfiguration {
 
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(name = "deviceServiceBinding")
     @Bean
     ServiceBinding deviceServiceBinding(PayloadEncoding payloadEncoding) {
         return new ServiceBinding(payloadEncoding, "device");
