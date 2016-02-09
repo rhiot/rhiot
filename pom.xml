@@ -32,6 +32,8 @@
 
         <fatjar.mainClass>com.example.DefaultMainClas</fatjar.mainClass>
         <docker.image.target>${project.artifactId}</docker.image.target>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
 
         <groovy-eclipse-batch.version>2.4.3-01</groovy-eclipse-batch.version>
         <groovy-eclipse-compiler.version>2.9.1-01</groovy-eclipse-compiler.version>
@@ -355,6 +357,7 @@
                                     <tags>
                                         <tag>latest</tag>
                                         <tag>${project.version}</tag>
+                                        <tag>${timestamp}</tag>
                                     </tags>
                                     <assembly>
                                         <basedir>/jars</basedir>
