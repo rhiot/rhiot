@@ -35,13 +35,16 @@ import static org.apache.camel.ServiceStatus.Started;
 
 public class CamelCloudClient implements CloudClient {
 
+    private final CamelCloudService cloudService;
+
     private final CamelContext camelContext;
 
     private final ProducerTemplate producerTemplate;
 
     private final String applicationId;
 
-    public CamelCloudClient(CamelContext camelContext, String applicationId) {
+    public CamelCloudClient(CamelCloudService cloudService, CamelContext camelContext, String applicationId) {
+        this.cloudService = cloudService;
         this.camelContext = camelContext;
         this.producerTemplate = camelContext.createProducerTemplate();
         this.applicationId = applicationId;
@@ -54,6 +57,7 @@ public class CamelCloudClient implements CloudClient {
 
     @Override
     public void release() {
+        cloudService.release(applicationId);
     }
 
     @Override
@@ -122,27 +126,26 @@ public class CamelCloudClient implements CloudClient {
 
     @Override
     public void addCloudClientListener(CloudClientListener cloudClientListener) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void removeCloudClientListener(CloudClientListener cloudClientListener) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<Integer> getUnpublishedMessageIds() throws KuraException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<Integer> getInFlightMessageIds() throws KuraException {
-        return null;
-    }
+        throw new UnsupportedOperationException();    }
 
     @Override
     public List<Integer> getDroppedInFlightMessageIds() throws KuraException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // Helpers

@@ -19,4 +19,7 @@ package io.rhiot.component.kura.camelcloud;
 import org.eclipse.kura.cloud.CloudService;
 
 public interface CamelCloudService extends CloudService {
+
+    void release(String applicationId);
+
 }

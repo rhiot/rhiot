@@ -37,7 +37,7 @@ public class DefaultCamelCloudService implements CamelCloudService {
 
     @Override
     public CloudClient newCloudClient(String applicationId) throws KuraException {
-        CloudClient cloudClient = new CamelCloudClient(camelContext, applicationId);
+        CloudClient cloudClient = new CamelCloudClient(this, camelContext, applicationId);
         clients.put(applicationId, cloudClient);
         return cloudClient;
     }
@@ -50,6 +50,11 @@ public class DefaultCamelCloudService implements CamelCloudService {
     @Override
     public boolean isConnected() {
         return camelContext.getStatus() == Started;
+    }
+
+    @Override
+    public void release(String applicationId) {
+        clients.remove(applicationId);
     }
 
 }
