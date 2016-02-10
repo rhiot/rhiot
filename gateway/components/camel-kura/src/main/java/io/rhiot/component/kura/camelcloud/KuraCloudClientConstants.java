@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.component.kura.cloudclient;
+package io.rhiot.component.kura.camelcloud;
 
 public final class KuraCloudClientConstants {
 

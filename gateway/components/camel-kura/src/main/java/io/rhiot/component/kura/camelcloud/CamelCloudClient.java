@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.component.kura.cloudclient;
+package io.rhiot.component.kura.camelcloud;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
@@ -30,10 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static io.rhiot.component.kura.cloudclient.KuraCloudClientConstants.CAMEL_KURA_CLOUD_MESSAGEID;
-import static io.rhiot.component.kura.cloudclient.KuraCloudClientConstants.CAMEL_KURA_CLOUD_PRIORITY;
-import static io.rhiot.component.kura.cloudclient.KuraCloudClientConstants.CAMEL_KURA_CLOUD_RETAIN;
-import static io.rhiot.component.kura.cloudclient.KuraCloudClientConstants.CAMEL_KURA_CLOUD_QOS;
+import static io.rhiot.component.kura.camelcloud.KuraCloudClientConstants.*;
 import static org.apache.camel.ServiceStatus.Started;
 
 public class CamelCloudClient implements CloudClient {
@@ -71,16 +68,7 @@ public class CamelCloudClient implements CloudClient {
 
     @Override
     public int publish(String topic, KuraPayload kuraPayload, int qos, boolean retain, int priority) throws KuraException {
-        int kuraMessageId = Math.abs(new Random().nextInt());
-
-        Map<String, Object> headers = new HashMap<>();
-        headers.put(CAMEL_KURA_CLOUD_MESSAGEID, kuraMessageId);
-        headers.put(CAMEL_KURA_CLOUD_QOS, qos);
-        headers.put(CAMEL_KURA_CLOUD_RETAIN, retain);
-        headers.put(CAMEL_KURA_CLOUD_PRIORITY, priority);
-
-        producerTemplate.sendBodyAndHeaders(topic, kuraPayload, headers);
-        return kuraMessageId;
+        return doPublish(false, null, topic, kuraPayload, qos, retain, priority);
     }
 
     @Override
@@ -91,18 +79,20 @@ public class CamelCloudClient implements CloudClient {
     }
 
     @Override
-    public int controlPublish(String s, KuraPayload kuraPayload, int i, boolean b, int i1) throws KuraException {
-        return 0;
+    public int controlPublish(String topic, KuraPayload payload, int i, boolean b, int priority) throws KuraException {
+        return doPublish(true, null, topic, payload, i, b, priority);
     }
 
     @Override
     public int controlPublish(String s, String s1, KuraPayload kuraPayload, int i, boolean b, int i1) throws KuraException {
-        return 0;
+        return doPublish(true, s, s1, kuraPayload, i, b, i1);
     }
 
     @Override
-    public int controlPublish(String s, String s1, byte[] bytes, int i, boolean b, int i1) throws KuraException {
-        return 0;
+    public int controlPublish(String s, String s1, byte[] bytes, int i, boolean b, int priority) throws KuraException {
+        KuraPayload kuraPayload = new KuraPayload();
+        kuraPayload.setBody(bytes);
+        return doPublish(true, s, s1, kuraPayload, i, b, priority);
     }
 
     @Override
@@ -165,6 +155,23 @@ public class CamelCloudClient implements CloudClient {
     @Override
     public List<Integer> getDroppedInFlightMessageIds() throws KuraException {
         return null;
+    }
+
+    // Helpers
+
+    private int doPublish(boolean isControl, String deviceId, String topic, KuraPayload kuraPayload, int qos, boolean retain, int priority) throws KuraException {
+        int kuraMessageId = Math.abs(new Random().nextInt());
+
+        Map<String, Object> headers = new HashMap<>();
+        headers.put(CAMEL_KURA_CLOUD_CONTROL, isControl);
+        headers.put(CAMEL_KURA_CLOUD_MESSAGEID, kuraMessageId);
+        headers.put(CAMEL_KURA_CLOUD_DEVICEID, deviceId);
+        headers.put(CAMEL_KURA_CLOUD_QOS, qos);
+        headers.put(CAMEL_KURA_CLOUD_RETAIN, retain);
+        headers.put(CAMEL_KURA_CLOUD_PRIORITY, priority);
+
+        producerTemplate.sendBodyAndHeaders(topic, kuraPayload, headers);
+        return kuraMessageId;
     }
 
 }
