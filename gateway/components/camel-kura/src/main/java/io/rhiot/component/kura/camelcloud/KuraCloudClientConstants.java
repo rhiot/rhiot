@@ -22,7 +22,7 @@ public final class KuraCloudClientConstants {
 
     public static final String APPLICATION_ID = "applicationId";
 
-    public static final String CAMEL_KURA_CLOUD = "CamelKuraCloudClient";
+    public static final String CAMEL_KURA_CLOUD = "CamelKuraCloudService";
 
     public static final String CAMEL_KURA_CLOUD_TOPIC = CAMEL_KURA_CLOUD + ".topic";
 
