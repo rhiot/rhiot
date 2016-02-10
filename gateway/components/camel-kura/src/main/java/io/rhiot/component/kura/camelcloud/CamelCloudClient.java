@@ -194,7 +194,7 @@ public class CamelCloudClient implements CloudClient {
     }
 
     private String target(String topic) {
-        if(topic.contains("%s")) {
+        if(baseEndpoint.contains("%s")) {
             return format(baseEndpoint, topic);
         }
         return baseEndpoint + topic;

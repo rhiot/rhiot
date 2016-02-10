@@ -20,6 +20,8 @@ import org.eclipse.kura.cloud.CloudService;
 
 public interface CamelCloudService extends CloudService {
 
+    void registerBaseEndpoint(String applicationId, String baseEndpoint);
+
     void release(String applicationId);
 
 }

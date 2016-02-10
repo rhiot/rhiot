@@ -36,7 +36,7 @@ public class CamelCloudClientTest extends CamelTestSupport {
 
     Random random = new Random();
 
-    CloudService cloudService;
+    CamelCloudService cloudService;
 
     CloudClient cloudClient;
 
@@ -52,6 +52,7 @@ public class CamelCloudClientTest extends CamelTestSupport {
     @Override
     protected void doPostSetup() throws Exception {
         cloudService = new DefaultCamelCloudService(context);
+        cloudService.registerBaseEndpoint("applicationId", "seda:%s");
         cloudClient = cloudService.newCloudClient("applicationId");
         kuraPayload = new KuraPayload();
         kuraPayload.setBody("foo".getBytes());
@@ -62,15 +63,17 @@ public class CamelCloudClientTest extends CamelTestSupport {
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                from("direct:start").to("mock:test");
+                from("seda:start").to("mock:test");
             }
         };
     }
 
+    // Tests
+
     @Test
     public void shouldPassMessageId() throws KuraException, InterruptedException {
         mockEndpoint.setExpectedCount(1);
-        cloudClient.publish("direct:start", kuraPayload, 0, true, 0);
+        cloudClient.publish("start", kuraPayload, 0, true, 0);
         mockEndpoint.assertIsSatisfied();
         int messageId = mockEndpoint.getExchanges().get(0).getIn().getHeader(CAMEL_KURA_CLOUD_MESSAGEID, int.class);
         Truth.assertThat(messageId).isGreaterThan(0);
@@ -79,57 +82,57 @@ public class CamelCloudClientTest extends CamelTestSupport {
     @Test
     public void shouldPassQos() throws KuraException, InterruptedException {
         mockEndpoint.expectedHeaderReceived(CAMEL_KURA_CLOUD_QOS, qos);
-        cloudClient.publish("direct:start", kuraPayload, qos, true, priority);
+        cloudClient.publish("start", kuraPayload, qos, true, priority);
         mockEndpoint.assertIsSatisfied();
     }
 
     @Test
     public void shouldPassRetain() throws KuraException, InterruptedException {
         mockEndpoint.expectedHeaderReceived(CAMEL_KURA_CLOUD_RETAIN, true);
-        cloudClient.publish("direct:start", kuraPayload, qos, true, 0);
+        cloudClient.publish("start", kuraPayload, qos, true, 0);
         mockEndpoint.assertIsSatisfied();
     }
 
     @Test
     public void shouldPassPriority() throws KuraException, InterruptedException {
         mockEndpoint.expectedHeaderReceived(CAMEL_KURA_CLOUD_PRIORITY, priority);
-        cloudClient.publish("direct:start", kuraPayload, 0, true, priority);
+        cloudClient.publish("start", kuraPayload, 0, true, priority);
         mockEndpoint.assertIsSatisfied();
     }
 
     @Test
     public void shouldPassDefaultPriority() throws KuraException, InterruptedException {
         mockEndpoint.expectedHeaderReceived(CAMEL_KURA_CLOUD_PRIORITY, 5);
-        cloudClient.publish("direct:start", kuraPayload, 0, true);
+        cloudClient.publish("start", kuraPayload, 0, true);
         mockEndpoint.assertIsSatisfied();
     }
 
     @Test
     public void shouldPassControlFlag() throws KuraException, InterruptedException {
         mockEndpoint.expectedHeaderReceived(CAMEL_KURA_CLOUD_CONTROL, true);
-        cloudClient.controlPublish("direct:start", kuraPayload, qos, true, priority);
+        cloudClient.controlPublish("start", kuraPayload, qos, true, priority);
         mockEndpoint.assertIsSatisfied();
     }
 
     @Test
     public void shouldNotPassControlFlag() throws KuraException, InterruptedException {
         mockEndpoint.expectedHeaderReceived(CAMEL_KURA_CLOUD_CONTROL, false);
-        cloudClient.publish("direct:start", kuraPayload, qos, true, priority);
+        cloudClient.publish("start", kuraPayload, qos, true, priority);
         mockEndpoint.assertIsSatisfied();
     }
 
     @Test
     public void shouldSubscribe() throws KuraException, InterruptedException {
-        cloudClient.subscribe("direct:subscribe", qos);
-        template.sendBody("direct:subscribe", "foo");
+        cloudClient.subscribe("subscribe", qos);
+        template.sendBody("seda:subscribe", "foo");
         String received = consumer.receiveBody("seda:applicationId", String.class);
         Truth.assertThat(received).isEqualTo("foo");
     }
 
     @Test
     public void shouldUnsubscribe() throws KuraException, InterruptedException {
-        cloudClient.subscribe("seda:subscribe", qos);
-        cloudClient.unsubscribe("seda:subscribe");
+        cloudClient.subscribe("subscribe", qos);
+        cloudClient.unsubscribe("subscribe");
         template.sendBody("seda:subscribe", "foo");
         String received = consumer.receiveBodyNoWait("seda:applicationId", String.class);
         Truth.assertThat(received).isNull();
@@ -137,8 +140,8 @@ public class CamelCloudClientTest extends CamelTestSupport {
 
     @Test
     public void shouldPassQosToSubscribed() throws KuraException, InterruptedException {
-        cloudClient.subscribe("direct:subscribe", qos);
-        template.sendBody("direct:subscribe", "foo");
+        cloudClient.subscribe("subscribe", qos);
+        template.sendBody("seda:subscribe", "foo");
         Exchange received = consumer.receive("seda:applicationId");
         Truth.assertThat(received.getIn().getHeader(CAMEL_KURA_CLOUD_QOS)).isEqualTo(qos);
     }

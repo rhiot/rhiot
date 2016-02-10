@@ -31,13 +31,19 @@ public class DefaultCamelCloudService implements CamelCloudService {
 
     private final Map<String, CloudClient> clients = new ConcurrentHashMap<>();
 
+    private final Map<String, String> baseEndpoints = new ConcurrentHashMap<>();
+
     public DefaultCamelCloudService(CamelContext camelContext) {
         this.camelContext = camelContext;
     }
 
     @Override
     public CloudClient newCloudClient(String applicationId) throws KuraException {
-        CloudClient cloudClient = new CamelCloudClient(this, camelContext, applicationId);
+        String baseEndpoint = baseEndpoints.get(applicationId);
+        if(baseEndpoint == null) {
+            baseEndpoint = "";
+        }
+        CloudClient cloudClient = new CamelCloudClient(this, camelContext, applicationId, baseEndpoint);
         clients.put(applicationId, cloudClient);
         return cloudClient;
     }
@@ -50,6 +56,11 @@ public class DefaultCamelCloudService implements CamelCloudService {
     @Override
     public boolean isConnected() {
         return camelContext.getStatus() == Started;
+    }
+
+    @Override
+    public void registerBaseEndpoint(String applicationId, String baseEndpoint) {
+        baseEndpoints.put(applicationId, baseEndpoint);
     }
 
     @Override
