@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Random;
 
 import static io.rhiot.component.kura.camelcloud.KuraCloudClientConstants.*;
+import static java.lang.String.format;
 import static org.apache.camel.ServiceStatus.Started;
 
 public class CamelCloudClient implements CloudClient {
@@ -43,11 +44,18 @@ public class CamelCloudClient implements CloudClient {
 
     private final String applicationId;
 
-    public CamelCloudClient(CamelCloudService cloudService, CamelContext camelContext, String applicationId) {
+    private final String baseEndpoint;
+
+    public CamelCloudClient(CamelCloudService cloudService, CamelContext camelContext, String applicationId, String baseEndpoint) {
         this.cloudService = cloudService;
         this.camelContext = camelContext;
         this.producerTemplate = camelContext.createProducerTemplate();
         this.applicationId = applicationId;
+        this.baseEndpoint = baseEndpoint;
+    }
+
+    public CamelCloudClient(CamelCloudService cloudService, CamelContext camelContext, String applicationId) {
+        this(cloudService, camelContext, applicationId, "");
     }
 
     @Override
@@ -111,9 +119,10 @@ public class CamelCloudClient implements CloudClient {
 
     @Override
     public void unsubscribe(String topic) throws KuraException {
+        String target = target(topic);
         try {
-            camelContext.stopRoute(topic);
-            camelContext.removeRoute(topic);
+            camelContext.stopRoute(target);
+            camelContext.removeRoute(target);
         } catch (Exception e) {
             throw new KuraException(KuraErrorCode.INTERNAL_ERROR, e);
         }
@@ -151,6 +160,7 @@ public class CamelCloudClient implements CloudClient {
     // Helpers
 
     private int doPublish(boolean isControl, String deviceId, String topic, KuraPayload kuraPayload, int qos, boolean retain, int priority) throws KuraException {
+        String target = target(topic);
         int kuraMessageId = Math.abs(new Random().nextInt());
 
         Map<String, Object> headers = new HashMap<>();
@@ -161,17 +171,18 @@ public class CamelCloudClient implements CloudClient {
         headers.put(CAMEL_KURA_CLOUD_RETAIN, retain);
         headers.put(CAMEL_KURA_CLOUD_PRIORITY, priority);
 
-        producerTemplate.sendBodyAndHeaders(topic, kuraPayload, headers);
+        producerTemplate.sendBodyAndHeaders(target, kuraPayload, headers);
         return kuraMessageId;
     }
 
     private void doSubscribe(final boolean isControl, final String topic, final int qos) throws KuraException {
+        final String target = target(topic);
         try {
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
                 public void configure() throws Exception {
-                    from(topic).
-                            routeId(topic).
+                    from(target).
+                            routeId(target).
                             setHeader(CAMEL_KURA_CLOUD_CONTROL, constant(isControl)).
                             setHeader(CAMEL_KURA_CLOUD_QOS, constant(qos)).
                             to("seda:" + applicationId);
@@ -180,6 +191,13 @@ public class CamelCloudClient implements CloudClient {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String target(String topic) {
+        if(topic.contains("%s")) {
+            return format(baseEndpoint, topic);
+        }
+        return baseEndpoint + topic;
     }
 
 }
