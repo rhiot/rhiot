@@ -79,8 +79,8 @@ public class CamelCloudClient implements CloudClient {
     }
 
     @Override
-    public int controlPublish(String topic, KuraPayload payload, int i, boolean b, int priority) throws KuraException {
-        return doPublish(true, null, topic, payload, i, b, priority);
+    public int controlPublish(String topic, KuraPayload payload, int i, boolean retain, int priority) throws KuraException {
+        return doPublish(true, null, topic, payload, i, retain, priority);
     }
 
     @Override
@@ -89,32 +89,20 @@ public class CamelCloudClient implements CloudClient {
     }
 
     @Override
-    public int controlPublish(String s, String s1, byte[] bytes, int i, boolean b, int priority) throws KuraException {
+    public int controlPublish(String deviceId, String topic, byte[] payload, int qos, boolean b, int priority) throws KuraException {
         KuraPayload kuraPayload = new KuraPayload();
-        kuraPayload.setBody(bytes);
-        return doPublish(true, s, s1, kuraPayload, i, b, priority);
+        kuraPayload.setBody(payload);
+        return doPublish(true, deviceId, topic, kuraPayload, qos, b, priority);
     }
 
     @Override
-    public void subscribe(final String topic, final int qos) throws KuraException {
-        try {
-            camelContext.addRoutes(new RouteBuilder() {
-                @Override
-                public void configure() throws Exception {
-                    from(topic).
-                            routeId(topic).
-                            setHeader(CAMEL_KURA_CLOUD_QOS, constant(qos)).
-                            to("seda:" + applicationId);
-                }
-            });
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void subscribe(String topic, int qos) throws KuraException {
+        doSubscribe(false, topic, qos);
     }
 
     @Override
-    public void controlSubscribe(String s, int i) throws KuraException {
-
+    public void controlSubscribe(String topic, int qos) throws KuraException {
+        doSubscribe(true, topic, qos);
     }
 
     @Override
@@ -128,8 +116,8 @@ public class CamelCloudClient implements CloudClient {
     }
 
     @Override
-    public void controlUnsubscribe(String s) throws KuraException {
-
+    public void controlUnsubscribe(String topic) throws KuraException {
+        unsubscribe(topic);
     }
 
     @Override
@@ -172,6 +160,23 @@ public class CamelCloudClient implements CloudClient {
 
         producerTemplate.sendBodyAndHeaders(topic, kuraPayload, headers);
         return kuraMessageId;
+    }
+
+    private void doSubscribe(final boolean isControl, final String topic, final int qos) throws KuraException {
+        try {
+            camelContext.addRoutes(new RouteBuilder() {
+                @Override
+                public void configure() throws Exception {
+                    from(topic).
+                            routeId(topic).
+                            setHeader(CAMEL_KURA_CLOUD_CONTROL, constant(isControl)).
+                            setHeader(CAMEL_KURA_CLOUD_QOS, constant(qos)).
+                            to("seda:" + applicationId);
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
