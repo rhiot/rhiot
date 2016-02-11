@@ -20,6 +20,8 @@ present on the **#rhiot** IRC channel at Freenode and twitter [@rhiot_io](http:/
 
 ## Issues
 
+[![GitHub issues](https://img.shields.io/github/issues/rhiot/rhiot.svg)](https://github.com/rhiot/rhiot/issues)
+
 You can create [new issue, bug, comment here](https://github.com/rhiot/rhiot/issues/new).
 
 ## Build status
