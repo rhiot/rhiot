@@ -94,4 +94,4 @@ fi
 
 ### Command execution
 
-docker run -v ${RHIOT_HOME}/maven/repository:/root/.m2/repository --net=host -it rhiot/cmd:${RHIOT_VERSION} "$@"
+docker run  -v ~/.m2/repository:/var/maven/repository -v ${RHIOT_HOME}/maven/repository:/root/.m2/repository --net=host -it rhiot/cmd:${RHIOT_VERSION} "$@"
