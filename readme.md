@@ -30,7 +30,7 @@ If you want to build the project yourself, read [this document](https://rhiot.gi
 
 ## License
 
-[![License ASF](https://img.shields.io/npm/l/express.svg)](http://opensource.org/licenses/ASF)
+[![License ASF](https://img.shields.io/hexpm/l/plug.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 The Rhiot project is distributed under the [Apache 2.0 Software License](https://www.apache.org/licenses/LICENSE-2.0).
 
