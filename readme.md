@@ -11,6 +11,8 @@ the common IoT-related challenges.
 
 ## Current release
 
+[![Release][Release-Image]][Release-Url]
+
 The latest and the greatest version of the Rhiot is `0.1.3`. Wondering what's new there? Here are the [release notes](https://rhiot.gitbooks.io/rhiotdocumentation/content/releases_notes/index.html).
 
 ## Community
