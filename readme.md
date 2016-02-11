@@ -20,7 +20,7 @@ present on the **#rhiot** IRC channel at Freenode and twitter [@rhiot_io](http:/
 
 ## Issues
 
-[![GitHub issues](https://img.shields.io/github/issues/rhiot/rhiot.svg?style=flat-square)]()
+[![GitHub issues](https://img.shields.io/github/issues/rhiot/rhiot.svg?style=flat)]()
 
 You can create [new issue, bug, comment here](https://github.com/rhiot/rhiot/issues/new).
 
@@ -32,7 +32,7 @@ If you want to build the project yourself, read [this document](https://rhiot.gi
 
 ## License
 
-[![License ASF](https://img.shields.io/hexpm/l/plug.svg?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0)
+[![License ASF](https://img.shields.io/hexpm/l/plug.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
 The Rhiot project is distributed under the [Apache 2.0 Software License](https://www.apache.org/licenses/LICENSE-2.0).
 
