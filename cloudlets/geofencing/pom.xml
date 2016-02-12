@@ -9,7 +9,7 @@
         <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>RHIOT :: Cloudlets :: GeoFencing</name>
+    <name>Rhiot :: Cloudlets :: GeoFencing</name>
     <artifactId>rhiot-cloudlets-geofencing-parent</artifactId>
     <packaging>pom</packaging>
 
