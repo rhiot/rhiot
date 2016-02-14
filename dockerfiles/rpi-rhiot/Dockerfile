@@ -49,6 +49,7 @@ LABEL projectURL="http://rhiot.io"
 LABEL description="Rhiot docker image"
 
 ## Debian/Raspbian package installation
+## List comes from http://wiki.eclipse.org/Kura/Raspberry_Pi
 RUN apt-get update && \
     apt-get install -y apt-utils unzip ethtool dos2unix telnet bind9 hostapd isc-dhcp-server iw monit wget openjdk-${JAVA_VERSION}-jdk --no-install-recommends  && \
     rm -rf /var/lib/apt/lists/*
