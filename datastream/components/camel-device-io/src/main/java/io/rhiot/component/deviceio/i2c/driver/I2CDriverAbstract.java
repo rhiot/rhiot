@@ -16,9 +16,15 @@
  */
 package io.rhiot.component.deviceio.i2c.driver;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+
+import jdk.dio.ClosedDeviceException;
+import jdk.dio.DeviceDescriptor;
+import jdk.dio.UnavailableDeviceException;
 import jdk.dio.i2cbus.I2CDevice;
 
-public abstract class I2CDriverAbstract implements I2CDriver {
+public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
 
     protected I2CDevice device;
 
@@ -48,6 +54,100 @@ public abstract class I2CDriverAbstract implements I2CDriver {
 
     @Override
     public void resume() throws Exception {
+    }
+
+    @Override
+    public final void begin() throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        device.begin();
+    }
+
+    @Override
+    public final void close() throws IOException {
+        device.close();
+    }
+
+    @Override
+    public final void end() throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        device.end();
+    }
+
+    @Override
+    public final Bus getBus() throws IOException {
+        return device.getBus();
+    }
+
+    @Override
+    public final <U extends I2CDevice> DeviceDescriptor<U> getDescriptor() {
+        return device.getDescriptor();
+    }
+
+    @Override
+    public final ByteBuffer getInputBuffer() throws ClosedDeviceException, IOException {
+        return device.getInputBuffer();
+    }
+
+    @Override
+    public final ByteBuffer getOutputBuffer() throws ClosedDeviceException, IOException {
+        return device.getOutputBuffer();
+    }
+
+    @Override
+    public final boolean isOpen() {
+        return device.isOpen();
+    }
+
+    @Override
+    public final int read() throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        return device.read();
+    }
+
+    @Override
+    public final int read(ByteBuffer dst) throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        return device.read(dst);
+    }
+
+    @Override
+    public final int read(int skip, ByteBuffer dst)
+            throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        return device.read(skip, dst);
+    }
+
+    @Override
+    public final int read(int subaddress, int subaddressSize, ByteBuffer dst)
+            throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        return device.read(subaddress, subaddressSize, dst);
+    }
+
+    @Override
+    public final int read(int subaddress, int subaddressSize, int skip, java.nio.ByteBuffer dst)
+            throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        return device.read(subaddress, subaddressSize, skip, dst);
+    }
+
+    @Override
+    public final void tryLock(int arg0) throws UnavailableDeviceException, ClosedDeviceException, IOException {
+        device.tryLock(arg0);
+    }
+
+    @Override
+    public final void unlock() throws IOException {
+        device.unlock();
+    }
+
+    @Override
+    public final int write(ByteBuffer arg0) throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        return device.write(arg0);
+    }
+
+    @Override
+    public final int write(int arg0, int arg1, ByteBuffer arg2)
+            throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        return device.write(arg0, arg1, arg2);
+    }
+
+    @Override
+    public final void write(int arg0) throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        device.write(arg0);
     }
 
 }
