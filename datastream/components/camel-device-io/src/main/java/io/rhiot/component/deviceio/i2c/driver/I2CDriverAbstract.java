@@ -16,7 +16,15 @@
  */
 package io.rhiot.component.deviceio.i2c.driver;
 
+import jdk.dio.i2cbus.I2CDevice;
+
 public abstract class I2CDriverAbstract implements I2CDriver {
+
+    protected I2CDevice device;
+
+    public I2CDriverAbstract(I2CDevice device) {
+        this.device = device;
+    }
 
     @Override
     public void init() throws Exception {
