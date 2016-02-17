@@ -32,4 +32,6 @@ public interface I2CDriver {
 
     public Object get() throws Exception;
 
+    public Class getType() throws Exception;
+
 }
