@@ -18,6 +18,7 @@ package io.rhiot.component.deviceio.i2c.driver;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import jdk.dio.ClosedDeviceException;
 import jdk.dio.DeviceDescriptor;
@@ -54,6 +55,14 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
 
     @Override
     public void resume() throws Exception {
+    }
+
+    public void sleep(long howMuch) {
+        try {
+            Thread.sleep(howMuch);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
     }
 
     @Override
@@ -148,6 +157,34 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
     @Override
     public final void write(int arg0) throws IOException, UnavailableDeviceException, ClosedDeviceException {
         device.write(arg0);
+    }
+
+    public int readU16BigEndian(int register) throws IOException {
+        ByteBuffer bb = ByteBuffer.allocate(2);
+        bb.order(ByteOrder.BIG_ENDIAN);
+        device.read(register, bb);
+        return bb.getInt();
+    }
+
+    public int readU16LittleEndian(int register) throws IOException {
+        ByteBuffer bb = ByteBuffer.allocate(2);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        device.read(register, bb);
+        return bb.getInt();
+    }
+
+    public int readU24LittleEndian(int register) throws IOException {
+        ByteBuffer bb = ByteBuffer.allocate(3);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        device.read(register, bb);
+        return bb.getInt();
+    }
+
+    public int readU24BigEndian(int register) throws IOException {
+        ByteBuffer bb = ByteBuffer.allocate(3);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        device.read(register, bb);
+        return bb.getInt();
     }
 
 }
