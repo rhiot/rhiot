@@ -16,18 +16,19 @@
  */
 package io.rhiot.component.pi4j.i2c.driver;
 
+import io.rhiot.component.pi4j.i2c.I2CConsumer;
+import io.rhiot.component.pi4j.i2c.I2CEndpoint;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-
-import io.rhiot.component.pi4j.i2c.I2CConsumer;
-import io.rhiot.component.pi4j.i2c.I2CEndpoint;
-import com.pi4j.io.i2c.I2CDevice;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pi4j.io.i2c.I2CDevice;
 
 /**
  * Code from Marcus Hirt, 2015, Code From http://hirt.se/blog/?p=652
@@ -77,6 +78,7 @@ public final class BMP180Consumer extends I2CConsumer {
         exchange.getIn().setBody(body);
     }
 
+    @Override
     protected void doStart() throws Exception {
         super.doStart();
         int totalBytes = CALIBRATION_END - CALIBRATION_START + 1;
@@ -150,7 +152,7 @@ public final class BMP180Consumer extends I2CConsumer {
     private int readRawTemp() throws IOException {
         write(BMP085_CONTROL, BMP085_READTEMPCMD);
         sleep(50);
-        return readU16LittleEndian(BMP085_TEMPDATA);
+        return readU16BigEndian(BMP085_TEMPDATA);
     }
 
     private float readTemperature() throws IOException {

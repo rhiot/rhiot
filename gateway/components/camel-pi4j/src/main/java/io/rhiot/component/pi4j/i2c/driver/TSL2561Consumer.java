@@ -16,16 +16,17 @@
  */
 package io.rhiot.component.pi4j.i2c.driver;
 
-import java.io.IOException;
-
 import io.rhiot.component.pi4j.i2c.I2CConsumer;
 import io.rhiot.component.pi4j.i2c.I2CEndpoint;
-import com.pi4j.io.i2c.I2CDevice;
+
+import java.io.IOException;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.pi4j.io.i2c.I2CDevice;
 
 /*
  * Light Sensor (I2C)
@@ -115,6 +116,7 @@ public class TSL2561Consumer extends I2CConsumer {
         super(endpoint, processor, device);
     }
 
+    @Override
     protected void doStart() throws Exception {
         super.doStart();
         write(TSL2561_COMMAND_BIT, (byte) TSL2561_CONTROL_POWERON);
@@ -122,6 +124,7 @@ public class TSL2561Consumer extends I2CConsumer {
         sleep(pause);
     }
 
+    @Override
     protected void doStop() throws Exception {
         super.doStop();
         write(TSL2561_COMMAND_BIT, (byte) TSL2561_CONTROL_POWEROFF);
@@ -142,8 +145,8 @@ public class TSL2561Consumer extends I2CConsumer {
      * https://learn.adafruit.com/tsl2561/overview
      */
     public double readLux() throws IOException {
-        int ambient = readU16BigEndian(TSL2561_COMMAND_BIT | TSL2561_REGISTER_CHAN0_LOW);
-        int ir = readU16BigEndian(TSL2561_COMMAND_BIT | TSL2561_REGISTER_CHAN1_LOW);
+        int ambient = readU16LittleEndian(TSL2561_COMMAND_BIT | TSL2561_REGISTER_CHAN0_LOW);
+        int ir = readU16LittleEndian(TSL2561_COMMAND_BIT | TSL2561_REGISTER_CHAN1_LOW);
 
         if (ambient >= 0xffff || ir >= 0xffff) // value(s) exeed(s) datarange
             throw new RuntimeException("Gain too high. Values exceed range.");

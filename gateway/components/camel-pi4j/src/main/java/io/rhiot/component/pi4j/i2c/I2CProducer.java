@@ -82,16 +82,16 @@ public class I2CProducer extends DefaultProducer implements I2CDevice {
         return this.device.read(address);
     }
 
-    public int readU16BigEndian(int register) throws IOException {
+    public int readU16LittleEndian(int register) throws IOException {
         int lo = read(register);
         int hi = read(register + 1);
         return (hi << 8) + lo;
     }
 
-    public int readU16LittleEndian(int register) throws IOException {
-        int lo = read(register);
-        int hi = read(register + 1);
-        return (lo << 8) + hi;
+    public int readU16BigEndian(int register) throws IOException {
+        int hi = read(register);
+        int lo = read(register + 1);
+        return (hi << 8) + lo;
     }
 
     @Override

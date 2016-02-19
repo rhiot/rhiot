@@ -105,8 +105,8 @@ public class I2CConsumer extends ScheduledPollConsumer implements I2CDevice {
     }
 
     public int readU16BigEndian(int register) throws IOException {
-        int lo = read(register);
-        int hi = read(register + 1);
+        int hi = read(register);
+        int lo = read(register + 1);
         return (hi << 8) + lo;
     }
 
