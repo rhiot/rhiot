@@ -9,15 +9,16 @@ public class DriverMain {
 
     public static void main(String[] args) throws Exception {
 
-        Class clazz = DriverMain.class.getClassLoader().loadClass("io.rhiot.component.deviceio.i2c.driver.BMP180Driver");
+        Class clazz = DriverMain.class.getClassLoader()
+                .loadClass("io.rhiot.component.deviceio.i2c.driver.BMP180Driver");
 
-        I2CDriver bmp = (I2CDriver) clazz.newInstance();
+        I2CDriver driver = (I2CDriver) clazz.newInstance();
 
-        bmp.start();
+        driver.start();
 
-        LOG.info(bmp.get().toString());
+        LOG.info(driver.get().toString());
 
-        bmp.stop();
+        driver.stop();
 
     }
 
