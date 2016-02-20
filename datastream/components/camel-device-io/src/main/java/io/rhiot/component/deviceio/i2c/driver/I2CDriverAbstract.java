@@ -159,32 +159,35 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         device.write(arg0);
     }
 
-    public int readU16BigEndian(int register) throws IOException {
+    public short readU16BigEndian(int register) throws IOException {
         ByteBuffer bb = ByteBuffer.allocate(2);
         bb.order(ByteOrder.BIG_ENDIAN);
         device.read(register, bb);
         return bb.getShort();
     }
 
-    public int readU16LittleEndian(int register) throws IOException {
+    public short readU16LittleEndian(int register) throws IOException {
         ByteBuffer bb = ByteBuffer.allocate(2);
         bb.order(ByteOrder.LITTLE_ENDIAN);
         device.read(register, bb);
         return bb.getShort();
     }
 
-    // public int readU24LittleEndian(int register) throws IOException {
-    // ByteBuffer bb = ByteBuffer.allocate(3);
-    // bb.order(ByteOrder.LITTLE_ENDIAN);
-    // device.read(register, bb);
-    // return bb.getInt();
-    // }
-    //
-    // public int readU24BigEndian(int register) throws IOException {
-    // ByteBuffer bb = ByteBuffer.allocate(3);
-    // bb.order(ByteOrder.BIG_ENDIAN);
-    // device.read(register, bb);
-    // return bb.getInt();
-    // }
+    public int readU24BigEndian(int register) throws IOException {
+        ByteBuffer bb = ByteBuffer.allocate(3);
+        device.read(register, bb);
+        int msb = bb.array()[0];
+        int lsb = bb.array()[1];
+        int xlsb = bb.array()[2];
+        return (msb << 16) + (lsb << 8) + xlsb;
+    }
 
+    public int readU24LittleEndian(int register) throws IOException {
+        ByteBuffer bb = ByteBuffer.allocate(3);
+        device.read(register, bb);
+        int msb = bb.array()[2];
+        int lsb = bb.array()[1];
+        int xlsb = bb.array()[0];
+        return (msb << 16) + (lsb << 8) + xlsb;
+    }
 }
