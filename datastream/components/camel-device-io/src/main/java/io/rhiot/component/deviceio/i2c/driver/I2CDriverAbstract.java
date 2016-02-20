@@ -33,7 +33,7 @@ import jdk.dio.i2cbus.I2CDeviceConfig;
 
 public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(BMP180Driver.class);
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     protected I2CDevice device;
 
