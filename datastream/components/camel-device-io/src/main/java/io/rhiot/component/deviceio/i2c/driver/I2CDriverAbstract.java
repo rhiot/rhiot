@@ -16,18 +16,36 @@
  */
 package io.rhiot.component.deviceio.i2c.driver;
 
+import io.rhiot.component.deviceio.DeviceIOConstants;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jdk.dio.ClosedDeviceException;
 import jdk.dio.DeviceDescriptor;
+import jdk.dio.DeviceManager;
 import jdk.dio.UnavailableDeviceException;
 import jdk.dio.i2cbus.I2CDevice;
+import jdk.dio.i2cbus.I2CDeviceConfig;
 
 public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
 
+    private static final transient Logger LOG = LoggerFactory.getLogger(BMP180Driver.class);
+
     protected I2CDevice device;
+
+    protected I2CDriverAbstract(int busId, int deviceAddr) {
+        try {
+            device = DeviceManager.open(new I2CDeviceConfig(busId, deviceAddr,
+                    DeviceIOConstants.CAMEL_I2C_DIO_ADDRESS_SIZE_BITS, DeviceIOConstants.CAMEL_I2C_DIO_SERIAL_CLOCK));
+
+        } catch (Exception e) {
+            LOG.error("Cannot load device " + deviceAddr + " via bus" + busId);
+        }
+    }
 
     public I2CDriverAbstract(I2CDevice device) {
         this.device = device;
@@ -161,33 +179,49 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
 
     public short readU16BigEndian(int register) throws IOException {
         ByteBuffer bb = ByteBuffer.allocate(2);
-        bb.order(ByteOrder.BIG_ENDIAN);
-        device.read(register, bb);
-        return bb.getShort();
+        int bytesRead = read(register, 1, bb);
+        if (bytesRead != 2) {
+            throw new IOException("Could not read 2 bytes data");
+        }
+        byte lsb = bb.array()[1];
+        byte msb = bb.array()[0];
+        return (short) ((msb << DeviceIOConstants.CAMEL_I2C_DIO_BYTE_SHIFT) + lsb);
     }
 
     public short readU16LittleEndian(int register) throws IOException {
         ByteBuffer bb = ByteBuffer.allocate(2);
-        bb.order(ByteOrder.LITTLE_ENDIAN);
-        device.read(register, bb);
-        return bb.getShort();
+        int bytesRead = read(register, 1, bb);
+        if (bytesRead != 2) {
+            throw new IOException("Could not read 2 bytes data");
+        }
+        byte lsb = bb.array()[0];
+        byte msb = bb.array()[1];
+        return (short) ((msb << DeviceIOConstants.CAMEL_I2C_DIO_BYTE_SHIFT) + lsb);
     }
 
     public int readU24BigEndian(int register) throws IOException {
         ByteBuffer bb = ByteBuffer.allocate(3);
-        device.read(register, bb);
-        int msb = bb.array()[0];
-        int lsb = bb.array()[1];
-        int xlsb = bb.array()[2];
-        return (msb << 16) + (lsb << 8) + xlsb;
+        int bytesRead = read(register, 1, bb);
+        if (bytesRead != 3) {
+            throw new IOException("Could not read 3 bytes data");
+        }
+        byte msb = bb.array()[0];
+        byte lsb = bb.array()[1];
+        byte xlsb = bb.array()[2];
+        return (msb << DeviceIOConstants.CAMEL_I2C_DIO_WORD_SHIFT) + (lsb << DeviceIOConstants.CAMEL_I2C_DIO_BYTE_SHIFT)
+                + xlsb;
     }
 
     public int readU24LittleEndian(int register) throws IOException {
         ByteBuffer bb = ByteBuffer.allocate(3);
-        device.read(register, bb);
-        int msb = bb.array()[2];
-        int lsb = bb.array()[1];
-        int xlsb = bb.array()[0];
-        return (msb << 16) + (lsb << 8) + xlsb;
+        int bytesRead = read(register, 1, bb);
+        if (bytesRead != 3) {
+            throw new IOException("Could not read 3 bytes data");
+        }
+        byte msb = bb.array()[2];
+        byte lsb = bb.array()[1];
+        byte xlsb = bb.array()[0];
+        return (msb << DeviceIOConstants.CAMEL_I2C_DIO_WORD_SHIFT) + (lsb << DeviceIOConstants.CAMEL_I2C_DIO_BYTE_SHIFT)
+                + xlsb;
     }
 }
