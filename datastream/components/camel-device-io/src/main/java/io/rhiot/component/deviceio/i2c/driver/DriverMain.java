@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 public class DriverMain {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(DriverMain.class);
+    private final static Logger LOG = LoggerFactory.getLogger(DriverMain.class);
 
     public static void main(String[] args) throws Exception {
 
