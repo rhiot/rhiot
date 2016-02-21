@@ -27,7 +27,7 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Assume;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -36,19 +36,19 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static io.rhiot.component.webcam.WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 public class WebcamComponentTest extends CamelTestSupport {
 
-    static Webcam webcam = mock(Webcam.class);
+    Webcam webcam = mock(Webcam.class);
 
-    static final Map<String, Webcam> webcams = new HashMap<>();
+    Map<String, Webcam> webcams = new HashMap<>();
 
     @EndpointInject(uri = "mock:test")
     MockEndpoint mockEndpoint;
-
 
     @Override
     protected JndiRegistry createRegistry() throws Exception {
@@ -66,8 +66,8 @@ public class WebcamComponentTest extends CamelTestSupport {
         };
     }
 
-    @BeforeClass
-    public static void before() throws IOException {
+    @Before
+    public void before() throws IOException {
         BufferedImage image = ImageIO.read(WebcamComponentTest.class.getResourceAsStream("rhiot.png"));
         given(webcam.getImage()).willReturn(image);
         given(webcam.open()).willReturn(true);
@@ -76,9 +76,11 @@ public class WebcamComponentTest extends CamelTestSupport {
          
         //Avoid the driver error when webcam/bridj loads the native lib
         if (OsUtils.isLinux()) {
-            assumeTrue(new DefaultInstaller().isInstalled(WebcamConstants.WEBCAM_DEPENDENCIES_LINUX));
+            assumeTrue(new DefaultInstaller().isInstalled(WEBCAM_DEPENDENCIES_LINUX));
         }
     }
+
+    // Tests
     
     @Test 
     public void testWebcamNames() throws Exception {
