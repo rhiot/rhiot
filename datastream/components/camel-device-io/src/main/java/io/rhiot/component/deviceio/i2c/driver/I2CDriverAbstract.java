@@ -205,11 +205,7 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         if (bytesRead != 3) {
             throw new IOException("Could not read 3 bytes data");
         }
-        byte msb = bb.array()[0];
-        byte lsb = bb.array()[1];
-        byte xlsb = bb.array()[2];
-        return (msb << DeviceIOConstants.CAMEL_I2C_DIO_WORD_SHIFT) + (lsb << DeviceIOConstants.CAMEL_I2C_DIO_BYTE_SHIFT)
-                + xlsb;
+        return returnInt(bb.array()[2], bb.array()[1], bb.array()[0]);
     }
 
     public int readU24LittleEndian(int register) throws IOException {
@@ -218,11 +214,7 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         if (bytesRead != 3) {
             throw new IOException("Could not read 3 bytes data");
         }
-        byte msb = bb.array()[2];
-        byte lsb = bb.array()[1];
-        byte xlsb = bb.array()[0];
-        return (msb << DeviceIOConstants.CAMEL_I2C_DIO_WORD_SHIFT) + (lsb << DeviceIOConstants.CAMEL_I2C_DIO_BYTE_SHIFT)
-                + xlsb;
+        return returnInt(bb.array()[0], bb.array()[1], bb.array()[2]);
     }
 
     public int returnInt(byte xlsb, byte lsb, byte msb) {
