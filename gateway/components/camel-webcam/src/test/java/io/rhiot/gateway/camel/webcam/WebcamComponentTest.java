@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package io.rhiot.component.webcam;
+package io.rhiot.gateway.camel.webcam;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.ds.dummy.WebcamDummyDevice;
@@ -36,7 +35,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.rhiot.component.webcam.WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
+import static io.rhiot.gateway.camel.webcam.WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -68,7 +67,7 @@ public class WebcamComponentTest extends CamelTestSupport {
 
     @Before
     public void before() throws IOException {
-        BufferedImage image = ImageIO.read(WebcamComponentTest.class.getResourceAsStream("rhiot.png"));
+        BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/rhiot.png"));
         given(webcam.getImage()).willReturn(image);
         given(webcam.open()).willReturn(true);
         given(webcam.getDevice()).willReturn(new WebcamDummyDevice(1));

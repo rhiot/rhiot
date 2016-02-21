@@ -15,8 +15,10 @@
  * limitations under the License.
  */
 
-package io.rhiot.component.webcam;
+package io.rhiot.gateway.camel.webcam;
 
+import io.rhiot.gateway.camel.webcam.WebcamConstants;
+import io.rhiot.gateway.camel.webcam.WebcamHelper;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;

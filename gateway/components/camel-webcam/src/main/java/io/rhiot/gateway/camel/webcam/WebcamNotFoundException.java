@@ -14,31 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.rhiot.gateway.camel.webcam;
 
-package io.rhiot.component.webcam;
-
-/**
- * Constants related to Webcam component.
- */
-public final class WebcamConstants {
-
-    // Constants
-
-    public static final String WEBCAM_MOTION_EVENT_HEADER = "io.rhiot.webcam.webcamMotionEvent";
-
-    public static final String V4L2_WEBCAM_LOADING_COMMAND = "modprobe bcm2835-v4l2";
-
-    public static final String V4L2_SET_FORMAT_JPEG_COMMAND = "v4l2-ctl --set-fmt-video=pixelformat=3";
-
-    public static final String V4L2_LIST_DEVICES_COMMAND = "v4l2-ctl --list-devices";
-
-    public static final String WEBCAM_DEPENDENCIES_LINUX = "v4l-utils";
-
-    public static final long   DEFAULT_WEBCAM_LOOKUP_TIMEOUT = 10000;
-
-    // Constructors
-
-    private WebcamConstants() {
+public class WebcamNotFoundException extends RuntimeException {
+    
+    public WebcamNotFoundException(String message) {
+        super(message);
     }
-
 }

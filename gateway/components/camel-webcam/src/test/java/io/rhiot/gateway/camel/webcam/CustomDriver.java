@@ -18,7 +18,7 @@
  *  
  */
 
-package io.rhiot.component.webcam;
+package io.rhiot.gateway.camel.webcam;
 
 import com.github.sarxos.webcam.WebcamDevice;
 import com.github.sarxos.webcam.WebcamDriver;

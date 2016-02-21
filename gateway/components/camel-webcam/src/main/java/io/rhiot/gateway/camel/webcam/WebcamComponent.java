@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.component.webcam;
+package io.rhiot.gateway.camel.webcam;
 
 import java.awt.*;
 import java.lang.reflect.Constructor;
@@ -36,7 +36,6 @@ import org.apache.camel.impl.UriEndpointComponent;
 import org.slf4j.Logger;
 
 import static java.lang.Thread.sleep;
-import static io.rhiot.component.webcam.WebcamConstants.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -52,7 +51,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
 
     private int webcamRestartInterval = 5000;
     private boolean webcamStarted;
-    private String v4l2WebcamLoadingCommand = V4L2_WEBCAM_LOADING_COMMAND;
+    private String v4l2WebcamLoadingCommand = WebcamConstants.V4L2_WEBCAM_LOADING_COMMAND;
     
     private Installer installer;
     private String requiredPackages = WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
@@ -147,7 +146,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
                         
                         processManager.executeAndJoinOutput("/bin/sh", "-c", WebcamConstants.V4L2_SET_FORMAT_JPEG_COMMAND);
                         
-                        v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", V4L2_LIST_DEVICES_COMMAND);
+                        v4l2Result = processManager.executeAndJoinOutput("/bin/sh", "-c", WebcamConstants.V4L2_LIST_DEVICES_COMMAND);
                         LOG.info("Result of V4L2 listing devices {}", v4l2Result);
 
                         List<String> failureToOpen = v4l2Result.stream().filter(e -> e.contains("Failed to open")).collect(Collectors.toList());

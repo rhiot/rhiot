@@ -15,7 +15,7 @@
 * limitations under the License.
  */
 
-package io.rhiot.component.webcam;
+package io.rhiot.gateway.camel.webcam;
 
 import com.github.sarxos.webcam.Webcam;
 import org.apache.camel.Processor;
