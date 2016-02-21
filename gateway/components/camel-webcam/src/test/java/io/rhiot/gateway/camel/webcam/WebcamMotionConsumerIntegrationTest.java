@@ -14,11 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.rhiot.gateway.camel.webcam;
 
-import io.rhiot.gateway.camel.webcam.WebcamConstants;
-import io.rhiot.gateway.camel.webcam.WebcamHelper;
+import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -33,6 +31,9 @@ import static org.junit.Assume.assumeTrue;
 
 public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
 
+    @EndpointInject(uri = "mock:detected")
+    MockEndpoint mockDetected;
+
     @BeforeClass
     public static void before(){
         assumeTrue(WebcamHelper.isWebcamPresent());
@@ -45,12 +46,14 @@ public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
     
     @Test
     public void testMotion() throws InterruptedException {
-        MockEndpoint mock = getMockEndpoint("mock:detected");
-        mock.setMinimumExpectedMessageCount(1);
+        // Given
+        mockDetected.setMinimumExpectedMessageCount(1);
 
-        assertMockEndpointsSatisfied(10, TimeUnit.SECONDS);
-        
-        assertNotNull(mock.getExchanges().get(0).getIn().getHeader(WebcamConstants.WEBCAM_MOTION_EVENT_HEADER));
+        // When
+        mockDetected.assertIsSatisfied();
+
+        // Then
+        assertNotNull(mockDetected.getExchanges().get(0).getIn().getHeader(WebcamConstants.WEBCAM_MOTION_EVENT_HEADER));
     }
     
     @Test
