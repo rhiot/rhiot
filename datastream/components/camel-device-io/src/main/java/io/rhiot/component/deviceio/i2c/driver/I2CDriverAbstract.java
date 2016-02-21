@@ -183,9 +183,7 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         if (bytesRead != 2) {
             throw new IOException("Could not read 2 bytes data");
         }
-        byte lsb = bb.array()[1];
-        byte msb = bb.array()[0];
-        return (short) ((msb << DeviceIOConstants.CAMEL_I2C_DIO_BYTE_SHIFT) + lsb);
+        return returnShort(bb.array()[1], bb.array()[0]);
     }
 
     public short readU16LittleEndian(int register) throws IOException {
@@ -194,8 +192,10 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         if (bytesRead != 2) {
             throw new IOException("Could not read 2 bytes data");
         }
-        byte lsb = bb.array()[0];
-        byte msb = bb.array()[1];
+        return returnShort(bb.array()[0], bb.array()[1]);
+    }
+
+    public short returnShort(byte lsb, byte msb) {
         return (short) ((msb << DeviceIOConstants.CAMEL_I2C_DIO_BYTE_SHIFT) + lsb);
     }
 
@@ -221,6 +221,11 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         byte msb = bb.array()[2];
         byte lsb = bb.array()[1];
         byte xlsb = bb.array()[0];
+        return (msb << DeviceIOConstants.CAMEL_I2C_DIO_WORD_SHIFT) + (lsb << DeviceIOConstants.CAMEL_I2C_DIO_BYTE_SHIFT)
+                + xlsb;
+    }
+
+    public int returnInt(byte xlsb, byte lsb, byte msb) {
         return (msb << DeviceIOConstants.CAMEL_I2C_DIO_WORD_SHIFT) + (lsb << DeviceIOConstants.CAMEL_I2C_DIO_BYTE_SHIFT)
                 + xlsb;
     }
