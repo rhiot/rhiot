@@ -51,6 +51,7 @@
                                 <tags>
                                     <tag>latest</tag>
                                     <tag>${project.version}</tag>
+                                    <tag>${timestamp}</tag>
                                 </tags>
                                 <ports>
                                     <port>5672</port>
