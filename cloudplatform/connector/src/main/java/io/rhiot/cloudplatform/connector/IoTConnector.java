@@ -19,6 +19,8 @@ package io.rhiot.cloudplatform.connector;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import org.apache.camel.ProducerTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -27,6 +29,10 @@ import java.util.Map;
 import static io.rhiot.cloudplatform.connector.Header.arguments;
 
 public class IoTConnector {
+
+    private static final Logger LOG = LoggerFactory.getLogger(IoTConnector.class);
+
+    // Collaborators
 
     private final PayloadEncoding payloadEncoding;
 
@@ -65,39 +71,40 @@ public class IoTConnector {
 
     public <T> T fromBus(String channel, Class<T> responseType, Header... headers) {
         byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, null, arguments(headers), byte[].class);
-        Object decodedResponse = busResponse;
-        if(responseType != byte[].class) {
-            decodedResponse = payloadEncoding.decode(busResponse);
-        }
-        if(decodedResponse != null && responseType.isAssignableFrom(decodedResponse.getClass())) {
-           return (T) decodedResponse;
-        } else {
-            return new ObjectMapper().convertValue(decodedResponse, responseType);
-        }
+        return decodedPayload(busResponse, responseType);
     }
 
     public <T> T pollChannel(String channel, Class<T> responseType) {
         byte[] busResponse = producerTemplate.getCamelContext().createConsumerTemplate().receiveBody("amqp:" + channel, byte[].class);
-        Object decodedResponse = payloadEncoding.decode(busResponse);
-        if(decodedResponse != null && responseType.isAssignableFrom(decodedResponse.getClass())) {
-            return (T) decodedResponse;
-        } else {
-            return new ObjectMapper().convertValue(decodedResponse, responseType);
-        }
+        return decodedPayload(busResponse, responseType);
     }
 
     public  <T> T fromBus(String channel, Object payload, Class<T> responseType, Header... headers) {
         byte[] busResponse = producerTemplate.requestBodyAndHeaders("amqp:" + channel, encodedPayload(payload), arguments(headers), byte[].class);
-        return (T) payloadEncoding.decode(busResponse);
+        return decodedPayload(busResponse, responseType);
     }
 
     // Helpers
 
     private Object encodedPayload(Object payload) {
+        LOG.debug("About to encode payload: {}", payload);
         if(payload == null || payload instanceof InputStream || payload.getClass() == byte[].class) {
+            LOG.debug("Payload is null or binary - encoding skipped.");
             return payload;
         }
         return payloadEncoding.encode(payload);
+    }
+
+    private <T> T decodedPayload(byte[] payload, Class<T> responseType) {
+        Object decodedResponse = payload;
+        if(responseType != byte[].class) {
+            decodedResponse = payloadEncoding.decode(payload);
+        }
+        if(decodedResponse != null && responseType.isAssignableFrom(decodedResponse.getClass())) {
+            return (T) decodedResponse;
+        } else {
+            return new ObjectMapper().convertValue(decodedResponse, responseType);
+        }
     }
 
 }

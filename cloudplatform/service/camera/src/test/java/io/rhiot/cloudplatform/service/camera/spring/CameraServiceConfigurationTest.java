@@ -19,20 +19,17 @@ package io.rhiot.cloudplatform.service.camera.spring;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
-import io.rhiot.utils.Uuids;
-import org.apache.commons.io.IOUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static io.rhiot.cloudplatform.connector.Header.arguments;
 import static io.rhiot.utils.Uuids.uuid;
 import static io.rhiot.utils.process.Processes.canExecuteCommand;
+import static java.lang.Thread.sleep;
 import static org.junit.Assume.assumeTrue;
 
 public class CameraServiceConfigurationTest extends CloudPlatformTest {
@@ -54,11 +51,12 @@ public class CameraServiceConfigurationTest extends CloudPlatformTest {
     }
 
     @Test
-    public void shouldProcessImagePlate() {
+    public void shouldProcessImagePlate() throws InterruptedException {
         assumeTrue(canExecuteCommand("docker", "version"));
 
         // When
         connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
+        sleep(5000);
 
         // Then
         Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
@@ -68,11 +66,12 @@ public class CameraServiceConfigurationTest extends CloudPlatformTest {
     }
 
     @Test
-    public void shouldStoreProcessedPlateImage() {
+    public void shouldStoreProcessedPlateImage() throws InterruptedException {
         assumeTrue(canExecuteCommand("docker", "version"));
 
         // When
         connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
+        sleep(5000);
 
         // Then
         Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));

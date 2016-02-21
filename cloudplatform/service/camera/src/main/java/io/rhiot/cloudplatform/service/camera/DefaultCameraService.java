@@ -47,10 +47,21 @@ public class DefaultCameraService implements CameraService {
 
     @Override
     public void process(String deviceId, String country, byte[] imageData) {
-        List<PlateMatch> matches = recognizePlate(country, imageData);
-        Map<String, Object> imageMetadata = ImmutableMap.of("deviceId", deviceId, "plateMatches", matches);
+        Map<String, Object> imageMetadata = ImmutableMap.of("deviceId", deviceId);
         String imageId = connector.fromBus("document.save", imageMetadata, String.class, arguments("CameraImage"));
-        connector.toBus("binary.store", imageData, arguments(imageId));
+        connector.toBusAndWait("binary.store", imageData, arguments(imageId));
+
+        connector.toBus("camera.processPlate", arguments(imageId, country));
+    }
+
+    @Override
+    public void processPlate(String imageId, String country) {
+        byte[] imageData = connector.fromBus("binary.read", imageId, byte[].class);
+        List<PlateMatch> matches = recognizePlate(country, imageData);
+
+        Map<String, Object> imageMetadata = connector.fromBus("document.findOne", Map.class, arguments("CameraImage", imageId));
+        imageMetadata.put("plateMatches", matches);
+        connector.toBus("document.save", imageMetadata, arguments("CameraImage"));
     }
 
 }

@@ -27,4 +27,6 @@ public interface CameraService {
 
     void process(String deviceId, String country, byte[] imageData);
 
+    void processPlate(String imageId, String country);
+
 }
