@@ -27,6 +27,7 @@ import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Assume;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.rhiot.gateway.camel.webcam.WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
+import static io.rhiot.gateway.camel.webcam.WebcamHelper.isWebcamPresent;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -48,6 +50,11 @@ public class WebcamComponentTest extends CamelTestSupport {
 
     @EndpointInject(uri = "mock:test")
     MockEndpoint mockEndpoint;
+
+    @BeforeClass
+    public static void beforeClass(){
+        assumeTrue(isWebcamPresent());
+    }
 
     @Override
     protected JndiRegistry createRegistry() throws Exception {
