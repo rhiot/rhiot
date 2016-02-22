@@ -14,16 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.camel.protonj;
+package io.rhiot.cloudplatform.camel.vertxproton;
 
 import io.vertx.core.Vertx;
-import io.vertx.proton.ProtonClient;
 import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
-import org.apache.qpid.proton.messenger.Messenger;
 
 import static io.vertx.core.Vertx.vertx;
 

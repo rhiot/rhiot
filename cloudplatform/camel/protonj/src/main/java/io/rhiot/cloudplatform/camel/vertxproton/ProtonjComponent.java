@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.camel.protonj;
+package io.rhiot.cloudplatform.camel.vertxproton;
 
 import io.vertx.core.Vertx;
 import org.apache.camel.Endpoint;
