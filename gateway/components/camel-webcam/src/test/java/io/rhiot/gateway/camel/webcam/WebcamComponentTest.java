@@ -18,6 +18,7 @@ package io.rhiot.gateway.camel.webcam;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.ds.dummy.WebcamDummyDevice;
+import com.google.common.truth.Truth;
 import io.rhiot.utils.install.DefaultInstaller;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
@@ -90,7 +91,6 @@ public class WebcamComponentTest extends CamelTestSupport {
     
     @Test 
     public void testWebcamNames() throws Exception {
-
         Assume.assumeNotNull(webcam);
         
         WebcamComponent component = new WebcamComponent(context);
@@ -106,7 +106,6 @@ public class WebcamComponentTest extends CamelTestSupport {
     
     @Test
     public void testWebcamFindByName() throws Exception {
-        
         WebcamComponent component = new WebcamComponent(context);
         HashMap<String, Webcam> webcams = new HashMap<>();
         webcams.put(webcam.getName(), webcam);
@@ -117,17 +116,21 @@ public class WebcamComponentTest extends CamelTestSupport {
         component.stop();
     }
     
-    @Test(expected = RuntimeException.class)
-    public void testDriverInstance() throws Exception {
-        
-        WebcamComponent component = new WebcamComponent(context);
-        component.setDriver("invalid.driver");
-        component.start();
+    @Test
+    public void shouldValidateInvalidDriverClass() throws Exception {
+        try {
+            WebcamComponent component = new WebcamComponent(context);
+            component.setDriver("invalid.driver");
+            component.start();
+        } catch (RuntimeException ex) {
+            Truth.assertThat(ex.getCause()).isInstanceOf(ClassNotFoundException.class);
+            return;
+        }
+        fail("Expected ClassNotFoundException to be thrown.");
     }
     
     @Test 
     public void testDriver() throws Exception {
-        
         WebcamComponent component = new WebcamComponent(context);
         component.setDriver(CustomDriver.class.getName());
         component.setWebcams(webcams);
