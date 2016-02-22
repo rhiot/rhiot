@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.camel.protonj;
+package io.rhiot.cloudplatform.camel.vertxproton;
 
+import io.vertx.core.Vertx;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.DefaultComponent;
-import org.apache.qpid.proton.messenger.Messenger;
 
 import java.util.Map;
 
 public class ProtonjComponent extends DefaultComponent {
 
-    private Messenger messenger;
+    private Vertx vertx;
 
     private String address;
 
@@ -37,12 +37,13 @@ public class ProtonjComponent extends DefaultComponent {
 
     // Getters and setters
 
-    public Messenger getMessenger() {
-        return messenger;
+
+    public Vertx getVertx() {
+        return vertx;
     }
 
-    public void setMessenger(Messenger messenger) {
-        this.messenger = messenger;
+    public void setVertx(Vertx vertx) {
+        this.vertx = vertx;
     }
 
     public String getAddress() {
