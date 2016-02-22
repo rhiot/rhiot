@@ -18,13 +18,10 @@ package io.rhiot.cloudplatform.camel.protonj;
 
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.DefaultComponent;
-import org.apache.qpid.proton.messenger.Messenger;
 
 import java.util.Map;
 
 public class ProtonjComponent extends DefaultComponent {
-
-    private Messenger messenger;
 
     private String address;
 
@@ -36,14 +33,6 @@ public class ProtonjComponent extends DefaultComponent {
     }
 
     // Getters and setters
-
-    public Messenger getMessenger() {
-        return messenger;
-    }
-
-    public void setMessenger(Messenger messenger) {
-        this.messenger = messenger;
-    }
 
     public String getAddress() {
         return address;

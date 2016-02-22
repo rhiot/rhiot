@@ -16,6 +16,7 @@
  */
 package io.rhiot.cloudplatform.camel.protonj;
 
+import io.vertx.core.Vertx;
 import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
@@ -23,9 +24,11 @@ import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.qpid.proton.messenger.Messenger;
 
+import static io.vertx.core.Vertx.vertx;
+
 public class ProtonjEndpoint extends DefaultEndpoint {
 
-    private Messenger messenger;
+    private Vertx vertx;
 
     private String address;
 
@@ -42,20 +45,6 @@ public class ProtonjEndpoint extends DefaultEndpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         return new ProtonjConsumer(this, processor);
-    }
-
-    @Override
-    protected void doStart() throws Exception {
-        super.doStart();
-        messenger = getMessenger();
-        address = getAddress();
-        messenger.start();
-    }
-
-    @Override
-    protected void doStop() throws Exception {
-        getMessenger().stop();
-        super.doStop();
     }
 
     @Override
@@ -81,17 +70,15 @@ public class ProtonjEndpoint extends DefaultEndpoint {
         this.address = address;
     }
 
-    public Messenger getMessenger() {
-        if(messenger != null) {
-            return messenger;
-        } else if(getComponent().getMessenger() != null) {
-            return getComponent().getMessenger();
+    public Vertx getVertx() {
+        if(vertx == null) {
+            vertx = Vertx.vertx();
         }
-        return Messenger.Factory.create();
+        return vertx;
     }
 
-    public void setMessenger(Messenger messenger) {
-        this.messenger = messenger;
+    public void setVertx(Vertx vertx) {
+        this.vertx = vertx;
     }
 
 }
