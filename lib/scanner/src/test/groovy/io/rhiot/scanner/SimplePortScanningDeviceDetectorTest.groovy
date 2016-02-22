@@ -38,11 +38,8 @@ public class SimplePortScanningDeviceDetectorTest extends Assert {
 
     @Test
     void shouldReachDevice() throws IOException {
-        // When
         def address = detector.detectDevices(sshd.port()).first()
-
-        // Then
-        Socket ssh = new Socket(address.address(), sshd.port())
+        def ssh = new Socket(address.address(), sshd.port())
         assertThat(ssh.isConnected()).isTrue()
     }
 

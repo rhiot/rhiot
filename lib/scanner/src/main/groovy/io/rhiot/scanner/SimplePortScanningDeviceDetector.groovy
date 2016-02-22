@@ -124,7 +124,7 @@ class SimplePortScanningDeviceDetector implements DeviceDetector, WithLogger {
                     }
                 }
             })
-        }.findAll{ it.get().reachable }.collect{it.get().address()}.collect { device ->
+        }.findAll{ try{it.get(5, SECONDS).reachable} catch(TimeoutException e){return null}}.findAll{ it != null }.collect{it.get().address()}.collect { device ->
             executor.submit(new Callable<Device>() {
                 @Override
                 Device call() throws Exception {
