@@ -18,7 +18,6 @@ package io.rhiot.scanner
 
 import io.rhiot.utils.WithLogger
 import io.rhiot.utils.ssh.client.SshClient
-import org.slf4j.Logger
 
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeoutException
@@ -28,7 +27,6 @@ import static com.google.common.collect.Lists.newLinkedList
 import static java.util.Collections.emptyList
 import static java.util.concurrent.Executors.newCachedThreadPool
 import static java.util.concurrent.TimeUnit.SECONDS
-import static org.slf4j.LoggerFactory.getLogger
 
 class SimplePortScanningDeviceDetector implements DeviceDetector, WithLogger {
 
@@ -79,7 +77,9 @@ class SimplePortScanningDeviceDetector implements DeviceDetector, WithLogger {
 
     // Operations
 
-    List<Inet4Address> detectReachableAddresses() {
+    List<Device> detectDevices(int port) {
+        if(port <= 0)
+            port = 22;
         def networkInterfaces = interfacesProvider.interfaces()
         if (networkInterfaces.isEmpty()) {
             return emptyList();
@@ -87,21 +87,33 @@ class SimplePortScanningDeviceDetector implements DeviceDetector, WithLogger {
 
         List<Inet4Address> addressesToScan = newLinkedList()
         networkInterfaces.each {
-                def address = it.broadcast
-                int lastDot = address.lastIndexOf('.') + 1;
-                def addressBase = address.substring(0, lastDot);
-                def addressesNumber = address.substring(lastDot).toInteger()
-                for (int i = 0; i < addressesNumber; i++) {
-                    addressesToScan.add((Inet4Address) Inet4Address.getByName(addressBase + (i + 1)));
-                }
+            def address = it.broadcast
+            int lastDot = address.lastIndexOf('.') + 1;
+            def addressBase = address.substring(0, lastDot);
+            def addressesNumber = address.substring(lastDot).toInteger()
+            for (int i = 0; i < addressesNumber; i++) {
+                addressesToScan.add((Inet4Address) Inet4Address.getByName(addressBase + (i + 1)));
+            }
         }
         addressesToScan.collect {
             executor.submit(new Callable<ScanResult>() {
                 @Override
                 ScanResult call() throws Exception {
                     try {
-                        log().debug('Scanning address {}', it.hostAddress)
-                        return new ScanResult(it, it.isReachable(timeout));
+                        Socket client = new Socket(it, port)
+                        boolean reachable = client.isConnected()
+                        client.close()
+                        log().debug('Scanning address: {}, reachable: {}', it.hostAddress, reachable)
+                        return new ScanResult(it, reachable);
+                    } catch(NoRouteToHostException e){
+                        log().debug('Scanning address: {}, reachable: false', it.hostAddress)
+                        return new ScanResult(it, false);
+                    } catch(SocketException e){
+                        log().debug('Scanning address: {}, reachable: false', it.hostAddress)
+                        return new ScanResult(it, false);
+                    } catch(ConnectException e) {
+                        log().debug('Scanning address: {}, reachable: false', it.hostAddress)
+                        return new ScanResult(it, false);
                     } catch (SocketException e) {
                         if (e.message.contains('Permission denied')) {
                             log().debug("Cannot scan " + it + " - permission denied.")
@@ -112,17 +124,13 @@ class SimplePortScanningDeviceDetector implements DeviceDetector, WithLogger {
                     }
                 }
             })
-        }.findAll {it.get().isReachable()}.collect{it.get().address()}
-    }
-
-    List<Device> detectDevices() {
-        detectReachableAddresses().collect { device ->
+        }.findAll{ it.get().reachable }.collect{it.get().address()}.collect { device ->
             executor.submit(new Callable<Device>() {
                 @Override
                 Device call() throws Exception {
                     try {
                         log().debug("Probing for Raspberry Pi on " + device.hostAddress)
-                        new SshClient(device.hostAddress, 22, username, password).command("echo ping");
+                        new SshClient(device.hostAddress, port, username, password).checkConnection();
                         new Device(device, Device.DEVICE_RASPBERRY_PI_2)
                     } catch (Exception ex) {
                         log().debug("Can't connect to the Raspberry Pi device: " + device.getHostAddress());
@@ -131,6 +139,10 @@ class SimplePortScanningDeviceDetector implements DeviceDetector, WithLogger {
                 }
             })
         }.collect{try{it.get(5, SECONDS)}catch(TimeoutException ex){return null}}.findAll{it != null}
+    }
+
+    List<Device> detectDevices() {
+        detectDevices(22)
     }
 
     private static class ScanResult {

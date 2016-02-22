@@ -16,28 +16,43 @@
  */
 package io.rhiot.scanner
 
+import io.rhiot.utils.ssh.server.NoneCredentialsPasswordAuthenticator
+import io.rhiot.utils.ssh.server.SshServerBuilder;
+import org.junit.Assert;
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
+import static io.rhiot.utils.Networks.findAvailableTcpPort;
 
-class SimplePortScanningDeviceDetectorTest {
+public class SimplePortScanningDeviceDetectorTest extends Assert {
 
-    def deviceDetector = new SimplePortScanningDeviceDetector(new StubInterfacesProvider())
+    static sshd = new SshServerBuilder().build().start()
+
+    def detector = new SimplePortScanningDeviceDetector();
 
     @Test
-    void shouldNotDetectAnyReachableAddress() {
-        def addresses = deviceDetector.detectReachableAddresses()
-        assertThat(addresses).hasSize(0)
+    void shouldNotReachDevice() {
+        def addresses = detector.detectDevices(findAvailableTcpPort())
+        assertEquals(0, addresses.size());
     }
 
-    static class StubInterfacesProvider implements InterfacesProvider {
+    @Test
+    void shouldReachDevice() throws IOException {
+        // When
+        def address = detector.detectDevices(sshd.port()).first()
 
-        @Override
-        List<NetworkInterface> interfaces() {
-            [new NetworkInterface(ipv4Address: '192.169.1.1', broadcast: '192.169.1.1'),
-             new NetworkInterface(ipv4Address: '192.169.0.1', broadcast: '192.169.0.1')]
-        }
+        // Then
+        Socket ssh = new Socket(address.address(), sshd.port())
+        assertThat(ssh.isConnected()).isTrue()
+    }
 
+    @Test
+    void shouldNotFindRaspberryPi() {
+        def raspberryPi = new SshServerBuilder().
+                authenticator(new NoneCredentialsPasswordAuthenticator()).
+                build().start()
+        def addresses = detector.detectDevices(raspberryPi.port())
+        assertEquals(0, addresses.size());
     }
 
 }

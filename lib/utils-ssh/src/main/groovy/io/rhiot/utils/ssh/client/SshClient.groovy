@@ -55,6 +55,34 @@ class SshClient {
         this(host, DEFAULT_SSH_PORT, username, password);
     }
 
+    private <T> T executeSession(String channelType, ChannelCallback<T> callback) {
+        Channel channel = null;
+        Session session = null;
+        try {
+            session = connect();
+            channel = session.openChannel(channelType);
+            callback.onChannel(channel)
+        } catch (JSchException | IOException jsche) {
+            throw new RuntimeException(jsche);
+        } finally {
+            if (channel != null && channel.isConnected()) {
+                channel.disconnect();
+            }
+            if(session != null && session.isConnected()) {
+                session.disconnect();
+            }
+        }
+    }
+
+    public void checkConnection() {
+        executeSession("exec", new ChannelCallback() {
+            @Override
+            Object onChannel(Channel channel) {
+                return null
+            }
+        })
+    }
+
     public List<String> command(String commandToExecute) {
         ListSshClientOutputCollector outputCollector = new ListSshClientOutputCollector();
         command(commandToExecute, outputCollector);
@@ -66,32 +94,21 @@ class SshClient {
     }
 
     public void command(String command, SshClientOutputCollector outputCollector) {
-        Session session = null;
-        Channel channel = null;
-        try {
-            session = connect();
-            channel = session.openChannel("exec");
-            ((ChannelExec) channel).setCommand(command);
+        executeSession("exec", new ChannelCallback() {
+            @Override
+            Object onChannel(Channel channel) {
+                ((ChannelExec) channel).setCommand(command);
 
+                BufferedReader br = new BufferedReader(new InputStreamReader(channel.getInputStream()));
+                channel.connect();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(channel.getInputStream()));
-            channel.connect();
-
-            String msg = null;
-            while ((msg = br.readLine()) != null) {
-                outputCollector.collect(msg);
+                String msg = null;
+                while ((msg = br.readLine()) != null) {
+                    outputCollector.collect(msg);
+                }
+                return null
             }
-
-            channel.disconnect();
-            session.disconnect();
-        } catch (JSchException | IOException jsche) {
-            throw new RuntimeException(jsche);
-        } finally {
-            if (channel != null) {
-                channel.disconnect();
-                session.disconnect();
-            }
-        }
+        })
     }
 
     void scp(InputStream inputStream, File destination) {
@@ -184,4 +201,5 @@ class SshClient {
             e.printStackTrace();
         }
     }
+
 }

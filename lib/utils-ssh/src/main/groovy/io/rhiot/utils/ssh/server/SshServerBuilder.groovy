@@ -14,38 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.utils.ssh
+package io.rhiot.utils.ssh.server
 
-import io.rhiot.utils.ssh.server.SshServerBuilder
-import org.junit.Test
+import org.apache.sshd.server.PasswordAuthenticator
 
-import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.utils.Uuids.uuid
+import static io.rhiot.utils.Networks.findAvailableTcpPort
 
-class SshTest {
+class SshServerBuilder {
 
-    static sshd = new SshServerBuilder().build().start()
+    private PasswordAuthenticator authenticator = new AnyCredentialsPasswordAuthenticator()
 
-    static ssh = sshd.client('foo', 'bar')
+    private int port = findAvailableTcpPort()
 
-    def file = new File("/parent/${uuid()}")
+    private File root = File.createTempDir()
 
-    @Test
-    void shouldHandleEmptyFile() {
-        assertThat(ssh.scp(file)).isNull()
+    SshServer build() {
+        new SshServer(authenticator, port, root)
     }
 
-    @Test
-    void shouldSendFile() {
-        // Given
-        def text = 'foo'
-        ssh.scp(new ByteArrayInputStream(text.getBytes()), file)
+    SshServerBuilder port(int port) {
+        this.port = port
+        this
+    }
 
-        // When
-        def received = new String(ssh.scp(file))
+    SshServerBuilder root(File root) {
+        this.root = root
+        this
+    }
 
-        // Then
-        assertThat(received).isEqualTo(text)
+    SshServerBuilder authenticator(PasswordAuthenticator authenticator) {
+        this.authenticator = authenticator
+        this
     }
 
 }

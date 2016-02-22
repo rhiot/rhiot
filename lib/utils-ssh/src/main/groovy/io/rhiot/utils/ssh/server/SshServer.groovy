@@ -18,11 +18,11 @@ package io.rhiot.utils.ssh.server
 
 import io.rhiot.utils.ssh.client.SshClient
 import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory
+import org.apache.sshd.server.PasswordAuthenticator
 import org.apache.sshd.server.command.ScpCommandFactory
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.apache.sshd.server.sftp.SftpSubsystem
 
-import java.nio.file.Path
 import java.nio.file.Paths
 
 import static io.rhiot.utils.Networks.findAvailableTcpPort
@@ -30,19 +30,18 @@ import static java.io.File.createTempFile
 
 class SshServer {
 
+    private final PasswordAuthenticator authenticator
+
     private final int port
 
     private final File root
 
     // Constructors
 
-    SshServer(int port, File root) {
+    SshServer(PasswordAuthenticator authenticator, int port, File root) {
+        this.authenticator = authenticator
         this.port = port
         this.root = root
-    }
-
-    SshServer() {
-        this(findAvailableTcpPort(), File.createTempDir())
     }
 
     // Life-cycle
@@ -51,7 +50,7 @@ class SshServer {
         def sshd = org.apache.sshd.SshServer.setUpDefaultServer()
         sshd.setPort(port)
         sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(createTempFile('rhiot', 'host_keys').absolutePath));
-        sshd.setPasswordAuthenticator(new AnyCredentialsPasswordAuthenticator())
+        sshd.setPasswordAuthenticator(authenticator)
         sshd.setCommandFactory(new ScpCommandFactory())
         sshd.setFileSystemFactory(new VirtualFileSystemFactory(root.absolutePath))
         sshd.setSubsystemFactories([new SftpSubsystem.Factory()])

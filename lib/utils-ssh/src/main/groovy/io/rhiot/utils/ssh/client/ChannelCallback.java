@@ -14,38 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.utils.ssh
+package io.rhiot.utils.ssh.client;
 
-import io.rhiot.utils.ssh.server.SshServerBuilder
-import org.junit.Test
+import com.jcraft.jsch.Channel;
 
-import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.utils.Uuids.uuid
+public interface ChannelCallback<T> {
 
-class SshTest {
-
-    static sshd = new SshServerBuilder().build().start()
-
-    static ssh = sshd.client('foo', 'bar')
-
-    def file = new File("/parent/${uuid()}")
-
-    @Test
-    void shouldHandleEmptyFile() {
-        assertThat(ssh.scp(file)).isNull()
-    }
-
-    @Test
-    void shouldSendFile() {
-        // Given
-        def text = 'foo'
-        ssh.scp(new ByteArrayInputStream(text.getBytes()), file)
-
-        // When
-        def received = new String(ssh.scp(file))
-
-        // Then
-        assertThat(received).isEqualTo(text)
-    }
+    T onChannel(Channel channel);
 
 }

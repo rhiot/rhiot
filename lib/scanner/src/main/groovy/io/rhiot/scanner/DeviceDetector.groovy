@@ -18,7 +18,7 @@ package io.rhiot.scanner
 
 interface DeviceDetector {
 
-    List<Inet4Address> detectReachableAddresses();
+    List<Device> detectDevices(int sshPort)
 
     List<Device> detectDevices()
 

@@ -14,38 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.utils.ssh
+package io.rhiot.utils.ssh.server
 
-import io.rhiot.utils.ssh.server.SshServerBuilder
-import org.junit.Test
+import org.apache.sshd.server.PasswordAuthenticator
+import org.apache.sshd.server.session.ServerSession
 
-import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.utils.Uuids.uuid
+class NoneCredentialsPasswordAuthenticator implements PasswordAuthenticator {
 
-class SshTest {
-
-    static sshd = new SshServerBuilder().build().start()
-
-    static ssh = sshd.client('foo', 'bar')
-
-    def file = new File("/parent/${uuid()}")
-
-    @Test
-    void shouldHandleEmptyFile() {
-        assertThat(ssh.scp(file)).isNull()
-    }
-
-    @Test
-    void shouldSendFile() {
-        // Given
-        def text = 'foo'
-        ssh.scp(new ByteArrayInputStream(text.getBytes()), file)
-
-        // When
-        def received = new String(ssh.scp(file))
-
-        // Then
-        assertThat(received).isEqualTo(text)
+    @Override
+    boolean authenticate(String username, String password, ServerSession session) {
+        false
     }
 
 }
