@@ -17,6 +17,7 @@
 package io.rhiot.cloudplatform.camel.protonj;
 
 import io.vertx.core.Vertx;
+import io.vertx.proton.ProtonClient;
 import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
@@ -71,7 +72,13 @@ public class ProtonjEndpoint extends DefaultEndpoint {
     }
 
     public Vertx getVertx() {
-        if(vertx == null) {
+        if(vertx != null) {
+            return vertx;
+        }
+
+        if(getComponent().getVertx() != null) {
+            vertx = getComponent().getVertx();
+        } else {
             vertx = Vertx.vertx();
         }
         return vertx;

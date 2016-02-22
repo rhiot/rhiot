@@ -16,12 +16,15 @@
  */
 package io.rhiot.cloudplatform.camel.protonj;
 
+import io.vertx.core.Vertx;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.DefaultComponent;
 
 import java.util.Map;
 
 public class ProtonjComponent extends DefaultComponent {
+
+    private Vertx vertx;
 
     private String address;
 
@@ -33,6 +36,15 @@ public class ProtonjComponent extends DefaultComponent {
     }
 
     // Getters and setters
+
+
+    public Vertx getVertx() {
+        return vertx;
+    }
+
+    public void setVertx(Vertx vertx) {
+        this.vertx = vertx;
+    }
 
     public String getAddress() {
         return address;
