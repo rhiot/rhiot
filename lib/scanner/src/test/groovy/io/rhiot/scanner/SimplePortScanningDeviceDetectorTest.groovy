@@ -22,7 +22,10 @@ import org.junit.Assert;
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
-import static io.rhiot.utils.Networks.findAvailableTcpPort;
+import static io.rhiot.utils.Networks.findAvailableTcpPort
+import static java.lang.Boolean.parseBoolean
+import static java.lang.System.getenv
+import static org.junit.Assume.assumeFalse;
 
 public class SimplePortScanningDeviceDetectorTest extends Assert {
 
@@ -38,6 +41,8 @@ public class SimplePortScanningDeviceDetectorTest extends Assert {
 
     @Test
     void shouldReachDevice() throws IOException {
+        assumeFalse(parseBoolean(getenv('IS_TRAVIS')))
+
         def address = detector.detectDevices(sshd.port()).first()
         def ssh = new Socket(address.address(), sshd.port())
         assertThat(ssh.isConnected()).isTrue()
