@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import com.github.sarxos.webcam.*;
 import com.github.sarxos.webcam.ds.v4l4j.V4l4jDriver;
-import io.rhiot.utils.OsUtils;
 import io.rhiot.utils.install.DefaultInstaller;
 import io.rhiot.utils.install.Installer;
 import io.rhiot.utils.process.DefaultProcessManager;
@@ -36,6 +35,7 @@ import org.apache.camel.impl.UriEndpointComponent;
 import org.slf4j.Logger;
 
 import static java.lang.Thread.sleep;
+import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -129,7 +129,7 @@ public class WebcamComponent extends UriEndpointComponent implements WebcamDisco
                 Webcam.setDriver(driver);
                 webcamStarted = true;
 
-            } else if (OsUtils.isPlatform("linux")) {
+            } else if (IS_OS_LINUX) {
                 try {
                     processManager = resolveProcessManager();
                     do {

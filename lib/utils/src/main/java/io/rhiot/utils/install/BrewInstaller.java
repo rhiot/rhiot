@@ -17,9 +17,10 @@
 
 package io.rhiot.utils.install;
 
-import io.rhiot.utils.OsUtils;
-
 import java.util.List;
+
+import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX;
+import static org.apache.commons.lang3.SystemUtils.IS_OS_MAC;
 
 public class BrewInstaller extends DefaultInstaller {
 
@@ -33,7 +34,7 @@ public class BrewInstaller extends DefaultInstaller {
 
     @Override
     public boolean isPlatformSupported() {
-        return OsUtils.isLinux() || OsUtils.isMac();
+        return IS_OS_LINUX || IS_OS_MAC;
     }
 
     @Override

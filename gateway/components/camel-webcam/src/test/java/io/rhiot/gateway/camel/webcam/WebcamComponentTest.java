@@ -18,7 +18,6 @@ package io.rhiot.gateway.camel.webcam;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.ds.dummy.WebcamDummyDevice;
-import io.rhiot.utils.OsUtils;
 import io.rhiot.utils.install.DefaultInstaller;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
@@ -38,6 +37,7 @@ import java.util.Map;
 
 import static io.rhiot.gateway.camel.webcam.WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
 import static io.rhiot.gateway.camel.webcam.WebcamHelper.isWebcamPresent;
+import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -81,7 +81,7 @@ public class WebcamComponentTest extends CamelTestSupport {
         webcams.put("dummy", webcam);
          
         //Avoid the driver error when webcam/bridj loads the native lib
-        if (OsUtils.isLinux()) {
+        if (IS_OS_LINUX) {
             assumeTrue(new DefaultInstaller().isInstalled(WEBCAM_DEPENDENCIES_LINUX));
         }
     }

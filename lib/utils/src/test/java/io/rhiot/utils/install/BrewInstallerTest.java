@@ -17,13 +17,14 @@
 
 package io.rhiot.utils.install;
 
-import io.rhiot.utils.OsUtils;
 import io.rhiot.utils.Uuids;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
 
+import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX;
+import static org.apache.commons.lang3.SystemUtils.IS_OS_MAC;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
 
@@ -32,7 +33,7 @@ public class BrewInstallerTest {
     
     @BeforeClass
     public static void assumptions(){
-        assumeTrue(OsUtils.isPlatform("mac"));
+        assumeTrue(IS_OS_MAC);
         assumeTrue(installer.isCommandInstalled("brew"));
     }
     
@@ -65,7 +66,7 @@ public class BrewInstallerTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testIncorrectPlatform() throws Exception {
-        if (!OsUtils.isPlatform("linux")) {
+        if (!IS_OS_LINUX) {
             new DefaultInstaller().install("foo");
         }
     }

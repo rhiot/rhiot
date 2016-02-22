@@ -17,7 +17,6 @@
 
 package io.rhiot.utils.install;
 
-import io.rhiot.utils.OsUtils;
 import io.rhiot.utils.Uuids;
 import io.rhiot.utils.install.exception.PermissionDeniedException;
 import org.junit.BeforeClass;
@@ -25,6 +24,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX;
 import static org.junit.Assert.*;
 
 import static org.junit.Assume.assumeTrue;
@@ -35,7 +35,7 @@ public class DefaultInstallerTest {
 
     @BeforeClass
     public static void assumptions(){
-        assumeTrue(OsUtils.isPlatform("linux"));
+        assumeTrue(IS_OS_LINUX);
         assumeTrue(installer.isCommandInstalled("apt-get"));
         
         boolean hasPermissions = true;

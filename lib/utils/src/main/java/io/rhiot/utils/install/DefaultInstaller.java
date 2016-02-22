@@ -17,7 +17,6 @@
 
 package io.rhiot.utils.install;
 
-import io.rhiot.utils.OsUtils;
 import io.rhiot.utils.install.exception.PermissionDeniedException;
 import io.rhiot.utils.process.ExecProcessManager;
 import io.rhiot.utils.process.ProcessManager;
@@ -27,6 +26,7 @@ import org.slf4j.Logger;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -190,7 +190,7 @@ public class DefaultInstaller implements Installer {
      * @return true if the installer can run on the current platform, false otherwise.
      */
     public boolean isPlatformSupported(){
-        return OsUtils.isLinux() ;
+        return IS_OS_LINUX;
     }
     
     // Accessors
