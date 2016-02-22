@@ -51,16 +51,12 @@ public class ProtonjProducer extends DefaultProducer {
         client.connect(coords[0], Integer.parseInt(coords[1]), res -> {
             if (res.succeeded()) {
                 ProtonConnection connection = res.result();
+                connection.open(); // Remove this in ProtonJ 0.12
                 ProtonSender sender = connection.createSender(path2);
 
-                Message message = message("Hello World from client");
+                Message message = message();
                 message.setBody(new AmqpValue(body));
-
-                // Can optionally add an openHandler or sendQueueDrainHandler
-                // to await remote sender open completing or credit to send being
-                // granted. But here we will just buffer the send immediately.
                 sender.open();
-                System.out.println("Sending message to server");
                 sender.send(tag("m1"), message, delivery -> {
                     System.out.println("The message was received by the server");
                 });

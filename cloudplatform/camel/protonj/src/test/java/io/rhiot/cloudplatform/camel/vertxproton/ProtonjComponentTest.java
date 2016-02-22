@@ -60,7 +60,7 @@ public class ProtonjComponentTest extends CamelTestSupport {
             public void configure() throws Exception {
                 from("protonj:amqp://~0.0.0.0:" + peerConsumerPort).to("mock:peer2peer");
 
-//                from("amqp:topic:mytopic").to("mock:mytopic");
+                from("amqp:topic:mytopic").to("mock:mytopic");
             }
         };
     }
@@ -93,19 +93,18 @@ public class ProtonjComponentTest extends CamelTestSupport {
 
     // Peer2broker tests
 
-//    @Test
-//    public void shouldSendMessageToBrokerQueue() throws InterruptedException {
-//        template.sendBody("protonj:localhost:9999/foo", "foo");
-//        Thread.sleep(120 * 1000);
-////        String receivedMessage = consumer.receiveBody("amqp:foo", String.class);
-////        Truth.assertThat(receivedMessage).isEqualTo("foo");
-//    }
-//
-//    @Test
-//    public void shouldSendMessageToBrokerTopic() throws InterruptedException {
-//        mytopicMockEndpoint.expectedBodiesReceived("foo");
-//        template.sendBody("protonj:amqp://localhost:9999/topic://mytopic", "foo");
-//        mytopicMockEndpoint.assertIsSatisfied();
-//    }
+    @Test
+    public void shouldSendMessageToBrokerQueue() throws InterruptedException {
+        template.sendBody("protonj:localhost:9999/foo", "foo");
+        String receivedMessage = consumer.receiveBody("amqp:foo", String.class);
+        Truth.assertThat(receivedMessage).isEqualTo("foo");
+    }
+
+    @Test
+    public void shouldSendMessageToBrokerTopic() throws InterruptedException {
+        mytopicMockEndpoint.expectedBodiesReceived("foo");
+        template.sendBody("protonj:amqp://localhost:9999/topic://mytopic", "foo");
+        mytopicMockEndpoint.assertIsSatisfied();
+    }
 
 }
