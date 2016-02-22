@@ -19,7 +19,7 @@ package io.rhiot.tooling.shell
 import io.rhiot.utils.process.EchoMockProcessManager
 import io.rhiot.utils.process.ProcessManager
 import io.rhiot.utils.ssh.client.SshClient
-import io.rhiot.utils.ssh.server.SshServer
+import io.rhiot.utils.ssh.server.SshServerBuilder
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,7 +42,7 @@ class ShellTest {
 
     // Fixtures
 
-    static device = new SshServer().start()
+    static device = new SshServerBuilder().build().start()
 
     static int shellPort = findAvailableTcpPort()
 
