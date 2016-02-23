@@ -19,9 +19,11 @@ package io.rhiot.cloudplatform.service.camera.spring;
 import io.rhiot.cloudplatform.connector.IoTConnector;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
+import io.rhiot.cloudplatform.service.camera.CameraImageRotation;
 import io.rhiot.cloudplatform.service.camera.api.CameraService;
 import io.rhiot.cloudplatform.service.camera.DefaultCameraService;
 import org.apache.camel.ProducerTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,6 +38,13 @@ public class CameraServiceConfiguration {
     @Bean
     ServiceBinding cameraServiceBinding(PayloadEncoding payloadEncoding) {
         return new ServiceBinding(payloadEncoding, "camera");
+    }
+
+    @Bean
+    CameraImageRotation cameraImageRotation(IoTConnector connector,
+                                            @Value("${camera.storageQuota:5120}") long storageQuota,
+                                            @Value("${camera.initialDelay:15000}") int initialDelay) {
+        return new CameraImageRotation(connector, storageQuota, initialDelay);
     }
 
 }

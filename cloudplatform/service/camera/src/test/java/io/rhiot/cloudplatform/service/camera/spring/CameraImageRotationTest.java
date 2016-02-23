@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ import static io.rhiot.utils.process.Processes.canExecuteCommand;
 import static java.lang.Thread.sleep;
 import static org.junit.Assume.assumeTrue;
 
-public class CameraServiceConfigurationTest extends CloudPlatformTest {
+public class CameraImageRotationTest extends CloudPlatformTest {
 
     String deviceId = uuid();
 
@@ -40,48 +41,30 @@ public class CameraServiceConfigurationTest extends CloudPlatformTest {
 
     @Override
     protected void beforeCloudPlatformStarted() {
-        System.setProperty("camera.initialDelay", 120000 + "");
+        System.setProperty("camera.storageQuota", 0 + "");
+        System.setProperty("camera.initialDelay", 8000 + "");
     }
 
     // Tests
 
     @Test
-    public void shouldRecognizePlate() {
+    public void shouldRotateCamerImages() throws InterruptedException {
         assumeTrue(canExecuteCommand("docker", "version"));
 
-        @SuppressWarnings("unchecked") // We deserialize binary data here, so type safety warnings can be ignored.
-        List<Map<String, Object>> plateMatches = connector.fromBus("camera.recognizePlate", image, List.class, arguments("eu"));
-        Truth.assertThat(plateMatches.get(0).get("plateNumber")).isEqualTo("H786P0J");
-    }
-
-    @Test
-    public void shouldProcessImagePlate() throws InterruptedException {
-        assumeTrue(canExecuteCommand("docker", "version"));
+        // Given
+        Arrays.asList(new File("/tmp/rhiot/binary").listFiles()).stream().forEach(File::delete);
 
         // When
         connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
         sleep(5000);
+        Truth.assertThat(new File("/tmp/rhiot/binary").list()).asList().isNotEmpty();
 
         // Then
-        Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
-        List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
-        Truth.assertThat(imageMetadata).hasSize(1);
-        Truth.assertThat(((List<Map<String, Object>>)imageMetadata.get(0).get("plateMatches")).get(0).get("plateNumber")).isEqualTo("H786P0J");
-    }
-
-    @Test
-    public void shouldStoreProcessedPlateImage() throws InterruptedException {
-        assumeTrue(canExecuteCommand("docker", "version"));
-
-        // When
-        connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
         sleep(5000);
-
-        // Then
         Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
         List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
-        Truth.assertThat(imageMetadata).hasSize(1);
-        Truth.assertThat(new File("/tmp/rhiot/binary").list()).asList().contains(imageMetadata.get(0).get("id"));
+        Truth.assertThat(imageMetadata).hasSize(0);
+        Truth.assertThat(new File("/tmp/rhiot/binary").list()).asList().isEmpty();
     }
 
 }
