@@ -18,37 +18,40 @@ package io.rhiot.cloudplatform.service.binary;
 
 import io.rhiot.cloudplatform.service.binary.api.BinaryService;
 
-import java.io.*;
-
 import static org.apache.commons.io.IOUtils.toByteArray;
 import static org.apache.commons.io.IOUtils.write;
 
-public class DefaultBinaryService implements BinaryService {
+class DefaultBinaryService implements BinaryService {
 
-    private final File imagesDirectory;
+    private final File imagesDirectory
 
-    public DefaultBinaryService(File imagesDirectory) {
+    DefaultBinaryService(File imagesDirectory) {
         this.imagesDirectory = imagesDirectory;
 
         imagesDirectory.mkdirs();
     }
 
+    // Service API
+
     @Override
-    public void store(String identifier, byte[] data) {
-        try {
-            write(data, new FileOutputStream(new File(imagesDirectory, identifier)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    void store(String identifier, byte[] data) {
+        write(data, new FileOutputStream(binaryFile(identifier)))
     }
 
     @Override
-    public byte[] read(String identifier) {
-        try {
-            return toByteArray(new FileInputStream(new File(imagesDirectory, identifier)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    byte[] read(String identifier) {
+        toByteArray(new FileInputStream(binaryFile(identifier)))
+    }
+
+    @Override
+    void delete(String identifier) {
+        binaryFile(identifier).delete()
+    }
+
+    // Helpers
+
+    private File binaryFile(String identifier) {
+        new File(imagesDirectory, identifier)
     }
 
 }

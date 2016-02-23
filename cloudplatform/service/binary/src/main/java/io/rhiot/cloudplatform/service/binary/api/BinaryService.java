@@ -22,4 +22,6 @@ public interface BinaryService {
 
     byte[] read(String identifier);
 
+    void delete(String identifier);
+
 }
