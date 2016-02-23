@@ -23,7 +23,7 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import io.rhiot.datastream.document.CountByQueryOperation;
 import io.rhiot.datastream.document.DocumentStore;
-import io.rhiot.datastream.document.RemoveOperation;
+
 import org.bson.types.ObjectId;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -92,8 +92,8 @@ public class MongodbDocumentStore implements DocumentStore {
     }
 
     @Override
-    void remove(RemoveOperation removeOperation) {
-        collection(removeOperation.collection()).remove(new BasicDBObject(MONGO_ID, new ObjectId(removeOperation.id())))
+    void remove(String documentCollection, String identifier) {
+        collection(documentCollection).remove(new BasicDBObject(MONGO_ID, new ObjectId(identifier)))
     }
 
     // Helpers

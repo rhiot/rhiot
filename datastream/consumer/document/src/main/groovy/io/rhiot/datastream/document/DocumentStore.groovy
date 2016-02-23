@@ -40,6 +40,6 @@ interface DocumentStore {
 
     long countByQuery(CountByQueryOperation countByQueryOperation)
 
-    void remove(RemoveOperation removeOperation)
+    void remove(String collection, String id)
 
 }
