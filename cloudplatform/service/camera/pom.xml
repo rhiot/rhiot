@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-cloudplatform-service</artifactId>
-        <version>0.1.4-SNAPSHOT</version>
+        <version>0.1.4</version>
         <relativePath>..</relativePath>
     </parent>
     <name>Rhiot :: Cloud platform :: Service :: Camera</name>
