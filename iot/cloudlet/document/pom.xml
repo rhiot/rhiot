@@ -6,7 +6,7 @@
     <parent>
         <artifactId>rhiot-iot-cloudlet</artifactId>
         <groupId>io.rhiot</groupId>
-        <version>0.1.4-SNAPSHOT</version>
+        <version>0.1.4</version>
     </parent>
 
     <name>RHIOT :: IoT :: Cloudlet :: Document</name>
