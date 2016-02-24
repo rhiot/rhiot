@@ -5,7 +5,7 @@
 
     <groupId>io.rhiot</groupId>
     <artifactId>rhiot</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5-SNAPSHOT</version>
     <name>Rhiot</name>
     <packaging>pom</packaging>
 
@@ -92,7 +92,7 @@
         <connection>scm:git:git@github.com:rhiot/rhiot.git</connection>
         <developerConnection>scm:git:git@github.com:rhiot/rhiot.git</developerConnection>
         <url>git@github.com:rhiot/rhiot.git</url>
-      <tag>rhiot-0.1.4</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>

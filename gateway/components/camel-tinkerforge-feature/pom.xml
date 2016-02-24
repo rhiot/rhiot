@@ -6,7 +6,7 @@
 	<parent>  <!-- should be removed -->
 		<groupId>io.rhiot</groupId>
 		<artifactId>rhiot-gateway-components</artifactId>
-		<version>0.1.4</version>
+		<version>0.1.5-SNAPSHOT</version>
 	</parent>
 	<name>Rhiot :: Gateway :: Camel components :: Tinkerforge :: Feature</name>
 	<artifactId>camel-tinkerforge-feature</artifactId>
