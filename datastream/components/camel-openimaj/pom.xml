@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-datastream-components</artifactId>
-        <version>0.1.5-SNAPSHOT</version>
+        <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <name>Rhiot :: DataStream :: Camel components :: OpenIMAJ</name>

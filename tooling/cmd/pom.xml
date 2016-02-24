@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.rhiot</groupId>
         <artifactId>rhiot-tooling</artifactId>
-        <version>0.1.5-SNAPSHOT</version>
+        <version>0.1.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <name>Rhiot :: Cmd</name>
