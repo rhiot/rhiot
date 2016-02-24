@@ -14,7 +14,7 @@
 	<parent>
 		<artifactId>rhiot-gateway-components</artifactId>
 		<groupId>io.rhiot</groupId>
-		<version>0.1.4</version>
+		<version>0.1.5-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
