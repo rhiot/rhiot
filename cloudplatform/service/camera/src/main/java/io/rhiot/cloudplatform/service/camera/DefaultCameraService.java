@@ -18,6 +18,7 @@ package io.rhiot.cloudplatform.service.camera;
 
 import com.google.common.collect.ImmutableMap;
 import io.rhiot.cloudplatform.connector.IoTConnector;
+import io.rhiot.cloudplatform.service.camera.api.CameraImage;
 import io.rhiot.cloudplatform.service.camera.api.CameraService;
 import io.rhiot.cloudplatform.service.camera.api.PlateMatch;
 import org.apache.camel.ProducerTemplate;
@@ -27,6 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.rhiot.cloudplatform.connector.Header.arguments;
+import static io.rhiot.cloudplatform.service.camera.api.CameraImage.CAMERA_IMAGE_COLLECTION;
 
 public class DefaultCameraService implements CameraService {
 
@@ -48,7 +50,7 @@ public class DefaultCameraService implements CameraService {
     @Override
     public void process(String deviceId, String country, byte[] imageData) {
         Map<String, Object> imageMetadata = ImmutableMap.of("deviceId", deviceId);
-        String imageId = connector.fromBus("document.save", imageMetadata, String.class, arguments("CameraImage"));
+        String imageId = connector.fromBus("document.save", imageMetadata, String.class, arguments(CAMERA_IMAGE_COLLECTION));
         connector.toBusAndWait("binary.store", imageData, arguments(imageId));
 
         connector.toBus("camera.processPlate", arguments(imageId, country));
@@ -59,8 +61,8 @@ public class DefaultCameraService implements CameraService {
         byte[] imageData = connector.fromBus("binary.read", imageId, byte[].class);
         List<PlateMatch> matches = recognizePlate(country, imageData);
 
-        Map<String, Object> imageMetadata = connector.fromBus("document.findOne", Map.class, arguments("CameraImage", imageId));
-        imageMetadata.put("plateMatches", matches);
+        CameraImage imageMetadata = connector.fromBus("document.findOne", CameraImage.class, arguments(CAMERA_IMAGE_COLLECTION, imageId));
+        imageMetadata.setPlateMatches(matches);
         connector.toBus("document.save", imageMetadata, arguments("CameraImage"));
     }
 
