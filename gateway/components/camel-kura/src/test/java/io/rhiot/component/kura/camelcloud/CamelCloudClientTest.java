@@ -217,7 +217,7 @@ public class CamelCloudClientTest extends CamelTestSupport {
     public void kuraServiceShouldReceivePayloadFromKuraCloudClient() throws KuraException, InterruptedException {
         kuraCloudMockEndpoint.setExpectedMessageCount(1);
         cloudClient.subscribe("topic", qos);
-        cloudClient.publish("topic", "msg".getBytes(), qos, true, priority);
+        cloudClient.publish("topic", kuraPayload, qos, true, priority);
         kuraCloudMockEndpoint.assertIsSatisfied();
     }
 
