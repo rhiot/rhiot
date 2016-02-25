@@ -30,7 +30,7 @@ You can create [new issue, bug, comment here](https://github.com/rhiot/rhiot/iss
 
 [![Build Status](https://travis-ci.org/rhiot/rhiot.svg?branch=master&style=flat-square)](https://travis-ci.org/rhiot/rhiot)
 
-If you want to build the project yourself, read [this document](https://rhiot.gitbooks.io/rhiotdocumentation/content/building/index.html).
+If you want to build the project yourself, read [this document](https://rhiot.gitbooks.io/rhiotdocumentation/content/building/building.html).
 
 ## License
 
