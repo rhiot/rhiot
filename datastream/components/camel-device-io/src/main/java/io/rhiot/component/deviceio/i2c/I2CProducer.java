@@ -16,43 +16,21 @@
  */
 package io.rhiot.component.deviceio.i2c;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
+import io.rhiot.component.deviceio.i2c.driver.I2CDriver;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
-
-import jdk.dio.ClosedDeviceException;
-import jdk.dio.DeviceDescriptor;
-import jdk.dio.UnavailableDeviceException;
-import jdk.dio.i2cbus.I2CDevice;
 
 /**
  * The I2C producer.
  */
-public abstract class I2CProducer extends DefaultProducer implements I2CDevice {
+public abstract class I2CProducer extends DefaultProducer {
 
-    protected I2CDevice device;
+    protected I2CDriver driver;
 
-    public I2CProducer(I2CEndpoint endpoint, I2CDevice device) {
+    public I2CProducer(I2CEndpoint endpoint, I2CDriver driver) {
         super(endpoint);
-        this.device = device;
-    }
-
-    public I2CDevice getDevice() {
-        return device;
-    }
-
-    @Override
-    public int read() throws IOException {
-        return this.device.read();
-    }
-
-    public void sleep(long howMuch) {
-        try {
-            Thread.sleep(howMuch);
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
-        }
+        this.driver = driver;
     }
 
     @Override
@@ -61,91 +39,20 @@ public abstract class I2CProducer extends DefaultProducer implements I2CDevice {
     }
 
     @Override
-    public void close() throws IOException {
-        this.device.close();
+    public void process(Exchange exchange) throws Exception {
+        exchange.getIn().setBody(driver.get());
     }
 
     @Override
-    public <U extends I2CDevice> DeviceDescriptor<U> getDescriptor() {
-        return this.device.getDescriptor();
+    protected void doStart() throws Exception {
+        super.doStart();
+        driver.start();
     }
 
     @Override
-    public boolean isOpen() {
-        return this.device.isOpen();
-    }
-
-    @Override
-    public void tryLock(int arg0) throws UnavailableDeviceException, ClosedDeviceException, IOException {
-        this.device.tryLock(arg0);
-    }
-
-    @Override
-    public void unlock() throws IOException {
-        this.device.unlock();
-    }
-
-    @Override
-    public ByteBuffer getInputBuffer() throws ClosedDeviceException, IOException {
-        return this.device.getInputBuffer();
-    }
-
-    @Override
-    public ByteBuffer getOutputBuffer() throws ClosedDeviceException, IOException {
-        return this.device.getOutputBuffer();
-    }
-
-    @Override
-    public void begin() throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        this.device.begin();
-    }
-
-    @Override
-    public void end() throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        this.device.end();
-    }
-
-    @Override
-    public Bus getBus() throws IOException {
-        return this.device.getBus();
-    }
-
-    @Override
-    public int read(ByteBuffer arg0) throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.read(arg0);
-    }
-
-    @Override
-    public int read(int arg0, ByteBuffer arg1) throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.read(arg0, arg1);
-    }
-
-    @Override
-    public int read(int arg0, int arg1, ByteBuffer arg2)
-            throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.read(arg0, arg1, arg2);
-    }
-
-    @Override
-    public int read(int arg0, int arg1, int arg2, ByteBuffer arg3)
-            throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.read(arg0, arg1, arg2, arg3);
-    }
-
-    @Override
-    public int write(ByteBuffer arg0) throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.write(arg0);
-    }
-
-    @Override
-    public void write(int arg0) throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        this.device.write(arg0);
-    }
-
-    @Override
-    public int write(int arg0, int arg1, ByteBuffer arg2)
-            throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.write(arg0, arg1, arg2);
+    protected void doStop() throws Exception {
+        super.doStop();
+        driver.stop();
     }
 
 }
