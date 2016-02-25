@@ -188,8 +188,16 @@ public class CamelCloudClient implements CloudClient {
                                 @Override
                                 public void process(Exchange exchange) throws Exception {
                                     for(CloudClientListener listener : cloudClientListeners) {
+                                        Object body = exchange.getIn().getBody();
+                                        KuraPayload payload;
+                                        if(body instanceof KuraPayload) {
+                                            payload = (KuraPayload) body;
+                                        } else {
+                                            payload = new KuraPayload();
+                                            payload.setBody(getContext().getTypeConverter().convertTo(byte[].class, body));
+                                        }
                                         int qos = exchange.getIn().getHeader(CAMEL_KURA_CLOUD_QOS, 0, int.class);
-                                        listener.onMessageArrived("x", "x", exchange.getIn().getBody(KuraPayload.class), qos, true);
+                                        listener.onMessageArrived("camel", "camel", payload, qos, true);
                                     }
                                 }
                             });
@@ -201,7 +209,7 @@ public class CamelCloudClient implements CloudClient {
     }
 
     private String target(String topic) {
-        if(baseEndpoint.contains("%s")) {
+        if (baseEndpoint.contains("%s")) {
             return format(baseEndpoint, topic);
         }
         return baseEndpoint + topic;

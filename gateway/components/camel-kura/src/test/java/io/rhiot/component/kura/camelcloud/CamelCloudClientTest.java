@@ -17,6 +17,7 @@
 package io.rhiot.component.kura.camelcloud;
 
 import com.google.common.truth.Truth;
+import io.rhiot.component.kura.cloud.EmptyCloudClientListener;
 import io.rhiot.component.kura.cloud.KuraCloudComponent;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
@@ -51,6 +52,8 @@ public class CamelCloudClientTest extends CamelTestSupport {
     int qos = random.nextInt();
 
     int priority = random.nextInt();
+
+    KuraPayload receivedKuraPayload;
 
     @Override
     protected void doPostSetup() throws Exception {
@@ -131,85 +134,37 @@ public class CamelCloudClientTest extends CamelTestSupport {
         mockEndpoint.assertIsSatisfied();
     }
 
-    boolean received = false;
-
     @Test
     public void shouldSubscribe() throws KuraException, InterruptedException {
         cloudClient.subscribe("subscribe", qos);
-        cloudClient.addCloudClientListener(new CloudClientListener() {
-            @Override
-            public void onControlMessageArrived(String s, String s1, KuraPayload kuraPayload, int i, boolean b) {
-
-            }
+        cloudClient.addCloudClientListener(new EmptyCloudClientListener() {
 
             @Override
-            public void onMessageArrived(String s, String s1, KuraPayload kuraPayload, int i, boolean b) {
-                received = true;
+            public void onMessageArrived(String deviceId, String topic, KuraPayload kuraPayload, int qos, boolean retain) {
+                receivedKuraPayload = kuraPayload;
             }
 
-            @Override
-            public void onConnectionLost() {
-
-            }
-
-            @Override
-            public void onConnectionEstablished() {
-
-            }
-
-            @Override
-            public void onMessageConfirmed(int i, String s) {
-
-            }
-
-            @Override
-            public void onMessagePublished(int i, String s) {
-
-            }
         });
         template.sendBody("seda:applicationId:subscribe", "foo");
         Thread.sleep(5000);
-        Truth.assertThat(received).isTrue();
+        Truth.assertThat(receivedKuraPayload.getBody()).isEqualTo("foo".getBytes());
     }
 
     @Test
     public void shouldUnsubscribe() throws KuraException, InterruptedException {
         cloudClient.subscribe("subscribe", qos);
         cloudClient.unsubscribe("subscribe");
-        cloudClient.addCloudClientListener(new CloudClientListener() {
-            @Override
-            public void onControlMessageArrived(String s, String s1, KuraPayload kuraPayload, int i, boolean b) {
-
-            }
+        cloudClient.addCloudClientListener(new EmptyCloudClientListener() {
 
             @Override
-            public void onMessageArrived(String s, String s1, KuraPayload kuraPayload, int i, boolean b) {
-                received = true;
+            public void onMessageArrived(String deviceId, String topic, KuraPayload kuraPayload, int qos, boolean retain) {
+                receivedKuraPayload = kuraPayload;
             }
 
-            @Override
-            public void onConnectionLost() {
-
-            }
-
-            @Override
-            public void onConnectionEstablished() {
-
-            }
-
-            @Override
-            public void onMessageConfirmed(int i, String s) {
-
-            }
-
-            @Override
-            public void onMessagePublished(int i, String s) {
-
-            }
         });
         template.sendBody("seda:applicationId:subscribe", "foo");
         Thread.sleep(3000);
-        Truth.assertThat(received).isFalse();
+        Truth.assertThat(receivedKuraPayload).isNull();
     }
 
     int qosReceived;
@@ -217,36 +172,13 @@ public class CamelCloudClientTest extends CamelTestSupport {
     @Test
     public void shouldPassQosToSubscribed() throws KuraException, InterruptedException {
         cloudClient.subscribe("subscribe", qos);
-        cloudClient.addCloudClientListener(new CloudClientListener() {
-            @Override
-            public void onControlMessageArrived(String s, String s1, KuraPayload kuraPayload, int i, boolean b) {
-
-            }
+        cloudClient.addCloudClientListener(new EmptyCloudClientListener() {
 
             @Override
             public void onMessageArrived(String s, String s1, KuraPayload kuraPayload, int qos, boolean b) {
                 qosReceived = qos;
             }
 
-            @Override
-            public void onConnectionLost() {
-
-            }
-
-            @Override
-            public void onConnectionEstablished() {
-
-            }
-
-            @Override
-            public void onMessageConfirmed(int i, String s) {
-
-            }
-
-            @Override
-            public void onMessagePublished(int i, String s) {
-
-            }
         });
         template.sendBodyAndHeader("seda:applicationId:subscribe", "foo", CAMEL_KURA_CLOUD_QOS, qos);
         Thread.sleep(3000);
