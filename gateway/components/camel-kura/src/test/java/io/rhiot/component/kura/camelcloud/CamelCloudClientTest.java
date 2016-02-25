@@ -17,14 +17,14 @@
 package io.rhiot.component.kura.camelcloud;
 
 import com.google.common.truth.Truth;
+import io.rhiot.component.kura.cloud.KuraCloudComponent;
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.eclipse.kura.KuraException;
 import org.eclipse.kura.cloud.CloudClient;
-import org.eclipse.kura.cloud.CloudService;
+import org.eclipse.kura.cloud.CloudClientListener;
 import org.eclipse.kura.message.KuraPayload;
 import org.junit.Test;
 
@@ -43,6 +43,9 @@ public class CamelCloudClientTest extends CamelTestSupport {
     @EndpointInject(uri = "mock:test")
     MockEndpoint mockEndpoint;
 
+    @EndpointInject(uri = "mock:kura-cloud")
+    MockEndpoint kuraCloudMockEndpoint;
+
     KuraPayload kuraPayload;
 
     int qos = random.nextInt();
@@ -51,19 +54,26 @@ public class CamelCloudClientTest extends CamelTestSupport {
 
     @Override
     protected void doPostSetup() throws Exception {
-        cloudService = new DefaultCamelCloudService(context);
-        cloudService.registerBaseEndpoint("applicationId", "seda:%s");
-        cloudClient = cloudService.newCloudClient("applicationId");
         kuraPayload = new KuraPayload();
         kuraPayload.setBody("foo".getBytes());
     }
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
+        cloudService = new DefaultCamelCloudService(context);
+        cloudService.registerBaseEndpoint("applicationId", "seda:%s");
+        cloudClient = cloudService.newCloudClient("applicationId");
+        KuraCloudComponent.clientCache().put("applicationId", cloudClient);
+        KuraCloudComponent kuraCloudComponent = new KuraCloudComponent();
+        kuraCloudComponent.setCloudService(cloudService);
+        context.addComponent("kura-cloud", kuraCloudComponent);
+
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                from("seda:start").to("mock:test");
+                from("seda:applicationId:start").to("mock:test");
+
+                from("kura-cloud:applicationId/topic").to("mock:kura-cloud");
             }
         };
     }
@@ -121,29 +131,134 @@ public class CamelCloudClientTest extends CamelTestSupport {
         mockEndpoint.assertIsSatisfied();
     }
 
+    boolean received = false;
+
     @Test
     public void shouldSubscribe() throws KuraException, InterruptedException {
         cloudClient.subscribe("subscribe", qos);
-        template.sendBody("seda:subscribe", "foo");
-        String received = consumer.receiveBody("seda:applicationId", String.class);
-        Truth.assertThat(received).isEqualTo("foo");
+        cloudClient.addCloudClientListener(new CloudClientListener() {
+            @Override
+            public void onControlMessageArrived(String s, String s1, KuraPayload kuraPayload, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onMessageArrived(String s, String s1, KuraPayload kuraPayload, int i, boolean b) {
+                received = true;
+            }
+
+            @Override
+            public void onConnectionLost() {
+
+            }
+
+            @Override
+            public void onConnectionEstablished() {
+
+            }
+
+            @Override
+            public void onMessageConfirmed(int i, String s) {
+
+            }
+
+            @Override
+            public void onMessagePublished(int i, String s) {
+
+            }
+        });
+        template.sendBody("seda:applicationId:subscribe", "foo");
+        Thread.sleep(5000);
+        Truth.assertThat(received).isTrue();
     }
 
     @Test
     public void shouldUnsubscribe() throws KuraException, InterruptedException {
         cloudClient.subscribe("subscribe", qos);
         cloudClient.unsubscribe("subscribe");
-        template.sendBody("seda:subscribe", "foo");
-        String received = consumer.receiveBodyNoWait("seda:applicationId", String.class);
-        Truth.assertThat(received).isNull();
+        cloudClient.addCloudClientListener(new CloudClientListener() {
+            @Override
+            public void onControlMessageArrived(String s, String s1, KuraPayload kuraPayload, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onMessageArrived(String s, String s1, KuraPayload kuraPayload, int i, boolean b) {
+                received = true;
+            }
+
+            @Override
+            public void onConnectionLost() {
+
+            }
+
+            @Override
+            public void onConnectionEstablished() {
+
+            }
+
+            @Override
+            public void onMessageConfirmed(int i, String s) {
+
+            }
+
+            @Override
+            public void onMessagePublished(int i, String s) {
+
+            }
+        });
+        template.sendBody("seda:applicationId:subscribe", "foo");
+        Thread.sleep(3000);
+        Truth.assertThat(received).isFalse();
     }
+
+    int qosReceived;
 
     @Test
     public void shouldPassQosToSubscribed() throws KuraException, InterruptedException {
         cloudClient.subscribe("subscribe", qos);
-        template.sendBody("seda:subscribe", "foo");
-        Exchange received = consumer.receive("seda:applicationId");
-        Truth.assertThat(received.getIn().getHeader(CAMEL_KURA_CLOUD_QOS)).isEqualTo(qos);
+        cloudClient.addCloudClientListener(new CloudClientListener() {
+            @Override
+            public void onControlMessageArrived(String s, String s1, KuraPayload kuraPayload, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onMessageArrived(String s, String s1, KuraPayload kuraPayload, int qos, boolean b) {
+                qosReceived = qos;
+            }
+
+            @Override
+            public void onConnectionLost() {
+
+            }
+
+            @Override
+            public void onConnectionEstablished() {
+
+            }
+
+            @Override
+            public void onMessageConfirmed(int i, String s) {
+
+            }
+
+            @Override
+            public void onMessagePublished(int i, String s) {
+
+            }
+        });
+        template.sendBodyAndHeader("seda:applicationId:subscribe", "foo", CAMEL_KURA_CLOUD_QOS, qos);
+        Thread.sleep(3000);
+        Truth.assertThat(qosReceived).isEqualTo(qos);
+    }
+
+    @Test
+    public void kuraServiceShouldReceivePayloadFromKuraCloudClient() throws KuraException, InterruptedException {
+        kuraCloudMockEndpoint.setExpectedMessageCount(1);
+        cloudClient.subscribe("topic", qos);
+        cloudClient.publish("topic", "msg".getBytes(), qos, true, priority);
+        kuraCloudMockEndpoint.assertIsSatisfied();
     }
 
 }

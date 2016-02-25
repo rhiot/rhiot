@@ -18,6 +18,7 @@ package io.rhiot.component.kura.cloud;
 
 import static io.rhiot.component.kura.cloud.KuraCloudComponent.clientCache;
 
+import io.rhiot.component.kura.utils.KuraServiceFactory;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultEndpoint;
@@ -50,7 +51,7 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "")
     private String deviceId;
 
-    private CloudService cloudService = null;
+    private CloudService cloudService;
 
     public KuraCloudEndpoint(String uri, KuraCloudComponent kuraCloudComponent, CloudService cloudService) {
         super(uri, kuraCloudComponent);
@@ -61,7 +62,7 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         CloudClient cloudClient = clientCache().get(applicationId);
         if (cloudClient == null) {
-            cloudClient = this.cloudService.newCloudClient(applicationId);
+            cloudClient = getCloudService().newCloudClient(applicationId);
             clientCache().put(applicationId, cloudClient);
         }
         return new KuraCloudConsumer(this, processor, cloudClient);
@@ -71,7 +72,7 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
     public KuraCloudProducer createProducer() throws Exception {
         CloudClient cloudClient = clientCache().get(applicationId);
         if (cloudClient == null) {
-            cloudClient = this.cloudService.newCloudClient(applicationId);
+            cloudClient = getCloudService().newCloudClient(applicationId);
             clientCache().put(applicationId, cloudClient);
         }
 
@@ -81,6 +82,11 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
     @Override
     public boolean isSingleton() {
         return true;
+    }
+
+    @Override
+    public KuraCloudComponent getComponent() {
+        return (KuraCloudComponent) super.getComponent();
     }
 
     public String getTopic() {
@@ -137,6 +143,24 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public CloudService getCloudService() {
+        if(cloudService != null) {
+            return cloudService;
+        }
+
+        if(getComponent().getCloudService() != null) {
+            cloudService = getComponent().getCloudService();
+        } else {
+            cloudService = KuraServiceFactory.retrieveService(CloudService.class, this.getCamelContext().getRegistry());
+        }
+
+        return cloudService;
+    }
+
+    public void setCloudService(CloudService cloudService) {
+        this.cloudService = cloudService;
     }
 
 }

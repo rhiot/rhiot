@@ -29,6 +29,8 @@ public class KuraCloudComponent extends UriEndpointComponent {
 
     private final static CloudClientCache clientCache = new ConcurrentHashMapCloudClientCache();
 
+    private CloudService cloudService;
+
     public KuraCloudComponent() {
         super(KuraCloudEndpoint.class);
     }
@@ -43,9 +45,6 @@ public class KuraCloudComponent extends UriEndpointComponent {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remain, Map<String, Object> parameters) throws Exception {
-        CloudService cloudService = KuraServiceFactory.retrieveService(CloudService.class,
-                this.getCamelContext().getRegistry());
-
         KuraCloudEndpoint kuraCloudEndpoint = new KuraCloudEndpoint(uri, this, cloudService);
 
         String[] res = remain.split("/");
@@ -62,6 +61,14 @@ public class KuraCloudComponent extends UriEndpointComponent {
 
     public static CloudClientCache clientCache() {
         return clientCache;
+    }
+
+    public CloudService getCloudService() {
+        return cloudService;
+    }
+
+    public void setCloudService(CloudService cloudService) {
+        this.cloudService = cloudService;
     }
 
 }

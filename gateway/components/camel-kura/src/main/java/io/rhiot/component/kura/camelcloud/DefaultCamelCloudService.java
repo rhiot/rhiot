@@ -41,7 +41,7 @@ public class DefaultCamelCloudService implements CamelCloudService {
     public CloudClient newCloudClient(String applicationId) throws KuraException {
         String baseEndpoint = baseEndpoints.get(applicationId);
         if(baseEndpoint == null) {
-            baseEndpoint = "";
+            baseEndpoint = "seda:%s";
         }
         CloudClient cloudClient = new CamelCloudClient(this, camelContext, applicationId, baseEndpoint);
         clients.put(applicationId, cloudClient);

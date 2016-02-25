@@ -17,6 +17,8 @@
 package io.rhiot.component.kura.camelcloud;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.eclipse.kura.KuraErrorCode;
@@ -25,10 +27,7 @@ import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudClientListener;
 import org.eclipse.kura.message.KuraPayload;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static io.rhiot.component.kura.camelcloud.KuraCloudClientConstants.*;
 import static java.lang.String.format;
@@ -41,6 +40,8 @@ public class CamelCloudClient implements CloudClient {
     private final CamelContext camelContext;
 
     private final ProducerTemplate producerTemplate;
+
+    private final List<CloudClientListener> cloudClientListeners = new LinkedList<>();
 
     private final String applicationId;
 
@@ -55,7 +56,7 @@ public class CamelCloudClient implements CloudClient {
     }
 
     public CamelCloudClient(CamelCloudService cloudService, CamelContext camelContext, String applicationId) {
-        this(cloudService, camelContext, applicationId, "");
+        this(cloudService, camelContext, applicationId, "seda:%s");
     }
 
     @Override
@@ -119,10 +120,10 @@ public class CamelCloudClient implements CloudClient {
 
     @Override
     public void unsubscribe(String topic) throws KuraException {
-        String target = target(topic);
+        String internalQueue = applicationId + ":" + topic;
         try {
-            camelContext.stopRoute(target);
-            camelContext.removeRoute(target);
+            camelContext.stopRoute(internalQueue);
+            camelContext.removeRoute(internalQueue);
         } catch (Exception e) {
             throw new KuraException(KuraErrorCode.INTERNAL_ERROR, e);
         }
@@ -135,12 +136,12 @@ public class CamelCloudClient implements CloudClient {
 
     @Override
     public void addCloudClientListener(CloudClientListener cloudClientListener) {
-        throw new UnsupportedOperationException();
+        cloudClientListeners.add(cloudClientListener);
     }
 
     @Override
     public void removeCloudClientListener(CloudClientListener cloudClientListener) {
-        throw new UnsupportedOperationException();
+        cloudClientListeners.remove(cloudClientListener);
     }
 
     @Override
@@ -160,7 +161,7 @@ public class CamelCloudClient implements CloudClient {
     // Helpers
 
     private int doPublish(boolean isControl, String deviceId, String topic, KuraPayload kuraPayload, int qos, boolean retain, int priority) throws KuraException {
-        String target = target(topic);
+        String target = target(applicationId + ":" + topic);
         int kuraMessageId = Math.abs(new Random().nextInt());
 
         Map<String, Object> headers = new HashMap<>();
@@ -176,16 +177,22 @@ public class CamelCloudClient implements CloudClient {
     }
 
     private void doSubscribe(final boolean isControl, final String topic, final int qos) throws KuraException {
-        final String target = target(topic);
+        final String internalQueue = applicationId + ":" + topic;
         try {
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
                 public void configure() throws Exception {
-                    from(target).
-                            routeId(target).
-                            setHeader(CAMEL_KURA_CLOUD_CONTROL, constant(isControl)).
-                            setHeader(CAMEL_KURA_CLOUD_QOS, constant(qos)).
-                            to("seda:" + applicationId);
+                    from(target(internalQueue)).
+                            routeId(internalQueue).
+                            process(new Processor() {
+                                @Override
+                                public void process(Exchange exchange) throws Exception {
+                                    for(CloudClientListener listener : cloudClientListeners) {
+                                        int qos = exchange.getIn().getHeader(CAMEL_KURA_CLOUD_QOS, 0, int.class);
+                                        listener.onMessageArrived("x", "x", exchange.getIn().getBody(KuraPayload.class), qos, true);
+                                    }
+                                }
+                            });
                 }
             });
         } catch (Exception e) {
