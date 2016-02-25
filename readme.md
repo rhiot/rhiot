@@ -11,9 +11,9 @@ the common IoT-related challenges.
 
 ## Current release
 
-[![Version](https://img.shields.io/badge/rhiot-0.1.3-blue.svg)]()
+[![Version](https://img.shields.io/badge/rhiot-0.1.4-blue.svg)]()
 
-The latest and the greatest version of the Rhiot is `0.1.3`. Wondering what's new there? Here are the [release notes](https://rhiot.gitbooks.io/rhiotdocumentation/content/releases_notes/index.html).
+The latest and the greatest version of the Rhiot is `0.1.4`. Wondering what's new there? Here are the [release notes](https://rhiot.gitbooks.io/rhiotdocumentation/content/releases_notes/index.html).
 
 ## Community
 
@@ -37,4 +37,3 @@ If you want to build the project yourself, read [this document](https://rhiot.gi
 [![License ASF](https://img.shields.io/hexpm/l/plug.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
 The Rhiot project is distributed under the [Apache 2.0 Software License](https://www.apache.org/licenses/LICENSE-2.0).
-
