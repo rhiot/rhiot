@@ -32,12 +32,15 @@ import org.junit.Test;
 import java.util.Random;
 
 import static io.rhiot.component.kura.camelcloud.KuraCloudClientConstants.*;
+import static java.lang.Thread.sleep;
 
 public class CamelCloudClientTest extends CamelTestSupport {
 
     Random random = new Random();
 
     CamelCloudService cloudService;
+
+    String applicationId = "applicationId";
 
     CloudClient cloudClient;
 
@@ -53,9 +56,11 @@ public class CamelCloudClientTest extends CamelTestSupport {
 
     int priority = random.nextInt();
 
+    String receivedDeviceId;
+
     KuraPayload receivedKuraPayload;
 
-    String receivedDeviceId;
+    int qosReceived;
 
     CloudClientListener listener = new EmptyCloudClientListener() {
 
@@ -77,9 +82,11 @@ public class CamelCloudClientTest extends CamelTestSupport {
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         cloudService = new DefaultCamelCloudService(context);
-        cloudService.registerBaseEndpoint("applicationId", "seda:%s");
-        cloudClient = cloudService.newCloudClient("applicationId");
-        KuraCloudComponent.clientCache().put("applicationId", cloudClient);
+        cloudService.registerBaseEndpoint(applicationId, "seda:%s");
+
+        cloudClient = cloudService.newCloudClient(applicationId);
+        KuraCloudComponent.clientCache().put(applicationId, cloudClient);
+
         KuraCloudComponent kuraCloudComponent = new KuraCloudComponent();
         kuraCloudComponent.setCloudService(cloudService);
         context.addComponent("kura-cloud", kuraCloudComponent);
@@ -89,7 +96,8 @@ public class CamelCloudClientTest extends CamelTestSupport {
             public void configure() throws Exception {
                 from("seda:applicationId:start").to("mock:test");
 
-                from("kura-cloud:applicationId/topic").to("mock:kura-cloud");
+                from("kura-cloud:applicationId/topic").
+                        to("mock:kura-cloud");
             }
         };
     }
@@ -159,7 +167,7 @@ public class CamelCloudClientTest extends CamelTestSupport {
 
         });
         template.sendBody("seda:applicationId:subscribe", "foo");
-        Thread.sleep(5000);
+        sleep(5000);
         Truth.assertThat(receivedKuraPayload.getBody()).isEqualTo("foo".getBytes());
     }
 
@@ -176,18 +184,16 @@ public class CamelCloudClientTest extends CamelTestSupport {
 
         });
         template.sendBody("seda:applicationId:subscribe", "foo");
-        Thread.sleep(3000);
+        sleep(3000);
         Truth.assertThat(receivedKuraPayload).isNull();
     }
-
-    int qosReceived;
 
     @Test
     public void shouldPassQosToSubscribed() throws KuraException, InterruptedException {
         cloudClient.subscribe("subscribe", qos);
         cloudClient.addCloudClientListener(listener);
         template.sendBodyAndHeader("seda:applicationId:subscribe", "foo", CAMEL_KURA_CLOUD_QOS, qos);
-        Thread.sleep(3000);
+        sleep(3000);
         Truth.assertThat(qosReceived).isEqualTo(qos);
     }
 
@@ -203,7 +209,7 @@ public class CamelCloudClientTest extends CamelTestSupport {
 
         });
         template.sendBodyAndHeader("seda:applicationId:subscribe", "foo", CAMEL_KURA_CLOUD_DEVICEID, "deviceId");
-        Thread.sleep(3000);
+        sleep(3000);
         Truth.assertThat(receivedDeviceId).isEqualTo("deviceId");
     }
 
