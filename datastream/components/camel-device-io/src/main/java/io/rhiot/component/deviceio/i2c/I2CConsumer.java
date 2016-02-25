@@ -16,33 +16,29 @@
  */
 package io.rhiot.component.deviceio.i2c;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
+import io.rhiot.component.deviceio.i2c.driver.I2CDriver;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.ScheduledPollConsumer;
 
-import jdk.dio.ClosedDeviceException;
-import jdk.dio.DeviceDescriptor;
-import jdk.dio.UnavailableDeviceException;
-import jdk.dio.i2cbus.I2CDevice;
-
 /**
  * The I2C consumer.
  */
-public abstract class I2CConsumer extends ScheduledPollConsumer implements I2CDevice {
-    private final I2CDevice device;
+public abstract class I2CConsumer extends ScheduledPollConsumer {
+    private final I2CDriver driver;
 
-    public I2CConsumer(I2CEndpoint endpoint, Processor processor, I2CDevice device) {
+    public I2CConsumer(I2CEndpoint endpoint, Processor processor, I2CDriver driver) {
         super(endpoint, processor);
-        this.device = device;
+        this.driver = driver;
     }
 
-    public abstract void createBody(Exchange exchange) throws IOException;
+    public void createBody(Exchange exchange) throws Exception {
+        exchange.getIn().setBody(driver.get());
+    }
 
-    public I2CDevice getDevice() {
-        return device;
+    public I2CDriver getDevice() {
+        return driver;
     }
 
     @Override
@@ -61,16 +57,15 @@ public abstract class I2CConsumer extends ScheduledPollConsumer implements I2CDe
     }
 
     @Override
-    public int read() throws IOException {
-        return this.device.read();
+    protected void doStart() throws Exception {
+        super.doStart();
+        driver.start();
     }
 
-    public void sleep(long howMuch) {
-        try {
-            Thread.sleep(howMuch);
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
-        }
+    @Override
+    protected void doStop() throws Exception {
+        super.doStop();
+        driver.stop();
     }
 
     @Override
@@ -78,91 +73,4 @@ public abstract class I2CConsumer extends ScheduledPollConsumer implements I2CDe
         return (I2CEndpoint) super.getEndpoint();
     }
 
-    @Override
-    public void close() throws IOException {
-        this.device.close();
-    }
-
-    @Override
-    public <U extends I2CDevice> DeviceDescriptor<U> getDescriptor() {
-        return this.device.getDescriptor();
-    }
-
-    @Override
-    public boolean isOpen() {
-        return this.device.isOpen();
-    }
-
-    @Override
-    public void tryLock(int arg0) throws UnavailableDeviceException, ClosedDeviceException, IOException {
-        this.device.tryLock(arg0);
-    }
-
-    @Override
-    public void unlock() throws IOException {
-        this.device.unlock();
-    }
-
-    @Override
-    public ByteBuffer getInputBuffer() throws ClosedDeviceException, IOException {
-        return this.device.getInputBuffer();
-    }
-
-    @Override
-    public ByteBuffer getOutputBuffer() throws ClosedDeviceException, IOException {
-        return this.device.getOutputBuffer();
-    }
-
-    @Override
-    public void begin() throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        this.device.begin();
-    }
-
-    @Override
-    public void end() throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        this.device.end();
-    }
-
-    @Override
-    public Bus getBus() throws IOException {
-        return this.device.getBus();
-    }
-
-    @Override
-    public int read(ByteBuffer arg0) throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.read(arg0);
-    }
-
-    @Override
-    public int read(int arg0, ByteBuffer arg1) throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.read(arg0, arg1);
-    }
-
-    @Override
-    public int read(int arg0, int arg1, ByteBuffer arg2)
-            throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.read(arg0, arg1, arg2);
-    }
-
-    @Override
-    public int read(int arg0, int arg1, int arg2, ByteBuffer arg3)
-            throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.read(arg0, arg1, arg2, arg3);
-    }
-
-    @Override
-    public int write(ByteBuffer arg0) throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.write(arg0);
-    }
-
-    @Override
-    public void write(int arg0) throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        this.device.write(arg0);
-    }
-
-    @Override
-    public int write(int arg0, int arg1, ByteBuffer arg2)
-            throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return this.device.write(arg0, arg1, arg2);
-    }
 }
