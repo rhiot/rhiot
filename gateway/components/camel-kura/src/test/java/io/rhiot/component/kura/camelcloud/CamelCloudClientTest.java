@@ -55,6 +55,19 @@ public class CamelCloudClientTest extends CamelTestSupport {
 
     KuraPayload receivedKuraPayload;
 
+    String receivedDeviceId;
+
+    CloudClientListener listener = new EmptyCloudClientListener() {
+
+        @Override
+        public void onMessageArrived(String s, String s1, KuraPayload kuraPayload, int qos, boolean b) {
+            receivedDeviceId = s;
+            receivedKuraPayload = kuraPayload;
+            qosReceived = qos;
+        }
+
+    };
+
     @Override
     protected void doPostSetup() throws Exception {
         kuraPayload = new KuraPayload();
@@ -172,17 +185,26 @@ public class CamelCloudClientTest extends CamelTestSupport {
     @Test
     public void shouldPassQosToSubscribed() throws KuraException, InterruptedException {
         cloudClient.subscribe("subscribe", qos);
-        cloudClient.addCloudClientListener(new EmptyCloudClientListener() {
-
-            @Override
-            public void onMessageArrived(String s, String s1, KuraPayload kuraPayload, int qos, boolean b) {
-                qosReceived = qos;
-            }
-
-        });
+        cloudClient.addCloudClientListener(listener);
         template.sendBodyAndHeader("seda:applicationId:subscribe", "foo", CAMEL_KURA_CLOUD_QOS, qos);
         Thread.sleep(3000);
         Truth.assertThat(qosReceived).isEqualTo(qos);
+    }
+
+    @Test
+    public void shouldPassDeviceIdToSubscribedClient() throws KuraException, InterruptedException {
+        cloudClient.subscribe("subscribe", qos);
+        cloudClient.addCloudClientListener(new EmptyCloudClientListener() {
+
+            @Override
+            public void onMessageArrived(String deviceId, String s1, KuraPayload kuraPayload, int qos, boolean b) {
+                receivedDeviceId = deviceId;
+            }
+
+        });
+        template.sendBodyAndHeader("seda:applicationId:subscribe", "foo", CAMEL_KURA_CLOUD_DEVICEID, "deviceId");
+        Thread.sleep(3000);
+        Truth.assertThat(receivedDeviceId).isEqualTo("deviceId");
     }
 
     @Test

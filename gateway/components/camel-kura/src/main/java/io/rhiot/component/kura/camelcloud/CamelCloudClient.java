@@ -196,8 +196,9 @@ public class CamelCloudClient implements CloudClient {
                                             payload = new KuraPayload();
                                             payload.setBody(getContext().getTypeConverter().convertTo(byte[].class, body));
                                         }
+                                        String deviceId = exchange.getIn().getHeader(CAMEL_KURA_CLOUD_DEVICEID, String.class);
                                         int qos = exchange.getIn().getHeader(CAMEL_KURA_CLOUD_QOS, 0, int.class);
-                                        listener.onMessageArrived("camel", "camel", payload, qos, true);
+                                        listener.onMessageArrived(deviceId, "camel", payload, qos, true);
                                     }
                                 }
                             });
