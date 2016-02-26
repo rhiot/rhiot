@@ -16,14 +16,6 @@
  */
 package io.rhiot.component.deviceio.i2c.driver;
 
-import static io.rhiot.component.deviceio.i2c.driver.BMP180Constants.BMP085_ADCDATA;
-import static io.rhiot.component.deviceio.i2c.driver.BMP180Constants.BMP085_BUSID;
-import static io.rhiot.component.deviceio.i2c.driver.BMP180Constants.BMP085_CALIBRATION_END;
-import static io.rhiot.component.deviceio.i2c.driver.BMP180Constants.BMP085_CALIBRATION_START;
-import static io.rhiot.component.deviceio.i2c.driver.BMP180Constants.BMP085_CONTROL;
-import static io.rhiot.component.deviceio.i2c.driver.BMP180Constants.BMP085_DEVICEADDR;
-import static io.rhiot.component.deviceio.i2c.driver.BMP180Constants.BMP085_READTEMPCMD;
-
 import io.rhiot.component.deviceio.DeviceIOConstants;
 
 import java.io.IOException;
@@ -34,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import jdk.dio.i2cbus.I2CDevice;
 
-public class BMP180Driver extends I2CDriverAbstract {
+public class BMP180Driver extends I2CDriverAbstract implements BMP180Constants {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(BMP180Driver.class);
 
@@ -71,10 +63,9 @@ public class BMP180Driver extends I2CDriverAbstract {
 
     private void checkId() throws Exception {
         ByteBuffer bb = ByteBuffer.allocate(1);
-        int bytesRead = read(BMP180Constants.BMP085_DEVICE_ID_ADDR,
-                DeviceIOConstants.CAMEL_I2C_DIO_SUBADDRESS_SIZE_BITS, bb);
+        int bytesRead = read(BMP085_DEVICE_ID_ADDR, DeviceIOConstants.CAMEL_I2C_DIO_SUBADDRESS_SIZE_BITS, bb);
         LOG.debug("bytesRead=" + bytesRead);
-        if (bb.get(0) != BMP180Constants.BMP085_DEVICE_ID) {
+        if (bb.get(0) != BMP085_DEVICE_ID) {
             throw new IOException("Could not read device identification");
         }
 
@@ -94,9 +85,12 @@ public class BMP180Driver extends I2CDriverAbstract {
         AC1 = bb.getShort(0);
         AC2 = bb.getShort(2);
         AC3 = bb.getShort(4);
-        AC4 = (bb.getShort(6) < 0) ? (bb.getShort(6) + Short.MAX_VALUE * 2) : bb.getShort(6);
-        AC5 = (bb.getShort(8) < 0) ? (bb.getShort(8) + Short.MAX_VALUE * 2) : bb.getShort(8);
-        AC6 = (bb.getShort(10) < 0) ? (bb.getShort(10) + Short.MAX_VALUE * 2) : bb.getShort(10);
+        AC4 = bb.getShort(6);
+        AC4 = (AC4 < 0) ? (AC4 + Short.MAX_VALUE * 2) : AC4;
+        AC5 = bb.getShort(8);
+        AC5 = (AC5 < 0) ? (AC5 + Short.MAX_VALUE * 2) : AC5;
+        AC6 = bb.getShort(10);
+        AC6 = (AC6 < 0) ? (AC6 + Short.MAX_VALUE * 2) : AC6;
         B1 = bb.getShort(12);
         B2 = bb.getShort(14);
         MB = bb.getShort(16);
@@ -188,8 +182,6 @@ public class BMP180Driver extends I2CDriverAbstract {
         }
         sleep(mode.getWaitTime());
         return readU24BigEndian(BMP085_ADCDATA) >> (8 - mode.getOverSamplingSetting());
-        // return readU16BigEndian(BMP085_ADCDATA);
-
     }
 
     private int readRawTemperature() throws IOException {

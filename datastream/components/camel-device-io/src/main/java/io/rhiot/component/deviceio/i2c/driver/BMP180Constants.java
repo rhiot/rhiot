@@ -16,7 +16,7 @@
  */
 package io.rhiot.component.deviceio.i2c.driver;
 
-public class BMP180Constants {
+public interface BMP180Constants {
 
     // Device data
     public static final short BMP085_BUSID = 1;
