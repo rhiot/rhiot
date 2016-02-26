@@ -103,7 +103,11 @@ public class BMP180Driver extends I2CDriverAbstract implements BMP180Constants {
 
     @Override
     public void stop() {
-
+        try {
+            device.close();
+        } catch (IOException e) {
+            LOG.error("Cannot close device");
+        }
     }
 
     public int readPressure() throws IOException {
