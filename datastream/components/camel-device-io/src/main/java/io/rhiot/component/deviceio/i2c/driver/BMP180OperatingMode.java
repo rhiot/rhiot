@@ -52,23 +52,14 @@ public enum BMP180OperatingMode {
 
     }
 
-    /**
-     * @return the over sampling setting.
-     */
     public int getOverSamplingSetting() {
         return this.overSamplingSetting;
     }
 
-    /**
-     * @return time to wait for a result, in ms.
-     */
     public int getWaitTime() {
         return waitTime;
     }
 
-    /**
-     * @return the average typical current at 1 sample per second, in µA.
-     */
     public int getCurrentDraw() {
         return currentDraw;
     }
