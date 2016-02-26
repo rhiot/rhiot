@@ -183,7 +183,8 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         if (bytesRead != 2) {
             throw new IOException("Could not read 2 bytes data");
         }
-        LOG.debug(String.format("0x%02X%02X  \n", bb.array()[0], bb.array()[1]));
+        bb.rewind();
+        LOG.debug(String.format("0x%02X%02X", bb.array()[0], bb.array()[1]));
         return returnShort(bb.array()[1], bb.array()[0]);
     }
 
@@ -193,6 +194,7 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         if (bytesRead != 2) {
             throw new IOException("Could not read 2 bytes data");
         }
+        bb.rewind();
         LOG.debug(String.format("0x%02X%02X  \n", bb.array()[1], bb.array()[0]));
         return returnShort(bb.array()[0], bb.array()[1]);
     }
@@ -207,8 +209,8 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         if (bytesRead != 3) {
             throw new IOException("Could not read 3 bytes data");
         }
+        bb.rewind();
         LOG.debug(String.format("0x%02X %02X %02X  \n", bb.array()[2], bb.array()[1], bb.array()[0]));
-
         return returnInt(bb.array()[2], bb.array()[1], bb.array()[0]);
     }
 
@@ -218,6 +220,7 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         if (bytesRead != 3) {
             throw new IOException("Could not read 3 bytes data");
         }
+        bb.rewind();
         return returnInt(bb.array()[0], bb.array()[1], bb.array()[2]);
     }
 
