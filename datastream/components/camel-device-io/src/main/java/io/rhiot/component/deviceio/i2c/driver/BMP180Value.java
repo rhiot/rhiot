@@ -21,25 +21,26 @@ package io.rhiot.component.deviceio.i2c.driver;
  */
 public class BMP180Value {
 
-    private int pressure;
-    private double temperature;
+    private String pressure;
+    private String temperature;
 
-    public int getPressure() {
+    public String getPressure() {
         return pressure;
     }
 
-    public void setPressure(int pressure) {
+    public void setPressure(String pressure) {
         this.pressure = pressure;
     }
 
-    public double getTemperature() {
+    public String getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(double temperature) {
+    public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
 
+    @Override
     public String toString() {
         return "[temperature:" + temperature + ",pressure:" + pressure + "]";
     }
