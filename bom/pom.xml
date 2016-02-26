@@ -41,7 +41,7 @@
 		<infinispan.version>8.0.0.Beta2</infinispan.version>
 		<ivy.version>2.4.0</ivy.version>
 		<jcabi-aether.version>0.10.1</jcabi-aether.version>
-		<jdk-dio.version>1.0.2</jdk-dio.version>
+		<jdk-dio.version>1.0.3</jdk-dio.version>
 		<jfreechart.version>1.0.19</jfreechart.version>
 		<jolokia.version>1.3.3</jolokia.version>
 		<jsch.version>0.1.53</jsch.version>
