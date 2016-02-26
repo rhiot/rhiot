@@ -17,11 +17,14 @@
 package io.rhiot.component.kura.cloud;
 
 import org.eclipse.kura.cloud.CloudClient;
+import org.eclipse.kura.cloud.CloudService;
 
 public interface CloudClientCache {
 
     void put(String appId, CloudClient cloudClient);
 
     CloudClient get(String appId);
+
+    CloudClient getOrCreate(String appId, CloudService cloudService);
 
 }
