@@ -169,7 +169,7 @@ public class BMP180Driver extends I2CDriverAbstract {
     @Override
     public Object get() throws Exception {
         BMP180Value ret = new BMP180Value();
-        ret.setPressure(String.format("%d hPa", readPressure()));
+        ret.setPressure(String.format("%.2f hPa", (double) readPressure() / 100));
         ret.setTemperature(String.format("%+.2f ºC", readTemperature()));
         return ret;
     }
@@ -208,6 +208,7 @@ public class BMP180Driver extends I2CDriverAbstract {
         int X1 = ((UT - AC6) * AC5) >> 15;
         int X2 = (MC << 11) / (X1 + MD);
         int B5 = X1 + X2;
+        LOG.debug("UT = " + UT);
         LOG.debug("X1 = " + X1);
         LOG.debug("X2 = " + X2);
         LOG.debug("B5 = " + B5);
