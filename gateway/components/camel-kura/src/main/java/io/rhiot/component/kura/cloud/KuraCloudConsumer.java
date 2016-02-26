@@ -64,6 +64,7 @@ public class KuraCloudConsumer extends DefaultConsumer implements CloudClientLis
                 .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_QOS, qos)
                 .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL, control)
                 .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_RETAIN, retain).build();
+        exchange.setFromEndpoint(getEndpoint());
         try {
             getProcessor().process(exchange);
         } catch (Exception e) {
