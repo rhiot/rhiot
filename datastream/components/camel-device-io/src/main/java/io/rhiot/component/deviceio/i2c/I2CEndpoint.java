@@ -74,9 +74,7 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     public I2CEndpoint(String uri, I2CComponent i2cComponent, String remaining, Map<String, Object> parameters) {
         super(uri, i2cComponent);
-
         this.parameters = parameters;
-
     }
 
     @Override
