@@ -35,13 +35,21 @@ public class I2CComponent extends UriEndpointComponent {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(I2CComponent.class);
 
+    public I2CComponent() {
+        super(I2CEndpoint.class);
+    }
+
+    public I2CComponent(CamelContext context) {
+        super(context, I2CEndpoint.class);
+    }
+
     public I2CComponent(CamelContext context, Class<? extends Endpoint> endpointClass) {
         super(context, endpointClass);
     }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        Endpoint endpoint = null;
+        Endpoint endpoint = new I2CEndpoint(uri, this, remaining, parameters);
         Pattern regexPattern = Pattern.compile(DeviceIOConstants.CAMEL_I2C_URL_PATTERN);
 
         Matcher match = regexPattern.matcher(remaining);

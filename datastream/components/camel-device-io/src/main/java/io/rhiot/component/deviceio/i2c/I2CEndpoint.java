@@ -17,6 +17,7 @@
 package io.rhiot.component.deviceio.i2c;
 
 import io.rhiot.component.deviceio.DeviceIOConstants;
+import io.rhiot.component.deviceio.i2c.driver.I2CDriver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -95,8 +96,6 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        Consumer ret = null;
-
         initDriver(I2CConsumer.class);
 
         device = DeviceManager.open(new I2CDeviceConfig(busId, deviceId,
@@ -104,10 +103,10 @@ public class I2CEndpoint extends DefaultEndpoint {
 
         Constructor constructor = driverClass.getConstructor(I2CDevice.class);
 
-        ret = (Consumer) constructor.newInstance(this, processor, device);
+        I2CDriver driver = (I2CDriver) constructor.newInstance(device);
 
         // Inject last parameter to i2c derived consumer
-        EndpointHelper.setProperties(this.getCamelContext(), ret, parameters);
+        EndpointHelper.setProperties(this.getCamelContext(), driver, parameters);
 
         if (!parameters.isEmpty()) {
             for (String param : parameters.keySet()) {
@@ -117,24 +116,23 @@ public class I2CEndpoint extends DefaultEndpoint {
             }
         }
 
-        return ret;
+        return new I2CConsumer(this, processor, driver);
     }
 
     @Override
     public Producer createProducer() throws Exception {
-        Producer ret = null;
 
-        initDriver(I2CProducer.class);
+        initDriver(I2CDriver.class);
 
         device = DeviceManager.open(new I2CDeviceConfig(busId, deviceId,
                 DeviceIOConstants.CAMEL_I2C_DIO_ADDRESS_SIZE_BITS, DeviceIOConstants.CAMEL_I2C_DIO_SERIAL_CLOCK));
 
         Constructor constructor = driverClass.getConstructor(I2CDevice.class);
 
-        ret = (Producer) constructor.newInstance(this, device);
+        I2CDriver driver = (I2CDriver) constructor.newInstance(device);
 
         // Inject last parameter to i2c derived producer
-        EndpointHelper.setProperties(this.getCamelContext(), ret, parameters);
+        EndpointHelper.setProperties(this.getCamelContext(), driver, parameters);
 
         if (!parameters.isEmpty()) {
             for (String param : parameters.keySet()) {
@@ -143,7 +141,7 @@ public class I2CEndpoint extends DefaultEndpoint {
                                 + " Unknown Producer parameters=[" + param + "]");
             }
         }
-        return ret;
+        return new I2CProducer(this, driver);
     }
 
     public int getAddress() {
@@ -202,6 +200,7 @@ public class I2CEndpoint extends DefaultEndpoint {
                 while ((line = br.readLine()) != null) {
                     if (!line.contains("#")) {
                         sb.append(line);
+                        break;
                     }
                 }
             } finally {

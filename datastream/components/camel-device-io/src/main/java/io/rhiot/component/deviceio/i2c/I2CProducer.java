@@ -24,7 +24,7 @@ import org.apache.camel.impl.DefaultProducer;
 /**
  * The I2C producer.
  */
-public abstract class I2CProducer extends DefaultProducer {
+public class I2CProducer extends DefaultProducer {
 
     protected I2CDriver driver;
 

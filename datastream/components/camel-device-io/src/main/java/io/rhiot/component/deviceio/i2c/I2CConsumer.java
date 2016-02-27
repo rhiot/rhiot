@@ -25,7 +25,7 @@ import org.apache.camel.impl.ScheduledPollConsumer;
 /**
  * The I2C consumer.
  */
-public abstract class I2CConsumer extends ScheduledPollConsumer {
+public class I2CConsumer extends ScheduledPollConsumer {
     private final I2CDriver driver;
 
     public I2CConsumer(I2CEndpoint endpoint, Processor processor, I2CDriver driver) {
