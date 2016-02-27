@@ -21,22 +21,9 @@ package io.rhiot.component.deviceio.i2c.driver;
  * http://hirt.se/blog/?p=652
  */
 public enum BMP180OperatingMode {
-    /**
-     * Max conversion time (pressure): 4.5ms Current draw: 3µA
-     */
-    ULTRA_LOW_POWER(45, (byte) 0x34, 3,
-            0), /**
-                 * Max conversion time (pressure): 7.5ms Current draw: 5µA
-                 */
-    STANDARD(75, (byte) 0x74, 5,
-            1), /**
-                 * Max conversion time (pressure): 13.5ms Current draw: 7µA
-                 */
-    HIGH_RES(135, (byte) 0xB4, 7,
-            2), /**
-                 * Max conversion time (pressure): 25.5ms Current draw: 12µA
-                 */
-    ULTRA_HIGH_RES(255, (byte) 0xF4, 12, 3);
+
+    ULTRA_LOW_POWER(45, (byte) 0x34, 3, 0), STANDARD(75, (byte) 0x74, 5, 1), HIGH_RES(135, (byte) 0xB4, 7,
+            2), ULTRA_HIGH_RES(255, (byte) 0xF4, 12, 3);
 
     final int waitTime;
     final int currentDraw;
