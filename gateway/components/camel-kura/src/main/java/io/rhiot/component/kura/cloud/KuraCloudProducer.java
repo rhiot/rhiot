@@ -82,7 +82,7 @@ public class KuraCloudProducer extends DefaultProducer {
                 if (deviceId != null) {
                     if (body instanceof KuraPayload) {
                         cloudClient.controlPublish(deviceId, topic, (KuraPayload) body, qos, retain, priority);
-                    } else if (body instanceof byte[]) {
+                    } else if (body instanceof byte[] || in.getBody(byte[].class) != null) {
                         cloudClient.controlPublish(deviceId, topic, (byte[]) body, qos, retain, priority);
                     } else {
                         cloudClient.controlPublish(deviceId, topic, in.getBody(String.class).getBytes(), qos, retain,
@@ -94,7 +94,7 @@ public class KuraCloudProducer extends DefaultProducer {
             } else {
                 if (body instanceof KuraPayload) {
                     cloudClient.publish(topic, (KuraPayload) body, qos, retain, priority);
-                } else if (body instanceof byte[]) {
+                } else if (body instanceof byte[] || in.getBody(byte[].class) != null) {
                     cloudClient.publish(topic, (byte[]) body, qos, retain, priority);
                 } else {
                     cloudClient.publish(topic, in.getBody(String.class).getBytes(), qos, retain, priority);
