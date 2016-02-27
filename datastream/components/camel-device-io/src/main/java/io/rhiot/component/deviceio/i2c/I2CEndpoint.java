@@ -45,7 +45,7 @@ import jdk.dio.i2cbus.I2CDeviceConfig;
 /**
  * Represents a I2C endpoint.
  */
-@UriEndpoint(scheme = "deviceio", syntax = "deviceio-i2c://busId/deviceId", consumerClass = I2CConsumer.class, label = "iot", title = "i2c")
+@UriEndpoint(scheme = "deviceio", syntax = "deviceio-i2c://busId/deviceId", consumerClass = I2CConsumer.class, label = "iot,dio,i2c", title = "deviceio-i2c")
 public class I2CEndpoint extends DefaultEndpoint {
 
     private static final Logger LOG = LoggerFactory.getLogger(I2CEndpoint.class);
