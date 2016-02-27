@@ -65,7 +65,8 @@ public class BMP180Driver extends I2CDriverAbstract implements BMP180Constants {
         this.mode = mode;
     }
 
-    private void checkId() throws Exception {
+    @Override
+    public void checkDevice() throws Exception {
         ByteBuffer bb = ByteBuffer.allocate(1);
         int bytesRead = read(BMP085_DEVICE_ID_ADDR, DeviceIOConstants.CAMEL_I2C_DIO_SUBADDRESS_SIZE_BITS, bb);
         LOG.debug("bytesRead=" + bytesRead);
@@ -77,7 +78,7 @@ public class BMP180Driver extends I2CDriverAbstract implements BMP180Constants {
 
     @Override
     public void start() throws Exception {
-        checkId();
+        checkDevice();
         int totalBytes = BMP085_CALIBRATION_END - BMP085_CALIBRATION_START + 1;
         ByteBuffer bb = ByteBuffer.allocate(totalBytes);
         int bytesRead = read(BMP085_CALIBRATION_START, 1, bb);
