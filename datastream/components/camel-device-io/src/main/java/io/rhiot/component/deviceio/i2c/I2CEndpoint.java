@@ -102,7 +102,7 @@ public class I2CEndpoint extends DefaultEndpoint {
         device = DeviceManager.open(new I2CDeviceConfig(busId, deviceId,
                 DeviceIOConstants.CAMEL_I2C_DIO_ADDRESS_SIZE_BITS, DeviceIOConstants.CAMEL_I2C_DIO_SERIAL_CLOCK));
 
-        Constructor constructor = driverClass.getConstructor(I2CEndpoint.class, Processor.class, I2CDevice.class);
+        Constructor constructor = driverClass.getConstructor(I2CDevice.class);
 
         ret = (Consumer) constructor.newInstance(this, processor, device);
 
@@ -129,7 +129,7 @@ public class I2CEndpoint extends DefaultEndpoint {
         device = DeviceManager.open(new I2CDeviceConfig(busId, deviceId,
                 DeviceIOConstants.CAMEL_I2C_DIO_ADDRESS_SIZE_BITS, DeviceIOConstants.CAMEL_I2C_DIO_SERIAL_CLOCK));
 
-        Constructor constructor = driverClass.getConstructor(I2CEndpoint.class, I2CDevice.class);
+        Constructor constructor = driverClass.getConstructor(I2CDevice.class);
 
         ret = (Producer) constructor.newInstance(this, device);
 

@@ -49,6 +49,10 @@ public class BMP180Driver extends I2CDriverAbstract implements BMP180Constants {
         super(BMP085_BUSID, BMP085_DEVICEADDR);
     }
 
+    public BMP180Driver(int busId, int deviceaddr) {
+        super(busId, deviceaddr);
+    }
+
     public BMP180Driver(I2CDevice device) {
         super(device);
     }
