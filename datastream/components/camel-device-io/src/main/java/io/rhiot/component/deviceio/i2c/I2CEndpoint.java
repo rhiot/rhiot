@@ -61,18 +61,6 @@ public class I2CEndpoint extends DefaultEndpoint {
     private int deviceId;
 
     @UriParam(defaultValue = "")
-    private I2CReadAction readAction;
-
-    @UriParam(defaultValue = "-1")
-    private int size = -1;
-
-    @UriParam(defaultValue = "-1")
-    private int offset = -1;
-
-    @UriParam(defaultValue = "-1")
-    private int bufferSize = -1;
-
-    @UriParam(defaultValue = "")
     private String driver;
 
     // DO NOT EXPORT IT OUTSIDE, NO GETTER, NO SETTER
@@ -141,10 +129,6 @@ public class I2CEndpoint extends DefaultEndpoint {
         return new I2CProducer(this, driver);
     }
 
-    public int getBufferSize() {
-        return bufferSize;
-    }
-
     public int getBusId() {
         return busId;
     }
@@ -163,18 +147,6 @@ public class I2CEndpoint extends DefaultEndpoint {
 
     public String getName() {
         return name;
-    }
-
-    public int getOffset() {
-        return offset;
-    }
-
-    public I2CReadAction getReadAction() {
-        return readAction;
-    }
-
-    public int getSize() {
-        return size;
     }
 
     private void initDriver(Class defaultClass) throws ClassNotFoundException, IOException {
@@ -220,10 +192,6 @@ public class I2CEndpoint extends DefaultEndpoint {
         return true;
     }
 
-    public void setBufferSize(int bufferSize) {
-        this.bufferSize = bufferSize;
-    }
-
     public void setBusId(int busId) {
         this.busId = busId;
     }
@@ -244,15 +212,4 @@ public class I2CEndpoint extends DefaultEndpoint {
         this.name = name;
     }
 
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
-    public void setReadAction(I2CReadAction readAction) {
-        this.readAction = readAction;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
 }
