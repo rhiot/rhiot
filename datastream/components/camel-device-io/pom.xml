@@ -26,11 +26,17 @@
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
+		
+		<!-- This module should use SLF4J version provided with Kura server. -->
+		<slf4j.version>1.6.6</slf4j.version>
+		
 		<camel.osgi.export.pkg>
-			io.rhiot.component.deviceio.gpio.*
+			io.rhiot.component.deviceio.gpio.*,
+			io.rhiot.component.deviceio.i2c.*
 		</camel.osgi.export.pkg>
 		<camel.osgi.export.service>
-			org.apache.camel.spi.ComponentResolver;component=deviceio-gpio
+			org.apache.camel.spi.ComponentResolver;component=deviceio-gpio,
+			org.apache.camel.spi.ComponentResolver;component=deviceio-i2c
 		</camel.osgi.export.service>
 	</properties>
 
