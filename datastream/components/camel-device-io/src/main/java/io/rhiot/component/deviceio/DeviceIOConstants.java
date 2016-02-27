@@ -16,6 +16,8 @@
  */
 package io.rhiot.component.deviceio;
 
+import jdk.dio.i2cbus.I2CDeviceConfig;
+
 /**
  * Constants Class
  */
@@ -47,7 +49,7 @@ public final class DeviceIOConstants {
     public static final boolean CAMEL_I2C_DIO_LENIENT = true;
 
     public static final int CAMEL_I2C_DIO_SERIAL_CLOCK = 3400000; // 3.4MHz
-    public static final int CAMEL_I2C_DIO_ADDRESS_SIZE_BITS = 7;
+    public static final int CAMEL_I2C_DIO_ADDRESS_SIZE_BITS = I2CDeviceConfig.ADDR_SIZE_7;
     public static final int CAMEL_I2C_DIO_SUBADDRESS_SIZE_BITS = 1;
     public static final int CAMEL_I2C_DIO_BYTE_SHIFT = 8;
     public static final int CAMEL_I2C_DIO_WORD_SHIFT = 16;
