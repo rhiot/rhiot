@@ -60,9 +60,6 @@ public class I2CEndpoint extends DefaultEndpoint {
     @UriParam(defaultValue = "")
     private int deviceId;
 
-    @UriParam(defaultValue = "0x00")
-    private int address = 0x00;
-
     @UriParam(defaultValue = "")
     private I2CReadAction readAction;
 
@@ -144,10 +141,6 @@ public class I2CEndpoint extends DefaultEndpoint {
         return new I2CProducer(this, driver);
     }
 
-    public int getAddress() {
-        return address;
-    }
-
     public int getBufferSize() {
         return bufferSize;
     }
@@ -225,10 +218,6 @@ public class I2CEndpoint extends DefaultEndpoint {
     @Override
     public boolean isSingleton() {
         return true;
-    }
-
-    public void setAddress(int address) {
-        this.address = address;
     }
 
     public void setBufferSize(int bufferSize) {
