@@ -51,6 +51,10 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         this.device = device;
     }
 
+    public void checkDevice() throws Exception {
+
+    }
+
     @Override
     public void init() throws Exception {
     }
