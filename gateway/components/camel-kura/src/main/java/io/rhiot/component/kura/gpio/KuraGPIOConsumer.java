@@ -55,7 +55,10 @@ public class KuraGPIOConsumer extends DefaultConsumer implements PinStatusListen
     @Override
     protected void doStop() throws Exception {
         super.doStop();
-        pin.removePinStatusListener(this);
+        if (pin.isOpen()) {
+            pin.removePinStatusListener(this);
+            pin.close();
+        }
         log.trace("Stop Listening GPIO name '{}' id '{}'", getPin().getName(), getPin().getIndex());
     }
 
@@ -82,5 +85,4 @@ public class KuraGPIOConsumer extends DefaultConsumer implements PinStatusListen
             }
         }
     }
-
 }
