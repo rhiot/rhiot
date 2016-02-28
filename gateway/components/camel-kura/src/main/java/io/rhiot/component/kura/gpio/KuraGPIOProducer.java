@@ -82,56 +82,59 @@ public class KuraGPIOProducer extends DefaultProducer {
             log.trace(exchange.toString());
         }
 
-        KuraGPIOAction messageAction = exchange.getIn().getHeader(KuraGPIOConstants.CAMEL_KURA_GPIO_ACTION, getAction(),
-                KuraGPIOAction.class);
+        if (pin.isOpen()) {
 
-        if (messageAction == null) {
-            log.trace("No action pick up body");
-            output(exchange);
-        } else {
-            log.trace("action= {} ", action);
-            switch (messageAction) {
+            KuraGPIOAction messageAction = exchange.getIn().getHeader(KuraGPIOConstants.CAMEL_KURA_GPIO_ACTION,
+                    getAction(), KuraGPIOAction.class);
 
-            case TOGGLE:
-                pin.setValue(!pin.getValue());
-                break;
+            if (messageAction == null) {
+                log.trace("No action pick up body");
+                output(exchange);
+            } else {
+                log.trace("action= {} ", action);
+                switch (messageAction) {
 
-            case LOW:
-                pin.setValue(false);
-                break;
+                case TOGGLE:
+                    pin.setValue(!pin.getValue());
+                    break;
 
-            case HIGH:
-                pin.setValue(true);
-                break;
+                case LOW:
+                    pin.setValue(false);
+                    break;
 
-            case BLINK:
+                case HIGH:
+                    pin.setValue(true);
+                    break;
 
-                pool.submit(new Runnable() {
+                case BLINK:
 
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(getEndpoint().getDelay());
-                            pin.setValue(!pin.getValue());
-                            Thread.sleep(getEndpoint().getDuration());
-                            pin.setValue(!pin.getValue());
-                        } catch (Exception e) {
-                            log.error("Thread interruption into BLINK sequence", e);
+                    pool.submit(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(getEndpoint().getDelay());
+                                pin.setValue(!pin.getValue());
+                                Thread.sleep(getEndpoint().getDuration());
+                                pin.setValue(!pin.getValue());
+                            } catch (Exception e) {
+                                log.error("Thread interruption into BLINK sequence", e);
+                            }
                         }
-                    }
-                });
+                    });
 
-                break;
+                    break;
 
-            default:
-                log.error("Any action set found");
-                break;
+                default:
+                    log.error("Any action set found");
+                    break;
+                }
             }
         }
     }
 
     @Override
-    protected void doShutdown() throws Exception {
+    protected void doStop() throws Exception {
         // 2 x (delay + timeout) + 5s
         long timeToWait = (getEndpoint().getDelay() + getEndpoint().getDuration()) * 2 + 5000;
         log.debug("Wait for {} ms", timeToWait);
@@ -144,7 +147,9 @@ public class KuraGPIOProducer extends DefaultProducer {
     @Override
     protected void doStart() throws Exception {
         super.doStart();
-        pin.open();
+        if (!pin.isOpen()) {
+            pin.open();
+        }
         pin.setValue(getEndpoint().isState());
     }
 
