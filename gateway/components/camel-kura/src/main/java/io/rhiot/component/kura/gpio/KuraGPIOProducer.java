@@ -130,6 +130,8 @@ public class KuraGPIOProducer extends DefaultProducer {
                     break;
                 }
             }
+        } else {
+            log.warn("Pin {} is close", pin.getIndex());
         }
     }
 
