@@ -112,7 +112,7 @@ public class URIRegexTest {
     @Test
     public void optionSplitI2C4Test() {
         Pattern p = Pattern.compile(DeviceIOConstants.CAMEL_I2C_URL_PATTERN);
-        String url = "deviceio-i2c://1/0x77?driver=bmp180";
+        String url = "1/0x77";
         Matcher m = p.matcher(url);
         Assert.assertTrue(m.matches());
         Assert.assertEquals("1", m.group(DeviceIOConstants.CAMEL_I2C_BUS_ID));

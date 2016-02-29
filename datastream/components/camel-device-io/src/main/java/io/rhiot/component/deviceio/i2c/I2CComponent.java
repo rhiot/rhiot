@@ -53,7 +53,7 @@ public class I2CComponent extends UriEndpointComponent {
         Endpoint endpoint = null;
         Pattern regexPattern = Pattern.compile(DeviceIOConstants.CAMEL_I2C_URL_PATTERN);
 
-        Matcher match = regexPattern.matcher(uri);
+        Matcher match = regexPattern.matcher(remaining);
         if (match.matches()) {
             endpoint = new I2CEndpoint(uri, this, remaining, parameters);
 
