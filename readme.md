@@ -13,7 +13,7 @@ the common IoT-related challenges.
 
 [![Version](https://img.shields.io/badge/rhiot-0.1.4-blue.svg)]()
 
-The latest and the greatest version of the Rhiot is `0.1.4`. Wondering what's new there? Here are the [release notes](https://rhiot.gitbooks.io/rhiotdocumentation/content/releases_notes.html).
+The latest and the greatest version of the Rhiot is `0.1.4`. Wondering what's new there? Here are the [release notes](https://rhiot.gitbooks.io/rhiotdocumentation/content/releases_notes/releases_notes.html).
 
 ## Community
 
