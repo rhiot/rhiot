@@ -49,11 +49,13 @@ public class I2CComponent extends UriEndpointComponent {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        Endpoint endpoint = new I2CEndpoint(uri, this, remaining, parameters);
+
+        Endpoint endpoint = null;
         Pattern regexPattern = Pattern.compile(DeviceIOConstants.CAMEL_I2C_URL_PATTERN);
 
-        Matcher match = regexPattern.matcher(remaining);
+        Matcher match = regexPattern.matcher(uri);
         if (match.matches()) {
+            endpoint = new I2CEndpoint(uri, this, remaining, parameters);
 
             int busId = Integer.decode(match.group(DeviceIOConstants.CAMEL_I2C_BUS_ID));
             int deviceId = Integer.decode(match.group(DeviceIOConstants.CAMEL_I2C_DEVICE_ID));
