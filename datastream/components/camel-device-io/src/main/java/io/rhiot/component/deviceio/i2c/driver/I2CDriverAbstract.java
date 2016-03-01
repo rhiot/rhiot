@@ -43,7 +43,8 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
                     DeviceIOConstants.CAMEL_I2C_DIO_ADDRESS_SIZE_BITS, DeviceIOConstants.CAMEL_I2C_DIO_SERIAL_CLOCK));
 
         } catch (Exception e) {
-            LOG.error("Cannot load device " + deviceAddr + " via bus" + busId);
+            LOG.error("Cannot load device " + deviceAddr + " via bus" + busId, e);
+
         }
     }
 
@@ -51,6 +52,7 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         this.device = device;
     }
 
+    @Override
     public void checkDevice() throws Exception {
 
     }
@@ -137,16 +139,26 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
         return device.read(dst);
     }
 
+    public final int read(int subaddress) throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        ByteBuffer dst = ByteBuffer.allocate(1);
+
+        read(subaddress, DeviceIOConstants.CAMEL_I2C_DIO_SUBADDRESS_SIZE_BITS, dst);
+
+        return dst.array()[0];
+    }
+
     @Override
-    public final int read(int skip, ByteBuffer dst)
+    public final int read(int subaddress, ByteBuffer dst)
             throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return device.read(skip, dst);
+        return read(subaddress, DeviceIOConstants.CAMEL_I2C_DIO_SUBADDRESS_SIZE_BITS, dst);
     }
 
     @Override
     public final int read(int subaddress, int subaddressSize, ByteBuffer dst)
             throws IOException, UnavailableDeviceException, ClosedDeviceException {
-        return device.read(subaddress, subaddressSize, dst);
+        int ret = device.read(subaddress, subaddressSize, dst);
+        dst.rewind();
+        return ret;
     }
 
     @Override
@@ -174,6 +186,13 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
     public final int write(int arg0, int arg1, ByteBuffer arg2)
             throws IOException, UnavailableDeviceException, ClosedDeviceException {
         return device.write(arg0, arg1, arg2);
+    }
+
+    public final int write(int subaddress, byte byteToWrite)
+            throws IOException, UnavailableDeviceException, ClosedDeviceException {
+        ByteBuffer dst = ByteBuffer.allocate(1);
+        dst.put(0, byteToWrite);
+        return device.write(subaddress, DeviceIOConstants.CAMEL_I2C_DIO_SUBADDRESS_SIZE_BITS, dst);
     }
 
     @Override

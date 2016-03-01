@@ -34,4 +34,6 @@ public interface I2CDriver {
 
     public Class getType() throws Exception;
 
+    void checkDevice() throws Exception;
+
 }
