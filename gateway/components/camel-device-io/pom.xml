@@ -13,7 +13,7 @@
 
 	<parent>
 		<groupId>io.rhiot</groupId>
-		<artifactId>rhiot-datastream-components</artifactId>
+		<artifactId>rhiot-gateway-components</artifactId>
 		<version>0.1.5-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
