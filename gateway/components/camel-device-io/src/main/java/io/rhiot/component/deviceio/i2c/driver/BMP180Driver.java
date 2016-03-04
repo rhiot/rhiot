@@ -119,7 +119,6 @@ public class BMP180Driver extends I2CDriverAbstract implements BMP180Constants {
         long p = 0;
         int UT = readRawTemperature();
         int UP = readRawPressure();
-        UP = 85867;
 
         int X1 = ((UT - AC6) * AC5) >> 15;
         int X2 = (MC << 11) / (X1 + MD);
