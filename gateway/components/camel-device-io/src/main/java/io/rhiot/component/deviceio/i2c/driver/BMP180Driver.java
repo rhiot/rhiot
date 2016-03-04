@@ -81,7 +81,7 @@ public class BMP180Driver extends I2CDriverAbstract implements BMP180Constants {
         checkDevice();
         int totalBytes = BMP085_CALIBRATION_END - BMP085_CALIBRATION_START + 1;
         ByteBuffer bb = ByteBuffer.allocate(totalBytes);
-        int bytesRead = read(BMP085_CALIBRATION_START, 1, bb);
+        int bytesRead = read(BMP085_CALIBRATION_START, bb);
         LOG.debug("bytesRead=" + bytesRead);
         if (bytesRead != totalBytes) {
             throw new IOException("Could not read calibration data");
@@ -102,7 +102,7 @@ public class BMP180Driver extends I2CDriverAbstract implements BMP180Constants {
         MC = bb.getShort(18);
         MD = bb.getShort(20);
 
-        LOG.info(String.format("AC1:%d, AC2:%d, AC3:%d, AC4:%d, AC5:%d, AC6:%d, B1:%d, B2:%d,  MB:%d, MC:%d, MD:%d",
+        LOG.debug(String.format("AC1:%d, AC2:%d, AC3:%d, AC4:%d, AC5:%d, AC6:%d, B1:%d, B2:%d,  MB:%d, MC:%d, MD:%d",
                 AC1, AC2, AC3, AC4, AC5, AC6, B1, B2, MB, MC, MD));
     }
 
