@@ -55,4 +55,10 @@ public class I2CProducer extends DefaultProducer {
         driver.stop();
     }
 
+    @Override
+    protected void doShutdown() throws Exception {
+        super.doShutdown();
+        driver.shutdown();
+    }
+
 }

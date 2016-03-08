@@ -71,6 +71,7 @@ public abstract class I2CDriverAbstract implements I2CDriver, I2CDevice {
 
     @Override
     public void shutdown() throws Exception {
+        this.close();
     }
 
     @Override
