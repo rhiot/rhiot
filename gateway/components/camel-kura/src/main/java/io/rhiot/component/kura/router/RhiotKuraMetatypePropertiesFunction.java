@@ -16,13 +16,19 @@
  */
 package io.rhiot.component.kura.router;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.Dictionary;
 import java.util.Map;
 
 import org.apache.camel.component.properties.PropertiesFunction;
 import org.osgi.service.cm.Configuration;
+import org.slf4j.Logger;
 
 public class RhiotKuraMetatypePropertiesFunction implements PropertiesFunction {
+
+    private static final Logger log = getLogger(RhiotKuraMetatypePropertiesFunction.class);
+
     Map<String, Object> m_properties;
     Dictionary<String, Object> m_dictonnary;
 
@@ -41,11 +47,21 @@ public class RhiotKuraMetatypePropertiesFunction implements PropertiesFunction {
 
     @Override
     public String apply(String remainder) {
+        String value[] = remainder.split(":");
+
         if (m_properties != null) {
-            return (m_properties.get(remainder) != null) ? m_properties.get(remainder).toString() : null;
+            return (m_properties.get(value[0]) != null) ? m_properties.get(value[0]).toString() : null;
         } else if (m_dictonnary != null) {
-            return (m_dictonnary.get(remainder) != null) ? m_dictonnary.get(remainder).toString() : null;
+            return (m_dictonnary.get(value[0]) != null) ? m_dictonnary.get(value[0]).toString() : null;
         }
-        return null;
+
+        if (value.length == 2) {
+            log.debug("Kura Metatype OSGi param _ {} _ default value _ {} _", value[0], value[1]);
+            return value[1];
+        }
+
+        log.error("Cannot retrieve correct value into Kura OSGi Metatype value for _ {} _", value[0]);
+
+        return "";
     }
 }
