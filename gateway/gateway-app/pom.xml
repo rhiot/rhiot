@@ -20,7 +20,7 @@
     </licenses>
 
     <properties>
-        <fatjar.mainClass>io.rhiot.gateway.Gateway</fatjar.mainClass>
+        <fatjar.mainClass>io.rhiot.cloudplatform.runtime.spring.CloudPlatform</fatjar.mainClass>
     </properties>
 
     <dependencies>
@@ -31,10 +31,6 @@
         <dependency>
             <groupId>io.rhiot</groupId>
             <artifactId>rhiot-gateway</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-vertx</artifactId>
         </dependency>
 
         <!-- Testing -->
