@@ -23,6 +23,7 @@
     <modules>
         <module>adapters</module>
         <module>services</module>
+        <module>gateway</module>
     </modules>
 
 </project>

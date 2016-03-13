@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>io.rhiot</groupId>
+		<artifactId>rhiot-cloudplatform-paas</artifactId>
+		<version>0.1.5-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<name>Rhiot :: Cloud platform :: PaaS :: Gateway</name>
+	<artifactId>rhiot-cloudplatform-paas-gateway</artifactId>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<properties>
+		<docker.image.target>paas-gateway</docker.image.target>
+		<fatjar.mainClass>io.rhiot.cloudplatform.runtime.spring.CloudPlatform</fatjar.mainClass>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-cloudplatform-encoding-json</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-cloudplatform-runtime-spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-cloudplatform-service-camera</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-datastream-document</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-spring-activemq</artifactId>
+		</dependency>
+
+		<!-- Testing -->
+		<dependency>
+			<groupId>com.google.truth</groupId>
+			<artifactId>truth</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.jolokia</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>empty-javadoc-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<forceCreation>true</forceCreation>
+							<classifier>javadoc</classifier>
+							<classesDirectory>${basedir}/javadoc</classesDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
