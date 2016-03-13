@@ -18,6 +18,7 @@ package io.rhiot.cloudplatform.service.binding;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import org.apache.camel.spi.Registry;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +64,10 @@ class OperationBinding {
             }
         }
 
-        Class beanType = registry.lookupByName(service).getClass();
+        Object bean = registry.lookupByName(service);
+        Validate.notNull(bean, "Cannot find service with name '%s'.", service);
+        Class beanType = bean.getClass();
+
         LOG.debug("Detected service bean type {} for operation: {}", beanType, operation);
         List<Method> beanMethods = new ArrayList<>(asList(beanType.getDeclaredMethods()));
         beanMethods.addAll(asList(beanType.getMethods()));
