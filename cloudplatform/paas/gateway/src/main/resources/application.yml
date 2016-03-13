@@ -1,0 +1,5 @@
+spring:
+  activemq:
+    broker:
+      amqpEnabled: true
+      enabled: true
