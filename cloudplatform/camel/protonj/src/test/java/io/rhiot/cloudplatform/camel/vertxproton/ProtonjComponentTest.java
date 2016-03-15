@@ -19,6 +19,8 @@ package io.rhiot.cloudplatform.camel.vertxproton;
 import com.google.common.truth.Truth;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.EndpointInject;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -27,6 +29,7 @@ import org.junit.Test;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
@@ -38,7 +41,7 @@ public class ProtonjComponentTest extends CamelTestSupport {
     MockEndpoint mockEndpoint;
 
     @EndpointInject(uri = "mock:mytopic")
-    MockEndpoint mytopicMockEndpoint;
+    MockEndpoint topicMockEndpoint;
 
     int peerConsumerPort = getNextAvailable();
 
@@ -50,7 +53,7 @@ public class ProtonjComponentTest extends CamelTestSupport {
         broker.start();
     }
 
-    String message = randomUUID().toString();
+    String destination = UUID.randomUUID().toString();
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
@@ -61,9 +64,20 @@ public class ProtonjComponentTest extends CamelTestSupport {
                 from("protonj:amqp://~0.0.0.0:" + peerConsumerPort).to("mock:peer2peer");
 
                 from("amqp:topic:mytopic").to("mock:mytopic");
+
+                from("protonj:amqp://0.0.0.0:9999/inout").setBody().constant("bar").process(new Processor() {
+                    @Override
+                    public void process(Exchange exchange) throws Exception {
+                        System.out.println("OOOOO");
+                    }
+                });
             }
         };
     }
+
+    // Messages fixtures
+
+    String message = randomUUID().toString();
 
     // Peer2peer tests
 
@@ -95,16 +109,34 @@ public class ProtonjComponentTest extends CamelTestSupport {
 
     @Test
     public void shouldSendMessageToBrokerQueue() throws InterruptedException {
-        template.sendBody("protonj:localhost:9999/foo", "foo");
-        String receivedMessage = consumer.receiveBody("amqp:foo", String.class);
+        template.sendBody("protonj:localhost:9999/" + destination, message);
+        String receivedMessage = consumer.receiveBody("amqp:" + destination, String.class);
+        Truth.assertThat(receivedMessage).isEqualTo(message);
+    }
+
+    @Test
+    public void shouldReceiveMessageFromBrokerQueue() throws InterruptedException {
+        template.sendBody("amqp:foo", "foo");
+        String receivedMessage = consumer.receiveBody("protonj:localhost:9999/foo", String.class);
         Truth.assertThat(receivedMessage).isEqualTo("foo");
     }
 
     @Test
+    public void shouldInOutOnBrokerQueue() throws InterruptedException {
+        String receivedMessage = template.requestBody("protonj:localhost:9999/inout", "foo", String.class);
+        Truth.assertThat(receivedMessage).isEqualTo("bar");
+    }
+
+    @Test
     public void shouldSendMessageToBrokerTopic() throws InterruptedException {
-        mytopicMockEndpoint.expectedBodiesReceived("foo");
-        template.sendBody("protonj:amqp://localhost:9999/topic://mytopic", "foo");
-        mytopicMockEndpoint.assertIsSatisfied();
+        // Given
+        topicMockEndpoint.expectedBodiesReceived(message);
+
+        // When
+        template.sendBody("protonj:amqp://localhost:9999/topic://mytopic", message);
+
+        // Then
+        topicMockEndpoint.assertIsSatisfied();
     }
 
 }

@@ -42,10 +42,9 @@ public class ProtonjConsumer extends DefaultConsumer {
         Vertx vertx = getEndpoint().getVertx();
 
         String fullAddress = getEndpoint().getAddress().replaceFirst("//", "");
-        int i = fullAddress.indexOf('/');
-        String path = i > 0 ? fullAddress.substring(i) : "";
         String coord = fullAddress.replaceFirst("amqp:", "");
         String[] coords = coord.split(":");
+        coords[1] = coords[1].replaceAll("/.*", "");
 
         if(coords[0].startsWith("~")) {
             ProtonServer server = ProtonServer.create(vertx)
@@ -58,10 +57,12 @@ public class ProtonjConsumer extends DefaultConsumer {
                         }
                     });
         } else {
-            ProtonClient client = ProtonClient.create(vertx);
+            ProtonClient client = getEndpoint().getProtonClient();
             client.connect(coords[0], Integer.parseInt(coords[1]), res -> {
                 if (res.succeeded()) {
                     ProtonConnection connection = res.result();
+                    connection.open(); // Remove this in ProtonJ 0.12
+                    String path = getEndpoint().addressParser().path();
                     connection.createReceiver(path)
                             .handler((delivery, msg) -> {
                                 Section body = msg.getBody();
@@ -70,6 +71,22 @@ public class ProtonjConsumer extends DefaultConsumer {
                                     Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(amqpValue.getValue()).build();
                                     try {
                                         getProcessor().process(exchange);
+                                        if(msg.getReplyTo() != null) {
+                                            Message message = message();
+                                            message.setBody(new AmqpValue(exchange.getIn().getBody()));
+
+                                            Vertx vertx2 = getEndpoint().getVertx();
+                                            ProtonClient client2 = ProtonClient.create(vertx2);
+                                            client2.connect(coords[0], Integer.parseInt(coords[1]), res2 -> {
+                                                if (res2.succeeded()) {
+                                                    ProtonConnection connection2 = res2.result();
+                                                    connection2.open(); // Remove this in ProtonJ 0.12
+                                                    connection2.createSender(msg.getReplyTo()).open().send(tag("m2"), message, deliveryx -> {
+                                                        System.out.println("The message was received by the server XXX");
+                                                    });
+                                                }
+                                            });
+                                        }
                                     } catch (Exception e) {
                                         throw new RuntimeException(e);
                                     }

@@ -17,6 +17,7 @@
 package io.rhiot.cloudplatform.camel.vertxproton;
 
 import io.vertx.core.Vertx;
+import io.vertx.proton.ProtonClient;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.DefaultComponent;
 
@@ -25,6 +26,8 @@ import java.util.Map;
 public class ProtonjComponent extends DefaultComponent {
 
     private Vertx vertx;
+
+    private ProtonClient protonClient;
 
     private String address;
 
@@ -44,6 +47,14 @@ public class ProtonjComponent extends DefaultComponent {
 
     public void setVertx(Vertx vertx) {
         this.vertx = vertx;
+    }
+
+    public ProtonClient getProtonClient() {
+        return protonClient;
+    }
+
+    public void setProtonClient(ProtonClient protonClient) {
+        this.protonClient = protonClient;
     }
 
     public String getAddress() {
