@@ -17,7 +17,7 @@
 
 package io.rhiot.gateway.camel.webcam;
 
-import io.rhiot.gateway.camel.webcam.WebcamHelper;
+import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -25,37 +25,51 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
+import static io.rhiot.gateway.camel.webcam.WebcamHelper.closeWebcam;
+import static io.rhiot.gateway.camel.webcam.WebcamHelper.isWebcamPresent;
 import static org.junit.Assume.assumeTrue;
 
 public class WebcamConsumerIntegrationTest extends CamelTestSupport {
+
+    @EndpointInject(uri = "mock:scheduled")
+    MockEndpoint mock;
+
+    @EndpointInject(uri = "mock:jpg")
+    MockEndpoint mjpgMock;
     
     @BeforeClass
     public static void before(){
-        assumeTrue(WebcamHelper.isWebcamPresent());
+        assumeTrue(isWebcamPresent());
     }
 
     @AfterClass
     public static void after() throws Exception {
-        WebcamHelper.closeWebcam();
+        closeWebcam();
     }
-    
-    @Test
-    public void testWebcamScheduledConsumer() throws Exception {
-        MockEndpoint mock = getMockEndpoint("mock:scheduled");
-        mock.expectedMinimumMessageCount(3);
-        
-        assertMockEndpointsSatisfied(20, TimeUnit.SECONDS);
-    }
-    
+
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("webcam:cam?consumer.delay=5000").to("mock:scheduled");
+                from("webcam:cam?consumer.delay=100").to("mock:scheduled");
+
+                from("webcam:jpgCam?format=jpg").to("mock:jpg");
             }
         };
+    }
+
+    // Tests
+
+    @Test
+    public void testWebcamScheduledConsumer() throws Exception {
+        mock.expectedMinimumMessageCount(3);
+        mock.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldReadMjpg() throws Exception {
+        mjpgMock.expectedMinimumMessageCount(1);
+        mjpgMock.assertIsSatisfied();
     }
 
 }
