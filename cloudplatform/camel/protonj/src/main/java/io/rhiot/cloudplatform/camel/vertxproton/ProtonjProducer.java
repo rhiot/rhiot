@@ -48,7 +48,7 @@ public class ProtonjProducer extends DefaultProducer {
         ProtonSender sender = connection.createSender(path).open();
 
         Message message = message();
-        String replyTo = UUID.randomUUID().toString();
+        String replyTo = getEndpoint().getReplyToGenerationStrategy().generateReplyTo(exchange, path);
         if (isInOut) {
             message.setReplyTo(replyTo);
         }

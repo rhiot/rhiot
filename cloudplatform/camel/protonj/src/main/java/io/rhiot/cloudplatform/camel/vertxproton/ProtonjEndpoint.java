@@ -39,6 +39,8 @@ public class ProtonjEndpoint extends DefaultEndpoint {
 
     private AmqpAddress addressParser;
 
+    private ReplyToGenerationStrategy replyToGenerationStrategy;
+
     private ProtonConnection protonConnection;
 
     private CountDownLatch connectionResolved = new CountDownLatch(1);
@@ -150,6 +152,23 @@ public class ProtonjEndpoint extends DefaultEndpoint {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public ReplyToGenerationStrategy getReplyToGenerationStrategy() {
+        if(replyToGenerationStrategy != null) {
+            return replyToGenerationStrategy;
+        }
+
+        if(getComponent().getReplyToGenerationStrategy() != null) {
+            replyToGenerationStrategy = getComponent().getReplyToGenerationStrategy();
+        } else {
+            replyToGenerationStrategy = new UuidReplyToGenerationStrategy();
+        }
+        return replyToGenerationStrategy;
+    }
+
+    public void setReplyToGenerationStrategy(ReplyToGenerationStrategy replyToGenerationStrategy) {
+        this.replyToGenerationStrategy = replyToGenerationStrategy;
     }
 
 }

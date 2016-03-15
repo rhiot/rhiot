@@ -31,6 +31,8 @@ public class ProtonjComponent extends DefaultComponent {
 
     private String address;
 
+    private ReplyToGenerationStrategy replyToGenerationStrategy;
+
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         ProtonjEndpoint endpoint = new ProtonjEndpoint(uri, remaining, this);
@@ -63,6 +65,14 @@ public class ProtonjComponent extends DefaultComponent {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public ReplyToGenerationStrategy getReplyToGenerationStrategy() {
+        return replyToGenerationStrategy;
+    }
+
+    public void setReplyToGenerationStrategy(ReplyToGenerationStrategy replyToGenerationStrategy) {
+        this.replyToGenerationStrategy = replyToGenerationStrategy;
     }
 
 }
