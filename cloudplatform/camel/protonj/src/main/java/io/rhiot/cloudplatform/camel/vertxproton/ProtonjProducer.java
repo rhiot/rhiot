@@ -16,7 +16,6 @@
  */
 package io.rhiot.cloudplatform.camel.vertxproton;
 
-import io.vertx.proton.ProtonClient;
 import io.vertx.proton.ProtonConnection;
 import io.vertx.proton.ProtonSender;
 import org.apache.camel.Exchange;

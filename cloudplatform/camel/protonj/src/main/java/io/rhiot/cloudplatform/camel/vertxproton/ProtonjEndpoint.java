@@ -27,6 +27,8 @@ import org.apache.camel.impl.DefaultEndpoint;
 
 import java.util.concurrent.CountDownLatch;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public class ProtonjEndpoint extends DefaultEndpoint {
 
     private Vertx vertx;
@@ -93,7 +95,7 @@ public class ProtonjEndpoint extends DefaultEndpoint {
 
     public ProtonConnection protonConnection() {
         try {
-            connectionResolved.await();
+            connectionResolved.await(10, SECONDS);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

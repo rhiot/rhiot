@@ -116,9 +116,9 @@ public class ProtonjComponentTest extends CamelTestSupport {
 
     @Test
     public void shouldReceiveMessageFromBrokerQueue() throws InterruptedException {
-        template.sendBody("amqp:foo", "foo");
-        String receivedMessage = consumer.receiveBody("protonj:localhost:9999/foo", String.class);
-        Truth.assertThat(receivedMessage).isEqualTo("foo");
+        template.sendBody("amqp:" + destination, message);
+        String receivedMessage = consumer.receiveBody("protonj:localhost:9999/" + destination, String.class);
+        Truth.assertThat(receivedMessage).isEqualTo(message);
     }
 
     @Test
