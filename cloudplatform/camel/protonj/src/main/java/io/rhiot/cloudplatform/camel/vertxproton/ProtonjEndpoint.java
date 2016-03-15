@@ -75,6 +75,7 @@ public class ProtonjEndpoint extends DefaultEndpoint {
                 }
             });
         }
+        Thread.sleep(2000);
     }
 
     // Read-only getters
