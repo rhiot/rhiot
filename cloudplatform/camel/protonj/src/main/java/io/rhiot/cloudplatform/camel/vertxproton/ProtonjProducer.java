@@ -45,7 +45,7 @@ public class ProtonjProducer extends DefaultProducer {
 
         ProtonConnection connection = getEndpoint().protonConnection();
         String path = getEndpoint().addressParser().path();
-        ProtonSender sender = connection.createSender(path);
+        ProtonSender sender = connection.createSender(path).open();
 
         Message message = message();
         String replyTo = UUID.randomUUID().toString();
@@ -54,9 +54,8 @@ public class ProtonjProducer extends DefaultProducer {
         }
         Object body = exchange.getIn().getBody();
         message.setBody(new AmqpValue(body));
-        sender.open();
         sender.send(tag("m1"), message, delivery -> {
-            System.out.println("The message was received by the server");
+            log.debug("Message has been delivered to path {}.", path);
         });
 
         if (isInOut) {
