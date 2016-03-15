@@ -60,15 +60,17 @@ public class ProtonjProducer extends DefaultProducer {
         if (isInOut) {
             connection.createReceiver(replyTo)
                     .handler((delivery, msg) -> {
+                        log.debug("Received response from path {}.", path);
                         Section responseBody = msg.getBody();
                         if (responseBody instanceof AmqpValue) {
                             AmqpValue amqpValue = (AmqpValue) responseBody;
+                            exchange.getOut().setBody(amqpValue.getValue());
                             try {
-                                exchange.getOut().setBody(amqpValue.getValue());
-                                responseReceived.countDown();
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
+                            responseReceived.countDown();
                         }
                     })
                     .flow(10)  // Prefetch up to 10 messages. The client will replenish credit as deliveries are settled.
