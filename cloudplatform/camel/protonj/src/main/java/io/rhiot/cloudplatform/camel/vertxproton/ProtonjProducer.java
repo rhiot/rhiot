@@ -70,10 +70,6 @@ public class ProtonjProducer extends DefaultProducer {
                                 throw new RuntimeException(e);
                             }
                         }
-                        // By default, the receiver automatically accepts (and settles) the delivery
-                        // when the handler returns, if no other disposition has been applied.
-                        // To change this and always manage dispositions yourself, use the
-                        // setAutoAccept method on the receiver.
                     })
                     .flow(10)  // Prefetch up to 10 messages. The client will replenish credit as deliveries are settled.
                     .open();
