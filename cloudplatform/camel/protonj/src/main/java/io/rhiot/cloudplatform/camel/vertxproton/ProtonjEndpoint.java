@@ -18,11 +18,14 @@ package io.rhiot.cloudplatform.camel.vertxproton;
 
 import io.vertx.core.Vertx;
 import io.vertx.proton.ProtonClient;
+import io.vertx.proton.ProtonConnection;
 import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
+
+import java.util.concurrent.CountDownLatch;
 
 public class ProtonjEndpoint extends DefaultEndpoint {
 
@@ -33,6 +36,10 @@ public class ProtonjEndpoint extends DefaultEndpoint {
     private String address;
 
     private AmqpAddress addressParser;
+
+    private ProtonConnection protonConnection;
+
+    private CountDownLatch connectionResolved = new CountDownLatch(1);
 
     public ProtonjEndpoint(String endpointUri, String address, Component component) {
         super(endpointUri, component);
@@ -50,6 +57,26 @@ public class ProtonjEndpoint extends DefaultEndpoint {
         return new ProtonjConsumer(this, processor);
     }
 
+    // Life-cycle
+
+    @Override
+    protected void doStart() throws Exception {
+        super.doStart();
+        if(!addressParser.isServer()) {
+            getProtonClient().connect(addressParser().host(), addressParser.port(), result -> {
+                if (result.succeeded()) {
+                    protonConnection = result.result().open();
+                    connectionResolved.countDown();
+                } else {
+                    connectionResolved.countDown();
+                    getExceptionHandler().handleException("Cannot connect to AMQP server.", result.cause());
+                }
+            });
+        }
+    }
+
+    // Read-only getters
+
     @Override
     public boolean isSingleton() {
         return false;
@@ -59,6 +86,21 @@ public class ProtonjEndpoint extends DefaultEndpoint {
     public ProtonjComponent getComponent() {
         return (ProtonjComponent) super.getComponent();
     }
+
+    public AmqpAddress addressParser() {
+        return addressParser;
+    }
+
+    public ProtonConnection protonConnection() {
+        try {
+            connectionResolved.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return protonConnection;
+    }
+
+    // Getters & setters
 
     public Vertx getVertx() {
         if(vertx != null) {
@@ -105,10 +147,6 @@ public class ProtonjEndpoint extends DefaultEndpoint {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public AmqpAddress addressParser() {
-        return addressParser;
     }
 
 }

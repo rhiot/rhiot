@@ -47,4 +47,8 @@ public class AmqpAddress {
         return path;
     }
 
+    public boolean isServer() {
+        return host.startsWith("~");
+    }
+
 }
