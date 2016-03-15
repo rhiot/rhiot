@@ -31,8 +31,8 @@ import static org.junit.Assume.assumeTrue
 
 class CameraSensorConfigurationTest extends CloudPlatformTest {
 
-    @BeforeClass
-    static void beforeClass() {
+    @Override
+    protected void beforeCloudPlatformStarted() {
         assumeTrue(isWebcamPresent())
     }
 

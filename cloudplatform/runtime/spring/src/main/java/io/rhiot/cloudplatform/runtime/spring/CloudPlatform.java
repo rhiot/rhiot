@@ -65,7 +65,9 @@ public class CloudPlatform {
     }
 
     public CloudPlatform stop() {
-        applicationContext.close();
+        if(applicationContext != null) {
+            applicationContext.close();
+        }
         return this;
     }
 
