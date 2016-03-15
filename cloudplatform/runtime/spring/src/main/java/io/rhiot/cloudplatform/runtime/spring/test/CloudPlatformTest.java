@@ -69,6 +69,7 @@ public abstract class CloudPlatformTest extends Assert {
             beforeCloudPlatformStarted();
             cloudPlatform = cloudPlatform.start();
             camelContext = cloudPlatform.applicationContext().getBean(CamelContext.class);
+            camelContext.getShutdownStrategy().setTimeout(5);
             producerTemplate = camelContext.createProducerTemplate();
             payloadEncoding = cloudPlatform.applicationContext().getBean(PayloadEncoding.class);
             connector = cloudPlatform.applicationContext().getBean(IoTConnector.class);
