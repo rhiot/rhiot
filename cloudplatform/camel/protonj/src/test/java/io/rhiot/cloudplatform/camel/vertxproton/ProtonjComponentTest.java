@@ -65,12 +65,7 @@ public class ProtonjComponentTest extends CamelTestSupport {
 
                 from("amqp:topic:mytopic").to("mock:mytopic");
 
-                from("protonj:amqp://0.0.0.0:9999/inout").setBody().constant("bar").process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        System.out.println("OOOOO");
-                    }
-                });
+                from("protonj:amqp://0.0.0.0:9999/inout").setBody().constant("bar");
             }
         };
     }
