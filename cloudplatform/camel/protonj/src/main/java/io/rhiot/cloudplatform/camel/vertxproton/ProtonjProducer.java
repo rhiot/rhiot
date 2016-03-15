@@ -24,7 +24,6 @@ import org.apache.qpid.proton.amqp.messaging.AmqpValue;
 import org.apache.qpid.proton.amqp.messaging.Section;
 import org.apache.qpid.proton.message.Message;
 
-import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 import static io.vertx.proton.ProtonHelper.message;
@@ -61,12 +60,12 @@ public class ProtonjProducer extends DefaultProducer {
         if (isInOut) {
             connection.createReceiver(replyTo)
                     .handler((delivery, msg) -> {
-                        responseReceived.countDown();
                         Section responseBody = msg.getBody();
                         if (responseBody instanceof AmqpValue) {
                             AmqpValue amqpValue = (AmqpValue) responseBody;
                             try {
                                 exchange.getOut().setBody(amqpValue.getValue());
+                                responseReceived.countDown();
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }

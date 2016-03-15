@@ -62,20 +62,12 @@ public class ProtonjConsumer extends DefaultConsumer {
                             try {
                                 getProcessor().process(exchange);
                                 if (msg.getReplyTo() != null) {
-                                    Message message = message();
-                                    message.setBody(new AmqpValue(exchange.getIn().getBody()));
-                                    connection.createSender(msg.getReplyTo()).open().send(tag("m2"), message, responseDelivery -> {
-                                        log.debug("Response to message has been delivered to path {}.", msg.getReplyTo());
-                                    });
+                                    getEndpoint().send(msg.getReplyTo(), exchange.getIn().getBody());
                                 }
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
                         }
-                        // By default, the receiver automatically accepts (and settles) the delivery
-                        // when the handler returns, if no other disposition has been applied.
-                        // To change this and always manage dispositions yourself, use the
-                        // setAutoAccept method on the receiver.
                     })
                     .flow(10)  // Prefetch up to 10 messages. The client will replenish credit as deliveries are settled.
                     .open();

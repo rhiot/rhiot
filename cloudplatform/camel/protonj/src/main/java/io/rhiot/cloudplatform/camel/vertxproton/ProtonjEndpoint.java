@@ -19,17 +19,26 @@ package io.rhiot.cloudplatform.camel.vertxproton;
 import io.vertx.core.Vertx;
 import io.vertx.proton.ProtonClient;
 import io.vertx.proton.ProtonConnection;
+import io.vertx.proton.ProtonSender;
 import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.qpid.proton.amqp.messaging.AmqpValue;
+import org.apache.qpid.proton.message.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
 
+import static io.vertx.proton.ProtonHelper.message;
+import static io.vertx.proton.ProtonHelper.tag;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class ProtonjEndpoint extends DefaultEndpoint {
+
+    private final static Logger LOG = LoggerFactory.getLogger(ProtonjEndpoint.class);
 
     private Vertx vertx;
 
@@ -78,6 +87,28 @@ public class ProtonjEndpoint extends DefaultEndpoint {
             });
         }
         Thread.sleep(2000);
+    }
+
+    // Helpers
+
+    public ProtonSender sender(String path) {
+        return protonConnection().createSender(path).open();
+    }
+
+    public void send(String path, Object payload) {
+        ProtonSender sender = null;
+        try {
+            sender = sender(path);
+            Message message = message();
+            message.setBody(new AmqpValue(payload));
+            sender.send(tag("m1"), message, delivery -> {
+                LOG.debug("Message has been delivered to path {}.", path);
+            });
+        } finally {
+            if(sender != null) {
+                sender.close();
+            }
+        }
     }
 
     // Read-only getters
