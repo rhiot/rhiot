@@ -17,7 +17,6 @@
 package io.rhiot.cloudplatform.camel.vertxproton;
 
 import io.vertx.core.Vertx;
-import io.vertx.proton.ProtonClient;
 import io.vertx.proton.ProtonConnection;
 import io.vertx.proton.ProtonServer;
 import org.apache.camel.Exchange;
@@ -54,8 +53,7 @@ public class ProtonjConsumer extends DefaultConsumer {
                     });
         } else {
             ProtonConnection connection = getEndpoint().protonConnection();
-            String path = getEndpoint().addressParser().path();
-            connection.createReceiver(path)
+            connection.createReceiver(address.path())
                     .handler((delivery, msg) -> {
                         Section body = msg.getBody();
                         if (body instanceof AmqpValue) {
@@ -66,8 +64,8 @@ public class ProtonjConsumer extends DefaultConsumer {
                                 if (msg.getReplyTo() != null) {
                                     Message message = message();
                                     message.setBody(new AmqpValue(exchange.getIn().getBody()));
-                                    connection.createSender(msg.getReplyTo()).open().send(tag("m2"), message, deliveryx -> {
-                                        System.out.println("The message was received by the server.");
+                                    connection.createSender(msg.getReplyTo()).open().send(tag("m2"), message, responseDelivery -> {
+                                        log.debug("Response to message has been delivered to path {}.", msg.getReplyTo());
                                     });
                                 }
                             } catch (Exception e) {
