@@ -6,11 +6,11 @@
     <parent>
         <groupId>io.rhiot</groupId>
         <version>0.1.5-SNAPSHOT</version>
-        <artifactId>rhiot-bom</artifactId>
-        <relativePath>../bom</relativePath>
+        <artifactId>rhiot-gateway-parent</artifactId>
+        <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: Gateway :: Parent</name>
-    <artifactId>rhiot-gateway-parent</artifactId>
+    <name>Rhiot :: Gateway :: Sensors</name>
+    <artifactId>rhiot-gateway-sensors</artifactId>
     <packaging>pom</packaging>
 
     <licenses>
@@ -21,10 +21,7 @@
     </licenses>
 
     <modules>
-        <module>components</module>
-        <module>sensors</module>
-        <module>gateway</module>
-        <module>gateway-app</module>
+        <module>camera</module>
     </modules>
 
 </project>

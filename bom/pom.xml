@@ -403,6 +403,11 @@
 			</dependency>
 			<dependency>
 				<groupId>io.rhiot</groupId>
+				<artifactId>rhiot-sensor-camera</artifactId>
+				<version>${rhiot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.rhiot</groupId>
 				<artifactId>rhiot-spring-activemq</artifactId>
 				<version>${rhiot.version}</version>
 			</dependency>

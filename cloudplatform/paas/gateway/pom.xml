@@ -49,6 +49,10 @@
 			<groupId>io.rhiot</groupId>
 			<artifactId>rhiot-spring-activemq</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-sensor-camera</artifactId>
+		</dependency>
 
 		<!-- Testing -->
 		<dependency>
