@@ -19,8 +19,6 @@ package io.rhiot.cloudplatform.camel.vertxproton;
 import com.google.common.truth.Truth;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;

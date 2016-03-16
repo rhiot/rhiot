@@ -42,40 +42,41 @@ public class ProtonjProducer extends DefaultProducer {
         boolean isInOut = exchange.getPattern() == InOut;
         CountDownLatch responseReceived = new CountDownLatch(1);
 
-        ProtonConnection connection = getEndpoint().protonConnection();
-        String path = getEndpoint().addressParser().path();
-        ProtonSender sender = connection.createSender(path).open();
+        getEndpoint().getProtonClient().connect(getEndpoint().addressParser().host(), getEndpoint().addressParser().port(), result -> {
+            if (result.succeeded()) {
+                ProtonConnection connection = result.result().open();
+                String path = getEndpoint().addressParser().path();
+                ProtonSender sender = connection.createSender(path).open();
 
-        Message message = message();
-        String replyTo = getEndpoint().getReplyToGenerationStrategy().generateReplyTo(exchange, path);
-        if (isInOut) {
-            message.setReplyTo(replyTo);
-        }
-        Object body = exchange.getIn().getBody();
-        message.setBody(new AmqpValue(body));
-        sender.send(tag("m1"), message, delivery -> {
-            log.debug("Message has been delivered to path {}.", path);
+                Message message = message();
+                String replyTo = getEndpoint().getReplyToGenerationStrategy().generateReplyTo(exchange, path);
+                if (isInOut) {
+                    message.setReplyTo(replyTo);
+                }
+                Object body = exchange.getIn().getBody();
+                message.setBody(new AmqpValue(body));
+                sender.send(tag("m1"), message, delivery -> {
+                    log.debug("Message has been delivered to path {}.", path);
+                });
+
+                if (isInOut) {
+                    connection.createReceiver(replyTo)
+                            .handler((delivery, msg) -> {
+                                log.debug("Received response from path {}.", path);
+                                Section responseBody = msg.getBody();
+                                if (responseBody instanceof AmqpValue) {
+                                    AmqpValue amqpValue = (AmqpValue) responseBody;
+                                    exchange.getOut().setBody(amqpValue.getValue());
+                                    responseReceived.countDown();
+                                }
+                            })
+                            .flow(10)  // Prefetch up to 10 messages. The client will replenish credit as deliveries are settled.
+                            .open();
+                }
+            }
+
         });
-
         if (isInOut) {
-            connection.createReceiver(replyTo)
-                    .handler((delivery, msg) -> {
-                        log.debug("Received response from path {}.", path);
-                        Section responseBody = msg.getBody();
-                        if (responseBody instanceof AmqpValue) {
-                            AmqpValue amqpValue = (AmqpValue) responseBody;
-                            exchange.getOut().setBody(amqpValue.getValue());
-                            try {
-                                Thread.sleep(2000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            responseReceived.countDown();
-                        }
-                    })
-                    .flow(10)  // Prefetch up to 10 messages. The client will replenish credit as deliveries are settled.
-                    .open();
-
             try {
                 responseReceived.await(30, SECONDS);
             } catch (InterruptedException e) {

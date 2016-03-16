@@ -50,10 +50,6 @@ public class ProtonjEndpoint extends DefaultEndpoint {
 
     private ReplyToGenerationStrategy replyToGenerationStrategy;
 
-    private ProtonConnection protonConnection;
-
-    private CountDownLatch connectionResolved = new CountDownLatch(1);
-
     public ProtonjEndpoint(String endpointUri, String address, Component component) {
         super(endpointUri, component);
         this.address = address;
@@ -70,35 +66,17 @@ public class ProtonjEndpoint extends DefaultEndpoint {
         return new ProtonjConsumer(this, processor);
     }
 
-    // Life-cycle
-
-    @Override
-    protected void doStart() throws Exception {
-        super.doStart();
-        if(!addressParser.isServer()) {
-            getProtonClient().connect(addressParser().host(), addressParser.port(), result -> {
-                if (result.succeeded()) {
-                    protonConnection = result.result().open();
-                    connectionResolved.countDown();
-                } else {
-                    connectionResolved.countDown();
-                    getExceptionHandler().handleException("Cannot connect to AMQP server.", result.cause());
-                }
-            });
-        }
-        Thread.sleep(2000);
-    }
 
     // Helpers
 
-    public ProtonSender sender(String path) {
-        return protonConnection().createSender(path).open();
+    public ProtonSender sender(ProtonConnection protonConnection, String path) {
+        return protonConnection.createSender(path).open();
     }
 
-    public void send(String path, Object payload) {
+    public void send(ProtonConnection protonConnection, String path, Object payload) {
         ProtonSender sender = null;
         try {
-            sender = sender(path);
+            sender = sender(protonConnection, path);
             Message message = message();
             message.setBody(new AmqpValue(payload));
             sender.send(tag("m1"), message, delivery -> {
@@ -125,15 +103,6 @@ public class ProtonjEndpoint extends DefaultEndpoint {
 
     public AmqpAddress addressParser() {
         return addressParser;
-    }
-
-    public ProtonConnection protonConnection() {
-        try {
-            connectionResolved.await(10, SECONDS);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        return protonConnection;
     }
 
     // Getters & setters

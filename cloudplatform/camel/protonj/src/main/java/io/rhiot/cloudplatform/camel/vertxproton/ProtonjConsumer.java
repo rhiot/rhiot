@@ -52,25 +52,33 @@ public class ProtonjConsumer extends DefaultConsumer {
                         }
                     });
         } else {
-            ProtonConnection connection = getEndpoint().protonConnection();
-            connection.createReceiver(address.path())
-                    .handler((delivery, msg) -> {
-                        Section body = msg.getBody();
-                        if (body instanceof AmqpValue) {
-                            AmqpValue amqpValue = (AmqpValue) body;
-                            Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(amqpValue.getValue()).build();
-                            try {
-                                getProcessor().process(exchange);
-                                if (msg.getReplyTo() != null) {
-                                    getEndpoint().send(msg.getReplyTo(), exchange.getIn().getBody());
+            getEndpoint().getProtonClient().connect(getEndpoint().addressParser().host(), getEndpoint().addressParser().port(), result -> {
+                if (result.succeeded()) {
+                    ProtonConnection connection = result.result().open();
+                    connection.createReceiver(address.path())
+                            .handler((delivery, msg) -> {
+                                Section body = msg.getBody();
+                                if (body instanceof AmqpValue) {
+                                    AmqpValue amqpValue = (AmqpValue) body;
+                                    Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(amqpValue.getValue()).build();
+                                    try {
+                                        getProcessor().process(exchange);
+                                        if (msg.getReplyTo() != null) {
+                                            getEndpoint().send(connection, msg.getReplyTo(), exchange.getIn().getBody());
+                                        }
+                                    } catch (Exception e) {
+                                        throw new RuntimeException(e);
+                                    }
                                 }
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    })
-                    .flow(10)  // Prefetch up to 10 messages. The client will replenish credit as deliveries are settled.
-                    .open();
+                            })
+                            .flow(10)  // Prefetch up to 10 messages. The client will replenish credit as deliveries are settled.
+                            .open();
+                } else {
+                    getExceptionHandler().handleException("Cannot connect to AMQP server.", result.cause());
+                }
+            });
+
+
 
         }
         super.doStart();
