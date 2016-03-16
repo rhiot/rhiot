@@ -29,8 +29,8 @@ class DeployerBuilder {
 
     private boolean debug
 
-    Deployer build() {
-        new Deployer(deviceDetector, username, password, debug)
+    Cmd build() {
+        new Cmd(deviceDetector, username, password, debug)
     }
 
     DeployerBuilder deviceDetector(DeviceDetector deviceDetector) {

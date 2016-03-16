@@ -28,7 +28,7 @@ import static io.rhiot.utils.Mavens.MavenCoordinates.parseMavenCoordinates
 import static io.rhiot.utils.Mavens.artifactVersionFromDependenciesProperties
 import static java.util.Optional.empty
 
-class Deployer {
+class Cmd {
 
     private final DeviceDetector deviceDetector
 
@@ -40,7 +40,7 @@ class Deployer {
 
     def JcabiMavenArtifactResolver artifactResolver = new JcabiMavenArtifactResolver()
 
-    Deployer(DeviceDetector deviceDetector, String username, String password, boolean debug) {
+    Cmd(DeviceDetector deviceDetector, String username, String password, boolean debug) {
         this.deviceDetector = deviceDetector
         this.username = username
         this.password = password
@@ -151,7 +151,7 @@ class Deployer {
 
     @PackageScope
     static deployGateway(ConsoleInputParser parser) {
-        def Deployer deployer = null
+        def Cmd deployer = null
         try {
             def deployerBuilder = new DeployerBuilder()
             if (parser.hasCredentials()) {

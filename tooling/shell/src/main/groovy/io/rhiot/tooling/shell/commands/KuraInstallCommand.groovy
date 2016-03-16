@@ -16,7 +16,7 @@
  */
 package io.rhiot.tooling.shell.commands
 
-import io.rhiot.tooling.shell.DownloadManager
+import io.rhiot.deployer.DownloadManager
 import io.rhiot.tooling.shell.SshCommandSupport
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
