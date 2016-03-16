@@ -16,6 +16,10 @@
  */
 package io.rhiot.deployer
 
+import io.rhiot.cmd.Cmd
+import io.rhiot.cmd.ConsoleInformation
+import io.rhiot.cmd.ConsoleInputParser
+import io.rhiot.cmd.DeployerBuilder
 import io.rhiot.scanner.DeviceDetector
 import org.junit.Assert
 import org.junit.Test

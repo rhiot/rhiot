@@ -19,7 +19,7 @@ package io.rhiot.cmd
 class Cmd {
 
     static void main(String... args) {
-        io.rhiot.deployer.Cmd.main(args)
+        Cmd.main(args)
     }
 
 }

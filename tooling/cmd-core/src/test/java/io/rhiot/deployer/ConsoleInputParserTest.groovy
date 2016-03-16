@@ -16,6 +16,9 @@
  */
 package io.rhiot.deployer
 
+import io.rhiot.cmd.ConsoleInformation
+import io.rhiot.cmd.ConsoleInputParser
+
 import static com.google.common.truth.Truth.assertThat
 
 import org.junit.Assert
