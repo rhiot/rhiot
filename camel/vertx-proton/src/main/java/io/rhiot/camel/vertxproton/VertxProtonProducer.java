@@ -31,9 +31,9 @@ import static io.vertx.proton.ProtonHelper.tag;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.apache.camel.ExchangePattern.InOut;
 
-public class ProtonjProducer extends DefaultProducer {
+public class VertxProtonProducer extends DefaultProducer {
 
-    public ProtonjProducer(ProtonjEndpoint endpoint) {
+    public VertxProtonProducer(VertxProtonEndpoint endpoint) {
         super(endpoint);
     }
 
@@ -88,8 +88,8 @@ public class ProtonjProducer extends DefaultProducer {
     // Getters & setters
 
     @Override
-    public ProtonjEndpoint getEndpoint() {
-        return (ProtonjEndpoint) super.getEndpoint();
+    public VertxProtonEndpoint getEndpoint() {
+        return (VertxProtonEndpoint) super.getEndpoint();
     }
 
 }

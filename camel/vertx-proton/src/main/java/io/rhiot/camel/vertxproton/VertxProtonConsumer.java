@@ -30,9 +30,9 @@ import org.apache.qpid.proton.message.Message;
 import static io.vertx.proton.ProtonHelper.message;
 import static io.vertx.proton.ProtonHelper.tag;
 
-public class ProtonjConsumer extends DefaultConsumer {
+public class VertxProtonConsumer extends DefaultConsumer {
 
-    public ProtonjConsumer(ProtonjEndpoint endpoint, Processor processor) {
+    public VertxProtonConsumer(VertxProtonEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
     }
 
@@ -85,8 +85,8 @@ public class ProtonjConsumer extends DefaultConsumer {
     }
 
     @Override
-    public ProtonjEndpoint getEndpoint() {
-        return (ProtonjEndpoint) super.getEndpoint();
+    public VertxProtonEndpoint getEndpoint() {
+        return (VertxProtonEndpoint) super.getEndpoint();
     }
 
     private void serverHandler(ProtonConnection connection) {

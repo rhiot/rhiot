@@ -10,7 +10,7 @@
         <relativePath>..</relativePath>
     </parent>
     <name>Rhiot Camel components :: Vertx-proton</name>
-    <artifactId>rhiot-camel-protonj</artifactId>
+    <artifactId>rhiot-camel-vertx-proton</artifactId>
 
     <licenses>
         <license>

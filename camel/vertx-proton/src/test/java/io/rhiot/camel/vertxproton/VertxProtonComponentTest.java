@@ -59,11 +59,11 @@ public class VertxProtonComponentTest extends CamelTestSupport {
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                from("protonj:amqp://~0.0.0.0:" + peerConsumerPort).to("mock:peer2peer");
+                from("vertx-proton:amqp://~0.0.0.0:" + peerConsumerPort).to("mock:peer2peer");
 
                 from("amqp:topic:mytopic").to("mock:mytopic");
 
-                from("protonj:amqp://0.0.0.0:9999/inout").setBody().constant("bar");
+                from("vertx-proton:amqp://0.0.0.0:9999/inout").setBody().constant("bar");
             }
         };
     }
@@ -77,15 +77,15 @@ public class VertxProtonComponentTest extends CamelTestSupport {
     @Test
     public void shouldReceivePeer2PeerMessage() throws InterruptedException {
         mockEndpoint.expectedBodiesReceived(message);
-        template.sendBody("protonj:amqp://0.0.0.0:" + peerConsumerPort, message);
+        template.sendBody("vertx-proton:amqp://0.0.0.0:" + peerConsumerPort, message);
         mockEndpoint.assertIsSatisfied();
     }
 
     @Test
     public void shouldReceivePeer2PeerMessages() throws InterruptedException {
         mockEndpoint.expectedBodiesReceived(message, message);
-        template.sendBody("protonj:amqp://0.0.0.0:" + peerConsumerPort, message);
-        template.sendBody("protonj:amqp://0.0.0.0:" + peerConsumerPort, message);
+        template.sendBody("vertx-proton:amqp://0.0.0.0:" + peerConsumerPort, message);
+        template.sendBody("vertx-proton:amqp://0.0.0.0:" + peerConsumerPort, message);
         mockEndpoint.assertIsSatisfied();
     }
 
@@ -94,7 +94,7 @@ public class VertxProtonComponentTest extends CamelTestSupport {
         Map<String, String> payload = new LinkedHashMap<>();
         payload.put(message, message);
         mockEndpoint.expectedBodiesReceived(payload);
-        template.sendBody("protonj:amqp://0.0.0.0:" + peerConsumerPort, payload);
+        template.sendBody("vertx-proton:amqp://0.0.0.0:" + peerConsumerPort, payload);
         mockEndpoint.assertIsSatisfied();
     }
 
@@ -102,7 +102,7 @@ public class VertxProtonComponentTest extends CamelTestSupport {
 
     @Test
     public void shouldSendMessageToBrokerQueue() throws InterruptedException {
-        template.sendBody("protonj:localhost:9999/" + destination, message);
+        template.sendBody("vertx-proton:localhost:9999/" + destination, message);
         String receivedMessage = consumer.receiveBody("amqp:" + destination, String.class);
         Truth.assertThat(receivedMessage).isEqualTo(message);
     }
@@ -110,13 +110,13 @@ public class VertxProtonComponentTest extends CamelTestSupport {
     @Test
     public void shouldReceiveMessageFromBrokerQueue() throws InterruptedException {
         template.sendBody("amqp:" + destination, message);
-        String receivedMessage = consumer.receiveBody("protonj:localhost:9999/" + destination, String.class);
+        String receivedMessage = consumer.receiveBody("vertx-proton:localhost:9999/" + destination, String.class);
         Truth.assertThat(receivedMessage).isEqualTo(message);
     }
 
     @Test
     public void shouldInOutOnBrokerQueue() throws InterruptedException {
-        String receivedMessage = template.requestBody("protonj:localhost:9999/inout", "foo", String.class);
+        String receivedMessage = template.requestBody("vertx-proton:localhost:9999/inout", "foo", String.class);
         Truth.assertThat(receivedMessage).isEqualTo("bar");
     }
 
@@ -126,7 +126,7 @@ public class VertxProtonComponentTest extends CamelTestSupport {
         topicMockEndpoint.expectedBodiesReceived(message);
 
         // When
-        template.sendBody("protonj:amqp://localhost:9999/topic://mytopic", message);
+        template.sendBody("vertx-proton:amqp://localhost:9999/topic://mytopic", message);
 
         // Then
         topicMockEndpoint.assertIsSatisfied();

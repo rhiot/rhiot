@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
 import static io.vertx.proton.ProtonHelper.message;
 import static io.vertx.proton.ProtonHelper.tag;
 
-public class ProtonjEndpoint extends DefaultEndpoint {
+public class VertxProtonEndpoint extends DefaultEndpoint {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ProtonjEndpoint.class);
+    private final static Logger LOG = LoggerFactory.getLogger(VertxProtonEndpoint.class);
 
     private Vertx vertx;
 
@@ -47,7 +47,7 @@ public class ProtonjEndpoint extends DefaultEndpoint {
 
     private ReplyToGenerationStrategy replyToGenerationStrategy;
 
-    public ProtonjEndpoint(String endpointUri, String address, Component component) {
+    public VertxProtonEndpoint(String endpointUri, String address, Component component) {
         super(endpointUri, component);
         this.address = address;
         this.addressParser = new AmqpAddress(address);
@@ -55,12 +55,12 @@ public class ProtonjEndpoint extends DefaultEndpoint {
 
     @Override
     public Producer createProducer() throws Exception {
-        return new ProtonjProducer(this);
+        return new VertxProtonProducer(this);
     }
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        return new ProtonjConsumer(this, processor);
+        return new VertxProtonConsumer(this, processor);
     }
 
 

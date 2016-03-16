@@ -21,8 +21,8 @@
     </licenses>
 
     <modules>
-        <module>camel-openalpr</module>
-        <module>protonj</module>
+        <module>openalpr</module>
+        <module>vertx-proton</module>
     </modules>
 
 </project>

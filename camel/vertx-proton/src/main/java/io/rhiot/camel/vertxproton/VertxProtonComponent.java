@@ -35,7 +35,7 @@ public class VertxProtonComponent extends DefaultComponent {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        ProtonjEndpoint endpoint = new ProtonjEndpoint(uri, remaining, this);
+        VertxProtonEndpoint endpoint = new VertxProtonEndpoint(uri, remaining, this);
         setProperties(endpoint, parameters);
         return endpoint;
     }
