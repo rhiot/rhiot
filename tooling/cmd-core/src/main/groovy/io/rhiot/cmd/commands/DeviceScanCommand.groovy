@@ -17,6 +17,7 @@
 package io.rhiot.cmd.commands
 
 import io.rhiot.cmd.Command
+import io.rhiot.cmd.OutputAppender
 import io.rhiot.scanner.DeviceDetector
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -37,17 +38,15 @@ class DeviceScanCommand implements Command {
     }
 
     @Override
-    List<String> execute(String... command) {
-        def output = []
-        output << 'Scanning local networks for devices...'
-        output << ''
-        output << '======================================'
-        output << "Device type\t\tIPv4 address"
-        output << '--------------------------------------'
+    void execute(OutputAppender appender, String... command) {
+        appender.append('Scanning local networks for devices...')
+        appender.append('')
+        appender.append('======================================')
+        appender.append("Device type\t\tIPv4 address")
+        appender.append('--------------------------------------')
         deviceDetector.detectDevices().each {
-            output << "${it.type()}\t\t${it.address()}"
+            appender.append("${it.type()}\t\t${it.address()}")
         }
-        output
     }
 
 }

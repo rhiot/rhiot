@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.tooling.shell.commands
+package io.rhiot.cmd.commands
 
+import io.rhiot.cmd.Command
 import io.rhiot.cmd.DownloadManager
+import io.rhiot.cmd.OutputAppender
 import io.rhiot.utils.WithLogger
 import io.rhiot.utils.process.ProcessManager
 import org.apache.commons.io.IOUtils
@@ -27,7 +29,7 @@ import org.springframework.stereotype.Component
 import java.util.zip.ZipInputStream
 
 @Component
-class RaspbianInstallCommand implements WithLogger {
+class RaspbianInstallCommand implements Command, WithLogger {
 
     private final String devicesDirectory
 
@@ -43,13 +45,25 @@ class RaspbianInstallCommand implements WithLogger {
         this.processManager = processManager
     }
 
-    List<String> execute(String device) {
-        downloadManager.download(
-                new URL('http://director.downloads.raspberrypi.org/raspbian/images/raspbian-2015-11-24/2015-11-21-raspbian-jessie.zip'),
-                '2015-11-21-raspbian-jessie.zip')
+    @Override
+    String command() {
+        'raspbian-install'
+    }
 
-        def imageZip = downloadManager.downloadedFile('2015-11-21-raspbian-jessie.zip')
-        def image = downloadManager.downloadedFile('2015-11-21-raspbian-jessie.img')
+    @Override
+    void execute(OutputAppender appender, String... command) {
+        def device = command[0]
+
+        if(!downloadManager.downloadedFile('2016-02-26-raspbian-jessie.zip').exists()) {
+            appender.append('Downloading image file...')
+        }
+
+        downloadManager.download(
+                new URL('http://vx2-downloads.raspberrypi.org/raspbian/images/raspbian-2016-02-29/2016-02-26-raspbian-jessie.zip'),
+                '2016-02-26-raspbian-jessie.zip')
+
+        def imageZip = downloadManager.downloadedFile('2016-02-26-raspbian-jessie.zip')
+        def image = downloadManager.downloadedFile('2016-02-26-raspbian-jessie.img')
         if(!image.exists()) {
             def tmpImageFile = File.createTempFile('rhiot', 'raspbian')
             def zip = new ZipInputStream(new FileInputStream(imageZip))
@@ -58,8 +72,13 @@ class RaspbianInstallCommand implements WithLogger {
             IOUtils.copyLarge(zip, new FileOutputStream(image))
             zip.close()
         }
-        def output = processManager.executeAndJoinOutput("dd", "bs=4M", "if=${image}", "of=${devicesDirectory}/${device}")
-        output + processManager.executeAndJoinOutput('sync')
+        appender.append('Writing image to SD card...')
+        processManager.executeAndJoinOutput("dd", "bs=4M", "if=${image}", "of=${devicesDirectory}/${device}").forEach {
+            appender.append(it)
+        }
+        processManager.executeAndJoinOutput('sync').forEach {
+            appender.append(it)
+        }
     }
 
 }

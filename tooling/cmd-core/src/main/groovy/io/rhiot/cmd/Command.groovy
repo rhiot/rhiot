@@ -20,6 +20,6 @@ interface Command {
 
     String command()
 
-    List<String> execute(String... command)
+    void execute(OutputAppender appender, String... command)
 
 }

@@ -22,10 +22,13 @@ import io.rhiot.scanner.Device
 import io.rhiot.scanner.DeviceDetector
 import io.rhiot.scanner.SimplePortScanningDeviceDetector
 import io.rhiot.utils.maven.JcabiMavenArtifactResolver
+import io.rhiot.utils.process.DefaultProcessManager
+import io.rhiot.utils.process.ProcessManager
 import io.rhiot.utils.ssh.client.SshClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 
 import java.util.concurrent.Future
@@ -141,7 +144,7 @@ class Cmd {
             if(command == 'deploy-gateway') {
                 deployGateway(parser)
             } else if(commandsManager.hasCommand(command)) {
-                println commandsManager.command(command).execute(args).join('\n')
+                println commandsManager.command(command).execute(new StdoutOutputAppender(), args)
             } else {
                 def output = new SshClient('localhost', 2000, 'rhiot', 'rhiot').command(args.join(' '))
                 if(output.isEmpty()) {
@@ -186,6 +189,17 @@ class Cmd {
     @Bean(destroyMethod = "close")
     DeviceDetector deviceDetector() {
         new SimplePortScanningDeviceDetector()
+    }
+
+    @Bean
+    DownloadManager downloadManager() {
+        new DownloadManager()
+    }
+
+    @ConditionalOnMissingBean
+    @Bean
+    ProcessManager processManager() {
+        new DefaultProcessManager()
     }
 
 }
