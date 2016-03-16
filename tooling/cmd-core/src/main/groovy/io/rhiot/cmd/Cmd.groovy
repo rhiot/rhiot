@@ -166,6 +166,7 @@ class Cmd {
                 e.printStackTrace()
             }
         } finally {
+            ctx.close()
             Runtime.getRuntime().exit(0)
         }
     }
