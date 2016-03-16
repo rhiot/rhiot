@@ -51,4 +51,9 @@ class Shell {
         new DownloadManager()
     }
 
+    @Bean(destroyMethod = "close")
+    DeviceDetector deviceDetector() {
+        new SimplePortScanningDeviceDetector()
+    }
+
 }

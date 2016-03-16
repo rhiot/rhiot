@@ -75,17 +75,6 @@ class ShellTest {
         assertThat(result).hasSize(1)
     }
 
-    // device-scan tests
-
-    @Test
-    void shouldPerformScan() {
-        // When
-        def result = shellClient.command("device-scan")
-
-        // Then
-        assertThat(result.first()).startsWith('Scanning')
-    }
-
     // device-config tests
 
     @Test
