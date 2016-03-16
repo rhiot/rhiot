@@ -17,10 +17,16 @@
 package io.rhiot.cmd
 
 import groovy.transform.PackageScope
+import io.rhiot.cmd.commands.DeviceScanCommand
 import io.rhiot.scanner.Device
 import io.rhiot.scanner.DeviceDetector
+import io.rhiot.scanner.SimplePortScanningDeviceDetector
 import io.rhiot.utils.maven.JcabiMavenArtifactResolver
 import io.rhiot.utils.ssh.client.SshClient
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.Bean
 
 import java.util.concurrent.Future
 
@@ -28,6 +34,7 @@ import static io.rhiot.utils.Mavens.MavenCoordinates.parseMavenCoordinates
 import static io.rhiot.utils.Mavens.artifactVersionFromDependenciesProperties
 import static java.util.Optional.empty
 
+@SpringBootApplication
 class Cmd {
 
     private final DeviceDetector deviceDetector
@@ -39,6 +46,9 @@ class Cmd {
     private final String password
 
     def JcabiMavenArtifactResolver artifactResolver = new JcabiMavenArtifactResolver()
+
+    Cmd() {
+    }
 
     Cmd(DeviceDetector deviceDetector, String username, String password, boolean debug) {
         this.deviceDetector = deviceDetector
@@ -117,6 +127,9 @@ class Cmd {
     // Main runner
 
     public static void main(String[] args) {
+        def ctx = new SpringApplication(Cmd.class).run(args)
+        def commandsManager = ctx.getBean(CommandsManager.class)
+
         def parser = new ConsoleInputParser(args)
         if (parser.help) {
             println(parser.helpText())
@@ -127,6 +140,8 @@ class Cmd {
             def command = parser.command()
             if(command == 'deploy-gateway') {
                 deployGateway(parser)
+            } else if(commandsManager.hasCommand(command)) {
+                println commandsManager.command(command).execute(args).join('\n')
             } else {
                 def output = new SshClient('localhost', 2000, 'rhiot', 'rhiot').command(args.join(' '))
                 if(output.isEmpty()) {
@@ -165,6 +180,12 @@ class Cmd {
                 deployer.close()
             }
         }
+    }
+
+
+    @Bean(destroyMethod = "close")
+    DeviceDetector deviceDetector() {
+        new SimplePortScanningDeviceDetector()
     }
 
 }

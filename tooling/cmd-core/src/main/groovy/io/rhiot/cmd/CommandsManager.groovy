@@ -14,21 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package commands
+package io.rhiot.cmd
 
-import io.rhiot.tooling.shell.commands.DeviceScanCommand
-import org.crsh.cli.Command
-import org.crsh.cli.Usage
-import org.crsh.command.InvocationContext
-import org.springframework.beans.factory.BeanFactory
+import org.springframework.stereotype.Component
+import org.springframework.beans.factory.annotation.Autowired
 
-class device_scan {
+@Component
+class CommandsManager {
 
-    @Usage("device-config file property key")
-    @Command
-    def main(InvocationContext context) {
-        BeanFactory beanFactory = context.attributes['spring.beanfactory']
-        beanFactory.getBean(DeviceScanCommand.class).execute()
+    private final Map<String, Command> commands = [:]
+
+    @Autowired
+    CommandsManager(List<Command> commands) {
+        commands.forEach {
+            this.commands[it.command()] = it
+        }
+    }
+
+    boolean hasCommand(String command) {
+        commands.containsKey(command)
+    }
+
+    Command command(String command) {
+        commands[command]
     }
 
 }
