@@ -16,9 +16,12 @@
  */
 package io.rhiot.camel.vertxproton;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.EndpointInject;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -29,6 +32,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static io.rhiot.camel.vertxproton.VertxProtonConstants.CAMEL_VERTX_PROTON_PATH;
 import static java.util.UUID.randomUUID;
 import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
 import static org.apache.camel.test.AvailablePortFinder.getNextAvailable;
@@ -56,6 +60,7 @@ public class VertxProtonComponentTest extends CamelTestSupport {
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         context.addComponent("amqp", amqp10Component("amqp://guest:guest@localhost:9999"));
+
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
@@ -130,6 +135,23 @@ public class VertxProtonComponentTest extends CamelTestSupport {
 
         // Then
         topicMockEndpoint.assertIsSatisfied();
+    }
+
+    // Data types tests
+
+    @Test
+    public void shouldReceiveMapFromJmsBridge() throws InterruptedException {
+        Map<String, String> mapMessage = ImmutableMap.of("foo", "bar");
+        template.sendBody("amqp:" + destination, mapMessage);
+        Map receivedMessage = consumer.receiveBody("vertx-proton:localhost:9999/" + destination, Map.class);
+        Truth.assertThat(receivedMessage).isEqualTo(mapMessage);
+    }
+
+    @Test
+    public void shouldReceivePathFromJmsBridge() throws InterruptedException {
+        template.sendBody("amqp:" + destination, message);
+        Exchange exchange = consumer.receive("vertx-proton:localhost:9999/" + destination);
+        Truth.assertThat(exchange.getIn().getHeader(CAMEL_VERTX_PROTON_PATH)).isEqualTo(destination);
     }
 
 }

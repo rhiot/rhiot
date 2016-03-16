@@ -60,9 +60,10 @@ public class VertxProtonEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        return new VertxProtonConsumer(this, processor);
+        return addressParser().isServer() ?
+                new VertxProtonServerConsumer(this, processor) :
+                new VertxProtonClientConsumer(this, processor);
     }
-
 
     // Helpers
 

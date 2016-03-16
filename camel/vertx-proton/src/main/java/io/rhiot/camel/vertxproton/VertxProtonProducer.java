@@ -62,11 +62,12 @@ public class VertxProtonProducer extends DefaultProducer {
                 if (isInOut) {
                     connection.createReceiver(replyTo)
                             .handler((delivery, msg) -> {
-                                log.debug("Received response from path {}.", path);
                                 Section responseBody = msg.getBody();
                                 if (responseBody instanceof AmqpValue) {
                                     AmqpValue amqpValue = (AmqpValue) responseBody;
-                                    exchange.getOut().setBody(amqpValue.getValue());
+                                    Object responsePayload = amqpValue.getValue();
+                                    log.debug("Received response {} from path {}.", responsePayload, replyTo);
+                                    exchange.getOut().setBody(responsePayload);
                                     responseReceived.countDown();
                                 }
                             })

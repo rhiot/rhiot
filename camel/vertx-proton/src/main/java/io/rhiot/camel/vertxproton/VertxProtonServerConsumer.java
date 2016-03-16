@@ -27,60 +27,31 @@ import org.apache.qpid.proton.amqp.messaging.AmqpValue;
 import org.apache.qpid.proton.amqp.messaging.Section;
 import org.apache.qpid.proton.message.Message;
 
+import static io.rhiot.camel.vertxproton.VertxProtonConstants.CAMEL_VERTX_PROTON_PATH;
 import static io.vertx.proton.ProtonHelper.message;
 import static io.vertx.proton.ProtonHelper.tag;
+import static org.apache.camel.ExchangePattern.InOut;
+import static org.apache.camel.builder.ExchangeBuilder.anExchange;
 
-public class VertxProtonConsumer extends DefaultConsumer {
+public class VertxProtonServerConsumer extends DefaultConsumer {
 
-    public VertxProtonConsumer(VertxProtonEndpoint endpoint, Processor processor) {
+    public VertxProtonServerConsumer(VertxProtonEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
     }
 
     @Override
     protected void doStart() throws Exception {
         AmqpAddress address = getEndpoint().addressParser();
-
-        if (address.host().startsWith("~")) {
-            Vertx vertx = getEndpoint().getVertx();
-            ProtonServer server = ProtonServer.create(vertx)
-                    .connectHandler(this::serverHandler)
-                    .listen(address.port(), (res) -> {
-                        if (res.succeeded()) {
-                            System.out.println("Listening on: " + res.result().actualPort());
-                        } else {
-                            res.cause().printStackTrace();
-                        }
-                    });
-        } else {
-            getEndpoint().getProtonClient().connect(getEndpoint().addressParser().host(), getEndpoint().addressParser().port(), result -> {
-                if (result.succeeded()) {
-                    ProtonConnection connection = result.result().open();
-                    connection.createReceiver(address.path())
-                            .handler((delivery, msg) -> {
-                                Section body = msg.getBody();
-                                if (body instanceof AmqpValue) {
-                                    AmqpValue amqpValue = (AmqpValue) body;
-                                    Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(amqpValue.getValue()).build();
-                                    try {
-                                        getProcessor().process(exchange);
-                                        if (msg.getReplyTo() != null) {
-                                            getEndpoint().send(connection, msg.getReplyTo(), exchange.getIn().getBody());
-                                        }
-                                    } catch (Exception e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                }
-                            })
-                            .flow(10)  // Prefetch up to 10 messages. The client will replenish credit as deliveries are settled.
-                            .open();
-                } else {
-                    getExceptionHandler().handleException("Cannot connect to AMQP server.", result.cause());
-                }
-            });
-
-
-
-        }
+        Vertx vertx = getEndpoint().getVertx();
+        ProtonServer server = ProtonServer.create(vertx)
+                .connectHandler(this::serverHandler)
+                .listen(address.port(), (res) -> {
+                    if (res.succeeded()) {
+                        System.out.println("Listening on: " + res.result().actualPort());
+                    } else {
+                        res.cause().printStackTrace();
+                    }
+                });
         super.doStart();
     }
 
@@ -115,7 +86,7 @@ public class VertxProtonConsumer extends DefaultConsumer {
                         Section body = msg.getBody();
                         if (body instanceof AmqpValue) {
                             AmqpValue bodyx = (AmqpValue) body;
-                            Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(bodyx.getValue()).build();
+                            Exchange exchange = anExchange(getEndpoint().getCamelContext()).withBody(bodyx.getValue()).build();
                             try {
                                 getProcessor().process(exchange);
                             } catch (Exception e) {
