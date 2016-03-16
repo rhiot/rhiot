@@ -9,8 +9,8 @@
         <artifactId>rhiot-cloudplatform</artifactId>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: Cloud platform :: Camel components</name>
-    <artifactId>rhiot-cloudplatform-camel</artifactId>
+    <name>Rhiot :: Camel components</name>
+    <artifactId>rhiot-camel</artifactId>
     <packaging>pom</packaging>
 
     <licenses>

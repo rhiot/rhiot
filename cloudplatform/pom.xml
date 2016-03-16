@@ -21,7 +21,6 @@
     </licenses>
 
     <modules>
-        <module>camel</module>
         <module>schema</module>
         <module>connector</module>
         <module>runtime</module>
