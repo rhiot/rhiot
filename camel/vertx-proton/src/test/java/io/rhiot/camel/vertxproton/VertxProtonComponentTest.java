@@ -50,6 +50,7 @@ public class VertxProtonComponentTest extends CamelTestSupport {
     @BeforeClass
     public static void beforeClass() throws Exception {
         BrokerService broker = new BrokerService();
+        broker.setBrokerName(randomUUID().toString());
         broker.setPersistent(false);
         broker.addConnector("amqp://0.0.0.0:9999");
         broker.start();

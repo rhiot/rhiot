@@ -22,6 +22,8 @@ public final class VertxProtonConstants {
 
     public static final String CAMEL_VERTX_PROTON_PATH = CAMEL_VERTX_PROTON + ".path";
 
+    public static final String CAMEL_VERTX_PROTON_REPLYTO = CAMEL_VERTX_PROTON + ".replyTo";
+
     private VertxProtonConstants() {
     }
 

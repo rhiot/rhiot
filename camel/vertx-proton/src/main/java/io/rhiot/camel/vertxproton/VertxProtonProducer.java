@@ -16,16 +16,19 @@
  */
 package io.rhiot.camel.vertxproton;
 
+import com.google.common.collect.ImmutableMap;
 import io.vertx.proton.ProtonConnection;
 import io.vertx.proton.ProtonSender;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.qpid.proton.amqp.messaging.AmqpValue;
+import org.apache.qpid.proton.amqp.messaging.ApplicationProperties;
 import org.apache.qpid.proton.amqp.messaging.Section;
 import org.apache.qpid.proton.message.Message;
 
 import java.util.concurrent.CountDownLatch;
 
+import static io.rhiot.camel.vertxproton.VertxProtonConstants.CAMEL_VERTX_PROTON_REPLYTO;
 import static io.vertx.proton.ProtonHelper.message;
 import static io.vertx.proton.ProtonHelper.tag;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -52,6 +55,9 @@ public class VertxProtonProducer extends DefaultProducer {
                 String replyTo = getEndpoint().getReplyToGenerationStrategy().generateReplyTo(exchange, path);
                 if (isInOut) {
                     message.setReplyTo(replyTo);
+                    message.setApplicationProperties(new ApplicationProperties(
+                            ImmutableMap.of(CAMEL_VERTX_PROTON_REPLYTO, replyTo)
+                    ));
                 }
                 Object body = exchange.getIn().getBody();
                 message.setBody(new AmqpValue(body));

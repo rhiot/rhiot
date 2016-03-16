@@ -24,6 +24,7 @@ import org.apache.qpid.proton.amqp.messaging.AmqpValue;
 import org.apache.qpid.proton.amqp.messaging.Section;
 
 import static io.rhiot.camel.vertxproton.VertxProtonConstants.CAMEL_VERTX_PROTON_PATH;
+import static io.rhiot.camel.vertxproton.VertxProtonConstants.CAMEL_VERTX_PROTON_REPLYTO;
 import static org.apache.camel.ExchangePattern.InOut;
 import static org.apache.camel.builder.ExchangeBuilder.anExchange;
 
@@ -55,7 +56,9 @@ public class VertxProtonClientConsumer extends DefaultConsumer {
                                     }
                                 }
                                 if (msg.getReplyTo() != null) {
-                                    exchangeBuilder.withPattern(InOut);
+                                    exchangeBuilder.
+                                            withPattern(InOut).
+                                            withHeader(CAMEL_VERTX_PROTON_REPLYTO, msg.getReplyTo());
                                 }
                                 Exchange exchange = exchangeBuilder.build();
                                 exchange.setFromEndpoint(getEndpoint());
