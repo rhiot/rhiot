@@ -23,7 +23,7 @@ import org.junit.Test
 import static com.google.common.truth.Truth.assertThat
 import static org.mockito.Mockito.mock
 
-class DeployerTest extends Assert {
+class CmdTest extends Assert {
 
     def deviceDetector = mock(DeviceDetector.class)
 
@@ -44,7 +44,7 @@ class DeployerTest extends Assert {
     void shouldUseUsernameAndPassword() {
         try {
             def parser = new ConsoleInputParser('--username=foo', '--password=bar')
-            Deployer.deployGateway(parser)
+            Cmd.deployGateway(parser)
         } catch (ConsoleInformation info) {
             assertTrue(info.message.contains('No supported devices detected'))
             return
@@ -56,7 +56,7 @@ class DeployerTest extends Assert {
     void shouldDetectUsernameWithoutPassword() {
         try {
             def parser = new ConsoleInputParser('--username=foo')
-            Deployer.deployGateway(parser)
+            Cmd.deployGateway(parser)
         } catch (ConsoleInformation info) {
             assertThat(info.message).contains('Both username and password must be specified')
             return

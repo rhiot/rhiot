@@ -42,6 +42,10 @@
             <artifactId>spring-boot-starter-remote-shell</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.rhiot</groupId>
+            <artifactId>rhiot-tooling-cmd-core</artifactId>
+        </dependency>
 
         <!-- Testing -->
         <dependency>

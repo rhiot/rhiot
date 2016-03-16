@@ -16,12 +16,10 @@
  */
 package io.rhiot.cmd
 
-import io.rhiot.deployer.Deployer
-
 class Cmd {
 
     static void main(String... args) {
-        Deployer.main(args)
+        io.rhiot.deployer.Cmd.main(args)
     }
 
 }
