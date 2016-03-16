@@ -43,7 +43,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.rhiot</groupId>
-			<artifactId>rhiot-datastream-document</artifactId>
+			<artifactId>rhiot-datastream-document-mongodb</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.rhiot</groupId>
