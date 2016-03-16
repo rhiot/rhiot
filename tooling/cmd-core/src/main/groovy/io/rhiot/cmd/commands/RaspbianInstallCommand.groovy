@@ -22,13 +22,9 @@ import io.rhiot.cmd.OutputAppender
 import io.rhiot.utils.WithLogger
 import io.rhiot.utils.process.ProcessManager
 import org.apache.commons.io.IOUtils
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
 
 import java.util.zip.ZipInputStream
 
-@Component
 class RaspbianInstallCommand implements Command, WithLogger {
 
     private final String devicesDirectory
@@ -37,9 +33,7 @@ class RaspbianInstallCommand implements Command, WithLogger {
 
     private final ProcessManager processManager
 
-    @Autowired
-    RaspbianInstallCommand(@Value('${devices.directory:/dev}') String devicesDirectory,
-                           DownloadManager downloadManager, ProcessManager processManager) {
+    RaspbianInstallCommand(String devicesDirectory, DownloadManager downloadManager, ProcessManager processManager) {
         this.devicesDirectory = devicesDirectory
         this.downloadManager = downloadManager
         this.processManager = processManager
