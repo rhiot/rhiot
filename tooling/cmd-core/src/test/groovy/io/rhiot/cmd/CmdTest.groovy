@@ -37,6 +37,13 @@ class CmdTest {
     }
 
     @Test
+    void shouldPerformScanning() {
+        def appender = new InMemoryOutputAppender()
+        commandsManager.command('device-scan').execute(appender)
+        assertThat(appender.output().join('')).startsWith('Scanning')
+    }
+
+    @Test
     void shouldLoadRaspbianInstallCommand() {
         assertThat(commandsManager.hasCommand('raspbian-install')).isTrue()
     }
