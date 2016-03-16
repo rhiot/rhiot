@@ -16,7 +16,7 @@
  */
 package io.rhiot.tooling.shell.commands
 
-import io.rhiot.deployer.DownloadManager
+import io.rhiot.cmd.DownloadManager
 import io.rhiot.utils.WithLogger
 import io.rhiot.utils.process.ProcessManager
 import org.apache.commons.io.IOUtils
