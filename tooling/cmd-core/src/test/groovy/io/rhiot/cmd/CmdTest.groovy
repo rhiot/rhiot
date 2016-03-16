@@ -36,4 +36,9 @@ class CmdTest {
         assertThat(commandsManager.hasCommand('device-scan')).isTrue()
     }
 
+    @Test
+    void shouldLoadRaspbianInstallCommand() {
+        assertThat(commandsManager.hasCommand('raspbian-install')).isTrue()
+    }
+
 }
