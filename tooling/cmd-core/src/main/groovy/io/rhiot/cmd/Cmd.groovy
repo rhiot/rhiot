@@ -18,6 +18,7 @@ package io.rhiot.cmd
 
 import groovy.transform.PackageScope
 import io.rhiot.cmd.commands.DeviceScanCommand
+import io.rhiot.cmd.commands.RaspbianInstallCommand
 import io.rhiot.scanner.Device
 import io.rhiot.scanner.DeviceDetector
 import io.rhiot.scanner.SimplePortScanningDeviceDetector
@@ -26,6 +27,8 @@ import io.rhiot.utils.process.DefaultProcessManager
 import io.rhiot.utils.process.ProcessManager
 import io.rhiot.utils.ssh.client.SshClient
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.Banner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -130,7 +133,9 @@ class Cmd {
     // Main runner
 
     public static void main(String[] args) {
-        def ctx = new SpringApplication(Cmd.class).run(args)
+        def app = new SpringApplication(Cmd.class)
+        app.setBannerMode(Banner.Mode.OFF)
+        def ctx = app.run(args)
         def commandsManager = ctx.getBean(CommandsManager.class)
 
         def parser = new ConsoleInputParser(args)
@@ -200,6 +205,14 @@ class Cmd {
     @Bean
     ProcessManager processManager() {
         new DefaultProcessManager()
+    }
+
+    // Commands
+
+    @Bean
+    RaspbianInstallCommand raspbianInstallCommand(@Value('${devices.directory:/dev}') String devicesDirectory,
+                                                  DownloadManager downloadManager, ProcessManager processManager) {
+        new RaspbianInstallCommand(devicesDirectory, downloadManager, processManager)
     }
 
 }
