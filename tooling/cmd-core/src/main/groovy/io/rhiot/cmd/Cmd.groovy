@@ -144,7 +144,7 @@ class Cmd {
             if(command == 'deploy-gateway') {
                 deployGateway(parser)
             } else if(commandsManager.hasCommand(command)) {
-                println commandsManager.command(command).execute(new StdoutOutputAppender(), args)
+                commandsManager.command(command).execute(new StdoutOutputAppender(), args.length == 0 ? new String[0] : ((String[]) Arrays.copyOfRange(args, 1, args.length)))
             } else {
                 def output = new SshClient('localhost', 2000, 'rhiot', 'rhiot').command(args.join(' '))
                 if(output.isEmpty()) {
