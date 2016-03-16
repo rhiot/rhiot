@@ -14,34 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.tooling.shell.commands
+package io.rhiot.cmd
 
-import io.rhiot.scanner.DeviceDetector
-import io.rhiot.tooling.shell.CommandSupport
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
+import org.springframework.boot.test.SpringApplicationConfiguration
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
-@Component
-class DeviceScanCommand extends CommandSupport {
+import static com.google.common.truth.Truth.assertThat
 
-    private final DeviceDetector deviceDetector
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(Cmd.class)
+class CmdTest {
 
     @Autowired
-    DeviceScanCommand(DeviceDetector deviceDetector) {
-        this.deviceDetector = deviceDetector
-    }
+    CommandsManager commandsManager
 
-    @Override
-    protected List<String> doExecute(List<String> output, String... command) {
-        output << 'Scanning local networks for devices...'
-        output << ''
-        output << '======================================'
-        output << "Device type\t\tIPv4 address"
-        output << '--------------------------------------'
-        deviceDetector.detectDevices().each {
-            output << "${it.type()}\t\t${it.address()}"
-        }
-        output
+    @Test
+    void shouldLoadDeviceScanCommand() {
+        assertThat(commandsManager.hasCommand('device-scan')).isTrue()
     }
 
 }

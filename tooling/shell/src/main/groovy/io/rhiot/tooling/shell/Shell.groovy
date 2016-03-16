@@ -16,6 +16,7 @@
  */
 package io.rhiot.tooling.shell
 
+import io.rhiot.cmd.DownloadManager
 import io.rhiot.scanner.DeviceDetector
 import io.rhiot.scanner.SimplePortScanningDeviceDetector
 import io.rhiot.utils.maven.JcabiMavenArtifactResolver
@@ -38,11 +39,6 @@ class Shell {
     @Bean
     ProcessManager processManager() {
         new DefaultProcessManager()
-    }
-
-    @Bean(destroyMethod = "close")
-    DeviceDetector deviceDetector() {
-        new SimplePortScanningDeviceDetector()
     }
 
     @Bean(destroyMethod = "close")

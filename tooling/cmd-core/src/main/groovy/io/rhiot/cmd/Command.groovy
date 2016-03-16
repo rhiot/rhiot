@@ -18,6 +18,8 @@ package io.rhiot.cmd
 
 interface Command {
 
+    String command()
+
     List<String> execute(String... command)
 
 }
