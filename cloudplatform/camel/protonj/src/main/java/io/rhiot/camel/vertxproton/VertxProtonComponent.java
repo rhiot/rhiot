@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.camel.vertxproton;
+package io.rhiot.camel.vertxproton;
 
 import io.vertx.core.Vertx;
 import io.vertx.proton.ProtonClient;
@@ -23,7 +23,7 @@ import org.apache.camel.impl.DefaultComponent;
 
 import java.util.Map;
 
-public class ProtonjComponent extends DefaultComponent {
+public class VertxProtonComponent extends DefaultComponent {
 
     private Vertx vertx;
 

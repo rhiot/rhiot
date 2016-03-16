@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.camel.vertxproton;
+package io.rhiot.camel.vertxproton;
 
 import com.google.common.truth.Truth;
 import org.apache.activemq.broker.BrokerService;
@@ -33,7 +33,7 @@ import static java.util.UUID.randomUUID;
 import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
 import static org.apache.camel.test.AvailablePortFinder.getNextAvailable;
 
-public class ProtonjComponentTest extends CamelTestSupport {
+public class VertxProtonComponentTest extends CamelTestSupport {
 
     @EndpointInject(uri = "mock:peer2peer")
     MockEndpoint mockEndpoint;

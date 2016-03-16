@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.camel.vertxproton;
+package io.rhiot.camel.vertxproton;
 
 import io.vertx.core.Vertx;
 import io.vertx.proton.ProtonClient;
@@ -30,11 +30,8 @@ import org.apache.qpid.proton.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.CountDownLatch;
-
 import static io.vertx.proton.ProtonHelper.message;
 import static io.vertx.proton.ProtonHelper.tag;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class ProtonjEndpoint extends DefaultEndpoint {
 
@@ -97,8 +94,8 @@ public class ProtonjEndpoint extends DefaultEndpoint {
     }
 
     @Override
-    public ProtonjComponent getComponent() {
-        return (ProtonjComponent) super.getComponent();
+    public VertxProtonComponent getComponent() {
+        return (VertxProtonComponent) super.getComponent();
     }
 
     public AmqpAddress addressParser() {
