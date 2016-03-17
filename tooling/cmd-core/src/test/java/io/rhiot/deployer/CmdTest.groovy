@@ -16,9 +16,7 @@
  */
 package io.rhiot.deployer
 
-import io.rhiot.cmd.Cmd
 import io.rhiot.cmd.ConsoleInformation
-import io.rhiot.cmd.ConsoleInputParser
 import io.rhiot.cmd.DeployerBuilder
 import io.rhiot.scanner.DeviceDetector
 import org.junit.Assert
@@ -39,30 +37,6 @@ class CmdTest extends Assert {
             deployer.deploy()
         } catch (ConsoleInformation info) {
             assertThat(info.message).contains('No supported devices detected')
-            return
-        }
-        fail()
-    }
-
-    @Test
-    void shouldUseUsernameAndPassword() {
-        try {
-            def parser = new ConsoleInputParser('--username=foo', '--password=bar')
-            Cmd.deployGateway(parser)
-        } catch (ConsoleInformation info) {
-            assertTrue(info.message.contains('No supported devices detected'))
-            return
-        }
-        fail()
-    }
-
-    @Test
-    void shouldDetectUsernameWithoutPassword() {
-        try {
-            def parser = new ConsoleInputParser('--username=foo')
-            Cmd.deployGateway(parser)
-        } catch (ConsoleInformation info) {
-            assertThat(info.message).contains('Both username and password must be specified')
             return
         }
         fail()
