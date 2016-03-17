@@ -14,24 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.service.camera.api;
+package io.rhiot.cloudplatform.service.camera
 
-import java.util.List;
+interface ImageProcessor {
 
-/**
- * Service for storing and analysing images taken by video cameras.
- */
-public interface CameraService {
-
-    /**
-     * Analyzes image against presence of license plates.
-     *
-     * @param country expected country of the plate. Can be 'us' or 'eu'.
-     * @param imageData binary data of an image to analyze
-     * @return list of possible recognition matches. The best matches come first.
-     */
-    List<PlateMatch> recognizePlate(String country, byte[] imageData);
-
-    void process(String deviceId, String country, byte[] imageData);
+    void process(String imageId, String country);
 
 }

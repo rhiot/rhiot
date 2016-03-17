@@ -19,20 +19,41 @@ package io.rhiot.cloudplatform.service.camera.spring;
 import io.rhiot.cloudplatform.connector.IoTConnector;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
-import io.rhiot.cloudplatform.service.camera.CameraImageRotation;
+import io.rhiot.cloudplatform.service.camera.*;
 import io.rhiot.cloudplatform.service.camera.api.CameraService;
-import io.rhiot.cloudplatform.service.camera.DefaultCameraService;
 import org.apache.camel.ProducerTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Collections;
+import java.util.List;
+
+import static com.google.common.base.MoreObjects.firstNonNull;
 
 @Configuration
 public class CameraServiceConfiguration {
 
+    @Autowired(required = false)
+    List<ImageProcessor> imageProcessors;
+
     @Bean(name = "camera")
-    CameraService cameraService(IoTConnector connector, ProducerTemplate producerTemplate) {
-        return new DefaultCameraService(connector, producerTemplate);
+    CameraService cameraService(IoTConnector connector, PlateRecognition plateRecognition) {
+        List<ImageProcessor> processors = firstNonNull(imageProcessors, Collections.<ImageProcessor>emptyList());
+        return new DefaultCameraService(connector, plateRecognition, processors);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "camera.processor.openalpr.enabled", havingValue = "true", matchIfMissing = true)
+    ImageProcessor openalprImageProcessor(IoTConnector connector, PlateRecognition plateRecognition) {
+        return new OpenalprImageProcessor(connector, plateRecognition);
+    }
+
+    @Bean
+    PlateRecognition plateRecognition(ProducerTemplate producerTemplate) {
+        return new PlateRecognition(producerTemplate);
     }
 
     @Bean
