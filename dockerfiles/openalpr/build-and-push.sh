@@ -15,7 +15,7 @@
 
 #!/usr/bin/env bash
 
-docker build -t rhiot/openalpr:0.1.4-SNAPSHOT https://github.com/openalpr/openalpr.git
-docker tag -f rhiot/openalpr:0.1.4-SNAPSHOT rhiot/openalpr:latest
-docker push rhiot/openalpr:0.1.4-SNAPSHOT
+docker build -t rhiot/openalpr:0.1.5-SNAPSHOT https://github.com/openalpr/openalpr.git
+docker tag -f rhiot/openalpr:0.1.5-SNAPSHOT rhiot/openalpr:latest
+docker push rhiot/openalpr:0.1.5-SNAPSHOT
 docker push rhiot/openalpr:latest
