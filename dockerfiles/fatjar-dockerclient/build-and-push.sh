@@ -15,7 +15,7 @@
 
 #!/bin/sh
 
-docker build -t rhiot/fatjar-dockerclient:0.1.4-SNAPSHOT .
-docker tag -f rhiot/fatjar-dockerclient:0.1.4-SNAPSHOT rhiot/fatjar-dockerclient:latest
-docker push rhiot/fatjar-dockerclient:0.1.4-SNAPSHOT
+docker build -t rhiot/fatjar-dockerclient:0.1.5-SNAPSHOT .
+docker tag -f rhiot/fatjar-dockerclient:0.1.5-SNAPSHOT rhiot/fatjar-dockerclient:latest
+docker push rhiot/fatjar-dockerclient:0.1.5-SNAPSHOT
 docker push rhiot/fatjar-dockerclient:latest
