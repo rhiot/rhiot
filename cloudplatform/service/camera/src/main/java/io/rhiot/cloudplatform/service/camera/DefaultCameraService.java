@@ -21,11 +21,9 @@ import io.rhiot.cloudplatform.connector.IoTConnector;
 import io.rhiot.cloudplatform.service.camera.api.CameraImage;
 import io.rhiot.cloudplatform.service.camera.api.CameraService;
 import io.rhiot.cloudplatform.service.camera.api.PlateMatch;
-import org.apache.camel.ProducerTemplate;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static io.rhiot.cloudplatform.connector.Header.arguments;
 import static io.rhiot.cloudplatform.service.camera.api.CameraImage.CAMERA_IMAGE_COLLECTION;
@@ -34,17 +32,19 @@ public class DefaultCameraService implements CameraService {
 
     private final IoTConnector connector;
 
-    private final ProducerTemplate producerTemplate;
+    private final PlateRecognition plateRecognition;
 
-    public DefaultCameraService(IoTConnector connector, ProducerTemplate producerTemplate) {
+    private final List<ImageProcessor> imageProcessors;
+
+    public DefaultCameraService(IoTConnector connector, PlateRecognition plateRecognition, List<ImageProcessor> imageProcessors) {
         this.connector = connector;
-        this.producerTemplate = producerTemplate;
+        this.plateRecognition = plateRecognition;
+        this.imageProcessors = imageProcessors;
     }
 
     @Override
     public List<PlateMatch> recognizePlate(String country, byte[] imageData) {
-        return ((List<io.rhiot.cloudplatform.camel.openalpr.PlateMatch>) producerTemplate.requestBody("openalpr:recognize?country=" + country, imageData, List.class)).stream().
-                map(match -> new PlateMatch(match.getPlateNumber(), match.getConfidence())).collect(Collectors.toList());
+        return plateRecognition.recognizePlate(country, imageData);
     }
 
     @Override
@@ -53,17 +53,7 @@ public class DefaultCameraService implements CameraService {
         String imageId = connector.fromBus("document.save", imageMetadata, String.class, arguments(CAMERA_IMAGE_COLLECTION));
         connector.toBusAndWait("binary.store", imageData, arguments(imageId));
 
-        connector.toBus("camera.processPlate", arguments(imageId, country));
-    }
-
-    @Override
-    public void processPlate(String imageId, String country) {
-        byte[] imageData = connector.fromBus("binary.read", imageId, byte[].class);
-        List<PlateMatch> matches = recognizePlate(country, imageData);
-
-        CameraImage imageMetadata = connector.fromBus("document.findOne", CameraImage.class, arguments(CAMERA_IMAGE_COLLECTION, imageId));
-        imageMetadata.setPlateMatches(matches);
-        connector.toBus("document.save", imageMetadata, arguments("CameraImage"));
+        imageProcessors.stream().forEach(processor -> processor.process(imageId, country));
     }
 
 }
