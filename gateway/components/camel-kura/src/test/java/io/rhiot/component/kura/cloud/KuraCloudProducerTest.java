@@ -16,11 +16,13 @@
  */
 package io.rhiot.component.kura.cloud;
 
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_RETAIN;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -34,16 +36,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.truth.Truth;
+import org.mockito.ArgumentCaptor;
 
 public class KuraCloudProducerTest extends CamelTestSupport {
 
     CloudService cloudService = mock(CloudService.class);
 
-    CloudClient cloudClient = mock(CloudClient.class);
+    CloudClient cloudClient;
 
-    @Before
-    public void before() throws KuraException {
-        given(cloudService.newCloudClient(anyString())).willReturn(cloudClient);
+    @Override
+    protected void doPreSetup() throws Exception {
+        given(cloudService.newCloudClient(anyString())).willReturn(mock(CloudClient.class));
+        cloudClient = KuraCloudComponent.clientCache().getOrCreate("app", cloudService);
     }
 
     @Override
@@ -52,6 +56,8 @@ public class KuraCloudProducerTest extends CamelTestSupport {
         registry.bind("cloudService", cloudService);
         return registry;
     }
+
+    // Tests
 
     @Test
     public void shouldSendKuraPayloadToTopic() throws KuraException {
@@ -63,6 +69,33 @@ public class KuraCloudProducerTest extends CamelTestSupport {
 
         // Then
         verify(cloudClient).publish(eq("topic"), eq(kuraPayload), anyInt(), anyBoolean(), anyInt());
+    }
+
+    @Test
+    public void shouldOverrideRetain() throws KuraException {
+        // Given
+        KuraPayload kuraPayload = new KuraPayload();
+
+        // When
+        template.sendBodyAndHeader("kura-cloud:app/topic", kuraPayload, CAMEL_KURA_CLOUD_RETAIN, true);
+
+        // Then
+        verify(cloudClient).publish(eq("topic"), eq(kuraPayload), anyInt(), eq(true), anyInt());
+    }
+
+    @Test
+    public void shouldConvertIntegerPayloadToBytes() throws KuraException {
+        // Given
+        Integer payload = 10;
+        byte[] serializedPayload = payload.toString().getBytes();
+
+        // When
+        template.sendBody("kura-cloud:app/topic", payload);
+
+        // Then
+        ArgumentCaptor<KuraPayload> captor = ArgumentCaptor.forClass(KuraPayload.class);
+        verify(cloudClient, atLeastOnce()).publish(eq("topic"), captor.capture(), anyInt(), anyBoolean(), anyInt());
+        Truth.assertThat(captor.getValue().getBody()).isEqualTo(serializedPayload);
     }
 
     @Test

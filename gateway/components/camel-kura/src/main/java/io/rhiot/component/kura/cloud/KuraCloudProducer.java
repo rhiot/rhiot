@@ -16,92 +16,67 @@
  */
 package io.rhiot.component.kura.cloud;
 
-import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_PRIORITY;
-import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_QOS;
-import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.message.KuraPayload;
 
-public class KuraCloudProducer extends DefaultProducer {
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.*;
 
-    private KuraCloudEndpoint endpoint;
+public class KuraCloudProducer extends DefaultProducer {
 
     // Visible for testing
     CloudClient cloudClient;
 
     public KuraCloudProducer(KuraCloudEndpoint endpoint, CloudClient cloudClient) {
         super(endpoint);
-        this.endpoint = endpoint;
         this.cloudClient = cloudClient;
-    }
-
-    protected boolean resolveRetain(Message message) {
-        Boolean ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_RETAIN, Boolean.class);
-        if (ret == null) {
-            ret = endpoint.isRetain();
-        }
-        return ret;
-    }
-
-    protected boolean resolveControl(Message message) {
-        Boolean ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL, Boolean.class);
-        if (ret == null) {
-            ret = endpoint.isControl();
-        }
-        return ret;
-    }
-
-    protected String resolveDeviceId(Message message) {
-        String ret = message.getHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID, String.class);
-        if (ret == null) {
-            ret = endpoint.getDeviceId();
-        }
-        return ret;
     }
 
     @Override
     public void process(Exchange exchange) throws Exception {
         Message in = exchange.getIn();
-        Object body = in.getBody();
 
         String topic = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_TOPIC, String.class), getEndpoint().getTopic());
         int qos = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_QOS, Integer.class), getEndpoint().getQos());
-        int priority = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_PRIORITY, Integer.class),
-                getEndpoint().getPriority());
-        ;
-        boolean retain = resolveRetain(in);
-        boolean control = resolveControl(in);
-        String deviceId = resolveDeviceId(in);
+        int priority = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_PRIORITY, Integer.class), getEndpoint().getPriority());
+        boolean retain = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_RETAIN, Boolean.class), getEndpoint().isRetain());
+        boolean control = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_CONTROL, Boolean.class), getEndpoint().isControl());
+        String deviceId = firstNotNull(in.getHeader(CAMEL_KURA_CLOUD_DEVICEID, String.class), getEndpoint().getDeviceId());
 
-        if (body != null) {
-            if (control) {
-                if (deviceId != null) {
-                    if (body instanceof KuraPayload) {
-                        cloudClient.controlPublish(deviceId, topic, (KuraPayload) body, qos, retain, priority);
-                    } else if (body instanceof byte[] || in.getBody(byte[].class) != null) {
-                        cloudClient.controlPublish(deviceId, topic, (byte[]) body, qos, retain, priority);
-                    } else {
-                        cloudClient.controlPublish(deviceId, topic, in.getBody(String.class).getBytes(), qos, retain,
-                                priority);
-                    }
-                } else {
-                    cloudClient.controlPublish(topic, (KuraPayload) body, qos, retain, priority);
-                }
+        Object body = in.getBody();
+        if(body == null) {
+            throw new RuntimeException("Cannot produce null payload.");
+        }
+
+        if(!(body instanceof KuraPayload)) {
+            KuraPayload payload = new KuraPayload();
+            if(body instanceof byte[]) {
+                payload.setBody((byte[]) body);
             } else {
-                if (body instanceof KuraPayload) {
-                    cloudClient.publish(topic, (KuraPayload) body, qos, retain, priority);
-                } else if (body instanceof byte[] || in.getBody(byte[].class) != null) {
-                    cloudClient.publish(topic, (byte[]) body, qos, retain, priority);
+                byte[] payloadBytes = in.getBody(byte[].class);
+                if(payloadBytes != null) {
+                    payload.setBody(in.getBody(byte[].class));
                 } else {
-                    cloudClient.publish(topic, in.getBody(String.class).getBytes(), qos, retain, priority);
+                    payload.setBody(in.getBody(String.class).getBytes());
                 }
             }
+            body = payload;
+        }
+
+        if (control) {
+            if (deviceId != null) {
+                cloudClient.controlPublish(deviceId, topic, (KuraPayload) body, qos, retain, priority);
+            } else {
+                cloudClient.controlPublish(topic, (KuraPayload) body, qos, retain, priority);
+            }
+        } else {
+                cloudClient.publish(topic, (KuraPayload) body, qos, retain, priority);
         }
     }
+
+    // Getters
 
     @Override
     public KuraCloudEndpoint getEndpoint() {
