@@ -19,11 +19,12 @@ package io.rhiot.component.kura.cloud;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.builder.ExchangeBuilder;
 import org.apache.camel.impl.DefaultConsumer;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudClientListener;
 import org.eclipse.kura.message.KuraPayload;
+
+import static org.apache.camel.builder.ExchangeBuilder.anExchange;
 
 public class KuraCloudConsumer extends DefaultConsumer implements CloudClientListener {
 
@@ -34,17 +35,23 @@ public class KuraCloudConsumer extends DefaultConsumer implements CloudClientLis
         this.cloudClient = cloudClient;
     }
 
+    // Life-cycle
+
     @Override
     protected void doStart() throws Exception {
+        super.doStart();
         cloudClient.addCloudClientListener(this);
-        log.trace("Start Listening CloudClient");
+        log.debug("Starting CloudClientListener.");
     }
 
     @Override
     protected void doStop() throws Exception {
         cloudClient.removeCloudClientListener(this);
-        log.trace("Stop Listening CloudClient");
+        log.debug("Stopping CloudClientListener.");
+        super.doStop();
     }
+
+    // CloudClientListener callbacks
 
     @Override
     public void onControlMessageArrived(String deviceId, String appTopic, KuraPayload msg, int qos, boolean retain) {
@@ -56,35 +63,37 @@ public class KuraCloudConsumer extends DefaultConsumer implements CloudClientLis
         onInternalMessageArrived(deviceId, appTopic, msg, qos, retain, false);
     }
 
+    @Override
+    public void onConnectionLost() {
+        log.debug("Executing empty 'onConnectionLost' callback.");
+    }
+
+    @Override
+    public void onConnectionEstablished() {
+        log.debug("Executing empty 'onConnectionLost' callback.");
+    }
+
+    @Override
+    public void onMessageConfirmed(int messageId, String appTopic) {
+        log.debug("Executing empty 'onMessageConfirmed' callback with message ID {} and application topic {}.", messageId, appTopic);
+    }
+
+    @Override
+    public void onMessagePublished(int messageId, String appTopic) {
+        log.debug("Executing empty 'onMessagePublished' callback with message ID {} and application topic {}.", messageId, appTopic);
+    }
+
+    // Helpers
+
     private void onInternalMessageArrived(String deviceId, String appTopic, KuraPayload msg, int qos, boolean retain,
-            boolean control) {
-        Exchange exchange = ExchangeBuilder.anExchange(getEndpoint().getCamelContext()).withBody(msg)
+                                          boolean control) {
+        Exchange exchange = anExchange(getEndpoint().getCamelContext()).withBody(msg)
                 .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC, appTopic)
                 .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID, deviceId)
                 .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_QOS, qos)
                 .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL, control)
                 .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_RETAIN, retain).build();
         exchange.setFromEndpoint(getEndpoint());
-    }
-
-    @Override
-    public void onConnectionLost() {
-        log.trace("Do Nothing");
-    }
-
-    @Override
-    public void onConnectionEstablished() {
-        log.trace("Do Nothing");
-    }
-
-    @Override
-    public void onMessageConfirmed(int messageId, String appTopic) {
-        log.trace("Do Nothing");
-    }
-
-    @Override
-    public void onMessagePublished(int messageId, String appTopic) {
-        log.trace("Do Nothing");
     }
 
 }
