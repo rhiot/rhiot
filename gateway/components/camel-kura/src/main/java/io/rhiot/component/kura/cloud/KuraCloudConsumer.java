@@ -24,6 +24,7 @@ import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudClientListener;
 import org.eclipse.kura.message.KuraPayload;
 
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.*;
 import static org.apache.camel.builder.ExchangeBuilder.anExchange;
 
 public class KuraCloudConsumer extends DefaultConsumer implements CloudClientListener {
@@ -85,15 +86,21 @@ public class KuraCloudConsumer extends DefaultConsumer implements CloudClientLis
 
     // Helpers
 
-    private void onInternalMessageArrived(String deviceId, String appTopic, KuraPayload msg, int qos, boolean retain,
+    private void onInternalMessageArrived(String deviceId, String appTopic, KuraPayload message, int qos, boolean retain,
                                           boolean control) {
-        Exchange exchange = anExchange(getEndpoint().getCamelContext()).withBody(msg)
-                .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC, appTopic)
-                .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID, deviceId)
-                .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_QOS, qos)
-                .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL, control)
-                .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_RETAIN, retain).build();
+        log.debug("Received message with deviceId {}, application topic {}.", deviceId, appTopic);
+        Exchange exchange = anExchange(getEndpoint().getCamelContext()).withBody(message)
+                .withHeader(CAMEL_KURA_CLOUD_TOPIC, appTopic)
+                .withHeader(CAMEL_KURA_CLOUD_DEVICEID, deviceId)
+                .withHeader(CAMEL_KURA_CLOUD_QOS, qos)
+                .withHeader(CAMEL_KURA_CLOUD_CONTROL, control)
+                .withHeader(CAMEL_KURA_CLOUD_RETAIN, retain).build();
         exchange.setFromEndpoint(getEndpoint());
+        try {
+            getProcessor().process(exchange);
+        } catch (Exception e) {
+            handleException("Error while processing an incoming message:", e);
+        }
     }
 
 }
