@@ -65,16 +65,6 @@ public class KuraCloudConsumer extends DefaultConsumer implements CloudClientLis
                 .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL, control)
                 .withHeader(KuraCloudConstants.CAMEL_KURA_CLOUD_RETAIN, retain).build();
         exchange.setFromEndpoint(getEndpoint());
-        try {
-            getProcessor().process(exchange);
-        } catch (Exception e) {
-            exchange.setException(e);
-        } finally {
-            // log exception if an exception occurred and was not handled
-            if (exchange.getException() != null) {
-                getExceptionHandler().handleException("Error processing exchange", exchange, exchange.getException());
-            }
-        }
     }
 
     @Override
