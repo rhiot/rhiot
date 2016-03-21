@@ -16,15 +16,17 @@
  */
 package io.rhiot.component.kura.cloud;
 
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL;
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID;
+import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC;
+import static java.util.UUID.randomUUID;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-
-import io.rhiot.component.kura.cloud.KuraCloudConstants;
-import io.rhiot.component.kura.cloud.KuraCloudConsumer;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
@@ -36,14 +38,15 @@ import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudClientListener;
 import org.eclipse.kura.cloud.CloudService;
 import org.eclipse.kura.message.KuraPayload;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.UUID;
 
 public class KuraCloudConsumerTest extends CamelTestSupport {
 
-    static CloudService cloudService = mock(CloudService.class);
+    CloudService cloudService = mock(CloudService.class);
 
-    static CloudClient cloudClient = mock(CloudClient.class);
+    CloudClient cloudClient = mock(CloudClient.class);
 
     @EndpointInject(uri = "mock:result")
     MockEndpoint mockResult;
@@ -51,28 +54,32 @@ public class KuraCloudConsumerTest extends CamelTestSupport {
     @EndpointInject(uri = "mock:result-control")
     MockEndpoint mockResultControl;
 
-    @BeforeClass
-    public static void before() throws KuraException {
-        given(cloudService.newCloudClient(anyString())).willReturn(cloudClient);
+    String deviceId = randomUUID().toString();
 
+    @Override
+    protected void doPreSetup() throws Exception {
+        given(cloudService.newCloudClient(anyString())).willReturn(cloudClient);
+    }
+
+    @Test
+    public void shouldRegisterListener() throws KuraException, InterruptedException {
+        verify(cloudClient, atLeastOnce()).addCloudClientListener(any(CloudClientListener.class));
     }
 
     @Test
     public void controlReceiveKuraPayloadToTopic() throws KuraException, InterruptedException {
         // Given
         KuraPayload kuraPayload = new KuraPayload();
-        KuraCloudConsumer consumer = (KuraCloudConsumer) context().getRoute("kura-cloud-test-route-control")
-                .getConsumer();
+        KuraCloudConsumer consumer =
+                (KuraCloudConsumer) context().getRoute("kura-cloud-test-route-control").getConsumer();
 
         // When
-        consumer.onControlMessageArrived("deviceIdControl", "appTopicControl", kuraPayload, 0, true);
+        consumer.onControlMessageArrived(deviceId, "appTopicControl", kuraPayload, 0, true);
 
         // Then
-        verify(cloudClient, atLeastOnce()).addCloudClientListener((CloudClientListener) anyObject());
-
-        mockResultControl.expectedHeaderReceived(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL, true);
-        mockResultControl.expectedHeaderReceived(KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID, "deviceIdControl");
-        mockResultControl.expectedHeaderReceived(KuraCloudConstants.CAMEL_KURA_CLOUD_TOPIC, "appTopicControl");
+        mockResultControl.expectedHeaderReceived(CAMEL_KURA_CLOUD_CONTROL, true);
+        mockResultControl.expectedHeaderReceived(CAMEL_KURA_CLOUD_DEVICEID, deviceId);
+        mockResultControl.expectedHeaderReceived(CAMEL_KURA_CLOUD_TOPIC, "appTopicControl");
         mockResultControl.setExpectedMessageCount(1);
         mockResultControl.assertIsSatisfied();
     }
@@ -84,13 +91,11 @@ public class KuraCloudConsumerTest extends CamelTestSupport {
         KuraCloudConsumer consumer = (KuraCloudConsumer) context().getRoute("kura-cloud-test-route").getConsumer();
 
         // When
-        consumer.onMessageArrived("deviceId", "appTopic", kuraPayload, 0, true);
+        consumer.onMessageArrived(deviceId, "appTopic", kuraPayload, 0, true);
 
         // Then
-        verify(cloudClient, atLeastOnce()).addCloudClientListener((CloudClientListener) anyObject());
-
-        mockResult.expectedHeaderReceived(KuraCloudConstants.CAMEL_KURA_CLOUD_CONTROL, false);
-        mockResult.expectedHeaderReceived(KuraCloudConstants.CAMEL_KURA_CLOUD_DEVICEID, "deviceId");
+        mockResult.expectedHeaderReceived(CAMEL_KURA_CLOUD_CONTROL, false);
+        mockResult.expectedHeaderReceived(CAMEL_KURA_CLOUD_DEVICEID, deviceId);
         mockResult.setExpectedMessageCount(1);
         mockResult.assertIsSatisfied();
     }
