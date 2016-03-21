@@ -17,6 +17,7 @@
 package io.rhiot.component.kura.cloud;
 
 public final class KuraCloudConstants {
+
     public static final String TOPIC = "topic";
     public static final String APPLICATION_ID = "applicationId";
 
@@ -30,4 +31,5 @@ public final class KuraCloudConstants {
 
     private KuraCloudConstants() {
     }
+
 }
