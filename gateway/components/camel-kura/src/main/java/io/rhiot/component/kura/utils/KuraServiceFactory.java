@@ -28,6 +28,9 @@ public final class KuraServiceFactory<T> {
 
     private static final Logger LOG = getLogger(KuraServiceFactory.class);
 
+    private KuraServiceFactory() {
+    }
+
     public static final <T> T retrieveService(Class<T> clazz, Registry registry) {
         T ret = null;
 
@@ -47,6 +50,4 @@ public final class KuraServiceFactory<T> {
         return ret;
     }
 
-    private KuraServiceFactory() {
-    }
 }

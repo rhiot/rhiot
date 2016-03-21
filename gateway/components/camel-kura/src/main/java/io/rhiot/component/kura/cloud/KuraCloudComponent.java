@@ -16,14 +16,14 @@
  */
 package io.rhiot.component.kura.cloud;
 
-import io.rhiot.component.kura.utils.KuraServiceFactory;
-
 import java.util.Map;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
 import org.eclipse.kura.cloud.CloudService;
+
+import static io.rhiot.component.kura.utils.KuraServiceFactory.retrieveService;
 
 public class KuraCloudComponent extends UriEndpointComponent {
 
@@ -64,6 +64,9 @@ public class KuraCloudComponent extends UriEndpointComponent {
     }
 
     public CloudService getCloudService() {
+        if(cloudService == null) {
+            cloudService = retrieveService(CloudService.class, getCamelContext().getRegistry());
+        }
         return cloudService;
     }
 
