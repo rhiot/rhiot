@@ -60,22 +60,13 @@ public class KuraCloudEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        CloudClient cloudClient = clientCache().get(applicationId);
-        if (cloudClient == null) {
-            cloudClient = getCloudService().newCloudClient(applicationId);
-            clientCache().put(applicationId, cloudClient);
-        }
+        CloudClient cloudClient = clientCache().getOrCreate(applicationId, cloudService);
         return new KuraCloudConsumer(this, processor, cloudClient);
     }
 
     @Override
     public KuraCloudProducer createProducer() throws Exception {
-        CloudClient cloudClient = clientCache().get(applicationId);
-        if (cloudClient == null) {
-            cloudClient = getCloudService().newCloudClient(applicationId);
-            clientCache().put(applicationId, cloudClient);
-        }
-
+        CloudClient cloudClient = clientCache().getOrCreate(applicationId, cloudService);
         return new KuraCloudProducer(this, cloudClient);
     }
 
