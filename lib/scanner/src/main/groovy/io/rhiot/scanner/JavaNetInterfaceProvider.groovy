@@ -27,7 +27,7 @@ class JavaNetInterfaceProvider implements InterfacesProvider, WithLogger {
         log().debug("Found network interfaces : " + getNetworkInterfaces().findAll())
 
         getNetworkInterfaces().findAll { def iface = it.displayName
-            iface.startsWith("wlan") || iface.startsWith("eth") || iface.startsWith("en") || iface.startsWith("docker")}.
+            iface.startsWith("wlan") || iface.startsWith("eth") || iface.startsWith("en") || iface.startsWith("docker") || iface.startsWith("wlp")}.
                 collect { java.net.NetworkInterface it ->
                     def ipv4Address = it.interfaceAddresses.find{ it.getAddress().getHostAddress().length() < 15 }
                     log().debug("Checking ipv4Address " + ipv4Address)
