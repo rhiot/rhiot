@@ -24,19 +24,28 @@ import org.apache.camel.spi.Registry;
 import org.slf4j.Logger;
 
 public final class KuraServiceFactory<T> {
+
     // Logger
 
     private static final Logger LOG = getLogger(KuraServiceFactory.class);
 
+    // Constructors
+
     private KuraServiceFactory() {
     }
 
-    public static final <T> T retrieveService(Class<T> clazz, Registry registry) {
-        T ret = null;
+    // Operations
+
+    public static <T> T retrieveService(Class<T> clazz, Registry registry) {
+        if(registry == null) {
+            throw new IllegalArgumentException("Registry cannot be null.");
+        }
 
         Set<T> servicesFromRegistry = registry.findByType(clazz);
         if (servicesFromRegistry.size() == 1) {
-            ret = servicesFromRegistry.iterator().next();
+            T service = servicesFromRegistry.iterator().next();
+            LOG.info("Found Kura " + clazz.getCanonicalName() + " in the registry. Kura component will use that instance.");
+            return service;
         } else if (servicesFromRegistry.size() > 1) {
             throw new IllegalStateException("Too many " + clazz.getCanonicalName() + " services found in a registry: "
                     + servicesFromRegistry.size());
@@ -44,10 +53,6 @@ public final class KuraServiceFactory<T> {
             throw new IllegalArgumentException(
                     "No " + clazz.getCanonicalName() + " service instance found in a registry.");
         }
-
-        LOG.info("Found Kura " + clazz.getCanonicalName() + " in the registry. Kura component will use that instance.");
-
-        return ret;
     }
 
 }
