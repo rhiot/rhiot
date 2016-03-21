@@ -35,12 +35,13 @@ import org.junit.Test;
 
 public class KuraCloudProducerTestDeviceId extends CamelTestSupport {
 
-    static CloudService cloudService = mock(CloudService.class);
-    static CloudClient cloudClient = mock(CloudClient.class);
+    CloudService cloudService = mock(CloudService.class);
+    CloudClient cloudClient;
 
-    @Before
-    public void before() throws KuraException {
-        given(cloudService.newCloudClient(anyString())).willReturn(cloudClient);
+    @Override
+    protected void doPreSetup() throws Exception {
+        given(cloudService.newCloudClient(anyString())).willReturn(mock(CloudClient.class));
+        cloudClient = KuraCloudComponent.clientCache().getOrCreate("app", cloudService);
     }
 
     @Override

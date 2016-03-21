@@ -43,7 +43,7 @@ public class KuraCloudConsumerTest extends CamelTestSupport {
 
     CloudService cloudService = mock(CloudService.class);
 
-    CloudClient cloudClient = mock(CloudClient.class);
+    CloudClient cloudClient;
 
     @EndpointInject(uri = "mock:result")
     MockEndpoint mockResult;
@@ -55,7 +55,8 @@ public class KuraCloudConsumerTest extends CamelTestSupport {
 
     @Override
     protected void doPreSetup() throws Exception {
-        given(cloudService.newCloudClient(anyString())).willReturn(cloudClient);
+        given(cloudService.newCloudClient(anyString())).willReturn(mock(CloudClient.class));
+        cloudClient = KuraCloudComponent.clientCache().getOrCreate("app", cloudService);
     }
 
     @Test
