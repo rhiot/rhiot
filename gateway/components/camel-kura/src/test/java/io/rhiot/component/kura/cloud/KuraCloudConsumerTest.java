@@ -22,7 +22,6 @@ import static io.rhiot.component.kura.cloud.KuraCloudConstants.CAMEL_KURA_CLOUD_
 import static java.util.UUID.randomUUID;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -39,8 +38,6 @@ import org.eclipse.kura.cloud.CloudClientListener;
 import org.eclipse.kura.cloud.CloudService;
 import org.eclipse.kura.message.KuraPayload;
 import org.junit.Test;
-
-import java.util.UUID;
 
 public class KuraCloudConsumerTest extends CamelTestSupport {
 
