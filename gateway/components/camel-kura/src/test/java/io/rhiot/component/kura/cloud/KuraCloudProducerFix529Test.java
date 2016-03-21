@@ -21,26 +21,31 @@ import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import com.google.common.truth.Truth;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.eclipse.kura.KuraException;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudService;
+import org.eclipse.kura.message.KuraPayload;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 public class KuraCloudProducerFix529Test extends CamelTestSupport {
 
     CloudService cloudService = mock(CloudService.class);
 
-    CloudClient cloudClient = mock(CloudClient.class);
+    CloudClient cloudClient;
 
-    @Before
-    public void before() throws KuraException {
-        given(cloudService.newCloudClient(anyString())).willReturn(cloudClient);
+    @Override
+    protected void doPreSetup() throws Exception {
+        given(cloudService.newCloudClient(anyString())).willReturn(mock(CloudClient.class));
+        cloudClient = KuraCloudComponent.clientCache().getOrCreate("app", cloudService);
     }
 
     @Override
@@ -78,7 +83,9 @@ public class KuraCloudProducerFix529Test extends CamelTestSupport {
         template.sendBody("kura-cloud:app/topic", kuraPayload2);
 
         // Then
-        verify(cloudClient).publish(eq("topic"), eq(kuraPayload.getBytes()), anyInt(), anyBoolean(), anyInt());
+        ArgumentCaptor<KuraPayload> captor = ArgumentCaptor.forClass(KuraPayload.class);
+        verify(cloudClient).publish(eq("topic"), captor.capture(), anyInt(), anyBoolean(), anyInt());
+        Truth.assertThat(captor.getValue().getBody()).isEqualTo(kuraPayload.getBytes());
     }
 
 }
