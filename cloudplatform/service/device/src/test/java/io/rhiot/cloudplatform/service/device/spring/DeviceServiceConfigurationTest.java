@@ -20,8 +20,8 @@ import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 import io.rhiot.cloudplatform.service.binding.ServiceBinding;
-import org.eclipse.cloudplatform.service.device.api.Device;
-import org.eclipse.cloudplatform.service.device.api.DeviceMetricsPollService;
+import io.rhiot.cloudplatform.service.device.api.Device;
+import io.rhiot.cloudplatform.service.device.api.DeviceMetricsPollService;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +32,7 @@ import java.util.*;
 import static java.lang.System.setProperty;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static org.eclipse.cloudplatform.service.device.api.DeviceConstants.*;
+import static io.rhiot.cloudplatform.service.device.api.DeviceConstants.*;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @Configuration

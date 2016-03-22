@@ -17,7 +17,7 @@
 package io.rhiot.cloudplatform.paas.gateway
 
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
-import io.rhiot.datastream.document.DocumentStore
+import io.rhiot.cloudplatform.service.document.api.DocumentStore
 import org.apache.commons.io.IOUtils
 import org.junit.Test
 import org.springframework.context.annotation.Bean
@@ -30,6 +30,11 @@ import static org.mockito.Mockito.mock
 
 @Configuration
 class GatewayPaasTest extends CloudPlatformTest {
+
+    @Override
+    protected void beforeCloudPlatformStarted() {
+        System.setProperty('deviceId', uuid())
+    }
 
     def document = uuid()
 

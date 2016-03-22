@@ -20,7 +20,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
 import io.rhiot.cloudplatform.connector.IoTConnector;
-import org.eclipse.cloudplatform.service.device.api.DeviceRegistry;
+import io.rhiot.cloudplatform.service.device.api.DeviceRegistry;
 
 import java.util.Date;
 import java.util.Map;

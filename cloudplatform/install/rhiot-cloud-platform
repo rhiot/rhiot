@@ -70,6 +70,11 @@ if [ -z "${CONTAINERS_LOG_LEVEL}" ]; then
   CONTAINERS_LOG_LEVEL="INFO"
 fi
 
+if [ -z "${CONTAINERS_NUMBER}" ]; then
+  MEMTOTAL=`free | grep Mem | awk '{ print $2 }'`
+  CONTAINERS_NUMBER=`expr $MEMTOTAL / 1024 / 1024 + 1`
+fi
+
 PAAS_LOG=$RHIOT_HOME/rcp.log
 REQUIRED_DOCKER_VERSION=1.8.2
 
@@ -78,6 +83,13 @@ if [ ! -d ${RHIOT_HOME} ]; then
 	mkdir -p ${RHIOT_HOME}
 	log_info "Creating Rhiot home directory at ${RHIOT_HOME} ..."
 fi
+
+# Exporting host environment variables
+
+ENV="-e "`env | grep -v ' ' | sed ':a;N;$!ba;s/\n/ -e /g'`
+
+exe docker pull rhiot/paas-bootstrap:${RHIOT_VERSION}
+CONTAINERS_NUMBER=`docker run ${ENV} rhiot/paas-bootstrap:${RHIOT_VERSION}`
 
 log_info "Starting Rhiot Cloud Platform" 
 
@@ -119,7 +131,7 @@ if [ $(docker ps | wc -l) -gt 1 ]; then
 fi
 
 log_info "Removing old containers..."
-exe docker rm -f mongodb AMQP_SERVICE_HOST paas-adapters paas-services spark_master spark_worker
+exe docker rm -f mongodb AMQP_SERVICE_HOST paas-single paas-adapters paas-services spark_master spark_worker
 
 ### MongoDB
 log_info "MongoDB" 
@@ -130,52 +142,65 @@ fi
 exe docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
 log_info "MongoDB started" 
 
-### IoT Connector
+if [ $CONTAINERS_NUMBER -gt 2 ]; then
 
-log_info "ActiveMQ" 
-exe docker pull rhiot/activemq:${RHIOT_VERSION}
-exe docker run -d --name AMQP_SERVICE_HOST \
-  -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -e spring_activemq_broker_websocketEnabled=true \
-  -p 5672:5672 -p 9090:9090 \
-  -t rhiot/activemq:${RHIOT_VERSION} 
-log_info "ActiveMQ started"
+    ### IoT Connector
 
-### Protocol adapters
+    log_info "ActiveMQ"
+    exe docker pull rhiot/activemq:${RHIOT_VERSION}
+    exe docker run -d --name AMQP_SERVICE_HOST \
+      -e spring_activemq_broker_enabled=true -e spring_activemq_broker_amqpEnabled=true -e spring_activemq_broker_websocketEnabled=true \
+      -p 5672:5672 -p 9090:9090 \
+      -t rhiot/activemq:${RHIOT_VERSION}
+    log_info "ActiveMQ started"
 
-log_info "Starting protocol adapters..."
-exe docker pull rhiot/paas-adapters:${RHIOT_VERSION}
-exe docker run -d --name paas-adapters --net=host -t rhiot/paas-adapters:${RHIOT_VERSION}
-log_info "Protocol adapters started."
+    ### Protocol adapters
 
-### Services
+    log_info "Starting protocol adapters..."
+    exe docker pull rhiot/paas-adapters:${RHIOT_VERSION}
+    exe docker run -d --name paas-adapters --net=host -t rhiot/paas-adapters:${RHIOT_VERSION}
+    log_info "Protocol adapters started."
 
-log_info "Starting services..."
-exe docker pull rhiot/paas-services:${RHIOT_VERSION}
-exe docker run -d --name paas-services \
-  --privileged -v /var/run/docker.sock:/run/docker.sock -v /tmp/openalpr-workdir:/tmp/openalpr-workdir \
-  -v /var/rhiot/pass/binary:/tmp/rhiot/binary \
-  -e logging.level.root=${CONTAINERS_LOG_LEVEL} \
-  --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
-  --link mongodb:mongodb \
-  -t rhiot/paas-services:${RHIOT_VERSION}
-log_info "Services started."
+    ### Services
 
-### Spark standalone cluster
+    log_info "Starting services..."
+    exe docker pull rhiot/paas-services:${RHIOT_VERSION}
+    exe docker run -d --name paas-services \
+      --privileged -v /var/run/docker.sock:/run/docker.sock -v /tmp/openalpr-workdir:/tmp/openalpr-workdir \
+      -v /var/rhiot/pass/binary:/tmp/rhiot/binary \
+      -e logging.level.root=${CONTAINERS_LOG_LEVEL} \
+      --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e AMQP_SERVICE_HOST=AMQP_SERVICE_HOST \
+      --link mongodb:mongodb \
+      -t rhiot/paas-services:${RHIOT_VERSION}
+    log_info "Services started."
 
-if [ "${SPARK_ENABLED}" != 'false' ]; then
+    ### Spark standalone cluster
 
-    log_info "Spark"
-    exe docker pull rhiot/spark-standalone:${RHIOT_VERSION}
-    exe docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"
-    sleep 5
-    SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4 | uniq`
-    log_info "Spark master started"
+    if [ "${SPARK_ENABLED}" != 'false' ]; then
 
-    exe docker run -d --name spark_worker \
-      --link spark_master:spark_master --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} \
-      -v /tmp/jobs:/tmp/jobs -P \
-      -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh
-    log_info "Spark worker started"
+        log_info "Spark"
+        exe docker pull rhiot/spark-standalone:${RHIOT_VERSION}
+        exe docker run -d --name spark_master -p 8081:8080 -P -t rhiot/spark-standalone:${RHIOT_VERSION} /start-master.sh "$@"
+        sleep 5
+        SPARK_MASTER_SERVICE_HOST=`docker inspect spark_master | grep IPAddress\": | cut -d '"' -f 4 | uniq`
+        log_info "Spark master started"
+
+        exe docker run -d --name spark_worker \
+          --link spark_master:spark_master --link AMQP_SERVICE_HOST:AMQP_SERVICE_HOST -e SPARK_MASTER_SERVICE_HOST=${SPARK_MASTER_SERVICE_HOST} \
+          -v /tmp/jobs:/tmp/jobs -P \
+          -t rhiot/spark-standalone:${RHIOT_VERSION} /start-worker.sh
+        log_info "Spark worker started"
+
+    fi
+
+else
+
+    ### Single node Cloud PaaS
+
+    log_info "Starting single node Cloud PaaS..."
+    exe docker pull rhiot/paas-single:${RHIOT_VERSION}
+    exe docker run -d --name paas-single --net=host -t rhiot/paas-single:${RHIOT_VERSION}
+    log_info "Single node Cloud PaaS started."
 
 fi
 

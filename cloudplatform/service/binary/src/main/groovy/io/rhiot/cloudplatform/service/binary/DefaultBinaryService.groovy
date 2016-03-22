@@ -14,28 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.service.binary;
+package io.rhiot.cloudplatform.service.binary
 
-import io.rhiot.cloudplatform.service.binary.api.BinaryService;
+import com.google.common.io.Files;
+import io.rhiot.cloudplatform.service.binary.api.BinaryService
+import org.slf4j.Logger
 
 import static org.apache.commons.io.IOUtils.toByteArray;
-import static org.apache.commons.io.IOUtils.write;
+import static org.slf4j.LoggerFactory.getLogger;
 
 class DefaultBinaryService implements BinaryService {
 
+    private static final Logger LOG = getLogger(DefaultBinaryService.class)
+
     private final File imagesDirectory
 
-    DefaultBinaryService(File imagesDirectory) {
-        this.imagesDirectory = imagesDirectory;
+    DefaultBinaryService(File binariesDirectory) {
+        this.imagesDirectory = binariesDirectory
 
-        imagesDirectory.mkdirs();
+        if(binariesDirectory.mkdirs()) {
+            LOG.debug('Creating binaries store {} .', binariesDirectory)
+        }
     }
 
     // Service API
 
     @Override
     void store(String identifier, byte[] data) {
-        write(data, new FileOutputStream(binaryFile(identifier)))
+        def target = binaryFile(identifier)
+        LOG.debug('Writing binary data to {}.', target.absolutePath)
+        Files.write(data, target)
     }
 
     @Override

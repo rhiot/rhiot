@@ -63,8 +63,8 @@ public class CameraServiceConfiguration {
 
     @Bean
     CameraImageRotation cameraImageRotation(IoTConnector connector,
-                                            @Value("${camera.storageQuota:5120}") long storageQuota,
-                                            @Value("${camera.initialDelay:15000}") int initialDelay) {
+                                            @Value("${camera.rotation.storageQuota:5120}") long storageQuota,
+                                            @Value("${camera.rotation.initialDelay:15000}") int initialDelay) {
         return new CameraImageRotation(connector, storageQuota, initialDelay);
     }
 

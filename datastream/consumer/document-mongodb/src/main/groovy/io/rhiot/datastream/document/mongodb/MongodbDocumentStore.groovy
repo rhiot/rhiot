@@ -20,10 +20,9 @@ import com.mongodb.BasicDBObject
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import io.rhiot.datastream.document.CountByQueryOperation;
-import io.rhiot.datastream.document.DocumentStore;
-
+import com.mongodb.Mongo
+import io.rhiot.cloudplatform.service.document.api.CountByQueryOperation
+import io.rhiot.cloudplatform.service.document.api.DocumentStore;
 import org.bson.types.ObjectId;
 
 import static com.google.common.base.Preconditions.checkNotNull;

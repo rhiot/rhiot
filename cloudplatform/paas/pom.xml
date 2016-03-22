@@ -9,8 +9,8 @@
         <artifactId>rhiot-cloudplatform</artifactId>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot :: Cloud platform :: PaaS</name>
-    <artifactId>rhiot-cloudplatform-paas</artifactId>
+    <name>Rhiot :: Cloud :: PaaS</name>
+    <artifactId>rhiot-cloud-paas</artifactId>
     <packaging>pom</packaging>
 
     <licenses>
@@ -21,8 +21,10 @@
     </licenses>
 
     <modules>
+        <module>bootstrap</module>
         <module>adapters</module>
         <module>services</module>
+        <module>single</module>
         <module>gateway</module>
     </modules>
 

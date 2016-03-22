@@ -33,6 +33,7 @@ import java.util.Random;
 
 import static io.rhiot.component.kura.camelcloud.KuraCloudClientConstants.*;
 import static java.lang.Thread.sleep;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 public class CamelCloudClientTest extends CamelTestSupport {
 
@@ -49,6 +50,8 @@ public class CamelCloudClientTest extends CamelTestSupport {
 
     @EndpointInject(uri = "mock:kura-cloud")
     MockEndpoint kuraCloudMockEndpoint;
+
+    String topic = randomAlphabetic(10);
 
     KuraPayload kuraPayload;
 
@@ -96,7 +99,7 @@ public class CamelCloudClientTest extends CamelTestSupport {
             public void configure() throws Exception {
                 from("seda:applicationId:start").to("mock:test");
 
-                from("kura-cloud:applicationId/topic").
+                from("kura-cloud:applicationId/" + topic).
                         to("mock:kura-cloud");
             }
         };
@@ -214,10 +217,14 @@ public class CamelCloudClientTest extends CamelTestSupport {
     }
 
     @Test
-    public void kuraServiceShouldReceivePayloadFromKuraCloudClient() throws KuraException, InterruptedException {
+    public void kuraServiceShouldReceivePayloadFromKuraCloudClient() throws Exception {
+        // Given
         kuraCloudMockEndpoint.setExpectedMessageCount(1);
-        cloudClient.subscribe("topic", qos);
-        cloudClient.publish("topic", kuraPayload, qos, true, priority);
+
+        // When
+        cloudClient.publish(topic, kuraPayload, qos, true, priority);
+
+        // Then
         kuraCloudMockEndpoint.assertIsSatisfied();
     }
 
