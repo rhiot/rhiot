@@ -16,8 +16,8 @@
  */
 package io.rhiot.cloudplatform.service.device;
 
-import org.eclipse.cloudplatform.service.device.api.Device;
-import org.eclipse.cloudplatform.service.device.api.DeviceRegistry;
+import io.rhiot.cloudplatform.service.device.api.Device;
+import io.rhiot.cloudplatform.service.device.api.DeviceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

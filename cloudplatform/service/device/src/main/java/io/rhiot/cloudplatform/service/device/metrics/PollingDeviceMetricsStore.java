@@ -17,8 +17,8 @@
 package io.rhiot.cloudplatform.service.device.metrics;
 
 import io.rhiot.cloudplatform.connector.IoTConnector;
-import org.eclipse.cloudplatform.service.device.api.Device;
-import org.eclipse.cloudplatform.service.device.api.DeviceRegistry;
+import io.rhiot.cloudplatform.service.device.api.Device;
+import io.rhiot.cloudplatform.service.device.api.DeviceRegistry;
 
 import static io.rhiot.cloudplatform.connector.Header.arguments;
 

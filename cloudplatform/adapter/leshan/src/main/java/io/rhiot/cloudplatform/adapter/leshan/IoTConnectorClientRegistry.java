@@ -18,7 +18,7 @@ package io.rhiot.cloudplatform.adapter.leshan;
 
 import com.google.common.net.InetAddresses;
 import io.rhiot.cloudplatform.connector.IoTConnector;
-import org.eclipse.cloudplatform.service.device.api.Device;
+import io.rhiot.cloudplatform.service.device.api.Device;
 import org.eclipse.leshan.LinkObject;
 import org.eclipse.leshan.core.request.BindingMode;
 import org.eclipse.leshan.server.client.Client;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
-import static org.eclipse.cloudplatform.service.device.api.DeviceConstants.*;
+import static io.rhiot.cloudplatform.service.device.api.DeviceConstants.*;
 
 public class IoTConnectorClientRegistry implements ClientRegistry {
 
@@ -135,8 +135,8 @@ public class IoTConnectorClientRegistry implements ClientRegistry {
     }
 
     private static Device clientToDevice(Client client) {
-        List<org.eclipse.cloudplatform.service.device.api.LinkObject> linkObjects = asList(client.getObjectLinks()).stream().map(
-            link -> new org.eclipse.cloudplatform.service.device.api.LinkObject(
+        List<io.rhiot.cloudplatform.service.device.api.LinkObject> linkObjects = asList(client.getObjectLinks()).stream().map(
+            link -> new io.rhiot.cloudplatform.service.device.api.LinkObject(
                     link.getUrl(), link.getAttributes(), link.getObjectId(), link.getObjectInstanceId(), link.getResourceId()
             )
         ).collect(toList());

@@ -19,7 +19,7 @@ package io.rhiot.gateway.sensors.device
 import groovy.transform.CompileStatic
 import io.rhiot.cloudplatform.connector.IoTConnector
 import org.apache.camel.builder.RouteBuilder
-import org.eclipse.cloudplatform.service.device.api.Device
+import io.rhiot.cloudplatform.service.device.api.Device
 
 @CompileStatic
 class DeviceSensor extends RouteBuilder {

@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
 import io.rhiot.utils.leshan.client.LeshanClientTemplate;
-import org.eclipse.cloudplatform.service.device.api.Device;
+import io.rhiot.cloudplatform.service.device.api.Device;
 import org.junit.Test;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,7 +30,7 @@ import static io.rhiot.cloudplatform.service.mailbox.MailboxConstants.inbox;
 import static io.rhiot.cloudplatform.service.mailbox.MailboxConstants.outbox;
 import static io.rhiot.utils.Uuids.uuid;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static org.eclipse.cloudplatform.service.device.api.DeviceConstants.getDevice;
+import static io.rhiot.cloudplatform.service.device.api.DeviceConstants.getDevice;
 
 @Configuration
 public class PaasServicesTest extends CloudPlatformTest {

@@ -16,19 +16,12 @@
  */
 package io.rhiot.cloudplatform.service.device;
 
-import org.eclipse.cloudplatform.service.device.api.Device;
-import org.eclipse.cloudplatform.service.device.api.DeviceRegistry;
+import io.rhiot.cloudplatform.service.device.api.Device;
 
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.time.Instant.ofEpochMilli;
-import static java.time.LocalDateTime.ofInstant;
 import static java.util.UUID.randomUUID;
-import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class InMemoryDeviceRegistry extends DisconnectionAwareDeviceRegistry {

@@ -18,14 +18,14 @@ package io.rhiot.datastream.node
 
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import io.rhiot.utils.leshan.client.LeshanClientTemplate
-import org.eclipse.cloudplatform.service.device.api.Device
+import io.rhiot.cloudplatform.service.device.api.Device
 import org.junit.Test
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
 
 import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.utils.Uuids.uuid
-import static org.eclipse.cloudplatform.service.device.api.DeviceConstants.*
+import static io.rhiot.cloudplatform.service.device.api.DeviceConstants.*
 
 @Configuration
 class PaaSProtocolAdaptersTest extends CloudPlatformTest {
