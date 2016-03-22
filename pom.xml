@@ -329,7 +329,10 @@
                             <exclude>soapui-errors.log</exclude>
                             <exclude>**/coordinates.txt</exclude>
                             <exclude>**/security.data</exclude>
-                            <exclude>**/testingfb/**</exclude>                            
+                            <exclude>**/testingfb/**</exclude>
+
+                            <!-- OpenALPR sources -->
+                            <exclude>**/2.2.0/**</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
