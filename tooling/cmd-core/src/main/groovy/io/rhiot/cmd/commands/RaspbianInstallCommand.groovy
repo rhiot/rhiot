@@ -25,6 +25,7 @@ import org.apache.commons.io.IOUtils
 
 import java.util.zip.ZipInputStream
 
+
 class RaspbianInstallCommand implements Command, WithLogger {
 
     private final String devicesDirectory

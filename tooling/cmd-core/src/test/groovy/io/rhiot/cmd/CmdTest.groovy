@@ -47,5 +47,5 @@ class CmdTest {
     void shouldLoadRaspbianInstallCommand() {
         assertThat(commandsManager.hasCommand('raspbian-install')).isTrue()
     }
-
+	
 }
