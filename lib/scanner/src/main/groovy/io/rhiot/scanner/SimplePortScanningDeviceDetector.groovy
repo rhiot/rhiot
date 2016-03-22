@@ -129,11 +129,18 @@ class SimplePortScanningDeviceDetector implements DeviceDetector, WithLogger {
                 @Override
                 Device call() throws Exception {
                     try {
-                        log().debug("Probing for Raspberry Pi on " + device.hostAddress)
-                        new SshClient(device.hostAddress, port, username, password).checkConnection();
-                        new Device(device, Device.DEVICE_RASPBERRY_PI_2)
+                        log().debug("Probing for Device on " + device.hostAddress + ":" + port + " using username: " + username + " and password: " + password)
+                        SshClient sshClient = new SshClient(device.hostAddress, port, username, password)
+						sshClient.checkConnection()
+						// Check with uname command if kernel version contains "poky-edison"
+                        def cpuInfo = sshClient.command("uname -r");
+                        if (!cpuInfo.empty && cpuInfo.get(0).contains("poky-edison")) {
+                        	new Device(device, Device.DEVICE_INTEL_EDISON)
+                        } else {
+                        	new Device(device, Device.DEVICE_RASPBERRY_PI_2)
+                        }
                     } catch (Exception ex) {
-                        log().debug("Can't connect to the Raspberry Pi device: " + device.getHostAddress());
+                        log().debug("Can't connect to the Raspberry Pi device: " + device.getHostAddress() + "\n" + ex.printStackTrace());
                         return null
                     }
                 }

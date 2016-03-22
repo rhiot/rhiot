@@ -81,4 +81,9 @@ class ConsoleInputParserTest extends Assert {
     void shouldParseEmptyGatewayArtifact() {
         assertThat(new ConsoleInputParser('--someRandomOption').artifact().isPresent()).isFalse()
     }
+	
+	@Test
+	void shouldDebug() {
+		assertThat(new ConsoleInputParser("-d","device-scan").isDebug()).isTrue()
+	}
 }

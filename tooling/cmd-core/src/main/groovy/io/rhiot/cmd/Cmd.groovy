@@ -16,29 +16,31 @@
  */
 package io.rhiot.cmd
 
+import static io.rhiot.utils.Mavens.artifactVersionFromDependenciesProperties
+import static io.rhiot.utils.Mavens.MavenCoordinates.parseMavenCoordinates
+import static java.util.Optional.empty
 import groovy.transform.PackageScope
-import io.rhiot.cmd.commands.DeviceScanCommand
 import io.rhiot.cmd.commands.RaspbianInstallCommand
 import io.rhiot.scanner.Device
 import io.rhiot.scanner.DeviceDetector
+import io.rhiot.scanner.JavaNetInterfaceProvider
 import io.rhiot.scanner.SimplePortScanningDeviceDetector
 import io.rhiot.utils.maven.JcabiMavenArtifactResolver
 import io.rhiot.utils.process.DefaultProcessManager
 import io.rhiot.utils.process.ProcessManager
 import io.rhiot.utils.ssh.client.SshClient
-import org.springframework.beans.factory.annotation.Autowired
+
+import java.util.concurrent.Future
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.Banner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
-
-import java.util.concurrent.Future
-
-import static io.rhiot.utils.Mavens.MavenCoordinates.parseMavenCoordinates
-import static io.rhiot.utils.Mavens.artifactVersionFromDependenciesProperties
-import static java.util.Optional.empty
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Component;;
 
 @SpringBootApplication
 class Cmd {
@@ -47,14 +49,16 @@ class Cmd {
 
     private final boolean debug
 
+	@Value('${username}')
     private final String username
 
+	@Value('${password}')
     private final String password
 
     def JcabiMavenArtifactResolver artifactResolver = new JcabiMavenArtifactResolver()
 
-    Cmd() {
-    }
+    Cmd() { 
+	}
 
     Cmd(DeviceDetector deviceDetector, String username, String password, boolean debug) {
         this.deviceDetector = deviceDetector
@@ -137,12 +141,12 @@ class Cmd {
         app.setBannerMode(Banner.Mode.OFF)
         def ctx = app.run(args)
         def commandsManager = ctx.getBean(CommandsManager.class)
-
-        def parser = new ConsoleInputParser(args)
-        if (parser.help) {
-            println(parser.helpText())
-            return
-        }
+		
+		def parser = new ConsoleInputParser(args)
+		if (parser.help) {
+			println(parser.helpText())
+			return
+		}
 
         try {
             def command = parser.command()
@@ -194,7 +198,7 @@ class Cmd {
 
     @Bean(destroyMethod = "close")
     DeviceDetector deviceDetector() {
-        new SimplePortScanningDeviceDetector()
+        new SimplePortScanningDeviceDetector(new JavaNetInterfaceProvider(), this.username, this.password, 500)
     }
 
     @Bean
