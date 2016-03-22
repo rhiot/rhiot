@@ -21,6 +21,7 @@
     </licenses>
 
     <modules>
+        <module>device</module>
         <module>camera</module>
     </modules>
 
