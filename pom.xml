@@ -13,6 +13,7 @@
         <module>bom</module>
         <module>spring</module>
         <module>camel</module>
+        <module>dockerfiles</module>
         <module>cloudplatform</module>
         <module>lib</module>
         <module>mongodb</module>
