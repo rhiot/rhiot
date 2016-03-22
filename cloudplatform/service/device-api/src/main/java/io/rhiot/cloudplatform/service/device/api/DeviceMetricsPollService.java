@@ -14,13 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.cloudplatform.service.device.api;
+package io.rhiot.cloudplatform.service.device.api;
 
-public enum DeviceMetrics {
+public interface DeviceMetricsPollService {
 
-    manufacturer,
-    modelNumber,
-    serialNumber,
-    firmwareVersion
+    Object read(String deviceId, String metric);
 
 }

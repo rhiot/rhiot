@@ -22,7 +22,7 @@ import io.rhiot.cloudplatform.service.binding.ServiceBinding;
 import io.rhiot.cloudplatform.service.device.metrics.DeviceMetricsStore;
 import io.rhiot.cloudplatform.service.device.metrics.MongoDbDeviceMetricsStore;
 import io.rhiot.cloudplatform.connector.IoTConnector;
-import org.eclipse.cloudplatform.service.device.api.DeviceRegistry;
+import io.rhiot.cloudplatform.service.device.api.DeviceRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

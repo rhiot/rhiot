@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
-import org.eclipse.cloudplatform.service.device.api.Device;
+import io.rhiot.cloudplatform.service.device.api.Device;
 
 import java.util.*;
 

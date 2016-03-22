@@ -14,35 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.cloudplatform.service.device.api;
+package io.rhiot.cloudplatform.service.device.api;
 
-import java.util.List;
+public enum DeviceMetrics {
 
-/**
- * Backend service used to manage devices connecting to the system.
- */
-public interface DeviceRegistry {
-
-    Device get(String deviceId);
-
-    Device getByRegistrationId(String registrationId);
-
-    List<Device> list();
-
-    List<String> disconnected();
-
-    /**
-     * Registers a given device. Registering device with the same `deviceId` twice should update the device, instead
-     * of registering two devices.
-     *
-     * @param device device to be registered.
-     */
-    void register(Device device);
-
-    void update(Device device);
-
-    void deregister(String deviceId);
-
-    void heartbeat(String deviceId);
+    manufacturer,
+    modelNumber,
+    serialNumber,
+    firmwareVersion
 
 }

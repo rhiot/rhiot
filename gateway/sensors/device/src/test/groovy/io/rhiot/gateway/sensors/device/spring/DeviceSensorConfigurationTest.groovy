@@ -17,7 +17,7 @@
 package io.rhiot.gateway.sensors.device.spring
 
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
-import org.eclipse.cloudplatform.service.device.api.Device
+import io.rhiot.cloudplatform.service.device.api.Device
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
