@@ -16,5 +16,5 @@
 #  limitations under the License.
 
 . ./build.sh
-docker push rhiot/spark-standalone:0.1.4-SNAPSHOT
+docker push rhiot/spark-standalone:0.1.5-SNAPSHOT
 docker push rhiot/spark-standalone:latest
