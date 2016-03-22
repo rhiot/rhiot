@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+# Source debconf library.
+. /usr/share/debconf/confmodule
+
+
+chown openalpr:openalpr /var/lib/openalpr/plateimages
+
+#DEBHELPER#
+
+db_stop
