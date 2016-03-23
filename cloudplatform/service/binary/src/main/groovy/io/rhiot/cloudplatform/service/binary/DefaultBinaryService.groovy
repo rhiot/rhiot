@@ -16,12 +16,16 @@
  */
 package io.rhiot.cloudplatform.service.binary;
 
-import io.rhiot.cloudplatform.service.binary.api.BinaryService;
+import io.rhiot.cloudplatform.service.binary.api.BinaryService
+import org.slf4j.Logger
 
 import static org.apache.commons.io.IOUtils.toByteArray;
-import static org.apache.commons.io.IOUtils.write;
+import static org.apache.commons.io.IOUtils.write
+import static org.slf4j.LoggerFactory.getLogger;
 
 class DefaultBinaryService implements BinaryService {
+
+    private static final Logger LOG = getLogger(DefaultBinaryService.class)
 
     private final File imagesDirectory
 
@@ -35,6 +39,7 @@ class DefaultBinaryService implements BinaryService {
 
     @Override
     void store(String identifier, byte[] data) {
+        LOG.debug('Writing binary data identified with {}.', identifier)
         write(data, new FileOutputStream(binaryFile(identifier)))
     }
 

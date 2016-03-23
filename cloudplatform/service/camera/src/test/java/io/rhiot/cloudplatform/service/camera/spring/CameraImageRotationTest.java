@@ -41,14 +41,14 @@ public class CameraImageRotationTest extends CloudPlatformTest {
 
     @Override
     protected void beforeCloudPlatformStarted() {
-        System.setProperty("camera.storageQuota", 0 + "");
-        System.setProperty("camera.initialDelay", 8000 + "");
+        System.setProperty("camera.rotation.storageQuota", 0 + "");
+        System.setProperty("camera.rotation.initialDelay", 15000 + "");
     }
 
     // Tests
 
     @Test
-    public void shouldRotateCamerImages() throws InterruptedException {
+    public void shouldRotateCameraImages() throws InterruptedException {
         assumeTrue(canExecuteCommand("docker", "version"));
 
         // Given
@@ -60,7 +60,7 @@ public class CameraImageRotationTest extends CloudPlatformTest {
         Truth.assertThat(new File("/tmp/rhiot/binary").list()).asList().isNotEmpty();
 
         // Then
-        sleep(5000);
+        sleep(10000);
         Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
         List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
         Truth.assertThat(imageMetadata).hasSize(0);
