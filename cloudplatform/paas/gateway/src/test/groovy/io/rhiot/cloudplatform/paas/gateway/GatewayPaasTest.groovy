@@ -31,6 +31,11 @@ import static org.mockito.Mockito.mock
 @Configuration
 class GatewayPaasTest extends CloudPlatformTest {
 
+    @Override
+    protected void beforeCloudPlatformStarted() {
+        System.setProperty('deviceId', uuid())
+    }
+
     def document = uuid()
 
     @Bean
