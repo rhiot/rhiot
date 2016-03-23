@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.datastream.document
+package io.rhiot.cloudplatform.service.document.api
 
 /**
  * Document stores can be used to perform CRUD operations on messages formatted as documents i.e. JSON-like
