@@ -17,7 +17,7 @@
 package io.rhiot.cloudplatform.paas.gateway
 
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
-import DocumentStore
+import io.rhiot.cloudplatform.service.document.api.DocumentStore
 import org.apache.commons.io.IOUtils
 import org.junit.Test
 import org.springframework.context.annotation.Bean
