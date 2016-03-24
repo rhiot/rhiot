@@ -45,5 +45,4 @@ public class DriverMain {
             LOG.error("Please provide 1 arg (fqn.driverClass)");
         }
     }
-
 }
