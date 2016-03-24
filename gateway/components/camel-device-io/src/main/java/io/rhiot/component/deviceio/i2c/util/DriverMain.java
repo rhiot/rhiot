@@ -21,6 +21,9 @@ import io.rhiot.component.deviceio.i2c.driver.I2CDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A simple driver tester
+ */
 public class DriverMain {
 
     private final static Logger LOG = LoggerFactory.getLogger(DriverMain.class);
