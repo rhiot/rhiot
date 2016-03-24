@@ -41,6 +41,8 @@ public class DriverMain {
 
             driver.stop();
 
+            driver.shutdown();
+
         } else {
             LOG.error("Please provide 1 arg (fqn.driverClass)");
         }
