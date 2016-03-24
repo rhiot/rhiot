@@ -23,6 +23,9 @@ import jdk.dio.DeviceNotFoundException;
 import jdk.dio.i2cbus.I2CDevice;
 import jdk.dio.i2cbus.I2CDeviceConfig;
 
+/**
+ * i2cdetect Java Implementation
+ */
 public class I2CDetect {
 
     enum State {
