@@ -16,18 +16,22 @@
  */
 package io.rhiot.component.kura.cloud;
 
-import org.apache.camel.Endpoint;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
+import org.apache.camel.*;
 import org.apache.camel.impl.DefaultConsumer;
+import org.eclipse.kura.KuraException;
 import org.eclipse.kura.cloud.CloudClient;
 import org.eclipse.kura.cloud.CloudClientListener;
 import org.eclipse.kura.message.KuraPayload;
+
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static io.rhiot.component.kura.cloud.KuraCloudConstants.*;
 import static org.apache.camel.builder.ExchangeBuilder.anExchange;
 
 public class KuraCloudConsumer extends DefaultConsumer implements CloudClientListener {
+
+    private ScheduledExecutorService executorService;
 
     private CloudClient cloudClient;
 
@@ -41,12 +45,30 @@ public class KuraCloudConsumer extends DefaultConsumer implements CloudClientLis
     @Override
     protected void doStart() throws Exception {
         super.doStart();
+        executorService = getEndpoint().getCamelContext().getExecutorServiceManager().newDefaultScheduledThreadPool(this, "executor");
         cloudClient.addCloudClientListener(this);
+        getEndpoint().getCamelContext().addStartupListener(new StartupListener() {
+            @Override
+            public void onCamelContextStarted(CamelContext context, boolean alreadyStarted) throws Exception {
+                executorService.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            cloudClient.subscribe(getEndpoint().getTopic(), 0);
+                        } catch (KuraException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }, 5, TimeUnit.SECONDS);
+            }
+        });
         log.debug("Starting CloudClientListener.");
     }
 
     @Override
     protected void doStop() throws Exception {
+        getEndpoint().getCamelContext().getExecutorServiceManager().shutdown(executorService);
+        cloudClient.unsubscribe(getEndpoint().getTopic());
         cloudClient.removeCloudClientListener(this);
         log.debug("Stopping CloudClientListener.");
         super.doStop();
@@ -101,6 +123,13 @@ public class KuraCloudConsumer extends DefaultConsumer implements CloudClientLis
         } catch (Exception e) {
             handleException("Error while processing an incoming message:", e);
         }
+    }
+
+    // Getters
+
+    @Override
+    public KuraCloudEndpoint getEndpoint() {
+        return (KuraCloudEndpoint) super.getEndpoint();
     }
 
 }
