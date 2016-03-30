@@ -23,6 +23,7 @@
     <modules>
         <module>adapters</module>
         <module>services</module>
+        <module>single</module>
         <module>gateway</module>
     </modules>
 
