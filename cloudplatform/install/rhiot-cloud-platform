@@ -70,11 +70,6 @@ if [ -z "${CONTAINERS_LOG_LEVEL}" ]; then
   CONTAINERS_LOG_LEVEL="INFO"
 fi
 
-if [ -z "${CONTAINERS_NUMBER}" ]; then
-  MEMTOTAL=`free | grep Mem | awk '{ print $2 }'`
-  CONTAINERS_NUMBER=`expr $MEMTOTAL / 1024 / 1024 + 1`
-fi
-
 PAAS_LOG=$RHIOT_HOME/rcp.log
 REQUIRED_DOCKER_VERSION=1.8.2
 
@@ -83,6 +78,11 @@ if [ ! -d ${RHIOT_HOME} ]; then
 	mkdir -p ${RHIOT_HOME}
 	log_info "Creating Rhiot home directory at ${RHIOT_HOME} ..."
 fi
+
+ENV="-e "`env | grep -v ' ' | sed ':a;N;$!ba;s/\n/ -e /g'`
+
+exe docker pull rhiot/paas-bootstrap:${RHIOT_VERSION}
+CONTAINERS_NUMBER=`docker run ${ENV} rhiot/paas-bootstrap:${RHIOT_VERSION}`
 
 log_info "Starting Rhiot Cloud Platform" 
 
