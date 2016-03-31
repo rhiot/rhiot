@@ -79,6 +79,8 @@ if [ ! -d ${RHIOT_HOME} ]; then
 	log_info "Creating Rhiot home directory at ${RHIOT_HOME} ..."
 fi
 
+# Exporting host environment variables
+
 ENV="-e "`env | grep -v ' ' | sed ':a;N;$!ba;s/\n/ -e /g'`
 
 exe docker pull rhiot/paas-bootstrap:${RHIOT_VERSION}
