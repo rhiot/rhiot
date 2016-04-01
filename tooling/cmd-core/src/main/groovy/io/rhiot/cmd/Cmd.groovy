@@ -50,8 +50,10 @@ class Cmd {
 
     private final boolean debug
 
+	@Value('${username}')
     private final String username
 
+	@Value('${password}')
     private final String password
 
     def JcabiMavenArtifactResolver artifactResolver = new JcabiMavenArtifactResolver()
