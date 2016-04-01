@@ -54,6 +54,18 @@ log_debug() {
 
 ### General configuration
 
+if [ -z "${RHIOT_VERSION}" ]; then # Remove after 0.1.5 release
+  BOOTSTRAP_RHIOT_VERSION=0.1.5-SNAPSHOT
+  else
+  BOOTSTRAP_RHIOT_VERSION=$RHIOT_VERSION
+fi
+
+if [ -z "${RHIOT_VERSION}" ]; then # Remove after 0.1.5 release
+    SINGLE_PAAS_RHIOT_VERSION=0.1.5-SNAPSHOT
+else
+    SINGLE_PAAS_RHIOT_VERSION=$RHIOT_VERSION
+fi
+
 if [ -z "${RHIOT_VERSION}" ]; then
   RHIOT_VERSION=0.1.4
 fi
@@ -122,9 +134,8 @@ ENV="-e "`env | grep -v ' ' | sed ':a;N;$!ba;s/\n/ -e /g'`
 
 # Calculating containers numbers
 
-exe docker pull rhiot/paas-bootstrap:${RHIOT_VERSION}
-CONTAINERS_NUMBER=`docker run ${ENV} rhiot/paas-bootstrap:${RHIOT_VERSION}`
-
+exe docker pull rhiot/paas-bootstrap:${BOOTSTRAP_RHIOT_VERSION}
+CONTAINERS_NUMBER=`docker run ${ENV} rhiot/paas-bootstrap:${BOOTSTRAP_RHIOT_VERSION}`
 
 ### Cleaning existing PaaS state
 
@@ -201,8 +212,8 @@ else
     ### Single node Cloud PaaS
 
     log_info "Starting single node Cloud PaaS..."
-    exe docker pull rhiot/paas-single:${RHIOT_VERSION}
-    exe docker run -d --name paas-single --net=host -t rhiot/paas-single:${RHIOT_VERSION}
+    exe docker pull rhiot/paas-single:${SINGLE_PAAS_RHIOT_VERSION}
+    exe docker run -d --name paas-single --net=host -t rhiot/paas-single:${SINGLE_PAAS_RHIOT_VERSION}
     log_info "Single node Cloud PaaS started."
 
 fi
