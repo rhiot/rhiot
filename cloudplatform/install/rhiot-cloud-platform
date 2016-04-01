@@ -93,10 +93,6 @@ log_info "Starting Rhiot Cloud Platform"
 case "$OSTYPE" in 
 
 	linux-gnu)
-      dist=`grep DISTRIB_ID /etc/*-release | awk -F '=' '{print $2}'`
-      if [ "$dist" == "Ubuntu" ]; then
-        type curl >/dev/null 2>&1 || apt-get install -qq curl
-      fi
       if ! type "docker" > /dev/null 2>&1 ; then
         log_info "Docker not found - installing..."
         curl -sSL https://get.docker.com/ | sh
