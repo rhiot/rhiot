@@ -34,6 +34,7 @@ import java.util.concurrent.Future
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.Banner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -49,10 +50,8 @@ class Cmd {
 
     private final boolean debug
 
-	@Value('${username}')
     private final String username
 
-	@Value('${password}')
     private final String password
 
     def JcabiMavenArtifactResolver artifactResolver = new JcabiMavenArtifactResolver()
@@ -138,6 +137,7 @@ class Cmd {
 
     public static void main(String[] args) {
         def app = new SpringApplication(Cmd.class)
+		app.setAddCommandLineProperties(true);
         app.setBannerMode(Banner.Mode.OFF)
         def ctx = app.run(args)
         def commandsManager = ctx.getBean(CommandsManager.class)
@@ -197,8 +197,21 @@ class Cmd {
 
 
     @Bean(destroyMethod = "close")
-    DeviceDetector deviceDetector() {
-        new SimplePortScanningDeviceDetector(new JavaNetInterfaceProvider(), this.username, this.password, 500)
+    DeviceDetector deviceDetector(ApplicationArguments arg) {
+		String user = "";
+		String pass = "";
+		if(arg.containsOption("username")) {
+			user = arg.getOptionValues("username").get(0)
+		} else if(arg.containsOption("u")) {
+			user = arg.getnOptionValues("u").get(0)
+		}
+		if(arg.containsOption("password")) {
+			pass = arg.getOptionValues("password").get(0)
+		}else if(arg.containsOption("pa")) {
+			pass = arg.getOptionValues("pa").get(0)
+		}
+        
+		new SimplePortScanningDeviceDetector(new JavaNetInterfaceProvider(), user, pass, 500)
     }
 
     @Bean
