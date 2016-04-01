@@ -83,7 +83,7 @@ if [ -z "${CONTAINERS_LOG_LEVEL}" ]; then
 fi
 
 PAAS_LOG=$RHIOT_HOME/rcp.log
-REQUIRED_DOCKER_VERSION=1.8.2
+REQUIRED_DOCKER_VERSION=1.10.3
 
 
 if [ ! -d ${RHIOT_HOME} ]; then
