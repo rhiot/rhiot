@@ -26,6 +26,7 @@
         <module>utils-ssh</module>
         <module>leshan-client</module>
         <module>scanner</module>
+        <module>docker</module>
     </modules>
 
 </project>
