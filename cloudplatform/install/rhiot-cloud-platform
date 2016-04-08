@@ -145,16 +145,23 @@ if [ $(docker ps | wc -l) -gt 1 ]; then
 fi
 
 log_info "Removing old containers..."
-exe docker rm -f mongodb AMQP_SERVICE_HOST paas-single paas-adapters paas-services spark_master spark_worker
+exe docker rm -f mongodb keycloak AMQP_SERVICE_HOST paas-single paas-adapters paas-services spark_master spark_worker
 
 ### MongoDB
-log_info "MongoDB" 
+
+log_info "MongoDB"
 if [ $(docker ps -a | grep mongodb_data | wc -l) -eq 0 ]; then
     log_info "MongoDB data volume doesn't exist. Creating..."
     exe docker run -v /data/db --name mongodb_data busybox true
 fi
 exe docker run -d --volumes-from mongodb_data --name mongodb -p 27017:27017 mongo
-log_info "MongoDB started" 
+log_info "MongoDB started"
+
+### KeyCloak
+
+exe docker run -d -p 8082:8080 --name keycloak --link mongodb:mongo -e JAVA_OPTS="-Djava.net.preferIPv4Stack=true" jboss/keycloak-mongo:1.9.1.Final
+
+### Initial auto-scaling
 
 if [ $CONTAINERS_NUMBER -gt 2 ]; then
 
