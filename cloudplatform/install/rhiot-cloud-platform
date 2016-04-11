@@ -159,7 +159,11 @@ log_info "MongoDB started"
 
 ### KeyCloak
 
-exe docker run -d -p 8082:8080 --name keycloak --link mongodb:mongo -e JAVA_OPTS="-Djava.net.preferIPv4Stack=true" jboss/keycloak-mongo:1.9.1.Final
+KEYCLOAK_VERSION=1.9.1.Final
+exe docker run -d --name keycloak -p 8082:8080 --link mongodb:mongo \
+  -e KEYCLOAK_USER=${ADMIN_USERNAME} -e KEYCLOAK_PASSWORD=${ADMIN_PASSWORD} \
+  -e JAVA_OPTS="-Djava.net.preferIPv4Stack=true" \
+  jboss/keycloak-mongo:${KEYCLOAK_VERSION}
 
 ### Initial auto-scaling
 
