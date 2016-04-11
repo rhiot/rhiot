@@ -31,7 +31,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.rhiot</groupId>
-			<artifactId>rhiot-utils</artifactId>
+			<artifactId>rhiot-utils-docker</artifactId>
 		</dependency>
 
 		<!-- Testing -->
