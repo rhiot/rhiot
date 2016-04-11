@@ -36,7 +36,6 @@
 		<google-maps-services.version>0.1.12</google-maps-services.version>
 		<google-truth.version>0.27</google-truth.version>
 		<gpsd4java.version>1.4</gpsd4java.version>
-		<groovy.version>2.4.5</groovy.version>
 		<hadoop.version>2.2.0</hadoop.version>
 		<hamcrest.version>1.3</hamcrest.version>
 		<infinispan.version>8.0.0.Beta2</infinispan.version>
@@ -585,16 +584,6 @@
 				<groupId>org.apache.sshd</groupId>
 				<artifactId>sshd-core</artifactId>
 				<version>${apache-ssh.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.groovy</groupId>
-				<artifactId>groovy</artifactId>
-				<version>${groovy.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.groovy</groupId>
-				<artifactId>groovy-all</artifactId>
-				<version>${groovy.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.californium</groupId>
