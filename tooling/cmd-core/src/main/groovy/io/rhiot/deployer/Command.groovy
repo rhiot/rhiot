@@ -14,32 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.scanner
+package io.rhiot.deployer
 
-import groovy.transform.ToString
+interface Command {
 
-@ToString
-public class Device {
-
-    public static final String DEVICE_RASPBERRY_PI_2 = "RaspberryPi2"
-    		
-    public static final String DEVICE_INTEL_EDISON = "IntelEdison"
-
-    private final InetAddress address
-
-    private final String type
-
-    public Device(InetAddress address, String type) {
-        this.address = address;
-        this.type = type;
-    }
-
-    public InetAddress address() {
-        return address;
-    }
-
-    public String type() {
-        return type;
-    }
+    List<String> execute(String... command)
 
 }

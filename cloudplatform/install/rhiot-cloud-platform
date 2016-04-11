@@ -82,6 +82,11 @@ if [ -z "${CONTAINERS_LOG_LEVEL}" ]; then
   CONTAINERS_LOG_LEVEL="INFO"
 fi
 
+if [ -z "${CONTAINERS_NUMBER}" ]; then
+  MEMTOTAL=`free | grep Mem | awk '{ print $2 }'`
+  CONTAINERS_NUMBER=`expr $MEMTOTAL / 1024 / 1024 + 1`
+fi
+
 PAAS_LOG=$RHIOT_HOME/rcp.log
 REQUIRED_DOCKER_VERSION=1.10.3
 
