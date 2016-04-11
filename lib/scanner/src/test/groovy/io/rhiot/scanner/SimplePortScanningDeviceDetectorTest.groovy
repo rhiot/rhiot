@@ -18,7 +18,8 @@ package io.rhiot.scanner
 
 import io.rhiot.utils.ssh.server.NoneCredentialsPasswordAuthenticator
 import io.rhiot.utils.ssh.server.SshServerBuilder;
-import org.junit.Assert;
+import org.junit.Assert
+import org.junit.Ignore;
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
@@ -39,6 +40,7 @@ public class SimplePortScanningDeviceDetectorTest extends Assert {
         assertEquals(0, addresses.size());
     }
 
+    @Ignore("See #572")
     @Test
     void shouldReachDevice() throws IOException {
         assumeFalse(parseBoolean(getenv('IS_TRAVIS')))
