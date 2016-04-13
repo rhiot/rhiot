@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.adapter.rest;
+package io.rhiot.cloud.adapter.rest;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;

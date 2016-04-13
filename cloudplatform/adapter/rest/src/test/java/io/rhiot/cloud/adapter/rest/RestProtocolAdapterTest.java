@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.adapter.rest;
+package io.rhiot.cloud.adapter.rest;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import org.springframework.util.SocketUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;

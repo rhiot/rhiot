@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.rhiot.cloudplatform.adapter.rest.spring;
+package io.rhiot.cloud.adapter.rest.spring;
 
-import io.rhiot.cloudplatform.adapter.rest.RestProtocolAdapter;
+import io.rhiot.cloud.adapter.rest.RestProtocolAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static io.rhiot.cloudplatform.adapter.rest.RestProtocolAdapter.DEFAULT_CONTENT_TYPE;
+import static io.rhiot.cloud.adapter.rest.RestProtocolAdapter.DEFAULT_CONTENT_TYPE;
 
 @Configuration
 public class RestProtocolAdapterConfiguration {
