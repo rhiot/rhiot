@@ -164,7 +164,7 @@ log_info "MongoDB started"
 
 ### KeyCloak
 
-KEYCLOAK_VERSION=1.9.1.Final
+KEYCLOAK_VERSION=1.9.2.Final
 exe docker run -d --name keycloak -p 8082:8080 --link mongodb:mongo \
   -e KEYCLOAK_USER=${ADMIN_USERNAME} -e KEYCLOAK_PASSWORD=${ADMIN_PASSWORD} \
   -e JAVA_OPTS="-Djava.net.preferIPv4Stack=true" \
