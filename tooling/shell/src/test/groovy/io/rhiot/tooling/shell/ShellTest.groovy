@@ -34,6 +34,9 @@ import static com.google.common.truth.Truth.assertThat
 import static io.rhiot.utils.Networks.findAvailableTcpPort
 import static io.rhiot.utils.Properties.setIntProperty
 import static io.rhiot.utils.Uuids.uuid
+import static java.lang.Boolean.parseBoolean
+import static java.lang.System.getenv
+import static org.junit.Assume.assumeFalse
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Shell.class)
@@ -177,6 +180,8 @@ class ShellTest {
 
     @Test
     void shouldNotFindDevicesForBootDelegationConfiguration() {
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
+
         // When
         def output = shellClient.command("kura-config-bootdelegation")
 
