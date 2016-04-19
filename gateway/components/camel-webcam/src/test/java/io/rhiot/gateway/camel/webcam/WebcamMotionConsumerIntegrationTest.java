@@ -42,10 +42,11 @@ public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
         assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
         assumeTrue(WebcamHelper.isWebcamPresent());
     }
-    
+
     @AfterClass
     public static void after() throws TimeoutException {
-        WebcamHelper.closeWebcam();
+        if(!parseBoolean(getenv("IS_TRAVIS")))
+            WebcamHelper.closeWebcam();
     }
     
     @Test

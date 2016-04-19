@@ -25,6 +25,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.concurrent.TimeoutException;
+
 import static io.rhiot.gateway.camel.webcam.WebcamHelper.closeWebcam;
 import static io.rhiot.gateway.camel.webcam.WebcamHelper.isWebcamPresent;
 import static java.lang.Boolean.parseBoolean;
@@ -42,13 +44,14 @@ public class WebcamConsumerIntegrationTest extends CamelTestSupport {
     
     @BeforeClass
     public static void before(){
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
         assumeTrue(isWebcamPresent());
     }
 
     @AfterClass
-    public static void after() throws Exception {
-        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
-        closeWebcam();
+    public static void after() throws TimeoutException {
+        if(!parseBoolean(getenv("IS_TRAVIS")))
+            WebcamHelper.closeWebcam();
     }
 
     @Override

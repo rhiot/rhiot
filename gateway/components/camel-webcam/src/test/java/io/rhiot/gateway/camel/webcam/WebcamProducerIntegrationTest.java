@@ -47,7 +47,8 @@ public class WebcamProducerIntegrationTest extends CamelTestSupport {
 
     @AfterClass
     public static void after() throws TimeoutException {
-        WebcamHelper.closeWebcam();
+        if(!parseBoolean(getenv("IS_TRAVIS")))
+            WebcamHelper.closeWebcam();
     }
     
     @Test
