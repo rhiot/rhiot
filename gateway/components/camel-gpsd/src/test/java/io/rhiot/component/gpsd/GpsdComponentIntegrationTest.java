@@ -34,6 +34,9 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.System.getenv;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 import static io.rhiot.utils.Properties.booleanProperty;
 
@@ -51,7 +54,8 @@ public class GpsdComponentIntegrationTest extends CamelTestSupport {
     
     @BeforeClass
     public static void beforeClass() {
-        
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
+
         devices = deviceDetector.detectDevices();
         piAddress = devices.size() == 1 ? devices.get(0).address().getHostAddress() : "localhost";
         isRpiAvailable = devices.size() == 1 && devices.get(0).type().equals(Device.DEVICE_RASPBERRY_PI_2) &&

@@ -31,6 +31,9 @@ import org.junit.Test;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.System.getenv;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 public class GpsdScheduledConsumerIntegrationTest extends CamelTestSupport {
@@ -42,6 +45,8 @@ public class GpsdScheduledConsumerIntegrationTest extends CamelTestSupport {
 
     @BeforeClass
     public static void beforeClass() {
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
+
 
         devices = deviceDetector.detectDevices();
         piAddress = devices.size() == 1 ? devices.get(0).address().getHostAddress() : null;
