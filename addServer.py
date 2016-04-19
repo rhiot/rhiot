@@ -57,6 +57,8 @@ sonatypeServerNode.appendChild(sonatypeServerPass)
 
 serversNode.appendChild(sonatypeServerNode)
 
+print 'Added Sonatype configuration.'
+
 dockerHub = m2.createElement("server")
 dockerHubId = m2.createElement("id")
 dockerHubUsername = m2.createElement("username")
