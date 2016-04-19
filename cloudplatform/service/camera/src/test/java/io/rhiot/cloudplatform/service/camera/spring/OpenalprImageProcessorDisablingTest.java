@@ -28,7 +28,10 @@ import java.util.Map;
 import static io.rhiot.cloudplatform.connector.Header.arguments;
 import static io.rhiot.utils.Uuids.uuid;
 import static io.rhiot.utils.process.Processes.canExecuteCommand;
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.System.getenv;
 import static java.lang.Thread.sleep;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 public class OpenalprImageProcessorDisablingTest extends CloudPlatformTest {
@@ -48,6 +51,7 @@ public class OpenalprImageProcessorDisablingTest extends CloudPlatformTest {
     @Test
     public void shouldDisableOpenalprProcessor() throws InterruptedException {
         assumeTrue(canExecuteCommand("docker", "version"));
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
 
         // When
         connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));

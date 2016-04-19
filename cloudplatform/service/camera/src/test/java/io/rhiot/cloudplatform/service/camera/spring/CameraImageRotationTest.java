@@ -31,7 +31,10 @@ import static com.jayway.awaitility.Awaitility.await;
 import static io.rhiot.cloudplatform.connector.Header.arguments;
 import static io.rhiot.utils.Uuids.uuid;
 import static io.rhiot.utils.process.Processes.canExecuteCommand;
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.System.getenv;
 import static java.lang.Thread.sleep;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 public class CameraImageRotationTest extends CloudPlatformTest {
@@ -51,6 +54,7 @@ public class CameraImageRotationTest extends CloudPlatformTest {
     @Test
     public void shouldRotateCameraImages() throws InterruptedException {
         assumeTrue(canExecuteCommand("docker", "version"));
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
 
         // Given
         Arrays.asList(new File("/tmp/rhiot/binary").listFiles()).stream().forEach(File::delete);
