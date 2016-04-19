@@ -17,16 +17,12 @@
 package io.rhiot.cloudplatform.service.camera.spring;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.truth.Truth;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
-import org.junit.Test;
+import org.junit.Test
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.Callable
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.jayway.awaitility.Awaitility.await;
 import static io.rhiot.cloudplatform.connector.Header.arguments;
 import static io.rhiot.utils.Uuids.uuid;
@@ -57,21 +53,24 @@ public class CameraImageRotationTest extends CloudPlatformTest {
         assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
 
         // Given
-        Arrays.asList(new File("/tmp/rhiot/binary").listFiles()).stream().forEach(File::delete);
+        new File("/tmp/rhiot/binary").listFiles().each { it.delete() }
 
         // When
         connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
         sleep(5000);
-        Truth.assertThat(new File("/tmp/rhiot/binary").list()).asList().isNotEmpty();
+        assertThat(new File("/tmp/rhiot/binary").list().toList()).isNotEmpty();
 
         // Then
         Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
-        await().until(() -> {
-            return connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage")).isEmpty();
+        await().until(new Callable<Boolean>() {
+            @Override
+            Boolean call() throws Exception {
+                return connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage")).isEmpty();
+            }
         });
         List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
-        Truth.assertThat(imageMetadata).hasSize(0);
-        Truth.assertThat(new File("/tmp/rhiot/binary").list()).asList().isEmpty();
+        assertThat(imageMetadata).hasSize(0);
+        assertThat(new File("/tmp/rhiot/binary").list().toList()).isEmpty()
     }
 
 }
