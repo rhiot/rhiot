@@ -17,14 +17,15 @@
 package io.rhiot.cloudplatform.service.camera.spring;
 
 import com.google.common.collect.ImmutableMap;
-import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest;
+import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import org.junit.Test
 
 import java.util.concurrent.Callable
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.jayway.awaitility.Awaitility.await;
-import static io.rhiot.cloudplatform.connector.Header.arguments;
+import static io.rhiot.cloudplatform.connector.Header.arguments
+import static io.rhiot.utils.Properties.setIntProperty;
 import static io.rhiot.utils.Uuids.uuid;
 import static io.rhiot.utils.process.Processes.canExecuteCommand;
 import static java.lang.Boolean.parseBoolean;
@@ -35,14 +36,18 @@ import static org.junit.Assume.assumeTrue;
 
 public class CameraImageRotationTest extends CloudPlatformTest {
 
-    String deviceId = uuid();
+    // Messages fixtures
 
-    InputStream image = getClass().getResourceAsStream("/h786poj.jpg");
+    def deviceId = uuid()
+
+    def image = getClass().getResourceAsStream('/h786poj.jpg')
+
+    // Configuration fixtures
 
     @Override
     protected void beforeCloudPlatformStarted() {
-        System.setProperty("camera.rotation.storageQuota", 0 + "");
-        System.setProperty("camera.rotation.initialDelay", 15000 + "");
+        setIntProperty('camera.rotation.storageQuota', 0)
+        setIntProperty('camera.rotation.initialDelay', 15000)
     }
 
     // Tests
