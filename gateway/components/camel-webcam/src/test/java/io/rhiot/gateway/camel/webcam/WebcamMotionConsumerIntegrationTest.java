@@ -27,6 +27,9 @@ import org.junit.Test;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.System.getenv;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
@@ -36,6 +39,7 @@ public class WebcamMotionConsumerIntegrationTest extends CamelTestSupport {
 
     @BeforeClass
     public static void before(){
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
         assumeTrue(WebcamHelper.isWebcamPresent());
     }
     

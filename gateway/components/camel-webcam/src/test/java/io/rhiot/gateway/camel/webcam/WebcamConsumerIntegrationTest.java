@@ -27,6 +27,9 @@ import org.junit.Test;
 
 import static io.rhiot.gateway.camel.webcam.WebcamHelper.closeWebcam;
 import static io.rhiot.gateway.camel.webcam.WebcamHelper.isWebcamPresent;
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.System.getenv;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 public class WebcamConsumerIntegrationTest extends CamelTestSupport {
@@ -44,6 +47,7 @@ public class WebcamConsumerIntegrationTest extends CamelTestSupport {
 
     @AfterClass
     public static void after() throws Exception {
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
         closeWebcam();
     }
 

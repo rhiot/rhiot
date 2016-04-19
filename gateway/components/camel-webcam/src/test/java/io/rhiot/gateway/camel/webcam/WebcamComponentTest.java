@@ -38,7 +38,10 @@ import java.util.Map;
 
 import static io.rhiot.gateway.camel.webcam.WebcamConstants.WEBCAM_DEPENDENCIES_LINUX;
 import static io.rhiot.gateway.camel.webcam.WebcamHelper.isWebcamPresent;
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.System.getenv;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -54,6 +57,7 @@ public class WebcamComponentTest extends CamelTestSupport {
 
     @BeforeClass
     public static void beforeClass(){
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
         assumeTrue(isWebcamPresent());
     }
 
