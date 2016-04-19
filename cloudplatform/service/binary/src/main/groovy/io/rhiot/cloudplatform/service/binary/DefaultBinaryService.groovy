@@ -27,8 +27,6 @@ class DefaultBinaryService implements BinaryService {
 
     private static final Logger LOG = getLogger(DefaultBinaryService.class)
 
-    public static final String DEFAULT_IMAGES_DIRECTORY = '/tmp/rhiot/binary'
-
     private final File imagesDirectory
 
     DefaultBinaryService(File binariesDirectory) {

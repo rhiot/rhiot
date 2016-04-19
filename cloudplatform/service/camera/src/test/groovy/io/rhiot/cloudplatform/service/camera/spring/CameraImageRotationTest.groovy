@@ -24,7 +24,7 @@ import java.util.concurrent.Callable
 import static com.google.common.truth.Truth.assertThat;
 import static com.jayway.awaitility.Awaitility.await;
 import static io.rhiot.cloudplatform.connector.Header.arguments
-import static io.rhiot.cloudplatform.service.binary.DefaultBinaryService.DEFAULT_IMAGES_DIRECTORY
+import static io.rhiot.cloudplatform.service.binary.spring.BinaryServiceConfiguration.DEFAULT_IMAGES_DIRECTORY
 import static io.rhiot.utils.Properties.setIntProperty;
 import static io.rhiot.utils.Uuids.uuid;
 import static io.rhiot.utils.process.Processes.canExecuteCommand;
@@ -72,7 +72,7 @@ public class CameraImageRotationTest extends CloudPlatformTest {
         await().until(new Callable<Boolean>() {
             @Override
             Boolean call() throws Exception {
-                return connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage")).isEmpty();
+                connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage")).isEmpty()
             }
         });
         def imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
