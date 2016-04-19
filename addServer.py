@@ -55,6 +55,25 @@ sonatypeServerNode.appendChild(sonatypeServerPass)
 
 serversNode.appendChild(sonatypeServerNode)
 
+dockerHub = m2.createElement("server")
+dockerHubId = m2.createElement("id")
+dockerHubUsername = m2.createElement("username")
+dockerHubPassword = m2.createElement("password")
+
+dockerHubIdNode = m2.createTextNode("ossrh")
+dockerHubUsernameNode = m2.createTextNode(os.environ["DOCKER_USERNAME"])
+dockerHubPasswordNode = m2.createTextNode(os.environ["DOCKER_PASSWORD"])
+
+dockerHubId.appendChild(dockerHubIdNode)
+dockerHubUsername.appendChild(dockerHubUsernameNode)
+dockerHubPassword.appendChild(dockerHubPasswordNode)
+
+dockerHub.appendChild(dockerHubId)
+dockerHub.appendChild(dockerHubUsername)
+dockerHub.appendChild(dockerHubPassword)
+
+serversNode.appendChild(dockerHub)
+
 m2Str = m2.toxml()
 f = open(homedir + '/.m2/mySettings.xml', 'w')
 f.write(m2Str)
