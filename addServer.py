@@ -60,7 +60,7 @@ dockerHubId = m2.createElement("id")
 dockerHubUsername = m2.createElement("username")
 dockerHubPassword = m2.createElement("password")
 
-dockerHubIdNode = m2.createTextNode("ossrh")
+dockerHubIdNode = m2.createTextNode("registry.hub.docker.com")
 dockerHubUsernameNode = m2.createTextNode(os.environ["DOCKER_USERNAME"])
 dockerHubPasswordNode = m2.createTextNode(os.environ["DOCKER_PASSWORD"])
 
