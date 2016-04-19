@@ -29,7 +29,10 @@ import java.util.Map;
 import static io.rhiot.cloudplatform.connector.Header.arguments;
 import static io.rhiot.utils.Uuids.uuid;
 import static io.rhiot.utils.process.Processes.canExecuteCommand;
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.System.getenv;
 import static java.lang.Thread.sleep;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 public class CameraServiceConfigurationTest extends CloudPlatformTest {
@@ -48,6 +51,7 @@ public class CameraServiceConfigurationTest extends CloudPlatformTest {
     @Test
     public void shouldRecognizePlate() {
         assumeTrue(canExecuteCommand("docker", "version"));
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
 
         @SuppressWarnings("unchecked") // We deserialize binary data here, so type safety warnings can be ignored.
         List<Map<String, Object>> plateMatches = connector.fromBus("camera.recognizePlate", image, List.class, arguments("eu"));
@@ -57,6 +61,7 @@ public class CameraServiceConfigurationTest extends CloudPlatformTest {
     @Test
     public void shouldProcessImagePlate() throws InterruptedException {
         assumeTrue(canExecuteCommand("docker", "version"));
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
 
         // When
         connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
@@ -72,6 +77,7 @@ public class CameraServiceConfigurationTest extends CloudPlatformTest {
     @Test
     public void shouldStoreProcessedPlateImage() throws InterruptedException {
         assumeTrue(canExecuteCommand("docker", "version"));
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
 
         // When
         connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
