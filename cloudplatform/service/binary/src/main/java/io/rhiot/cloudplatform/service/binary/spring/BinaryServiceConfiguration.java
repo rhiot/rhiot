@@ -29,8 +29,10 @@ import java.io.File;
 @Configuration
 public class BinaryServiceConfiguration {
 
+    private static final String DEFAULT_IMAGES_DIRECTORY = "${camera.imagesDirectory:" + DefaultBinaryService.DEFAULT_IMAGES_DIRECTORY +"}";
+
     @Bean(name = "binary")
-    BinaryService binaryService(@Value("${camera.imagesDirectory:" + DefaultBinaryService.DEFAULT_IMAGES_DIRECTORY +"}") File imagesDirectory) {
+    BinaryService binaryService(@Value(DEFAULT_IMAGES_DIRECTORY) File imagesDirectory) {
         return new DefaultBinaryService(imagesDirectory);
     }
 
