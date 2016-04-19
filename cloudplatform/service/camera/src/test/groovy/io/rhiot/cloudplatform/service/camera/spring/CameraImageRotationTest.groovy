@@ -70,7 +70,7 @@ public class CameraImageRotationTest extends CloudPlatformTest {
         assertThat(imagesDirectory.list().toList()).isNotEmpty();
 
         // Then
-        Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
+        def query = ['query': ['deviceId': deviceId]]
         await().until(new Callable<Boolean>() {
             @Override
             Boolean call() throws Exception {
