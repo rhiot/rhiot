@@ -36,6 +36,7 @@ public class SimplePortScanningDeviceDetectorTest extends Assert {
 
     @Test
     void shouldNotReachDevice() {
+        assumeFalse(parseBoolean(getenv('IS_TRAVIS')))
         def addresses = detector.detectDevices(findAvailableTcpPort())
         assertEquals(0, addresses.size());
     }
@@ -52,6 +53,7 @@ public class SimplePortScanningDeviceDetectorTest extends Assert {
 
     @Test
     void shouldNotFindRaspberryPi() {
+        assumeFalse(parseBoolean(getenv('IS_TRAVIS')))
         def raspberryPi = new SshServerBuilder().
                 authenticator(new NoneCredentialsPasswordAuthenticator()).
                 build().start()
