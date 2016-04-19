@@ -18,7 +18,6 @@ package io.rhiot.gateway.sensors.camera.spring
 
 import com.google.common.collect.ImmutableMap
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
-import org.junit.BeforeClass
 import org.junit.Test
 
 import java.util.concurrent.Callable
@@ -27,6 +26,9 @@ import static com.google.common.truth.Truth.assertThat
 import static com.jayway.awaitility.Awaitility.await
 import static io.rhiot.cloudplatform.connector.Header.arguments
 import static io.rhiot.gateway.camel.webcam.WebcamHelper.webcamPresent
+import static java.lang.Boolean.parseBoolean
+import static java.lang.System.getenv
+import static org.junit.Assume.assumeFalse
 import static org.junit.Assume.assumeTrue
 
 class CameraSensorConfigurationTest extends CloudPlatformTest {
@@ -34,6 +36,7 @@ class CameraSensorConfigurationTest extends CloudPlatformTest {
     @Override
     protected void beforeCloudPlatformStarted() {
         assumeTrue(isWebcamPresent())
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
     }
 
     @Test
