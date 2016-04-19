@@ -16,9 +16,7 @@
  */
 package io.rhiot.cloudplatform.service.camera.spring;
 
-import com.google.common.collect.ImmutableMap;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
-import io.rhiot.cloudplatform.service.binary.DefaultBinaryService
 import org.junit.Test
 
 import java.util.concurrent.Callable
@@ -77,7 +75,7 @@ public class CameraImageRotationTest extends CloudPlatformTest {
                 return connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage")).isEmpty();
             }
         });
-        List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
+        def imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
         assertThat(imageMetadata).hasSize(0);
         assertThat(imagesDirectory.list().toList()).isEmpty()
     }
