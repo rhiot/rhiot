@@ -18,6 +18,7 @@ package io.rhiot.cloudplatform.service.camera.spring;
 
 import com.google.common.collect.ImmutableMap;
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
+import io.rhiot.cloudplatform.service.binary.DefaultBinaryService
 import org.junit.Test
 
 import java.util.concurrent.Callable
@@ -25,6 +26,7 @@ import java.util.concurrent.Callable
 import static com.google.common.truth.Truth.assertThat;
 import static com.jayway.awaitility.Awaitility.await;
 import static io.rhiot.cloudplatform.connector.Header.arguments
+import static io.rhiot.cloudplatform.service.binary.DefaultBinaryService.DEFAULT_IMAGES_DIRECTORY
 import static io.rhiot.utils.Properties.setIntProperty;
 import static io.rhiot.utils.Uuids.uuid;
 import static io.rhiot.utils.process.Processes.canExecuteCommand;
@@ -37,6 +39,8 @@ import static org.junit.Assume.assumeTrue;
 public class CameraImageRotationTest extends CloudPlatformTest {
 
     // Messages fixtures
+
+    def imagesDirectory = new File(DEFAULT_IMAGES_DIRECTORY)
 
     def deviceId = uuid()
 
@@ -53,17 +57,17 @@ public class CameraImageRotationTest extends CloudPlatformTest {
     // Tests
 
     @Test
-    public void shouldRotateCameraImages() throws InterruptedException {
-        assumeTrue(canExecuteCommand("docker", "version"));
-        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
+    void shouldRotateCameraImages() {
+        assumeTrue(canExecuteCommand('docker', 'version'))
+        assumeFalse(parseBoolean(getenv('IS_TRAVIS')))
 
         // Given
-        new File("/tmp/rhiot/binary").listFiles().each { it.delete() }
+        imagesDirectory.listFiles().each { it.delete() }
 
         // When
         connector.toBusAndWait("camera.process", image, arguments(deviceId, "eu"));
         sleep(5000);
-        assertThat(new File("/tmp/rhiot/binary").list().toList()).isNotEmpty();
+        assertThat(imagesDirectory.list().toList()).isNotEmpty();
 
         // Then
         Map<String, Object> query = ImmutableMap.of("query", ImmutableMap.of("deviceId", deviceId));
@@ -75,7 +79,7 @@ public class CameraImageRotationTest extends CloudPlatformTest {
         });
         List<Map<String, Object>> imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
         assertThat(imageMetadata).hasSize(0);
-        assertThat(new File("/tmp/rhiot/binary").list().toList()).isEmpty()
+        assertThat(imagesDirectory.list().toList()).isEmpty()
     }
 
 }

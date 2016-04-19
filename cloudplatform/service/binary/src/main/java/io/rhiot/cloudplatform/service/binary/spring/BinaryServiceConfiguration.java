@@ -30,7 +30,7 @@ import java.io.File;
 public class BinaryServiceConfiguration {
 
     @Bean(name = "binary")
-    BinaryService binaryService(@Value("${camera.imagesDirectory:/tmp/rhiot/binary}") File imagesDirectory) {
+    BinaryService binaryService(@Value("${camera.imagesDirectory:" + DefaultBinaryService.DEFAULT_IMAGES_DIRECTORY +"}") File imagesDirectory) {
         return new DefaultBinaryService(imagesDirectory);
     }
 
