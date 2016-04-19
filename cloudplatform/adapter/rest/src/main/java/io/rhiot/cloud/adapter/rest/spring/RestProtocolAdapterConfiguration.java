@@ -23,11 +23,14 @@ import org.springframework.context.annotation.Configuration;
 
 import static io.rhiot.cloud.adapter.rest.RestProtocolAdapter.DEFAULT_CONTENT_TYPE;
 
+/**
+ * Spring configuration for REST protocol adapter.
+ */
 @Configuration
 public class RestProtocolAdapterConfiguration {
 
     @Bean
-    RestProtocolAdapter camelRestStreamSource(
+    RestProtocolAdapter restProtcolAdapter(
             @Value("${rest.port:8080}") int httpPort,
             @Value("${rest.contentType:" + DEFAULT_CONTENT_TYPE + "}") String contentType) {
         return new RestProtocolAdapter(httpPort, contentType);
