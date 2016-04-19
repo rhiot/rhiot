@@ -23,6 +23,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
 import static com.google.common.truth.Truth.assertThat
+import static java.lang.Boolean.parseBoolean
+import static java.lang.System.getenv
+import static org.junit.Assume.assumeFalse
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Cmd.class)
@@ -38,6 +41,7 @@ class CmdTest {
 
     @Test
     void shouldPerformScanning() {
+        assumeFalse(parseBoolean(getenv("IS_TRAVIS")));
         def appender = new InMemoryOutputAppender()
         commandsManager.command('device-scan').execute(appender)
         assertThat(appender.output().join('')).startsWith('Scanning')
