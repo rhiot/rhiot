@@ -17,6 +17,7 @@ language: java
 script:
   - wget http://ftp.ps.pl/pub/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
   - tar xpf apache-maven-3.3.9-bin.tar.gz
+  - mv apache-maven-3.3.9 /tmp/
   - ./travis.sh
 jdk:
 - oraclejdk8
