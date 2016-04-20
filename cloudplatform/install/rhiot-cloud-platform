@@ -229,7 +229,9 @@ else
 
     log_info "Starting single node Cloud PaaS..."
     exe docker pull rhiot/paas-single:${SINGLE_PAAS_RHIOT_VERSION}
-    exe docker run -d --name paas-single --net=host -t rhiot/paas-single:${SINGLE_PAAS_RHIOT_VERSION}
+    exe docker run -d --name paas-single --net=host -t \
+      --privileged -v /var/run/docker.sock:/run/docker.sock -v /tmp/openalpr-workdir:/tmp/openalpr-workdir \
+      -e logging.level.root=${CONTAINERS_LOG_LEVEL} rhiot/paas-single:${SINGLE_PAAS_RHIOT_VERSION}
     log_info "Single node Cloud PaaS started."
 
 fi
