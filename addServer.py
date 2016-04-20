@@ -21,6 +21,9 @@ import os.path
 import xml.dom.minidom
 
 print 'Editing Maven settings...'
+print os.environ["SONATYPE_PASSWORD"]
+print os.environ["DOCKER_PASSWORD"]
+print 'xxx'
 
 if os.environ["TRAVIS_SECURE_ENV_VARS"] == "false":
   print "no secure env vars available, skipping deployment"
