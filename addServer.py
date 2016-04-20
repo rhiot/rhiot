@@ -44,7 +44,9 @@ sonatypeServerUser = m2.createElement("username")
 sonatypeServerPass = m2.createElement("password")
 
 idNode = m2.createTextNode("ossrh")
+print 'Reading Sonatype username...'
 userNode = m2.createTextNode(os.environ["SONATYPE_USERNAME"])
+print 'Reading Sonatype password...'
 passNode = m2.createTextNode(os.environ["SONATYPE_PASSWORD"])
 
 sonatypeServerId.appendChild(idNode)
