@@ -21,6 +21,7 @@ jdk:
 sudo: required
 services:
   - docker
+
 env:
   global:
   - IS_TRAVIS=true
