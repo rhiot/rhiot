@@ -44,7 +44,7 @@ public class GpsdRoutes extends RouteBuilder {
 
     // Collaborators
 
-    def jackson = new JacksonDataFormat()
+    def jackson = new JacksonDataFormat(new ObjectMapper(), null)
 
     // Constructors
 

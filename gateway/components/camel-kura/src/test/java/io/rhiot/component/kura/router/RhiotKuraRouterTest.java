@@ -25,10 +25,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
 
+@Ignore
 public class RhiotKuraRouterTest {
 
     TestKuraServer kuraServer = new TestKuraServer();

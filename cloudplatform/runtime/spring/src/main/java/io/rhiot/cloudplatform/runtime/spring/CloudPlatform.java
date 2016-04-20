@@ -20,7 +20,7 @@ import static io.rhiot.cloudplatform.runtime.spring.RhiotConstants.BANNER_LOCATI
 import static io.rhiot.cloudplatform.runtime.spring.RhiotConstants.CAMEL_SPRINGBOOT_TYPE_CONVERSION;
 import static io.rhiot.cloudplatform.runtime.spring.RhiotConstants.META_INF_RHIOT_BANNER_TXT;
 import static java.util.Arrays.asList;
-import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
+import static org.apache.camel.component.amqp.AMQPComponent.amqpComponent;
 
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import io.rhiot.cloudplatform.connector.IoTConnector;
@@ -90,7 +90,7 @@ public class CloudPlatform {
     AMQPComponent amqp(@Value("${AMQP_SERVICE_HOST:localhost}") String amqpBrokerUrl,
             @Value("${AMQP_SERVICE_PORT:5672}") int amqpBrokerPort) throws MalformedURLException {
         LOG.debug("About to create AMQP component {}:{}", amqpBrokerUrl, amqpBrokerPort);
-        return amqp10Component("amqp://guest:guest@" + amqpBrokerUrl + ":" + amqpBrokerPort);
+        return amqpComponent("amqp://" + amqpBrokerUrl + ":" + amqpBrokerPort);
     }
 
     @Bean

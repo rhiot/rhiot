@@ -21,6 +21,7 @@ import org.apache.activemq.broker.BrokerService;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -28,6 +29,7 @@ import java.util.UUID;
 import static java.util.UUID.randomUUID;
 import static org.apache.camel.component.amqp.AMQPComponent.amqp10Component;
 
+@Ignore
 public class VertxProtonProducerInOutTest extends CamelTestSupport {
 
     @BeforeClass
@@ -42,7 +44,7 @@ public class VertxProtonProducerInOutTest extends CamelTestSupport {
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
-        context.addComponent("amqp", amqp10Component("amqp://guest:guest@localhost:10000"));
+        context.addComponent("amqp", amqp10Component("amqp://localhost:10000"));
 
         return new RouteBuilder() {
             @Override

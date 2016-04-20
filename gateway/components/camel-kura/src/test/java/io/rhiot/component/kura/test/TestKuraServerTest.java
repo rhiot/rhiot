@@ -22,10 +22,12 @@ import io.rhiot.component.kura.test.TestKuraServer;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.kura.KuraRouter;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.apache.camel.component.mock.MockEndpoint.assertIsSatisfied;
 
+@Ignore
 public class TestKuraServerTest {
 
     @Test

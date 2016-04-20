@@ -19,7 +19,6 @@ package io.rhiot.cloudplatform.service.binding;
 import io.rhiot.cloudplatform.encoding.spi.PayloadEncoding;
 import org.apache.camel.Message;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.qpid.amqp_1_0.jms.Destination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +62,7 @@ public class ServiceBinding extends RouteBuilder {
 
             from(fromChannel).process(exchange -> {
                 Message message = exchange.getIn();
-                String channel = message.getHeader("JMSDestination", Destination.class).getAddress();
+                String channel = message.getHeader("JMSDestination", String.class);
                 byte[] incomingPayload = message.getBody(byte[].class);
                 OperationBinding operationBinding = operationBinding(payloadEncoding, channel, incomingPayload, message.getHeaders(), getContext().getRegistry());
                 exchange.setProperty(TARGET_PROPERTY, "bean:" + operationBinding.service() + "?method=" + operationBinding.operation() + "&multiParameterArray=true");

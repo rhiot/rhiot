@@ -60,7 +60,7 @@ public class VertxProtonComponentTest extends CamelTestSupport {
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
-        context.addComponent("amqp", amqp10Component("amqp://guest:guest@localhost:9999"));
+        context.addComponent("amqp", amqp10Component("amqp://localhost:9999"));
 
         return new RouteBuilder() {
             @Override
