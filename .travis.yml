@@ -14,7 +14,10 @@
 # limitations under the License.
 
 language: java
-script: "./travis.sh"
+script:
+  - wget http://ftp.ps.pl/pub/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+  - tar xpf apache-maven-3.3.9-bin.tar.gz
+  - ./travis.sh
 jdk:
 - oraclejdk8
 

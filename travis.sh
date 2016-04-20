@@ -41,9 +41,9 @@ bash -c "while true; do echo \$(date) - building ...; sleep $PING_SLEEP; done" &
 PING_LOOP_PID=$!
 
 if [ -z "${DEPLOY}" ]; then
-    mvn install -PwithRatCheck >> $BUILD_OUTPUT 2>&1
+    apache-maven-3.3.9/bin/mvn install -PwithRatCheck >> $BUILD_OUTPUT 2>&1
 else
-    mvn -q clean install deploy -DskipTests -Pdocker --settings ~/.m2/mySettings.xml >> $BUILD_OUTPUT 2>&1
+    apache-maven-3.3.9/bin/mvn -q clean install deploy -DskipTests -Pdocker --settings ~/.m2/mySettings.xml >> $BUILD_OUTPUT 2>&1
 fi
 
 # The build finished without returning an error so dump a tail of the output
