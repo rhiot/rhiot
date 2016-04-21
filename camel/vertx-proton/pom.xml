@@ -9,7 +9,7 @@
         <version>0.1.5-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <name>Rhiot Camel components :: Vertx-proton</name>
+    <name>Rhiot :: Camel components :: Vertx-proton</name>
     <artifactId>rhiot-camel-vertx-proton</artifactId>
 
     <licenses>
