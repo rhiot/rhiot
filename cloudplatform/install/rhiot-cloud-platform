@@ -154,14 +154,14 @@ exe docker rm -f mongodb keycloak AMQP_SERVICE_HOST paas-single paas-adapters pa
 
 ### Starting OpenShift
 
-if [ $(docker ps -a | grep origin | wc -l) -eq 0 ]; then
-    exe docker run -d --name "origin" \
+if [ $(docker ps -a | grep openshift-server | wc -l) -eq 0 ]; then
+    exe docker run -d --name openshift-server \
         --privileged --pid=host --net=host \
         -v /:/rootfs:ro -v /var/run:/var/run:rw -v /sys:/sys -v /var/lib/docker:/var/lib/docker:rw \
         -v /var/lib/origin/openshift.local.volumes:/var/lib/origin/openshift.local.volumes \
         openshift/origin start
 else
-    exe docker start origin
+    exe docker start openshift-server
 fi
 
 ### MongoDB
