@@ -16,21 +16,14 @@
  */
 package io.rhiot.utils.process;
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.util.List;
-
-public class DefaultProcessManager extends ExecutorBasedProcessManager {
+/**
+ * Mock process manager returning command input as an output.
+ */
+class EchoMockProcessManager extends ExecutorBasedProcessManager {
 
     @Override
-    public List<String> executeAndJoinOutput(String... command) {
-        try {
-            Process process = new ProcessBuilder().redirectErrorStream(true).command(command).start();
-            return IOUtils.readLines(process.getInputStream());
-        } catch (IOException e) {
-            throw new ProcessExecutionException(e);
-        }
+    List<String> executeAndJoinOutput(String... command) {
+        command.toList()
     }
 
 }

@@ -17,14 +17,22 @@
 package io.rhiot.utils.process;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
-import static java.util.Arrays.asList;
+import static java.util.concurrent.Executors.newCachedThreadPool;
 
-public class EchoMockProcessManager implements ProcessManager {
+public abstract class ExecutorBasedProcessManager implements ProcessManager {
+
+    private ExecutorService executor = newCachedThreadPool();
 
     @Override
-    public List<String> executeAndJoinOutput(String... command) {
-        return asList(command);
+    public Future<List<String>> asyncExecuteAndJoinOutput(String... command) {
+        return executor.submit(() -> executeAndJoinOutput(command));
+    }
+
+    public void close() {
+        executor.shutdown();
     }
 
 }

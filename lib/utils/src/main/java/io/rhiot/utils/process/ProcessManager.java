@@ -17,6 +17,7 @@
 package io.rhiot.utils.process;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * Executes and manages system processes.
@@ -31,5 +32,7 @@ public interface ProcessManager {
      * represented as a line of returned list.
      */
     List<String> executeAndJoinOutput(String... command);
+
+    Future<List<String>> asyncExecuteAndJoinOutput(String... command);
 
 }

@@ -20,7 +20,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-public class FixedMockProcessManager implements ProcessManager {
+public class FixedMockProcessManager extends ExecutorBasedProcessManager {
 
     private final List<String> result;
 

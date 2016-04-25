@@ -25,7 +25,8 @@ import java.util.List;
 /**
  * Process manager based on commons-exec, optionally waits for timeout or kills the process. Default is to not timeout.
  */
-public class ExecProcessManager implements ProcessManager {
+public class ExecProcessManager extends ExecutorBasedProcessManager {
+
     private static final Logger LOG = LoggerFactory.getLogger(ExecProcessManager.class);
     
     private int timeout;
