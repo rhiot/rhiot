@@ -31,31 +31,37 @@ class CameraSensor extends RouteBuilder {
 
     private final String deviceId
 
-    private final boolean sendToCloud
+    private final boolean enqueue
 
-    CameraSensor(IoTConnector connector, Raspistill raspistill, File workdir, String deviceId, boolean sendToCloud) {
+    private final boolean sendEnqueuedToCloud
+
+    CameraSensor(IoTConnector connector, Raspistill raspistill, File workdir, String deviceId,
+                 boolean enqueue, boolean sendEnqueuedToCloud) {
         this.connector = connector
         this.raspistill = raspistill
         this.workdir = workdir
         this.deviceId = deviceId
-        this.sendToCloud = sendToCloud
+        this.enqueue = enqueue
+        this.sendEnqueuedToCloud = sendEnqueuedToCloud
     }
 
     @Override
     void configure() {
         workdir.mkdirs()
+        def queue = new File(workdir, 'queue')
+        queue.mkdirs()
 
         raspistill.timelapse()
 
-        def queue = new File(workdir, 'queue')
-        queue.mkdirs()
-        from("file:${workdir.absolutePath}/?delay=250&noop=true&idempotent=false&fileName=camera.jpg").
-                to("file:${queue.absolutePath}?fileName=\${random(1,100000)}.jpg")
+        if(enqueue) {
+            from("file:${workdir.absolutePath}/?delay=250&noop=true&idempotent=false&fileName=camera.jpg").
+                    to("file:${queue.absolutePath}?fileName=\${random(1,100000)}.jpg")
 
-        // Send enqueued image data to a cloud
-        if(sendToCloud) {
-            from("file:${queue.absolutePath}").process {
-                connector.toBus('camera.process', it.in.getBody(byte[].class), arguments(deviceId, 'eu'))
+            // Send enqueued image data to a cloud
+            if (sendEnqueuedToCloud) {
+                from("file:${queue.absolutePath}").process {
+                    connector.toBus('camera.process', it.in.getBody(InputStream.class), arguments(deviceId, 'eu'))
+                }
             }
         }
     }

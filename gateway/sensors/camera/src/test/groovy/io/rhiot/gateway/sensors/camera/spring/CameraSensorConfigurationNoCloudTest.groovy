@@ -32,7 +32,7 @@ class CameraSensorConfigurationNoCloudTest extends CloudPlatformTest {
     @Override
     protected void beforeCloudPlatformStarted() {
         setStringProperty('sensor.camera.workdir', Files.createTempDir().absolutePath)
-        setBooleanProperty('sensor.camera.sendToCloud', false)
+        setBooleanProperty('sensor.camera.sendEnqueuedToCloud', false)
     }
 
     @AfterClass

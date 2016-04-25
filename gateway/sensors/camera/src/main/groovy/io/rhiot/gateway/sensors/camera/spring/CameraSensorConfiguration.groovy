@@ -34,8 +34,10 @@ class CameraSensorConfiguration {
     @Bean
     CameraSensor cameraSensor(IoTConnector connector, Raspistill raspistill,
                               @Value('${sensor.camera.workdir:/tmp/camera}') File workdir,
-                              @Value('${deviceId}') String deviceId, @Value('${sensor.camera.sendToCloud:true}') boolean sendToCloud) {
-        new CameraSensor(connector, raspistill, workdir, deviceId, sendToCloud)
+                              @Value('${deviceId}') String deviceId,
+                              @Value('${sensor.camera.enqueue:true}') boolean enqueue,
+                              @Value('${sensor.camera.sendEnqueuedToCloud:true}') boolean sendEnqueuedToCloud) {
+        new CameraSensor(connector, raspistill, workdir, deviceId, enqueue, sendEnqueuedToCloud)
     }
 
     @Bean
