@@ -57,17 +57,21 @@
 			<groupId>io.rhiot</groupId>
 			<artifactId>rhiot-datastream-document-mongodb</artifactId>
 		</dependency>
+
+		<!-- AMQP broker (event bus) -->
 		<dependency>
 			<groupId>io.rhiot</groupId>
 			<artifactId>rhiot-spring-activemq</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>io.rhiot</groupId>
-			<artifactId>rhiot-sensor-device</artifactId>
-		</dependency>
+
+		<!-- Sensors -->
 		<dependency>
 			<groupId>io.rhiot</groupId>
 			<artifactId>rhiot-sensor-camera</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rhiot</groupId>
+			<artifactId>rhiot-sensor-device</artifactId>
 		</dependency>
 	</dependencies>
 
