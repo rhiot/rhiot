@@ -18,7 +18,11 @@ package io.rhiot.gateway.sensors.camera.spring
 
 import io.rhiot.cloudplatform.connector.IoTConnector
 import io.rhiot.gateway.sensors.camera.CameraSensor
+import io.rhiot.gateway.sensors.camera.Raspistill
+import io.rhiot.utils.process.DefaultProcessManager
+import io.rhiot.utils.process.ProcessManager
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -28,8 +32,21 @@ import org.springframework.context.annotation.Configuration
 class CameraSensorConfiguration {
 
     @Bean
-    CameraSensor cameraSensor(IoTConnector connector, @Value('${deviceId}') String deviceId) {
-        new CameraSensor(connector, deviceId)
+    CameraSensor cameraSensor(IoTConnector connector, Raspistill raspistill,
+                              @Value('${sensor.camera.workdir:/tmp/camera}') File workdir,
+                              @Value('${deviceId}') String deviceId, @Value('${sensor.camera.sendToCloud:true}') boolean sendToCloud) {
+        new CameraSensor(connector, raspistill, workdir, deviceId, sendToCloud)
+    }
+
+    @Bean
+    Raspistill raspistill(ProcessManager processManager, @Value('${sensor.camera.workdir:/tmp/camera}') File workdir) {
+        new Raspistill(processManager, workdir)
+    }
+
+    @Bean(destroyMethod = 'close')
+    @ConditionalOnMissingBean
+    ProcessManager processManager() {
+        new DefaultProcessManager()
     }
 
 }

@@ -22,11 +22,11 @@
     <dependencies>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>camel-webcam</artifactId>
+            <artifactId>rhiot-cloudplatform-connector</artifactId>
         </dependency>
         <dependency>
             <groupId>io.rhiot</groupId>
-            <artifactId>rhiot-cloudplatform-connector</artifactId>
+            <artifactId>rhiot-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>

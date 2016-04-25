@@ -25,17 +25,38 @@ class CameraSensor extends RouteBuilder {
 
     private final IoTConnector connector
 
+    private final Raspistill raspistill
+
+    private final File workdir
+
     private final String deviceId
 
-    CameraSensor(IoTConnector connector, String deviceId) {
+    private final boolean sendToCloud
+
+    CameraSensor(IoTConnector connector, Raspistill raspistill, File workdir, String deviceId, boolean sendToCloud) {
         this.connector = connector
+        this.raspistill = raspistill
+        this.workdir = workdir
         this.deviceId = deviceId
+        this.sendToCloud = sendToCloud
     }
 
     @Override
     void configure() {
-        from('webcam:camera-sensor?motion=true&format=jpg&motionInterval=250').process {
-            connector.toBus('camera.process', it.in.body, arguments(deviceId, 'eu'))
+        workdir.mkdirs()
+
+        raspistill.timelapse()
+
+        def queue = new File(workdir, 'queue')
+        queue.mkdirs()
+        from("file:${workdir.absolutePath}/?delay=250&noop=true&idempotent=false&fileName=camera.jpg").
+                to("file:${queue.absolutePath}?fileName=\${random(1,100000)}.jpg")
+
+        // Send enqueued image data to a cloud
+        if(sendToCloud) {
+            from("file:${queue.absolutePath}").process {
+                connector.toBus('camera.process', it.in.getBody(byte[].class), arguments(deviceId, 'eu'))
+            }
         }
     }
 

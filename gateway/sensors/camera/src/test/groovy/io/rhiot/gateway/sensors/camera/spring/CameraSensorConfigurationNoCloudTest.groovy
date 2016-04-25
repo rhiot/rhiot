@@ -16,24 +16,28 @@
  */
 package io.rhiot.gateway.sensors.camera.spring
 
-import com.google.common.collect.ImmutableMap
 import com.google.common.io.Files
 import io.rhiot.cloudplatform.runtime.spring.test.CloudPlatformTest
 import io.rhiot.gateway.sensors.camera.CameraSensor
+import org.junit.AfterClass
 import org.junit.Test
 
-import java.util.concurrent.Callable
-
 import static com.google.common.truth.Truth.assertThat
-import static com.jayway.awaitility.Awaitility.await
-import static io.rhiot.cloudplatform.connector.Header.arguments
+import static io.rhiot.utils.Properties.restoreSystemProperties
+import static io.rhiot.utils.Properties.setBooleanProperty
 import static io.rhiot.utils.Properties.setStringProperty
 
-class CameraSensorConfigurationTest extends CloudPlatformTest {
+class CameraSensorConfigurationNoCloudTest extends CloudPlatformTest {
 
     @Override
     protected void beforeCloudPlatformStarted() {
         setStringProperty('sensor.camera.workdir', Files.createTempDir().absolutePath)
+        setBooleanProperty('sensor.camera.sendToCloud', false)
+    }
+
+    @AfterClass
+    static void afterClass() {
+        restoreSystemProperties()
     }
 
     @Test
@@ -41,15 +45,12 @@ class CameraSensorConfigurationTest extends CloudPlatformTest {
         // Given
         def cameraSensor = cloudPlatform.applicationContext().getBean(CameraSensor.class)
         Files.write('foo'.bytes, new File(cameraSensor.workdir, 'camera.jpg'))
-        def query = ImmutableMap.of('query', ImmutableMap.of('deviceId', 'myDevice'))
 
         // When
         Thread.sleep(5000)
-        await().until((Callable<Boolean>) { !connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage")).isEmpty() })
 
         // Then
-        def imageMetadata = connector.fromBus("document.findByQuery", query, List.class, arguments("CameraImage"));
-        assertThat(imageMetadata.size()).isGreaterThan(0)
+        assertThat(new File(cameraSensor.workdir, 'queue').list().toList()).isNotEmpty()
     }
 
 }

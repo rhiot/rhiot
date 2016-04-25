@@ -85,7 +85,7 @@ public abstract class CloudPlatformTest extends Assert {
     }
 
     @AfterClass
-    public static void afterClass() {
+    public static void afterCloudPlatformTestClass() {
         try {
             cloudPlatform.stop();
         } finally {
