@@ -333,6 +333,11 @@
 
                             <!-- OpenALPR sources -->
                             <exclude>**/2.2.0/**</exclude>
+
+                            <!-- Maven wrapper -->
+                            <exclude>.mvn/**</exclude>
+                            <exclude>mvnw</exclude>
+                            <exclude>mvnw.bat</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
