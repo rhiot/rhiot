@@ -43,7 +43,7 @@ PING_LOOP_PID=$!
 if [ -z "${DEPLOY}" ]; then
     ./mvnw install -PwithRatCheck >> $BUILD_OUTPUT 2>&1
 else
-    ./mvnw -q clean install deploy -DskipTests -Pdocker --settings ~/.m2/mySettings.xml >> $BUILD_OUTPUT 2>&1
+    ./mvnw clean install deploy -DskipTests -Pdocker --settings ~/.m2/mySettings.xml >> $BUILD_OUTPUT 2>&1
 fi
 
 # The build finished without returning an error so dump a tail of the output
