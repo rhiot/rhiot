@@ -1,5 +1,10 @@
 # Rhiot - the messaging platform for the Internet Of Things
 
+Rhiot itself is no more maintained. Instead it was migrated into two projects:
+- Eclipse Kapua (general IoT backend platform) - https://github.com/eclipse/kapua
+- Streamok (big data streams for IoT) - https://github.com/streamok/streamok
+
+
 <a href="https://github.com/rhiot/rhiot"><img src="rhiot.png" align="left" height="280" hspace="30"></a>
 Rhiot is a messaging platform for the Internet Of Things. We are focused on an adoption of the
 [Red Hat JBoss middleware portfolio](http://www.redhat.com/en/technologies/jboss-middleware) to provide solutions to
